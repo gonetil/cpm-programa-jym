@@ -5,7 +5,7 @@
 Proyecto
   * titulo : String
   * coordinador : Docente
-  * colaboradores : [Persona(0..n)]
+  * colaboradores : [Persona ]
   * esPrimerVezDocente : boolean
   * esPrimeraVezEscuela : boolean
   * esPrimeraVezAlumnos : boolean
@@ -22,7 +22,7 @@ Proyecto
 
 
 ==Docente==
-  * dni : String  #tipoyNumero
+  * dni : String  ---> tipoyNumero
   * telefonoFijo : String
   * telefonoCelular : String ---> opcional
   * domicilio : String
