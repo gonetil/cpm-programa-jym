@@ -18,11 +18,11 @@
   * produccionFinal : [DiccionarioDeDatos#Produccion Produccion]
 
 
-
 ==Persona==
   * nombre : String
   * apellido : String
   * email : String
+  * anulado : boolean
 
 
 ==Docente==
@@ -78,6 +78,7 @@
 ==Tema==
 #representa el tema principal del proyecto
   * nombre : String
+  * anulado : boolean
 
 ==Produccion==
 #representa los tipos de produccion que pueden realizarse en los proyectos como Producción Final
