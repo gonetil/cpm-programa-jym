@@ -3,19 +3,19 @@
 =Entidades=
 ==Periodo Actual==
   * anioActual : Integer
-  * proyectos : [ DiccionarioDeDatos#Proyecto ]+
+  * proyectos : [ DiccionarioDeDatos#Proyecto Proyecto]+
 
 ==Proyecto==
   * titulo : String
   * coordinador : Docente
-  * colaboradores : [DiccionarioDeDatos#Persona]+
-  * escuela : [DiccionarioDeDatos#Escuela]
+  * colaboradores : [DiccionarioDeDatos#Persona Persona]+
+  * escuela : [DiccionarioDeDatos#Escuela Escuela]
   * esPrimerVezDocente : boolean
   * esPrimeraVezEscuela : boolean
   * esPrimeraVezAlumnos : boolean
   * aniosAlumnos : Integer(1..6)+
-  * temaPrincipal : [DiccionarioDeDatos#Tema]
-  * produccionFinal : [DiccionarioDeDatos#Produccion]
+  * temaPrincipal : [DiccionarioDeDatos#Tema Tema]
+  * produccionFinal : [DiccionarioDeDatos#Produccion Produccion]
 
 
 
@@ -26,36 +26,36 @@
 
 
 ==Docente==
-  * __parent : [DiccionarioDeDatos#Persona]
+  * __parent : [DiccionarioDeDatos#Persona Persona]
   * dni : String  ---> tipoyNumero
   * telefonoFijo : String
   * telefonoCelular : String ---> opcional
   * domicilio : String
   * codigoPostal : String
-  * localidad : [DiccionarioDeDatos#Localidad]
-  * distrito : [DiccionarioDeDatos#Distrito]
-  * regionEducativa : [DiccionarioDeDatos#Region_Educativa]
+  * localidad : [DiccionarioDeDatos#Localidad Localidad]
+  * distrito : [DiccionarioDeDatos#Distrito Distrito]
+  * regionEducativa : [DiccionarioDeDatos#Region_Educativa Region Educativa]
 
 ==Administrador==
-  * __parent : Persona
+  * __parent : [DiccionarioDeDatos#Persona Persona]
   
 
 ==Usuario==
   * login : String
   * password : String
-  * persona : Persona
+  * persona : [DiccionarioDeDatos#Persona Persona]
 
 ==Escuela==
-  * tipoEscuela : [DiccionarioDeDatos#Tipo_Escuela]  ---> confirmar que esto no es lo mismo que tipoInstitucion
-  * tipoInstitucion : [DiccionarioDeDatos#Tipo_Institucion]
+  * tipoEscuela : [DiccionarioDeDatos#Tipo_Escuela Tipo Escuela]  ---> confirmar que esto no es lo mismo que tipoInstitucion
+  * tipoInstitucion : [DiccionarioDeDatos#Tipo_Institucion Tipo Institucion]
   * otroTipoInstitucion : String  ---> para cuando el tipo no estaba cargado en la BBDD
   * email : String ---> opcional
   * telefono : String  ---> opcional
   * domicilio : String
-  * localidad : [DiccionarioDeDatos#Localidad]
+  * localidad : [DiccionarioDeDatos#Localidad Localidad]
   * codigoPostal : String
-  * distrito : [DiccionarioDeDatos#Distrito]
-  * regionEducativa : [DiccionarioDeDatos#Region_Educativa]
+  * distrito : [DiccionarioDeDatos#Distrito Distrito]
+  * regionEducativa : [DiccionarioDeDatos#Region_Educativa Region Educativa]
   * director : String
 
 ==Tipo Escuela==
@@ -66,7 +66,6 @@
 
 ==Localidad==
   * nombre : String
-  * distrito : [DiccionarioDeDatos#Distrito]
 
 ==Distrito==
   * nombre : String
