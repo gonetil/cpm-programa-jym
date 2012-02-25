@@ -8,6 +8,9 @@ date.timezone = America/Argentina/Buenos_Aires
 
 short_open_tag=off (opcional)
 
+#workaround bug de warning de sqlite https://bugs.launchpad.net/ubuntu/+source/php5/+bug/875262
+sudo mv /etc/php5/conf.d/sqlite.ini /etc/php5/conf.d/sqlite.NOTini
+
 #Reiniciar apache
 sudo service apache2 restart
 
