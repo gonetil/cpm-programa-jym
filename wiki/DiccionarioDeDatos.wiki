@@ -8,7 +8,7 @@
 ==Proyecto==
   * titulo : String
   * coordinador : Docente
-  * colaboradores : [Persona#Persona]
+  * colaboradores : [DiccionarioDeDatos#Persona]
   * escuela : Escuela
   * esPrimerVezDocente : boolean
   * esPrimeraVezEscuela : boolean
