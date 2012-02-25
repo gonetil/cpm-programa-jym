@@ -43,6 +43,7 @@
 ==Usuario==
   * login : String
   * password : String
+  * lastLogin : DateTime
   * persona : [DiccionarioDeDatos#Persona Persona]
 
 ==Escuela==
