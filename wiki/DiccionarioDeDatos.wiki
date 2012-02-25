@@ -2,10 +2,15 @@
 
 = Entidades =
 
-Proyecto
+==PeriodoActual==
+  * anioActual : Integer
+  * proyectos : [Proyecto ]
+
+==Proyecto==
   * titulo : String
   * coordinador : Docente
   * colaboradores : [Persona ]
+  * escuela : Escuela
   * esPrimerVezDocente : boolean
   * esPrimeraVezEscuela : boolean
   * esPrimeraVezAlumnos : boolean
@@ -22,21 +27,46 @@ Proyecto
 
 
 ==Docente==
+  * __parent : Persona
   * dni : String  ---> tipoyNumero
   * telefonoFijo : String
   * telefonoCelular : String ---> opcional
   * domicilio : String
   * codigoPostal : String
   * localidad : Localidad  
+  * distrito : Distrito
+  * regionEducativa : RegionEducativa
 
+==Administrador==
+  * __parent : Persona
+  
 
 ==Usuario==
   * login : String
   * password : String
   * persona : Persona
 
+==Escuela==
+  * tipoEscuela : TipoEscuela  
+  * tipoInstitucion : TipoInstitucion
+  * otroTipoInstitucion : String  ---> para cuando el tipo no estaba cargado en la BBDD
+  * email : String ---> opcional
+  * telefono : String  ---> opcional
+  * domicilio : String
+  * localidad : Localidad
+  * codigoPostal : String
+  * distrito : Distrito
+  * regionEducativa : RegionEducativa
+  * director : String
+
+TipoEscuela
+  * nombre : String (EPB, ESB,...)
+
+TipoInstitucion
+  * nombre : String (Escuela Pública, Escuela Privada, Organización Social, Otro)
+
 ==Localidad==
-  * nombre
+  * nombre : String
   * distrito : Distrito
 
 ==Distrito==
