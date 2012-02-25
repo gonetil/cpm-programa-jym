@@ -13,7 +13,7 @@
   * esPrimerVezDocente : boolean
   * esPrimeraVezEscuela : boolean
   * esPrimeraVezAlumnos : boolean
-  * aniosAlumnos : Integer(1..6)+
+  * aniosAlumnos : Integer(1..6)
   * temaPrincipal : [DiccionarioDeDatos#Tema Tema]
   * produccionFinal : [DiccionarioDeDatos#Produccion Produccion]
 
