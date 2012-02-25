@@ -3,19 +3,19 @@
 =Entidades=
 ==Periodo Actual==
   * anioActual : Integer
-  * proyectos : [Proyecto ]
+  * proyectos : [ DiccionarioDeDatos#Proyecto ]+
 
 ==Proyecto==
   * titulo : String
   * coordinador : Docente
-  * colaboradores : [DiccionarioDeDatos#Persona]
-  * escuela : Escuela
+  * colaboradores : [DiccionarioDeDatos#Persona]+
+  * escuela : [DiccionarioDeDatos#Escuela]
   * esPrimerVezDocente : boolean
   * esPrimeraVezEscuela : boolean
   * esPrimeraVezAlumnos : boolean
-  * aniosAlumnos : [Integer(1..6)] 
-  * temaPrincipal : Tema
-  * produccionFinal : Produccion
+  * aniosAlumnos : Integer(1..6)+
+  * temaPrincipal : [DiccionarioDeDatos#Tema]
+  * produccionFinal : [DiccionarioDeDatos#Produccion]
 
 
 
@@ -26,15 +26,15 @@
 
 
 ==Docente==
-  * __parent : Persona
+  * __parent : [DiccionarioDeDatos#Persona]
   * dni : String  ---> tipoyNumero
   * telefonoFijo : String
   * telefonoCelular : String ---> opcional
   * domicilio : String
   * codigoPostal : String
-  * localidad : Localidad  
-  * distrito : Distrito
-  * regionEducativa : Region Educativa
+  * localidad : [DiccionarioDeDatos#Localidad]
+  * distrito : [DiccionarioDeDatos#Distrito]
+  * regionEducativa : [DiccionarioDeDatos#Region_Educativa]
 
 ==Administrador==
   * __parent : Persona
@@ -46,16 +46,16 @@
   * persona : Persona
 
 ==Escuela==
-  * tipoEscuela : Tipo Escuela  ---> confirmar que esto no es lo mismo que tipoInstitucion
-  * tipoInstitucion : Tipo Institucion
+  * tipoEscuela : [DiccionarioDeDatos#Tipo_Escuela]  ---> confirmar que esto no es lo mismo que tipoInstitucion
+  * tipoInstitucion : [DiccionarioDeDatos#Tipo_Institucion]
   * otroTipoInstitucion : String  ---> para cuando el tipo no estaba cargado en la BBDD
   * email : String ---> opcional
   * telefono : String  ---> opcional
   * domicilio : String
-  * localidad : Localidad
+  * localidad : [DiccionarioDeDatos#Localidad]
   * codigoPostal : String
-  * distrito : Distrito
-  * regionEducativa : Region Educativa
+  * distrito : [DiccionarioDeDatos#Distrito]
+  * regionEducativa : [DiccionarioDeDatos#Region_Educativa]
   * director : String
 
 ==Tipo Escuela==
@@ -66,7 +66,7 @@
 
 ==Localidad==
   * nombre : String
-  * distrito : Distrito
+  * distrito : [DiccionarioDeDatos#Distrito]
 
 ==Distrito==
   * nombre : String
