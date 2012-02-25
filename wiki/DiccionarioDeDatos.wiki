@@ -44,7 +44,7 @@
 ==Usuario==
   * login : String
   * password : String
-  * lastLogin : DateTime
+  * lastLogin : Time
   * persona : [DiccionarioDeDatos#Persona Persona]
 
 ==Escuela==
@@ -85,7 +85,6 @@
 
 
 ==Correo==
-  * fecha : DateTime
+  * fecha : Time
   * asunto : String
   * cuerpo : String
-  * leido : boolean
