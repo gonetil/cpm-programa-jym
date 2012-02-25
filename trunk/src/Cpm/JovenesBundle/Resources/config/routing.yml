@@ -1,3 +1,0 @@
-CpmJovenesBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: CpmJovenesBundle:Default:index }
