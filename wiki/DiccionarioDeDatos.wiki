@@ -3,7 +3,15 @@
 = Entidades =
 
 Proyecto
-
+  * titulo : String
+  * coordinador : Docente
+  * colaboradores : [Persona]
+  * esPrimerVezDocente : boolean
+  * esPrimeraVezEscuela : boolean
+  * esPrimeraVezAlumnos : boolean
+  * aniosAlumnos : [Integer(1..6)] 
+  * temaPrincipal : Tema
+  * produccionFinal : Produccion
 
 
 
@@ -29,7 +37,15 @@ Proyecto
   * distrito : Distrito
 
 ==Distrito==
-  * Nombre
+  * nombre : String
 
-== RegionEducativa ==
-  * Nombre
+==RegionEducativa==
+  * nombre : String
+
+==Tema==
+#representa el tema principal del proyecto
+  * nombre : String
+
+==Produccion==
+#representa los tipos de produccion que pueden realizarse en los proyectos como Producción Final
+  * nombre : String
