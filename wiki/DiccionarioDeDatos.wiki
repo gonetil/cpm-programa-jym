@@ -8,27 +8,28 @@ Proyecto
 
 
 ==Persona==
-*  nombre
-*  apellido
-*  email
+  * nombre
+  * apellido
+  * email
 
 
 ==Docente==
-* DNI : String
-* Telefono : String
-*  
+  * DNI : String
+  * Telefono : String
+  * localidad : Localidad  
 
 
 ==Usuario==
-* login : String
-* password : String
-* persona : Persona
+  * login : String
+  * password : String
+  * persona : Persona
 
 ==Localidad==
-* nombre
+  * nombre
+  * distrito : Distrito
 
 ==Distrito==
-* Nombre
+  * Nombre
 
 == RegionEducativa ==
-* Nombre
+  * Nombre
