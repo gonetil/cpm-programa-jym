@@ -1,4 +1,4 @@
-.#Diccionario de datos para generar la app
+#Diccionario de datos para generar la app
 
 = Entidades =
 
@@ -16,14 +16,17 @@ Proyecto
 
 
 ==Persona==
-  * nombre
-  * apellido
-  * email
+  * nombre : String
+  * apellido : String
+  * email : String
 
 
 ==Docente==
-  * DNI : String
-  * Telefono : String
+  * dni : String  #tipoyNumero
+  * telefonoFijo : String
+  * telefonoCelular : String ---> opcional
+  * domicilio : String
+  * codigoPostal : String
   * localidad : Localidad  
 
 
