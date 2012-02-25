@@ -3,7 +3,7 @@
 =Entidades=
 ==Periodo Actual==
   * anioActual : Integer
-  * proyectos : [ DiccionarioDeDatos#Proyecto Proyecto]+
+  * proyectos : [DiccionarioDeDatos#Proyecto Proyecto]+
 
 ==Proyecto==
   * titulo : String
