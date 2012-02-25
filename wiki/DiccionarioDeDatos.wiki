@@ -1,0 +1,34 @@
+.#Diccionario de datos para generar la app
+
+= Entidades =
+
+Proyecto
+
+
+
+
+==Persona==
+- nombre
+- apellido
+- email
+
+
+==Docente==
+- DNI : String
+- Telefono : String
+-  
+
+
+==Usuario==
+- login : String
+- password : String
+- persona : Persona
+
+==Localidad==
+- nombre
+
+==Distrito==
+- Nombre
+
+== RegionEducativa
+- Nombre
