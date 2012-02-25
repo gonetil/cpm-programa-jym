@@ -1,0 +1,24 @@
+#Instalar sqlite, habilitar php-cli
+sudo apt-get install php-cli php5-sqlite 
+
+#PHP.ini /etc/php5/apache2/php.ini
+#Definir date.timezone como corresponda
+[Date]
+date.timezone = America/Argentina/Buenos_Aires
+
+short_open_tag=off (opcional)
+
+#Reiniciar apache
+sudo service apache2 restart
+
+#Hacer un co del proyect read-only
+svn checkout http://cpm-programa-jym.googlecode.com/svn/trunk/ jym
+#o writable
+svn checkout https://cpm-programa-jym.googlecode.com/svn/trunk/ jym --username arieljlira@gmail.com
+
+#permitr RW sobre cache y logs
+cd jym
+chmod -R 777 app/logs/ app/cache/
+
+#Descargar vedors
+php bin/vendors install
