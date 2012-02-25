@@ -1,8 +1,7 @@
 #Diccionario de datos para generar la app
 
-= Entidades =
-
-== PeriodoActual ==
+=Entidades=
+==PeriodoActual==
   * anioActual : Integer
   * proyectos : [Proyecto ]
 
