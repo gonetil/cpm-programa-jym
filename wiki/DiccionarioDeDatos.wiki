@@ -35,7 +35,7 @@
   * localidad : [DiccionarioDeDatos#Localidad Localidad]
   * distrito : [DiccionarioDeDatos#Distrito Distrito]
   * regionEducativa : [DiccionarioDeDatos#Region_Educativa Region Educativa]
-  * correos : [[DiccionarioDeDatos#Correo Correo]+ ---> en ppio, representa los correos recibidos
+  * correos : [DiccionarioDeDatos#Correo Correo]+ ---> en ppio, representa los correos recibidos
 
 ==Administrador==
   * __parent : [DiccionarioDeDatos#Persona Persona]
