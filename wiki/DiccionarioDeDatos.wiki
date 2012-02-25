@@ -8,9 +8,9 @@ Proyecto
 
 
 ==Persona==
-- nombre
-- apellido
-- email
+nombre
+apellido
+email
 
 
 ==Docente==
