@@ -22,3 +22,15 @@ chmod -R 777 app/logs/ app/cache/
 
 #Descargar vedors
 php bin/vendors install
+
+
+
+
+
+======================================================================
+1) Cómo crear una entidad
+--------------------------------
+
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:XyzEntity" --fields="name:string(255) price:float description:text"
+php app/console doctrine:generate:entities CpmJovenesBundle
+php app/console doctrine:schema:update --force
