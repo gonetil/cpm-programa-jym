@@ -13,7 +13,7 @@
   * esPrimerVezDocente : boolean
   * esPrimeraVezEscuela : boolean
   * esPrimeraVezAlumnos : boolean
-  * aniosAlumnos : Integer(1..6)
+  * anioAlumnos : Integer(1..6)
   * temaPrincipal : [DiccionarioDeDatos#Tema Tema]
   * produccionFinal : [DiccionarioDeDatos#Produccion Produccion]
 
@@ -42,9 +42,9 @@
   * correos : [DiccionarioDeDatos#Correo Correo]+  ---> en ppio, representa los correos enviados  
 
 ==Usuario==
-  * login : String
-  * password : String
-  * lastLogin : Time
+  * usario : String
+  * clave : String
+  * ultimoAcceso : Time
   * persona : [DiccionarioDeDatos#Persona Persona]
 
 ==Escuela==
@@ -84,8 +84,13 @@
 #representa los tipos de produccion que pueden realizarse en los proyectos como Producción Final
   * nombre : String
 
-
 ==Correo==
   * fecha : Time
   * asunto : String
-  * cuerpo : String
+  * cuerpo : Text
+
+==Plantilla==
+  * codigo : String
+  * asunto : String
+  * cuerpo : Text
+  * puedeBorrarse : boolean
