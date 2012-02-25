@@ -2,7 +2,7 @@
 
 = Entidades =
 
-==PeriodoActual==
+== PeriodoActual ==
   * anioActual : Integer
   * proyectos : [Proyecto ]
 
