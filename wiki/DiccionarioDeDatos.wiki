@@ -46,7 +46,7 @@
   * persona : Persona
 
 ==Escuela==
-  * tipoEscuela : TipoEscuela  
+  * tipoEscuela : TipoEscuela  ---> confirmar que esto no es lo mismo que tipoInstitucion
   * tipoInstitucion : TipoInstitucion
   * otroTipoInstitucion : String  ---> para cuando el tipo no estaba cargado en la BBDD
   * email : String ---> opcional
