@@ -35,10 +35,11 @@
   * localidad : [DiccionarioDeDatos#Localidad Localidad]
   * distrito : [DiccionarioDeDatos#Distrito Distrito]
   * regionEducativa : [DiccionarioDeDatos#Region_Educativa Region Educativa]
+  * correos : [[DiccionarioDeDatos#Correo Correo]+ ---> en ppio, representa los correos recibidos
 
 ==Administrador==
   * __parent : [DiccionarioDeDatos#Persona Persona]
-  
+  * correos : [DiccionarioDeDatos#Correo Correo]+  ---> en ppio, representa los correos enviados  
 
 ==Usuario==
   * login : String
@@ -81,3 +82,10 @@
 ==Produccion==
 #representa los tipos de produccion que pueden realizarse en los proyectos como Producción Final
   * nombre : String
+
+
+==Correo==
+  * fecha : DateTime
+  * asunto : String
+  * cuerpo : String
+  * leido : boolean
