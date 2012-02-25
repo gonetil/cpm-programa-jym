@@ -34,7 +34,7 @@
   * codigoPostal : String
   * localidad : Localidad  
   * distrito : Distrito
-  * regionEducativa : RegionEducativa
+  * regionEducativa : Region Educativa
 
 ==Administrador==
   * __parent : Persona
@@ -46,8 +46,8 @@
   * persona : Persona
 
 ==Escuela==
-  * tipoEscuela : TipoEscuela  ---> confirmar que esto no es lo mismo que tipoInstitucion
-  * tipoInstitucion : TipoInstitucion
+  * tipoEscuela : Tipo Escuela  ---> confirmar que esto no es lo mismo que tipoInstitucion
+  * tipoInstitucion : Tipo Institucion
   * otroTipoInstitucion : String  ---> para cuando el tipo no estaba cargado en la BBDD
   * email : String ---> opcional
   * telefono : String  ---> opcional
@@ -55,14 +55,14 @@
   * localidad : Localidad
   * codigoPostal : String
   * distrito : Distrito
-  * regionEducativa : RegionEducativa
+  * regionEducativa : Region Educativa
   * director : String
 
-TipoEscuela
+==Tipo Escuela==
   * nombre : String (EPB, ESB,...)
 
-TipoInstitucion
-  * nombre : String (Escuela Pública, Escuela Privada, Organización Social, Otro)
+==Tipo Institucion==
+  * nombre : String ---> (Escuela Pública, Escuela Privada, Organización Social, Otro)
 
 ==Localidad==
   * nombre : String
@@ -71,7 +71,7 @@ TipoInstitucion
 ==Distrito==
   * nombre : String
 
-==RegionEducativa==
+==Region Educativa==
   * nombre : String
 
 ==Tema==
