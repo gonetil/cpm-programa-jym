@@ -489,5 +489,3 @@ class Usuario implements AdvancedUserInterface, \Serializable
         ) = unserialize($serialized);
     }
 }
-
-

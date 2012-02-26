@@ -28,7 +28,11 @@ class Localidad
      */
     private $nombre;
 
-
+    /**
+    *  @ORM\ManyToOne(targetEntity="Distrito")
+    */
+    private $distrito;
+    
     /**
      * Get id
      *
@@ -61,5 +65,25 @@ class Localidad
     
     public function __toString(){
     	return $this->nombre;
+    }
+
+    /**
+     * Set distrito
+     *
+     * @param Cpm\JovenesBundle\Entity\Distrito $distrito
+     */
+    public function setDistrito(\Cpm\JovenesBundle\Entity\Distrito $distrito)
+    {
+        $this->distrito = $distrito;
+    }
+
+    /**
+     * Get distrito
+     *
+     * @return Cpm\JovenesBundle\Entity\Distrito 
+     */
+    public function getDistrito()
+    {
+        return $this->distrito;
     }
 }

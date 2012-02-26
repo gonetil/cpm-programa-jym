@@ -111,23 +111,6 @@ class Escuela
     private $localidad;
     
     /**
-    *  @ORM\ManyToOne(targetEntity="Distrito")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="distrito_id", referencedColumnName="id")
-    * })
-    */
-    private $distrito;
-
-    /**
-    *  @ORM\ManyToOne(targetEntity="RegionEducativa")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="region_educativa_id", referencedColumnName="id")
-    * })
-    */
-    private $region;
-    
-
-    /**
      * Get id
      *
      * @return integer 
