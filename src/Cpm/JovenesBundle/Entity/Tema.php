@@ -85,4 +85,9 @@ class Tema
     {
         return $this->anulado;
     }
+    
+    public function __toString()
+    {
+    	return $this->nombre;
+    }
 }
