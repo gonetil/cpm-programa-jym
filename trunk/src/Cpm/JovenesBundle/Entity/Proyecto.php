@@ -110,7 +110,7 @@ class Proyecto
      *
      * @param string $titulo
      */
-    public function setTitulo(\string $titulo)
+    public function setTitulo($titulo)
     {
         $this->titulo = $titulo;
     }

@@ -125,7 +125,7 @@ class Escuela
      *
      * @param string $otroTipoInstitucion
      */
-    public function setOtroTipoInstitucion(\string $otroTipoInstitucion)
+    public function setOtroTipoInstitucion($otroTipoInstitucion)
     {
         $this->otroTipoInstitucion = $otroTipoInstitucion;
     }
@@ -145,7 +145,7 @@ class Escuela
      *
      * @param string $email
      */
-    public function setEmail(\string $email)
+    public function setEmail($email)
     {
         $this->email = $email;
     }
@@ -165,7 +165,7 @@ class Escuela
      *
      * @param string $telefono
      */
-    public function setTelefono(\string $telefono)
+    public function setTelefono($telefono)
     {
         $this->telefono = $telefono;
     }
@@ -185,7 +185,7 @@ class Escuela
      *
      * @param string $domicilio
      */
-    public function setDomicilio(\string $domicilio)
+    public function setDomicilio($domicilio)
     {
         $this->domicilio = $domicilio;
     }
@@ -205,7 +205,7 @@ class Escuela
      *
      * @param string $codigoPostal
      */
-    public function setCodigoPostal(\string $codigoPostal)
+    public function setCodigoPostal($codigoPostal)
     {
         $this->codigoPostal = $codigoPostal;
     }
@@ -225,7 +225,7 @@ class Escuela
      *
      * @param string $director
      */
-    public function setDirector(\string $director)
+    public function setDirector($director)
     {
         $this->director = $director;
     }

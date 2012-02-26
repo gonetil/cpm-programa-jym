@@ -65,7 +65,7 @@ class Plantilla
      *
      * @param string $codigo
      */
-    public function setCodigo(\string $codigo)
+    public function setCodigo($codigo)
     {
         $this->codigo = $codigo;
     }
@@ -85,7 +85,7 @@ class Plantilla
      *
      * @param string $asunto
      */
-    public function setAsunto(\string $asunto)
+    public function setAsunto($asunto)
     {
         $this->asunto = $asunto;
     }
