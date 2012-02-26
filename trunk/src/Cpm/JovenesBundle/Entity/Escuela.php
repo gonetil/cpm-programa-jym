@@ -22,10 +22,7 @@ class Escuela
     private $id;
     
     /**
-    *  @ORM\OneToOne(targetEntity="TipoInstitucion")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="tipo_institucion_id", referencedColumnName="id")
-    * })
+    *  @ORM\ManyToOne(targetEntity="TipoInstitucion")
     */
     private $tipoInstitucion;
 
@@ -39,20 +36,9 @@ class Escuela
     
     
     /**
-    *  @ORM\OneToOne(targetEntity="TipoEscuela")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="tipo_escuela_id", referencedColumnName="id")
-    * })
+    *  @ORM\ManyToOne(targetEntity="TipoEscuela")
     */
         private $tipoEscuela;
-    
-    /**
-    *  @ORM\OneToOne(targetEntity="Tema")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="tema_id", referencedColumnName="id")
-    * })
-    */
-    private $temaPrincipal;
 
     
     /**
@@ -79,16 +65,6 @@ class Escuela
     
     private $impactoBuscado;
 
-    
-    /**
-    *  @ORM\OneToOne(targetEntity="Produccion")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="produccion_id", referencedColumnName="id")
-    * })
-    */
-    private $produccionFinal;
-    
-    
     /**
      * @var string $email
      *
@@ -127,7 +103,7 @@ class Escuela
     
     
     /**
-    *  @ORM\OneToOne(targetEntity="Localidad")
+    *  @ORM\ManyToOne(targetEntity="Localidad")
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="localidad_id", referencedColumnName="id")
     * })
@@ -135,7 +111,7 @@ class Escuela
     private $localidad;
     
     /**
-    *  @ORM\OneToOne(targetEntity="Distrito")
+    *  @ORM\ManyToOne(targetEntity="Distrito")
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="distrito_id", referencedColumnName="id")
     * })
@@ -143,7 +119,7 @@ class Escuela
     private $distrito;
 
     /**
-    *  @ORM\OneToOne(targetEntity="RegionEducativa")
+    *  @ORM\ManyToOne(targetEntity="RegionEducativa")
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="region_educativa_id", referencedColumnName="id")
     * })
