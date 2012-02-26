@@ -14,6 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Usuario implements AdvancedUserInterface, \Serializable
 {
+	const ROL_USUARIO = 'ROLE_USER';
+	const ROL_ADMIN = 'ROLE_ADMIN';
     /**
      * @var integer $id
      *
@@ -68,7 +70,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     /**
      * @var string $email
      *
-     * @ORM\Column(name="email", type="string")
+     * @ORM\Column(name="email", type="string", unique=true)
      */
     private $email;
 
@@ -131,10 +133,18 @@ class Usuario implements AdvancedUserInterface, \Serializable
      * @ORM\Column(name="esta_habilitado", type="boolean" )
      */
     private $estaHabilitado;
+
+    /**
+     * @var bool $esAdmin
+     *
+     * @ORM\Column(name="es_admin", type="boolean" )
+     */
+    private $esAdmin;
     
     
     public function __construct()
     {
+        $this->esAdmin = false;
         $this->estaHabilitado = true;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();
@@ -392,18 +402,40 @@ class Usuario implements AdvancedUserInterface, \Serializable
         return $this->estaHabilitado;
     }
     
-    /********************************************************************************/
+    /**
+     * Set esAdmin
+     *
+     * @param boolean $esAdmin
+     */
+    public function setEsAdmin($esAdmin)
+    {
+        $this->esAdmin = $esAdmin;
+    }
+
+    /**
+     * Get esAdmin
+     *
+     * @return boolean 
+     */
+    public function getEsAdmin()
+    {
+        return $this->esAdmin;
+    }
+        /********************************************************************************/
     /********************* Metodos de userInterface     *****************************/
     /********************************************************************************/
     
      public function getRoles()
     {
-        return array('ROLE_USER');
+    	$roles = array(Usuario::ROL_USUARIO);
+    	if ($this->getEsAdmin())
+    		$roles[]=Usuario::ROL_ADMIN;
+        return $roles;
     }
 
     public function equals(UserInterface $user)
     {
-        return true;//$user->getUsername() === $this->email;
+        return $user->getUsername() === $this->email;
     }
 
     public function eraseCredentials()
