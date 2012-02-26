@@ -18,6 +18,7 @@ class UsuarioType extends AbstractType
             ->add('email', 'email')
             ->add('codigoPostal')
             ->add('estaHabilitado')
+            ->add('esAdmin', 'checkbox', array('required'=>false))
             ->add('localidad')
             ->add('distrito')
             ->add('region')
