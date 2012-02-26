@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Cpm\JovenesBundle\Entity\RegionEducativa
@@ -25,6 +26,8 @@ class RegionEducativa
      * @var string $nombre
      *
      * @ORM\Column(name="nombre", type="string")
+     * 
+     * @Assert\NotBlank()
      */
     private $nombre;
 

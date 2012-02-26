@@ -1,0 +1,23 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+
+<h1>Agregar Distrito</h1>
+
+<form action="{{ path('distrito_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Guardar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('distrito') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>
+
+    
+{% endblock %}
