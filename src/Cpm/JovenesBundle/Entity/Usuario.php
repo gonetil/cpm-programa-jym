@@ -3,6 +3,8 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Cpm\JovenesBundle\Entity\Usuario
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\UsuarioRepository")
  */
-class Usuario
+class Usuario implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer $id
@@ -22,23 +24,23 @@ class Usuario
     private $id;
 
     /**
-     * @var string $usuario
-     *
-     * @ORM\Column(name="usuario", type="string")
-     */
-    private $usuario;
-
-    /**
      * @var string $clave
      *
-     * @ORM\Column(name="clave", type="string")
+     * @ORM\Column(name="clave", type="string", nullable=true)
      */
     private $clave;
 
     /**
+     * @var string $salt
+     *
+     * @ORM\Column(name="salt", type="string", nullable=true)
+     */
+    private $salt;
+    
+    /**
      * @var datetime $ultimoAcceso
      *
-     * @ORM\Column(name="ultimoAcceso", type="datetime")
+     * @ORM\Column(name="ultimoAcceso", type="datetime", nullable=true)
      */
     private $ultimoAcceso;
 
@@ -52,14 +54,14 @@ class Usuario
     /**
      * @var string $telefono
      *
-     * @ORM\Column(name="telefono", type="string")
+     * @ORM\Column(name="telefono", type="string", nullable=true)
      */
     private $telefono;
 
     /**
      * @var string $telefonoCelular
      *
-     * @ORM\Column(name="telefonoCelular", type="string")
+     * @ORM\Column(name="telefonoCelular", type="string", nullable=true)
      */
     private $telefonoCelular;
 
@@ -73,13 +75,14 @@ class Usuario
     /**
      * @var string $codigoPostal
      *
-     * @ORM\Column(name="codigoPostal", type="string")
+     * @ORM\Column(name="codigoPostal", type="string", nullable=true)
      */
     private $codigoPostal;
 
 
    /**
-    *  @ORM\ManyToOne(targetEntity="Localidad")
+    * 
+    * @ORM\ManyToOne(targetEntity="Localidad")
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="localidad_id", referencedColumnName="id")
     * })
@@ -87,7 +90,7 @@ class Usuario
     private $localidad;
     
     /**
-    *  @ORM\ManyToOne(targetEntity="Distrito")
+    * @ORM\ManyToOne(targetEntity="Distrito")
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="distrito_id", referencedColumnName="id")
     * })
@@ -95,7 +98,7 @@ class Usuario
     private $distrito;
 
     /**
-    *  @ORM\ManyToOne(targetEntity="RegionEducativa")
+    * @ORM\ManyToOne(targetEntity="RegionEducativa")
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="region_educativa_id", referencedColumnName="id")
     * })
@@ -112,44 +115,41 @@ class Usuario
     */
     private $correosRecibidos;
     
-    /**
+    /*
     * @ORM\ManyToMany(targetEntity="Usuario", inversedBy="colaboradores")
      * @ORM\JoinTable(name="colaboradores_proyectos",
     * joinColumns={@ORM\JoinColumn(name="usuario_id", referencedColumnName="id")},
     * inverseJoinColumns={@ORM\JoinColumn(name="proyecto_id", referencedColumnName="id")}
     * )
-    */
-    private $categories;
     
+    private $categories;
+*/
+
+    /**
+     * @var bool $estaHabilitado
+     *
+     * @ORM\Column(name="esta_habilitado", type="boolean" )
+     */
+    private $estaHabilitado;
+    
+    
+    public function __construct()
+    {
+        $this->estaHabilitado = true;
+        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();
+		//$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        
+    }
     
     /**
      * Get id
-     *
+     *$email
      * @return integer 
      */
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set usuario
-     *
-     * @param string $usuario
-     */
-    public function setUsuario($usuario)
-    {
-        $this->usuario = $usuario;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return string 
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
     }
 
     /**
@@ -291,11 +291,6 @@ class Usuario
     {
         return $this->codigoPostal;
     }
-    public function __construct()
-    {
-        $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
-    }
     
     /**
      * Set localidad
@@ -378,22 +373,121 @@ class Usuario
     }
 
     /**
-     * Add categories
+     * Set estaHabilitado
      *
-     * @param Cpm\JovenesBundle\Entity\Usuario $categories
+     * @param boolean $estaHabilitado
      */
-    public function addUsuario(\Cpm\JovenesBundle\Entity\Usuario $categories)
+    public function setEstaHabilitado($estaHabilitado)
     {
-        $this->categories[] = $categories;
+        $this->estaHabilitado = $estaHabilitado;
     }
 
     /**
-     * Get categories
+     * Get estaHabilitado
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return boolean 
      */
-    public function getCategories()
+    public function getEstaHabilitado()
     {
-        return $this->categories;
+        return $this->estaHabilitado;
+    }
+    
+    /********************************************************************************/
+    /********************* Metodos de userInterface     *****************************/
+    /********************************************************************************/
+    
+     public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function equals(UserInterface $user)
+    {
+        return true;//$user->getUsername() === $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+    	//$this->clave ='';
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    public function getPassword()
+    {
+        return $this->getClave();
+    }
+    
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return !empty($this->clave);;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->getEstaHabilitado();
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+    }
+
+
+  /**
+     * Serializes the user.
+     * The serialized data have to contain the fields used byt the equals method.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->clave,
+            $this->salt,
+            $this->email,
+            $this->estaHabilitado,
+        ));
+    }
+
+    /**
+     * Unserializes the user.
+     *
+     * @return string
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->clave,
+            $this->salt,
+            $this->email,
+            $this->estaHabilitado
+        ) = unserialize($serialized);
     }
 }
+
+

@@ -44,7 +44,7 @@ class Localidad
      *
      * @param string $nombre
      */
-    public function setNombre(\string $nombre)
+    public function setNombre($nombre)
     {
         $this->nombre = $nombre;
     }
@@ -57,5 +57,9 @@ class Localidad
     public function getNombre()
     {
         return $this->nombre;
+    }
+    
+    public function __toString(){
+    	return $this->nombre;
     }
 }

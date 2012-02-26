@@ -1,0 +1,51 @@
+<h1>Usuario list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Clave</th>
+            <th>Ultimoacceso</th>
+            <th>Dni</th>
+            <th>Telefono</th>
+            <th>Telefonocelular</th>
+            <th>Email</th>
+            <th>Codigopostal</th>
+            <th>Estahabilitado</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.clave }}</td>
+            <td>{% if entity.ultimoAcceso %}{{ entity.ultimoAcceso|date('Y-m-d H:i:s') }}{% endif%}</td>
+            <td>{{ entity.dni }}</td>
+            <td>{{ entity.telefono }}</td>
+            <td>{{ entity.telefonoCelular }}</td>
+            <td>{{ entity.email }}</td>
+            <td>{{ entity.codigoPostal }}</td>
+            <td>{{ entity.estaHabilitado }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('usuario_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
