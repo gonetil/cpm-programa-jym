@@ -10,7 +10,6 @@ class EscuelaType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('otroTipoInstitucion')
             ->add('deQueSeTrata')
             ->add('motivoRealizacion')
             ->add('impactoBuscado')
@@ -20,6 +19,7 @@ class EscuelaType extends AbstractType
             ->add('codigoPostal')
             ->add('director')
             ->add('tipoInstitucion')
+            ->add('otroTipoInstitucion',null,array('required' => false))
             ->add('tipoEscuela')
             ->add('localidad')
         ;

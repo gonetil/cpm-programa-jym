@@ -139,4 +139,9 @@ class Plantilla
     {
         return $this->puedeBorrarse;
     }
+    
+    public function __toString(){
+    	return $this->codigo;
+    }
+    
 }

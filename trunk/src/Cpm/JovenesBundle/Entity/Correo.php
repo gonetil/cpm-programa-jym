@@ -136,4 +136,9 @@ class Correo
     {
         return $this->destinatario;
     }
+    
+    public function __toString(){
+    	return "{$this->fecha} Asunto {$this->asunto}";
+    }
+    
 }

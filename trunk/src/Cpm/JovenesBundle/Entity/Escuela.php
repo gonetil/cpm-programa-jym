@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Cpm\JovenesBundle\Entity\Escuela
@@ -30,6 +31,7 @@ class Escuela
     * @var string $otroTipoInstitucion
     *
     * @ORM\Column(name="otroTipoInstitucion", type="string")
+    *  
     */
     private $otroTipoInstitucion;
     
