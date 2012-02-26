@@ -1,0 +1,43 @@
+<h1>Plantilla list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Codigo</th>
+            <th>Asunto</th>
+            <th>Cuerpo</th>
+            <th>Puedeborrarse</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('plantilla_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.codigo }}</td>
+            <td>{{ entity.asunto }}</td>
+            <td>{{ entity.cuerpo }}</td>
+            <td>{{ entity.puedeBorrarse }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('plantilla_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('plantilla_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('plantilla_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>

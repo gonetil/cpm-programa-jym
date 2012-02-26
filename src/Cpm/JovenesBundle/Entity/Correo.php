@@ -82,7 +82,7 @@ class Correo
      *
      * @param string $asunto
      */
-    public function setAsunto(\string $asunto)
+    public function setAsunto($asunto)
     {
         $this->asunto = $asunto;
     }

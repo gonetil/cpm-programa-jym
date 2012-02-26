@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Cpm\JovenesBundle\Entity\TipoEscuela
@@ -21,13 +22,14 @@ class TipoEscuela
      */
     private $id;
 
-    /**
+  /**
      * @var string $nombre
      *
      * @ORM\Column(name="nombre", type="string")
+     * 
+     * @Assert\NotBlank()
      */
     private $nombre;
-
 
     /**
      * Get id
@@ -44,7 +46,7 @@ class TipoEscuela
      *
      * @param string $nombre
      */
-    public function setNombre(\string $nombre)
+    public function setNombre($nombre)
     {
         $this->nombre = $nombre;
     }
