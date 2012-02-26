@@ -1,0 +1,18 @@
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:PeriodoActual" --fields="anio:integer" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Produccion" --fields="nombre:string" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:TipoEscuela" --fields="nombre:string" --no-interaction --with-repository --format=annotation
+
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Tema" --fields="nombre:string anulado:boolean" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:TipoInstitucion" --fields="nombre:string" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Localidad" --fields="nombre:string" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Distrito" --fields="nombre:string" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:RegionEducativa" --fields="nombre:string" --no-interaction --with-repository --format=annotation
+
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Correo" --fields="fecha:datetime asunto:string cuerpo:text" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Plantilla" --fields="codigo:string asunto:string cuerpo:text puedeBorrarse:boolean" --no-interaction --with-repository --format=annotation
+
+
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Escuela" --fields="otroTipoInstitucion:string email:string telefono:string domicilio:string codigoPostal:string(15) director:string" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Proyecto" --fields="titulo:string nroAlumnos:integer esPrimeraVezDocente:boolean esPrimeraVezEscuela:boolean esPrimeraVezAlumnos:boolean" --no-interaction --with-repository --format=annotation
+
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Usuario" --fields="usuario:string clave:string ultimoAcceso:datetime dni:string telefono:string telefonoCelular:string email:string codigoPostal:string" --no-interaction --with-repository --format=annotation
