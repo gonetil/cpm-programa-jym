@@ -28,7 +28,11 @@ class Distrito
      */
     private $nombre;
 
-
+    /**
+    *  @ORM\ManyToOne(targetEntity="RegionEducativa")
+    */
+    private $region;
+    
     /**
      * Get id
      *
@@ -61,5 +65,25 @@ class Distrito
     
     public function __toString(){
     	return $this->nombre;
+    }
+
+    /**
+     * Set region
+     *
+     * @param Cpm\JovenesBundle\Entity\RegionEducativa $region
+     */
+    public function setRegion(\Cpm\JovenesBundle\Entity\RegionEducativa $region)
+    {
+        $this->region = $region;
+    }
+
+    /**
+     * Get region
+     *
+     * @return Cpm\JovenesBundle\Entity\RegionEducativa 
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
 }
