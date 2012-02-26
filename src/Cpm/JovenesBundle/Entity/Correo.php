@@ -42,6 +42,10 @@ class Correo
      */
     private $cuerpo;
 
+    /**
+     *  @ORM\ManyToOne(targetEntity="Usuario")
+     */
+    private $destinatario;
 
     /**
      * Get id
@@ -111,5 +115,25 @@ class Correo
     public function getCuerpo()
     {
         return $this->cuerpo;
+    }
+
+    /**
+     * Set destinatario
+     *
+     * @param Cpm\JovenesBundle\Entity\Usuario $destinatario
+     */
+    public function setDestinatario(\Cpm\JovenesBundle\Entity\Usuario $destinatario)
+    {
+        $this->destinatario = $destinatario;
+    }
+
+    /**
+     * Get destinatario
+     *
+     * @return Cpm\JovenesBundle\Entity\Usuario 
+     */
+    public function getDestinatario()
+    {
+        return $this->destinatario;
     }
 }
