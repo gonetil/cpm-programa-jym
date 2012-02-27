@@ -1,11 +1,15 @@
-<h1>TipoInstitucion list</h1>
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
+{% block content %}
+
+<h1>Tipos Instituciones</h1>
 
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
             <th>Nombre</th>
-            <th>Actions</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -16,10 +20,10 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('tipo_institucion_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('tipo_institucion_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('tipo_institucion_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('tipo_institucion_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
                 </ul>
             </td>
@@ -31,7 +35,8 @@
 <ul>
     <li>
         <a href="{{ path('tipo_institucion_new') }}">
-            Create a new entry
+            Agregar nuevo tipo
         </a>
     </li>
 </ul>
+{% endblock %}

@@ -10,7 +10,7 @@
             <th>Id</th>
             <th>Nombre</th>
             <th>Anulado</th>
-            <th>Actions</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -22,10 +22,10 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('tema_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('tema_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('tema_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('tema_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
                 </ul>
             </td>
@@ -37,7 +37,7 @@
 <ul>
     <li>
         <a href="{{ path('tema_new') }}">
-            Create a new entry
+            Agregar
         </a>
     </li>
 </ul>

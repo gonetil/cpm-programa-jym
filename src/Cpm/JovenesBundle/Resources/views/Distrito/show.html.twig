@@ -1,4 +1,5 @@
-{% extends '::base.html.twig' %}
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
 
 {% block content %}
 
@@ -18,25 +19,24 @@
             <th>Region Educativa</th>
             <td>{{ entity.region.nombre }}</td>
         </tr>
-        
     </tbody>
 </table>
 
 <ul class="record_actions">
     <li>
         <a href="{{ path('distrito') }}">
-            Back to the list
+            Volver al listado
         </a>
     </li>
     <li>
         <a href="{{ path('distrito_edit', { 'id': entity.id }) }}">
-            Edit
+            Modificar
         </a>
     </li>
     <li>
         <form action="{{ path('distrito_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+            <button type="submit">Eliminar</button>
         </form>
     </li>
 </ul>

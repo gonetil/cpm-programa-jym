@@ -349,6 +349,29 @@ class Escuela
         return $this->tipoEscuela;
     }
 
+
+    
+    
+    /**
+    * Set nombre
+    *
+    * @param string $nombre
+    */
+    public function setNombre($nombre)
+    {
+    	$this->nombre = $nombre;
+    }
+    
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+    	return $this->nombre;
+    }
+    
     /**
      * Set temaPrincipal
      *
