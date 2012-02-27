@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+         <link rel="stylesheet" href="{{ asset('css/screen.css') }}" />
+         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+
+ 	    {% include 'CpmJovenesBundle:Default:header.html.twig' %}
+ 	    <div class="clear"></div>
+ 	    {% include 'CpmJovenesBundle:Default:menu.html.twig' %}
+ 	    <div class="clear"></div>
+        
+        
+<!-- start content-outer ........................................................................................................................START -->
+<div id="content-outer">
+<!-- start content -->
+<div id="content">
+
+	<!--  start page-heading -->
+	<div id="page-heading">
+		<h1>Add product</h1>
+	</div>
+	<!-- end page-heading -->
+
+	<table width="100%" cellspacing="0" cellpadding="0" border="0" id="content-table">
+	<tbody><tr>
+		<th class="sized" rowspan="3"><img width="20" height="300" alt="" src="{{asset('images/shared/side_shadowleft.jpg')}}"></th>
+		<th class="topleft"></th>
+		<td id="tbl-border-top">&nbsp;</td>
+		<th class="topright"></th>
+		<th class="sized" rowspan="3"><img width="20" height="300" alt="" src="{{asset('images/shared/side_shadowright.jpg')}}"></th>
+	</tr>
+	<tr>
+		<td id="tbl-border-left"></td>
+		<td>
+		<!--  start content-table-inner ...................................................................... START -->
+		<div id="content-table-inner">
+		
+			
+				<!--  start messages
+				<div id="message-yellow">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tbody><tr>
+					<td class="yellow-left">You have a new message. <a href="">Go to Inbox.</a></td>
+					<td class="yellow-right"><a class="close-yellow"><img alt="" src="{{asset('images/table/icon_close_yellow.gif')}}"></a></td>
+				</tr>
+				</tbody></table>
+				</div>
+
+				<div id="message-red">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tbody><tr>
+					<td class="red-left">Error. <a href="">Please try again.</a></td>
+					<td class="red-right"><a class="close-red"><img alt="" src="{{asset('images/table/icon_close_red.gif')}}"></a></td>
+				</tr>
+				</tbody></table>
+				</div>
+				
+				<div id="message-blue">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tbody><tr>
+					<td class="blue-left">Welcome back. <a href="">View my account.</a> </td>
+					<td class="blue-right"><a class="close-blue"><img alt="" src="{{asset('images/table/icon_close_blue.gif')}}"></a></td>
+				</tr>
+				</tbody></table>
+				</div>
+			
+				<div id="message-green">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tbody><tr>
+					<td class="green-left">Product added sucessfully. <a href="">Add new one.</a></td>
+					<td class="green-right"><a class="close-green"><img alt="" src="{{asset('images/table/icon_close_green.gif')}}"></a></td>
+				</tr>
+				</tbody></table>
+				</div>
+				 -->
+		
+		    <!--  start table-content  -->
+			<div id="table-content">
+			
+				<!--  start content-block ....................................... -->
+				{% block content %}{% endblock %}
+				
+				<!--  end content-block................................... --> 
+			</div>
+			<!--  end content-table  -->
+		
+			<!--  start actions-box ............................................... -->
+			
+			<!-- end actions-box........... -->
+			
+			<!--  start paging..................................................... -->
+			
+			<!--  end paging................ -->
+			
+			<div class="clear"></div>
+		 
+		</div>
+		<!--  end content-table-inner ............................................END  -->
+		</td>
+		<td id="tbl-border-right"></td>
+	</tr>
+	<tr>
+		<th class="sized bottomleft"></th>
+		<td id="tbl-border-bottom">&nbsp;</td>
+		<th class="sized bottomright"></th>
+	</tr>
+	</tbody></table>
+	<div class="clear">&nbsp;</div>
+
+</div>
+<!--  end content -->
+<div class="clear">&nbsp;</div>
+</div>
+<!--  end content-outer........................................................END -->
+        
+        
+        {% block javascripts %}{% endblock %}
+        <div class="clear"></div>
+    	{% include 'CpmJovenesBundle:Default:footer.html.twig' %}
+    </body>
+</html>

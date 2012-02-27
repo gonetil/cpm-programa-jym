@@ -1,3 +1,7 @@
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
+{% block content %}
+
 <h1>Usuario edit</h1>
 
 <form action="{{ path('usuario_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
@@ -20,3 +24,5 @@
         </form>
     </li>
 </ul>
+
+ {% endblock %}

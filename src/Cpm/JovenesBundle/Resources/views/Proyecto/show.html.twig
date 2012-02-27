@@ -1,0 +1,49 @@
+<h1>Proyecto</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Titulo</th>
+            <td>{{ entity.titulo }}</td>
+        </tr>
+        <tr>
+            <th>Nroalumnos</th>
+            <td>{{ entity.nroAlumnos }}</td>
+        </tr>
+        <tr>
+            <th>Esprimeravezdocente</th>
+            <td>{{ entity.esPrimeraVezDocente }}</td>
+        </tr>
+        <tr>
+            <th>Esprimeravezescuela</th>
+            <td>{{ entity.esPrimeraVezEscuela }}</td>
+        </tr>
+        <tr>
+            <th>Esprimeravezalumnos</th>
+            <td>{{ entity.esPrimeraVezAlumnos }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('proyecto') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('proyecto_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('proyecto_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
