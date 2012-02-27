@@ -452,4 +452,24 @@ class Escuela
     public function __toString() { 
  		return "{$this->tipoEscuela} {$this->nombre}";   	
     }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string 
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
 }
