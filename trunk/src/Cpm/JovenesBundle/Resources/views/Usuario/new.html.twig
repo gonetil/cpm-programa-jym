@@ -1,3 +1,7 @@
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
+{% block content %}
+
 <h1>Usuario creation</h1>
 
 <form action="{{ path('usuario_create') }}" method="post" {{ form_enctype(form) }}>
@@ -14,3 +18,5 @@
         </a>
     </li>
 </ul>
+
+ {% endblock %}

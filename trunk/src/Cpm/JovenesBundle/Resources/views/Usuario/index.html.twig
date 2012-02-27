@@ -1,3 +1,7 @@
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
+{% block content %}
+
 <h1>Usuario list</h1>
 
 <table class="records_list">
@@ -28,7 +32,7 @@
             <td>{{ entity.codigoPostal }}</td>
             <td>{{ entity.estaHabilitado }}</td>
             <td>
-                <ul>
+                <ul class="record_actions">
                     <li>
                         <a href="{{ path('usuario_show', { 'id': entity.id }) }}">show</a>
                     </li>
@@ -42,10 +46,12 @@
     </tbody>
 </table>
 
-<ul>
+<ul class="record_actions">
     <li>
         <a href="{{ path('usuario_new') }}">
             Create a new entry
         </a>
     </li>
 </ul>
+
+ {% endblock %}
