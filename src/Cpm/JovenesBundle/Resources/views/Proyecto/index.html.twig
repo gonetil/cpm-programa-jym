@@ -1,4 +1,8 @@
-<h1>Proyecto list</h1>
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
+{% block content %}
+
+<h1>Listado de Proyectos</h1>
 
 <table class="records_list">
     <thead>
@@ -6,10 +10,10 @@
             <th>Id</th>
             <th>Titulo</th>
             <th>Nroalumnos</th>
-            <th>Esprimeravezdocente</th>
-            <th>Esprimeravezescuela</th>
-            <th>Esprimeravezalumnos</th>
-            <th>Actions</th>
+            <th>¿primera vez del docente?</th>
+            <th>¿primera vez de la escuela?</th>
+            <th>¿primera vez de los alumnos?</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -24,10 +28,10 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('proyecto_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('proyecto_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('proyecto_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('proyecto_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
                 </ul>
             </td>
@@ -39,7 +43,8 @@
 <ul>
     <li>
         <a href="{{ path('proyecto_new') }}">
-            Create a new entry
+            Agregar proyecto
         </a>
     </li>
 </ul>
+{% endblock %}
