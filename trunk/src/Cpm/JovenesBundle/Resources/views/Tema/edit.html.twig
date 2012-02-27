@@ -1,4 +1,7 @@
-<h1>Tema edit</h1>
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
+{% block content %}
+<h1>Modificar Tema</h1>
 
 <form action="{{ path('tema_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
@@ -20,3 +23,4 @@
         </form>
     </li>
 </ul>
+ {% endblock %}

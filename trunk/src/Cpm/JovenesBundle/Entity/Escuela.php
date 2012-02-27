@@ -42,7 +42,14 @@ class Escuela
     */
         private $tipoEscuela;
 
-    
+        /**
+        * @var string $nombre
+        *
+        * @ORM\Column(name="nombre", type="string")
+        */
+        
+        private $nombre;
+        
     /**
     * @var string $deQueSeTrata
     *
@@ -440,5 +447,9 @@ class Escuela
     public function getRegion()
     {
         return $this->region;
+    }
+    
+    public function __toString() { 
+ 		return "{$this->tipoEscuela} {$this->nombre}";   	
     }
 }
