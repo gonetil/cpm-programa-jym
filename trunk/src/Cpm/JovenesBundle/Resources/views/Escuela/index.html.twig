@@ -1,29 +1,37 @@
-<h1>Escuela list</h1>
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
+{% block content %}
+
+<h1>Escuelas</h1>
 
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Otrotipoinstitucion</th>
-            <th>Dequesetrata</th>
-            <th>Motivorealizacion</th>
-            <th>Impactobuscado</th>
+            <th>Tipo</th>
+            <th>Nombre</th>
+            <th>Tipo de Institución</th>
             <th>Email</th>
             <th>Telefono</th>
             <th>Domicilio</th>
-            <th>Codigopostal</th>
+            <th>Codigo Postal</th>
             <th>Director</th>
-            <th>Actions</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('escuela_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.otroTipoInstitucion }}</td>
-            <td>{{ entity.deQueSeTrata }}</td>
-            <td>{{ entity.motivoRealizacion }}</td>
-            <td>{{ entity.impactoBuscado }}</td>
+            <td>{{ entity.tipoEscuela.nombre }}</td>
+            <td>{{ entity.nombre }}</td>
+            <td>
+            	{% if entity.tipoInstitucion is not null %}
+            		{{ entity.tipoInstitucion.nombre }}
+            	{% else %}	
+            		{{ entity.otroTipoInstitucion }}
+            	{% endif %}	
+            </td>
             <td>{{ entity.email }}</td>
             <td>{{ entity.telefono }}</td>
             <td>{{ entity.domicilio }}</td>
@@ -32,10 +40,10 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('escuela_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('escuela_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('escuela_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('escuela_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
                 </ul>
             </td>
@@ -47,7 +55,8 @@
 <ul>
     <li>
         <a href="{{ path('escuela_new') }}">
-            Create a new entry
+            Agregar escuela
         </a>
     </li>
 </ul>
+{% endblock %}
