@@ -53,6 +53,20 @@ class Usuario implements AdvancedUserInterface, \Serializable
      */
     private $dni;
 
+    
+    /**
+    * @var string $apellido
+     *
+    * @ORM\Column(name="apellido", type="string")
+    */
+    private $apellido;
+    
+    /**
+    * @var string $nombre
+     *
+    * @ORM\Column(name="nombre", type="string")
+    */
+    private $nombre;
     /**
      * @var string $telefono
      *
@@ -86,33 +100,16 @@ class Usuario implements AdvancedUserInterface, \Serializable
     * 
     * @ORM\ManyToOne(targetEntity="Localidad")
     *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="localidad_id", referencedColumnName="id")
+    *   @ORM\JoinColumn(name="localidad_id", referencedColumnName="id", nullable = "true")
     * })
     */
     private $localidad;
-    
-    /**
-    * @ORM\ManyToOne(targetEntity="Distrito")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="distrito_id", referencedColumnName="id")
-    * })
-    */
-    private $distrito;
-
-    /**
-    * @ORM\ManyToOne(targetEntity="RegionEducativa")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="region_educativa_id", referencedColumnName="id")
-    * })
-    */
-    private $region;
-    
-    
+        
     
     /**
     *  @ORM\OneToMany(targetEntity="Correo",mappedBy="destinatario")
     *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="correo_id", referencedColumnName="id")
+    *   @ORM\JoinColumn(name="correo_id", referencedColumnName="id", nullable=true)
     * })
     */
     private $correosRecibidos;
@@ -128,14 +125,14 @@ class Usuario implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="esta_habilitado", type="boolean" )
      */
-    private $estaHabilitado;
+    private $estaHabilitado=1;
 
     /**
      * @var bool $esAdmin
      *
      * @ORM\Column(name="es_admin", type="boolean" )
      */
-    private $esAdmin;
+    private $esAdmin=0;
     
     
     public function __construct()
@@ -298,6 +295,49 @@ class Usuario implements AdvancedUserInterface, \Serializable
         return $this->codigoPostal;
     }
     
+
+    /**
+    * Set apellido
+    *
+    * @param string $apellido
+    */
+    public function setApellido($apellido)
+    {
+    	$this->apellido = $apellido;
+    }
+    
+    /**
+     * Get apellido
+     *
+     * @return string
+     */
+    public function getApellido()
+    {
+    	return $this->apellido;
+    }
+    
+    
+    /**
+    * Set nombre
+    *
+    * @param string $nombre
+    */
+    public function setNombre($nombre)
+    {
+    	$this->nombre = $nombre;
+    }
+    
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+    	return $this->nombre;
+    }
+    
+    
     /**
      * Set localidad
      *
@@ -316,46 +356,6 @@ class Usuario implements AdvancedUserInterface, \Serializable
     public function getLocalidad()
     {
         return $this->localidad;
-    }
-
-    /**
-     * Set distrito
-     *
-     * @param Cpm\JovenesBundle\Entity\Distrito $distrito
-     */
-    public function setDistrito(\Cpm\JovenesBundle\Entity\Distrito $distrito)
-    {
-        $this->distrito = $distrito;
-    }
-
-    /**
-     * Get distrito
-     *
-     * @return Cpm\JovenesBundle\Entity\Distrito 
-     */
-    public function getDistrito()
-    {
-        return $this->distrito;
-    }
-
-    /**
-     * Set region
-     *
-     * @param Cpm\JovenesBundle\Entity\RegionEducativa $region
-     */
-    public function setRegion(\Cpm\JovenesBundle\Entity\RegionEducativa $region)
-    {
-        $this->region = $region;
-    }
-
-    /**
-     * Get region
-     *
-     * @return Cpm\JovenesBundle\Entity\RegionEducativa 
-     */
-    public function getRegion()
-    {
-        return $this->region;
     }
 
     /**
@@ -438,7 +438,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     {
     	//$this->clave ='';
     }
-
+    
     public function getUsername()
     {
         return $this->email;
