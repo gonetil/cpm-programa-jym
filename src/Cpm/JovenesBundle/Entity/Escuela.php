@@ -50,29 +50,6 @@ class Escuela
         
         private $nombre;
         
-    /**
-    * @var string $deQueSeTrata
-    *
-    * @ORM\Column(name="de_que_se_trata", type="text")
-    */
-        
-    private $deQueSeTrata;
-    
-    /**
-    * @var string $motivoRealizacion
-    *
-    * @ORM\Column(name="motivo_realizacion", type="text")
-    */
-    
-    private $motivoRealizacion;
-    
-    /**
-    * @var string $impactoBuscado
-    *
-    * @ORM\Column(name="impacto_buscado", type="text")
-    */
-    
-    private $impactoBuscado;
 
     /**
      * @var string $email
@@ -249,65 +226,6 @@ class Escuela
         return $this->director;
     }
 
-    /**
-     * Set deQueSeTrata
-     *
-     * @param text $deQueSeTrata
-     */
-    public function setDeQueSeTrata($deQueSeTrata)
-    {
-        $this->deQueSeTrata = $deQueSeTrata;
-    }
-
-    /**
-     * Get deQueSeTrata
-     *
-     * @return text 
-     */
-    public function getDeQueSeTrata()
-    {
-        return $this->deQueSeTrata;
-    }
-
-    /**
-     * Set motivoRealizacion
-     *
-     * @param text $motivoRealizacion
-     */
-    public function setMotivoRealizacion($motivoRealizacion)
-    {
-        $this->motivoRealizacion = $motivoRealizacion;
-    }
-
-    /**
-     * Get motivoRealizacion
-     *
-     * @return text 
-     */
-    public function getMotivoRealizacion()
-    {
-        return $this->motivoRealizacion;
-    }
-
-    /**
-     * Set impactoBuscado
-     *
-     * @param text $impactoBuscado
-     */
-    public function setImpactoBuscado($impactoBuscado)
-    {
-        $this->impactoBuscado = $impactoBuscado;
-    }
-
-    /**
-     * Get impactoBuscado
-     *
-     * @return text 
-     */
-    public function getImpactoBuscado()
-    {
-        return $this->impactoBuscado;
-    }
 
     /**
      * Set tipoInstitucion
@@ -474,25 +392,5 @@ class Escuela
     
     public function __toString() { 
  		return "{$this->tipoEscuela} {$this->nombre}";   	
-    }
-
-    /**
-     * Set nombre
-     *
-     * @param string $nombre
-     */
-    public function setNombre($nombre)
-    {
-        $this->nombre = $nombre;
-    }
-
-    /**
-     * Get nombre
-     *
-     * @return string 
-     */
-    public function getNombre()
-    {
-        return $this->nombre;
     }
 }
