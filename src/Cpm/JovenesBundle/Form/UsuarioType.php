@@ -11,8 +11,9 @@ class UsuarioType extends AbstractType
     {
         $builder
             ->add('clave')
-//            ->add('ultimoAcceso', datearray('required'=>'false'))
             ->add('dni')
+	        ->add('nombre')
+	        ->add('apellido')
             ->add('telefono', 'text', array('required'=>false))
             ->add('telefonoCelular', 'text', array('required'=>false))
             ->add('email', 'email')
@@ -20,8 +21,6 @@ class UsuarioType extends AbstractType
             ->add('estaHabilitado')
             ->add('esAdmin', 'checkbox', array('required'=>false))
             ->add('localidad')
-            ->add('distrito')
-            ->add('region')
         ;
     }
 

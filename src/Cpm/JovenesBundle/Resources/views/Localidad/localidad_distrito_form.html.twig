@@ -4,7 +4,7 @@
    				 
    				 url = "{{ path('localidad_find_by_distrito') }}"; 
    				 $.getJSON(  url, { distrito_id : id} , function(data) {
-   				 	select = jQuery("#localidades");
+   				 	select = jQuery("#cpm_jovenesbundle_proyectotype_escuela_localidad");
    				 	select.empty();
    				    if (data.length > 0) {
 	   				 	for (var i=0; i<data.length; i++) 
@@ -17,6 +17,7 @@
 	   				 }
    				 });
    			}
+   			$(document).ready(function() { $("#distrito").trigger("change"); });
 </script>
 
 

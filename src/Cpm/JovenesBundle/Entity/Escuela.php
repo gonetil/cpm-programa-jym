@@ -30,7 +30,7 @@ class Escuela
     /**
     * @var string $otroTipoInstitucion
     *
-    * @ORM\Column(name="otroTipoInstitucion", type="string")
+    * @ORM\Column(name="otroTipoInstitucion", type="string", nullable="true")
     *  
     */
     private $otroTipoInstitucion;

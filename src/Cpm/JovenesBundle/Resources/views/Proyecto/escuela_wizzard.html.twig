@@ -1,0 +1,29 @@
+	<script>
+   			$(document).ready(function() { 
+   					$("#cpm_jovenesbundle_proyectotype_escuela_tipoInstitucion").append("<option value='-1'>Otro</option>").change(function(event) { 
+   						if ($(event.target).val() == -1)
+   							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr("disabled");
+   						else 
+   							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr("disabled","disabled");
+   					}).trigger('change');
+   					
+   					
+   					
+   			});
+   		</script>
+
+      {# incluyo el formulario de seleccion de distrito y localidad  #}  
+      {% include "CpmJovenesBundle:Localidad:localidad_distrito_form.html.twig" %}
+   
+	      			
+	{{ form_row(form.escuela.localidad)}}
+	{{ form_row(form.escuela.nombre)}}
+	{{ form_row(form.escuela.email)}}
+	{{ form_row(form.escuela.telefono)}}
+	{{ form_row(form.escuela.domicilio)}}
+	{{ form_row(form.escuela.codigoPostal)}}
+	{{ form_row(form.escuela.director)}}
+	{{ form_row(form.escuela.tipoInstitucion)}}
+	{{ form_row(form.escuela.otroTipoInstitucion)}}
+	   
+

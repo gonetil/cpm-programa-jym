@@ -40,25 +40,25 @@ class Proyecto
      *
      * @ORM\Column(name="esPrimeraVezDocente", type="boolean")
      */
-    private $esPrimeraVezDocente;
+    private $esPrimeraVezDocente=false;
 
     /**
      * @var boolean $esPrimeraVezEscuela
      *
      * @ORM\Column(name="esPrimeraVezEscuela", type="boolean")
      */
-    private $esPrimeraVezEscuela;
+    private $esPrimeraVezEscuela=false;
 
     /**
      * @var boolean $esPrimeraVezAlumnos
      *
      * @ORM\Column(name="esPrimeraVezAlumnos", type="boolean")
      */
-    private $esPrimeraVezAlumnos;
+    private $esPrimeraVezAlumnos=false;
 
 
     /**
-    *  @ORM\OneToOne(targetEntity="Escuela")
+    *  @ORM\OneToOne(targetEntity="Escuela",cascade={"persist"})
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="escuela_id", referencedColumnName="id")
     * })
@@ -94,6 +94,30 @@ class Proyecto
     * })
     */
     private $produccionFinal;
+    
+    /**
+    * @var string $deQueSeTrata
+    *
+    * @ORM\Column(name="de_que_se_trata", type="text")
+    */
+    
+    private $deQueSeTrata;
+    
+    /**
+     * @var string $motivoRealizacion
+     *
+     * @ORM\Column(name="motivo_realizacion", type="text")
+     */
+    
+    private $motivoRealizacion;
+    
+    /**
+     * @var string $impactoBuscado
+     *
+     * @ORM\Column(name="impacto_buscado", type="text")
+     */
+    
+    private $impactoBuscado;
     
             
     /**
@@ -270,6 +294,17 @@ class Proyecto
         return $this->colaboradores;
     }
 
+    
+    /**
+    * Set colaboradores
+    *
+    */
+    public function setColaboradores($colaboradores)
+    {
+    	$this->colaboradores = $colaboradores;
+    }
+    
+    
     /**
      * Set temaPrincipal
      *
@@ -309,4 +344,65 @@ class Proyecto
     {
         return $this->produccionFinal;
     }
+    
+    /**
+    * Set deQueSeTrata
+    *
+    * @param text $deQueSeTrata
+    */
+    public function setDeQueSeTrata($deQueSeTrata)
+    {
+    	$this->deQueSeTrata = $deQueSeTrata;
+    }
+    
+    /**
+     * Get deQueSeTrata
+     *
+     * @return text
+     */
+    public function getDeQueSeTrata()
+    {
+    	return $this->deQueSeTrata;
+    }
+    
+    /**
+     * Set motivoRealizacion
+     *
+     * @param text $motivoRealizacion
+     */
+    public function setMotivoRealizacion($motivoRealizacion)
+    {
+    	$this->motivoRealizacion = $motivoRealizacion;
+    }
+    
+    /**
+     * Get motivoRealizacion
+     *
+     * @return text
+     */
+    public function getMotivoRealizacion()
+    {
+    	return $this->motivoRealizacion;
+    }
+    
+    /**
+     * Set impactoBuscado
+     *
+     * @param text $impactoBuscado
+     */
+    public function setImpactoBuscado($impactoBuscado)
+    {
+    	$this->impactoBuscado = $impactoBuscado;
+    }
+    
+    /**
+     * Get impactoBuscado
+     *
+     * @return text
+     */
+    public function getImpactoBuscado()
+    {
+    	return $this->impactoBuscado;
+    }
+    
 }

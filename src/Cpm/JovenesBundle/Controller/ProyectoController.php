@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Form\ProyectoType;
+use Cpm\JovenesBundle\Entity\Escuela;
+use Cpm\JovenesBundle\Entity\Usuario;
 
 /**
  * Proyecto controller.
@@ -199,4 +201,82 @@ class ProyectoController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+    * Displays a form to create a new Proyecto entity.
+    *
+    * @Route("/wizzard", name="proyecto_wizzard")
+    * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
+    */
+    
+    public function wizzardAction() {
+        $proyecto = new Proyecto();
+        
+        $user= $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $coordinador = $em->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($user->getUsername());
+
+		$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findAll();
+        
+        $form   = $this->createForm(new ProyectoType(), $proyecto);
+
+		
+        return array(
+            'entity' => $proyecto,
+            'coordinador' => $coordinador,
+            'distritos' => $distritos,
+            'form'   => $form->createView()
+        );
+    }
+
+    /**
+    * Guarda un proyecto enviado desde el Wizzard de proyectos
+    *
+    * @Route("/save_wizzard", name="proyecto_create_from_wizzard")
+    * @Method("post")
+    * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
+    * 
+    */
+    
+    public function createFromWizzardAction() { 
+    	$proyecto = new Proyecto();
+    	$proyecto->setEscuela(new Escuela());
+    	    	
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$coordinador = $em->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($user->getUsername());
+		
+    	
+    	$proyecto->setCoordinador($coordinador);
+
+    	$form    = $this->createForm(new ProyectoType(), $proyecto);
+    	$form->bindRequest($this->getRequest());
+    	
+
+    	
+    	if ($form->isValid()) {
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$em->persist($proyecto);
+    		$em->flush();
+    	
+    		return $this->redirect($this->generateUrl('proyecto_show', array('id' => $proyecto->getId())));
+    	
+    	}
+    	
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findAll();
+    	
+		return    	array(
+    	            'entity' => $proyecto,
+    				'coordinador' => $coordinador,
+    	            'distritos' => $distritos,
+    	 
+    	            'form'   => $form->createView()
+    	);    	
+    	
+    }
+
+    
 }

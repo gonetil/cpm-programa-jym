@@ -1,0 +1,71 @@
+{% extends 'CpmJovenesBundle:Default:admin_layout.html.twig' %}
+
+{% block content %}
+
+
+<script>
+   colaboradores = 0;
+   function addColaborador() { 
+   			var html = ' <label class=" required">' + colaboradores+ '</label> \
+   			<div id="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'"> \
+   				<div> \
+   				  <label class=" required" for="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_nombre">Nombre</label> \
+   				  <input type="text" required="required" name="cpm_jovenesbundle_proyectotype[colaboradores]['+colaboradores+'][nombre]" id="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_nombre"> \
+   				 </div> \
+   				 <div> \
+   				 	<label class=" required" for="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_apellido">Apellido</label> \
+   				 	<input type="text" required="required" name="cpm_jovenesbundle_proyectotype[colaboradores]['+colaboradores+'][apellido]" id="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_apellido"> \
+   				 </div> \
+   				 <div> \
+   				    <label class=" required" for="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_email">Email</label> \
+   				    <input type="email" required="required" name="cpm_jovenesbundle_proyectotype[colaboradores]['+colaboradores+'][email]" id="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_email"> \
+   				 </div> \
+   		   </div>';
+   		   
+   		   $("#colaboradores").append(html); 
+   		   colaboradores++;
+   		   return false;
+   }
+</script>
+<form action="{{ path('proyecto_create_from_wizzard') }}" method="post" {{ form_enctype(form) }}>
+      {{ form_errors(form) }}
+   
+   {{ form_row(form.titulo) }}
+   {{ form_row(form.nroAlumnos) }}
+   {{ form_row(form.esPrimeraVezDocente) }}
+   {{ form_row(form.esPrimeraVezEscuela) }}
+   {{ form_row(form.esPrimeraVezAlumnos) }}
+   {{ form_row(form.temaPrincipal) }}
+   {{ form_row(form.produccionFinal) }}
+   {{ form_row(form.deQueSeTrata) }}
+   {{ form_row(form.motivoRealizacion) }}
+   {{ form_row(form.impactoBuscado) }}
+   <hr/>
+      {# incluyo el formulario de carga de escuela en el wizzard #}  
+      {% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
+    
+   <hr/>
+   <div id="coordinador">
+   
+   {{ coordinador.nombre }}
+   
+   {{ coordinador.apellido }}
+   </div>
+   <span id="colaboradores"> 
+   {{ form_row(form.colaboradores) }}
+   </span>
+   <a href="#" onclick="addColaborador(); return false;"> Agregar colaborador </a> </br>
+   {{ form_rest(form) }}
+    <p>
+        <button type="submit">Confirmar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('usuario') }}">
+            Salir
+        </a>
+    </li>
+</ul>
+{% endblock %}
