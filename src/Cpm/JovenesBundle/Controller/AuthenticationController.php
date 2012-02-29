@@ -61,6 +61,14 @@ class AuthenticationController extends Controller
     		//TODO
     }
     
+    /**
+     * @Route("/registrarse", name="registrarse")
+   
+    public function registrarseAction()
+    {
+    		//TODO
+    }
+      */
     
     
     

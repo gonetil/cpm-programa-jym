@@ -2,13 +2,29 @@
 
 {% block content %}
 <script>
+	function cargar_form_registro() {
+	  loader_indicator = $('#register-loading-indicator');
+	  if (loader_indicator.css('display')=='none')
+	  	return;
+	  
+	  $('#register-box').load('{{path('register_form')}}');
+	  
+	  //loader_indicator.css('display','none');
+	}
+	
 	$(function() {
 		$('#submit-login').button();
 		$('#submit-recuperar-clave').button();
 		$('#submit-registrarse').button();
-		$('#login-accordion').accordion();
+		$('#login-accordion').accordion({
+			
+		});
 		
 	});
+	
+	$( ".selector" ).accordion({
+   
+});
 </script>
 <!-- Start: login-holder -->
 
@@ -52,19 +68,9 @@
 	 <!--  end loginbox -->
 
 	<!--  start registerbox ................................................................................... -->
-	<h3><a href="#">Registrarse</a></h3>
-	<div>
-		<p> Si no tiene una cuenta en jovenes .... speech inicial? </p>
-		
-		<p>
-			<form action="{{path('registrarse')}}" method="post" id="register">
-				<h2>Campo1</h2>
-				<input type="text" value="@" size="30"/>
-				<br/>
-				<input type="button" id="submit-registrarse" value="Registrarse"/>
-			</form>
-		</p>
-	
+	<h3><a href="#" onclick="javascript:cargar_form_registro()">Registrarse</a></h3>
+	<div id="register-box">
+		<div id="register-loading-indicator" ><img src="loader.gif" alt="Loading..." /></div>
 	</div>
 	<!--  end registerbox -->
 	 
