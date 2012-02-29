@@ -17,7 +17,7 @@ class EscuelaType extends AbstractType
             ->add('domicilio')
             ->add('codigoPostal',null,array('label'=>'Código postal'))
             ->add('director')
-	        ->add('tipoInstitucion', 'entity', array( 'class' => 'CpmJovenesBundle:TipoInstitucion','label'=>'Tipo de Institución'))
+	        ->add('tipoInstitucion', 'entity', array( 'class' => 'CpmJovenesBundle:TipoInstitucion','label'=>'Tipo de Institución', 'empty_value'=>'Otro', 'required'=>false))
             ->add('otroTipoInstitucion',null,array('required' => false,'label'=>'Otro tipo de institución'))
             ->add('localidad', 'entity', array( 'class' => 'CpmJovenesBundle:Localidad','label'=>'Localidad'))	    
                 

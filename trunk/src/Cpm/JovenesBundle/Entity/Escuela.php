@@ -53,7 +53,10 @@ class Escuela
 
     /**
      * @var string $email
-     *
+     * @Assert\Email(
+     *     message = "La dirección de correo '{{ value }}' no es válida.",
+     *     checkMX = true
+     * )
      * @ORM\Column(name="email", type="string")
      */
     private $email;

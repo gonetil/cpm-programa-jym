@@ -1,7 +1,7 @@
 	<script>
    			$(document).ready(function() { 
-   					$("#cpm_jovenesbundle_proyectotype_escuela_tipoInstitucion").append("<option value='-1'>Otro</option>").change(function(event) { 
-   						if ($(event.target).val() == -1)
+   					$("#cpm_jovenesbundle_proyectotype_escuela_tipoInstitucion").change(function(event) { 
+   						if ($(event.target).val() == "")
    							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr("disabled");
    						else 
    							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr("disabled","disabled");
@@ -12,12 +12,15 @@
    			});
    		</script>
 
+	<h3> Información de la Escuela </h3> 
       {# incluyo el formulario de seleccion de distrito y localidad  #}  
       {% include "CpmJovenesBundle:Localidad:localidad_distrito_form.html.twig" %}
-   
+   	 
 	      			
 	{{ form_row(form.escuela.localidad)}}
+	{{ form_row(form.escuela.tipoEscuela)}}
 	{{ form_row(form.escuela.nombre)}}
+	
 	{{ form_row(form.escuela.email)}}
 	{{ form_row(form.escuela.telefono)}}
 	{{ form_row(form.escuela.domicilio)}}

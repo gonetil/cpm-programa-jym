@@ -27,6 +27,7 @@
    		   return false;
    }
 </script>
+<h3> Datos de la propuesta </h3>
 <form action="{{ path('proyecto_create_from_wizzard') }}" method="post" {{ form_enctype(form) }}>
       {{ form_errors(form) }}
    
@@ -51,12 +52,14 @@
    
    {{ coordinador.apellido }}
    </div>
+      
    <span id="colaboradores"> 
    {{ form_row(form.colaboradores) }}
    </span>
-   <a href="#" onclick="addColaborador(); return false;"> Agregar colaborador </a> </br>
+<a href="#" onclick="addColaborador(); return false;"> Agregar colaborador </a> </br>
    {{ form_rest(form) }}
     <p>
+    
         <button type="submit">Confirmar</button>
     </p>
 </form>
