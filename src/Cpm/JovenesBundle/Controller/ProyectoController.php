@@ -211,6 +211,9 @@ class ProyectoController extends Controller
     
     public function wizzardAction() {
         $proyecto = new Proyecto();
+        //$escuela = new Escuela();
+        
+      //  $proyecto->setEscuela($escuela);
         
         $user= $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
@@ -240,7 +243,7 @@ class ProyectoController extends Controller
     
     public function createFromWizzardAction() { 
     	$proyecto = new Proyecto();
-    	$proyecto->setEscuela(new Escuela());
+//    	$proyecto->setEscuela(new Escuela());
     	    	
     	$user = $this->get('security.context')->getToken()->getUser();
     	
@@ -249,9 +252,12 @@ class ProyectoController extends Controller
 		
     	
     	$proyecto->setCoordinador($coordinador);
-
+    	
+    	$request = $this->getRequest();
     	$form    = $this->createForm(new ProyectoType(), $proyecto);
-    	$form->bindRequest($this->getRequest());
+    	//var_dump($request);
+    	
+    	$form->bindRequest($request);
     	
 
     	

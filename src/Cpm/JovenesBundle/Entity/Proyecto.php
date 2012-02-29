@@ -66,7 +66,7 @@ class Proyecto
     private $escuela;
     
     /**
-    *  @ORM\OneToOne(targetEntity="Usuario")
+    *  @ORM\ManyToOne(targetEntity="Usuario")
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="coordinador_id", referencedColumnName="id")
     * })
@@ -74,7 +74,7 @@ class Proyecto
     private $coordinador;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Usuario", inversedBy="colaboraEn")
+     * @ORM\ManyToMany(targetEntity="Usuario", inversedBy="colaboraEn",cascade={"persist"})
      * @ORM\JoinTable(name="ColaboradorProyecto")
      **/
     private $colaboradores;

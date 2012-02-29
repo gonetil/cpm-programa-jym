@@ -5,7 +5,7 @@ namespace Cpm\JovenesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Cpm\JovenesBundle\Entity\Usuario
  *
@@ -49,7 +49,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     /**
      * @var string $dni
      *
-     * @ORM\Column(name="dni", type="string")
+     * @ORM\Column(name="dni", type="string", nullable=true)
      */
     private $dni;
 
@@ -83,14 +83,16 @@ class Usuario implements AdvancedUserInterface, \Serializable
 
     /**
      * @var string $email
-     *
+     * @Assert\Email(
+     *     message = "La dirección de correo '{{ value }}' no es válida.",
+     *     checkMX = true
+     * )     
      * @ORM\Column(name="email", type="string", unique=true)
      */
     private $email;
 
     /**
      * @var string $codigoPostal
-     *
      * @ORM\Column(name="codigoPostal", type="string", nullable=true)
      */
     private $codigoPostal;
