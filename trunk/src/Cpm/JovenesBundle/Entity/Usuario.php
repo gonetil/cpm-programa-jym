@@ -117,15 +117,11 @@ class Usuario implements AdvancedUserInterface, \Serializable
     */
     private $correosRecibidos;
     
-    /*
-    * @ORM\ManyToMany(targetEntity="Usuario", inversedBy="colaboradores")
-     * @ORM\JoinTable(name="colaboradores_proyectos",
-    * joinColumns={@ORM\JoinColumn(name="usuario_id", referencedColumnName="id")},
-    * inverseJoinColumns={@ORM\JoinColumn(name="proyecto_id", referencedColumnName="id")}
-    * )
-    
-    private $categories;
-*/
+    /**
+     * @ORM\ManyToMany(targetEntity="Proyecto", mappedBy="colaboradores")
+     **/
+    private $colaboraEn;
+
 
     /**
      * @var bool $estaHabilitado
@@ -519,5 +515,25 @@ class Usuario implements AdvancedUserInterface, \Serializable
             $this->email,
             $this->estaHabilitado
         ) = unserialize($serialized);
+    }
+
+    /**
+     * Add colaboraEn
+     *
+     * @param Cpm\JovenesBundle\Entity\Proyecto $colaboraEn
+     */
+    public function addProyecto(\Cpm\JovenesBundle\Entity\Proyecto $colaboraEn)
+    {
+        $this->colaboraEn[] = $colaboraEn;
+    }
+
+    /**
+     * Get colaboraEn
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getColaboraEn()
+    {
+        return $this->colaboraEn;
     }
 }

@@ -73,9 +73,10 @@ class Proyecto
     */    
     private $coordinador;
     
-   /**
-     * @ORM\ManyToMany(targetEntity="Usuario", mappedBy="colabora_en")
-     */
+    /**
+     * @ORM\ManyToMany(targetEntity="Usuario", inversedBy="colaboraEn")
+     * @ORM\JoinTable(name="ColaboradorProyecto")
+     **/
     private $colaboradores;
     
     
