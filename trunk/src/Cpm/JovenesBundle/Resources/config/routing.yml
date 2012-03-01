@@ -1,0 +1,15 @@
+ControllersAdmin:
+    resource: "@CpmJovenesBundle/Controller/"
+    type:     annotation
+    prefix:   /admin/
+    
+    
+ControllerDocente:
+    resource: "@CpmJovenesBundle/Controller/PerfilController.php"
+    type:     annotation
+    prefix:   /perfil/
+    
+ControllerPublico:
+    resource: "@CpmJovenesBundle/Controller/DefaultController.php"
+    type:     annotation
+#    prefix:   /

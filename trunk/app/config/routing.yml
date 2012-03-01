@@ -1,7 +1,7 @@
 CpmJovenesBundle:
-    resource: "@CpmJovenesBundle/Controller/"
-    type:     annotation
-#    resource: "@CpmJovenesBundle/Resources/config/routing.yml"
+#    resource: "@CpmJovenesBundle/Controller/"
+#    type:     annotation
+    resource: "@CpmJovenesBundle/Resources/config/routing.yml"
 #    prefix:   /
     
 # Internal routing configuration to handle ESI

@@ -1,4 +1,4 @@
-{% extends 'CpmJovenesBundle:Authentication:login_layout.html.twig' %}
+{% extends 'CpmJovenesBundle:Layout:login_layout.html.twig' %}
 
 {% block content %}
 <script>
@@ -6,8 +6,8 @@
 	  loader_indicator = $('#register-loading-indicator');
 	  if (loader_indicator.css('display')=='none')
 	  	return;
-	  
-	  $('#register-box').load('{{path('register_form')}}');
+	  $('#register-box').load('{{path('registrarse_form')}}');
+		
 	  
 	  //loader_indicator.css('display','none');
 	}
@@ -19,6 +19,7 @@
 		$('#login-accordion').accordion({
 			
 		});
+		$('#registrarse-titulo').bind('click', cargar_form_registro);
 		
 	});
 	
@@ -68,9 +69,9 @@
 	 <!--  end loginbox -->
 
 	<!--  start registerbox ................................................................................... -->
-	<h3><a href="#" onclick="javascript:cargar_form_registro()">Registrarse</a></h3>
+	<h3  id="registrarse-titulo"><a href="#">Registrarse</a></h3>
 	<div id="register-box">
-		<div id="register-loading-indicator" ><img src="loader.gif" alt="Loading..." /></div>
+		<div id="loading-indicator-mini" >Loading...</div>
 	</div>
 	<!--  end registerbox -->
 	 

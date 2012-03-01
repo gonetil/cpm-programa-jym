@@ -9,24 +9,18 @@ security:
             security: false
 
         login:
-            pattern:  ^/login$
-            anonymous: ~
-
+            pattern:  ^/public/
+            security: false
+        
         secured_area:
             pattern:    ^/
-            form_login:
-                check_path: /login_check
-                login_path: /login
-            logout:
-                path:   /logout
-                target: /
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
+            form_login: 
+                login_path: /public/login 
+            logout: ~
+            
     access_control:
-        - { path: ^/persona, roles: ROLE_USER }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: ROLE_ADMIN }
+        - { path: ^/user, roles: ROLE_USER }
+#        - { path: ^/, roles: ROLE_ADMIN }
 
     providers:
        chain_provider:
