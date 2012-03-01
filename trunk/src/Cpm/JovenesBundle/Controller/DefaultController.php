@@ -28,7 +28,7 @@ class DefaultController extends BaseController
     
     /**
      * @Route("/public/login", name="_login")
-     * @Template()
+     * 
      */
     public function loginAction()
     {
@@ -40,10 +40,9 @@ class DefaultController extends BaseController
 
 		if ($error) $this->setErrorMessage($error);
         
-        return array(
-            'last_username' => $this->getSession()->get(SecurityContext::LAST_USERNAME),
-            
-        );
+        return $this->render('CpmJovenesBundle:Default:login.html.twig', array(
+            'last_username' => $this->getSession()->get(SecurityContext::LAST_USERNAME)
+        ));
     }
 
     /**
@@ -77,7 +76,7 @@ class DefaultController extends BaseController
      */
     public function recuperarClaveSubmitAction()
     {
-    	 return $this->render('CpmJovenesBundle:Default:login.html.twig');
+    	 return $this->loginAction();
     }
     
     /**
@@ -101,14 +100,17 @@ class DefaultController extends BaseController
             
             $this->enviarMail($entity->getEmail(), Plantilla::REGISTRO_USUARIO, array('user'=>$entity));
             
-            $this->setSuccessMessage('Se le ha enviado un correo de confirmación. Deberá seguir el enlace que alli se incluye para completar el proceso de registración. ');
-            return $this->render('CpmJovenesBundle:Default:login.html.twig');
+            $this->setSuccessMessage('Se le ha enviado un correo de confirmación a '.$entity->getEmail()
+					.'. Deberá seguir el enlace que alli se incluye para completar el proceso de registración. ');
+            return $this->loginAction();
         }else{
-	 		
+
 	 		if ($preexistente)
 	            $this->setErrorMessage('Ya existe un usuario con el mismo email ..');
-	
-	        return $this->render('CpmJovenesBundle:Default:registrarseForm.html.twig', array(
+			else
+				$this->setErrorMessage('Faltan datos :S');
+				
+	        return $this->render('CpmJovenesBundle:Default:registrarse.html.twig', array(
 	            'entity' => $entity,
 	            'form'   => $form->createView(),
 	            'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll() 
@@ -136,7 +138,7 @@ class DefaultController extends BaseController
     /**
     * Busca todas las escuelas de un distrito
     *
-    * @Route("find_by_distrito", name="localidad_find_by_distrito")
+    * @Route("/public/find_by_distrito", name="localidad_find_by_distrito")
     */   
     public function findByDistritoAction() {
     	$distrito_id = $this->get('request')->query->get('distrito_id');
