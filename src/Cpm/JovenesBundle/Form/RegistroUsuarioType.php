@@ -12,12 +12,12 @@ class RegistroUsuarioType extends AbstractType
         $builder
             ->add('nombre')
             ->add('apellido')
-            ->add('email', 'email')
             ->add('dni')
+            ->add('localidad', null, array('attr' => array('class'=>'localidad-selector')))
+            ->add('codigoPostal')
             ->add('telefono')
             ->add('telefonoCelular', 'text', array('required'=>false))
-            ->add('localidad')
-            ->add('codigoPostal')
+            ->add('email', 'email')
             ->add('clave', 'repeated', array(
 				    'type' => 'password',
 				    'invalid_message' => 'Las claves deben coincidir',

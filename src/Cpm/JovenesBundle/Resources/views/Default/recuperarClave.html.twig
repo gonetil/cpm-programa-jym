@@ -1,0 +1,21 @@
+{% extends 'CpmJovenesBundle:Layout:login_layout.html.twig' %}
+
+{% block title %}Recuperacion de clave{% endblock %}
+
+{% block content %}
+
+<p>Si no recuerda su clave, ingrese la dirección de correo electrónico que uso para registrarse en el sitio. Luego, le generaremos una nueva clave y se la enviaremos por correo electrónico. </p>
+			
+<form action="{{ path('recuperar_clave_submit') }}" method="post">
+    <br/>
+	Email: <input type="text" value="@" size="30"/>
+	<br/>
+	<input type="submit" class="submit" value="Recuperar" />
+</form>
+
+<ul id="login-extra-options">
+	<li><a href="{{path('_login')}}">Volver al login</a></li>
+	<li><a href="{{path('registrarse_form')}}">Registrarse</a></li>
+</ul>
+	
+{% endblock %}

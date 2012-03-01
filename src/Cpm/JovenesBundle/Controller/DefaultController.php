@@ -4,12 +4,14 @@ namespace Cpm\JovenesBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use Symfony\Component\Security\Core\SecurityContext;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Plantilla;
 use Cpm\JovenesBundle\Form\RegistroUsuarioType;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class DefaultController extends BaseController
@@ -36,9 +38,11 @@ class DefaultController extends BaseController
             $error = $this->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
 
+		if ($error) $this->setErrorMessage($error);
+        
         return array(
             'last_username' => $this->getSession()->get(SecurityContext::LAST_USERNAME),
-            'error'         => $error,
+            
         );
     }
 
@@ -59,18 +63,29 @@ class DefaultController extends BaseController
     }
 
     /**
-     * @Route("/public/recuperar_clave", name="recuperar_clave")
+     * @Route("/public/recuperar_clave", name="recuperar_clave_form")
+     * @Template()
      */
     public function recuperarClaveAction()
     {
-    		//TODO
+    	return array();
     }
     
     /**
-     * @Route("/public/registrarse", name="registrarse")
-     * @Template("CpmJovenesBundle:Default:registrarseForm.html.twig")
+     * @Method ("post")
+     * @Route("/public/recuperar_clave", name="recuperar_clave_submit")
      */
-    public function registrarseAction()
+    public function recuperarClaveSubmitAction()
+    {
+    	 return $this->render('CpmJovenesBundle:Default:login.html.twig');
+    }
+    
+    /**
+     * @Method("post")
+     * @Route("/public/registrarse", name="registrarse_submit")
+     * 
+     */
+    public function registrarseSubmitAction()
     {
     	$entity  = new Usuario();
   		$request = $this->getRequest();
@@ -102,10 +117,10 @@ class DefaultController extends BaseController
     }
     
     /**
-     * @Route("/public/registrarse_form", name="registrarse_form")
+     * @Route("/public/registrarse", name="registrarse_form")
      * @Template()
      */
-    public function registrarseFormAction()
+    public function registrarseAction()
     {
     	$entity = new Usuario();
         $form   = $this->createForm(new RegistroUsuarioType(), $entity);
@@ -116,5 +131,26 @@ class DefaultController extends BaseController
             'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll() 
         );
     }
-    
+
+
+    /**
+    * Busca todas las escuelas de un distrito
+    *
+    * @Route("find_by_distrito", name="localidad_find_by_distrito")
+    */   
+    public function findByDistritoAction() {
+    	$distrito_id = $this->get('request')->query->get('distrito_id');
+    	 
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findByDistrito($distrito_id);
+    	
+    	$json = array();
+    	foreach ($localidades as $loc) {
+    		$json[] = array("nombre"=>$loc->getNombre(), "id" => $loc->getId());
+    	} 
+    	$response = new Response(json_encode($json));
+    	
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    }    
 }
