@@ -3,6 +3,18 @@
 {% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
 
 {% block content %}
+<script>
+	cargar_proyecto = function(id) { 
+		$.ajax(
+			{ url : {{ path('miproyecto_usuario') }},
+			  data : id ,
+			  success : function(detalle) {
+			  	$("#detalle_proyecto").append(detalle);
+			  }
+			}
+		);
+	}
+</script>
 <h3> Bienvenido/a {{usuario.nombre}} </h3>
  	{% if proyectos|length > 0 %} 		
  		<ul class="record_actions" style="float:right">
@@ -20,6 +32,7 @@
 		</h4>
 		
 		
+		<div id="detalle_proyecto"></div>		
 		
 		<ul class="mis_proyectos">
 		    {% for proyecto in proyectos %}
@@ -28,6 +41,7 @@
 		            </li>
 		    {% endfor %}
 		</ul>
+
 	{% else %}
 			<ul class="record_actions" style="float:right">
 	    	<li>
