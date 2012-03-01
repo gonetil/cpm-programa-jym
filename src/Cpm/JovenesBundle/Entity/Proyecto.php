@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Cpm\JovenesBundle\Entity\Proyecto
@@ -30,7 +31,7 @@ class Proyecto
 
     /**
      * @var integer $nroAlumnos
-     *
+     * @Assert\Type(type="integer", message="El valor {{ value }} no es un número válido.")
      * @ORM\Column(name="nroAlumnos", type="integer")
      */
     private $nroAlumnos;

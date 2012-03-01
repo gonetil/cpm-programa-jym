@@ -1,0 +1,21 @@
+{% macro showSmall(proyecto) %}
+    <div class="proyecto_box">
+	    <h3>Titulo: {{ proyecto.titulo }}</h3>
+	    <h4> 
+	    	Coordinador: 
+	    	<a href=' {{ path('usuario_show' , {'id' : proyecto.coordinador.id}) }}'>
+	    	 	{{ proyecto.coordinador.nombre }} {{ proyecto.coordinador.apellido }}
+	    	 </a> 
+	   	</h4>
+	    <p> 
+	    	Escuela: 
+	    	<a href=' {{ path('escuela_show' , {'id' : proyecto.escuela.id}) }}'>
+	    		{{ proyecto.escuela.nombre }}
+	    	</a> 
+	    </p>
+    </div>
+{% endmacro %}
+
+{% macro showFull(proyecto) %}
+
+{% endmacro %}
