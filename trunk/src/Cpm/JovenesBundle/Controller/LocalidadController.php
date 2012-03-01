@@ -202,27 +202,5 @@ class LocalidadController extends Controller
     }
     
     
-    /**
-    * Busca todas las escuelas de un distrito
-    *
-    * @Route("find_by_distrito", name="localidad_find_by_distrito")
-    * @Method("get")
-    */
-    
-    public function findByDistritoAction() {
-    	$distrito_id = $this->get('request')->query->get('distrito_id');
-    	 
-    	$em = $this->getDoctrine()->getEntityManager();
-    	$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findByDistrito($distrito_id);
-    	
-    	$json = array();
-    	foreach ($localidades as $loc) {
-    		$json[] = array("nombre"=>$loc->getNombre(), "id" => $loc->getId());
-    	} 
-    	$response = new Response(json_encode($json));
-    	
-    	$response->headers->set('Content-Type', 'application/json');
-    	return $response;
-    }
     
 }

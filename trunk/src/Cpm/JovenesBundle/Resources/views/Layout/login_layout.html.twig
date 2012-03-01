@@ -14,16 +14,31 @@
 	         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 	    </head>
 	    
-	<body > 
+	<body> 
 	 	<div style="margin:50px auto 50px; width:550px;">
+
+<div class="ui-widget" >
+	<h3 class="ui-helper-reset ui-state-active ui-corner-top" style="padding:0.4em 1em">{{ block('title') }}</h3>
+	<div class="ui-widget-content">
+
 {% endif %}
 
 {% block content %}{% endblock %}
 
+
 {% if not app.request.isXmlHttpRequest() %}
+</div>
+
+</div>
 	 	</div>
 	  	 {% block javascripts %}{% endblock %}
 	    
+<script>
+	$(function() {
+		$('.submit').button();
+	});
+</script>
+
 	</body>
 	</html>
 {% endif %}
