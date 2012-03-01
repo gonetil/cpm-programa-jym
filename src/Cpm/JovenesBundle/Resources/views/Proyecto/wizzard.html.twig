@@ -26,49 +26,101 @@
    		   colaboradores++;
    		   return false;
    }
+   
+   
+   stage = 1;
+   function move_stage(from,to) {
+   
+   		$("[required='required']").each(function(i,v) { console.log(v); });  
+   		prev = $("#stage_"+from);
+   		next = $("#stage_"+to);
+   		
+   		if (prev) prev.hide();
+   		if (next) next.fadeIn();
+   		
+   }
+   $(document).ready(function() { move_stage(0,1); } );
 </script>
-<h3> Datos de la propuesta </h3>
-<form action="{{ path('proyecto_create_from_wizzard') }}" method="post" {{ form_enctype(form) }}>
-      {{ form_errors(form) }}
-   
-   {{ form_row(form.titulo) }}
-   {{ form_row(form.nroAlumnos) }}
-   {{ form_row(form.esPrimeraVezDocente) }}
-   {{ form_row(form.esPrimeraVezEscuela) }}
-   {{ form_row(form.esPrimeraVezAlumnos) }}
-   {{ form_row(form.temaPrincipal) }}
-   {{ form_row(form.produccionFinal) }}
-   {{ form_row(form.deQueSeTrata) }}
-   {{ form_row(form.motivoRealizacion) }}
-   {{ form_row(form.impactoBuscado) }}
-   <hr/>
-      {# incluyo el formulario de carga de escuela en el wizzard #}  
-      {% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
-    
-   <hr/>
-   <div id="coordinador">
-   
-   {{ coordinador.nombre }}
-   
-   {{ coordinador.apellido }}
-   </div>
-      
-   <span id="colaboradores"> 
-   {{ form_row(form.colaboradores) }}
-   </span>
-<a href="#" onclick="addColaborador(); return false;"> Agregar colaborador </a> </br>
-   {{ form_rest(form) }}
-    <p>
-    
-        <button type="submit">Confirmar</button>
-    </p>
-</form>
-
+<div style="float:right;">
 <ul class="record_actions">
     <li>
         <a href="{{ path('usuario') }}">
-            Salir
+            Cancelar	
         </a>
     </li>
 </ul>
+</div>
+<form action="{{ path('proyecto_create_from_wizzard') }}" method="post" {{ form_enctype(form) }} name="wizzard_form">
+
+<div class="wizzard_stage" id="stage_1">
+<h4> Etapa 1 de 3 </h4>
+<h3> Datos de la propuesta </h3>
+<div class="form_fields">
+   {{ form_errors(form) }}
+   
+   {{ form_row(form.titulo) }}
+
+   <div>
+   	  {{form_label(form.esPrimeraVezDocente)}} {{form_errors(form.esPrimeraVezDocente)}} {{form_widget(form.esPrimeraVezDocente) }}
+   	  {{form_label(form.esPrimeraVezEscuela)}} {{form_errors(form.esPrimeraVezEscuela)}} {{form_widget(form.esPrimeraVezEscuela) }}
+   	  <p>&nbsp;</p>
+   </div>
+
+   <div>
+   	  {{form_label(form.nroAlumnos)}} {{form_errors(form.nroAlumnos)}} {{form_widget(form.nroAlumnos) }}
+   	  {{form_label(form.esPrimeraVezAlumnos)}} {{form_errors(form.esPrimeraVezAlumnos)}} {{form_widget(form.esPrimeraVezAlumnos) }}
+   	  <p>&nbsp;</p>
+   </div>
+   
+   <div>
+   {{ form_label(form.temaPrincipal) }} {{ form_errors(form.temaPrincipal) }} {{ form_widget(form.temaPrincipal) }} 
+   {{ form_label(form.produccionFinal) }} {{ form_errors(form.produccionFinal) }} {{ form_widget(form.produccionFinal) }}
+   <p>&nbsp;</p>
+   </div>
+   
+   
+   {{ form_row(form.deQueSeTrata) }}
+   {{ form_row(form.motivoRealizacion) }}
+   {{ form_row(form.impactoBuscado) }}
+   </div>
+   <input type="button" value="Siguiente" onclick="move_stage(1,2);">
+</div>
+<div class="wizzard_stage" id="stage_2">
+	<h4> Etapa 2 de 3 </h4>
+	<h3> Información de la Escuela </h3> 
+   <div class="form_fields">
+      {# incluyo el formulario de carga de escuela en el wizzard #}  
+      {% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
+    </div>
+    <input type="button" value="Anterior" onclick="move_stage(2,1);">
+    <input type="button" value="Siguiente" onclick="move_stage(2,3);">
+    
+</div>
+<div class="wizzard_stage" id="stage_3">
+		<h4> Etapa 3 de 3 </h4>
+		<h3> Datos de los docentes </h3>		
+		<div class="form_fields">
+   		<div id="coordinador">
+   			<strong> Coordinador: </strong> {{ coordinador.nombre }} {{ coordinador.apellido }} <br/>
+   			<strong> Dirección de correo: </strong> {{ coordinador.email }}
+   		</div>
+      
+   		<div id="colaboradores"> 
+		   {{ form_row(form.colaboradores) }}
+		   <a href="#" onclick="addColaborador(); return false;"> Agregar colaborador </a> </br>
+   		</div>
+	
+   		{{ form_rest(form) }}
+
+	</div> <!-- form_fields -->
+	    	<p>
+	        <input type="button" value="Anterior" onclick="move_stage(3,2);" />	    	
+	        <input type="button" onclick="document.wizzard_form.submit();" value="Confirmar" />
+
+    	</p>	
+</div>
+</form>
+<div>
+
+</div>
 {% endblock %}
