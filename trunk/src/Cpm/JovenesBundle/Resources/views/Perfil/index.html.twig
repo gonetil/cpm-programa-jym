@@ -1,0 +1,39 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
+
+{% block content %}
+<h3> Bienvenido/a {{usuario.nombre}} </h3>
+ 	{% if proyectos|length > 0 %} 		
+ 		<ul class="record_actions" style="float:right">
+	    	<li>
+	    		<a href="{{ path('proyecto_wizzard') }}">Cargar otra propuesta</a>
+	    	</li>
+		</ul>
+ 	
+		<h4> Usted posee {{ proyectos|length }} 
+			{% if proyectos|length > 1 %}
+				propuestas registradas 
+			{% else %}
+				propuesta registrada
+			{% endif %}	
+		</h4>
+		
+		
+		
+		<ul class="mis_proyectos">
+		    {% for proyecto in proyectos %}
+		            <li>		             
+		            	{{ proyecto_box.showSmall(proyecto) }}
+		            </li>
+		    {% endfor %}
+		</ul>
+	{% else %}
+			<ul class="record_actions" style="float:right">
+	    	<li>
+	    		<a href="{{ path('proyecto_wizzard') }}">Cargar propuesta</a>
+	    	</li>
+		</ul>
+	{% endif %}	
+		        
+{% endblock %}

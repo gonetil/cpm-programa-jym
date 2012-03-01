@@ -42,62 +42,78 @@
    $(document).ready(function() { move_stage(0,1); } );
 </script>
 <div style="float:right;">
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('usuario') }}">
-            Cancelar	
-        </a>
-    </li>
-</ul>
 </div>
 <form action="{{ path('proyecto_create_from_wizzard') }}" method="post" {{ form_enctype(form) }} name="wizzard_form">
 
 <div class="wizzard_stage" id="stage_1">
-<h4> Etapa 1 de 3 </h4>
+<h4> Paso 1 de 3 </h4>
 <h3> Datos de la propuesta </h3>
 <div class="form_fields">
    {{ form_errors(form) }}
    
    {{ form_row(form.titulo) }}
 
-   <div>
+   <div class="primera_vez_checkboxes">
    	  {{form_label(form.esPrimeraVezDocente)}} {{form_errors(form.esPrimeraVezDocente)}} {{form_widget(form.esPrimeraVezDocente) }}
    	  {{form_label(form.esPrimeraVezEscuela)}} {{form_errors(form.esPrimeraVezEscuela)}} {{form_widget(form.esPrimeraVezEscuela) }}
+   	  {{form_label(form.esPrimeraVezAlumnos)}} {{form_errors(form.esPrimeraVezAlumnos)}} {{form_widget(form.esPrimeraVezAlumnos) }}
    	  <p>&nbsp;</p>
    </div>
 
    <div>
    	  {{form_label(form.nroAlumnos)}} {{form_errors(form.nroAlumnos)}} {{form_widget(form.nroAlumnos) }}
-   	  {{form_label(form.esPrimeraVezAlumnos)}} {{form_errors(form.esPrimeraVezAlumnos)}} {{form_widget(form.esPrimeraVezAlumnos) }}
+   	  
    	  <p>&nbsp;</p>
    </div>
    
-   <div>
-   {{ form_label(form.temaPrincipal) }} {{ form_errors(form.temaPrincipal) }} {{ form_widget(form.temaPrincipal) }} 
-   {{ form_label(form.produccionFinal) }} {{ form_errors(form.produccionFinal) }} {{ form_widget(form.produccionFinal) }}
+   
+   {{ form_row(form.temaPrincipal) }} 
+   {{ form_row(form.produccionFinal) }}
    <p>&nbsp;</p>
-   </div>
-   
-   
    {{ form_row(form.deQueSeTrata) }}
    {{ form_row(form.motivoRealizacion) }}
    {{ form_row(form.impactoBuscado) }}
    </div>
-   <input type="button" value="Siguiente" onclick="move_stage(1,2);">
+   
+   	<ul class="record_actions">
+    	<li>
+    		<a href="#" onclick="move_stage(1,2);"> Siguiente </a>
+    	</li>
+	    <li>
+	        <a href="{{ path('usuario') }}"> Cancelar </a>
+	    </li>    
+    </ul>
+    
 </div>
+
+
+
+
 <div class="wizzard_stage" id="stage_2">
-	<h4> Etapa 2 de 3 </h4>
+	<h4> Paso 2 de 3 </h4>
 	<h3> Información de la Escuela </h3> 
    <div class="form_fields">
       {# incluyo el formulario de carga de escuela en el wizzard #}  
       {% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
     </div>
-    <input type="button" value="Anterior" onclick="move_stage(2,1);">
-    <input type="button" value="Siguiente" onclick="move_stage(2,3);">
     
+    	<ul class="record_actions">
+    	<li>
+    		<a href="#" onclick="move_stage(2,1);"> Anterior </a>
+    	</li>
+    	<li>
+    		<a href="#" onclick="move_stage(2,3);"> Siguiente </a>
+    	</li>
+	    <li>
+	        <a href="{{ path('usuario') }}"> Cancelar </a>
+	    </li>    
+    </ul>
+        
 </div>
+
+
 <div class="wizzard_stage" id="stage_3">
-		<h4> Etapa 3 de 3 </h4>
+		<h4> Paso 3 de 3 </h4>
 		<h3> Datos de los docentes </h3>		
 		<div class="form_fields">
    		<div id="coordinador">
@@ -113,11 +129,21 @@
    		{{ form_rest(form) }}
 
 	</div> <!-- form_fields -->
-	    	<p>
-	        <input type="button" value="Anterior" onclick="move_stage(3,2);" />	    	
-	        <input type="button" onclick="document.wizzard_form.submit();" value="Confirmar" />
-
-    	</p>	
+	
+	<ul class="record_actions">
+    <li>
+    	<a href="#" onclick="move_stage(3,2);" > Anterior </a>
+    </li>	   
+    <li>
+        <button type="Submit"> Confirmar </button>
+    </li>
+    <li>
+        <a href="{{ path('usuario') }}"> Cancelar </a>
+    </li>    
+    
+	</ul>
+	
+		
 </div>
 </form>
 <div>

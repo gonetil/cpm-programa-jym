@@ -56,4 +56,9 @@ abstract class BaseController extends Controller
 		
 	}
 	
+	protected function getLoggedInUser() { 
+		$user = $this->get('security.context')->getToken()->getUser();
+		return $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($user->getUsername());
+	}
+	
 }
