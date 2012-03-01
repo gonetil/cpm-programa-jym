@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Plantilla
 {
+	
+	const REGISTRO_USUARIO = "registro_usuario";
+	
     /**
      * @var integer $id
      *

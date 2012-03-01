@@ -18,9 +18,15 @@ case $1 in
 		echo ">>>>>Regenerando el schema de la base de datos"
         	php app/console doctrine:schema:drop --force
         	php app/console doctrine:schema:create
+		
+		echo ">>>>>Generando las entidades"
+		php app/console doctrine:generate:entities Cpm
 
 		echo ">>>>>Cargando datos inciales"
         	mysql -u$dbpass -p$dbpass $dbname < app/sql/pidu.sql
+
+		 rm -fr app/cache/dev* app/cache/prod*
+
 		exit 0;
         ;;
 	*)
