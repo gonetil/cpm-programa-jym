@@ -28,7 +28,7 @@
 	
 		<!--  start page-heading -->
 		<div id="page-heading">
-			<h1>Titulo de la pag, se podrá hacer contextual? al menos podemos usar el title.html</h1>
+			<h1>{{ block('title') }}</h1>
 		</div>
 		<!-- end page-heading -->
 	
@@ -46,45 +46,9 @@
 			<!--  start content-table-inner ...................................................................... START -->
 			<div id="content-table-inner">
 			
+				<!--  start messages  red, yellow, blue, green -->
+				{% include "CpmJovenesBundle:Layout:flashes.html.twig"  %}
 				
-					<!--  start messages
-					<div id="message-yellow">
-					<table width="100%" cellspacing="0" cellpadding="0" border="0">
-					<tbody><tr>
-						<td class="yellow-left">You have a new message. <a href="">Go to Inbox.</a></td>
-						<td class="yellow-right"><a class="close-yellow"><img alt="" src="{{asset('images/table/icon_close_yellow.gif')}}"></a></td>
-					</tr>
-					</tbody></table>
-					</div>
-	
-					<div id="message-red">
-					<table width="100%" cellspacing="0" cellpadding="0" border="0">
-					<tbody><tr>
-						<td class="red-left">Error. <a href="">Please try again.</a></td>
-						<td class="red-right"><a class="close-red"><img alt="" src="{{asset('images/table/icon_close_red.gif')}}"></a></td>
-					</tr>
-					</tbody></table>
-					</div>
-					
-					<div id="message-blue">
-					<table width="100%" cellspacing="0" cellpadding="0" border="0">
-					<tbody><tr>
-						<td class="blue-left">Welcome back. <a href="">View my account.</a> </td>
-						<td class="blue-right"><a class="close-blue"><img alt="" src="{{asset('images/table/icon_close_blue.gif')}}"></a></td>
-					</tr>
-					</tbody></table>
-					</div>
-				
-					<div id="message-green">
-					<table width="100%" cellspacing="0" cellpadding="0" border="0">
-					<tbody><tr>
-						<td class="green-left">Product added sucessfully. <a href="">Add new one.</a></td>
-						<td class="green-right"><a class="close-green"><img alt="" src="{{asset('images/table/icon_close_green.gif')}}"></a></td>
-					</tr>
-					</tbody></table>
-					</div>
-					 -->
-			
 			    <!--  start table-content  -->
 				<div id="table-content">
 				
