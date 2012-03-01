@@ -1,0 +1,7 @@
+{% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
+
+{% if proyecto is defined %}
+	{{ proyecto_box.showSmall(proyecto) }}
+{% else %}
+	No se ha encontrado el proyecto
+{% endif %}
