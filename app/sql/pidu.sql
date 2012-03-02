@@ -1055,6 +1055,12 @@ INSERT INTO Localidad (id, nombre, distrito_id) VALUES
 (925, 'Lima', 121),
 (926, 'Zárate', 121);
 
+
+INSERT INTO  `jym_jovenes`.`Plantilla` (`id` ,`codigo` ,`asunto` ,`cuerpo` ,`puedeBorrarse`)
+VALUES ('1',  'registro_usuario',  'Registro usuarios',  'asdasd asda sdasd asdasd ',  '0');
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
