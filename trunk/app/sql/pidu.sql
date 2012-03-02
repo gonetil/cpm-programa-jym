@@ -1056,10 +1056,6 @@ INSERT INTO Localidad (id, nombre, distrito_id) VALUES
 (926, 'Zárate', 121);
 
 
-INSERT INTO  `jym_jovenes`.`Plantilla` (`id` ,`codigo` ,`asunto` ,`cuerpo` ,`puedeBorrarse`)
-VALUES ('1',  'registro_usuario',  'Registro usuarios',  'asdasd asda sdasd asdasd ',  '0');
-
-
 INSERT INTO `jym_jovenes`.`TipoEscuela`(`id`,`nombre`) VALUES
 (1,'CEBAS'),
 (2,'CENS'),
@@ -1108,6 +1104,14 @@ INSERT INTO `jym_jovenes`.`Produccion` (`id`,`nombre`) VALUES
 (16,'Música, Canciones'),
 (17,'Muestra Fotográfica');
 /* (18,'Otro'); */
+
+INSERT INTO  `jym_jovenes`.`Plantilla` (`id` ,`codigo` ,`asunto` ,`cuerpo` ,`puedeBorrarse`)
+VALUES ('1',  'registro_usuario',  'Registro usuarios',  'asdasd asda sdasd asdasd ',  '0');
+
+INSERT INTO `Usuario` (`id`, `localidad_id`, `clave`, `salt`, `ultimoAcceso`, `dni`, `apellido`, `nombre`, `telefono`, `telefonoCelular`, `email`, `codigoPostal`, `esta_habilitado`, `es_admin`) VALUES
+(1, 451, '7x5rerQV2XNisvznC0rHdeppPhs=', 'cb48tyn1j3wc4wgw4s4wkgcg84cc4co', NULL, '29994156', 'Lira', 'Ariel', '9999', NULL, 'arieljlira@gmail.com', '1900', 1, 0),
+(2, 451, 'WaQlDiXVx1Cfnq/eI9ZLygDyT+s=', '2sqslu3ds5c0g44w8wws8o04cgcss8o', NULL, '12312322', 'Villarreal', 'Gonzalo', '9999', NULL, 'gonetil@gmail.com', '1900', 1, 0),
+(3, 451, 'NobRvoAtLoBlWaMSF8RP21dHTfc=', '6l5u55rxmj4s8w0c4woc4kgwg004ko8', NULL, '12345678', 'admin', 'admin', '9999', NULL, 'admin@admin.com', '1900', 1, 0);
 
 
 

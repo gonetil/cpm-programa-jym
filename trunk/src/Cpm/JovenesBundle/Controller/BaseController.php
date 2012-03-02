@@ -70,8 +70,13 @@ abstract class BaseController extends Controller
 		
 	}
 	
+	protected function isUserAuthenticated() { 
+		return $this->get('security.context')->getToken()->isAuthenticated();
+	}
+	
 	protected function getLoggedInUser() { 
 		$user = $this->get('security.context')->getToken()->getUser();
+		if (!$user) return null; 
 		return $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($user->getUsername());
 	}
 	

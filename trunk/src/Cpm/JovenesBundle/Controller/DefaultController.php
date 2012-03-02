@@ -32,13 +32,16 @@ class DefaultController extends BaseController
      */
     public function loginAction()
     {
+    	if ($this->isUserAuthenticated()){
+    		return $this->forward('CpmJovenes:Default:index');
+    	}
+    	
         if ($this->getRequest()->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $this->getRequest()->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
             $error = $this->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
-
-		if ($error) $this->setErrorMessage($error);
+		if ($error) $this->setErrorMessage($error->getMessage());
         
         return $this->render('CpmJovenesBundle:Default:login.html.twig', array(
             'last_username' => $this->getSession()->get(SecurityContext::LAST_USERNAME)
