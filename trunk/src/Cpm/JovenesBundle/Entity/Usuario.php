@@ -428,6 +428,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     	$roles = array(Usuario::ROL_USUARIO);
     	if ($this->getEsAdmin())
     		$roles[]=Usuario::ROL_ADMIN;
+        var_dump($roles);
         return $roles;
     }
 

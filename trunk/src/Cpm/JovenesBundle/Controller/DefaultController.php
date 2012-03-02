@@ -32,9 +32,9 @@ class DefaultController extends BaseController
      */
     public function loginAction()
     {
-    	if ($this->isUserAuthenticated()){
-    		return $this->forward('CpmJovenes:Default:index');
-    	}
+//    	if ($this->isUserAuthenticated()){
+//    		return $this->forward('CpmJovenesBundle:Default:index');
+//    	}
     	
         if ($this->getRequest()->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $this->getRequest()->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
