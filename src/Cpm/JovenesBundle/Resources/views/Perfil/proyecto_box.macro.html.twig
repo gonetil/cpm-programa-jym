@@ -14,11 +14,72 @@
 	    	Escuela: 
 	    	<a href=' {{ path('escuela_show' , {'id' : proyecto.escuela.id}) }}'>
 	    		{{ proyecto.escuela.nombre }}
-	    	</a> 
+	    	</a> 	
 	    </p>
     </div>
 {% endmacro %}
 
 {% macro showFull(proyecto) %}
+	<div id="proyecto_fullbox">
+		<div class="operaciones">
+			<a href="#" onclick="$('#proyecto_fullbox').fadeOut(); "> <img src="/images/shared/close.png" /></a>
+		</div>
+		<h3> Titulo: {{ proyecto.titulo }} </h3>
+		<h4>
+		 	Coordinador: {{ proyecto.coordinador.nombre }} {{proyecto.coordinador.apellido}}
+		 	{% if proyecto.esPrimeraVezDocente %}<sup>*</sup>{% endif %}		
+		</h4>
+			
 
+		
+		{% if proyecto.colaboradores | length > 0 %}
+			<h4> Colaboradores </h4>
+			<ul class="colaboradores">
+				{% for colaboradores in proyecto.colaboradores %}
+					<li> {{colaboradores.nombre}} {{colaboradores.apellido}} &lt; <a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;
+				{% endfor %}
+			</ul>
+		{% endif %}
+		
+		{% set escuela = proyecto.escuela %}
+		<h3> Datos de la Escuela </h3>
+	 	
+		<p> Nombre: {{ escuela }} 
+			(
+			{% if escuela.otroTipoInstitucion != "" %}
+				{{ escuela.otroTipoInstitucion }}
+			{% else %}		
+				{{ escuela.tipoInstitucion }}
+			{% endif %}
+			)
+			{% if proyecto.esPrimeraVezEscuela %} <sup>**</sup> {% endif %}
+		</p>
+		<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p> 
+		<p> Localidad {{escuela.localidad.nombre }} , Distrito {{ escuela.localidad.distrito }} </p>
+		<p> Tel. {{ escuela.telefono }} / Email {{ escuela.email }} </p>
+		<p> Director: {{ escuela.director }} </p>
+		
+		<h3> Acerca del proyecto </h4>
+		<p> Cantidad de alumnos que participan: {{ proyecto.nroAlumnos }} 
+		{% if proyecto.esPrimeraVezAlumnos %} <sup> *** </sup> {% endif %}
+		</p>
+		 
+		<p> Tema principal: {{ proyecto.temaPrincipal }} </p>
+		<p>  Producción Final: {{ proyecto.produccionFinal }} </p>
+		
+		
+		<h4>¿De qué trata el proyecto?</h4>
+		<p>  {{ proyecto.deQueSeTrata }} </p>
+		
+		<h4>¿Cuál es el motivo de su realización?</h4>
+		<p>  {{ proyecto.motivoRealizacion }} </p>
+		
+		<h4>¿Cuál es el impacto buscado?</h4>
+		<p>  {{ proyecto.impactoBuscado }} </p>
+		<p> &nbsp; </p>
+		{% if proyecto.esPrimeraVezDocente %} <p class="small_text"> <sup>*</sup>Primera vez que participa el docente</p> {% endif %}
+		
+		{% if proyecto.esPrimeraVezEscuela %} <sup>**</sup> Primera vez que participa la escuela {% endif %}
+		
+		{% if proyecto.esPrimeraVezAlumnos %} <sup>***</sup> Primera vez que participan los alumnos {% endif %}
 {% endmacro %}

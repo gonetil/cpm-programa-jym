@@ -4,15 +4,12 @@
 
 {% block content %}
 <script>
-	cargar_proyecto = function(id) { 
-		$.ajax(
-			{ url : {{ path('miproyecto_usuario') }},
-			  data : id ,
-			  success : function(detalle) {
-			  	$("#detalle_proyecto").append(detalle);
-			  }
-			}
-		);
+	function cargar_proyecto(id) { 
+		$.post("{{ path('miproyecto_usuario') }}", 
+				{id : id } ,
+			    function(detalle) { $("#detalle_proyecto").html(detalle); }
+			   );
+		return false;	   
 	}
 </script>
 <h3> Bienvenido/a {{usuario.nombre}} </h3>
