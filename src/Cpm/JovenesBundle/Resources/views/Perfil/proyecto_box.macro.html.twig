@@ -1,7 +1,7 @@
 {% macro showSmall(proyecto) %}
     <div class="proyecto_box">
     	<div class="operaciones">
-	    	<a href="#" onclick="cargar_proyecto( {{ proyecto.id }} )"; >Ver</a>
+	    	<a href="#" onclick="cargar_proyecto( {{ proyecto.id }} ); return false;"; >Ver</a>
     	</div>
 	    <h3>Titulo: {{ proyecto.titulo }}</h3>
 	    <h4> 

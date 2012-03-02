@@ -5,12 +5,24 @@
 {% block content %}
 <script>
 	function cargar_proyecto(id) { 
+		$("#detalle_proyecto").hide()
 		$.post("{{ path('miproyecto_usuario') }}", 
 				{id : id } ,
-			    function(detalle) { $("#detalle_proyecto").html(detalle); }
+			    function(detalle) { $("#detalle_proyecto").html(detalle).show(); }
 			   );
 		return false;	   
 	}
+	
+	$(document).ready(function() { 
+		$('#loading-indicator-mini')
+		.hide()
+	    .ajaxStart(function() {
+	        $(this).show();
+	    })
+	    .ajaxStop(function() {
+	        $(this).hide();
+	    });
+	});
 </script>
 <h3> Bienvenido/a {{usuario.nombre}} </h3>
  	{% if proyectos|length > 0 %} 		
@@ -28,7 +40,7 @@
 			{% endif %}	
 		</h4>
 		
-		
+		<div id="loading-indicator-mini" class="cargando_detalle_proyecto"> &nbsp; </div> 
 		<div id="detalle_proyecto"></div>		
 		
 		<ul class="mis_proyectos">
