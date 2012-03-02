@@ -45,7 +45,21 @@ abstract class BaseController extends Controller
 	}
 	
 	protected function enviarMail($destinatario, $codigo_plantilla, $args){
-        //TODO
+        //FIXME levantar el from
+//        $this->get('');
+        $from='arieljlira@gmail.com';
+        $plantilla = $this->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
+       
+        //if (empty($plantilla)) throw new Runtime
+       //FIMXE handle error
+        
+        $message = \Swift_Message::newInstance()
+	        ->setSubject($plantilla->getAsunto())
+	        ->setFrom($from)
+	        ->setTo($destinatario)
+	        ->setBody($plantilla->getCuerpo())
+	    ;
+    	$this->get('mailer')->send($message);
     }
 
 	//ABM
