@@ -11,6 +11,7 @@ class EscuelaType extends AbstractType
     {
         $builder
 	        ->add('tipoEscuela', 'entity', array( 'class' => 'CpmJovenesBundle:TipoEscuela','label'=>'Tipo de Escuela'))
+	        ->add('numero',null, array('label'=>'Número'))
         	->add('nombre',null, array('label'=>'Nombre de la Escuela'))
             ->add('email')
             ->add('telefono')
