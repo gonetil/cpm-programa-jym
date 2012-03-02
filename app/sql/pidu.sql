@@ -1059,6 +1059,36 @@ INSERT INTO Localidad (id, nombre, distrito_id) VALUES
 INSERT INTO  `jym_jovenes`.`Plantilla` (`id` ,`codigo` ,`asunto` ,`cuerpo` ,`puedeBorrarse`)
 VALUES ('1',  'registro_usuario',  'Registro usuarios',  'asdasd asda sdasd asdasd ',  '0');
 
+
+INSERT INTO `jym_jovenes`.`TipoEscuela`(`id`,`nombre`) VALUES
+(1,'CEBAS'),
+(2,'CENS'),
+(3,'CEPT'),
+(4,'ECSB'),
+(5,'Centro de Educación Complementario'),
+(6,'Escuela de Adultos'),
+(7,'Escuela de Educación Secundaria'),
+(8,'Escuela de Enseñanza Media'),
+(9,'Escuela Secundaria Agropecuaria'),
+(10,'Escuela Secundaria Técnica'),
+(11,'Escuela Secundaria Básica'),
+(12,'Instituto Superior de Formación Docente y Técnico');
+
+INSERT INTO `jym_jovenes`.`Tema` (`id`,`nombre`,`anulado`) VALUES
+(1,'Episodios de violencia institucional como el "gatillo facil"',0),
+(2, 'Percepciones actuales sobre la dictadura: el "aca no pasó nada"',0),
+(3, 'Agenda actual de Derechos Humanos',0),
+(4, 'Biografía de Desaparecidos de la Comunidad',0),
+(5, 'Consecuencias de la Dictadura Militar en la Comunidad',0),
+(6, 'Discriminación, Género y Violencia',0),
+(7, 'Guerra de Malvinas',0),
+(8, 'Impacto de la Dictadura sobre las prácticas educativas',0),
+(9, 'Participación Juvenil y Protesta Social hoy',0),
+(10, 'Reconstrucción de los episodios locales, de represión y de resistencia',0),
+(11, 'Reconstrucción de la vida cotidiana durante la dictadura',0),
+(12, 'Transformaciones socioeconómicas provocadas por la dictadura',0),
+(13, 'Exclusión Social',0);
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
