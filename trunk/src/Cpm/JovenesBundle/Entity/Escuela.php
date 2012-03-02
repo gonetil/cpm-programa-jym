@@ -50,6 +50,13 @@ class Escuela
         
         private $nombre;
         
+        /**
+         * @var integer $numero
+         * 
+         * @ORM\Column (name="numero", type="integer")
+         */
+        private $numero;
+        
 
     /**
      * @var string $email
@@ -395,5 +402,25 @@ class Escuela
     
     public function __toString() { 
  		return "{$this->tipoEscuela} {$this->nombre}";   	
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer 
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 }
