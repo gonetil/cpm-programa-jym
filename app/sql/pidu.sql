@@ -1089,6 +1089,28 @@ INSERT INTO `jym_jovenes`.`Tema` (`id`,`nombre`,`anulado`) VALUES
 (12, 'Transformaciones socioeconómicas provocadas por la dictadura',0),
 (13, 'Exclusión Social',0);
 
+INSERT INTO `jym_jovenes`.`Produccion` (`id`,`nombre`) VALUES
+(1,'Documental Audiovisual'),
+(2,'Ficción Audiovisual'),
+(3,'Murga'),
+(4,'Teatro, Expresión Corporal'),
+(5,'Danzas'),
+(6,'Producción Gráfica (folletos, cartillas, diarios, revistas)'),
+(7,'Historieta'),
+(8,'Libro'),
+(9,'Mural'),
+(10,'Placa'),
+(11,'Instalación'),
+(12,'Edición Multimedia'),
+(13,'Página web, Blog, etc'),
+(14,'Documental Sonoro'),
+(15,'Radio'),
+(16,'Música, Canciones'),
+(17,'Muestra Fotográfica');
+/* (18,'Otro'); */
+
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
