@@ -34,7 +34,23 @@ class PerfilController extends BaseController
         			'usuario' => $usuario
         		);
     }
-
+    
+    /**
+    * Muestra informacion de un proyecto del usuario
+    * @Route("miproyecto", name="miproyecto_usuario")
+    * @Template()
+    */
+    
+    public function myprojectAction() {
+    	$id = $this->getRequest()->get('id'); 
+    	$usuario = $this->getLoggedInUser();
+    	$proyecto = $this->getRepository("CpmJovenesBundle:Proyecto")->findOneById($id);
+    	
+    	if ($proyecto && $usuario->equals($proyecto->getCoordinador())) 
+    		return array( 'proyecto' => $proyecto );
+    	else 
+    		return array();
+    }
     /**
     * Displays a form to create a new Proyecto entity.
     *
