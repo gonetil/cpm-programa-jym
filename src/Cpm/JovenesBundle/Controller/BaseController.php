@@ -71,7 +71,7 @@ abstract class BaseController extends Controller
 	}
 	
 	protected function isUserAuthenticated() { 
-		return $this->get('security.context')->getToken()->isAuthenticated();
+		return $this->get('security.context')->getToken() && $this->get('security.context')->getToken()->isAuthenticated();
 	}
 	
 	protected function getLoggedInUser() { 
