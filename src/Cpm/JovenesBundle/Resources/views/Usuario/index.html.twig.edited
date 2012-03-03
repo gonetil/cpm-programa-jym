@@ -1,13 +1,18 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
+<<<<<<< .mine
 {% block title %}Listado de Usuarios{% endblock %}
  
+=======
+{% block title %} Listado de usuarios registrados {% endblock %}
+>>>>>>> .r98
 {% block content %}
 
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
+<<<<<<< .mine
             <th>Username</th>
             <th>Email</th>
             <th>Enabled</th>
@@ -18,32 +23,57 @@
             <th>Nombre</th>
             <th>Telefono</th>
             <th>Telefonocelular</th>
+=======
+            <th>Último Acceso</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Teléfono</th>
+            <th>Teléfono Celular</th>
+>>>>>>> .r98
+<<<<<<< .mine
             <th>Codigopostal</th>
             <th>Acciones</th>
+=======
+            <th>Código Postal</th>
+            <th>habilitado</th>
+            <th>Actions</th>
+>>>>>>> .r98
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
+<<<<<<< .mine
             <td>{{ entity.id }}</td>
             <td><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.username }}</a></td>
             <td>{{ entity.email }}</td>
             <td>{{ entity.enabled }}</td>
             <td>{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif%}</td>
             <td>{{ entity.roles }}</td>
+=======
+            <td><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{% if entity.ultimoAcceso %}{{ entity.ultimoAcceso|date('Y-m-d H:i:s') }}{% endif%}</td>
+>>>>>>> .r98
+            <td>{{ entity.nombre}}</td>
+            <td>{{ entity.apellido }} </td>
             <td>{{ entity.dni }}</td>
             <td>{{ entity.apellido }}</td>
             <td>{{ entity.nombre }}</td>
             <td>{{ entity.telefono }}</td>
             <td>{{ entity.telefonoCelular }}</td>
             <td>{{ entity.codigoPostal }}</td>
+<<<<<<< .mine
+=======
+            <td>{% if entity.estaHabilitado == 1 %} Sí {% else %} No {% endif %}</td>
+>>>>>>> .r98
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
                 </ul>
             </td>
@@ -55,7 +85,7 @@
 <ul>
     <li>
         <a href="{{ path('usuario_new') }}">
-            Create a new entry
+            Crear un nuevo usuario
         </a>
     </li>
 </ul>

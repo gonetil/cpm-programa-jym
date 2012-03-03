@@ -17,6 +17,18 @@
 	
 	 	    {% include 'CpmJovenesBundle:Layout:header.html.twig' %}
 	 	    <div class="clear"></div>
+	 	    
+    	<div>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                <a href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+            {% else %}
+                <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+            {% endif %}
+        </div>
+        
 	 	    {% include 'CpmJovenesBundle:Layout:menu.html.twig' %}
 	 	    <div class="clear"></div>
 	        
@@ -47,7 +59,11 @@
 			<div id="content-table-inner">
 			
 				<!--  start messages  red, yellow, blue, green -->
-				{% include "CpmJovenesBundle:Layout:flashes.html.twig"  %}
+				{% for key, message in app.session.getFlashes() %}
+				    <div class="{{key}}-message">{{app.session.flash(message)}}</div>
+				        {{ message|trans({}) }}
+				    </div>
+				{% endfor %}	
 				
 			    <!--  start table-content  -->
 				<div id="table-content">

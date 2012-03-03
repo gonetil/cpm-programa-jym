@@ -6,13 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+
+use FOS\UserBundle\Entity\User as BaseUser;
 /**
  * Cpm\JovenesBundle\Entity\Usuario
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\UsuarioRepository")
  */
-class Usuario implements AdvancedUserInterface, \Serializable
+class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
 {
 	const ROL_USUARIO = 'ROLE_USER';
 	const ROL_ADMIN = 'ROLE_ADMIN';
@@ -23,28 +25,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
-
-    /**
-     * @var string $clave
-     *
-     * @ORM\Column(name="clave", type="string", nullable=true)
-     */
-    private $clave;
-
-    /**
-     * @var string $salt
-     *
-     * @ORM\Column(name="salt", type="string", nullable=true)
-     */
-    private $salt;
-    
-    /**
-     * @var datetime $ultimoAcceso
-     *
-     * @ORM\Column(name="ultimoAcceso", type="datetime", nullable=true)
-     */
-    private $ultimoAcceso;
+    protected $id;
 
     /**
      * @var string $dni
@@ -53,7 +34,6 @@ class Usuario implements AdvancedUserInterface, \Serializable
      */
     private $dni;
 
-    
     /**
     * @var string $apellido
      *
@@ -62,11 +42,16 @@ class Usuario implements AdvancedUserInterface, \Serializable
     private $apellido;
     
     /**
-    * @var string $nombre
+     * @var string $nombre
      *
-    * @ORM\Column(name="nombre", type="string")
-    */
-    private $nombre;
+     * @ORM\Column(type="string", length="255")
+     *
+     * @Assert\NotBlank(message="Ingrese su nombre.", groups={"Registration", "Profile"})
+     * @Assert\MinLength(limit="3", message="El nombre es muy corto.", groups={"Registration", "Profile"})
+     * @Assert\MaxLength(limit="255", message="El nombre es muy largo.", groups={"Registration", "Profile"})
+     */
+   private $nombre;
+   
     /**
      * @var string $telefono
      *
@@ -81,15 +66,16 @@ class Usuario implements AdvancedUserInterface, \Serializable
      */
     private $telefonoCelular;
 
-    /**
+    /*
      * @var string $email
      * @Assert\Email(
      *     message = "La dirección de correo '{{ value }}' no es válida.",
      *     checkMX = true
      * )     
      * @ORM\Column(name="email", type="string", unique=true)
-     */
+     
     private $email;
+*/
 
     /**
      * @var string $codigoPostal
@@ -121,30 +107,11 @@ class Usuario implements AdvancedUserInterface, \Serializable
      **/
     private $colaboraEn;
 
-
-    /**
-     * @var bool $estaHabilitado
-     *
-     * @ORM\Column(name="esta_habilitado", type="boolean" )
-     */
-    private $estaHabilitado=1;
-
-    /**
-     * @var bool $esAdmin
-     *
-     * @ORM\Column(name="es_admin", type="boolean" )
-     */
-    private $esAdmin=0;
-    
     
     public function __construct()
     {
-        $this->esAdmin = false;
-        $this->estaHabilitado = true;
-        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();
-		//$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
-        
+    	parent::__construct();
+        $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();//TODO qué sentido tiene guardar los correos disponibles aca?
     }
     
     /**
@@ -158,46 +125,6 @@ class Usuario implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set clave
-     *
-     * @param string $clave
-     */
-    public function setClave($clave)
-    {
-        $this->clave = $clave;
-    }
-
-    /**
-     * Get clave
-     *
-     * @return string 
-     */
-    public function getClave()
-    {
-        return $this->clave;
-    }
-
-    /**
-     * Set ultimoAcceso
-     *
-     * @param datetime $ultimoAcceso
-     */
-    public function setUltimoAcceso($ultimoAcceso)
-    {
-        $this->ultimoAcceso = $ultimoAcceso;
-    }
-
-    /**
-     * Get ultimoAcceso
-     *
-     * @return datetime 
-     */
-    public function getUltimoAcceso()
-    {
-        return $this->ultimoAcceso;
-    }
-
-    /**
      * Set dni
      *
      * @param string $dni
@@ -207,6 +134,12 @@ class Usuario implements AdvancedUserInterface, \Serializable
         $this->dni = $dni;
     }
 
+	public function setEmail($email)
+    {
+        parent::setEmail($email);
+        parent::setUsername($email);
+    }
+    
     /**
      * Get dni
      *
@@ -255,26 +188,6 @@ class Usuario implements AdvancedUserInterface, \Serializable
     public function getTelefonoCelular()
     {
         return $this->telefonoCelular;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
@@ -378,146 +291,6 @@ class Usuario implements AdvancedUserInterface, \Serializable
     public function getCorreosRecibidos()
     {
         return $this->correosRecibidos;
-    }
-
-    /**
-     * Set estaHabilitado
-     *
-     * @param boolean $estaHabilitado
-     */
-    public function setEstaHabilitado($estaHabilitado)
-    {
-        $this->estaHabilitado = $estaHabilitado;
-    }
-
-    /**
-     * Get estaHabilitado
-     *
-     * @return boolean 
-     */
-    public function getEstaHabilitado()
-    {
-        return $this->estaHabilitado;
-    }
-    
-    /**
-     * Set esAdmin
-     *
-     * @param boolean $esAdmin
-     */
-    public function setEsAdmin($esAdmin)
-    {
-        $this->esAdmin = $esAdmin;
-    }
-
-    /**
-     * Get esAdmin
-     *
-     * @return boolean 
-     */
-    public function getEsAdmin()
-    {
-        return $this->esAdmin;
-    }
-        /********************************************************************************/
-    /********************* Metodos de userInterface     *****************************/
-    /********************************************************************************/
-    
-     public function getRoles()
-    {
-    	$roles = array(Usuario::ROL_USUARIO);
-    	if ($this->getEsAdmin())
-    		$roles[]=Usuario::ROL_ADMIN;
-        var_dump($roles);
-        return $roles;
-    }
-
-    public function equals(UserInterface $user)
-    {
-        return $user->getUsername() === $this->email;
-    }
-
-    public function eraseCredentials()
-    {
-    	//$this->clave ='';
-    }
-    
-    public function getUsername()
-    {
-        return $this->email;
-    }
-
-    public function getSalt()
-    {
-        return $this->salt;
-    }
-
-    public function getPassword()
-    {
-        return $this->getClave();
-    }
-    
-    public function isAccountNonExpired()
-    {
-        return true;
-    }
-
-    public function isAccountNonLocked()
-    {
-        return !empty($this->clave);;
-    }
-
-    public function isCredentialsNonExpired()
-    {
-        return true;
-    }
-
-    public function isEnabled()
-    {
-        return $this->getEstaHabilitado();
-    }
-
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     */
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
-    }
-
-
-  /**
-     * Serializes the user.
-     * The serialized data have to contain the fields used byt the equals method.
-     * @return string
-     */
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->clave,
-            $this->salt,
-            $this->email,
-            $this->estaHabilitado,
-        ));
-    }
-
-    /**
-     * Unserializes the user.
-     *
-     * @return string
-     */
-    public function unserialize($serialized)
-    {
-        list(
-            $this->id,
-            $this->clave,
-            $this->salt,
-            $this->email,
-            $this->estaHabilitado
-        ) = unserialize($serialized);
     }
 
     /**

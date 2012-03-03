@@ -10,17 +10,18 @@ class UsuarioType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('clave')
-            ->add('dni')
-	        ->add('nombre')
-	        ->add('apellido')
-            ->add('telefono', 'text', array('required'=>false))
-            ->add('telefonoCelular', 'text', array('required'=>false))
-            ->add('email', 'email',array('attr'=>array('class'=>'number')))
+            ->add('apellido')
+            ->add('nombre')
+     //       ->add('username')
+            ->add('dni', 'number')
+            ->add('email', 'email')
+            ->add('telefono')
+            ->add('telefonoCelular')
             ->add('codigoPostal')
-            ->add('estaHabilitado')
-            ->add('esAdmin', 'checkbox', array('required'=>false))
             ->add('localidad')
+            ->add('roles', 'choice', array('choices'=> array('ROLE_USER'=>'Docente','ROLE_ADMIN'=>'Administrador'), 'multiple'=>true))
+            ->add('enabled')
+            ->add('password', 'repeated', array('type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir Clave"))
         ;
     }
 
