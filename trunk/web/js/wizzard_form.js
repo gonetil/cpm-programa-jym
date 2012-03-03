@@ -1,26 +1,3 @@
-   colaboradores = 0;
-   function addColaborador() { 
-   			var html = ' <label class=" required">' + colaboradores+ '</label> \
-   			<div id="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'"> \
-   				<div> \
-   				  <label class=" required" for="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_nombre">Nombre</label> \
-   				  <input type="text" required="required" name="cpm_jovenesbundle_proyectotype[colaboradores]['+colaboradores+'][nombre]" id="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_nombre"> \
-   				 </div> \
-   				 <div> \
-   				 	<label class=" required" for="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_apellido">Apellido</label> \
-   				 	<input type="text" required="required" name="cpm_jovenesbundle_proyectotype[colaboradores]['+colaboradores+'][apellido]" id="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_apellido"> \
-   				 </div> \
-   				 <div> \
-   				    <label class=" required email" for="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_email">Email</label> \
-   				    <input type="email" required="required" name="cpm_jovenesbundle_proyectotype[colaboradores]['+colaboradores+'][email]" id="cpm_jovenesbundle_proyectotype_colaboradores_'+colaboradores+'_email"> \
-   				 </div> \
-   		   </div>';
-   		   
-   		   $("#colaboradores").append(html); 
-   		   colaboradores++;
-   		   return false;
-   }
-   
    /**
    * esta variable guarda el handler de validacion del formulario. La dejo global para no tener que buscarla siempre 
    */

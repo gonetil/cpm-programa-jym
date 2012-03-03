@@ -539,4 +539,8 @@ class Usuario implements AdvancedUserInterface, \Serializable
     {
         return $this->colaboraEn;
     }
+    
+    public function __toString() {
+    	return "{$this->nombre} {$this->apellido} <{$this->email}>";
+    }
 }
