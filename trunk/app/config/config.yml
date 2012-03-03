@@ -4,7 +4,7 @@ imports:
 
 framework:
     #esi:             ~
-    #translator:      { fallback: %locale% }
+    translator:      { fallback: %locale% }
     secret:          %secret%
     charset:         UTF-8
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
@@ -67,16 +67,25 @@ swiftmailer:
     username:  %mailer_user%
     password:  %mailer_password%
     auth_mode:  %mailer_auth_mode%
-    encryption:  %mailer_encryption%
+    encryption: %mailer_encryption%
     
 jms_security_extra:
     secure_controllers:  true
     secure_all_services: false
 
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    service:
+        mailer: cpm_jovenes_bundle.mailer
+    user_class: Cpm\JovenesBundle\Entity\Usuario
+    registration:
+        form:
+            type: cpm_jovenesbundle_registrousuariotype
+        confirmation:
+            enabled:    true
+
 services:
-    mailer_manager:
-        class:     Cpm\JovenesBundle\MailerService
-        arguments: [@mailer, %mailer_from%]
         
 cpm_jovenes:
 #    coco: sdasd

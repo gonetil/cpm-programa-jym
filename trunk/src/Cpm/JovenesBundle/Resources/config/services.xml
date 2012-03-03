@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="cpm_jovenes_bundle.registration.form.type" class="Cpm\JovenesBundle\Form\RegistroUsuarioType">
+            <tag name="form.type" alias="cpm_jovenesbundle_registrousuariotype" />
+            <argument>%fos_user.model.user.class%</argument>
+        </service>
+
+        <service id="cpm_jovenes_bundle.custom_user_provider" class="Cpm\JovenesBundle\Service\CustomUserProvider" public="false" >
+			<argument type="service" id="fos_user.user_manager"/>
+        </service>
+
+
+        <service id="cpm_jovenes_bundle.mailer" class="Cpm\JovenesBundle\Service\TwigSwiftMailer">
+            <argument type="service" id="mailer" />
+            <argument type="service" id="router" />
+            <argument type="service" id="twig" />
+            <argument type="service" id="doctrine" />
+            <argument type="collection">
+                <argument key="from_name">%mailer_from_name%</argument>
+                <argument key="from_email">%mailer_from_email%</argument>
+            </argument>            
+		</service>
+<!-- <service id="my.security" class="sCpm\JovenesBundle\SecurityEventListener"> -->
+<!-- 	<argument type="service" id="doctrine.orm.entity_manager" /> -->
+<!-- 	<tag name="kernel.event_listener" event="security.interactive_login" -->
+<!-- 		method="onSsecurityInteractiveLogin" /> -->
+<!-- </service> -->
+    </services>
+
+
+</container>

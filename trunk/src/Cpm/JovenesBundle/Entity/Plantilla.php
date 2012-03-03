@@ -13,7 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Plantilla
 {
 	
-	const REGISTRO_USUARIO = "registro_usuario";
+	const CONFIRMACION_REGISTRO = "confirmar_registro_usuario";
+	const RESETEAR_CUENTA = "resetear_cuenta_usuario";
 	
     /**
      * @var integer $id

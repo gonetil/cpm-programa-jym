@@ -1,8 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
+{% block title %}Usuario{% endblock %}
+ 
 {% block content %}
-
-<h1>Usuario</h1>
 
 <table class="record_properties">
     <tbody>
@@ -11,12 +11,12 @@
             <td>{{ entity.id }}</td>
         </tr>
         <tr>
-            <th>Clave</th>
-            <td>{{ entity.clave }}</td>
+            <th>Nombre</th>
+            <td>{{ entity.nombre }}</td>
         </tr>
         <tr>
-            <th>Ultimoacceso</th>
-            <td>{{ entity.ultimoAcceso|date('Y-m-d H:i:s') }}</td>
+            <th>Apellido</th>
+            <td>{{ entity.apellido }}</td>
         </tr>
         <tr>
             <th>Dni</th>
@@ -31,16 +31,32 @@
             <td>{{ entity.telefonoCelular }}</td>
         </tr>
         <tr>
-            <th>Email</th>
-            <td>{{ entity.email }}</td>
-        </tr>
-        <tr>
             <th>Codigopostal</th>
             <td>{{ entity.codigoPostal }}</td>
         </tr>
         <tr>
-            <th>Estahabilitado</th>
-            <td>{{ entity.estaHabilitado }}</td>
+            <th>Username</th>
+            <td>{{ entity.username }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ entity.email }}</td>
+        </tr>
+        <tr>
+            <th>Enabled</th>
+            <td>{{ entity.enabled }}</td>
+        </tr>
+        <tr>
+            <th>Lastlogin</th>
+            <td>{{ entity.lastLogin|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Locked</th>
+            <td>{{ entity.locked }}</td>
+        </tr>
+        <tr>
+            <th>Roles</th>
+            <td>{{ entity.roles }}</td>
         </tr>
     </tbody>
 </table>
@@ -63,5 +79,4 @@
         </form>
     </li>
 </ul>
-
- {% endblock %}
+{% endblock %}

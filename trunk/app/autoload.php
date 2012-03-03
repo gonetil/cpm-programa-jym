@@ -5,6 +5,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
+	'FOS' => __DIR__.'/../vendor/bundles',
     'Stof'  => __DIR__.'/../vendor/bundles',
     'Gedmo' => __DIR__.'/../vendor/gedmo-doctrine-extensions/lib',
     'Symfony'          => array(__DIR__.'/../vendor/symfony/src', __DIR__.'/../vendor/bundles'),

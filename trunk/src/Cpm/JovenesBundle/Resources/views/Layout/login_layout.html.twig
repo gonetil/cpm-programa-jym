@@ -1,9 +1,8 @@
-{% if not app.request.isXmlHttpRequest() %}
 	<!DOCTYPE html>
 	<html>
 	    <head>
 	        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	        <title>{% block title %}Welcome!{% endblock %}</title>
+	        <title>{% block title %}Bienvenido al Programa Jóvenes y Memoria de CPM{% endblock %}</title>
 	        {% block stylesheets %}{% endblock %}
 	         <link rel="stylesheet" href="{{ asset('css/screen.css') }}" />
 	         <link rel="stylesheet" href="{{ asset('css/jquery-ui/jquery-ui-1.8.18.custom.css') }}" />
@@ -16,16 +15,26 @@
 
 	<body> 
 		<div style="margin:50px auto 50px; width:550px;">
-			{% include "CpmJovenesBundle:Layout:flashes.html.twig"  %}
-				
+			{% for key, message in app.session.getFlashes() %}
+			    <div class="{{key}}-message">{{app.session.flash(message)}}</div>
+			        {{ message|trans({}) }}
+			    </div>
+			{% endfor %}
 			<div class="ui-widget" >
 				<h3 class="ui-helper-reset ui-state-active ui-corner-top" style="padding:0.4em 1em">{{ block('title') }}</h3>
-				<div class="ui-widget-content">
-{% endif %}
-
-{% block content %}{% endblock %}
-{% if not app.request.isXmlHttpRequest() %}
+				<div class="ui-widget-content" style=" padding: 10px 4px 0px 4px;">
+					{% block content %}{% endblock %}
 				</div>
+				<h3 class="ui-helper-reset ui-state-active ui-corner-bottom" style="padding:0.4em 1em">
+				<ul id="login-extra-options">
+					<li><a href="{{path('fos_user_security_login')}}">Login</a></li>
+					<li><a href="{{path('fos_user_registration_register')}}">Registrarse</a></li>
+					<li><a href="{{path('fos_user_resetting_request')}}">Recuperar Clave</a></li>
+					
+				</ul>
+								
+				</h3>
+				
 			</div>
 		</div>
 			
@@ -34,9 +43,12 @@
 		<script>
 			$(function() {
 				$('.submit').button();
+				$('#_submit').button();
+				$('input[type=submit]').button();
+				$('#login-extra-options li a').button();
+				
 			});
 		</script>
 
 	</body>
 	</html>
-{% endif %}

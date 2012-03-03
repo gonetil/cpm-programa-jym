@@ -1,7 +1,0 @@
-parameters:
-#    cpm_jovenes.example.class: Cpm\JovenesBundle\Example
-
-services:
-#    cpm_jovenes.example:
-#        class: %cpm_jovenes.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

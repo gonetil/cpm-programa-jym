@@ -1,28 +1,27 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
+{% block title %}Edicion de Usuario{% endblock %}
+ 
 {% block content %}
-
-<h1>Usuario edit</h1>
 
 <form action="{{ path('usuario_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
     <p>
-        <button type="submit">Modificar</button>
+        <button type="submit">Edit</button>
     </p>
 </form>
 
 <ul class="record_actions">
     <li>
         <a href="{{ path('usuario') }}">
-            Volver al listado
+            Back to the list
         </a>
     </li>
     <li>
         <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Eliminar</button>
+            <button type="submit">Delete</button>
         </form>
     </li>
 </ul>
-
- {% endblock %}
+{% endblock %}

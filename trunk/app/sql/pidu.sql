@@ -1108,13 +1108,14 @@ INSERT INTO `jym_jovenes`.`Produccion` (`id`,`nombre`) VALUES
 (16,'Música, Canciones'),
 (17,'Muestra Fotográfica');
 
-INSERT INTO  `jym_jovenes`.`Plantilla` (`id` ,`codigo` ,`asunto` ,`cuerpo` ,`puedeBorrarse`)
-VALUES ('1',  'registro_usuario',  'Registro usuarios',  'asdasd asda sdasd asdasd ',  '0');
+INSERT INTO `Plantilla` (`id`, `codigo`, `asunto`, `cuerpo`, `puedeBorrarse`) VALUES
+(1, 'confirmar_registro_usuario', 'Registro usuarios', '{% block body_text %}\r\nHola {{ user.username }}!\r\nPara completar la validación de tu cuenta, debes seguir el siguiente enlace {{confirmationUrl}}\r\n\r\nDesde ya muchas gracias. \r\nEl equipo de Jovenes. CPM.\r\n{% endblock %}\r\n{% block body_html %}{% endblock %}\r\n', 0),
+(2, 'resetear_cuenta_usuario', 'Resetear clave de usuario', '{% block body_text %}\r\nHola {{ user.username }}!\r\nPara generar tu clave nuevamente debes seguir el siguiente enlace {{confirmationUrl}}\r\n\r\nDesde ya muchas gracias. \r\nEl equipo de Jovenes. CPM.\r\n{% endblock %}\r\n{% block body_html %}{% endblock %}\r\n', 0);
 
-INSERT INTO `Usuario` (`id`, `localidad_id`, `clave`, `salt`, `ultimoAcceso`, `dni`, `apellido`, `nombre`, `telefono`, `telefonoCelular`, `email`, `codigoPostal`, `esta_habilitado`, `es_admin`) VALUES
-(1, 451, '7x5rerQV2XNisvznC0rHdeppPhs=', 'cb48tyn1j3wc4wgw4s4wkgcg84cc4co', NULL, '29994156', 'Lira', 'Ariel', '9999', NULL, 'arieljlira@gmail.com', '1900', 1, 0),
-(2, 451, 'WaQlDiXVx1Cfnq/eI9ZLygDyT+s=', '2sqslu3ds5c0g44w8wws8o04cgcss8o', NULL, '12312322', 'Villarreal', 'Gonzalo', '9999', NULL, 'gonetil@gmail.com', '1900', 1, 0),
-(3, 451, 'NobRvoAtLoBlWaMSF8RP21dHTfc=', '6l5u55rxmj4s8w0c4woc4kgwg004ko8', NULL, '12345678', 'admin', 'admin', '9999', NULL, 'admin@admin.com', '1900', 1, 0);
+
+INSERT INTO `Usuario` (`id`, `localidad_id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `locked`, `expired`, `expires_at`, `confirmation_token`, `password_requested_at`, `roles`, `credentials_expired`, `credentials_expire_at`, `dni`, `apellido`, `nombre`, `telefono`, `telefonoCelular`, `codigoPostal`) VALUES
+(1, 1, 'admin@admin.com', 'admin@admin.com', 'admin@admin.com', 'admin@admin.com', 1, '6l5u55rxmj4s8w0c4woc4kgwg004ko8', 'NobRvoAtLoBlWaMSF8RP21dHTfc=', '2012-03-03 16:02:51', 0, 0, NULL, '6l5u55rxmj4s8w0c4woc4kgwg004ko8', NULL, 'a:0:{}', 0, NULL, '29994156', 'Lira', 'Ariel', '099999', '999999', '1900'),
+(2, 1, '29994156', '29994156', 'arieljlira@gmail.com', 'arieljlira@gmail.com', 1, 'pdht2c4153400kgogssg88s40okk8cg', 'hrGCn+MPmxG2TaMV7NhpLrunBeM=', '2012-03-03 13:01:27', 0, 0, NULL, '4p14szd2eq684gkgckc44gcowgs0cgwk4ook4ko4s8ock40gos', '2012-03-03 17:37:43', 'a:0:{}', 0, NULL, '29994156', 'lira', 'Ariel', '00099', '999', '190');
 
 
 
