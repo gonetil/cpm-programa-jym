@@ -89,6 +89,15 @@ class ProyectoController extends BaseController
         $form    = $this->createForm(new ProyectoType(), $entity);
         $form->bindRequest($request);
 
+        $colaboradores = $entity->getColaboradores();
+        foreach ($colaboradores as $colaborador) {
+        	if ($c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($colaborador->getEmail())) //el colaborador ya existia en la bbdd
+        	{
+        		$colaboradores->removeElement($colaborador);
+        		$colaboradores->add($c);
+        	}
+        }
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
@@ -147,6 +156,7 @@ class ProyectoController extends BaseController
             throw $this->createNotFoundException('Unable to find Proyecto entity.');
         }
 
+        
         $editForm   = $this->createForm(new ProyectoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -154,6 +164,15 @@ class ProyectoController extends BaseController
 
         $editForm->bindRequest($request);
 
+        $colaboradores = $entity->getColaboradores();
+        foreach ($colaboradores as $colaborador) {
+        	if ($c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($colaborador->getEmail())) //el colaborador ya existia en la bbdd
+        	{
+        		$colaboradores->removeElement($colaborador);
+        		$colaboradores->add($c);
+        	}
+        }
+        
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
