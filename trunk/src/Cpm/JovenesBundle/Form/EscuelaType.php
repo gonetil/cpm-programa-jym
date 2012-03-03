@@ -10,16 +10,16 @@ class EscuelaType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
+	        ->add('tipoInstitucion', 'entity', array( 'class' => 'CpmJovenesBundle:TipoInstitucion','label'=>'Tipo de Institución', 'empty_value'=>'Otro', 'required'=>false))
+	        ->add('otroTipoInstitucion',null,array('required' => false,'label'=>'Otro tipo de institución'))
 	        ->add('tipoEscuela', 'entity', array( 'class' => 'CpmJovenesBundle:TipoEscuela','label'=>'Tipo de Escuela'))
-	        ->add('numero',null, array('label'=>'Número'))
+	        ->add('numero',null, array('label'=>'Número','attr'=>array('class'=>'number')))
         	->add('nombre',null, array('label'=>'Nombre de la Escuela'))
-            ->add('email')
+            ->add('email',null,array('attr'=>array('class'=>'email')))
             ->add('telefono')
             ->add('domicilio')
             ->add('codigoPostal',null,array('label'=>'Código postal'))
             ->add('director')
-	        ->add('tipoInstitucion', 'entity', array( 'class' => 'CpmJovenesBundle:TipoInstitucion','label'=>'Tipo de Institución', 'empty_value'=>'Otro', 'required'=>false))
-            ->add('otroTipoInstitucion',null,array('required' => false,'label'=>'Otro tipo de institución'))
             ->add('localidad', 'entity', array( 'class' => 'CpmJovenesBundle:Localidad','label'=>'Localidad', 'attr' => array('class'=>'localidad-selector')))	    
         ;
     }

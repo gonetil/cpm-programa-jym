@@ -53,7 +53,7 @@ class Escuela
         /**
          * @var integer $numero
          * 
-         * @ORM\Column (name="numero", type="integer")
+         * @ORM\Column (name="numero", type="integer", nullable="true")
          */
         private $numero;
         

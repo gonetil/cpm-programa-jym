@@ -81,7 +81,7 @@ class PerfilController extends BaseController
      *
      * @Route("/save_wizzard", name="proyecto_create_from_wizzard")
      * @Method("post")
-     *
+	 * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
      */
     
     public function createFromWizzardAction() {

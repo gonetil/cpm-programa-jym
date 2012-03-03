@@ -16,7 +16,7 @@ class UsuarioType extends AbstractType
 	        ->add('apellido')
             ->add('telefono', 'text', array('required'=>false))
             ->add('telefonoCelular', 'text', array('required'=>false))
-            ->add('email', 'email')
+            ->add('email', 'email',array('attr'=>array('class'=>'number')))
             ->add('codigoPostal')
             ->add('estaHabilitado')
             ->add('esAdmin', 'checkbox', array('required'=>false))

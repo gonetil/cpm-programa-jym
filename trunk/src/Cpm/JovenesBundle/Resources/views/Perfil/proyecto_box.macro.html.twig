@@ -1,3 +1,19 @@
+{% macro nombreEscuela(escuela) %}
+	{% if escuela.tipoInstitucion.id is defined %}
+		
+		{{ escuela.tipoEscuela }}
+	    Número {{ escuela.numero }}
+		<strong> {{ escuela.nombre }} </strong> 
+		- 
+		{{ escuela.tipoInstitucion }}
+	{% else %}
+		<strong> {{ escuela.nombre }} </strong> 
+		- {{ escuela.otroTipoInstitucion }}
+		
+	{% endif %}		
+	
+{% endmacro %}
+
 {% macro showSmall(proyecto) %}
     <div class="proyecto_box">
     	<div class="operaciones">
@@ -11,9 +27,8 @@
 	    	 </a> 
 	   	</h4>
 	    <p> 
-	    	Escuela: 
 	    	<a href=' {{ path('escuela_show' , {'id' : proyecto.escuela.id}) }}'>
-	    		{{ proyecto.escuela.nombre }}
+	    		{{ _self.nombreEscuela(proyecto.escuela) }}
 	    	</a> 	
 	    </p>
     </div>
@@ -43,16 +58,10 @@
 		
 		{% set escuela = proyecto.escuela %}
 		<h3> Datos de la Escuela </h3>
-	 	
-		<p> Nombre: {{ escuela }} 
-			(
-			{% if escuela.otroTipoInstitucion != "" %}
-				{{ escuela.otroTipoInstitucion }}
-			{% else %}		
-				{{ escuela.tipoInstitucion }}
-			{% endif %}
-			)
-			{% if proyecto.esPrimeraVezEscuela %} <sup>**</sup> {% endif %}
+
+		<p> 
+			 	{{ _self.nombreEscuela(proyecto.escuela) }}
+				{% if proyecto.esPrimeraVezEscuela %} <sup>**</sup> {% endif %}
 		</p>
 		<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p> 
 		<p> Localidad {{escuela.localidad.nombre }} , Distrito {{ escuela.localidad.distrito }} </p>
