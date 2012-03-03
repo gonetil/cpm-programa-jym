@@ -1,21 +1,19 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
+{% block title %} Listado de usuarios registrados {% endblock %}
 {% block content %}
-
-<h1>Usuario list</h1>
 
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Clave</th>
-            <th>Ultimoacceso</th>
-            <th>Dni</th>
-            <th>Telefono</th>
-            <th>Telefonocelular</th>
+            <th>Último Acceso</th>
+            <th>DNI</th>
+            <th>Teléfono</th>
+            <th>Teléfono Celular</th>
             <th>Email</th>
-            <th>Codigopostal</th>
-            <th>Estahabilitado</th>
+            <th>Código Postal</th>
+            <th>habilitado</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -23,21 +21,20 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.clave }}</td>
             <td>{% if entity.ultimoAcceso %}{{ entity.ultimoAcceso|date('Y-m-d H:i:s') }}{% endif%}</td>
             <td>{{ entity.dni }}</td>
             <td>{{ entity.telefono }}</td>
             <td>{{ entity.telefonoCelular }}</td>
             <td>{{ entity.email }}</td>
             <td>{{ entity.codigoPostal }}</td>
-            <td>{{ entity.estaHabilitado }}</td>
+            <td>{% if entity.estaHabilitado == 1 %} Sí {% else %} No {% endif %}</td>
             <td>
-                <ul class="record_actions">
+                <ul>
                     <li>
-                        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
                 </ul>
             </td>
@@ -49,7 +46,7 @@
 <ul class="record_actions">
     <li>
         <a href="{{ path('usuario_new') }}">
-            Create a new entry
+            Crear un nuevo usuario
         </a>
     </li>
 </ul>
