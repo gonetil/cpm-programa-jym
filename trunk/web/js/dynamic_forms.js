@@ -7,3 +7,9 @@
 	    form = prototype.replace(/\$\$name\$\$/g, collectionHolder.children().length);
 	    collectionHolder.append(form);
 	}
+	
+	
+	function removeForm(holder) { 
+		$(holder).remove();
+	}
+	

@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
+use Cpm\JovenesBundle\Controller\BaseController;
 use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
@@ -16,7 +18,7 @@ use Cpm\JovenesBundle\Entity\Usuario;
  *
  * @Route("/proyecto")
  */
-class ProyectoController extends Controller
+class ProyectoController extends BaseController
 {
     /**
      * Lists all Proyecto entities.
@@ -201,6 +203,35 @@ class ProyectoController extends Controller
             ->getForm()
         ;
     }
+    
+    /** 
+     * Quita un colaborador de un proyecto. No elimina al usuario
+     * 
+     *  @Route("/remove_colaborador" , name="proyecto_quitar_colaborador")
+     * 
+     * */
+	public function quitarColaboradorDeProyecto() {
+		$id_proyecto = $this->getRequest()->get('id_proyecto');
+		$email_colaborador = $this->getRequest()->get('email_colaborador');
+		 
+		$proyecto = $this->getRepository('CpmJovenesBundle:Proyecto')->findOneById($id_proyecto);
 
+		$em = $this->getEntityManager();
+		
+		foreach ($proyecto->getColaboradores() as $colab) { 
+			if ($colab->getEmail() == $email_colaborador) { 
+				$proyecto->getColaboradores()->removeElement($colab);
+				$colab->getColaboraEn()->removeElement($proyecto);
+				$em->persist($proyecto);
+				$em->persist($colab);
+				$em->flush();
+				return new Response('success');
+			}
+		}
+
+
+		return new Response("error");
+		
+	}
     
 }

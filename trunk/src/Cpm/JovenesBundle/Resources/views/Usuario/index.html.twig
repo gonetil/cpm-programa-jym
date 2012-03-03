@@ -8,6 +8,8 @@
         <tr>
             <th>Id</th>
             <th>Último Acceso</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
             <th>DNI</th>
             <th>Teléfono</th>
             <th>Teléfono Celular</th>
@@ -22,6 +24,8 @@
         <tr>
             <td><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{% if entity.ultimoAcceso %}{{ entity.ultimoAcceso|date('Y-m-d H:i:s') }}{% endif%}</td>
+            <td>{{ entity.nombre}}</td>
+            <td>{{ entity.apellido }} </td>
             <td>{{ entity.dni }}</td>
             <td>{{ entity.telefono }}</td>
             <td>{{ entity.telefonoCelular }}</td>
