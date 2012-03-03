@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Controller\BaseController;
 use Cpm\JovenesBundle\Entity\Proyecto;
-use Cpm\JovenesBundle\Form\ProyectoType;
+use Cpm\JovenesBundle\Form\ProyectoWizzardType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 
@@ -66,7 +66,7 @@ class PerfilController extends BaseController
     		return $this->redirect($this->generateUrl("home"));
     	}
     	
-    	$form   = $this->createForm(new ProyectoType(), $proyecto);
+    	$form   = $this->createForm(new ProyectoWizzardType(), $proyecto);
     
     	return array(
                 'entity' => $proyecto,
@@ -90,7 +90,7 @@ class PerfilController extends BaseController
     
     	$proyecto->setCoordinador($coordinador);
     	
-    	$form    = $this->createForm(new ProyectoType(), $proyecto);
+    	$form    = $this->createForm(new ProyectoWizzardType(), $proyecto);
     	 
     	$form->bindRequest($this->getRequest());
     	$colaboradores = $proyecto->getColaboradores();

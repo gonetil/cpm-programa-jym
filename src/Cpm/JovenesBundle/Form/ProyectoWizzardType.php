@@ -5,7 +5,7 @@ namespace Cpm\JovenesBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class ProyectoType extends AbstractType
+class ProyectoWizzardType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
@@ -22,7 +22,7 @@ class ProyectoType extends AbstractType
 	        ->add('motivoRealizacion',null,array('label'=>'¿Para qué se realiza el proyecto?'))
 	        ->add('impactoBuscado',null,array('label'=>'¿Cuál es el impacto que se busca?'))
         	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
-        	->add('coordinador',null,array('label' => 'Docente Coordinador'))
+        // ->add('coordinador',new UsuarioType(),array('label' => 'Docente Coordinador'))
         
         ;
     }
