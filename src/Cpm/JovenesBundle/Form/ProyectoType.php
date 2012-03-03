@@ -11,7 +11,7 @@ class ProyectoType extends AbstractType
     {
         $builder
             ->add('titulo')
-            ->add('nroAlumnos','integer',array('label'  => 'Número de alumnos'))
+            ->add('nroAlumnos','integer',array('label'  => 'Número de alumnos', 'attr'=>array('class'=>'number')))
             ->add('esPrimeraVezDocente',null,array('label' => '¿primera vez del docente?', 'required'=>false))
             ->add('esPrimeraVezEscuela',null,array('label' => '¿primera vez de la escuela?', 'required'=>false))
             ->add('esPrimeraVezAlumnos',null,array('label' => '¿primera vez de los alumnos?', 'required'=>false))
