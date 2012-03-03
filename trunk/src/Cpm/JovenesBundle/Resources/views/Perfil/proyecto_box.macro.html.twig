@@ -88,7 +88,7 @@
 		<p> &nbsp; </p>
 		{% if proyecto.esPrimeraVezDocente %} <p class="small_text"> <sup>*</sup>Primera vez que participa el docente</p> {% endif %}
 		
-		{% if proyecto.esPrimeraVezEscuela %} <sup>**</sup> Primera vez que participa la escuela {% endif %}
+		{% if proyecto.esPrimeraVezEscuela %} <sup>**</sup> Primera vez que participa la escuela <br/>{% endif %}
 		
-		{% if proyecto.esPrimeraVezAlumnos %} <sup>***</sup> Primera vez que participan los alumnos {% endif %}
+		{% if proyecto.esPrimeraVezAlumnos %} <sup>***</sup> Primera vez que participan los alumnos <br/> {% endif %}
 {% endmacro %}
