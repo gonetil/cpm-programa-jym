@@ -9,6 +9,7 @@
         <tr>
             <th>Id</th>
             <th>Tipo</th>
+            <th>Número</th>
             <th>Nombre</th>
             <th>Tipo de Institución</th>
             <th>Email</th>
@@ -23,7 +24,8 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('escuela_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.tipoEscuela.nombre }}</td>
+            <td>{{ entity.tipoEscuela }}</td>
+            <td>{{ entity.numero }}</td>            
             <td>{{ entity.nombre }}</td>
             <td>
             	{% if entity.tipoInstitucion is not null %}
