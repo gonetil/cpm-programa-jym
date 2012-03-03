@@ -32,16 +32,20 @@ class DefaultController extends BaseController
      */
     public function loginAction()
     {
-//    	if ($this->isUserAuthenticated()){
-//    		return $this->forward('CpmJovenesBundle:Default:index');
-//    	}
     	
         if ($this->getRequest()->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $this->getRequest()->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
             $error = $this->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
-		if ($error) $this->setErrorMessage($error->getMessage());
+        if (get_class($error) =="Symfony\Component\Security\Core\Exception\LockedException"){
+        	$error = "Su cuenta se encuentra pendiente de activacion. Siga el enlace que se le envio a su cuenta de correo electrónico.";
+        }elseif (is_a($error, "\Exception")){
+        	$error = $error->getMessage();
+        }
+        
+        if ($error) 
+        	$this->setErrorMessage($error);
         
         return $this->render('CpmJovenesBundle:Default:login.html.twig', array(
             'last_username' => $this->getSession()->get(SecurityContext::LAST_USERNAME)
@@ -53,6 +57,7 @@ class DefaultController extends BaseController
      */
     public function securityCheckAction()
     {
+    	die('paso');
         // The security layer will intercept this request
     }
 
@@ -95,13 +100,13 @@ class DefaultController extends BaseController
         $form->bindRequest($request);
 		
 		$preexistente = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($entity->getEmail());
-		
-        if (!$preexistente && $form->isValid()) {
-        	
-			$entity->setClave($this->encodePasswordFor($entity, $entity->getPassword()));
+		$mail_enviado = $this->enviarMail($entity->getEmail(), Plantilla::REGISTRO_USUARIO, array('user'=>$entity));
+            
+        if ($mail_enviado && !$preexistente && $form->isValid()) {
+        	$entity->setClave($this->encodePasswordFor($entity, $entity->getPassword()));
+			$entity->setEstaHabilitado(false);
 			$this->doPersist($entity);
             
-            $this->enviarMail($entity->getEmail(), Plantilla::REGISTRO_USUARIO, array('user'=>$entity));
             
             $this->setSuccessMessage('Se le ha enviado un correo de confirmación a '.$entity->getEmail()
 					.'. Deberá seguir el enlace que alli se incluye para completar el proceso de registración. ');
@@ -110,6 +115,8 @@ class DefaultController extends BaseController
 
 	 		if ($preexistente)
 	            $this->setErrorMessage('Ya existe un usuario con el mismo email ..');
+			elseif (!$mail_enviado)
+				$this->setErrorMessage('Lo sentimos pero no se pudo enviar el mail. Intentelo nuevamente y si el problema persiste contactese con la Comision...');
 			else
 				$this->setErrorMessage('Faltan datos :S');
 				

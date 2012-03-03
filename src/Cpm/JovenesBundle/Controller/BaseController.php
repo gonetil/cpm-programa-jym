@@ -44,22 +44,10 @@ abstract class BaseController extends Controller
 		$this->get('session')->setFlash('error', $msg);
 	}
 	
-	protected function enviarMail($destinatario, $codigo_plantilla, $args){
-        //FIXME levantar el from
-//        $this->get('');
-        $from='arieljlira@gmail.com';
-        $plantilla = $this->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
-       
-        //if (empty($plantilla)) throw new Runtime
-       //FIMXE handle error
-        
-        $message = \Swift_Message::newInstance()
-	        ->setSubject($plantilla->getAsunto())
-	        ->setFrom($from)
-	        ->setTo($destinatario)
-	        ->setBody($plantilla->getCuerpo())
-	    ;
-    	$this->get('mailer')->send($message);
+	protected function enviarMail($destinatario, $codigo_plantilla, $args=array()){
+		$plantilla = $this->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
+		$mailer = $this->get('mailer_manager');
+		return $mailer->send($destinatario, $plantilla, $args);
     }
 
 	//ABM
