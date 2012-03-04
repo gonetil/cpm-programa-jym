@@ -24,6 +24,13 @@ class UsuarioType extends AbstractType
             ->add('password', 'repeated', array('type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir Clave"))
         ;
     }
+    
+    public function getDefaultOptions(array $options)
+	{
+	    return array(
+	        'validation_groups' => array('administration')
+	    );
+	}
 
     public function getName()
     {

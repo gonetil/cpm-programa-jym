@@ -60,7 +60,7 @@
 			
 				<!--  start messages  red, yellow, blue, green -->
 				{% for key, message in app.session.getFlashes() %}
-				    <div class="{{key}}-message">{{app.session.flash(message)}}</div>
+				    <div class="{{key}}-message">
 				        {{ message|trans({}) }}
 				    </div>
 				{% endfor %}	
