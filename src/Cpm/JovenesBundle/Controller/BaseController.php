@@ -68,4 +68,12 @@ abstract class BaseController extends Controller
 		return $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($user->getUsername());
 	}
 	
+	protected function getUserManager(){
+		return $this->get('fos_user.user_manager');
+	}
+	
+	protected function getMailer(){
+		return $this->get('cpm_jovenes_bundle.mailer');
+	}
+	
 }

@@ -2,20 +2,22 @@
 
 namespace Cpm\JovenesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Form\UsuarioType;
-
+use FOS\UserBundle\Form\Handler\RegistrationFormHandler;
 /**
  * Usuario controller.
  *
  * @Route("/usuario")
  */
-class UsuarioController extends Controller
+class UsuarioController extends BaseController
 {
+	
+	
     /**
      * Lists all Usuario entities.
      *
@@ -62,7 +64,7 @@ class UsuarioController extends Controller
      */
     public function newAction()
     {
-        $entity = new Usuario();
+        $entity = $this->getUserManager()->createUser();
         $form   = $this->createForm(new UsuarioType(), $entity);
 
         return array(
@@ -71,6 +73,29 @@ class UsuarioController extends Controller
         );
     }
 
+public function create2Action()
+    {
+        $form = $this->createForm(new UsuarioType());
+        $confirmationEnabled = false; //TODO recuperar confirmationEnabled de algun lado
+        $formHandler = new RegistrationFormHandler($form, $this->getRequest(), $this->getUserManager(), $this->getMailer());
+        $process = $formHandler->process($confirmationEnabled);
+        if ($process) {
+            $entity = $form->getData();
+
+            if ($confirmationEnabled) {
+	            $this->setSuccessMessage('Se creo el usuario correctamente y se le envió un correo de confirmación.');
+            } else {
+    	        $this->setSuccessMessage('Se creo el usuario correctamente .');
+            }
+
+      	 	return $this->redirect($this->generateUrl('usuario_show', array('id' => $entity->getId())));
+        }
+
+        return array(
+            'entity' => null,
+            'form'   => $form->createView()
+        );
+    }
     /**
      * Creates a new Usuario entity.
      *
@@ -80,22 +105,24 @@ class UsuarioController extends Controller
      */
     public function createAction()
     {
-        $entity  = new Usuario();
-        $request = $this->getRequest();
-        $form    = $this->createForm(new UsuarioType(), $entity);
-        $form->bindRequest($request);
+    	$entity = new Usuario();
+        $form = $this->createForm(new UsuarioType(), $entity );
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($entity);
-            $em->flush();
+	    $form->bindRequest($this->getRequest());
 
-            return $this->redirect($this->generateUrl('usuario_show', array('id' => $entity->getId())));
-            
+       if ($form->isValid()) {
+$this->getUserManager()->updateUser($entity);
+            if (true) {
+	            $this->setSuccessMessage('Se creo el usuario correctamente y se le envió un correo de confirmación.');
+            } else {
+    	        $this->setSuccessMessage('Se creo el usuario correctamente .');
+            }
+
+      	 	return $this->redirect($this->generateUrl('usuario_show', array('id' => $entity->getId())));
         }
 
         return array(
-            'entity' => $entity,
+            'entity' => null,
             'form'   => $form->createView()
         );
     }

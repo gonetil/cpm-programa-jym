@@ -16,7 +16,7 @@
 	<body> 
 		<div style="margin:50px auto 50px; width:550px;">
 			{% for key, message in app.session.getFlashes() %}
-			    <div class="{{key}}-message">{{app.session.flash(message)}}</div>
+			    <div class="{{key}}-message">
 			        {{ message|trans({}) }}
 			    </div>
 			{% endfor %}
