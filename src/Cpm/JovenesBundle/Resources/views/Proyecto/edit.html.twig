@@ -55,8 +55,6 @@
 </script>
 
 
-<h1>Modificar Proyecto</h1>
-
 <form action="{{ path('proyecto_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     
     {{ form_row(edit_form.titulo) }}
