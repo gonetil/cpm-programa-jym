@@ -20,7 +20,14 @@ class EscuelaType extends AbstractType
             ->add('domicilio')
             ->add('codigoPostal',null,array('label'=>'Código postal'))
             ->add('director')
-            ->add('localidad', 'entity', array( 'class' => 'CpmJovenesBundle:Localidad','label'=>'Localidad', 'attr' => array('class'=>'localidad-selector')))	    
+            ->add('localidad', 'entity', array( 'class' => 'CpmJovenesBundle:Localidad',
+            									'label'=>'Localidad', 
+            									'attr' => array('class'=>'localidad-selector'),
+     											'query_builder' => function($er) {
+													        return $er->createQueryBuilder('loc')
+													            ->orderBy('loc	.nombre', 'ASC');
+    														}
+    											))	    
         ;
     }
 

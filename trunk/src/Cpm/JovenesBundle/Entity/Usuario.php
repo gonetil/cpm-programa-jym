@@ -32,7 +32,6 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="dni", type="string", nullable=true)
      * @Assert\NotBlank(groups="administration")
-     * @Assert\Url(groups="administration")
      */
     private $dni;
 
