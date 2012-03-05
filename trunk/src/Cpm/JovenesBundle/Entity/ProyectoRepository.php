@@ -12,4 +12,31 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProyectoRepository extends EntityRepository
 {
+	
+	function findBySearchCriteria($data) {
+		
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		
+		
+		$qb->add('select','p')
+			->add('from','CpmJovenesBundle:Proyecto p');
+		
+		
+		if ($data->getEsPrimeraVezDocente()) $qb->andWhere('p.esPrimeraVezDocente = :pvd')->setParameter('pvd',$data->getEsPrimeraVezDocente());
+		
+		if ($data->getEsPrimeraVezAlumnos()) $qb->andWhere('p.esPrimeraVezAlumnos = :pva')->setParameter('pva',$data->getEsPrimeraVezAlumnos());
+
+		if ($data->getEsPrimeraVezEscuela()) $qb->andWhere('p.esPrimeraVezEscuela = :pve')->setParameter('pve',$data->getEsPrimeraVezEscuela());
+		
+		if ($data->getProduccionFinal()) $qb->andWhere('p.produccionFinal = :pf')->setParameter('pf',$data->getProduccionFinal());
+		
+		if ($data->getTemaPrincipal()) $qb->andWhere('p.temaPrincipal = :tp')->setParameter('tp',$data->getTemaPrincipal());
+		
+		
+		
+		$qb->add('orderBy','p.id AsC');
+		$proyectos = $qb->getQuery()->getResult();
+		return $proyectos;
+		
+	}
 }

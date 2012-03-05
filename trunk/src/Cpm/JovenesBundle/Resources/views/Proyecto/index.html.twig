@@ -5,7 +5,13 @@
 {% block title %} Listado de Proyectos {% endblock %}
 {% block content %}
 
-
+<div class="filters">
+	Filtrar por:
+	<form method="post">
+	{{ form_widget(form) }}
+	<input type="submit" value='filtrar' />
+	</form>
+</div>
 <table class="records_list">
     <thead>
         <tr>

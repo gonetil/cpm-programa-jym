@@ -23,7 +23,16 @@ class DefaultController extends BaseController
      */
     public function indexAction()
     {
+    	$user = $this->getLoggedInUser();
+    	if ($this->get("security.context")->isGranted("ROLE_ADMIN")) {
+    		return $this->forward("CpmJovenesBundle:Proyecto:index"); 
+    	}
+    	elseif ($this->get("security.context")->isGranted("ROLE_USER")) {
+    		return $this->forward("CpmJovenesBundle:Perfil:index");
+    	}
+    	else 
     	return array();
+    	
     }
     
     /**
