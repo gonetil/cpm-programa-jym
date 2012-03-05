@@ -11,7 +11,14 @@ class ProyectoType extends AbstractType
     {
         $builder
             ->add('titulo')
-            ->add('coordinador',null,array('label' => 'Docente Coordinador'))
+            ->add('coordinador','entity',
+            					array('label' => 'Docente Coordinador',
+            						  'class' => 'CpmJovenesBundle:Usuario',
+            						  'query_builder' => function($er) {
+													        return $er->createQueryBuilder('u')
+													            ->orderBy('u.apellido', 'ASC');
+    														}
+    								    ))
             ->add('colaboradores','collection',array('allow_add'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
             ->add('nroAlumnos','integer',array('label'  => 'Número de alumnos', 'attr'=>array('class'=>'number')))
             ->add('esPrimeraVezDocente',null,array('label' => '¿primera vez del docente?', 'required'=>false))
