@@ -13,6 +13,9 @@ use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 
+use Cpm\JovenesBundle\Entity\ProyectoSearch;
+use Cpm\JovenesBundle\Form\ProyectoSearchType;
+
 /**
  * Proyecto controller.
  *
@@ -20,6 +23,7 @@ use Cpm\JovenesBundle\Entity\Usuario;
  */
 class ProyectoController extends BaseController
 {
+	
     /**
      * Lists all Proyecto entities.
      *
@@ -28,11 +32,31 @@ class ProyectoController extends BaseController
      */
     public function indexAction()
     {
+    	
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Proyecto')->findAll();
-
-        return array('entities' => $entities);
+        $repository = $em->getRepository('CpmJovenesBundle:Proyecto');
+        
+        $request = $this->getRequest();
+        $searchValues = new ProyectoSearch();
+        $searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
+        $proyectos = null;
+        
+        if ($request->getMethod() == 'POST') {
+        	$searchForm->bindRequest($request);
+        
+        	if ($searchForm->isValid()) {
+        		// 
+        		$proyectos =$repository ->findBySearchCriteria($searchForm->getData());
+        		// the query builder is returned, do something with it ($qb->getQuery()->getResult())
+        	}
+        } else { 
+        	$proyectos = $repository->findAll();
+        }
+         
+		
+        return array('entities' => $proyectos, 
+        			 'form'=>$searchForm->createView()
+        		);
     }
 
     /**
