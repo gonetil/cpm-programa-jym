@@ -73,29 +73,6 @@ class UsuarioController extends BaseController
         );
     }
 
-public function create2Action()
-    {
-        $form = $this->createForm(new UsuarioType());
-        $confirmationEnabled = false; //TODO recuperar confirmationEnabled de algun lado
-        $formHandler = new RegistrationFormHandler($form, $this->getRequest(), $this->getUserManager(), $this->getMailer());
-        $process = $formHandler->process($confirmationEnabled);
-        if ($process) {
-            $entity = $form->getData();
-
-            if ($confirmationEnabled) {
-	            $this->setSuccessMessage('Se creo el usuario correctamente y se le envió un correo de confirmación.');
-            } else {
-    	        $this->setSuccessMessage('Se creo el usuario correctamente .');
-            }
-
-      	 	return $this->redirect($this->generateUrl('usuario_show', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => null,
-            'form'   => $form->createView()
-        );
-    }
     /**
      * Creates a new Usuario entity.
      *
@@ -105,24 +82,30 @@ public function create2Action()
      */
     public function createAction()
     {
-    	$entity = new Usuario();
-        $form = $this->createForm(new UsuarioType(), $entity );
+    	$confirmationEnabled = false; //TODO recuperar confirmationEnabled de algun lado
+        
+        $user = $this->getUserManager()->createUser();
+        $form = $this->createForm(new UsuarioType(), $user );
 
 	    $form->bindRequest($this->getRequest());
 
        if ($form->isValid()) {
-$this->getUserManager()->updateUser($entity);
-            if (true) {
-	            $this->setSuccessMessage('Se creo el usuario correctamente y se le envió un correo de confirmación.');
-            } else {
-    	        $this->setSuccessMessage('Se creo el usuario correctamente .');
-            }
-
-      	 	return $this->redirect($this->generateUrl('usuario_show', array('id' => $entity->getId())));
+       		if ($confirmationEnabled) {
+				$user->setEnabled(false);
+				$user->setPassword('');
+	            $this->getMailer()->sendConfirmationEmailMessage($user);
+	        } else {
+	            $user->setConfirmationToken(null);
+	            $user->setEnabled(true);
+	        }
+			$this->getUserManager()->updateUser($user);
+			$this->setSuccessMessage('Se creo el usuario correctamente.' . ($confirmationEnabled?'se le envió un correo de confirmación.':''));
+				
+      	 	return $this->redirect($this->generateUrl('usuario_show', array('id' => $user->getId())));
         }
 
         return array(
-            'entity' => null,
+            'entity' => $user,
             'form'   => $form->createView()
         );
     }

@@ -20,8 +20,7 @@ class UsuarioType extends AbstractType
             ->add('codigoPostal')
             ->add('localidad')
             ->add('roles', 'choice', array('choices'=> array('ROLE_USER'=>'Docente','ROLE_ADMIN'=>'Administrador'), 'multiple'=>true))
-            ->add('enabled')
-            ->add('password', 'repeated', array('type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir Clave"))
+            ->add('plainPassword', 'repeated', array('type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir Clave"))
         ;
     }
     

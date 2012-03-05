@@ -28,4 +28,13 @@ class RegistroUsuarioType extends BaseType
     {
         return 'cpm_jovenesbundle_registrousuariotype';
     }
+    
+    
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'groups'  => 'registration',
+        );
+    }
+    
 }
