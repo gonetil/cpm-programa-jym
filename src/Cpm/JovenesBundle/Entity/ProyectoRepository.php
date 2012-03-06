@@ -17,7 +17,6 @@ class ProyectoRepository extends EntityRepository
 		
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		
-		
 		$qb->add('select','p')
 			->add('from','CpmJovenesBundle:Proyecto p');
 		
@@ -33,10 +32,19 @@ class ProyectoRepository extends EntityRepository
 		if ($data->getTemaPrincipal()) $qb->andWhere('p.temaPrincipal = :tp')->setParameter('tp',$data->getTemaPrincipal());
 		
 		
+		if ($data->getRegion()) { 
+			 $qb->innerJoin('p.escuela e')
+				->join("e.localidad l")
+				->join("l.distrito d")
+			    ->join("d.region r")
+				->andWhere('r = :region')
+			 	->setParameter('region',$data->getRegion())
+			;			
+		}
 		
 		$qb->add('orderBy','p.id AsC');
+
 		$proyectos = $qb->getQuery()->getResult();
 		return $proyectos;
-		
 	}
 }
