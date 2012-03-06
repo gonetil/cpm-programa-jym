@@ -54,12 +54,12 @@ class EscuelaController extends Controller
             'delete_form' => $deleteForm->createView(),        );
     }
 
-    /**
+    /*
      * Displays a form to create a new Escuela entity.
      *
      * @Route("/new", name="escuela_new")
      * @Template()
-     */
+    
     public function newAction()
     {
         $entity = new Escuela();
@@ -70,14 +70,14 @@ class EscuelaController extends Controller
             'form'   => $form->createView()
         );
     }
-
-    /**
+ 	*/
+    /*
      * Creates a new Escuela entity.
      *
      * @Route("/create", name="escuela_create")
      * @Method("post")
      * @Template("CpmJovenesBundle:Escuela:new.html.twig")
-     */
+     
     public function createAction()
     {
         $entity  = new Escuela();
@@ -99,7 +99,7 @@ class EscuelaController extends Controller
             'form'   => $form->createView()
         );
     }
-
+	*/
     /**
      * Displays a form to edit an existing Escuela entity.
      *

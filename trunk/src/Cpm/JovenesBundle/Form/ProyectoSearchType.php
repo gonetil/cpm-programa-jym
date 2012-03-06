@@ -52,6 +52,17 @@ class ProyectoSearchType extends AbstractType
 															            ->orderBy('p.nombre', 'ASC');
 		    														},
         												'required'=>false
+        								))
+			->add('region','entity',array(
+		    								'label' => 'Región Educativa',
+		    								'class' => 'CpmJovenesBundle:RegionEducativa',
+		    								'empty_value' => "Todas",
+		    								'preferred_choices' => array("Todas"),
+		    								'query_builder' => function($er) {
+		    														return $er->createQueryBuilder('r')
+		    														->orderBy('r.nombre', 'ASC');
+		    														},
+		    								'required'=>false
 		    							))
 //        	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
         ;

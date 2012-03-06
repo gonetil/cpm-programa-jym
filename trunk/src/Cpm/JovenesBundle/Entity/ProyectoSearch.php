@@ -51,6 +51,11 @@ class ProyectoSearch
     private $produccionFinal;
     
     /**
+    * @var integer region
+    */
+    public $region;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -137,5 +142,14 @@ class ProyectoSearch
     public function setProduccionFinal($produccion) {
     	$this->produccionFinal = $produccion;
     }
+
+    public function getRegion() 
+    {
+    	return $this->region;
+    }
     
+    public function setRegion($region)
+    {
+    	$this->region = $region;
+    }
 }
