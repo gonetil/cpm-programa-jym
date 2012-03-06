@@ -1,8 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block content %}
+{% block title %}Escuelas{% endblock %}
 
-<h1>Escuelas</h1>
+{% block content %}
 
 <table class="records_list">
     <thead>
@@ -54,11 +54,4 @@
     </tbody>
 </table>
 
-<ul>
-    <li>
-        <a href="{{ path('escuela_new') }}">
-            Agregar escuela
-        </a>
-    </li>
-</ul>
 {% endblock %}

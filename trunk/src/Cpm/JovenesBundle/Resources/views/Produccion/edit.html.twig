@@ -1,8 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block content %}
+{% block title %}Modificar Tipo de Producción{% endblock %}
 
-<h1>Modificar Tipo de Producción</h1>
+{% block content %}
 
 <form action="{{ path('produccion_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}

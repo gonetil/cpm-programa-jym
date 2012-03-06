@@ -1,8 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block content %}
+{% block title %}Agregar Localidad{% endblock %}
 
-<h1>Agregar Localidad</h1>
+{% block content %}
 
 <form action="{{ path('localidad_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
@@ -19,5 +19,4 @@
     </li>
 </ul>
 
-    
 {% endblock %}

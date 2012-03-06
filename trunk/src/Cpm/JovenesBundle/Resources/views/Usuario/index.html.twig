@@ -40,10 +40,10 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
                 </ul>
             </td>
@@ -55,8 +55,9 @@
 <ul>
     <li>
         <a href="{{ path('usuario_new') }}">
-            Create a new entry
+            Crear nuevo usuario
         </a>
     </li>
 </ul>
+
 {% endblock %}

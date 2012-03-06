@@ -47,11 +47,8 @@ class CorreoController extends Controller
             throw $this->createNotFoundException('Unable to find Correo entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
+            'entity'      => $entity);
     }
 
     /**
@@ -100,103 +97,4 @@ class CorreoController extends Controller
         );
     }
 
-    /**
-     * Displays a form to edit an existing Correo entity.
-     *
-     * @Route("/{id}/edit", name="correo_edit")
-     * @Template()
-     */
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Correo')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Correo entity.');
-        }
-
-        $editForm = $this->createForm(new CorreoType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-     * Edits an existing Correo entity.
-     *
-     * @Route("/{id}/update", name="correo_update")
-     * @Method("post")
-     * @Template("CpmJovenesBundle:Correo:edit.html.twig")
-     */
-    public function updateAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Correo')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Correo entity.');
-        }
-
-        $editForm   = $this->createForm(new CorreoType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
-
-        $editForm->bindRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('correo_edit', array('id' => $id)));
-        }
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-     * Deletes a Correo entity.
-     *
-     * @Route("/{id}/delete", name="correo_delete")
-     * @Method("post")
-     */
-    public function deleteAction($id)
-    {
-        $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
-
-        $form->bindRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Correo')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Correo entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('correo'));
-    }
-
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
-    }
 }

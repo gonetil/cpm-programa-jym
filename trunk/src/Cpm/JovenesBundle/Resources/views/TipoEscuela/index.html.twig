@@ -1,8 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block content %}
+{% block title %}Tipos de Escuelas{% endblock %}
 
-<h1>Tipos de Escuelas</h1>
+{% block content %}
 
 <table class="records_list">
     <thead>
@@ -35,7 +35,7 @@
 <ul>
     <li>
         <a href="{{ path('tipo_escuela_new') }}">
-            Agregar nuevo tipo
+            Agregar nuevo tipo de escuela
         </a>
     </li>
 </ul>

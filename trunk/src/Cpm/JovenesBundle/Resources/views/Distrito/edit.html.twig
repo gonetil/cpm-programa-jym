@@ -1,9 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
+{% block title %}Modificar Distrito{% endblock %}
 
 {% block content %}
-
-<h1>Modificar Distrito</h1>
 
 <form action="{{ path('distrito_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}

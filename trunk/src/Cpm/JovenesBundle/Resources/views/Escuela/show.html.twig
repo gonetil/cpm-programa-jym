@@ -1,8 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block content %}
+{% block title %}Escuela{% endblock %}
 
-<h1>Escuela</h1>
+{% block content %}
 
 <table class="record_properties">
     <tbody>
@@ -40,19 +40,13 @@
 <ul class="record_actions">
     <li>
         <a href="{{ path('escuela') }}">
-            Back to the list
+            Volver al listado
         </a>
     </li>
     <li>
         <a href="{{ path('escuela_edit', { 'id': entity.id }) }}">
-            Edit
+            Modificar
         </a>
-    </li>
-    <li>
-        <form action="{{ path('escuela_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
     </li>
 </ul>
 {% endblock %}

@@ -1,9 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
+{% block title %}Modificar Tipo de Escuela{% endblock %}
+
 {% block content %}
-
-
-<h1>Modificar Tipo de Escuela</h1>
 
 <form action="{{ path('tipo_escuela_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
