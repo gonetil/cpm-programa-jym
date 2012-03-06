@@ -9,6 +9,10 @@ use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 
 class RegistroUsuarioType extends BaseType
 {
+	public function __construct($c){
+		parent::__construct($c);
+	}
+	
     public function buildForm(FormBuilder $builder, array $options)
     {
     	parent::buildForm($builder, $options);
@@ -17,7 +21,7 @@ class RegistroUsuarioType extends BaseType
             ->add('nombre')
             ->add('apellido')
             ->add('dni', 'number')
-            ->add('localidad', null, array('attr' => array('class'=>'localidad-selector')))
+            ->add('localidad')
             ->add('codigoPostal')
             ->add('telefono')
             ->add('telefonoCelular', 'text', array('required'=>false))
@@ -32,9 +36,9 @@ class RegistroUsuarioType extends BaseType
     
     public function getDefaultOptions(array $options)
     {
-        return array(
-            'groups'  => 'registration',
-        );
+    	$a = parent::getDefaultOptions($options);
+    	//$a['groups'] = 'Registration';
+        return $a;
     }
     
 }
