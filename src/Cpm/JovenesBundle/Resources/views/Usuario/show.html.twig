@@ -56,7 +56,7 @@
         </tr>
         <tr>
             <th>Roles</th>
-            <td>{{ entity.roles }}</td>
+            <td>{{ entity.roles|join(', ') }}</td>
         </tr>
     </tbody>
 </table>
@@ -64,19 +64,21 @@
 <ul class="record_actions">
     <li>
         <a href="{{ path('usuario') }}">
-            Back to the list
+            Volver al listado
         </a>
     </li>
     <li>
         <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">
-            Edit
+            Editar
         </a>
     </li>
+    <!--
     <li>
         <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit">Delete</button>
         </form>
     </li>
+    -->
 </ul>
 {% endblock %}

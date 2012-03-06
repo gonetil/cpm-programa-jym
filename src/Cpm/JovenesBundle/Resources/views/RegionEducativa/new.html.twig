@@ -1,8 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block content %}
+{% block title %}Agregar Región Educativa{% endblock %}
 
-<h1>Agregar Región Educativa</h1>
+{% block content %}
 
 <form action="{{ path('region_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

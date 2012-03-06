@@ -1,7 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
+{% block title %}Agregar Tema{% endblock %}
+
 {% block content %}
-<h1>Agregar Tema</h1>
 
 <form action="{{ path('tema_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

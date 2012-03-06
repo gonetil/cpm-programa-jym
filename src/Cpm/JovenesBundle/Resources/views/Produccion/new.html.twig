@@ -1,8 +1,8 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block content %}
+{% block title %}Agregar Tipo de Producción{% endblock %}
 
-<h1>Agregar Tipo de Producción</h1>
+{% block content %}
 
 <form action="{{ path('produccion_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

@@ -106,6 +106,12 @@
 	<div class="clear">&nbsp;</div>
 	</div>
 	<!--  end content-outer........................................................END -->
+
+<script>
+	$(function(){
+		$('.records_list tbody').selectable({ filter: "tr", cancel: "a" });
+	});
+</script>
 	        
 	        
 	        {% block javascripts %}{% endblock %}
