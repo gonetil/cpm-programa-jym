@@ -35,11 +35,10 @@ class TwigSwiftMailer implements MailerInterface
         $template = Plantilla::CONFIRMACION_REGISTRO;
         $url = $this->router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
         $context = array(
-            'user' => $user,
             'confirmationUrl' => $url
         );
 
-        $this->sendMessage($template, $context, $user->getEmail());
+        return $this->sendPlantilla($template, $user, $context);
     }
 
     public function sendResettingEmailMessage(UserInterface $user)
@@ -47,28 +46,38 @@ class TwigSwiftMailer implements MailerInterface
         $template = Plantilla::RESETEAR_CUENTA;
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), true);
         $context = array(
-            'user' => $user,
             'confirmationUrl' => $url
         );
-        $this->sendMessage($template, $context, $user->getEmail());
+        return $this->sendPlantilla($template, $user, $context);
     }
 
-    protected function sendMessage($codigo_plantilla, $context, $toEmail)
-    {
-    	$fromEmail= $this->parameters['from_email'];
-        
-        $plantilla=$this->doctrine->getEntityManager()->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
-		//fixme validar $plantilla
+	protected function sendPlantilla($codigo_plantilla,UserInterface $user, $context=array()){
+		$context['user'] = $user;
+		$plantilla=$this->doctrine->getEntityManager()->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
 		
-		$template = $this->twig->loadTemplate($plantilla->getCuerpo());
+		if (!$plantilla)
+			throw new \InvalidArgumentException("No existe la plantilla $codigo_plantilla");
+		
+		//se asume que la plantilla tiene texto twig nomas, nada de HTML
+		return $this->sendMessage($user->getEmail(), $plantilla->getAsunto(),$plantilla->getCuerpo(), null, $context );
+	}
+	
+    protected function sendMessage($to, $subject, $twig_text, $twig_html, $context)
+    {
+		$text_template = $this->twig->loadTemplate($twig_text);
+		$textBody = $text_template->render($context);
         
-        $textBody = $template->renderBlock('body_text', $context);
-        $htmlBody = $template->renderBlock('body_html', $context);
+		if($twig_html){
+			$html_template= $this->twig->loadTemplate($twig_html);
+        	$htmlBody = $html_template->render($context);
+		}
+		
+    	$fromEmail= $this->parameters['from_email'];
 
 		$message = \Swift_Message::newInstance()
-	        ->setSubject($plantilla->getAsunto())
+	        ->setSubject($subject)
 	        ->setFrom($fromEmail)
-	        ->setTo($toEmail)
+	        ->setTo($to)
 	    ;
 		
         if (!empty($htmlBody)) {
