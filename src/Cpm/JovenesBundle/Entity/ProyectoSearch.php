@@ -50,11 +50,36 @@ class ProyectoSearch
      */
     private $produccionFinal;
     
+    
+    /**
+     * @var integer localidad
+     */
+    private $localidad;
+    
+    /**
+     * @var integer distrito
+     */
+    private $distrito;
+    
     /**
     * @var integer region
     */
     public $region;
     
+    /**
+    * @var integer $regionDesde
+    */
+    public $regionDesde;
+    
+    /**
+    * @var integer $regionHasta
+    */
+    public $regionHasta;
+    
+    /**
+    * @var integer $tipoInstitucion
+    */
+    public $tipoInstitucion;
     /**
      * Get id
      *
@@ -143,6 +168,27 @@ class ProyectoSearch
     	$this->produccionFinal = $produccion;
     }
 
+    
+    public function getLocalidad() 
+    {
+    	return $this->localidad;
+    }
+    
+    public function setLocalidad($localidad) 
+    {
+    	$this->localidad = $localidad;
+    }
+    
+    public function getDistrito() 
+    { 
+    	return $this->distrito;
+    }
+    
+    public function setDistrito($distrito)
+    {
+    	$this->distrito = $distrito;
+    }
+    
     public function getRegion() 
     {
     	return $this->region;
@@ -151,5 +197,30 @@ class ProyectoSearch
     public function setRegion($region)
     {
     	$this->region = $region;
+    }
+    
+    
+    public function getRegionDesde() {
+    	return $this->regionDesde;
+    }
+    
+    public function getRegionHasta() {
+    	return $this->regionHasta;
+    }
+    
+    public function getTipoInstitucion() {
+    	return $this->tipoInstitucion;
+    }
+    
+    public function setRegionDesde($regionDesde) {
+    	$this->regionDesde = $regionDesde;
+    }
+    
+    public function setRegionHasta($regionHasta) {
+    	$this->regionHasta = $regionHasta;
+    }
+    
+    public function setTipoInstitucion($tipoInstitucion) {
+    	$this->tipoInstitucion = $tipoInstitucion;
     }
 }

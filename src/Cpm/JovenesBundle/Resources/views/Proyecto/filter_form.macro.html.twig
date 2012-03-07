@@ -1,0 +1,78 @@
+{% macro show(form) %}
+
+		<script>
+		
+			autofill_select = function ( value_to_send , select_to_fill , url_to_json, empty_value)
+			{
+			   	select = $(select_to_fill)
+			   			.first()
+			   			.empty()
+			   			.append("<option value=''>" + empty_value + "</option>");
+			
+				if (value_to_send != null )
+				 {
+				   	$.getJSON(url_to_json, value_to_send , function(data) {
+				   		if (data.length > 0) {
+					   		for (var i=0; i<data.length; i++) 
+					   			select.append("<option value="+data[i].id+">"+data[i].nombre+"</option>");
+					   	}
+					}); 
+				}
+			};
+			
+			buscar_localidades = function() {
+				id = jQuery("select.distrito-selector").val();
+						
+				select = "select.localidad-selector";
+				if (id == "") 
+					autofill_select(null, select , null, "Todas");
+				else
+					autofill_select( { distrito_id : id} ,  select , "{{ path('localidad_find_by_distrito') }}" , "Todas");			
+			};
+			
+			buscar_distritos = function() {
+					id = jQuery("select.region-selector").val();
+						
+					select = "select.distrito-selector";
+					if (id == "") 
+					{
+						autofill_select(null, select , null, "Todos");
+						buscar_localidades(); //para que tambien se vacíe el select de localidades
+					}
+					else
+						autofill_select( { region_id : id} , select  , "{{ path('distrito_find_by_region') }}" , "Todos");
+			};
+			
+		</script>
+		
+		<div class="filters">
+			
+			<form method="post">
+				<div class='left'>
+					<h4> Filtros sobre el proyecto</h4>
+					{{ form_row(form.esPrimeraVezDocente) }}
+					{{ form_row(form.esPrimeraVezEscuela) }}
+					{{ form_row(form.esPrimeraVezAlumnos) }}
+					{{ form_row(form.temaPrincipal) }}
+					{{ form_row(form.produccionFinal) }}
+					
+				</div>
+				<div class='right'>
+					<h4> Filtros sobre la escuela </h4>
+					{{ form_row(form.region) }}
+					{{ form_row(form.distrito) }}
+					{{ form_row(form.localidad) }}
+					{{ form_row(form.regionDesde) }}
+					{{ form_row(form.regionHasta) }}
+					{{ form_row(form.tipoInstitucion) }}
+				</div>
+				<div class="double">
+					{{ form_rest(form) }}
+					<input type="submit" value='filtrar' />
+				</div>
+			</form>
+		</div>
+
+
+
+{% endmacro %}

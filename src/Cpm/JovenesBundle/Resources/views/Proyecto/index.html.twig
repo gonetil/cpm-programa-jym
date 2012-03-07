@@ -1,17 +1,51 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
 {% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
+{% import "CpmJovenesBundle:Proyecto:filter_form.macro.html.twig" as filter_form %}
 
 {% block title %} Listado de Proyectos {% endblock %}
 {% block content %}
 
-<div class="filters">
-	Filtrar por:
-	<form method="post">
-	{{ form_widget(form) }}
-	<input type="submit" value='filtrar' />
-	</form>
+<script>
+			$(document).ready(function() { 
+					$('select.region-selector').change(buscar_distritos);
+					$('select.distrito-selector').change(buscar_localidades);
+					
+					
+					{% if distritos is defined %} 
+						options = "{% for d in distritos %}<option value='{{d.id}}' {% if (form.vars.value.distrito is defined) and ( form.vars.value.distrito == d.id ) %} selected='selected'{% endif %}>{{d.nombre}}</option>{% endfor %}";
+						$('select.distrito-selector').append(options);
+					{% endif %}
+					
+					{% if localidades is defined %} 
+						options = "{% for l in localidades %}<option value='{{l.id}}' {% if (form.vars.value.localidad is defined) and ( form.vars.value.localidad == l.id ) %} selected='selected'{% endif %}>{{l.nombre}}</option>{% endfor %}";
+						$('select.localidad-selector').append(options);
+					{% endif %}
+
+					}) //document ready
+			;
+</script>
+<div id="before_list">
+		
+		{{ filter_form.show(form) }}
+		
+		
+		<div class="systats">
+				<h4> Estadísticas del Sistema </h4>
+			  <ul>
+			  <li> Cant. de proyectos: {{total_proyectos}}</li>
+			  {% if total_proyectos > 0 %}
+			    <li> % primera vez del docente: {{ 100 * total_PrimeraVezDocente / total_proyectos }}% ( {{total_PrimeraVezDocente}} )</li>
+			  	<li> % primera vez de los alumnos: {{ 100 * total_PrimeraVezAlumnos / total_proyectos }}% ({{total_PrimeraVezAlumnos}})</li>
+			  	<li> % primera vez de la escuela: {{100 * total_PrimeraVezEscuela / total_proyectos }}% ({{total_PrimeraVezEscuela}})</li>
+			  {% endif %}
+			    <li> Cantidad de coordinadores: {{ total_Coordinadores }} </li>	
+			  </ul>
+		</div>
+
 </div>
+
+
 <table class="records_list">
     <thead>
         <tr>
@@ -28,6 +62,7 @@
         </tr>
     </thead>
     <tbody>
+    	<tr> <td colspan="100%"> Cantidad de resultados: <strong> {{ entities | length }} </strong> </td> </tr>
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
