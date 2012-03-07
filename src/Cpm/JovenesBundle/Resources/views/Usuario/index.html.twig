@@ -8,17 +8,11 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Username</th>
+            <th>Apellido, Nombres [Habilitado]</th>
             <th>Email</th>
-            <th>Enabled</th>
-            <th>Lastlogin</th>
-            <th>Roles</th>
             <th>Dni</th>
-            <th>Apellido</th>
-            <th>Nombre</th>
             <th>Telefono</th>
-            <th>Telefonocelular</th>
-            <th>Codigopostal</th>
+            <th>Ultimo Acceso</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -26,17 +20,11 @@
     {% for entity in entities %}
         <tr>
             <td>{{ entity.id }}</td>
-            <td><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.username }}</a></td>
+            <td><b><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.apellido }}, {{ entity.nombre }}</a> [{{ entity.enabled?'Si':'No' }}]<b></td>
             <td>{{ entity.email }}</td>
-            <td>{{ entity.enabled }}</td>
-            <td>{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif%}</td>
-            <td>{{ entity.roles }}</td>
             <td>{{ entity.dni }}</td>
-            <td>{{ entity.apellido }}</td>
-            <td>{{ entity.nombre }}</td>
-            <td>{{ entity.telefono }}</td>
-            <td>{{ entity.telefonoCelular }}</td>
-            <td>{{ entity.codigoPostal }}</td>
+            <td>{{ entity.telefono }}{{ (entity.telefono) and (entity.telefonoCelular)?',':'' }}{{ entity.telefonoCelular }}</td>
+            <td>{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif%}</td>
             <td>
                 <ul>
                     <li>
