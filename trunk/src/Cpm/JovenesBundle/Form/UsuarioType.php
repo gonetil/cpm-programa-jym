@@ -16,20 +16,14 @@ class UsuarioType extends AbstractType
             ->add('dni', 'number')
             ->add('email', 'email')
             ->add('telefono')
-            ->add('telefonoCelular')
+            ->add('telefonoCelular', null, array('required'=>false))
             ->add('codigoPostal')
             ->add('localidad')
             ->add('roles', 'choice', array('choices'=> array('ROLE_USER'=>'Docente','ROLE_ADMIN'=>'Administrador'), 'multiple'=>true))
-            ->add('plainPassword', 'repeated', array('type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir Clave"))
+            ->add('plainPassword', 'repeated', array('required'=>false,'type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir Clave"))
         ;
     }
     
-    public function getDefaultOptions(array $options)
-	{
-	    return array(
-	        'validation_groups' => array('administration')
-	    );
-	}
 
     public function getName()
     {
