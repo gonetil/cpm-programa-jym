@@ -10,6 +10,11 @@
             <argument>%fos_user.model.user.class%</argument>
         </service>
 
+        <service id="cpm_jovenes_bundle.profile.form.type" class="Cpm\JovenesBundle\Form\PerfilUsuarioType">
+            <tag name="form.type" alias="cpm_jovenesbundle_perfilusuariotype" />
+            <argument>%fos_user.model.user.class%</argument>
+        </service>
+
         <service id="cpm_jovenes_bundle.custom_user_provider" class="Cpm\JovenesBundle\Service\CustomUserProvider" public="false" >
 			<argument type="service" id="fos_user.user_manager"/>
         </service>

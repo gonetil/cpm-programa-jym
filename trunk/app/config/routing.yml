@@ -23,7 +23,11 @@ CpmJovenesBundle:
     resource: "@CpmJovenesBundle/Resources/config/routing.yml"
 #    prefix:   /
 
+fos_user_profile_show:
+    pattern:   /profile/
+    defaults:  { _controller: FOSUserBundle:Profile:edit }
     
+ 
 # Internal routing configuration to handle ESI
 #_internal:
 #   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"

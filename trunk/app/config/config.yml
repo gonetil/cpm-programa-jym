@@ -84,7 +84,10 @@ fos_user:
             type: cpm_jovenesbundle_registrousuariotype
         confirmation:
             enabled:    true
-
+    profile:
+        form:
+            type: cpm_jovenesbundle_perfilusuariotype
+            
 services:
         
 cpm_jovenes:

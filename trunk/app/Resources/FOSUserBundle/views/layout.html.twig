@@ -1,7 +1,7 @@
-{% extends 'CpmJovenesBundle:Layout:login_layout.html.twig' %}
+{% extends is_granted('ROLE_USER')?'CpmJovenesBundle:Layout:admin_layout.html.twig':'CpmJovenesBundle:Layout:login_layout.html.twig' %}
 
 {% block content %}
 {% block fos_user_content %}
-{% endblock fos_user_content %}
+{% endblock  %}
 
-{% endblock content %}
+{% endblock  %}
