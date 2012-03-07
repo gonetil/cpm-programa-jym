@@ -89,13 +89,13 @@
 			
 			<div class="nav-divider">&nbsp;</div>
 			<ul class="select">
-				<li><a href="{{path('correo')}}"><b>{{ app.user.username}}</b></a></li>
+				<li><a href="{{path('fos_user_profile_edit')}}"><b>{{ app.user.username}}</b></a></li>
 			</ul>
 
 			{% if not is_granted("ROLE_ADMIN") %}
             <div class="nav-divider">&nbsp;</div>
 			<ul class="select">
-				<li><a href="{{path('correo')}}"><b>Mi cuenta</b></a></li>
+				<li><a href="{{path('fos_user_profile_edit')}}"><b>Mi cuenta</b></a></li>
 			</ul>
 			{% endif %}
 			

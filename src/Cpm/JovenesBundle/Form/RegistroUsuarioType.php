@@ -15,16 +15,16 @@ class RegistroUsuarioType extends BaseType
 	
     public function buildForm(FormBuilder $builder, array $options)
     {
-    	parent::buildForm($builder, $options);
-    	
         $builder
             ->add('nombre')
             ->add('apellido')
             ->add('dni', 'number')
-            ->add('localidad')
+    		->add('email', 'email')
+	        ->add('localidad')
             ->add('codigoPostal')
             ->add('telefono')
             ->add('telefonoCelular', 'text', array('required'=>false))
+            ->add('plainPassword', 'repeated', array('type' => 'password', 'first_name'=>'Clave', 'second_name'=>'Repetir Clave'))
         ;
     }
 
