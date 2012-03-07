@@ -14,14 +14,10 @@
             <constraint name="MinLength">
                 <option name="limit">6</option>
                 <option name="message">fos_user.password.short</option>
-                <option name="groups">
-                    <value>Registration</value>
-                    <value>Profile</value>
-                </option>
             </constraint>
         </property>
     </class>
-
+    
     <class name="FOS\UserBundle\Form\Model\CheckPassword">
         <constraint name="FOS\UserBundle\Validator\Password">
             <option name="passwordProperty">current</option>
