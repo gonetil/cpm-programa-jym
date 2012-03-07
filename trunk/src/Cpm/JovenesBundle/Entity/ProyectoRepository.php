@@ -30,19 +30,54 @@ class ProyectoRepository extends EntityRepository
 		if ($data->getProduccionFinal()) $qb->andWhere('p.produccionFinal = :pf')->setParameter('pf',$data->getProduccionFinal());
 		
 		if ($data->getTemaPrincipal()) $qb->andWhere('p.temaPrincipal = :tp')->setParameter('tp',$data->getTemaPrincipal());
+				
+		$tiene_escuela = false;
+		if ($data->getLocalidad())
+		{  
+			$tiene_escuela = true;
+			$qb->innerJoin('p.escuela','e')
+			->innerJoin("e.localidad",'l')
+			->andWhere('l = :localidad')
+			->setParameter('localidad',$data->getLocalidad())
+			;
+		} elseif ($data->getDistrito()) 
+			{ 
+				$tiene_escuela = true;
+				 $qb->innerJoin('p.escuela','e')
+					->innerJoin("e.localidad",'l')
+					->innerJoin("l.distrito",'d')
+					->andWhere('d = :distrito')
+				 	->setParameter('distrito',$data->getDistrito())
+				;			
+			}
+			elseif ($data->getRegion() || $data->getRegionDesde() || $data->getRegionHasta()) //la region solo se considera si no se eligio ni la localidad ni el distrito 
+			{ 
+				$tiene_escuela = true;
+				 $qb->innerJoin('p.escuela','e')
+					->innerJoin("e.localidad",'l')
+					->innerJoin("l.distrito",'d')
+				    ->innerJoin("d.region",'r');
+				    
+				    if ($data->getRegion())  
+						$qb->andWhere('r = :region')->setParameter('region',$data->getRegion());
+				    else { 
+				    	if ($data->getRegionDesde()) $qb->andWhere('r.id >= :regionDesde')->setParameter('regionDesde',$data->getRegionDesde());
+				    	if ($data->getRegionHasta()) $qb->andWhere('r.id <= :regionHasta')->setParameter('regionHasta',$data->getRegionHasta());
+				    }
+				;			
+			}
+			
+			if ($data->getTipoInstitucion()) 
+			{ 
+					if (!$tiene_escuela ) $qb->innerJoin('p.escuela','e');
+					
+					$qb->innerJoin("e.tipoInstitucion",'t')
+					   ->andWhere('t = :tipoInstitucion')->setParameter('tipoInstitucion',$data->getTipoInstitucion())
+				;			
+			}
+
 		
-		
-		if ($data->getRegion()) { 
-			 $qb->innerJoin('p.escuela e')
-				->join("e.localidad l")
-				->join("l.distrito d")
-			    ->join("d.region r")
-				->andWhere('r = :region')
-			 	->setParameter('region',$data->getRegion())
-			;			
-		}
-		
-		$qb->add('orderBy','p.id AsC');
+			$qb->add('orderBy','p.id AsC');
 
 		$proyectos = $qb->getQuery()->getResult();
 		return $proyectos;

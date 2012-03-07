@@ -57,6 +57,7 @@ class ProyectoSearchType extends AbstractType
 		    								'label' => 'Región Educativa',
 		    								'class' => 'CpmJovenesBundle:RegionEducativa',
 		    								'empty_value' => "Todas",
+		    								'attr' => array('class' => 'region-selector'),
 		    								'preferred_choices' => array("Todas"),
 		    								'query_builder' => function($er) {
 		    														return $er->createQueryBuilder('r')
@@ -64,6 +65,44 @@ class ProyectoSearchType extends AbstractType
 		    														},
 		    								'required'=>false
 		    							))
+		    ->add('distrito','choice',array(
+		    							'label' => 'Distrito',
+		    							'choices' => array(),
+		    							'attr' => array('class' => 'distrito-selector'),
+		    							'empty_value' => "Todos",
+		    							'preferred_choices' => array("Todos"),
+		    							'required'=>false
+		    							)) 
+			->add('localidad','choice',array(
+		    								'label' => 'Localidad',
+		    								'choices' => array(),
+		    								'attr' => array('class' => 'localidad-selector'),
+		    								'empty_value' => "Todas",
+		    								'preferred_choices' => array("Todas"),
+		    								'required'=>false		    
+		    							))
+		  	->add('tipoInstitucion','entity',array(
+		            									'label' => 'Tipo de Institución',
+		            									'class' => 'CpmJovenesBundle:TipoInstitucion',
+		    								    		'empty_value' => "Todos",
+		    								            'preferred_choices' => array("Todos"),
+		            									'query_builder' => function($er) {
+																	        return $er->createQueryBuilder('t')
+															            ->orderBy('t.nombre', 'ASC');
+		    														},
+        												'required'=>false
+        								))
+        	->add('regionDesde','integer',array(
+		            									'label' => 'Desde la región',
+        												'required'=>false
+        								))
+        	->add('regionHasta','integer',array(
+		            									'label' => 'Hasta la región',
+        												'required'=>false
+        								))
+	        								
+		        								
+		    							
 //        	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
         ;
     }

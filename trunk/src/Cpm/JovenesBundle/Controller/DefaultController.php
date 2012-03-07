@@ -174,4 +174,27 @@ class DefaultController extends BaseController
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }    
+    
+
+    /**
+    * Busca todos los distritos de una region
+    *
+    * @Route("/public/find_by_region", name="distrito_find_by_region")
+    */
+    public function findByRegionAction() {
+    	$region_id = $this->get('request')->query->get('region_id');
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findByRegion($region_id);
+    	 
+    	$json = array();
+    	foreach ($distritos as $dist) {
+    		$json[] = array("nombre"=>$dist->getNombre(), "id" => $dist->getId());
+    	}
+    	$response = new Response(json_encode($json));
+    	 
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    }
+    
 }

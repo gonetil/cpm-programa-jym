@@ -41,24 +41,58 @@ class ProyectoController extends BaseController
         $searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
         $proyectos = null;
         
+        $response = array();
         if ($request->getMethod() == 'POST') {
         	$searchForm->bindRequest($request);
         
         	if ($searchForm->isValid()) {
         		// 
         		$proyectos =$repository ->findBySearchCriteria($searchForm->getData());
-        		// the query builder is returned, do something with it ($qb->getQuery()->getResult())
+        		
+        		if ($searchForm->getData()->getRegion()) {
+        			
+        			$response['distritos'] = $em->getRepository('CpmJovenesBundle:Distrito')->findByRegion($searchForm->getData()->getRegion()->getId());
+        		}
+        		
+        		if ($searchForm->getData()->getDistrito()) {
+        			$response['localidades'] = $em->getRepository('CpmJovenesBundle:Localidad')->findByDistrito($searchForm->getData()->getDistrito());
+        		}
         	}
         } else { 
         	$proyectos = $repository->findAll();
         }
          
+		$stats = $this->getSystemStats(); 
 		
-        return array('entities' => $proyectos, 
-        			 'form'=>$searchForm->createView()
-        		);
+		$response['entities'] = $proyectos;
+		$response['form']=$searchForm->createView();
+		
+        return array_merge($stats, $response);
     }
 
+    private function getSystemStats() {
+    	$stats = array(); 
+    	$em = $this->getEntityManager();
+    	$repo = $em->getRepository('CpmJovenesBundle:Proyecto');
+    	
+    	$qb = $repo->createQueryBuilder('p');
+    	$stats['total_proyectos'] = $qb->select($qb->expr()->count('p'))->getQuery()->getSingleScalarResult();
+
+    	$stats['total_PrimeraVezDocente'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezDocente = 1')->getQuery()->getSingleScalarResult();
+    	$stats['total_PrimeraVezAlumnos'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezAlumnos = 1')->getQuery()->getSingleScalarResult();
+    	$stats['total_PrimeraVezEscuela'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezEscuela = 1')->getQuery()->getSingleScalarResult();
+    	
+    	//$stats['total_Alumnos'] = $repo->createQuery('SELECT SUM(p.nroAlumnos) FROM Proyecto')->getSingleScalarResult(); 
+    	
+    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')->getQuery()->getResult());
+    	//$stats['total_Alumnos'] = $qb->select('SUM(nroAlumnos)')  ->add('from','CpmJovenesBundle:Proyecto p')->getQuery()->getResult();
+    							   
+    	
+    	//select($qb->expr()->sum('p.nroAlumnos',0))->getQuery()->getSingleScalarResult();
+    	//$stats['total_Docentes'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezEscuela = 1')->getQuery()->getSingleScalarResult();
+    	
+    	return $stats;
+    }
     /**
      * Finds and displays a Proyecto entity.
      *
