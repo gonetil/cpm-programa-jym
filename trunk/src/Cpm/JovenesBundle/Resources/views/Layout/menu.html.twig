@@ -3,17 +3,110 @@
 <div class="nav-outer-repeat"> 
 <!--  start nav-outer -->
 <div class="nav-outer"> 
-
-		<!-- start nav-right -->
-		<div id="nav-right">
+	<!--  start nav -->
+	<div class="nav">
+	<div class="table">
 		
+		<ul  class="current" >
+			<li>
+				<a href="{{path('home')}}"><b>Panel de Control</b></a>
+				{% if not is_granted("ROLE_ADMIN") %}
+					<div class="select_sub show">
+					<ul class="sub">
+						<li><a href="{{path('home')}}">Mis proyectos</a></li>
+						<li><a href="{{path('home')}}">Mis reuniones</a></li>
+					</ul>
+				</div>
+				{% endif %}
+			</li>
+		</ul>
+		
+		{% if is_granted("ROLE_ADMIN") %}<!-- Comienzo de las opciones de admin -->
+		<div class="nav-divider">&nbsp;</div>
+		<ul class="select">
+			<li><a href="{{path('usuario')}}"><b>Usuarios</b></a>
+			<div class="select_sub show">
+				<ul class="sub">
+					<li><a href="{{path('usuario')}}">Ver todos los usuarios</a></li>
+					<li class="sub_show"><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+		
+		<div class="nav-divider">&nbsp;</div>
+		<ul class="select">
+			<li><a href="{{path('proyecto')}}"><b>Proyectos</b></a>
+			<div class="select_sub show">
+				<ul class="sub">
+					<li><a href="{{path('proyecto_new')}}">Agregar Proyecto</a></li>
+					<li><a href="{{path('proyecto')}}">Ver todos los proyectos</a></li>
+					<li><a href="{{path('escuela')}}">Escuelas</a></li>
+					<li><a href="{{path('tema')}}">Temas</a></li>
+					<li><a href="{{path('produccion')}}">Producciones</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+		
+		<div class="nav-divider">&nbsp;</div>
+		<ul class="select">
+			<li><a href="{{path('correo')}}"><b>Comunicaciones</b></a>
+			<div class="select_sub show">
+				<ul class="sub">
+					<li><a href="{{path('correo')}}">Correos Enviados</a></li>
+					<li><a href="{{path('plantilla')}}">Plantillas</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+		
+		<div class="nav-divider">&nbsp;</div>
+		<ul class="select">
+			<li><a href="{{path('proyecto')}}"><b>Mas</b></a>
+			<div class="select_sub show">
+				<ul class="sub">
+					<li><a href="{{path('localidad')}}">Localidades</a></li>
+					<li><a href="{{path('distrito')}}">Municipios/Distritos</a></li>
+					<li><a href="{{path('region')}}">Regiones</a></li>
+					<li><a href="{{path('tipo_institucion')}}">Tipo de Institucion</a></li>
+					<li><a href="{{path('tipo_escuela')}}">Tipo de Escuela</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+		{% endif %}	
+	</div>
+	<div class="clear"></div>
+	</div>
+	<!-- end nav -->
+		
+	<!-- start nav-right -->
+	<div id="nav-right" class="nav">
+			<div class="showhide-account">
+                <img width="11" height="14" alt="" src="{{asset('images/shared/nav/nav_myaccount.gif')}}">
+            </div>
+			
 			<div class="nav-divider">&nbsp;</div>
-			<div class="showhide-account"><img width="93" height="14" alt="" src="{{asset('images/shared/nav/nav_myaccount.gif')}}"></div>
+			<ul class="select">
+				<li><a href="{{path('correo')}}"><b>{{ app.user.username}}</b></a></li>
+			</ul>
+
+			{% if not is_granted("ROLE_ADMIN") %}
+            <div class="nav-divider">&nbsp;</div>
+			<ul class="select">
+				<li><a href="{{path('correo')}}"><b>Mi cuenta</b></a></li>
+			</ul>
+			{% endif %}
+			
 			<div class="nav-divider">&nbsp;</div>
-			<a id="logout" href="{{path('_logout')}}"><img width="64" height="14" alt="" src="{{asset('images/shared/nav/nav_logout.gif')}}"></a>
+			<ul class="select">
+				<li><a id="logout" href="{{path('_logout')}}"><b>Salir</b></a></li>
+			</ul>
+
 			<div class="clear">&nbsp;</div>
 		
-			<!--  start account-content -->	
+			<!--  start account-content 
 			<div class="account-content">
 			<div class="account-drop-inner">
 				<a id="acc-settings" href="">Settings</a>
@@ -31,90 +124,10 @@
 				<a id="acc-stats" href="">Statistics</a> 
 			</div>
 			</div>
-			<!--  end account-content -->
+			  end account-content -->
 		
 		</div>
 		<!-- end nav-right -->
-
-
-		<!--  start nav -->
-		<div class="nav">
-		<div class="table">
-		
-		<ul  class="current" ><li><a href="{{path('home')}}"><b>Dashboard</b></a>
-		<div class="select_sub">
-			<ul class="sub">
-				<li><a href="{{path('home')}}">Dashboard Details 3</a></li>
-			</ul>
-		</div>
-		</li>
-		</ul>
-		
-		<div class="nav-divider">&nbsp;</div>
-		                    
-		<ul class="select">
-			<li><a href="{{path('usuario')}}"><b>Usuarios</b></a>
-			<div class="select_sub show">
-				<ul class="sub">
-					<li><a href="{{path('usuario')}}">Ver todos los usuarios</a></li>
-					<li class="sub_show"><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
-				</ul>
-			</div>
-		</li>
-		</ul>
-		
-		<div class="nav-divider">&nbsp;</div>
-		
-		<ul class="select">
-			<li><a href="{{path('proyecto')}}"><b>Proyectos</b></a>
-			<div class="select_sub show">
-				<ul class="sub">
-					<li><a href="{{path('proyecto_new')}}">Agregar Proyecto</a></li>
-					<li><a href="{{path('proyecto')}}">Ver todos los proyectos</a></li>
-					<li><a href="{{path('escuela')}}">Escuelas</a></li>
-					<li><a href="{{path('tema')}}">Temas</a></li>
-					<li><a href="{{path('produccion')}}">Producciones</a></li>
-				</ul>
-			</div>
-		</li>
-		</ul>
-		
-		
-		
-		<div class="nav-divider">&nbsp;</div>
-		
-		<ul class="select">
-			<li><a href="{{path('correo')}}"><b>Comunicaciones</b></a>
-			<div class="select_sub show">
-				<ul class="sub">
-					<li><a href="{{path('correo')}}">Correos Enviados</a></li>
-					<li><a href="{{path('plantilla')}}">Plantillas</a></li>
-				</ul>
-			</div>
-		</li>
-		</ul>
-		
-		<div class="nav-divider">&nbsp;</div>
-		
-		<ul class="select">
-			<li><a href="{{path('proyecto')}}"><b>Mas</b></a>
-			<div class="select_sub show">
-				<ul class="sub">
-					<li><a href="{{path('localidad')}}">Localidades</a></li>
-					<li><a href="{{path('distrito')}}">Municipios/Distritos</a></li>
-					<li><a href="{{path('region')}}">Regiones</a></li>
-					<li><a href="{{path('tipo_institucion')}}">Tipo de Institucion</a></li>
-					<li><a href="{{path('tipo_escuela')}}">Tipo de Escuela</a></li>
-				</ul>
-			</div>
-		</li>
-		</ul>
-		
-		<div class="clear"></div>
-		</div>
-		<div class="clear"></div>
-		</div>
-		<!--  start nav -->
 
 </div>
 <div class="clear"></div>
