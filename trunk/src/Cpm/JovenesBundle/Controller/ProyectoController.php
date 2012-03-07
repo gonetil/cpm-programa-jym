@@ -154,8 +154,12 @@ class ProyectoController extends BaseController
         		$colaboradores->removeElement($colaborador);
         		$colaboradores->add($c);
         	}
+        	else
+	        { //si el colaborador debe ser cargado en la BBDD, le pongo una password vacia
+	        	$colaborador->setPassword("");
+	        }
+
         }
-        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
