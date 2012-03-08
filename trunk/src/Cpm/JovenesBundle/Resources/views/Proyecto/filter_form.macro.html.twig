@@ -62,7 +62,15 @@
 					{{ form_row(form.region) }}
 					{{ form_row(form.distrito) }}
 					{{ form_row(form.localidad) }}
-					{{ form_row(form.regionDesde) }}
+					
+					<div class='range'>
+					{{ form_label(form.regionDesde) }}
+					{{ form_errors(form.regionDesde) }}
+					{{ form_widget(form.regionDesde) }}
+					{{ form_label(form.regionHasta) }}
+					{{ form_errors(form.regionHasta) }}
+					{{ form_widget(form.regionHasta) }}
+					</div>
 					{{ form_row(form.regionHasta) }}
 					{{ form_row(form.tipoInstitucion) }}
 				</div>
