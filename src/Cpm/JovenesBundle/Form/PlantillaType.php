@@ -13,7 +13,8 @@ class PlantillaType extends AbstractType
             ->add('codigo')
             ->add('asunto')
             ->add('cuerpo')
-            ->add('puedeBorrarse')
+            ->add('puedeBorrarse',null,array('required'=>false, 
+            								 'label'=>'Puede borrarse?'))
         ;
     }
 

@@ -85,7 +85,9 @@ class PlantillaController extends BaseController
         $form    = $this->createForm(new PlantillaType(), $entity);
         $form->bindRequest($request);
 
-        if ($form->isValid()) {
+        $template_is_correct = $this->isValidTemplate($entity->getCuerpo());
+        
+        if ($form->isValid() && ($template_is_correct == "success")) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
@@ -93,11 +95,14 @@ class PlantillaController extends BaseController
             return $this->redirect($this->generateUrl('plantilla_show', array('id' => $entity->getId())));
             
         }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView()
-        );
+		
+        
+		$retorno = array(
+			            'entity' => $entity,
+			            'form'   => $form->createView()
+			        );
+		if ($template_is_correct != "success") $retorno['template_error'] = "Error en la plantilla ($template_is_correct)";
+        return $retorno; 
     }
 
     /**
@@ -149,19 +154,26 @@ class PlantillaController extends BaseController
         $request = $this->getRequest();
 
         $editForm->bindRequest($request);
+        
+        $parsed = $this->isValidTemplate($entity->getCuerpo());
 
-        if ($editForm->isValid()) {
+        if ($editForm->isValid() && ($parsed == "success")) {
             $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('plantilla_edit', array('id' => $id)));
         }
 
-        return array(
+        $retorno = array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
+        
+        if ($parsed != "success") $retorno['template_error'] = "Error en la plantilla ($parsed)";
+        	
+        return $retorno;
+         
     }
 
     /**
@@ -198,5 +210,23 @@ class PlantillaController extends BaseController
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+    
+    /**
+     * @param string $template : un string con tags twig dentro
+     * returns boolean
+     */
+    private function isValidTemplate($template) 
+    {
+    	$twig = $this->get('twig');
+    	try {
+    		$token_stream = $twig->tokenize($template);
+    		$twig->parse($token_stream);
+    	} catch (\Twig_Error_Syntax $e) {
+    		
+    		return $e->getMessage(); 
+    	}
+    	return "success";
+    	
     }
 }

@@ -1,0 +1,31 @@
+<div class="template_tip">
+	<h4> Pautas para crear plantillas de correos </h4>
+	<ul>
+		<li> El cuerpo de la plantilla de correo puede incluir <strong> variables </strong> </li>
+		<li> Cada variable debe encerrarse entre llaves dobles: &#123;&#123; variable &#125;&#125;</li>
+		<li> El sistema reemplazará automáticamente las variables cuando la plantilla sea utilizada sobre una entidad concreta</li>
+		<li> Las variables disponibles son:
+			<ul>
+				<li> user.nombre </li>
+				<li> user.apellido </li>
+				<li> user.email</li>
+			</ul>
+		</li>
+		<li>
+			Por ejemplo, la siguiente plantilla: <br/>
+			<div class='example'> Estimado/a &#123;&#123; user.apellido &#125;&#125; ,  &#123;&#123; user.nombre &#125;&#125: <br/>
+				Por favor, verifique que su direccion de correo ( &#123;&#123; user.email &#125;&#125 ) es válida- <br/>
+				Gracias
+			</div> 
+			<br/>
+			aplicada sobre el usuario <i>Pato Vilaltella</i> será procesada de la siguiente manera:
+			<br/><div class='example'> Estimado/a Vilaltella,  Pato: <br/>
+				Por favor, verifique que su direccion de correo ( pato.vilaltella@gmail.com ) es válida- <br/>
+				Gracias
+			</div>
+			 
+		</li>
+		
+		
+	</ul>
+</div>
