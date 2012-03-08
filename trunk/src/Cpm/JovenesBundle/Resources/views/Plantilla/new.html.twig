@@ -4,7 +4,11 @@
 
 {% block content %}
 
+{% include 'CpmJovenesBundle:Plantilla:template_tip.html.twig' %}
 <form action="{{ path('plantilla_create') }}" method="post" {{ form_enctype(form) }}>
+	{% if template_error is defined %}
+		<strong>{{ template_error }}</strong>
+	{% endif %}	
     {{ form_widget(form) }}
     <p>
         <button type="submit">Agregar</button>
