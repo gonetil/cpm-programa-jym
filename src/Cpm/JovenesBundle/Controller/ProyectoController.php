@@ -148,16 +148,26 @@ class ProyectoController extends BaseController
         $form->bindRequest($request);
 
         $colaboradores = $entity->getColaboradores();
+        $emails = array();
         foreach ($colaboradores as $colaborador) {
         	if ($c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($colaborador->getEmail())) //el colaborador ya existia en la bbdd
         	{
         		$colaboradores->removeElement($colaborador);
-        		$colaboradores->add($c);
+        		if (($colaborador->getEmail() != $this->getLoggedInUser()->getEmail()) && (!in_array($colaborador->getEmail(),$emails))) 
+        		{
+        			$colaboradores->add($c);
+        			
+        		}
         	}
         	else
 	        {
+	        	if (!in_array($colaborador->getEmail(),$emails))
+	        	{
+	        		$colaborador->setPassword("");
+	        		$emails[] = $colaborador->getEmail();
+	        	} 
 	        	//si el colaborador debe ser cargado en la BBDD, le pongo una password vacia
-	        	$colaborador->setPassword("");
+	        	
 	        }
 
         }

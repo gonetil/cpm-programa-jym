@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\ProduccionType;
  *
  * @Route("/produccion")
  */
-class ProduccionController extends Controller
+class ProduccionController extends BaseController
 {
     /**
      * Lists all Produccion entities.

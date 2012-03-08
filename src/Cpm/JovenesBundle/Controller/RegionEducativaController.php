@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\RegionEducativaType;
  *
  * @Route("/region")
  */
-class RegionEducativaController extends Controller
+class RegionEducativaController extends BaseController
 {
     /**
      * Lists all RegionEducativa entities.

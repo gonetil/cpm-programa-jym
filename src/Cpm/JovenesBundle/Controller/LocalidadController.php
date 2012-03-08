@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/localidad")
  */
-class LocalidadController extends Controller
+class LocalidadController extends BaseController
 {
     /**
      * Lists all Localidad entities.

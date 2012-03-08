@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\PlantillaType;
  *
  * @Route("/plantilla")
  */
-class PlantillaController extends Controller
+class PlantillaController extends BaseController
 {
     /**
      * Lists all Plantilla entities.

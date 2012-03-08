@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\DistritoType;
  *
  * @Route("/distrito")
  */
-class DistritoController extends Controller
+class DistritoController extends BaseController
 {
     /**
      * Lists all Distrito entities.
