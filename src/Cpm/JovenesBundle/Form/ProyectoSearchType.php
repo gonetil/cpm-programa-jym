@@ -10,7 +10,7 @@ class ProyectoSearchType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('esPrimeraVezDocente', 'choice' ,array('label' => '¿primera vez del docente?', 
+            ->add('esPrimeraVezDocente', 'choice' ,array('label' => '¿primera vez del docente?',
             											'choices' => array(1=>"si",0=>"no"),
             											'preferred_choices' => array("Todos"),
         												'empty_value' => "Todos",
@@ -94,10 +94,12 @@ class ProyectoSearchType extends AbstractType
         								))
         	->add('regionDesde','integer',array(
 		            									'label' => 'Desde la región',
+		    											'attr' => array('class' => 'input-narrow left-float'),
         												'required'=>false
         								))
         	->add('regionHasta','integer',array(
 		            									'label' => 'Hasta la región',
+		    											'attr' => array('class' => 'input-narrow left-float'),
         												'required'=>false
         								))
 	        								

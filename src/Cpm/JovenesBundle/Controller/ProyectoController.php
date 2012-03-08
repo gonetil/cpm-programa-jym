@@ -84,7 +84,7 @@ class ProyectoController extends BaseController
     	
     	//$stats['total_Alumnos'] = $repo->createQuery('SELECT SUM(p.nroAlumnos) FROM Proyecto')->getSingleScalarResult(); 
     	
-    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')->getQuery()->getResult());
+    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')->getQuery()->getSingleScalarResult());
     	//$stats['total_Alumnos'] = $qb->select('SUM(nroAlumnos)')  ->add('from','CpmJovenesBundle:Proyecto p')->getQuery()->getResult();
     							   
     	
@@ -155,7 +155,8 @@ class ProyectoController extends BaseController
         		$colaboradores->add($c);
         	}
         	else
-	        { //si el colaborador debe ser cargado en la BBDD, le pongo una password vacia
+	        {
+	        	//si el colaborador debe ser cargado en la BBDD, le pongo una password vacia
 	        	$colaborador->setPassword("");
 	        }
 
