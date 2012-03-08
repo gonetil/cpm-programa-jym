@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\TemaType;
  *
  * @Route("/tema")
  */
-class TemaController extends Controller
+class TemaController extends BaseController
 {
     /**
      * Lists all Tema entities.

@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\CorreoType;
  *
  * @Route("/correo")
  */
-class CorreoController extends Controller
+class CorreoController extends BaseController
 {
     /**
      * Lists all Correo entities.

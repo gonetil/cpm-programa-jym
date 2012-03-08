@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\TipoEscuelaType;
  *
  * @Route("/tipo_escuela")
  */
-class TipoEscuelaController extends Controller
+class TipoEscuelaController extends BaseController
 {
     /**
      * Lists all TipoEscuela entities.
