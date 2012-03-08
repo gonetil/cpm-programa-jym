@@ -18,13 +18,9 @@ abstract class BaseController extends Controller
 	
 	protected function getRepository($entity_name){
 		 $repo = $this->getDoctrine()->getEntityManager()->getRepository($entity_name);
-//	/	 if ()
 		 return $repo;
 	}
-/*	protected function getRequest(){
-		return $this->get('request');
-	}*/
-	
+		
 	protected function getSession(){
 		return $this->get('request')->getSession();
 	}
