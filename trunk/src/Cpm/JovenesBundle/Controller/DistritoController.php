@@ -26,9 +26,9 @@ class DistritoController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Distrito')->findAll();
+        $entities = $em->getRepository('CpmJovenesBundle:Distrito')->findAllQuery();
 
-        return array('entities' => $entities);
+        return $this->paginate($entities);
     }
 
     /**

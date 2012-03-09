@@ -26,9 +26,9 @@ class EscuelaController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Escuela')->findAll();
+        $entities = $em->getRepository('CpmJovenesBundle:Escuela')->findAllQuery();
 
-        return array('entities' => $entities);
+        return $this->paginate($entities);
     }
 
     /**

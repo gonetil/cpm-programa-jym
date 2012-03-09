@@ -47,7 +47,7 @@ class ProyectoController extends BaseController
         
         	if ($searchForm->isValid()) {
         		// 
-        		$proyectos =$repository ->findBySearchCriteria($searchForm->getData());
+        		$proyectos =$repository ->findBySearchCriteriaQuery($searchForm->getData());
         		
         		if ($searchForm->getData()->getRegion()) {
         			
@@ -59,7 +59,7 @@ class ProyectoController extends BaseController
         		}
         	}
         } else { 
-        	$proyectos = $repository->findAll();
+        	$proyectos = $repository->findAllQuery();
         }
          
 

@@ -26,9 +26,9 @@ class RegionEducativaController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:RegionEducativa')->findAll();
-
-        return array('entities' => $entities);
+        $entities = $em->getRepository('CpmJovenesBundle:RegionEducativa')->findAllQuery();
+        return $this->paginate($entities);
+        
     }
 
     /**

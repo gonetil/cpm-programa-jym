@@ -27,9 +27,9 @@ class LocalidadController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Localidad')->findAll();
+        $entities = $em->getRepository('CpmJovenesBundle:Localidad')->findAllQuery();
 
-        return array('entities' => $entities);
+        return $this->paginate($entities);
     }
 
     /**

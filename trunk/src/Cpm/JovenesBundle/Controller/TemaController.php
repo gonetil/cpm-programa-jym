@@ -26,9 +26,10 @@ class TemaController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Tema')->findAll();
-
-        return array('entities' => $entities);
+        $entities = $em->getRepository('CpmJovenesBundle:Tema')->findAllQuery();
+        
+        return $this->paginate($entities);
+        
     }
 
     /**

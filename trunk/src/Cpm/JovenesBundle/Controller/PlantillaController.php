@@ -26,9 +26,9 @@ class PlantillaController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Plantilla')->findAll();
+        $entities = $em->getRepository('CpmJovenesBundle:Plantilla')->findAllQuery();
 
-        return array('entities' => $entities);
+        return $this->paginate($entities);
     }
 
     /**

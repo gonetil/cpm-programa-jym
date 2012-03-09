@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class UsuarioRepository extends EntityRepository
 {
-	public function findAll() {
+	public function findAllQuery() {
 		$qb = $this->getEntityManager()->createQueryBuilder()
 			->add('select','u')
 			->add('from','CpmJovenesBundle:Usuario u');

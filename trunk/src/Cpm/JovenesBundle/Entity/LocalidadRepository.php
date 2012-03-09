@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class LocalidadRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','l')
+		->add('from','CpmJovenesBundle:Localidad l');
+	
+		return  $qb->getQuery();
+	}
+	
 }
