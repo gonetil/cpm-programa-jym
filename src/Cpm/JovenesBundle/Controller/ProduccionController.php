@@ -26,9 +26,9 @@ class ProduccionController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Produccion')->findAll();
+        $entities = $em->getRepository('CpmJovenesBundle:Produccion')->findAllQuery();
 
-        return array('entities' => $entities);
+        return $this->paginate($entities);
     }
 
     /**

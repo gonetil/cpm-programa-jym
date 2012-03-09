@@ -3,7 +3,7 @@
 {% if paginator is defined %}  
 
 <tr> <td colspan="100%">
-<div class="total_count">Cantidad total de resultados: {{ paginator.totalItems('entities') }}</div> 
+<div class="total_count">Total: {{ paginator.totalItems('entities') }} resultados</div> 
 <ul id="paginate_elements">
   {% if paginator.currentPage('entities') > 1 %}
     <li><a href="{{ path(pagination_route, {'page': paginator.previousPage('entities'), 'paginatorId': 'entities'}) }}">anterior</a></li>

@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class DistritoRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','d')
+		->add('from','CpmJovenesBundle:Distrito d');
+	
+		return  $qb->getQuery();
+	}
+	
 }

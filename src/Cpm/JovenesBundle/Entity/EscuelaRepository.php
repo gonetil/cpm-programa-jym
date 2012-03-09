@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class EscuelaRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','e')
+		->add('from','CpmJovenesBundle:Escuela e');
+	
+		return  $qb->getQuery();
+	}
+	
 }

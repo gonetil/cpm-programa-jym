@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class TemaRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','t')
+		->add('from','CpmJovenesBundle:Tema t');
+	
+		return  $qb->getQuery();
+	
+	}
+	
 }

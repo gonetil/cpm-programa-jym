@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class ProyectoRepository extends EntityRepository
 {
 	
-	function findAll() { 
+	function findAllQuery() { 
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		
 		return $qb->add('select','p')
@@ -21,7 +21,7 @@ class ProyectoRepository extends EntityRepository
 				->getQuery();
 		
 	}
-	function findBySearchCriteria($data) {
+	function findBySearchCriteriaQuery($data) {
 		
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		
