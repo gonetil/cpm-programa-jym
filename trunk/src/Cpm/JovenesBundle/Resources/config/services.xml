@@ -17,8 +17,13 @@
 
         <service id="cpm_jovenes_bundle.custom_user_provider" class="Cpm\JovenesBundle\Service\CustomUserProvider" public="false" >
 			<argument type="service" id="fos_user.user_manager"/>
+			<argument type="service" id="cpm_jovenes_bundle.application"/>
         </service>
 
+        <service id="cpm_jovenes_bundle.application" class="Cpm\JovenesBundle\Service\JYM" factory-class="Cpm\JovenesBundle\Service\JYM" factory-method="initServices">
+            <argument type="service" id="doctrine" />
+            <argument type="service" id="logger" />
+        </service>
 
         <service id="cpm_jovenes_bundle.mailer" class="Cpm\JovenesBundle\Service\TwigSwiftMailer">
             <argument type="service" id="mailer" />
@@ -30,11 +35,7 @@
                 <argument key="from_email">%mailer_from_email%</argument>
             </argument>            
 		</service>
-        <service id="cpm_jovenes_bundle.application" class="Cpm\JovenesBundle\Service\JovenesYMemoria">
-            <argument type="service" id="doctrine" />
-            <argument type="service" id="logger" />
-            
-        </service>
+		
     </services>
 
 

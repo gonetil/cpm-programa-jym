@@ -20,10 +20,64 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('cpm_jovenes');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-
+		$rootNode
+			->children()
+				->arrayNode('etapas')
+                	->prototype('array')
+	                	->children()
+		                	->scalarNode('nombre')->isRequired()->end()
+		             		->arrayNode('accionesUsuario')->useAttributeAsKey('name')
+		             			->prototype('array')
+									->children()
+										->scalarNode('href')->defaultNull()->end()
+										->scalarNode('label')->isRequired()->end()
+										->scalarNode('condition')->defaultNull()->end()
+										->booleanNode('enabled')->defaultTrue()->end()
+									->end()
+		             			->end()->children()->scalarNode('patOh')->defaultNull()->end()->end()
+		             		->end()
+			             	->arrayNode('accionesProyecto')->useAttributeAsKey('name')
+		             			->prototype('array')
+									->children()
+										->scalarNode('href')->defaultNull()->end()
+										->scalarNode('label')->isRequired()->end()
+										->scalarNode('condition')->defaultNull()->end()
+										->booleanNode('enabled')->defaultTrue()->end()
+									->end()
+		             			->end()->children()->scalarNode('patOh')->defaultNull()->end()->end()
+		             		->end()
+		    			->end()
+		    		->end()
+	           ->end()
+			->end()
+        ;
+/*
+array(1) {
+  ["etapas"]=>
+  array(1) {
+    ["etapa1"]=>
+    array(2) {
+      ["accionesUsuario"]=>
+      array(1) {
+        ["action1"]=>
+        array(4) {
+          ["path"]=>
+          string(9) "/action-1"
+          ["label"]=>
+          string(10) "Accionar 1"
+          ["condition"]=>
+          string(19) "user.name == 'pepe'"
+          ["enabled"]=>
+          bool(false)
+        }
+      }
+      ["accionesProyecto"]=>
+      array(0) {
+      }
+    }
+  }
+}
+*/
         return $treeBuilder;
     }
 }

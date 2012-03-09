@@ -91,4 +91,15 @@ fos_user:
 services:
         
 cpm_jovenes:
-#    coco: sdasd
+    etapas: 
+        etapa1:
+            nombre: "Etapa número 1"
+            accionesUsuario:
+                action1:
+                    label: Accionar 1
+                    href: /action-1
+                    condition: user.name == 'pepe'
+                    enabled: false
+                
+            accionesProyecto:
+        
