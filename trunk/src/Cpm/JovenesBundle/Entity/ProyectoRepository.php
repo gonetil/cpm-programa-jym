@@ -13,6 +13,14 @@ use Doctrine\ORM\EntityRepository;
 class ProyectoRepository extends EntityRepository
 {
 	
+	function findAll() { 
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		
+		return $qb->add('select','p')
+				->add('from','CpmJovenesBundle:Proyecto p')
+				->getQuery();
+		
+	}
 	function findBySearchCriteria($data) {
 		
 		$qb = $this->getEntityManager()->createQueryBuilder();
@@ -79,7 +87,7 @@ class ProyectoRepository extends EntityRepository
 		
 			$qb->add('orderBy','p.id AsC');
 
-		$proyectos = $qb->getQuery()->getResult();
+		$proyectos = $qb->getQuery();
 		return $proyectos;
 	}
 }

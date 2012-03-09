@@ -72,4 +72,14 @@ abstract class BaseController extends Controller
 		return $this->get('cpm_jovenes_bundle.mailer');
 	}
 	
+	protected function paginate($query, $extra_params = array() ){ 
+		
+		
+		$paginator = $this->get('ideup.simple_paginator');
+		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
+		
+		$routeName = $this->container->get('request')->get('_route');
+
+		return array_merge( array('entities' => $entities ,  'paginator' => $paginator , 'pagination_route'=>$routeName) , $extra_params);
+	}
 }

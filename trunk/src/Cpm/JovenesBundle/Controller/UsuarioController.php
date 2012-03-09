@@ -28,9 +28,11 @@ class UsuarioController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Usuario')->findAll();
+        
+        $query = $em->getRepository('CpmJovenesBundle:Usuario')->findAll();
+        
+        return $this->paginate($query);
 
-        return array('entities' => $entities);
     }
 
     /**

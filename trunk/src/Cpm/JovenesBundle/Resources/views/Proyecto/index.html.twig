@@ -62,7 +62,7 @@
         </tr>
     </thead>
     <tbody>
-    	<tr> <td colspan="100%"> Cantidad de resultados: <strong> {{ entities | length }} </strong> </td> </tr>
+    	{% include "CpmJovenesBundle:Default:pagination.html.twig" %}
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
@@ -92,6 +92,7 @@
             </td>
         </tr>
     {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
     </tbody>
 </table>
 
