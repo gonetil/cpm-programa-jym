@@ -273,7 +273,18 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     {
         return $this->localidad;
     }
-
+	
+    public function getDistrito() {
+	 if ($this->localidad)
+    	return $this->localidad->getDistrito();
+	 else return "";
+    }
+    /**
+     * esta funcion no hace nada
+     */
+    public function setDistrito($distirto) {
+    	
+    }
     /**
      * Add correosRecibidos
      *
