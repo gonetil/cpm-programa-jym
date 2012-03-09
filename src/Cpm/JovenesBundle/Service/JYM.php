@@ -3,44 +3,63 @@
 namespace Cpm\JovenesBundle\Service;
 
 use Cpm\JovenesBundle\Entity\Usuario;
-
-class JovenesYMemoria {
-	
+use Symfony\Component\DependencyInjection\ContainerInterface; 
+class JYM {
+	private static $instance;
+	private $etapasPorNombre;
 	private $etapas;
 	private $ciclo;
 	private $numeroEtapaActual;
-	private $accionesUsuario;
-	private $accionesProyecto;
 	
 	private $doctrine;
 	private $logger;
 	
-	public function __construct($doctrine, $logger){
+	public static function initEtapas($etapas){
+		$t=self::instance();
+		$t->setEtapas($etapas);
+		
+	}
+	
+	public static function initServices($doctrine, $logger){
+		$t=self::instance();
+		$t->doctrine=$doctrine;
+		$t->logger=$logger;
+	}
+	
+	public static function instance(){
+		if (empty(self::$instance))
+			self::$instance=new self;
+		elseif (!empty(self::$instance->doctrine) && !empty(self::$instance->etapas)){	
+			self::$instance->lastInit();
+			
+		}
+		return self::$instance;
+	}
+	
+	private function __construct(){
 		$this->etapas = array();
-		$this->numeroEtapaActual = array();
-		$this->doctrine=$doctrine;
-		$this->logger=$logger;
+		$this->numeroEtapaActual = -1;
 		$this->ciclo=null;
 	} 
 	
-	private function setEtapas($etapas, $accionesUsuarios, $accionesProyecto){
+	private function setEtapas($etapas){
+		$this->etapasPorNombre = array();
 		$this->etapas = $etapas;
-		$this->accionesUsuario = array();
-		$this->accionesProyecto = array();
-		foreach ( $tapas as $numEtapa => $nombreEtapa) {
-			if (empty($accionesUsuarios[$numEtapa]))
-				$accionesUsuarios[$numEtapa]=array();
-			$this->accionesUsuario[$numEtapa]=$accionesUsuarios[$numEtapa];
+		foreach ( $this->etapas as $numEtapa => $sarassaasa) {
+			$this->etapasPorNombre[$this->etapas[$numEtapa]['nombre']]=$numEtapa;
 			
-			if (empty($accionesProyecto[$numEtapa]))
-				$accionesProyecto[$numEtapa]=array();
-			$this->accionesProyecto[$numEtapa]=$accionesProyecto[$numEtapa];
+			if (empty($this->etapas[$numEtapa]['accionesUsuario']))
+				$this->etapas[$numEtapa]['accionesUsuario']=array();
+
+			if (empty($this->etapas[$numEtapa]['accionesProyectos']))
+				$this->etapas[$numEtapa]['accionesProyectos']=array();
 		}
-		$this->logger->info("Se cargan las etapas y sus acciones");
-		$this->calcularEtapaActual();
 	}
 	
-	private function calcularEtapaActual(){
+	/**
+	 * Calcula la primer etapa y que el ciclo activo exista 
+	 */
+	private function lastInit(){
 		$repo = $this->doctrine->getEntityManager()->getRepository("CpmJovenesBundle:Ciclo");
 		
 		$this->ciclo = $repo->getCicloActivo(false);
@@ -51,12 +70,18 @@ class JovenesYMemoria {
 			$c->setActivo(true);
 			$this->flush();	
 		}
+		$nombreEtapaActual=$this->ciclo->getEtapaActual();
 		
-		$etapaActualNombre = $this->ciclo->getEtapaActual();
-		$this->numeroEtapaActual = array_search($etapaActualNombre, $this->etapas);
-		if ($this->numeroEtapaActual ===false){
+		if (!empty($this->etapasPorNombre[$nombreEtapaActual]))
+			$this->numeroEtapaActual =false;
+		else 
+			$this->numeroEtapaActual = $this->etapasPorNombre[$nombreEtapaActual];
+		if (($this->numeroEtapaActual === false) || !$this->hasEtapa($this->numeroEtapaActual)){
 			$this->gotoEtapa(0);
 		}
+		
+		$this->logger->info("Se incializa JYM");
+			
 	}
 	
 	private function flush(){
@@ -93,7 +118,7 @@ class JovenesYMemoria {
 		
 		$this->numeroEtapaActual=$numeroEtapa;
 		
-		$nombreEtapaActual=$this->etapas[$this->numeroEtapaActual]
+		$nombreEtapaActual=$this->etapas[$this->numeroEtapaActual]['nombre'];
 		$this->ciclo->setEtapaActual($nombreEtapaActual);
 		$this->flush();
 	}

@@ -2,6 +2,7 @@
 
 namespace Cpm\JovenesBundle\DependencyInjection;
 
+use Cpm\JovenesBundle\Service\JYM;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -14,6 +15,7 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class CpmJovenesExtension extends Extension
 {
+	
     /**
      * {@inheritDoc}
      */
@@ -24,8 +26,17 @@ class CpmJovenesExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-
-//        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-//        $loader->load('services.yml');
+	
+		
+	    JYM::initEtapas($config['etapas']);
+	//	$a = $container->get('cpm_jovenes_bundle.application');
+	//	var_dump($a);
+		/*
+		$etapas = $config['etapas'];
+		foreach ($etapas as $etapa){
+			var_dump($etapa);
+			
+		}
+	exit;	*/
     }
 }

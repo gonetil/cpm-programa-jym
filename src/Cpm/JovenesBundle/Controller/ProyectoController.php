@@ -84,7 +84,7 @@ class ProyectoController extends BaseController
     	
     	//$stats['total_Alumnos'] = $repo->createQuery('SELECT SUM(p.nroAlumnos) FROM Proyecto')->getSingleScalarResult(); 
     	
-    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')->getQuery()->getSingleScalarResult());
+    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')->getQuery()->getResult());
     	//$stats['total_Alumnos'] = $qb->select('SUM(nroAlumnos)')  ->add('from','CpmJovenesBundle:Proyecto p')->getQuery()->getResult();
     							   
     	
