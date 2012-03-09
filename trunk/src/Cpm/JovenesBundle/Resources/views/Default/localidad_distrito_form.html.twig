@@ -1,6 +1,6 @@
 <script>
 buscar_localidades = function() {
-	id = jQuery("#distrito").val();
+	id = $("select.distrito-selector").val();
    	localidad_select = $("select.localidad-selector").first();
    	localidad_select.empty();
    	$.getJSON("{{ path('localidad_find_by_distrito') }}", { distrito_id : id} , function(data) {
@@ -13,17 +13,21 @@ buscar_localidades = function() {
 };
 
 $(function() {
-	$("#distrito").trigger("change");
+	$(".distrito-selector").change(buscar_localidades).trigger("change");
 });
 
 </script>
-
+{# si habia un formulario que ya mandaba los distritos, entonces no renderizo el formulario a mano #}
+	{% if ((form is defined) and ( form.distrito is defined)) %}
+{% set distritos = form.get('distrito') %} 
+{% else %}
 <div>
  	<label for="distrito" class="required">Distrito</label> 
-	<select id="distrito" name="distrito" onchange="buscar_localidades();">
+	<select id="distrito" name="distrito" class="distrito-selector">
 		<option value="-1" selected>Seleccione un distrito ...</option> 
         {% for distrito in distritos  %}
            <option value="{{distrito.id}}">{{distrito.nombre}}</option>
    		{% endfor %}
 	</select>
 </div>
+{% endif %}
