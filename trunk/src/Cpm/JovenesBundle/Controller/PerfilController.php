@@ -54,7 +54,7 @@ class PerfilController extends BaseController
     /**
     * Displays a form to create a new Proyecto entity.
     *
-    * @Route("/wizzard", name="proyecto_wizzard")
+    * @Route("/inscipcion", name="proyecto_wizzard")
     * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
     */
     

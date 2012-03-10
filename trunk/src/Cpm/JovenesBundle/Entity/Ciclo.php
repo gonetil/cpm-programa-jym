@@ -117,6 +117,8 @@ class Ciclo
      */
     public function setEtapaActual($etapaActual)
     {
+    	if ($this->etapaActual == $etapaActual) 
+    		return;
     	$desc = "Se pasa a la siguiente etapa, antes era [".$this->etapaActual."], ahora es ".$etapaActual;
         $this->etapaActual = $etapaActual;
         $this->add2Historial($desc);
@@ -155,6 +157,6 @@ class Ciclo
 
 	public function add2Historial($evento)
     {
-        $this->historial[] = date("Y-m-d HH:MM")." : ".$evento;
+        $this->historial[] = date("Y-m-d H:i")." : ".$evento;
     }
 }

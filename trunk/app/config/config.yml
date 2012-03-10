@@ -91,15 +91,12 @@ fos_user:
 services:
         
 cpm_jovenes:
-    etapas: 
-        etapa1:
-            nombre: "Etapa número 1"
-            accionesUsuario:
-                action1:
-                    label: Accionar 1
-                    href: /action-1
-                    condition: user.name == 'pepe'
-                    enabled: false
-                
-            accionesProyecto:
-        
+    etapas:
+#        etapaX:
+#            nombre: "Etapa X - XX XX XX"
+#            accionesUsuario:
+#                action_0:
+#                    label: Action label
+#                    href: /internal_action_name
+#                    condition: user.name == 'coco'
+#                    enabled: true
