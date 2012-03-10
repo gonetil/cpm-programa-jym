@@ -1,7 +1,4 @@
 {% if not app.request.isXmlHttpRequest() %}
-
-
-
 	<!DOCTYPE html>
 	<html>
 	    <head>
@@ -18,8 +15,17 @@
 	    </head>
 	    <body>
 	
-	 	    {% include 'CpmJovenesBundle:Layout:header.html.twig' %}
-	 	    <div class="clear"></div>
+	 	    {#% include 'CpmJovenesBundle:Layout:header.html.twig' %#}
+	 	    
+	        <div id="page-top-top">
+	        	<div id="page-top-top-title">
+	        	    <a href="http://www.comisionporlamemoria.org/">Comisión provincial por la memoria</a>
+	        	     - 
+	        	    <a href="http://www.comisionporlamemoria.org/jovenesymemoria/inicio.php">Programa Jóvenes y memoria</a>
+	        	</div>
+				
+			</div>
+			<div class="clear"></div>
         
 	 	    {% include 'CpmJovenesBundle:Layout:menu.html.twig' %}
 	 	    <div class="clear"></div>
