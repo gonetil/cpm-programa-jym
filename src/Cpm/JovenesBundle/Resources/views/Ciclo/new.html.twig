@@ -1,0 +1,22 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Crear Ciclo{% endblock %}
+
+{% block content %}
+
+<form action="{{ path('ciclo_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Crear</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('ciclo') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>
+
+{% endblock %}

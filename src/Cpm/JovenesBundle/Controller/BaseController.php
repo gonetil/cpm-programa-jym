@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\User\UserInterface;
-//use Symfony\Component\Security\Core\SecurityContext;
+use Cpm\JovenesBundle\Service\JYM;
 
 abstract class BaseController extends Controller
 {
@@ -34,6 +34,9 @@ abstract class BaseController extends Controller
 	//flashes
 	protected function setSuccessMessage($msg){
 		$this->get('session')->setFlash('success', $msg);
+	}
+	protected function setInfoMessage($msg){
+		$this->get('session')->setFlash('info', $msg);
 	}
 	
 	protected function setErrorMessage($msg){
@@ -84,4 +87,10 @@ abstract class BaseController extends Controller
 
 		return array_merge( array('entities' => $entities ,  'paginator' => $paginator , 'pagination_route'=>$routeName) , $extra_params);
 	}
+	
+	
+    protected function getJYM(){
+    	//return JYM::instance();
+    	return $this->get('cpm_jovenes_bundle.application');
+    }
 }

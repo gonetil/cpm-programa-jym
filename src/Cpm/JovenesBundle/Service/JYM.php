@@ -10,7 +10,6 @@ use Cpm\JovenesBundle\Entity\Ciclo;
 use Symfony\Component\DependencyInjection\ContainerInterface; 
 
 class JYM {
-	private static $instance;
 	private $etapasPorNombre;
 	private $etapas;
 	private $ciclo;
@@ -18,6 +17,7 @@ class JYM {
 	
 	private $doctrine;
 	private $logger;
+/*
 	public static function instance(){
 		if (empty(self::$instance)){
 			throw new \IllegalStateException("No existe una instancia de JYM");
@@ -33,12 +33,13 @@ class JYM {
 		self::$instance->lastInit();
 		
 	}
-	
-	private function __construct($doctrine, $logger){
+	*/
+	public function __construct($doctrine, $logger){
 		$this->doctrine=$doctrine;
 		$this->logger=$logger;
 		$this->setEtapas(StaticConfig::getEtapas());
 		$this->ciclo=null;
+		$this->lastInit();
 	} 
 	
 	private function setEtapas($etapas){
@@ -55,6 +56,10 @@ class JYM {
 		}
 	}
 	
+	public function getCicloActivo(){
+		return $this->ciclo;
+	}
+	
 	/**
 	 * Calcula la primer etapa y que el ciclo activo exista 
 	 */
@@ -67,20 +72,37 @@ class JYM {
 			$this->ciclo = new Ciclo();
 			$this->ciclo->setTitulo('Ciclo 1 (Creado automaticamente)');
 			$this->ciclo->setActivo(true);
-			$this->gotoEtapa(0);	
+			$this->gotoEtapa(0);
 		}
 		$nombreEtapaActual=$this->ciclo->getEtapaActual();
-		
-		if (empty($this->etapasPorNombre[$nombreEtapaActual]))
-			$this->numeroEtapaActual =false;
+		if (!isset($this->etapasPorNombre[$nombreEtapaActual]))
+			$this->numeroEtapaActual = false;
 		else 
 			$this->numeroEtapaActual = $this->etapasPorNombre[$nombreEtapaActual];
+		//echo "busco la etapa ".$this->etapasPorNombre[$nombreEtapaActual];
 		if (($this->numeroEtapaActual === false) || !$this->hasEtapa($this->numeroEtapaActual)){
 			$this->gotoEtapa(0);
 		}
 		
 		$this->logger->info("Se incializa JYM");
 			
+	}
+	
+	public function setCicloActivo(Ciclo $ciclo){
+		if ($this->ciclo->getId() == $ciclo->getId())
+			return;
+
+		$this->ciclo->setActivo(false);
+		$ciclo->setActivo(true);
+		
+		$em = $this->doctrine->getEntityManager();
+		$em->persist($this->ciclo);
+		$em->persist($ciclo);
+        $em->flush();
+        
+        $this->logger->info("Se desactiva el ciclo ".$this->ciclo->getId(). " y se activa el ciclo ".$ciclo->getId());
+		$this->ciclo = $ciclo;
+		$this->gotoEtapa(0);
 	}
 	
 	private function flush(){
@@ -155,4 +177,9 @@ class JYM {
 		}
 		return $acciones;
 	}
+	
+	public function getNombresEtapas(){
+		return $this->etapas;
+	}
+	
 }
