@@ -76,6 +76,10 @@
     git=http://github.com/stof/StofDoctrineExtensionsBundle.git
     target=/bundles/Stof/DoctrineExtensionsBundle
 
-[FOSUserBundle]
-    git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
-    target=bundles/FOS/UserBundle
+[DoctrineExtensions]
+    git=git://github.com/beberlei/DoctrineExtensions.git
+    target=/DoctrineExtensions
+
+[IdeupSimplePaginatorBundle]
+    git=git://github.com/javiacei/IdeupSimplePaginatorBundle.git
+    target=/bundles/Ideup/SimplePaginatorBundle

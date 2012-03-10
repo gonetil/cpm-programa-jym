@@ -2,17 +2,19 @@
 
 {% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
 
-{% block title %} Bienvenido/a {{usuario.nombre}} {% endblock %}
+{% block title %}  {% endblock %}
 
 {% block content %}
+Bienvenido/a {{usuario.nombre}}
+
 <script>
 	function cargar_proyecto(id) { 
 		$("#detalle_proyecto").hide()
 		$.post("{{ path('miproyecto_usuario') }}", 
 				{id : id } ,
 			    function(detalle) { $("#detalle_proyecto").html(detalle).show(); }
-			   );
-		return false;	   
+		);
+		return false;
 	}
 	
 	$(document).ready(function() { 
@@ -27,39 +29,35 @@
 	});
 </script>
 
- 	{% if proyectos|length > 0 %} 		
- 		<ul class="record_actions" style="float:right">
-	    	<li>
-	    		<a href="{{ path('proyecto_wizzard') }}">Cargar otra propuesta</a>
-	    	</li>
-		</ul>
- 	
-		<h4> Usted posee {{ proyectos|length }} 
+	<ul id="user-actions" class="record_actions" style="float:right">
+	    {% for accionUsuario in jym.getAccionesUsuario() %}
+		<li>
+			<a href="{{ path(accionUsuario.href) }}">{{accionUsuario.label}}</a>
+		</li>
+		{% endfor %}
+	</ul>
+ 	<h4> 
+	 	{% if proyectos|length == 0 %} 		
+			No posee ningún proyecto 
+		{% else %}
+ 			Usted posee {{ proyectos|length }} 
 			{% if proyectos|length > 1 %}
-				propuestas registradas 
+				proyectos registrados 
 			{% else %}
-				propuesta registrada
+				proyecto registrado
 			{% endif %}	
-		</h4>
+		{% endif %}
+	</h4>
 		
-		<div id="loading-indicator-mini" class="cargando_detalle_proyecto"> &nbsp; </div> 
-		<div id="detalle_proyecto"></div>		
-		
-		<ul class="mis_proyectos">
-		    {% for proyecto in proyectos %}
-		            <li>		             
-		            	{{ proyecto_box.showSmall(proyecto) }}
-		            </li>
-		    {% endfor %}
-		</ul>
-
-	{% else %}
-			<h4> Aun no ha cargado ninguna propuesta </h4>
-			<ul class="record_actions" style="float:right">
-	    	<li>
-	    		<a href="{{ path('proyecto_wizzard') }}">Cargar propuesta</a>
-	    	</li>
-		</ul>
-	{% endif %}	
+	<div id="loading-indicator-mini" class="cargando_detalle_proyecto"> &nbsp; </div> 
+	<div id="detalle_proyecto"></div>		
+	
+	<ul class="mis_proyectos">
+		{% for proyecto in proyectos %}
+			<li>		             
+		    	{{ proyecto_box.showSmall(proyecto) }}
+		    </li>
+		{% endfor %}
+	</ul>
 		        
 {% endblock %}

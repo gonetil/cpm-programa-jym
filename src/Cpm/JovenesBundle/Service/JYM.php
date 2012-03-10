@@ -2,8 +2,12 @@
 
 namespace Cpm\JovenesBundle\Service;
 
+
+use Cpm\JovenesBundle\StaticConfig;
 use Cpm\JovenesBundle\Entity\Usuario;
+use Cpm\JovenesBundle\Entity\Ciclo;
 use Symfony\Component\DependencyInjection\ContainerInterface; 
+
 class JYM {
 	private static $instance;
 	private $etapasPorNombre;
@@ -13,32 +17,26 @@ class JYM {
 	
 	private $doctrine;
 	private $logger;
-	
-	public static function initEtapas($etapas){
-		$t=self::instance();
-		$t->setEtapas($etapas);
-		
-	}
-	
-	public static function initServices($doctrine, $logger){
-		$t=self::instance();
-		$t->doctrine=$doctrine;
-		$t->logger=$logger;
-	}
-	
 	public static function instance(){
-		if (empty(self::$instance))
-			self::$instance=new self;
-		elseif (!empty(self::$instance->doctrine) && !empty(self::$instance->etapas)){	
-			self::$instance->lastInit();
-			
+		if (empty(self::$instance)){
+			throw new \IllegalStateException("No existe una instancia de JYM");
 		}
 		return self::$instance;
 	}
 	
-	private function __construct(){
-		$this->etapas = array();
-		$this->numeroEtapaActual = -1;
+	public static function initServices($doctrine, $logger){
+		if (!empty(self::$instance)){
+			throw new \IllegalStateException("Ya existe una instancia de JYM");
+		}
+		self::$instance=new JYM($doctrine, $logger);
+		self::$instance->lastInit();
+		
+	}
+	
+	private function __construct($doctrine, $logger){
+		$this->doctrine=$doctrine;
+		$this->logger=$logger;
+		$this->setEtapas(StaticConfig::getEtapas());
 		$this->ciclo=null;
 	} 
 	
@@ -65,14 +63,14 @@ class JYM {
 		$this->ciclo = $repo->getCicloActivo(false);
 		if (empty($this->ciclo )){
 			$this->logger->err("No habia ningun ciclo creado, se crea uno y se activa");
-			$c = new Ciclo();
-			$c->setTitulo('Ciclo 1 (Creado automaticamente)');
-			$c->setActivo(true);
-			$this->flush();	
+			$this->ciclo = new Ciclo();
+			$this->ciclo->setTitulo('Ciclo 1 (Creado automaticamente)');
+			$this->ciclo->setActivo(true);
+			$this->gotoEtapa(0);	
 		}
 		$nombreEtapaActual=$this->ciclo->getEtapaActual();
 		
-		if (!empty($this->etapasPorNombre[$nombreEtapaActual]))
+		if (empty($this->etapasPorNombre[$nombreEtapaActual]))
 			$this->numeroEtapaActual =false;
 		else 
 			$this->numeroEtapaActual = $this->etapasPorNombre[$nombreEtapaActual];
@@ -122,16 +120,27 @@ class JYM {
 		$this->ciclo->setEtapaActual($nombreEtapaActual);
 		$this->flush();
 	}
-	
+	public function getNombreEtapaActual(){
+		return $this->getNombreEtapa($this->numeroEtapaActual);
+	}
+
+	public function getNombreEtapa($numeroEtapa){
+		if (!$this->hasEtapa($numeroEtapa)){
+			throw new \OutOfRangeException("No existe la etapa ".$numeroEtapa);
+		}
+		return $this->etapas[$numeroEtapa]['nombre'];
+	}	
 	public function getEtapaActual(){
+		if (empty($this->etapas[$this->numeroEtapaActual]))
+			$this->gotoEtapa(0);
 		return $this->etapas[$this->numeroEtapaActual];
 	}
 	
-	public function getUserActions(Usuario $usuario){
-		return $this->accionesUsuario[$this->numeroEtapaActual];
+	public function getAccionesUsuario(){
+		return $this->etapas[$this->numeroEtapaActual]['accionesUsuario'];
 	}
 	
-	public function getProjectoActions(Project $project){
-		return $this->accionesProyecto[$this->numeroEtapaActual];
+	public function getAccionesProjecto(Project $project){
+		return $this->etapas[$this->numeroEtapaActual]['accionesProyecto'];
 	}
 }
