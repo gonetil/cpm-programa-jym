@@ -79,6 +79,8 @@ abstract class BaseController extends Controller
 		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
 		
 		$routeName = $this->container->get('request')->get('_route');
+		if (empty($routeName))
+			$routeName = "home";
 
 		return array_merge( array('entities' => $entities ,  'paginator' => $paginator , 'pagination_route'=>$routeName) , $extra_params);
 	}
