@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Form\UsuarioType;
 use FOS\UserBundle\Form\Handler\RegistrationFormHandler;
+
 /**
  * Usuario controller.
  *
@@ -197,8 +198,18 @@ class UsuarioController extends BaseController
                 throw $this->createNotFoundException('Unable to find Usuario entity.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+			if ($entity->hasRole('ROLE_ADMIN') || $entity->hasRole('ROLE_SUPER_ADMIN')){
+				$this->setErrorMessage("No se puede eliminar al usuario dado que tiene  rol ADMIN. ");
+				
+			}else{
+				
+				$em->remove($entity);
+	            try{
+					$em->flush();
+	            }catch(\PDOException $e){
+	            	$this->setErrorMessage("No se puede eliminar al usuario , revise que no tenga proyectos relacionados");
+	            }
+			}
         }
 
         return $this->redirect($this->generateUrl('usuario'));

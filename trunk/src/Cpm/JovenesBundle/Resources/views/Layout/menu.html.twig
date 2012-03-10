@@ -76,6 +76,19 @@
 			</div>
 		</li>
 		</ul>
+			{% if is_granted("ROLE_SUPER_ADMIN") %}<!-- Comienzo de las opciones de admin -->
+				<div class="nav-divider">&nbsp;</div>
+				<ul class="select">
+					<li><a href="{{path('ciclo')}}"><b>Ciclos y Etapas</b></a>
+					<div class="select_sub show">
+						<ul class="sub">
+							<li><a href="{{path('ciclo')}}">Ciclo</a></li>
+							
+						</ul>
+					</div>
+				</li>
+				</ul>
+			{% endif %}
 		{% endif %}	
 	</div>
 	<div class="clear"></div>

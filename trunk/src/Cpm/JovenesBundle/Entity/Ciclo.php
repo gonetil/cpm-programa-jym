@@ -50,6 +50,11 @@ class Ciclo
     private $historial;
 
 
+	public function __construct(){
+		$this->activo = false;
+		$this->etapaActual = '';
+	}
+
     /**
      * Get id
      *
@@ -119,7 +124,7 @@ class Ciclo
     {
     	if ($this->etapaActual == $etapaActual) 
     		return;
-    	$desc = "Se pasa a la siguiente etapa, antes era [".$this->etapaActual."], ahora es ".$etapaActual;
+    	$desc = "Se pasa a la siguiente etapa, antes era [".$this->etapaActual."], ahora es [".$etapaActual."]";
         $this->etapaActual = $etapaActual;
         $this->add2Historial($desc);
     }

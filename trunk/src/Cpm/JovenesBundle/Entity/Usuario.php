@@ -115,6 +115,9 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
         $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();//TODO qué sentido tiene guardar los correos disponibles aca?
     }
     
+    public function getNombreComleto(){
+    	return $this->apellido.", ".$this->nombre;
+    }
     /**
      * Get id
      *$email
