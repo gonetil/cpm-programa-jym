@@ -31,6 +31,14 @@
 	    		{{ _self.nombreEscuela(proyecto.escuela) }}
 	    	</a> 	
 	    </p>
+	    
+		    	<ul id="project-actions" class="record_actions">
+				    {% for accion in jym.getAccionesProjecto(proyecto) %}
+					<li>
+						<a href="{{ path(accion.href, {'id':proyecto.id}) }}">{{accion.label}}</a>
+					</li>
+					{% endfor %}
+				</ul>
     </div>
 {% endmacro %}
 

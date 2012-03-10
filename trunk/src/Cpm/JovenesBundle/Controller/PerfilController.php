@@ -40,7 +40,6 @@ class PerfilController extends BaseController
     * @Route("miproyecto", name="miproyecto_usuario")
     * @Template()
     */
-    
     public function myprojectAction() {
     	$id = $this->getRequest()->get('id'); 
     	$usuario = $this->getLoggedInUser();
@@ -54,23 +53,30 @@ class PerfilController extends BaseController
     /**
     * Displays a form to create a new Proyecto entity.
     *
+    * @Route("/inscripcion/{id}", name="modificar_inscripcion")
+    * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
+    */
+    public function modificarInscripcionAction($id) {
+    	return $this->inscripcionAction($id);
+    }
+    
+    /**
+    * Displays a form to create a new Proyecto entity.
+    *
     * @Route("/inscipcion", name="proyecto_wizzard")
     * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
     */
-    
-    public function wizzardAction() {
-    	$proyecto = new Proyecto();
-    	$coordinador = $this->getLoggedInUser();
-    	if (!$coordinador) { 
-    		$this->getSession()->setFlash('notice', 'Su sesión ha expirado');
-    		return $this->redirect($this->generateUrl("home"));
-    	}
+    public function inscripcionAction($id_proyecto = 0) {
+    	if ($id_proyecto)
+    		$proyecto = $this->getRepository('CpmJovenesBundle:Proyecto')->find($id_proyecto);
+    	else
+    		$proyecto = new Proyecto();
     	
     	$form   = $this->createForm(new ProyectoWizzardType(), $proyecto);
     
     	return array(
                 'entity' => $proyecto,
-                'coordinador' => $coordinador,
+                'coordinador' => $this->getLoggedInUser(),
                 'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll(),
                 'form'   => $form->createView()
     	);
@@ -78,7 +84,6 @@ class PerfilController extends BaseController
     
     /**
      * Guarda un proyecto enviado desde el Wizzard de proyectos
-     *
      * @Route("/save_wizzard", name="proyecto_create_from_wizzard")
      * @Method("post")
 	 * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")

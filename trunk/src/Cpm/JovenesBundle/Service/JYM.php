@@ -5,6 +5,7 @@ namespace Cpm\JovenesBundle\Service;
 
 use Cpm\JovenesBundle\StaticConfig;
 use Cpm\JovenesBundle\Entity\Usuario;
+use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Entity\Ciclo;
 use Symfony\Component\DependencyInjection\ContainerInterface; 
 
@@ -130,6 +131,7 @@ class JYM {
 		}
 		return $this->etapas[$numeroEtapa]['nombre'];
 	}	
+	
 	public function getEtapaActual(){
 		if (empty($this->etapas[$this->numeroEtapaActual]))
 			$this->gotoEtapa(0);
@@ -137,10 +139,20 @@ class JYM {
 	}
 	
 	public function getAccionesUsuario(){
-		return $this->etapas[$this->numeroEtapaActual]['accionesUsuario'];
+		$acciones = array();
+		foreach ( $this->etapas[$this->numeroEtapaActual]['accionesUsuario'] as $key => $accion ) {
+			//if (eval($accion['condition']))
+			$acciones[]=$accion;
+		}
+		return $acciones;
 	}
 	
-	public function getAccionesProjecto(Project $project){
-		return $this->etapas[$this->numeroEtapaActual]['accionesProyecto'];
+	public function getAccionesProjecto(Proyecto $proyecto){
+		$acciones = array();
+		foreach ( $this->etapas[$this->numeroEtapaActual]['accionesProyecto'] as $key => $accion ) {
+			//if (eval($accion['condition'] on $project))
+			$acciones[]=$accion;
+		}
+		return $acciones;
 	}
 }
