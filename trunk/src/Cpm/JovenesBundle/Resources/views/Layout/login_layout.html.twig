@@ -14,7 +14,7 @@
     </head>
 
 	<body> 
-		<div style="margin:50px auto 50px; width:550px;">
+		<div style="margin:50px auto 50px; width:550px; ">
 			{% for key, message in app.session.getFlashes() %}
 			    <div class="{{key}}-message">
 			        {{ message|trans({}) }}
@@ -22,7 +22,7 @@
 			{% endfor %}
 			<div class="ui-widget" >
 				<h3 class="ui-helper-reset ui-state-active ui-corner-top" style="padding:0.4em 1em">{{ block('title') }}</h3>
-				<div class="ui-widget-content" style=" padding: 10px 4px 0px 4px;">
+				<div class="ui-widget-content" style=" padding:10px 13px">
 					{% block content %}{% endblock %}
 				</div>
 				<h3 class="ui-helper-reset ui-state-active ui-corner-bottom" style="padding:0.4em 1em">
