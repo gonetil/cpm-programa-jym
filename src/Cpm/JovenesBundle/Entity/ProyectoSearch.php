@@ -2,22 +2,15 @@
 
 namespace Cpm\JovenesBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cpm\JovenesBundle\Entity\ProyectoSearch
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\ProyectoSearchRepository")
  */
 class ProyectoSearch
 {
     /**
      * @var integer $id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 

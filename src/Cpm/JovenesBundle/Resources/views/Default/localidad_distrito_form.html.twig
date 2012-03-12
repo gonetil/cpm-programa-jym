@@ -11,23 +11,34 @@ buscar_localidades = function() {
 	   	}
 	});
 };
-
-$(function() {
-	$(".distrito-selector").change(buscar_localidades).trigger("change");
-});
-
+  $(document).ready(function() {
+		$(".distrito-selector").change(buscar_localidades);
+		});
 </script>
-{# si habia un formulario que ya mandaba los distritos, entonces no renderizo el formulario a mano #}
-	{% if ((form is defined) and ( form.distrito is defined)) %}
-{% set distritos = form.get('distrito') %} 
-{% else %}
-<div>
- 	<label for="distrito" class="required">Distrito</label> 
-	<select id="distrito" name="distrito" class="distrito-selector">
-		<option value="-1" selected>Seleccione un distrito ...</option> 
-        {% for distrito in distritos  %}
-           <option value="{{distrito.id}}">{{distrito.nombre}}</option>
-   		{% endfor %}
-	</select>
-</div>
+ {% if (form.escuela.distrito is defined) %}
+ 	{{form_row(form.escuela.distrito) }}
+  {% elseif (form.usuario.distrito is defined) %}
+  	{{form_row(form.usuario.distrito) }}
+   {% else %}
+	<script>
+	  $(document).ready(function() {
+		$(".distrito-selector").trigger("change");
+	 });
+	 </script>
+
+	<div>
+	 	<label for="distrito" class="required">Distrito</label> 
+		<select id="distrito" name="distrito" class="distrito-selector">
+			<option value="-1" selected>Seleccione un distrito ...</option> 
+	        {% for distrito in distritos  %}
+	           <option value="{{distrito.id}}">{{distrito.nombre}}</option>
+	   		{% endfor %}
+		</select>
+	</div>
+
+ {% endif %}
+ 
+ {% if (form.escuela.localidad is defined) %}
+	{{ form_row(form.escuela.localidad) }}
 {% endif %}
+

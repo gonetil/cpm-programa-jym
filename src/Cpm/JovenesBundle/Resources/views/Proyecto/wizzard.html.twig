@@ -8,7 +8,12 @@
 
 <div style="float:right;">
 </div>
-<form action="{{ path('proyecto_create_from_wizzard') }}" method="post" {{ form_enctype(form) }} name="wizzard_form">
+
+<form action="{% if form_action == 'proyecto_update_wizzard' %}
+				{{ path( form_action, { 'id': entity.id } ) }}
+			{% else %}	
+				{{ path( form_action ) }}
+			{% endif %}" method="post" {{ form_enctype(form) }} name="wizzard_form">
 
 <div class="wizzard_stage" id="stage_1">
 <h4> Paso 1 de 3 </h4>
