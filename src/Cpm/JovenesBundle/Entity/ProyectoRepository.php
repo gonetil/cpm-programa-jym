@@ -75,7 +75,12 @@ class ProyectoRepository extends EntityRepository
 				;			
 			}
 			
-			if ($data->getTipoInstitucion()) 
+			if ($data->getOtroTipoInstitucion()) 
+			{
+				if (!$tiene_escuela ) $qb->innerJoin('p.escuela','e');
+				$qb->andWhere('e.tipoInstitucion is NULL'); 
+			} 
+			elseif ($data->getTipoInstitucion()) 
 			{ 
 					if (!$tiene_escuela ) $qb->innerJoin('p.escuela','e');
 					

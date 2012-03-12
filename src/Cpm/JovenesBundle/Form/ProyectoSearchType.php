@@ -92,6 +92,10 @@ class ProyectoSearchType extends AbstractType
 		    														},
         												'required'=>false
         								))
+        	->add('otroTipoInstitucion','checkbox',array(
+        												'label' => 'Otro tipo de institucion',
+		    											'required'=>false
+        												))							
         	->add('regionDesde','integer',array(
 		            									'label' => 'Desde la región',
 		    											'attr' => array('class' => 'input-narrow left-float'),

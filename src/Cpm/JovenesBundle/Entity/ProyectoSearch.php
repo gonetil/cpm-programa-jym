@@ -73,6 +73,8 @@ class ProyectoSearch
     * @var integer $tipoInstitucion
     */
     public $tipoInstitucion;
+    
+    public $otroTipoInstitucion;
     /**
      * Get id
      *
@@ -204,7 +206,14 @@ class ProyectoSearch
     public function getTipoInstitucion() {
     	return $this->tipoInstitucion;
     }
+
+    public function getOtroTipoInstitucion() {
+    	return $this->otroTipoInstitucion;
+    }
     
+    public function setOtroTipoInstitucion($o) {
+    	$this->otroTipoInstitucion = $o;
+    }
     public function setRegionDesde($regionDesde) {
     	$this->regionDesde = $regionDesde;
     }
