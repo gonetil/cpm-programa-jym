@@ -12,8 +12,12 @@ class EscuelaType extends AbstractType
         $builder
 	        ->add('tipoInstitucion', 'entity', array( 'class' => 'CpmJovenesBundle:TipoInstitucion','label'=>'Tipo de Institución', 'empty_value'=>'Otro', 'required'=>false))
 	        ->add('otroTipoInstitucion',null,array('required' => false,'label'=>'Otro tipo de institución'))
-	        ->add('tipoEscuela', 'entity', array( 'class' => 'CpmJovenesBundle:TipoEscuela','label'=>'Tipo de Escuela'))
-	        ->add('numero',null, array('label'=>'Número','attr'=>array('class'=>'number')))
+	        ->add('tipoEscuela','entity',
+            					array('label' => 'Tipo de Escuela',
+            						  'class' => 'CpmJovenesBundle:TipoEscuela',
+            						  'query_builder' => function($er) { return $er->createQueryBuilder('t')->where('t.anulado = 0');}
+    								    ))
+            ->add('numero',null, array('label'=>'Número','attr'=>array('class'=>'number')))
         	->add('nombre',null, array('label'=>'Nombre de la Escuela'))
             ->add('email',null,array('attr'=>array('class'=>'email')))
             ->add('telefono')

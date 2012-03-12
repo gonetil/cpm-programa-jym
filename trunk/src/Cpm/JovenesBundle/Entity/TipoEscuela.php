@@ -32,6 +32,14 @@ class TipoEscuela
     private $nombre;
 
     /**
+     * @var boolean $anulado
+     *
+     * @ORM\Column(name="anulado", type="boolean")
+     */
+    private $anulado;
+
+
+    /**
      * Get id
      *
      * @return integer 
@@ -60,6 +68,27 @@ class TipoEscuela
     {
         return $this->nombre;
     }
+
+    /**
+     * Set anulado
+     *
+     * @param boolean $anulado
+     */
+    public function setAnulado($anulado)
+    {
+        $this->anulado = $anulado;
+    }
+
+    /**
+     * Get anulado
+     *
+     * @return boolean 
+     */
+    public function getAnulado()
+    {
+        return $this->anulado;
+    }
+    
     
     
     public function __toString()
