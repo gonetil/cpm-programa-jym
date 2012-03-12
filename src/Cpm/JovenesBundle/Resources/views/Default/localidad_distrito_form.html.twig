@@ -19,6 +19,7 @@ buscar_localidades = function() {
  	{{form_row(form.escuela.distrito) }}
   {% elseif (form.usuario.distrito is defined) %}
   	{{form_row(form.usuario.distrito) }}
+  	
    {% else %}
 	<script>
 	  $(document).ready(function() {
@@ -26,15 +27,6 @@ buscar_localidades = function() {
 	 });
 	 </script>
 
-	<div>
-	 	<label for="distrito" class="required">Distrito</label> 
-		<select id="distrito" name="distrito" class="distrito-selector">
-			<option value="-1" selected>Seleccione un distrito ...</option> 
-	        {% for distrito in distritos  %}
-	           <option value="{{distrito.id}}">{{distrito.nombre}}</option>
-	   		{% endfor %}
-		</select>
-	</div>
 
  {% endif %}
  
