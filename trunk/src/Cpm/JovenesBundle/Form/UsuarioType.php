@@ -19,6 +19,14 @@ class UsuarioType extends AbstractType
             ->add('telefonoCelular', null, array('required'=>false))
             ->add('codigoPostal')
             ->add('localidad')
+            ->add('distrito','entity',array( 'class' => 'CpmJovenesBundle:Distrito',
+            									'label'=>'Distrito', 
+            									'attr' => array('class'=>'distrito-selector'),
+     											'query_builder' => function($er) {
+													        return $er->createQueryBuilder('dis')
+													            ->orderBy('dis.nombre', 'ASC');
+    														}
+    											))
             ->add('roles', 'choice', array('choices'=> array('ROLE_USER'=>'Docente','ROLE_ADMIN'=>'Administrador'), 'multiple'=>true))
             ->add('plainPassword', 'repeated', array('required'=>false,'type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir Clave"))
         ;

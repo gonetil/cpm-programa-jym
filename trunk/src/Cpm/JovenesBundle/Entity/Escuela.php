@@ -110,6 +110,11 @@ class Escuela
     private $localidad;
     
     /**
+     * Este campo no se guarda en la DB, pero se pone aquí para que viaje con el formulario
+     *
+     */
+    private $distrito;
+    /**
      * Get id
      *
      * @return integer 
@@ -380,7 +385,10 @@ class Escuela
      */
     public function getDistrito()
     {
-        return $this->distrito;
+    	if ($this->localidad) {
+    		return $this->localidad->getDistrito();
+    	}
+        return null;
     }
 
     /**
@@ -426,4 +434,6 @@ class Escuela
     {
         return $this->numero;
     }
+    
+
 }

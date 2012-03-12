@@ -78,7 +78,8 @@ class PerfilController extends BaseController
                 'entity' => $proyecto,
                 'coordinador' => $this->getLoggedInUser(),
                 'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll(),
-                'form'   => $form->createView()
+                'form'   => $form->createView(),
+    			'form_action' => 'proyecto_create_from_wizzard'
     	);
     }
     
@@ -122,8 +123,75 @@ class PerfilController extends BaseController
         	            'entity' => $proyecto,
         				'coordinador' => $coordinador,
         	            'distritos' => $distritos,
-        	            'form'   => $form->createView()
+        	            'form'   => $form->createView(),
+    					'form_action' => 'proyecto_create_from_wizzard'
     	);
     	 
     }
+    
+    /**
+    * Displays a form to edit an existing Proyecto entity.
+    *
+    * @Route("/{id}/edit", name="proyecto_edit_wizzard")
+    * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
+    */
+    public function editAction($id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find Proyecto entity.');
+    	}
+    
+    	$editForm = $this->createForm(new ProyectoWizzardType(), $entity);
+    
+    	return array(
+                'entity'      => $entity,
+		    	'coordinador' => $entity->getCoordinador(),
+                'form'   => $editForm->createView(),
+                'form_action' => 'proyecto_update_wizzard'
+          
+    	);
+    }
+    
+    
+    /**
+    * Edits an existing Proyecto entity.
+    *
+    * @Route("/{id}/update", name="proyecto_update_wizzard")
+    * @Method("post")
+    * @Template("CpmJovenesBundle:Proyecto:edit.html.twig")
+    */
+    public function updateAction($id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find Proyecto entity.');
+    	}
+    
+    	$editForm   = $this->createForm(new ProyectoWizzardType(), $entity);
+    
+    	$request = $this->getRequest();
+    
+    	$editForm->bindRequest($request);
+    
+    	if ($editForm->isValid()) {
+    		$em->persist($entity);
+    		$em->flush();
+    
+    		return $this->forward('CpmJovenesBundle:Perfil:index');
+    	}
+    
+    	return array(
+                'entity'      => $entity,
+                'edit_form'   => $editForm->createView(),
+				'form_action' => 'proyecto_update_wizzard'
+    	);
+    }
+    
 }

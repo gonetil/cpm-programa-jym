@@ -27,7 +27,15 @@ class EscuelaType extends AbstractType
 													        return $er->createQueryBuilder('loc')
 													            ->orderBy('loc	.nombre', 'ASC');
     														}
-    											))	    
+    											))
+    		->add('distrito','entity',array( 'class' => 'CpmJovenesBundle:Distrito',
+            									'label'=>'Distrito', 
+            									'attr' => array('class'=>'distrito-selector'),
+     											'query_builder' => function($er) {
+													        return $er->createQueryBuilder('dis')
+													            ->orderBy('dis.nombre', 'ASC');
+    														}
+    											))								    
         ;
     }
 
