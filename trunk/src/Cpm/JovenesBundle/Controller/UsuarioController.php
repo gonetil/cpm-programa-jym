@@ -118,7 +118,7 @@ class UsuarioController extends BaseController
      * @Template()
      */
     public function editAction($id)
-    {
+    {	
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
@@ -132,7 +132,7 @@ class UsuarioController extends BaseController
 
         return array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -170,7 +170,7 @@ class UsuarioController extends BaseController
 
         return array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }

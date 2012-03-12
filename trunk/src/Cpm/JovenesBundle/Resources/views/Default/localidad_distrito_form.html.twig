@@ -15,22 +15,28 @@ buscar_localidades = function() {
 		$(".distrito-selector").change(buscar_localidades);
 		});
 </script>
- {% if (form.escuela.distrito is defined) %}
+
+  {% if (form.escuela.distrito is defined) %}
  	{{form_row(form.escuela.distrito) }}
+ 	{{ form_row(form.escuela.localidad) }}
   {% elseif (form.usuario.distrito is defined) %}
-  	{{form_row(form.usuario.distrito) }}
-  	
-   {% else %}
+   	{{form_row(form.usuario.distrito) }}
+   	{{form_row(form.usuario.localidad) }}  	
+  {% elseif (form.user.distrito is defined) %}
+  		{{form_row(form.user.distrito) }}
+  		{{form_row(form.user.localidad) }} 	
+  {% elseif (form.distrito is defined) %}
+   	{{form_row(form.distrito) }}
+   	{{form_row(form.localidad) }}  	
+  		
+  {% else %}
 	<script>
 	  $(document).ready(function() {
+	  alert('fsdf');
 		$(".distrito-selector").trigger("change");
 	 });
 	 </script>
-
-
  {% endif %}
- 
- {% if (form.escuela.localidad is defined) %}
-	{{ form_row(form.escuela.localidad) }}
-{% endif %}
+ 	
+
 
