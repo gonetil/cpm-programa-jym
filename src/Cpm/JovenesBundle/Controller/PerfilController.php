@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Controller\BaseController;
 use Cpm\JovenesBundle\Entity\Proyecto;
-use Cpm\JovenesBundle\Form\ProyectoWizzardType;
+use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 
@@ -63,17 +63,19 @@ class PerfilController extends BaseController
     /**
     * Displays a form to create a new Proyecto entity.
     *
-    * @Route("/inscipcion", name="proyecto_wizzard")
+    * @Route("/inscripcion", name="proyecto_wizzard")
     * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
     */
     public function inscripcionAction($id_proyecto = 0) {
-    	if ($id_proyecto)
+    	if ($id_proyecto){
     		$proyecto = $this->getRepository('CpmJovenesBundle:Proyecto')->find($id_proyecto);
-    	else
+    		if (!$proyecto)
+    			throw new \Exception("No exite el Proyecto $id_proyecto "); 
+    	}else
     		$proyecto = new Proyecto();
     	
-    	$form   = $this->createForm(new ProyectoWizzardType(), $proyecto);
-    
+    	$form = $this->createForm(new ProyectoType(), $proyecto);
+    	$form->remove('coordinador');
     	return array(
                 'entity' => $proyecto,
                 'coordinador' => $this->getLoggedInUser(),
@@ -96,8 +98,9 @@ class PerfilController extends BaseController
     
     	$proyecto->setCoordinador($coordinador);
     	
-    	$form    = $this->createForm(new ProyectoWizzardType(), $proyecto);
-    	 
+    	$form = $this->createForm(new ProyectoType(), $proyecto);
+    	$form->remove('coordinador');
+    	
     	$form->bindRequest($this->getRequest());
     	$colaboradores = $proyecto->getColaboradores();
     	foreach ($colaboradores as $colaborador) {

@@ -11,6 +11,7 @@ class TipoEscuelaType extends AbstractType
     {
         $builder
             ->add('nombre')
+            ->add('anulado',null,array('required' => false))
         ;
     }
 

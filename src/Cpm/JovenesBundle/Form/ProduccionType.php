@@ -11,7 +11,8 @@ class ProduccionType extends AbstractType
     {
         $builder
             ->add('nombre')
-        ;
+            ->add('anulado',null,array('required' => false))
+            ;
     }
 
     public function getName()
