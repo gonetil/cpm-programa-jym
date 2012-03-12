@@ -121,7 +121,7 @@ class PerfilController extends BaseController
     	}
 
     	$distritos = $this->getRepository('CpmJovenesBundle:Distrito')->findAll();
-    	 
+    	$form->remove('coordinador');
     	return    	array(
         	            'entity' => $proyecto,
         				'coordinador' => $coordinador,
@@ -148,8 +148,9 @@ class PerfilController extends BaseController
     		throw $this->createNotFoundException('Unable to find Proyecto entity.');
     	}
     
-    	$editForm = $this->createForm(new ProyectoWizzardType(), $entity);
-    
+    	$editForm = $this->createForm(new ProyectoType(), $entity);
+    	
+    	$editForm->remove('coordinador');
     	return array(
                 'entity'      => $entity,
 		    	'coordinador' => $entity->getCoordinador(),
@@ -172,13 +173,16 @@ class PerfilController extends BaseController
     	$em = $this->getDoctrine()->getEntityManager();
     
     	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-    
+    	    	 
     	if (!$entity) {
     		throw $this->createNotFoundException('Unable to find Proyecto entity.');
     	}
-    
-    	$editForm   = $this->createForm(new ProyectoWizzardType(), $entity);
-    
+        	
+    	$entity->setCoordinador($this->getLoggedInUser());
+    	 
+    	$editForm   = $this->createForm(new ProyectoType(), $entity);
+    	$editForm->remove('coordinador');
+    	
     	$request = $this->getRequest();
     
     	$editForm->bindRequest($request);
@@ -192,6 +196,7 @@ class PerfilController extends BaseController
     
     	return array(
                 'entity'      => $entity,
+    			'coordinador' => $entity->getCoordinador(),
                 'edit_form'   => $editForm->createView(),
 				'form_action' => 'proyecto_update_wizzard'
     	);

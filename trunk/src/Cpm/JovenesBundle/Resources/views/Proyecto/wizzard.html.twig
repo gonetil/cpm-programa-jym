@@ -13,7 +13,8 @@
 				{{ path( form_action, { 'id': entity.id } ) }}
 			{% else %}	
 				{{ path( form_action ) }}
-			{% endif %}" method="post" {{ form_enctype(form) }} name="wizzard_form">
+			{% endif %}"
+	  method="post" {{ form_enctype(form) }} name="wizzard_form">
 
 <div class="wizzard_stage" id="stage_1">
 <h4> Paso 1 de 3 </h4>
