@@ -94,7 +94,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     */
     private $localidad;
         
-    
+    private $distrito;
     /**
     *  @ORM\OneToMany(targetEntity="Correo",mappedBy="destinatario")
     *  @ORM\JoinColumns({
@@ -285,8 +285,8 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * esta funcion no hace nada
      */
-    public function setDistrito($distirto) {
-    	
+    public function setDistrito($distrito) {
+    	$this->distrito = $distrito;
     }
     /**
      * Add correosRecibidos

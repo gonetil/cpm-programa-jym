@@ -34,10 +34,19 @@ class PerfilUsuarioType extends BaseType
             ->add('apellido')
             ->add('dni', 'number')
     		->add('email', 'email')
-	        ->add('localidad')
-            ->add('codigoPostal')
-            ->add('telefono')
-            ->add('telefonoCelular', 'text', array('required'=>false));
+            ->add('distrito','entity',array( 'class' => 'CpmJovenesBundle:Distrito',
+            									'label'=>'Distrito', 
+            									'attr' => array('class'=>'distrito-selector'),
+     											'query_builder' => function($er) {
+													        return $er->createQueryBuilder('dis')
+													            ->orderBy('dis.nombre', 'ASC');
+    														}
+    											))
+    		->add('localidad',null,array('attr'=>array('class'=>'localidad-selector')))
+            ->add('codigoPostal',null,array('label'=>'Código Postal'))
+            ->add('telefono',null,array('label'=>'Teléfono'))
+            ->add('telefonoCelular', 'text', array('required'=>false,
+    												'label' => 'Teléfono Celular'));
 
     }
 
