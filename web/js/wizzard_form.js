@@ -19,17 +19,17 @@
   function setup_selects() { 
   	   	$("#cpm_jovenesbundle_proyectotype_escuela_tipoInstitucion").change(function(event) {
   	   	
-  	   	$numero_escuela = $("#cpm_jovenesbundle_proyectotype_escuela_numero");
+  	   	$numero_escuela = $("#cpm_jovenesbundle_proyectotype_esds");
   	   	
  		if( $(this).val() == "") //selecciono otra institucion
  		{  
  			$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr('disabled').addClass('required'); 
  			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").attr('disabled','disabled').removeClass('required');
- 			$numero_escuela.attr('disabled','disabled').attr('oldValue',$numero_escuela.val()).val(0);
+ 			
  		} else {
  		 $("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr('disabled','disabled').removeClass('required'); 
  			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").removeAttr('disabled').addClass('required');
- 			$numero_escuela.removeAttr('disabled').val($numero_escuela.attr('oldValue'));
+ 			
  			
  		}
  	});   
