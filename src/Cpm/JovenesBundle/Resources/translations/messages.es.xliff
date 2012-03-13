@@ -6,6 +6,10 @@
                 <source>registration.flash.user_created</source>
                 <target></target>
             </trans-unit>
+             <trans-unit id="2">
+                <source>profile.flash.updated</source>
+                <target>El perfil fue actualizado satisfactoriamente</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
