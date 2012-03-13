@@ -50,14 +50,14 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Titulo</th>
-            <th>Escuela</th>
             <th>Coordinador</th>
-            <th>Colaboradores</th>
-            <th>Alumnos</ht>
-            <th>Tema Principal</th>
-            <th>Region</th>
-            <th>Localidad (Distrito) </th> 
+            <th>Tel. del Coordinador</th>
+            <th>Email del Coordinador</th>
+            <th>Escuela</th>
+            <th>Tel. de la Escuela</th>
+            <th>Email de la Escuela</th>
+            <th>Localidad</th>
+            <th>Distrito</th>  
             <th>Acciones</th>
         </tr>
     </thead>
@@ -66,20 +66,18 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.titulo }}</td>
-            <td class="{% if entity.esPrimeraVezEscuela %}primera_vez{% endif %}"</td>
-            		{{ proyecto_box.nombreEscuela(entity.escuela)  }}
-            
             <td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">
-            {{ entity.coordinador.nombre }} {{ entity.coordinador.apellido }} </td>
-            
-            <td>{{ entity.colaboradores | length }}</td>
-            
-            <td class="{% if entity.esPrimeraVezAlumnos %}primera_vez{% endif %}">
-            {{ entity.nroAlumnos }}</td>
-            <td>{{ entity.temaPrincipal }}</td>
-            <td>{{ entity.escuela.localidad.distrito.region }}</td>
-            <td>{{ entity.escuela.localidad }} ({{ entity.escuela.localidad.distrito }})</td>
+            {{ entity.coordinador.nombre }} {{ entity.coordinador.apellido }} 
+            </td>
+            <td> {% if entity.coordinador.telefonoCelular == '' %} {{entity.coordinador.telefono}} {% else %} {{ entity.coordinador.telefonoCelular }} {% endif %} </td>
+            <td> {{ entity.coordinador.email }} </td>
+            <td class="{% if entity.esPrimeraVezEscuela %}primera_vez{% endif %}"
+            		{{ proyecto_box.nombreEscuela(entity.escuela)  }}
+            </td>		
+            <td> {{ entity.escuela.telefono }} </td>
+            <td> {{ entity.escuela.email }} </td>           
+            <td>{{ entity.escuela.localidad }} </td>
+            <td> {{ entity.escuela.localidad.distrito }}</td>
             <td>
                 <ul>
                     <li>
