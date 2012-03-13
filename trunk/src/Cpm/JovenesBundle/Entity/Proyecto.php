@@ -127,6 +127,11 @@ class Proyecto
     */
     private $estado = Proyecto::__ESTADO_INICIADO;
     
+    /**
+     *  @ORM\ManyToOne(targetEntity="Ciclo")
+     */
+    private $ciclo;
+    
     
     const __ESTADO_INICIADO = 'Iniciado';
     const __ESTADO_RECHAZADO = 'Rechazado';
@@ -427,5 +432,35 @@ class Proyecto
     public function setEstado($estado)
     {
     	$this->estado = $estado;
+    }
+
+    /**
+     * Set ciclo
+     *
+     * @param Cpm\JovenesBundle\Entity\Ciclo $ciclo
+     */
+    public function setEmisor(\Cpm\JovenesBundle\Entity\Ciclo $ciclo)
+    {
+        $this->ciclo = $ciclo;
+    }
+
+    /**
+     * Get ciclo
+     *
+     * @return Cpm\JovenesBundle\Entity\Ciclo
+     */
+    public function getCiclo()
+    {
+        return $this->ciclo;
+    }
+
+    /**
+     * Set ciclo
+     *
+     * @param Cpm\JovenesBundle\Entity\Ciclo $ciclo
+     */
+    public function setCiclo(\Cpm\JovenesBundle\Entity\Ciclo $ciclo)
+    {
+        $this->ciclo = $ciclo;
     }
 }

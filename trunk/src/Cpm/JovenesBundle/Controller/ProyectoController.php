@@ -137,6 +137,9 @@ class ProyectoController extends BaseController
         $entity  = new Proyecto();
         $request = $this->getRequest();
         $entity->setEstado(Proyecto::__ESTADO_INICIADO);
+        $jym = $this->getJYM();
+        $entity->setCiclo($jym->getCicloActivo());
+        
         $form    = $this->createForm(new ProyectoType(), $entity);
         $form->bindRequest($request);
 
