@@ -89,7 +89,11 @@ class UsuarioController extends BaseController
         $form = $this->createForm(new UsuarioType(), $user );
 
 	    $form->bindRequest($this->getRequest());
-
+	    
+	    $user->setApellido(ucwords(strtolower($user->getApellido())));
+	    $user->setNombre(ucwords(strtolower($user->getNombre())));
+	    
+	     
        if ($form->isValid()) {
        		if ($confirmationEnabled) {
 				$user->setEnabled(false);
@@ -161,6 +165,9 @@ class UsuarioController extends BaseController
 
         $editForm->bindRequest($request);
 
+        $entity->setApellido(ucwords(strtolower($entity->getApellido())));
+        $entity->setNombre(ucwords(strtolower($entity->getNombre())));
+        
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();

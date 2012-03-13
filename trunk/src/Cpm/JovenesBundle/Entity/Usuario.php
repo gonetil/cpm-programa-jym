@@ -31,7 +31,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @var string $dni
      *
      * @ORM\Column(name="dni", type="string", nullable=true)
-     * @Assert\NotBlank(message="Debe completar el DNI (solo con números])")
+     * @Assert\NotBlank(message="Debe completar el DNI (solo con números)", groups={"Registration", "Profile"})
      * @Assert\Min(limit="100000", message="El dni ingresado no es válido", groups={"Registration", "Profile"})
      */
     private $dni;
@@ -226,7 +226,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     */
     public function setApellido($apellido)
     {
-    	$this->apellido = $apellido;
+    	$this->apellido = ucwords(strtolower($apellido)) ;
     }
     
     /**
@@ -247,7 +247,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     */
     public function setNombre($nombre)
     {
-    	$this->nombre = $nombre;
+    	$this->nombre = ucwords(strtolower($nombre));
     }
     
     /**

@@ -105,22 +105,14 @@ class PerfilController extends BaseController
     	$form->remove('coordinador');
     	
     	$form->bindRequest($this->getRequest());
-    	$colaboradores = $proyecto->getColaboradores();
-    	foreach ($colaboradores as $colaborador) {
-    		if ($c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($colaborador->getEmail())) //el colaborador ya existia en la bbdd 
-    		{ //si el email del colaborador estaba en la BBDD, no creo uno nuevo  
-    			$colaboradores->removeElement($colaborador);
-    			$colaboradores->add($c);
-    		} else 
-    		{ //si el colaborador debe ser cargado en la BBDD, le pongo una password vacia
-    			$colaborador->setPassword("");
-    		}
-    	}
+    	$this->procesar_colaboradores($proyecto->getColaboradores());
     	 
     	if ($form->isValid()) {
     		$this->doPersist($proyecto);
     		$this->enviarMail($coordinador, Plantilla::ALTA_PROYECTO, array(Plantilla::_PROYECTO => $proyecto));
     		$this->setSuccessMessage("Los datos fueron registrados satifactoriamente");
+    		$this->setInfoMessage("Usted se ha inscripto al Programa Jóvenes y Memoria, Convocatoria 2012");
+    		
     		return $this->redirect($this->generateUrl('home_usuario'));
     	}
 
@@ -170,7 +162,7 @@ class PerfilController extends BaseController
     *
     * @Route("/{id}/update", name="proyecto_update_wizzard")
     * @Method("post")
-    * @Template("CpmJovenesBundle:Proyecto:edit.html.twig")
+    * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
     */
     public function updateAction($id)
     {
@@ -190,20 +182,40 @@ class PerfilController extends BaseController
     	$request = $this->getRequest();
     
     	$editForm->bindRequest($request);
+    	$this->procesar_colaboradores($entity->getColaboradores());
     
     	if ($editForm->isValid()) {
     		$em->persist($entity);
     		$em->flush();
-    		$this->setSuccessMessage("Datos actualizados satifactoriamente");
+    		$this->setSuccessMessage("Los datos fueron actualizados satisfactoriamente");
+    		
     		return $this->redirect($this->generateUrl('home_usuario'));
     	}
     
     	return array(
                 'entity'      => $entity,
-    			'coordinador' => $entity->getCoordinador(),
-                'edit_form'   => $editForm->createView(),
+    			'coordinador' => $this->getLoggedInUser(),
+                'form'   => $editForm->createView(),
 				'form_action' => 'proyecto_update_wizzard'
     	);
     }
     
+    
+    private function procesar_colaboradores($colaboradores) {
+    	foreach ($colaboradores as $colaborador) {
+    		if ($c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($colaborador->getEmail())) //el colaborador ya existia en la bbdd
+    		{ //si el email del colaborador estaba en la BBDD, no creo uno nuevo
+    			$colaboradores->removeElement($colaborador);
+    			$colaboradores->add($c);
+    			$c->setApellido(ucwords(strtolower($c->getApellido())));
+    			$c->setNombre(ucwords(strtolower($c->getNombre())));
+    			 
+    		} else
+    		{ //si el colaborador debe ser cargado en la BBDD, le pongo una password vacia
+    			$colaborador->setApellido(ucwords(strtolower($colaborador->getApellido())));
+    			$colaborador->setNombre(ucwords(strtolower($colaborador->getNombre())));
+    			$colaborador->setPassword("");
+    		}
+    	}
+    }
 }
