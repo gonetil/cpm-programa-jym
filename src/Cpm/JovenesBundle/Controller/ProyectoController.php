@@ -136,6 +136,7 @@ class ProyectoController extends BaseController
     {
         $entity  = new Proyecto();
         $request = $this->getRequest();
+        $entity->setEstado(Proyecto::__ESTADO_INICIADO);
         $form    = $this->createForm(new ProyectoType(), $entity);
         $form->bindRequest($request);
 
@@ -196,7 +197,6 @@ class ProyectoController extends BaseController
 
         $editForm = $this->createForm(new ProyectoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),

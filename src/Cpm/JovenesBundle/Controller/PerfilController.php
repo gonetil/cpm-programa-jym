@@ -97,6 +97,7 @@ class PerfilController extends BaseController
     	$coordinador = $this->getLoggedInUser();
     
     	$proyecto->setCoordinador($coordinador);
+    	$proyecto->setEstado(Proyecto::__ESTADO_INICIADO);
     	
     	$form = $this->createForm(new ProyectoType(), $proyecto);
     	$form->remove('coordinador');
@@ -116,8 +117,8 @@ class PerfilController extends BaseController
     	 
     	if ($form->isValid()) {
     		$this->doPersist($proyecto);
-    		
-    		return $this->forward('CpmJovenesBundle:Perfil:index');
+    		$this->setSuccessMessage("Los datos fueron registrados satifactoriamente");
+    		return $this->redirect($this->generateUrl('home_usuario'));
     	}
 
     	$distritos = $this->getRepository('CpmJovenesBundle:Distrito')->findAll();
@@ -190,8 +191,8 @@ class PerfilController extends BaseController
     	if ($editForm->isValid()) {
     		$em->persist($entity);
     		$em->flush();
-    
-    		return $this->forward('CpmJovenesBundle:Perfil:index');
+    		$this->setSuccessMessage("Datos actualizados satifactoriamente");
+    		return $this->redirect($this->generateUrl('home_usuario'));
     	}
     
     	return array(
