@@ -98,7 +98,9 @@ class PerfilController extends BaseController
     
     	$proyecto->setCoordinador($coordinador);
     	$proyecto->setEstado(Proyecto::__ESTADO_INICIADO);
-    	
+    	$jym = $this->getJYM();
+        $proyecto->setCiclo($jym->getCicloActivo());
+        
     	$form = $this->createForm(new ProyectoType(), $proyecto);
     	$form->remove('coordinador');
     	
