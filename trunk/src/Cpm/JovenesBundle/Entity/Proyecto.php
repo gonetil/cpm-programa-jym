@@ -120,6 +120,19 @@ class Proyecto
     
     private $impactoBuscado;
     
+    /**
+    * @var string $estado
+    *
+    * @ORM\Column(name="estado", type="string")
+    */
+    private $estado = Proyecto::__ESTADO_INICIADO;
+    
+    
+    const __ESTADO_INICIADO = 'Iniciado';
+    const __ESTADO_RECHAZADO = 'Rechazado';
+    
+    
+
             
     /**
      * Get id
@@ -405,5 +418,14 @@ class Proyecto
     {
     	return $this->impactoBuscado;
     }
+
+    public function getEstado()
+    {
+    	return $this->estado;
+    }
     
+    public function setEstado($estado)
+    {
+    	$this->estado = $estado;
+    }
 }

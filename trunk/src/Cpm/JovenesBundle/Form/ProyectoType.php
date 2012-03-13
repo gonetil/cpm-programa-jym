@@ -38,6 +38,7 @@ class ProyectoType extends AbstractType
 	        ->add('motivoRealizacion',null,array('label'=>'¿Para qué se realiza el proyecto?'))
 	        ->add('impactoBuscado',null,array('label'=>'¿Cuál es el impacto que se busca?'))
         	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
+			->add('estado')
         // ->add('coordinador',new UsuarioType(),array('label' => 'Docente Coordinador'))
         
         ;
