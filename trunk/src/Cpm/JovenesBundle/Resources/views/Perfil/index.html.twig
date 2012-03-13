@@ -39,17 +39,47 @@
 	</ul>
  	<h4> 
 	 	{% if proyectos|length == 0 %} 		
-			No posee ningún proyecto 
+			No posee ninguna escuela inscripta
 		{% else %}
  			Usted posee {{ proyectos|length }} 
 			{% if proyectos|length > 1 %}
-				proyectos registrados 
+				escuelas inscriptas
 			{% else %}
-				proyecto registrado
-			{% endif %}	
+				escuela inscripta
+			{% endif %}
+		
 		{% endif %}
 	</h4>
 		
+		{% if proyectos|length > 0 %}
+		<script>	
+			$("a[href='{{path('proyecto_wizzard')}}']").click(function(event) { 
+																		event.preventDefault();  
+																		href = $(this).attr('href');
+																		
+																		$( "#dialog-confirm" ).dialog({
+																					resizable: false,
+																					width:440,
+																					height:252,
+																					modal: true,
+																					buttons: {
+																						"Sí, quiero inscribir otra escuela": function() {
+																								$( this ).dialog( "close" );
+																							   window.location = href;
+																						},
+																						"No, me equivoqué": function() {
+																							$( this ).dialog( "close" );
+																						}
+																					}
+																				});
+																	});
+			</script>	
+			<div id="dialog-confirm" title="Escuela ya inscripta" style="display:none">
+				<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+						Usted ya inscribió a una escuela <strong> ¿está seguro que quiere inscribir otra?</strong>
+				 </p>
+			</div>
+	{% endif %}
 	<div id="loading-indicator-mini" class="cargando_detalle_proyecto"> &nbsp; </div> 
 	<div id="detalle_proyecto"></div>		
 	
