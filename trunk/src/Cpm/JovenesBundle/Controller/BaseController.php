@@ -45,8 +45,9 @@ abstract class BaseController extends Controller
 	
 	protected function enviarMail($destinatario, $codigo_plantilla, $args=array()){
 		$plantilla = $this->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
-		$mailer = $this->get('mailer_manager');
-		return $mailer->send($destinatario, $plantilla, $args);
+		$mailer = $this->getMailer();
+		
+		return $mailer->sendPlantilla($plantilla, $destinatario, $args, $this->getLoggedInUser());
     }
 
 	//ABM
@@ -64,6 +65,7 @@ abstract class BaseController extends Controller
 	protected function getLoggedInUser() { 
 		$user = $this->get('security.context')->getToken()->getUser();
 		if (!$user) return null; 
+		//TODO ver si es necesario que se levante el user, me pa que es al pedo
 		return $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($user->getUsername());
 	}
 	
