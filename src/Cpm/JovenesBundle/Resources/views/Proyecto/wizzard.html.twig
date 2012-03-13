@@ -17,10 +17,34 @@
 	  method="post" {{ form_enctype(form) }} name="wizzard_form">
 
 <div class="wizzard_stage" id="stage_1">
-<h4> Paso 1 de 3 </h4>
+   {{ form_errors(form) }}
+	<h4> Paso 1 de 3 </h4>
+	<h3> Información de la Escuela </h3> 
+   <div class="form_fields">
+      {# incluyo el formulario de carga de escuela en el wizzard #}  
+      {% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
+    </div>
+    
+   
+   	<ul class="record_actions">
+    	<li>
+    		<a href="#" onclick="move_stage(1,2);"> Siguiente </a>
+    	</li>
+	    <li>
+        <a href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')"> Cancelar </a>
+	    </li>    
+    </ul>
+    
+</div>
+
+
+
+
+<div class="wizzard_stage" id="stage_2">
+<h4> Paso 2 de 3 </h4>
 <h3> Datos de la propuesta </h3>
 <div class="form_fields">
-   {{ form_errors(form) }}
+
    
    {{ form_row(form.titulo) }}
 
@@ -46,29 +70,6 @@
    {{ form_row(form.motivoRealizacion) }}
    {{ form_row(form.impactoBuscado) }}
    </div>
-   
-   	<ul class="record_actions">
-    	<li>
-    		<a href="#" onclick="move_stage(1,2);"> Siguiente </a>
-    	</li>
-	    <li>
-        <a href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')"> Cancelar </a>
-	    </li>    
-    </ul>
-    
-</div>
-
-
-
-
-<div class="wizzard_stage" id="stage_2">
-	<h4> Paso 2 de 3 </h4>
-	<h3> Información de la Escuela </h3> 
-   <div class="form_fields">
-      {# incluyo el formulario de carga de escuela en el wizzard #}  
-      {% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
-    </div>
-    
     	<ul class="record_actions">
     	<li>
     		<a href="#" onclick="move_stage(2,1);"> Anterior </a>
