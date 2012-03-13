@@ -46,8 +46,11 @@ abstract class BaseController extends Controller
 	protected function enviarMail($destinatario, $codigo_plantilla, $args=array()){
 		$plantilla = $this->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
 		$mailer = $this->getMailer();
-		
-		return $mailer->sendPlantilla($plantilla, $destinatario, $args, $this->getLoggedInUser());
+		$sender = $this->getLoggedInUser();
+		if ($destinatario->equals($sender))
+			$sender = null;
+			
+		return $mailer->sendPlantilla($plantilla, $destinatario, $args,$sender );
     }
 
 	//ABM
