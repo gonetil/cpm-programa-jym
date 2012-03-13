@@ -25,7 +25,7 @@ class StaticConfig {
 	    array (
 	      'modificar_proyecto' => 
 	      array (
-	        'href' => 'modificar_inscripcion',
+	        'href' => 'proyecto_edit_wizzard',
 	        'label' => 'Modificar inscripción'
 	      ),
 	    ),

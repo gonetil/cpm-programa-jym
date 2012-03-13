@@ -20,9 +20,9 @@ class ProyectoType extends AbstractType
     								    ))
             ->add('titulo')
             ->add('nroAlumnos','integer',array('label'  => 'Número de alumnos', 'attr'=>array('class'=>'number')))
-            ->add('esPrimeraVezDocente',null,array('label' => '¿primera vez del docente?', 'required'=>false))
-            ->add('esPrimeraVezEscuela',null,array('label' => '¿primera vez de la escuela?', 'required'=>false))
-            ->add('esPrimeraVezAlumnos',null,array('label' => '¿primera vez de los alumnos?', 'required'=>false))
+            ->add('esPrimeraVezDocente',null,array('label' => '¿participa por primera vez el docente?', 'required'=>false))
+            ->add('esPrimeraVezEscuela',null,array('label' => '¿participa por primera vez la escuela?', 'required'=>false))
+            ->add('esPrimeraVezAlumnos',null,array('label' => '¿participa por primera vez los alumnos?', 'required'=>false))
             ->add('colaboradores','collection',array('allow_add'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
             ->add('temaPrincipal','entity',
             					array('label' => 'Tema Principal',
@@ -35,10 +35,9 @@ class ProyectoType extends AbstractType
             						  'query_builder' => function($er) { return $er->createQueryBuilder('p')->where('p.anulado = 0');}
     								    ))
             ->add('deQueSeTrata',null,array('label'=>'¿De qué se trata el proyecto?'))
-	        ->add('motivoRealizacion',null,array('label'=>'¿Para qué se realiza el proyecto?'))
-	        ->add('impactoBuscado',null,array('label'=>'¿Cuál es el impacto que se busca?'))
+	        ->add('motivoRealizacion',null,array('label'=>'¿Por qué queremos investigar este tema?'))
+	        ->add('impactoBuscado',null,array('label'=>'¿Qué impacto tendrá en la comunidad?'))
         	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
-			->add('estado')
         // ->add('coordinador',new UsuarioType(),array('label' => 'Docente Coordinador'))
         
         ;
