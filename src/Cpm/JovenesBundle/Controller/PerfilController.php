@@ -10,7 +10,7 @@ use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
-
+use Cpm\JovenesBundle\Entity\Plantilla;
 /**
  * Perfil controller.
  *
@@ -119,6 +119,7 @@ class PerfilController extends BaseController
     	 
     	if ($form->isValid()) {
     		$this->doPersist($proyecto);
+    		$this->enviarMail($coordinador, Plantilla::ALTA_PROYECTO, array(Plantilla::_PROYECTO => $proyecto));
     		$this->setSuccessMessage("Los datos fueron registrados satifactoriamente");
     		return $this->redirect($this->generateUrl('home_usuario'));
     	}
