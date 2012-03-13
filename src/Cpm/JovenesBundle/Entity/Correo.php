@@ -29,6 +29,13 @@ class Correo
     private $fecha;
 
     /**
+     * @var string $email
+     *
+     * @ORM\Column(name="email", type="string")
+     */
+    private $email;
+    
+    /**
      * @var string $asunto
      *
      * @ORM\Column(name="asunto", type="string")
@@ -46,6 +53,12 @@ class Correo
      *  @ORM\ManyToOne(targetEntity="Usuario")
      */
     private $destinatario;
+    
+    /**
+     *  @ORM\ManyToOne(targetEntity="Usuario")
+     */
+    private $emisor;
+    
 
     /**
      * Get id
@@ -136,9 +149,49 @@ class Correo
     {
         return $this->destinatario;
     }
+
+    /**
+     * Set emisor
+     *
+     * @param Cpm\JovenesBundle\Entity\Usuario $emisor
+     */
+    public function setEmisor(\Cpm\JovenesBundle\Entity\Usuario $emisor)
+    {
+        $this->emisor = $emisor;
+    }
+
+    /**
+     * Get emisor
+     *
+     * @return Cpm\JovenesBundle\Entity\Usuario 
+     */
+    public function getEmisor()
+    {
+        return $this->emisor;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
     
     public function __toString(){
-    	return "{$this->fecha} Asunto {$this->asunto}";
+    	return "{$this->fecha} Destinatario {$this->email} Asunto {$this->asunto}";
     }
     
 }

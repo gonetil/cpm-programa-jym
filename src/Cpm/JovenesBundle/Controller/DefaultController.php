@@ -31,7 +31,7 @@ class DefaultController extends BaseController
     		return $this->forward("CpmJovenesBundle:Perfil:index");
     	}
     	else 
-    	return array();
+    	return $this->forward("CpmJovenesBundle:Default:_login");
     	
     }
     
@@ -66,7 +66,6 @@ class DefaultController extends BaseController
      */
     public function securityCheckAction()
     {
-    	die('paso');
         // The security layer will intercept this request
     }
 
@@ -77,83 +76,7 @@ class DefaultController extends BaseController
     {
         // The security layer will intercept this request
     }
-
-    /**
-     * @Route("/public/recuperar_clave", name="recuperar_clave_form")
-     * @Template()
-     */
-    public function recuperarClaveAction()
-    {
-    	return array();
-    }
     
-    /**
-     * @Method ("post")
-     * @Route("/public/recuperar_clave", name="recuperar_clave_submit")
-     */
-    public function recuperarClaveSubmitAction()
-    {
-    	 return $this->loginAction();
-    }
-    
-    /**
-     * @Method("post")
-     * @Route("/public/registrarse", name="registrarse_submit")
-     * 
-     */
-    public function registrarseSubmitAction()
-    {
-    	$entity  = new Usuario();
-  		$request = $this->getRequest();
-        $form    = $this->createForm(new RegistroUsuarioType(), $entity);
-        $form->bindRequest($request);
-		
-		$preexistente = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($entity->getEmail());
-		$mail_enviado = $this->enviarMail($entity->getEmail(), Plantilla::REGISTRO_USUARIO, array('user'=>$entity));
-            
-        if ($mail_enviado && !$preexistente && $form->isValid()) {
-        	$entity->setClave($this->encodePasswordFor($entity, $entity->getPassword()));
-			$entity->setEstaHabilitado(false);
-			$this->doPersist($entity);
-            
-            
-            $this->setSuccessMessage('Se le ha enviado un correo de confirmación a '.$entity->getEmail()
-					.'. Deberá seguir el enlace que alli se incluye para completar el proceso de registración. ');
-            return $this->loginAction();
-        }else{
-
-	 		if ($preexistente)
-	            $this->setErrorMessage('Ya existe un usuario con el mismo email ..');
-			elseif (!$mail_enviado)
-				$this->setErrorMessage('Lo sentimos pero no se pudo enviar el mail. Intentelo nuevamente y si el problema persiste contactese con la Comision...');
-			else
-				$this->setErrorMessage('Faltan datos :S');
-				
-	        return $this->render('CpmJovenesBundle:Default:registrarse.html.twig', array(
-	            'entity' => $entity,
-	            'form'   => $form->createView(),
-	            'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll() 
-	        ));
-        }
-    }
-    
-    /**
-     * @Route("/public/registrarse", name="registrarse_form")
-     * @Template()
-     */
-    public function registrarseAction()
-    {
-    	$entity = new Usuario();
-        $form   = $this->createForm(new RegistroUsuarioType(), $entity);
-        
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-            'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll() 
-        );
-    }
-
-
     /**
     * Busca todas las escuelas de un distrito
     *
@@ -196,5 +119,83 @@ class DefaultController extends BaseController
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }
+/*
+    / **
+     * @Route("/public/recuperar_clave", name="recuperar_clave_form")
+     * @Template()
+     * /
+    public function recuperarClaveAction()
+    {
+    	return array();
+    }
+    
+    / **
+     * @Method ("post")
+     * @Route("/public/recuperar_clave", name="recuperar_clave_submit")
+     * /
+    public function recuperarClaveSubmitAction()
+    {
+    	 return $this->loginAction();
+    }
+    
+    / **
+     * @Method("post")
+     * @Route("/public/registrarse", name="registrarse_submit")
+     * 
+     * /
+    public function registrarseSubmitAction()
+    {
+    	$entity  = new Usuario();
+  		$request = $this->getRequest();
+        $form    = $this->createForm(new RegistroUsuarioType(), $entity);
+        $form->bindRequest($request);
+		
+		$preexistente = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($entity->getEmail());
+		$mail_enviado = $this->enviarMail($entity->getEmail(), Plantilla::REGISTRO_USUARIO, array('user'=>$entity));
+            
+        if ($mail_enviado && !$preexistente && $form->isValid()) {
+        	$entity->setClave($this->encodePasswordFor($entity, $entity->getPassword()));
+			$entity->setEstaHabilitado(false);
+			$this->doPersist($entity);
+            
+            
+            $this->setSuccessMessage('Se le ha enviado un correo de confirmación a '.$entity->getEmail()
+					.'. Deberá seguir el enlace que alli se incluye para completar el proceso de registración. ');
+            return $this->loginAction();
+        }else{
+
+	 		if ($preexistente)
+	            $this->setErrorMessage('Ya existe un usuario con el mismo email ..');
+			elseif (!$mail_enviado)
+				$this->setErrorMessage('Lo sentimos pero no se pudo enviar el mail. Intentelo nuevamente y si el problema persiste contactese con la Comision...');
+			else
+				$this->setErrorMessage('Faltan datos :S');
+				
+	        return $this->render('CpmJovenesBundle:Default:registrarse.html.twig', array(
+	            'entity' => $entity,
+	            'form'   => $form->createView(),
+	            'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll() 
+	        ));
+        }
+    }
+    
+    
+    / **
+     * @Route("/public/registrarse", name="registrarse_form")
+     * @Template()
+     * /
+    public function registrarseAction()
+    {
+    	$entity = new Usuario();
+        $form   = $this->createForm(new RegistroUsuarioType(), $entity);
+        
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+            'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll() 
+        );
+    }
+
+*/
     
 }
