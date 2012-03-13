@@ -31,16 +31,6 @@
             Volver al listado
         </a>
     </li>
-    <li>
-        <a href="{{ path('correo_edit', { 'id': entity.id }) }}">
-            Modificar
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('correo_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
+
 </ul>
 {% endblock %}

@@ -51,7 +51,7 @@ class TwigSwiftMailer implements MailerInterface
     {
         $plantilla = $this->getPlantilla(Plantilla::RESETEAR_CUENTA);
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $usuario->getConfirmationToken()), true);
-        $context = array(Plantilla::URL => $url);
+        $context = array(Plantilla::_URL => $url);
         return $this->sendPlantilla($plantilla, $usuario, $context);
     }
 

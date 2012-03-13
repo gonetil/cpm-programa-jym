@@ -16,10 +16,13 @@ class Plantilla
 	const _URL = "url";
 	const _EMISOR = "emisor";
 	const _FECHA = "fecha";
+	const _PROYECTO = "proyecto";
 	const _URL_SITIO = "url_sitio";
 	const CONFIRMACION_REGISTRO = "confirmar_registro_usuario";
 	const RESETEAR_CUENTA = "resetear_cuenta_usuario";
+	const ALTA_PROYECTO= "alta_proyecto";
 	
+
     /**
      * @var integer $id
      *
