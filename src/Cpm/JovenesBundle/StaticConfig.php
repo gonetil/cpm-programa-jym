@@ -18,7 +18,7 @@ class StaticConfig {
 	      'crear_proyecto' => 
 	      array (
 	        'href' => 'proyecto_wizzard',
-	        'label' => 'Cargar propuesta'
+	        'label' => 'Inscribir escuela'
 	      ),
 	    ),
 	    'accionesProyecto' => 
@@ -26,7 +26,7 @@ class StaticConfig {
 	      'modificar_proyecto' => 
 	      array (
 	        'href' => 'modificar_inscripcion',
-	        'label' => 'Cambiar Propuesta'
+	        'label' => 'Modificar inscripción'
 	      ),
 	    ),
 	  );
