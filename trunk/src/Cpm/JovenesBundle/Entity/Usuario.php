@@ -31,7 +31,8 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @var string $dni
      *
      * @ORM\Column(name="dni", type="string", nullable=true)
-     * @Assert\NotBlank(groups="administration")
+     * @Assert\NotBlank(message="Debe completar el DNI (solo con números])")
+     * @Assert\Min(limit="100000", message="El dni ingresado no es válido", groups={"Registration", "Profile"})
      */
     private $dni;
 
@@ -57,6 +58,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @var string $telefono
      *
      * @ORM\Column(name="telefono", type="string", nullable=true)
+     * @Assert\Regex(pattern="/^[\s0-9]+$/", message="El teléfono solo puede contener números y espacios")
      */
     private $telefono;
 
@@ -64,6 +66,8 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @var string $telefonoCelular
      *
      * @ORM\Column(name="telefonoCelular", type="string", nullable=true)
+     * @Assert\Regex(pattern="/^[\s0-9]+$/", message="El teléfono celular solo puede contener números y espacios")
+     * @Assert\NotBlank(message="Ingrese su teléfono celular", groups={"Registration", "Profile"})
      */
     private $telefonoCelular;
 
