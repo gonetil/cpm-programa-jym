@@ -59,15 +59,15 @@
 																		
 																		$( "#dialog-confirm" ).dialog({
 																					resizable: false,
-																					width:440,
-																					height:252,
+																					width:650,
+																					height:200,
 																					modal: true,
 																					buttons: {
 																						"Sí, quiero inscribir otra escuela": function() {
 																								$( this ).dialog( "close" );
 																							   window.location = href;
 																						},
-																						"No, me equivoqué": function() {
+																						"No, gracias": function() {
 																							$( this ).dialog( "close" );
 																						}
 																					}
