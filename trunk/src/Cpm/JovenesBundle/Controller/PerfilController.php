@@ -115,7 +115,7 @@ class PerfilController extends BaseController
     		
     		return $this->redirect($this->generateUrl('home_usuario'));
     	}
-
+		$this->setErrorMessage("Se produjeron errores al procesar los datos");
     	$distritos = $this->getRepository('CpmJovenesBundle:Distrito')->findAll();
     	$form->remove('coordinador');
     	return    	array(
@@ -191,7 +191,7 @@ class PerfilController extends BaseController
     		
     		return $this->redirect($this->generateUrl('home_usuario'));
     	}
-    
+    	$this->setErrorMessage("Se produjeron errores al procesar los datos");
     	return array(
                 'entity'      => $entity,
     			'coordinador' => $this->getLoggedInUser(),
