@@ -25,7 +25,7 @@ class ColaboradorType extends AbstractType
     {
     	return array(
                 'data_class' => 'Cpm\JovenesBundle\Entity\Usuario',
-    	        'groups'  => 'colaborador',
+    	        'groups'  => 'Colaborador',
         );
     }
     

@@ -12,10 +12,9 @@ class UsuarioType extends AbstractType
         $builder
             ->add('apellido')
             ->add('nombre')
-     //       ->add('username')
-            ->add('dni', 'number')
+            ->add('dni')
             ->add('email', 'email')
-            ->add('telefono')
+            ->add('telefono', null, array('required'=>false))
             ->add('telefonoCelular', null, array('required'=>false))
             ->add('codigoPostal')
             ->add('localidad',null,array('attr' => array('class'=>'localidad-selector')))
@@ -36,5 +35,14 @@ class UsuarioType extends AbstractType
     public function getName()
     {
         return 'cpm_jovenesbundle_usuariotype';
+    }
+    
+    
+    public function getDefaultOptions(array $options)
+    {
+    	return array(
+                'data_class' => 'Cpm\JovenesBundle\Entity\Usuario',
+    	        'groups'  => 'Administracion',
+        );
     }
 }

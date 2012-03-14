@@ -18,6 +18,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
 {
 	const ROL_USUARIO = 'ROLE_USER';
 	const ROL_ADMIN = 'ROLE_ADMIN';
+	
     /**
      * @var integer $id
      *
@@ -31,15 +32,19 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @var string $dni
      *
      * @ORM\Column(name="dni", type="string", nullable=true)
-     * @Assert\NotBlank(message="Debe completar el DNI (solo con números)", groups={"Registration", "Profile"})
-     * @Assert\Min(limit="100000", message="El dni ingresado no es válido", groups={"Registration", "Profile"})
+     * @Assert\Regex(pattern="/^[0-9]*$/", message="El dni solo puede contener números")
+     * @Assert\NotBlank(message="Debe completar el DNI (solo con números)", groups={"Registration", "Profile", "Administracion"})
+     * @Assert\Min(limit="10000", message="El dni ingresado no es válido", groups={"Registration", "Profile", "Administracion"})
      */
     private $dni;
 
     /**
     * @var string $apellido
-     *
+    *
     * @ORM\Column(name="apellido", type="string")
+    * @Assert\NotBlank(message="Debe completar el apellido")
+    * @Assert\MinLength(limit="2", message="El nombre es muy corto, es un apellido de verdad?")
+    * @Assert\MaxLength(limit="255", message="El apellido es muy largo.")
     */
     private $apellido;
     
@@ -48,9 +53,9 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(type="string", length="255")
      *
-     * @Assert\NotBlank(message="Ingrese su nombre.", groups={"Registration", "Profile"})
-     * @Assert\MinLength(limit="3", message="El nombre es muy corto.", groups={"Registration", "Profile"})
-     * @Assert\MaxLength(limit="255", message="El nombre es muy largo.", groups={"Registration", "Profile"})
+     * @Assert\NotBlank(message="Falta el campo nombre")
+     * @Assert\MinLength(limit="3", message="El nombre es muy corto, es un nombre de verdad?")
+     * @Assert\MaxLength(limit="255", message="El nombre es muy largo.")
      */
    private $nombre;
    
@@ -66,25 +71,15 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @var string $telefonoCelular
      *
      * @ORM\Column(name="telefonoCelular", type="string", nullable=true)
-     * @Assert\Regex(pattern="/^[\s0-9]+$/", message="El teléfono celular solo puede contener números y espacios")
+     * @Assert\Regex(pattern="/^[\s0-9]*$/", message="El teléfono celular solo puede contener números y espacios")
      * @Assert\NotBlank(message="Ingrese su teléfono celular", groups={"Registration", "Profile"})
      */
     private $telefonoCelular;
 
-    /*
-     * @var string $email
-     * @Assert\Email(
-     *     message = "La dirección de correo '{{ value }}' no es válida.",
-     *     checkMX = true
-     * )     
-     * @ORM\Column(name="email", type="string", unique=true)
-     
-    private $email;
-*/
-
     /**
      * @var string $codigoPostal
      * @ORM\Column(name="codigoPostal", type="string", nullable=true)
+     * @Assert\NotBlank(message="Ingrese el código postal", groups={"Registration", "Profile"})
      */
     private $codigoPostal;
 
