@@ -20,40 +20,27 @@ class ProyectoType extends AbstractType
     								    ))
             ->add('titulo')
             ->add('nroAlumnos','integer',array('label'  => 'Número de alumnos', 'attr'=>array('class'=>'number')))
-            ->add('esPrimeraVezDocente',
-            		'choice',
-            		 array(	'label' => '¿participa por primera vez el docente?', 
-            		 		'required'=>false,
-    						'choices' => array(1=>"si"),
-    						'preferred_choices' => array("No"),
-    						'empty_value' => "No",
-    						'expanded'=>false,
-    						'required'=>false,
-    						'attr'=>array('class'=>'input-narrow')
-            		 		)
-            	)->add('esPrimeraVezEscuela',
-            		'choice',
-            		 array(	'label' => '¿participa por primera vez la escuela?', 
-            		 		'required'=>false,
-    						'choices' => array(1=>"si"),
-    						'preferred_choices' => array("No"),
-    						'empty_value' => "No",
-    						'expanded'=>false,
-    						'required'=>false,
-    						'attr'=>array('class'=>'input-narrow')
-            		 		)
-            	)->add('esPrimeraVezAlumnos',
-            		'choice',
-            		 array(	'label' => '¿participa por primera vez los alumnos?', 
-            		 		'required'=>false,
-    						'choices' => array(1=>"si"),
-    						'preferred_choices' => array("No"),
-    						'empty_value' => "No",
-    						'expanded'=>false,
-    						'required'=>false,
-    						'attr'=>array('class'=>'input-narrow')
-            		 		)
-            	)
+            ->add('esPrimeraVezDocente', 'choice',	array(
+            		'label' => '¿participa por primera vez el docente?', 
+            		'required'=>false,
+    				'choices' => array(1=>"si",0=>"no"),
+    				'expanded' => true,
+    				 'attr'=>array('class'=>'radios-en-linea'),
+    		))
+    		->add('esPrimeraVezEscuela', 'choice',	array(
+            		'label' => '¿participa por primera vez la escuela?', 
+            		'required'=>false,
+    				'choices' => array(1=>"si",0=>"no"),
+    				'expanded' => true,
+    				 'attr'=>array('class'=>'radios-en-linea'),
+    		))
+    		->add('esPrimeraVezAlumnos', 'choice',	array(
+            		'label' => '¿participan por primera vez los alumnos?', 
+            		'required'=>false,
+    				'choices' => array(1=>"si",0=>"no"),
+    				'expanded' => true,
+    				 'attr'=>array('class'=>'radios-en-linea'),
+    		))
             ->add('colaboradores','collection',array('allow_add'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
             ->add('temaPrincipal','entity',
             					array('label' => 'Tema Principal',

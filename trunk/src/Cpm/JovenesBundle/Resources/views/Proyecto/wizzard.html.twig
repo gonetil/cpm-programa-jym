@@ -1,125 +1,100 @@
-{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
-
-{% block title %} Ficha de Inscripción {% endblock %}
-
-{% block content %}
-	<script src="{{ asset('js/wizzard_form.js') }}" type="text/javascript"></script>
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %} {% block
+title %} Ficha de Inscripción {% endblock %} {% block content %}
+<script src="{{ asset('js/wizzard_form.js') }}" type="text/javascript"></script>
 
 
-<div style="float:right;">
-</div>
+<div style="float: right;"></div>
 
 <form action="{% if form_action == 'proyecto_update_wizzard' %}
 				{{ path( form_action, { 'id': entity.id } ) }}
 			{% else %}	
 				{{ path( form_action ) }}
 			{% endif %}"
-	  method="post" {{ form_enctype(form) }} name="wizzard_form">
+	method="post" {{ form_enctype(form) }} name="wizzard_form">
 
-<div class="wizzard_stage" id="stage_1">
-   {{ form_errors(form) }}
-	<h4> Paso 1 de 3 </h4>
-	<h3> Información de la Escuela </h3> 
-   <div class="form_fields">
-      {# incluyo el formulario de carga de escuela en el wizzard #}  
-      {% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
-    </div>
-    
-   
-   	<ul class="record_actions">
-    	<li>
-    		<a href="#" onclick="move_stage(1,2);"> Siguiente </a>
-    	</li>
-	    <li>
-        <a href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')"> Cancelar </a>
-	    </li>    
-    </ul>
-    
-</div>
-
-
-
-
-<div class="wizzard_stage" id="stage_2">
-<h4> Paso 2 de 3 </h4>
-<h3> Datos de la propuesta </h3>
-<div class="form_fields">
-
-   
-   {{ form_row(form.titulo) }}
-
-   <div class="primera_vez_checkboxes">
-   	  {{form_label(form.esPrimeraVezDocente)}} {{form_errors(form.esPrimeraVezDocente)}} {{form_widget(form.esPrimeraVezDocente) }}
-   	  
-   	  {{form_label(form.esPrimeraVezEscuela)}} {{form_errors(form.esPrimeraVezEscuela)}} {{form_widget(form.esPrimeraVezEscuela) }}
-   	  {{form_label(form.esPrimeraVezAlumnos)}} {{form_errors(form.esPrimeraVezAlumnos)}} {{form_widget(form.esPrimeraVezAlumnos) }}
-   	  <p>&nbsp;</p>
-   </div>
-
-   <div>
-   	  {{form_label(form.nroAlumnos)}} {{form_errors(form.nroAlumnos)}} {{form_widget(form.nroAlumnos) }}
-   	  
-   	  <p>&nbsp;</p>
-   </div>
-   
-   
-   {{ form_row(form.temaPrincipal) }} 
-   {{ form_row(form.produccionFinal) }}
-   <p>&nbsp;</p>
-   {{ form_row(form.deQueSeTrata) }}
-   {{ form_row(form.motivoRealizacion) }}
-   {{ form_row(form.impactoBuscado) }}
-   </div>
-    	<ul class="record_actions">
-    	<li>
-    		<a href="#" onclick="move_stage(2,1);"> Anterior </a>
-    	</li>
-    	<li>
-    		<a href="#" onclick="move_stage(2,3);"> Siguiente </a>
-    	</li>
-	    <li>
-	        <a href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')"> Cancelar </a>
-	    </li>    
-    </ul>
-        
-</div>
-
-
-<div class="wizzard_stage" id="stage_3">
-		<h4> Paso 3 de 3 </h4>
-		<h3> Datos de los docentes </h3>		
-		<div class="form_fields">
-   		<div id="coordinador">
-   			<strong> Coordinador: </strong> {{ coordinador.nombre }} {{ coordinador.apellido }} <br/>
-   			<strong> Dirección de correo: </strong> {{ coordinador.email }}
-   		</div>
-      
-   		<div id="colaboradores"> 
-		   {{ form_row(form.colaboradores) }}
-		   <a href="#" onclick="addDynamicForm('#cpm_jovenesbundle_proyectotype_colaboradores'); return false;"> Agregar colaborador </a> </br>
-   		</div>
-	
-   		{{ form_rest(form) }}
-
-	</div> <!-- form_fields -->
-
-	<ul class="record_actions">
-    <li>
-    	<a href="#" onclick="move_stage(3,2);" > Anterior </a>
-    </li>	   
-    <li>
-        <button type="submit"> Confirmar </button>
-    </li>
-    <li>
-        <a href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')"> Cancelar </a>
-    </li>
-    
-	</ul>
-	
+	<div class="wizzard_stage" id="stage_1">
+		{{ form_errors(form) }}
+		<h4>Paso 1 de 3</h4>
+		<h3>Información de la Escuela</h3>
 		
-</div>
-</form>
-<div>
+		<div class="form_fields">
+			{# incluyo el formulario de carga de escuela en el wizzard #} 
+			{% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
+		</div>
 
-</div>
+
+		<ul class="record_actions">
+			<li><a href="#" onclick="move_stage(1,2);"> Siguiente </a></li>
+			<li><a href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')">
+					Cancelar 
+			</a></li>
+		</ul>
+
+	</div>
+
+
+
+
+	<div class="wizzard_stage" id="stage_2">
+		<h4>Paso 2 de 3</h4>
+		<h3>Datos de la propuesta</h3>
+		<div class="form_fields">
+			{{ form_row(form.titulo) }}
+			{{ form_row(form.esPrimeraVezDocente) }}
+			{{ form_row(form.esPrimeraVezEscuela) }}
+			{{ form_row(form.esPrimeraVezAlumnos) }}
+			{{ form_row(form.nroAlumnos) }}
+			{{ form_row(form.temaPrincipal) }}
+			{{ form_row(form.produccionFinal)}}
+			{{ form_row(form.deQueSeTrata) }} 
+			{{ form_row(form.motivoRealizacion)}}
+			{{ form_row(form.impactoBuscado) }}
+		</div>
+		<ul class="record_actions">
+			<li><a href="#" onclick="move_stage(2,1);"> Anterior </a></li>
+			<li><a href="#" onclick="move_stage(2,3);"> Siguiente </a></li>
+			<li><a
+				href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')">
+					Cancelar </a></li>
+		</ul>
+
+	</div>
+
+
+	<div class="wizzard_stage" id="stage_3">
+		<h4>Paso 3 de 3</h4>
+		<h3>Datos de los docentes</h3>
+		<div class="form_fields">
+			<div id="coordinador">
+				<strong> Coordinador: </strong> {{ coordinador.nombre }} {{
+				coordinador.apellido }} <br /> <strong> Dirección de
+					correo: </strong> {{ coordinador.email }}
+			</div>
+
+			<div id="colaboradores">
+				{{ form_row(form.colaboradores) }} <a href="#"
+					onclick="addDynamicForm('#cpm_jovenesbundle_proyectotype_colaboradores'); return false;">
+					Agregar colaborador </a> </br>
+			</div>
+
+			{{ form_rest(form) }}
+
+		</div>
+		<!-- form_fields -->
+
+		<ul class="record_actions">
+			<li><a href="#" onclick="move_stage(3,2);"> Anterior </a></li>
+			<li>
+				<button type="submit">Confirmar</button>
+			</li>
+			<li><a
+				href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')">
+					Cancelar </a></li>
+
+		</ul>
+
+
+	</div>
+</form>
+<div></div>
 {% endblock %}
