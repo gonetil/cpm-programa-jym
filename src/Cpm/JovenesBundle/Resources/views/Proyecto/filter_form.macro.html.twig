@@ -25,7 +25,7 @@
 						
 				select = "select.localidad-selector";
 				if (id == "") 
-					autofill_select(null, select , null, "Todas");
+					autofill_select( { distrito_id : -1} ,  select , "{{ path('localidad_find_by_distrito') }}" , "Todas");
 				else
 					autofill_select( { distrito_id : id} ,  select , "{{ path('localidad_find_by_distrito') }}" , "Todas");			
 			};
@@ -36,12 +36,12 @@
 					select = "select.distrito-selector";
 					if (id == "") 
 					{
-						autofill_select(null, select , null, "Todos");
-						buscar_localidades(); //para que tambien se vacíe el select de localidades
+						autofill_select({ region_id : -1}, select , "{{ path('distrito_find_by_region') }}", "Todos");
 					}
 					else
 						autofill_select( { region_id : id} , select  , "{{ path('distrito_find_by_region') }}" , "Todos");
 			};
+			
 			
 		</script>
 		

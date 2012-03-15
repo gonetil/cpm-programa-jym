@@ -65,17 +65,26 @@ class ProyectoSearchType extends AbstractType
 		    														},
 		    								'required'=>false
 		    							))
-		    ->add('distrito','choice',array(
+		    ->add('distrito','entity',array(
 		    							'label' => 'Distrito',
-		    							'choices' => array(),
+		    							'class' => 'CpmJovenesBundle:Distrito',
+		    							'query_builder' => function($er) {
+		    														return $er->createQueryBuilder('d')
+		    																  ->orderBy('d.nombre', 'ASC');
+		    														},
 		    							'attr' => array('class' => 'distrito-selector'),
 		    							'empty_value' => "Todos",
 		    							'preferred_choices' => array("Todos"),
 		    							'required'=>false
 		    							)) 
-			->add('localidad','choice',array(
+			->add('localidad','entity',array(
 		    								'label' => 'Localidad',
-		    								'choices' => array(),
+		    								'class' => 'CpmJovenesBundle:Localidad',
+			    							'query_builder' => function($er) {
+		    														return $er->createQueryBuilder('l')
+		    																  ->orderBy('l.nombre', 'ASC');
+		    														},
+		    														
 		    								'attr' => array('class' => 'localidad-selector'),
 		    								'empty_value' => "Todas",
 		    								'preferred_choices' => array("Todas"),
