@@ -86,7 +86,10 @@ class DefaultController extends BaseController
     	$distrito_id = $this->get('request')->query->get('distrito_id');
     	 
     	$em = $this->getDoctrine()->getEntityManager();
-    	$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findByDistrito($distrito_id);
+    	if ($distrito_id != -1)
+    		$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findByDistrito($distrito_id);
+    	else
+    		$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findAll();
     	
     	$json = array();
     	foreach ($localidades as $loc) {
@@ -108,8 +111,11 @@ class DefaultController extends BaseController
     	$region_id = $this->get('request')->query->get('region_id');
     
     	$em = $this->getDoctrine()->getEntityManager();
-    	$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findByRegion($region_id);
-    	 
+    	if ($region_id != -1)
+    		$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findByRegion($region_id);
+    	else
+    		$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findAll();
+    	
     	$json = array();
     	foreach ($distritos as $dist) {
     		$json[] = array("nombre"=>$dist->getNombre(), "id" => $dist->getId());
