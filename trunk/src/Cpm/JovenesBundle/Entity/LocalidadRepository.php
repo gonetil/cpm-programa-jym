@@ -20,4 +20,14 @@ class LocalidadRepository extends EntityRepository
 		return  $qb->getQuery();
 	}
 	
+	public function findAllOrdered() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','l')
+		->add('from','CpmJovenesBundle:Localidad l')
+		->orderBy('l.nombre','ASC')
+		->getQuery();
+		return  $qb->getResult();
+	}
+	
+	
 }
