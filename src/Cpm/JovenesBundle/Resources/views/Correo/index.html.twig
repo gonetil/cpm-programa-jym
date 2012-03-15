@@ -11,6 +11,8 @@
             <th>Id</th>
             <th>Fecha</th>
             <th>Asunto</th>
+            <th>Destinatario</th>
+            <th>Cuerpo</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -20,6 +22,8 @@
             <td><a href="{{ path('correo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif%}</td>
             <td>{{ entity.asunto }}</td>
+            <td>{{ entity.email }}</td>
+            <td>{{ entity.cuerpo }}</td>
             <td>
                 <ul>
                     <li>
@@ -33,11 +37,11 @@
     </tbody>
 </table>
 
-<ul>
-    <li>
-        <a href="{{ path('correo_new') }}">
-            Agregar
-        </a>
-    </li>
-</ul>
+<!-- <ul> -->
+<!--     <li> -->
+<!--         <a href="{{ path('correo_new') }}"> -->
+<!--             Agregar -->
+<!--         </a> -->
+<!--     </li> -->
+<!-- </ul> -->
 {% endblock %}

@@ -60,7 +60,9 @@ class Plantilla
      */
     private $puedeBorrarse;
 
-
+	public function __construct(){
+		$this->puedeBorrarse=true;
+	}
     /**
      * Get id
      *

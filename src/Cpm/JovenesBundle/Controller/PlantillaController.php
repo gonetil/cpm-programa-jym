@@ -64,7 +64,7 @@ class PlantillaController extends BaseController
     {
         $entity = new Plantilla();
         $form   = $this->createForm(new PlantillaType(), $entity);
-
+		$form->remove('codigo');
         return array(
             'entity' => $entity,
             'form'   => $form->createView()
@@ -86,7 +86,7 @@ class PlantillaController extends BaseController
         $form->bindRequest($request);
 
         $template_is_correct = $this->isValidTemplate($entity->getCuerpo());
-        
+        $entity->setCodigo($this->slug($entity->getAsunto()));
         if ($form->isValid() && ($template_is_correct == "success")) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
@@ -103,6 +103,14 @@ class PlantillaController extends BaseController
 			        );
 		if ($template_is_correct != "success") $retorno['template_error'] = "Error en la plantilla ($template_is_correct)";
         return $retorno; 
+    }
+    
+    protected function slug($str)
+    {
+    $str = strtolower(trim($str));
+    $str = preg_replace('/[^a-z0-9-]/', '-', $str);
+    $str = preg_replace('/-+/', "-", $str);
+    return $str;
     }
 
     /**
@@ -196,9 +204,13 @@ class PlantillaController extends BaseController
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Plantilla entity.');
             }
-
-            $em->remove($entity);
-            $em->flush();
+            if (!$entity->getPuedeBorrarse())
+				$this->setErrorMessage("No se pueden borrar las plantillas del sistema");
+			else{
+				$this->setSuccessMessage("La plantilla ha sido borrada");
+				$em->remove($entity);
+	            $em->flush();
+            }
         }
 
         return $this->redirect($this->generateUrl('plantilla'));

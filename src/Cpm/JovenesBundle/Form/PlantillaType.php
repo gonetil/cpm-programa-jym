@@ -10,12 +10,12 @@ class PlantillaType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('codigo')
+            ->add('codigo', null, array('read_only' => true))
             ->add('asunto')
             ->add('cuerpo')
-            ->add('puedeBorrarse',null,array('required'=>false, 
-            								 'label'=>'Puede borrarse?'))
-        ;
+       //     ->add('puedeBorrarse',null,array('required'=>false, 
+       //     								 'label'=>'Puede borrarse?'))
+       ;
     }
 
     public function getName()

@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Controller\BaseController;
 use Cpm\JovenesBundle\Entity\Proyecto;
-use Cpm\JovenesBundle\Form\ProyectoType;
+use Cpm\JovenesBundle\Form\ProyectoType;//
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Plantilla;
