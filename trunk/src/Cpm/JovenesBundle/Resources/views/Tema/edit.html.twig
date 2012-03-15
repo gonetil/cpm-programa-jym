@@ -18,7 +18,8 @@
         </a>
     </li>
     <li>
-        <form action="{{ path('tema_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('tema_delete', { 'id': entity.id }) }}" method="post"
+            onsubmit="return confirm('¿Está seguro que desea eliminar el tema?');">
             {{ form_widget(delete_form) }}
             <button type="submit">Eliminar</button>
         </form>

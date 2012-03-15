@@ -50,31 +50,29 @@ class Escuela
         *
         * @ORM\Column(name="nombre", type="string")
         */
-        
         private $nombre;
         
         /**
          * @var integer $numero
          * 
          * @ORM\Column (name="numero", type="integer", nullable="true")
+         * @Assert\Regex(pattern="/^[\s0-9]*$/", message="El número de escuela solo puede contener números y espacios")
          */
         private $numero;
         
 
     /**
      * @var string $email
-     * @Assert\Email(
-     *     message = "La dirección de correo '{{ value }}' no es válida.",
-     *     checkMX = true
-     * )
-     * @ORM\Column(name="email", type="string")
+     * @Assert\Email(message = "La dirección de correo de la escuela no es válida.", checkMX = false)
+     * @ORM\Column(name="email", type="string", nullable="true")
      */
     private $email;
 
     /**
      * @var string $telefono
      *
-     * @ORM\Column(name="telefono", type="string")
+     * @ORM\Column(name="telefono", type="string", nullable="true")
+     * @Assert\Regex(pattern="/^[\s0-9]*$/", message="El telefono solo puede contener números y espacios")
      */
     private $telefono;
 

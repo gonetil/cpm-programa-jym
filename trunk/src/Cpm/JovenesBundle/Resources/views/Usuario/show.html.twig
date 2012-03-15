@@ -72,13 +72,14 @@
             Editar
         </a>
     </li>
-    <!--
-    <li>
-        <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-    -->
+<!--    
+<!--     <li> -->
+<!--         <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" 
+            onsubmit="return confirm('¿Está seguro que desea eliminar el usuario?');"> -->
+<!--             {{ form_widget(delete_form) }} -->
+<!--             <button type="submit">Delete</button> -->
+<!--         </form> -->
+<!--     </li> -->
+
 </ul>
 {% endblock %}

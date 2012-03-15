@@ -11,14 +11,20 @@
 		<ul  class="current" >
 			<li>
 				<a href="{{path('home')}}"><b>Panel de Control</b></a>
+				<div class="select_sub show">
+				<ul class="sub">
 				{% if not is_granted("ROLE_ADMIN") %}
-					<div class="select_sub show">
-					<ul class="sub">
-						<li><a href="{{path('home')}}">Mis proyectos</a></li>
-						<li><a href="{{path('home')}}">Mis reuniones</a></li>
-					</ul>
-				</div>
+					<li><a href="{{path('home')}}">Mis proyectos</a></li>
+<!-- 				<li><a href="{{path('home')}}">Mis reuniones</a></li> -->
+				{% else %}
+				<li><a href="{{path('proyecto')}}">Ver todos los proyectos</a></li>
+				<li><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
+				<li><a href="{{path('usuario')}}">Ver todos los usuarios</a></li>
+				<li><a href="{{path('correo')}}">Correos Enviados</a></li>
+				
 				{% endif %}
+				</ul>
+				</div>
 			</li>
 		</ul>
 		

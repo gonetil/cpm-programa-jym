@@ -54,52 +54,6 @@ class EscuelaController extends BaseController
             'delete_form' => $deleteForm->createView(),        );
     }
 
-    /*
-     * Displays a form to create a new Escuela entity.
-     *
-     * @Route("/new", name="escuela_new")
-     * @Template()
-    
-    public function newAction()
-    {
-        $entity = new Escuela();
-        $form   = $this->createForm(new EscuelaType(), $entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView()
-        );
-    }
- 	*/
-    /*
-     * Creates a new Escuela entity.
-     *
-     * @Route("/create", name="escuela_create")
-     * @Method("post")
-     * @Template("CpmJovenesBundle:Escuela:new.html.twig")
-     
-    public function createAction()
-    {
-        $entity  = new Escuela();
-        $request = $this->getRequest();
-        $form    = $this->createForm(new EscuelaType(), $entity);
-        $form->bindRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('escuela_show', array('id' => $entity->getId())));
-            
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView()
-        );
-    }
-	*/
     /**
      * Displays a form to edit an existing Escuela entity.
      *

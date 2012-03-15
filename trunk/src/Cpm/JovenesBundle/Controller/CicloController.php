@@ -182,6 +182,7 @@ class CicloController extends BaseController
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Ciclo entity.');
             }
+            //FIXME que pasa si se esta eliminando un ciclo con proyectos?
             if ($entity->getActivo()){
             	$this->setErrorMessage("No se puede eliminar un ciclo activo");	
             }else{

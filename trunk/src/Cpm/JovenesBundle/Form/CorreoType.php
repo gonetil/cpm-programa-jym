@@ -11,6 +11,7 @@ class CorreoType extends AbstractType
     {
         $builder
             ->add('fecha')
+            ->add('email', 'email')
             ->add('asunto')
             ->add('cuerpo')
             ->add('destinatario')

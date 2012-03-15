@@ -29,7 +29,8 @@
         </a>
     </li>
     <li>
-        <form action="{{ path('produccion_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('produccion_delete', { 'id': entity.id }) }}" method="post"
+            onsubmit="return confirm('¿Está seguro que desea eliminar la produción?');">
             {{ form_widget(delete_form) }}
             <button type="submit">Eliminar</button>
         </form>
