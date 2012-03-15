@@ -20,4 +20,13 @@ class DistritoRepository extends EntityRepository
 		return  $qb->getQuery();
 	}
 	
+	public function findAllOrdered() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','d')
+		->add('from','CpmJovenesBundle:Distrito d')
+		->orderBy('d.nombre','ASC')
+		->getQuery();
+		return  $qb->getResult();
+	} 
+	
 }

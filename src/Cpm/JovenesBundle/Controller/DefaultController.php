@@ -89,7 +89,7 @@ class DefaultController extends BaseController
     	if ($distrito_id != -1)
     		$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findByDistrito($distrito_id);
     	else
-    		$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findAll();
+    		$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findAllOrdered();
     	
     	$json = array();
     	foreach ($localidades as $loc) {
@@ -114,7 +114,7 @@ class DefaultController extends BaseController
     	if ($region_id != -1)
     		$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findByRegion($region_id);
     	else
-    		$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findAll();
+    		$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findAllOrdered();
     	
     	$json = array();
     	foreach ($distritos as $dist) {
