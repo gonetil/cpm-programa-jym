@@ -1,0 +1,49 @@
+<h1>Evento list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Titulo</th>
+            <th>Descripcion</th>
+            <th>Pedirnumeroasistentes</th>
+            <th>Permitirsuplente</th>
+            <th>Ofrecerhospedaje</th>
+            <th>Ofrecerviaje</th>
+            <th>Permitirobservaciones</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('evento_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.titulo }}</td>
+            <td>{{ entity.descripcion }}</td>
+            <td>{{ entity.pedirNumeroAsistentes }}</td>
+            <td>{{ entity.permitirSuplente }}</td>
+            <td>{{ entity.ofrecerHospedaje }}</td>
+            <td>{{ entity.ofrecerViaje }}</td>
+            <td>{{ entity.permitirObservaciones }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('evento_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('evento_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('evento_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>

@@ -1,0 +1,53 @@
+<h1>InstanciaEvento</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Subtitulo</th>
+            <td>{{ entity.subtitulo }}</td>
+        </tr>
+        <tr>
+            <th>Descripcion</th>
+            <td>{{ entity.descripcion }}</td>
+        </tr>
+        <tr>
+            <th>Url</th>
+            <td>{{ entity.url }}</td>
+        </tr>
+        <tr>
+            <th>Lugar</th>
+            <td>{{ entity.lugar }}</td>
+        </tr>
+        <tr>
+            <th>Fechainicio</th>
+            <td>{{ entity.fechaInicio|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Fechafin</th>
+            <td>{{ entity.fechaFin|date('Y-m-d H:i:s') }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('instancia') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('instancia_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('instancia_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
