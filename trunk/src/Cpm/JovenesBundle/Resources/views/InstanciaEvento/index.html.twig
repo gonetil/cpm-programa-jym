@@ -1,0 +1,47 @@
+<h1>InstanciaEvento list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Subtitulo</th>
+            <th>Descripcion</th>
+            <th>Url</th>
+            <th>Lugar</th>
+            <th>Fechainicio</th>
+            <th>Fechafin</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('instancia_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.subtitulo }}</td>
+            <td>{{ entity.descripcion }}</td>
+            <td>{{ entity.url }}</td>
+            <td>{{ entity.lugar }}</td>
+            <td>{% if entity.fechaInicio %}{{ entity.fechaInicio|date('Y-m-d H:i:s') }}{% endif%}</td>
+            <td>{% if entity.fechaFin %}{{ entity.fechaFin|date('Y-m-d H:i:s') }}{% endif%}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('instancia_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('instancia_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('instancia_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>

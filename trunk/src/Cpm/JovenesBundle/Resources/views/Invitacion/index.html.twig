@@ -1,0 +1,51 @@
+<h1>Invitacion list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fechacreacion</th>
+            <th>Aceptoinvitacion</th>
+            <th>Numeroasistentes</th>
+            <th>Solicitaviaje</th>
+            <th>Solicitahospedaje</th>
+            <th>Observaciones</th>
+            <th>Suplente</th>
+            <th>Asistio</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('invitaciones_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{% if entity.fechaCreacion %}{{ entity.fechaCreacion|date('Y-m-d H:i:s') }}{% endif%}</td>
+            <td>{{ entity.aceptoInvitacion }}</td>
+            <td>{{ entity.numeroAsistentes }}</td>
+            <td>{{ entity.solicitaViaje }}</td>
+            <td>{{ entity.solicitaHospedaje }}</td>
+            <td>{{ entity.observaciones }}</td>
+            <td>{{ entity.suplente }}</td>
+            <td>{{ entity.asistio }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('invitaciones_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('invitaciones_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('invitaciones_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>

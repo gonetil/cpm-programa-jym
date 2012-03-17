@@ -17,11 +17,10 @@
 					<li><a href="{{path('home')}}">Mis proyectos</a></li>
 <!-- 				<li><a href="{{path('home')}}">Mis reuniones</a></li> -->
 				{% else %}
-				<li><a href="{{path('proyecto')}}">Ver todos los proyectos</a></li>
-				<li><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
-				<li><a href="{{path('usuario')}}">Ver todos los usuarios</a></li>
-				<li><a href="{{path('correo')}}">Correos Enviados</a></li>
-				
+					<li><a href="{{path('proyecto')}}">Ver todos los proyectos</a></li>
+					<li><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
+					<li><a href="{{path('usuario')}}">Ver todos los usuarios</a></li>
+					<li><a href="{{path('correo')}}">Correos Enviados</a></li>
 				{% endif %}
 				</ul>
 				</div>
@@ -89,6 +88,23 @@
 					<div class="select_sub show">
 						<ul class="sub">
 							<li><a href="{{path('ciclo')}}">Ciclo</a></li>
+							
+						</ul>
+					</div>
+				</li>
+				</ul>
+				
+				<div class="nav-divider">&nbsp;</div>
+				<ul class="select">
+					<li><a href="{{path('evento')}}"><b>Eventos</b></a>
+					<div class="select_sub show">
+						<ul class="sub">
+							<li><a href="{{path('evento_new')}}">Agregar Evento</a></li>
+							<li><a href="{{path('evento')}}">Listar Eventos</a></li>
+							<li><a href="{{path('instancia_new')}}">Agregar Instancia</a></li>
+							<li><a href="{{path('instancia')}}">Listar Instancias</a></li>
+							<li><a href="{{path('invitaciones_new')}}">Agregar Invitacion</a></li>
+							<li><a href="{{path('invitaciones')}}">Listar Invitaciones</a></li>
 							
 						</ul>
 					</div>
