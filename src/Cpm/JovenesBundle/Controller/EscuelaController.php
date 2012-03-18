@@ -44,7 +44,7 @@ class EscuelaController extends BaseController
         $entity = $em->getRepository('CpmJovenesBundle:Escuela')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Escuela entity.');
+            throw $this->createNotFoundException('Escuela no encontrada');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -67,7 +67,7 @@ class EscuelaController extends BaseController
         $entity = $em->getRepository('CpmJovenesBundle:Escuela')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Escuela entity.');
+            throw $this->createNotFoundException('Escuela no encontrada');
         }
 
         $editForm = $this->createForm(new EscuelaType(), $entity);
@@ -94,7 +94,7 @@ class EscuelaController extends BaseController
         $entity = $em->getRepository('CpmJovenesBundle:Escuela')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Escuela entity.');
+            throw $this->createNotFoundException('Escuela no encontrada');
         }
 
         $editForm   = $this->createForm(new EscuelaType(), $entity);
@@ -107,7 +107,7 @@ class EscuelaController extends BaseController
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-
+            $this->setSuccessMessage("Escuela modificada satisfactoriamente");
             return $this->redirect($this->generateUrl('escuela_edit', array('id' => $id)));
         }
 
@@ -136,7 +136,7 @@ class EscuelaController extends BaseController
             $entity = $em->getRepository('CpmJovenesBundle:Escuela')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Escuela entity.');
+                throw $this->createNotFoundException('Escuela no encontrada');
             }
 
             $em->remove($entity);

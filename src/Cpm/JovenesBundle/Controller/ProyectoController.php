@@ -148,7 +148,7 @@ class ProyectoController extends BaseController
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
-
+            $this->setSuccessMessage("Proyecto creado satisfactoriamente");
             return $this->redirect($this->generateUrl('proyecto_show', array('id' => $entity->getId())));
             
         }
@@ -198,7 +198,7 @@ class ProyectoController extends BaseController
         $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Proyecto entity.');
+            throw $this->createNotFoundException('No se encontro el Proyecto');
         }
 
         
@@ -214,7 +214,7 @@ class ProyectoController extends BaseController
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-
+            $this->setSuccessMessage("Proyecto fue modificado satisfactoriamente");
             return $this->redirect($this->generateUrl('proyecto_show', array('id' => $id)));
         }
 

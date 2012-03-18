@@ -128,7 +128,7 @@ class UsuarioController extends BaseController
         $entity = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
+            throw $this->createNotFoundException('Usuario no encontrado');
         }
 
         $editForm = $this->createForm(new UsuarioType(), $entity);
@@ -171,7 +171,7 @@ class UsuarioController extends BaseController
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-
+            $this->setSuccessMessage("Usuario modificado satisfactoriamente");
             return $this->redirect($this->generateUrl('usuario_edit', array('id' => $id)));
         }
 
