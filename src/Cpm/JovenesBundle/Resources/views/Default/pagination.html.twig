@@ -1,6 +1,6 @@
 {# agrega la paginacion a los listados . Debe usarse como una ultima fila de las tablas, antes del /table #}
 
-{% if paginator is defined %}  
+{% if paginator is defined and paginator.totalItems('entities') > paginator.itemsPerPage('entities') %}  
 
 <tr> <td colspan="100%">
 <div class="total_count">Total: {{ paginator.totalItems('entities') }} resultados</div> 
