@@ -28,10 +28,9 @@ class PerfilController extends BaseController
     	$mis_proyectos = $this->getRepository('CpmJovenesBundle:Proyecto')->findBy(
 						    	array('coordinador' => $usuario->getId())
 				    	);
-    	
         return array (
         			'proyectos' => $mis_proyectos ,
-        			'usuario' => $usuario
+        			'usuario' => $usuario,
         		);
     }
     
@@ -201,4 +200,33 @@ class PerfilController extends BaseController
     }
     
     
+    /**
+     * Lista todos los correos del usuarios
+     * @Route("/mis_correos", name="correos_usuario")
+     * @Template()
+     */
+    	
+    public function misCorreosAction() 
+    {
+    	$usuario = $this->getLoggedInUser();
+    	$query = $this->getRepository('CpmJovenesBundle:Correo')->findAllQuery($usuario->getId());
+    	return $this->paginate($query);
+
+    }
+
+    /**
+    * Lista todos los correos del usuarios
+    * @Route("/ver_correo", name="ver_correo_usuario")
+    * @Method("post")
+    * @Template()
+    */
+    public function verCorreoAction() {
+		$usuario = $usuario = $this->getLoggedInUser();
+		$id_correo = $this->getRequest()->get('correo');
+		$correo = $this->getRepository("CpmJovenesBundle:Correo")->findOneById($id_correo);
+		if ($correo->getDestinatario()->equals($usuario)) 
+			return array('correo' => $correo);
+		else return "";	 
+				
+    }
 }

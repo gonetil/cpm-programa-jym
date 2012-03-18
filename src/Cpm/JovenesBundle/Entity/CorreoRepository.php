@@ -12,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class CorreoRepository extends EntityRepository
 {
+	public function findAllQuery($user_id = null) {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','c')
+		->add('from','CpmJovenesBundle:Correo c')
+		->orderBy('c.fecha', 'DESC');
+	
+		if ($user_id != null)
+			$qb->andWhere('c.destinatario = :destinatario')
+				->setParameter('destinatario',$user_id);
+		
+		return  $qb->getQuery();
+	}
+	
 }

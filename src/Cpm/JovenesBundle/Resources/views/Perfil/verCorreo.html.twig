@@ -1,0 +1,24 @@
+{% if correo is defined %}
+	<table class="correoDetalle">
+		<tr>
+			<td class='labelColumn'> Fecha: </td>
+			<td class='infoColumn'> {{ correo.fecha|date('Y-m-d H:i:s') }}</td>
+	 	</tr>
+	 	<tr>
+			<td class='labelColumn'> De: </td>
+			<td class='infoColumn'> {{ correo.emisor.nombre }} {{ correo.emisor.apellido }} &lt;{{ correo.emisor.email }}&gt;</td>
+	 	</tr>
+		<tr>
+			<td class='labelColumn'> Para: </td>
+			<td class='infoColumn'> {{ correo.destinatario.nombre }} {{ correo.destinatario.apellido }} &lt;{{ correo.destinatario.email }}&gt;</td>
+	 	</tr>
+		<tr>
+			<td class='labelColumn'> Asunto: </td>
+			<td class='infoColumn'> {{ correo.asunto }}</td>
+	 	</tr>
+		<tr>
+			<td class='labelColumn'> Cuerpo: </td>
+			<td class='infoColumn'> {{ correo.cuerpo }}</td>
+	 	</tr>
+
+{% endif %}

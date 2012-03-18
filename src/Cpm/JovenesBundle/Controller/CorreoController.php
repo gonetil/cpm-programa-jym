@@ -26,9 +26,9 @@ class CorreoController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Correo')->findAll();
-
-        return array('entities' => $entities);
+        $entities = $em->getRepository('CpmJovenesBundle:Correo')->findAllQuery();
+        return $this->paginate($entities);
+        
     }
 
     /**
