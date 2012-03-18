@@ -2,13 +2,13 @@
 	{% if escuela.tipoInstitucion.id is defined %}
 		
 		{{ escuela.tipoEscuela }}
-	    Número {{ escuela.numero }}
-		<strong> {{ escuela.nombre }} </strong> 
+	    Número {{ escuela.numero }}:
+		"<strong>{{ escuela.nombre }}</strong>" 
 		- 
 		{{ escuela.tipoInstitucion }}
 	{% else %}
-		<strong> {{ escuela.nombre }} </strong> 
-		- {{ escuela.otroTipoInstitucion }}
+		{{ escuela.otroTipoInstitucion }}: "<strong>{{ escuela.nombre }}</strong>" 
+		
 		
 	{% endif %}		
 	
