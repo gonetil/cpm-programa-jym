@@ -50,15 +50,18 @@
 			<form method="post">
 				<div class='left'>
 					<h4> Filtros sobre el proyecto</h4>
+					{{ form_row(form.coordinador) }}
 					{{ form_row(form.esPrimeraVezDocente) }}
 					{{ form_row(form.esPrimeraVezEscuela) }}
 					{{ form_row(form.esPrimeraVezAlumnos) }}
 					{{ form_row(form.temaPrincipal) }}
 					{{ form_row(form.produccionFinal) }}
+
 					
 				</div>
 				<div class='right'>
 					<h4> Filtros sobre la escuela </h4>
+					{{ form_row(form.escuela) }}
 					{{ form_row(form.region) }}
 					{{ form_row(form.distrito) }}
 					{{ form_row(form.localidad) }}

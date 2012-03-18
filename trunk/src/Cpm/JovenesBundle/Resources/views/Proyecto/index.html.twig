@@ -51,11 +51,9 @@
         <tr>
             <th>Id</th>
             <th>Coordinador</th>
-            <th>Tel. del Coordinador</th>
-            <th>Email del Coordinador</th>
+            <th>Datos de contacto</th>
             <th>Escuela</th>
-            <th>Tel. de la Escuela</th>
-            <th>Email de la Escuela</th>
+            <th>Datos de la Escuela</th>
             <th>Localidad</th>
             <th>Distrito</th>  
             <th>Acciones</th>
@@ -69,13 +67,13 @@
             <td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">
             {{ entity.coordinador.nombre }} {{ entity.coordinador.apellido }} 
             </td>
-            <td> {% if entity.coordinador.telefonoCelular == '' %} {{entity.coordinador.telefono}} {% else %} {{ entity.coordinador.telefonoCelular }} {% endif %} </td>
-            <td> {{ entity.coordinador.email }} </td>
-            <td class="{% if entity.esPrimeraVezEscuela %}primera_vez{% endif %}"
+            <td> Tel:{% if entity.coordinador.telefonoCelular == '' %} {{entity.coordinador.telefono}} {% else %} {{ entity.coordinador.telefonoCelular }} {% endif %} 
+             <br/>Email: {{ entity.coordinador.email }} </td>
+            <td class="{% if entity.esPrimeraVezEscuela %}primera_vez{% endif %}">
             		{{ proyecto_box.nombreEscuela(entity.escuela)  }}
             </td>		
-            <td> {{ entity.escuela.telefono }} </td>
-            <td> {{ entity.escuela.email }} </td>           
+            <td> Tel. {{ entity.escuela.telefono }} 
+             <br/>    E-mail {{ entity.escuela.email }} </td>           
             <td>{{ entity.escuela.localidad }} </td>
             <td> {{ entity.escuela.localidad.distrito }}</td>
             <td>

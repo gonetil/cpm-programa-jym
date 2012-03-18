@@ -75,6 +75,10 @@ class ProyectoSearch
     public $tipoInstitucion;
     
     public $otroTipoInstitucion;
+    
+    
+    public $coordinador;
+    public $escuela;
     /**
      * Get id
      *
@@ -224,5 +228,25 @@ class ProyectoSearch
     
     public function setTipoInstitucion($tipoInstitucion) {
     	$this->tipoInstitucion = $tipoInstitucion;
+    }
+    
+    public function setCoordinador($coordinador)
+    { 
+    	$this->coordinador = $coordinador;
+    }
+    
+    public function getCoordinador()
+    {
+    	return $this->coordinador;
+    }
+    
+    public function setEscuela($escuela)
+    {
+    	$this->escuela = $escuela;
+    }
+    
+    public function getEscuela() 
+    {
+    	return $this->escuela;
     }
 }

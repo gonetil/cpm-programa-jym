@@ -90,6 +90,27 @@ class ProyectoRepository extends EntityRepository
 			}
 
 		
+			if (trim($data->getCoordinador()) != "") { 
+				$qb->innerJoin("p.coordinador","coordinador")
+					->andWhere("coordinador.apellido like :apellido")
+					->setParameter("apellido",(trim($data->getCoordinador())."%"));
+			}
+			
+			if (trim($data->getEscuela()) != "") {
+				$escuela = trim($data->getEscuela());
+				if (!$tiene_escuela ) $qb->innerJoin('p.escuela','e');
+				
+				if (is_numeric($escuela)) { 
+					$qb->andWhere("e.numero = :numero")
+						->setParameter("numero",$escuela);
+				} 
+				else 
+				{
+					$qb->andWhere("e.nombre like :nombreEscuela")
+					->setParameter("nombreEscuela",$escuela."%");
+				}
+				
+			}
 			$qb->add('orderBy','p.id AsC');
 
 		$proyectos = $qb->getQuery();

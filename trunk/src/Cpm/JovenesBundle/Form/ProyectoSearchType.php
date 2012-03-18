@@ -115,10 +115,11 @@ class ProyectoSearchType extends AbstractType
 		    											'attr' => array('class' => 'input-narrow left-float'),
         												'required'=>false
         								))
-	        								
-		        								
-		    							
-//        	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
+	        											        								
+		    ->add('coordinador',null,array( 'label' => 'Docente coordinador',
+		    										'required' => false ))
+        	->add('escuela', null, array('label' => 'Nombre o numero de escuela',
+        								'required' => false))
         ;
     }
     
