@@ -22,7 +22,7 @@
             <td><a href="{{ path('correo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif%}</td>
             <td>{{ entity.asunto }}</td>
-            <td>{{ entity.email }}</td>
+            <td>{{ entity.destinatario.email }}</td>
             <td>{{ entity.cuerpo }}</td>
             <td>
                 <ul>

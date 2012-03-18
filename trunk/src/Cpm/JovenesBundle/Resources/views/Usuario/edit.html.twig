@@ -23,7 +23,7 @@
     </li>
 
     <li>
-        <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el usuario?')">
+        <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el usuario? También se eliminarán todos los correos enviados al usuario')">
             {{ form_widget(delete_form) }}
             <button type="submit">Eliminar</button>
         </form>
