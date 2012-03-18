@@ -27,24 +27,23 @@
       autoOpen: false,
       modal: true,
       buttons : {
-		        "Confirm" : function() {
+		        "Confirmar" : function() {
 		        		$.post("{{ path('proyecto_quitar_colaborador') }}", 
 								{	
 									id_proyecto : {{ entity.id }} ,
 								 	email_colaborador : email 
 								 } ,
 							    function(result) {
+							    	$("#dialog").dialog("open");
 							    if (result = "success") { 
-							    		$(this).dialog("close");
 							    		form.empty().html("Colaborador eliminado satisfactoriamente");
-							    		$(this).dialog("close");
 							    	} else { 
-							    		$(this).dialog("close");
 							    		alert('Error al quitar el colaborador');
 									}
+							
 					   });
 		      },
-		        "Cancel" : function() {
+		        "Cancelar" : function() {
 		          $(this).dialog("close");
 		      }
       }
@@ -81,6 +80,9 @@
 		</div>
 	{% endfor %}
 	
+	{# incluyo el formulario de seleccion de distrito y localidad  #}  
+      {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
+	
 		
 	</div>		
 	
@@ -106,7 +108,7 @@
         </form>
         
         <div id="dialog" title="Se requiere confirmación">
-  			¿está seguro que desea quitar el colaborador del proyecto? 
+  			¿está seguro que desea quitar el colaborador del proyecto? Esta operación no puede deshacerse 
 		</div>
     </li>
 </ul>

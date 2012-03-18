@@ -17,7 +17,14 @@ class UsuarioType extends AbstractType
             ->add('telefono', null, array('required'=>false))
             ->add('telefonoCelular', null, array('required'=>false))
             ->add('codigoPostal')
-            ->add('localidad',null,array('attr' => array('class'=>'localidad-selector')))
+	        ->add('localidad','entity',array( 'class' => 'CpmJovenesBundle:Localidad',
+	                    									'label'=>'Localidad', 
+	                    									'attr' => array('class'=>'localidad-selector'),
+	             											'query_builder' => function($er) {
+																			        return $er->createQueryBuilder('loc')
+																			        ->orderBy('loc.nombre', 'ASC');
+																			        }
+				))
             ->add('distrito','entity',array( 'class' => 'CpmJovenesBundle:Distrito',
             									'label'=>'Distrito', 
             									'attr' => array('class'=>'distrito-selector'),
