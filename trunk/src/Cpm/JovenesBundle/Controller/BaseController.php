@@ -93,6 +93,33 @@ abstract class BaseController extends Controller
 		return array_merge( array('entities' => $entities ,  'paginator' => $paginator , 'pagination_route'=>$routeName) , $extra_params);
 	}
 	
+	/**
+	*
+	* Toma una lista de colaboradores, y se fija si ya existen en la BBDD.
+	* Si eso sucede, reemplaza el colaborador de la lista por el de la bbdd.
+	* Si esto NO sucede, normaliza los datos del colaborador
+	* Esta funcion es usada en PerfilController y en ProyectoController, al crear y editar proyectos
+	* @param array $colaboradores
+	*/
+	protected function procesar_colaboradores($colaboradores) {
+		foreach ($colaboradores as $colaborador) {
+			if ($c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($colaborador->getEmail())) //el colaborador ya existia en la bbdd
+			{ //si el email del colaborador estaba en la BBDD, no creo uno nuevo
+				$colaboradores->removeElement($colaborador);
+				$colaboradores->add($c);
+				$c->setApellido(ucwords(strtolower($c->getApellido())));
+				$c->setNombre(ucwords(strtolower($c->getNombre())));
+	
+			} else
+			{ //si el colaborador debe ser cargado en la BBDD, le pongo una password vacia
+				$colaborador->setApellido(ucwords(strtolower($colaborador->getApellido())));
+				$colaborador->setNombre(ucwords(strtolower($colaborador->getNombre())));
+				$colaborador->setPassword("");
+			}
+		}
+	}
+	
+	
 	
     protected function getJYM(){
     	//return JYM::instance();

@@ -201,21 +201,4 @@ class PerfilController extends BaseController
     }
     
     
-    private function procesar_colaboradores($colaboradores) {
-    	foreach ($colaboradores as $colaborador) {
-    		if ($c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($colaborador->getEmail())) //el colaborador ya existia en la bbdd
-    		{ //si el email del colaborador estaba en la BBDD, no creo uno nuevo
-    			$colaboradores->removeElement($colaborador);
-    			$colaboradores->add($c);
-    			$c->setApellido(ucwords(strtolower($c->getApellido())));
-    			$c->setNombre(ucwords(strtolower($c->getNombre())));
-    			 
-    		} else
-    		{ //si el colaborador debe ser cargado en la BBDD, le pongo una password vacia
-    			$colaborador->setApellido(ucwords(strtolower($colaborador->getApellido())));
-    			$colaborador->setNombre(ucwords(strtolower($colaborador->getNombre())));
-    			$colaborador->setPassword("");
-    		}
-    	}
-    }
 }
