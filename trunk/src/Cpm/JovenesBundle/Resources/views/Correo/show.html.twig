@@ -7,13 +7,19 @@
 <table class="record_properties">
     <tbody>
         <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
+            <th>Fecha</th>
+            <td>{{ entity.fecha|date('d-m-Y H:i:s') }}</td>
         </tr>
         <tr>
-            <th>Fecha</th>
-            <td>{{ entity.fecha|date('Y-m-d H:i:s') }}</td>
-        </tr>
+        	<th>De:</th>
+        	<td>{{ entity.emisor.nombre }} {{ entity.emisor.apellido }} &lt; {{ entity.emisor.email }} &gt;
+        </tr>	 
+ 
+        <tr>
+        	<th>Para:</th>
+        	<td>{{ entity.destinatario.nombre }} {{ entity.destinatario.apellido }} &lt; {{ entity.destinatario.email }} &gt;
+        </tr>	 
+ 
         <tr>
             <th>Asunto</th>
             <td>{{ entity.asunto }}</td>
@@ -25,12 +31,4 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('correo') }}">
-            Volver al listado
-        </a>
-    </li>
-
-</ul>
 {% endblock %}
