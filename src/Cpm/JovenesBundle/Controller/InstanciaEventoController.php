@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\InstanciaEventoType;
  *
  * @Route("/instancia")
  */
-class InstanciaEventoController extends Controller
+class InstanciaEventoController extends BaseController
 {
     /**
      * Lists all InstanciaEvento entities.
@@ -89,7 +89,7 @@ class InstanciaEventoController extends Controller
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
-
+			$this->setSuccessMessage("Instancia de evento creada satisfactoriamente");
             return $this->redirect($this->generateUrl('instancia_show', array('id' => $entity->getId())));
             
         }
@@ -153,7 +153,7 @@ class InstanciaEventoController extends Controller
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-
+            $this->setSuccessMessage("Instancia de evento modificada satisfactoriamente");
             return $this->redirect($this->generateUrl('instancia_edit', array('id' => $id)));
         }
 
