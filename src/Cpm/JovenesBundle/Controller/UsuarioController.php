@@ -207,17 +207,10 @@ class UsuarioController extends BaseController
 				$this->setErrorMessage("No se puede eliminar al usuario dado que tiene  rol ADMIN. ");
 				
 			}else{
-				$correos = $em->getRepository('CpmJovenesBundle:Correo')->findByDestinatario($id);
-				$cant_correos = count($correos);
-				foreach ($correos as $correo) {
-					$em->remove($correo);
-				}
-				if ($cant_correos > 1) $msg = "Se eliminaron también $cant_correos correos enviados al usuario";
-				elseif ($cant_correos == 1) $msg = "Se eliminó también 1 correo enviado al usuario";
-				else $msg = "No había ningún correo enviado al usuario para eliminar";
+
 				$em->remove($entity);
 				
-				$this->setSuccessMessage("Usuario eliminado. $msg");
+				$this->setSuccessMessage("Usuario eliminado satisfactoriamente");
 	            try{
 					$em->flush();
 	            }catch(\PDOException $e){

@@ -50,7 +50,8 @@ class Correo
     private $cuerpo;
 
     /**
-     *  @ORM\ManyToOne(targetEntity="Usuario")
+     *  @ORM\ManyToOne(targetEntity="Usuario" )
+     *  @ORM\JoinColumn(name="destinatario_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $destinatario;
     
