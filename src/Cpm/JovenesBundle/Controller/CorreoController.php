@@ -34,15 +34,14 @@ class CorreoController extends BaseController
     /**
      * Finds and displays a Correo entity.
      *
-     * @Route("/{id}/show", name="correo_show")
+     * @Route("/show", name="correo_show")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Correo')->find($id);
-
+		$id_correo = $this->getRequest()->get('correo');
+		$entity= $this->getRepository("CpmJovenesBundle:Correo")->findOneById($id_correo);
+    	
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Correo entity.');
         }
