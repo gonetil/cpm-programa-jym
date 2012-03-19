@@ -22,7 +22,7 @@ class EscuelaType extends AbstractType
             ->add('email',null,array('attr'=>array('class'=>'email')))
             ->add('telefono')
             ->add('domicilio')
-            ->add('codigoPostal',null,array('label'=>'Código postal'))
+            ->add('codigoPostal',null,array('label'=>'Código postal' , 'attr'=>array( "minlength"=>"4")))
             ->add('director')
             ->add('localidad', 'entity', array( 'class' => 'CpmJovenesBundle:Localidad',
             									'label'=>'Localidad', 

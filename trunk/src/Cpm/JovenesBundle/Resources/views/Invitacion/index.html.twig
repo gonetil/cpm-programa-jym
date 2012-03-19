@@ -1,18 +1,22 @@
-<h1>Invitacion list</h1>
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Invitaciones{% endblock %}
+
+{% block content %}
 
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Fechacreacion</th>
-            <th>Aceptoinvitacion</th>
-            <th>Numeroasistentes</th>
-            <th>Solicitaviaje</th>
-            <th>Solicitahospedaje</th>
+            <th>Fecha de Creación</th>
+            <th>Invitación aceptada</th>
+            <th>Número de asistentes</th>
+            <th>Solicita viaje?</th>
+            <th>Solicita hospedaje?</th>
             <th>Observaciones</th>
             <th>Suplente</th>
-            <th>Asistio</th>
-            <th>Actions</th>
+            <th>Asistió</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -30,22 +34,24 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('invitaciones_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('invitaciones_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('invitaciones_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('invitaciones_edit', { 'id': entity.id }) }}">Editar</a>
                     </li>
                 </ul>
             </td>
         </tr>
     {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
     </tbody>
 </table>
 
 <ul>
     <li>
         <a href="{{ path('invitaciones_new') }}">
-            Create a new entry
+            Agregar invitación
         </a>
     </li>
 </ul>
+{% endblock %}

@@ -13,21 +13,29 @@ use Doctrine\ORM\EntityRepository;
 class ProyectoRepository extends EntityRepository
 {
 	
-	function findAllQuery() { 
+	function findAllQuery($ciclo = null) { 
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		
-		return $qb->add('select','p')
-				->add('from','CpmJovenesBundle:Proyecto p')
-				->getQuery();
+		$qb->add('select','p')
+				->add('from','CpmJovenesBundle:Proyecto p');
+		if ($ciclo)
+		{
+			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		}
+			return $qb->getQuery();
 		
 	}
-	function findBySearchCriteriaQuery($data) {
+	function findBySearchCriteriaQuery($data,$ciclo = null) {
 		
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		
 		$qb->add('select','p')
 			->add('from','CpmJovenesBundle:Proyecto p');
 		
+		if ($ciclo) 
+		{
+			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		}
 		
 		if ($data->getEsPrimeraVezDocente()) $qb->andWhere('p.esPrimeraVezDocente = :pvd')->setParameter('pvd',$data->getEsPrimeraVezDocente());
 		
@@ -111,6 +119,7 @@ class ProyectoRepository extends EntityRepository
 				}
 				
 			}
+			
 			$qb->add('orderBy','p.id AsC');
 
 		$proyectos = $qb->getQuery();
