@@ -1,4 +1,8 @@
-<h1>Evento</h1>
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Evento{% endblock %}
+
+{% block content %}
 
 <table class="record_properties">
     <tbody>
@@ -7,31 +11,31 @@
             <td>{{ entity.id }}</td>
         </tr>
         <tr>
-            <th>Titulo</th>
+            <th>Título</th>
             <td>{{ entity.titulo }}</td>
         </tr>
         <tr>
-            <th>Descripcion</th>
+            <th>Descripción</th>
             <td>{{ entity.descripcion }}</td>
         </tr>
         <tr>
-            <th>Pedirnumeroasistentes</th>
+            <th>Solicitar número de asistentes</th>
             <td>{{ entity.pedirNumeroAsistentes }}</td>
         </tr>
         <tr>
-            <th>Permitirsuplente</th>
+            <th>Permitir suplentes</th>
             <td>{{ entity.permitirSuplente }}</td>
         </tr>
         <tr>
-            <th>Ofrecerhospedaje</th>
+            <th>Ofrecer hospedaje</th>
             <td>{{ entity.ofrecerHospedaje }}</td>
         </tr>
         <tr>
-            <th>Ofrecerviaje</th>
+            <th>Ofrecer viaje</th>
             <td>{{ entity.ofrecerViaje }}</td>
         </tr>
         <tr>
-            <th>Permitirobservaciones</th>
+            <th>Permitir observaciones</th>
             <td>{{ entity.permitirObservaciones }}</td>
         </tr>
     </tbody>
@@ -40,18 +44,19 @@
 <ul class="record_actions">
     <li>
         <a href="{{ path('evento') }}">
-            Back to the list
+            Volver al listado
         </a>
     </li>
     <li>
         <a href="{{ path('evento_edit', { 'id': entity.id }) }}">
-            Edit
+            Editar
         </a>
     </li>
     <li>
         <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+            <button type="submit">Borrar</button>
         </form>
     </li>
 </ul>
+{% endblock %}

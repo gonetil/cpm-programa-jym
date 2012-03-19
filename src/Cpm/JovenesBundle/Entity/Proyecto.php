@@ -463,4 +463,9 @@ class Proyecto
     {
         $this->ciclo = $ciclo;
     }
+    
+    public function __toString() 
+    { 
+    	return "Escuela {$this->escuela} / Coordinador {$this->coordinador}";
+    }
 }

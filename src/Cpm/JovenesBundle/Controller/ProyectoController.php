@@ -40,14 +40,14 @@ class ProyectoController extends BaseController
         $searchValues = new ProyectoSearch();
         $searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
         $proyectos = null;
-        
+        $ciclo = $this->getJYM()->getCicloActivo();
         $response = array();
         if ($request->getMethod() == 'POST') {
         	$searchForm->bindRequest($request);
         
         	if ($searchForm->isValid()) {
         		// 
-        		$proyectos =$repository ->findBySearchCriteriaQuery($searchForm->getData());
+        		$proyectos =$repository ->findBySearchCriteriaQuery($searchForm->getData(),$ciclo);
         		
         		if ($searchForm->getData()->getRegion()) {
         			
@@ -59,7 +59,7 @@ class ProyectoController extends BaseController
         		}
         	}
         } else { 
-        	$proyectos = $repository->findAllQuery();
+        	$proyectos = $repository->findAllQuery($ciclo);
         }
          
 

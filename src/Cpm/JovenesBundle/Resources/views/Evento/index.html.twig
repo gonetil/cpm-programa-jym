@@ -1,17 +1,21 @@
-<h1>Evento list</h1>
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Eventos{% endblock %}
+
+{% block content %}
 
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Titulo</th>
-            <th>Descripcion</th>
-            <th>Pedirnumeroasistentes</th>
-            <th>Permitirsuplente</th>
-            <th>Ofrecerhospedaje</th>
-            <th>Ofrecerviaje</th>
-            <th>Permitirobservaciones</th>
-            <th>Actions</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>¿se debe solicitar número de asistentes?</th>
+            <th>¿se permite ingresar un suplente?</th>
+            <th>¿se ofrece hospedaje? </th>
+            <th>¿se ofrece viaje?</th>
+            <th>¿se permite ingresar observaciones?</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -28,22 +32,24 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('evento_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('evento_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('evento_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('evento_edit', { 'id': entity.id }) }}">Editar</a>
                     </li>
                 </ul>
             </td>
         </tr>
     {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
     </tbody>
 </table>
 
 <ul>
     <li>
         <a href="{{ path('evento_new') }}">
-            Create a new entry
+            Crear nuevo evento
         </a>
     </li>
 </ul>
+{% endblock %}
