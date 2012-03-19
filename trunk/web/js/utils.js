@@ -13,3 +13,22 @@ confirmAndRelocate = function(confirmationMessage, gotoUrl) {
 	if (!confirmationMessage || confirm(confirmationMessage))
 		location.href = gotoUrl;
 }
+
+
+
+/**
+ *  inicializaciones comunes a toda la aplicacion
+ */
+$(document).ready(function() {
+	
+	/**
+	 * Elimina la clase "current" de los items del menu que no tienen hover
+	 */
+	$("ul.select").mousemove(function(event) { 
+		$("ul.select").each(function(index,elem) { $(elem).removeClass('current'); });
+		$(event.target).addClass('current');	
+	});
+	
+	
+}); //document.ready
+
