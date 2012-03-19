@@ -99,6 +99,7 @@ class Invitacion
 		$this->numeroAsistentes=1;
 		$this->solicitaViaje = false;
 		$this->solicitaHospedaje = false;
+		
 	}
 	
     /**
@@ -276,7 +277,7 @@ class Invitacion
      *
      * @param Cpm\JovenesBundle\Entity\Proyecto $proyecto
      */
-    public function setProyecto(Cpm\JovenesBundle\Entity\Proyecto $proyecto)
+    public function setProyecto($proyecto)
     {
         $this->proyecto = $proyecto;
     }
@@ -296,7 +297,7 @@ class Invitacion
      *
      * @param Cpm\JovenesBundle\Entity\InstanciaEvento $instanciaEvento
      */
-    public function setInstanciaEvento(Cpm\JovenesBundle\Entity\InstanciaEvento $instanciaEvento)
+    public function setInstanciaEvento($instanciaEvento)
     {
         $this->instanciaEvento = $instanciaEvento;
     }

@@ -28,7 +28,7 @@ class InstanciaEvento
     /**
      * @var string $subtitulo
      *
-     * @ORM\Column(name="subtitulo", type="string", length=255)
+     * @ORM\Column(name="subtitulo", type="string", length=255, nullable="true")
      */
     private $subtitulo;
 
@@ -264,5 +264,10 @@ class InstanciaEvento
     public function getInvitaciones()
     {
         return $this->invitaciones;
+    }
+    
+    public function __toString()
+    {
+    	return $this->evento->getTitulo() . " - (Inst. {$this->id}" .( ($this->subtitulo != "")? ": ".$this->subtitulo : "").")";
     }
 }

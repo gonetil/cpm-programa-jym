@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\EventoType;
  *
  * @Route("/evento")
  */
-class EventoController extends Controller
+class EventoController extends BaseController
 {
     /**
      * Lists all Evento entities.
@@ -89,7 +89,7 @@ class EventoController extends Controller
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
-
+			$this->setSuccessMessage("Evento creado satisfactoriamente");
             return $this->redirect($this->generateUrl('evento_show', array('id' => $entity->getId())));
             
         }
@@ -153,7 +153,7 @@ class EventoController extends Controller
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-
+            $this->setSuccessMessage("Evento modificado satisfactoriamente");
             return $this->redirect($this->generateUrl('evento_edit', array('id' => $id)));
         }
 
@@ -182,9 +182,9 @@ class EventoController extends Controller
             $entity = $em->getRepository('CpmJovenesBundle:Evento')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Evento entity.');
+                throw $this->createNotFoundException('Evento no encontrado.');
             }
-
+            $this->setSuccessMessage("Evento eliminado satisfactoriamente");
             $em->remove($entity);
             $em->flush();
         }
