@@ -258,4 +258,9 @@ class Evento
     {
         return $this->instancias;
     }
+    
+    public function __toString()
+    {
+    	return $this->titulo;
+    }
 }

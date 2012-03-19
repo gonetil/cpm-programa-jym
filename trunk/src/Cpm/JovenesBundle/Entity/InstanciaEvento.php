@@ -4,12 +4,15 @@ namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Cpm\JovenesBundle\Entity\Evento;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ExecutionContext;
 
 /**
  * Cpm\JovenesBundle\Entity\InstanciaEvento
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\InstanciaEventoRepository")
+ * @Assert\Callback(methods={"inicioAntesQueFin"})
  */
 class InstanciaEvento
 {
@@ -59,7 +62,6 @@ class InstanciaEvento
 
     /**
      * @var datetime $fechaFin
-     *
      * @ORM\Column(name="fecha_fin", type="datetime")
      */
     private $fechaFin;
@@ -215,13 +217,21 @@ class InstanciaEvento
         return $this->fechaFin;
     }
     
+    public function inicioAntesQueFin(ExecutionContext $context) 
+    {
+    	if ($this->fechaInicio > $this->fechaFin) {
+    		$propertyPath = $context->getPropertyPath() . '.fechaInicio';
+    		$context->setPropertyPath($propertyPath);
+    		$context->addViolation('La fecha de inicio tiene que ser anterior a la fecha de fin', array(), null);
+    	}
+    }
     /**
      * Set evento
      *
      *
      * @param Cpm\JovenesBundle\Entity\Evento $evento
      */
-    public function setEvento(Cpm\JovenesBundle\Entity\Evento $evento)
+    public function setEvento($evento)
     {
         $this->evento = $evento;
     }
@@ -241,7 +251,7 @@ class InstanciaEvento
      *
      * @param Cpm\JovenesBundle\Entity\Invitacion $invitaciones
      */
-    public function addInvitacion(\Cpm\JovenesBundle\Entity\Invitacion $invitaciones)
+    public function addInvitacion($invitaciones)
     {
         $this->invitaciones[] = $invitaciones;
     }
