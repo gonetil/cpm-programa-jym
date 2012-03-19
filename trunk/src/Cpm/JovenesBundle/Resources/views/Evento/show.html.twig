@@ -20,23 +20,23 @@
         </tr>
         <tr>
             <th>Solicitar número de asistentes</th>
-            <td>{{ entity.pedirNumeroAsistentes }}</td>
+            <td>{% if entity.pedirNumeroAsistentes %} Sí {% else %} No {% endif %}</td>
         </tr>
         <tr>
             <th>Permitir suplentes</th>
-            <td>{{ entity.permitirSuplente }}</td>
+            <td>{% if entity.permitirSuplente %} Sí {% else %} No {% endif %}</td>
         </tr>
         <tr>
             <th>Ofrecer hospedaje</th>
-            <td>{{ entity.ofrecerHospedaje }}</td>
+            <td>{% if entity.ofrecerHospedaje %} Sí {% else %} No {% endif %}</td>
         </tr>
         <tr>
             <th>Ofrecer viaje</th>
-            <td>{{ entity.ofrecerViaje }}</td>
+            <td>{% if entity.ofrecerViaje %} Sí {% else %} No {% endif %}</td>
         </tr>
         <tr>
             <th>Permitir observaciones</th>
-            <td>{{ entity.permitirObservaciones }}</td>
+            <td>{% if entity.permitirObservaciones %} Sí {% else %} No {% endif %}</td>
         </tr>
     </tbody>
 </table>
