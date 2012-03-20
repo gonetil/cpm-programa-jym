@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\InvitacionType;
  *
  * @Route("/invitaciones")
  */
-class InvitacionController extends Controller
+class InvitacionController extends BaseController
 {
     /**
      * Lists all Invitacion entities.
@@ -26,9 +26,9 @@ class InvitacionController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Invitacion')->findAll();
+        $entities = $em->getRepository('CpmJovenesBundle:Invitacion')->findAllQuery();
 
-        return array('entities' => $entities);
+        return $this->paginate($entities);
     }
 
     /**
@@ -84,7 +84,7 @@ class InvitacionController extends Controller
         $request = $this->getRequest();
         $form    = $this->createForm(new InvitacionType(), $entity);
         $form->bindRequest($request);
-
+		
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
