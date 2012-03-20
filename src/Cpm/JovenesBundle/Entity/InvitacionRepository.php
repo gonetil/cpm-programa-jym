@@ -12,4 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvitacionRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','i')
+		->add('from','CpmJovenesBundle:Invitacion i')
+		->add('orderBy','i.fechaCreacion ASC')
+		;
+	
+		return  $qb->getQuery();
+	}
+	
 }

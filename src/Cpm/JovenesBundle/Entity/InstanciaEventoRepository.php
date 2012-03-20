@@ -15,7 +15,9 @@ class InstanciaEventoRepository extends EntityRepository
 	public function findAllQuery() {
 		$qb = $this->getEntityManager()->createQueryBuilder()
 		->add('select','ie')
-		->add('from','CpmJovenesBundle:InstanciaEvento ie');
+		->add('from','CpmJovenesBundle:InstanciaEvento ie')
+		->add('orderBy','ie.fechaInicio ASC, ie.fechaFin ASC')
+		;
 	
 		return  $qb->getQuery();
 	}
