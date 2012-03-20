@@ -82,10 +82,10 @@
 		            	<td>{{ inv.suplente }}</th>
 		            {% endif %}
 		            {% if entity.evento.ofrecerHospedaje %}
-		            	<td>{{ inv.solicitaHospedaje }}</td>
+		            	<td>{% if inv.solicitaHospedaje %} Sí {% else %} No {% endif %}</td>
 		            {% endif %}
 		            {% if entity.evento.ofrecerViaje %}
-			            <td>{{ inv.solicitaViaje }}</td>
+			            <td>{% if inv.solicitaViaje %} Sí {% else %} No {% endif %}</td>
 		            {% endif %}
 		            {% if entity.evento.permitirObservaciones %}
 		            	<td>{{ inv.observaciones }}</td>
