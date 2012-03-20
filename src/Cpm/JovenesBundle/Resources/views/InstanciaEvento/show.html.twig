@@ -4,39 +4,105 @@
 
 {% block content %}
 
-<table class="record_properties">
-    <tbody>
-        <tr>
-            <th>Evento</th>
-            <td>{{ entity.evento.titulo }}</td>
-        </tr>
-        <tr>
-            <th>Subtítulo</th>
-            <td>{{ entity.subtitulo }}</td>
-        </tr>
-        <tr>
-            <th>Descripción</th>
-            <td>{{ entity.descripcion }}</td>
-        </tr>
-        <tr>
-            <th>Url</th>
-            <td>{{ entity.url }}</td>
-        </tr>
-        <tr>
-            <th>Lugar</th>
-            <td>{{ entity.lugar }}</td>
-        </tr>
-        <tr>
-            <th>Inicio</th>
-            <td>{{ entity.fechaInicio|date('d-m-Y H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Fin</th>
-            <td>{{ entity.fechaFin|date('d-m-Y H:i:s') }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="left-panel">
+	<table class="record_properties">
+	    <tbody>
+	        <tr>
+	            <th>Evento</th>
+	            <td>{{ entity.evento.titulo }}</td>
+	        </tr>
+	        <tr>
+	            <th>Subtítulo</th>
+	            <td>{{ entity.subtitulo }}</td>
+	        </tr>
+	        <tr>
+	            <th>Descripción</th>
+	            <td>{{ entity.descripcion }}</td>
+	        </tr>
+	        <tr>
+	            <th>Url</th>
+	            <td>{{ entity.url }}</td>
+	        </tr>
+	        <tr>
+	            <th>Lugar</th>
+	            <td>{{ entity.lugar }}</td>
+	        </tr>
+	        <tr>
+	            <th>Inicio</th>
+	            <td>{{ entity.fechaInicio|date('d-m-Y H:i:s') }}</td>
+	        </tr>
+	        <tr>
+	            <th>Fin</th>
+	            <td>{{ entity.fechaFin|date('d-m-Y H:i:s') }}</td>
+	        </tr>
+	    </tbody>
+	</table>
+</div>
 
+{# invitaciones enviadas para esta instancia del evento #}
+
+<div class="right-panel" style="display:block; border:none;">
+	<h2>Invitaciones enviadas a esta instancia</h2>
+	<table class="records_properties" id="invitaciones">
+	    <thead>
+	        <tr>
+	            <th>Id</th>
+	            <th>Fecha</th>
+	            <th>Aceptada</th>
+	            {% if entity.evento.pedirNumeroAsistentes %}
+	            <th>Asistentes</th>
+	            {% endif %}
+	            {% if entity.evento.permitirSuplente %}
+	            <th>Suplente</th>
+	            {% endif %}
+	            {% if entity.evento.ofrecerHospedaje %}
+	            <th>Requiere hospedaje</th>
+	            {% endif %}
+	            {% if entity.evento.ofrecerViaje %}
+	            <th>Requiere pasaje</th>
+	            {% endif %}
+	            {% if entity.evento.permitirObservaciones %}
+	            <th>Observaciones</th>
+	            {% endif %}	          
+	            <th> Asistió </th>  	            	            	            
+	        </tr>
+	    </thead>
+	    <tbody>
+    	{% for inv in entity.invitaciones %}
+	        <tr>
+	            <td>{{ inv.id }}</th>
+	            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
+	            <td>{% if inv.aceptoInvitacion %}Sí{% else %}No{% endif %}</td>
+	            
+	            {% if inv.aceptoInvitacion %}
+	            	{% if entity.evento.pedirNumeroAsistentes %}
+		            	<td>{{ inv.numeroAsistentes }}</td>
+		        	{% endif %}
+		            {% if entity.evento.permitirSuplente %}
+		            	<td>{{ inv.suplente }}</th>
+		            {% endif %}
+		            {% if entity.evento.ofrecerHospedaje %}
+		            	<td>{{ inv.solicitaHospedaje }}</td>
+		            {% endif %}
+		            {% if entity.evento.ofrecerViaje %}
+			            <td>{{ inv.solicitaViaje }}</td>
+		            {% endif %}
+		            {% if entity.evento.permitirObservaciones %}
+		            	<td>{{ inv.observaciones }}</td>
+		            {% endif %}	  
+		            <td>          	            	            	            
+		            {% if inv.asistio %} Sí {% else %} No {% endif %}
+		            </td>
+		            
+	            {% else %}
+	            <td colspan="100%"> </td>
+	            {% endif %}
+	        </tr>
+	        {% endfor %}
+	</table>
+</div>	
+
+<div style="width:100%; clear:both">
 <ul class="record_actions">
     <li>
         <a href="{{ path('instancia') }}">
@@ -55,4 +121,6 @@
         </form>
     </li>
 </ul>
+</div>
+
 {% endblock %}
