@@ -5,7 +5,7 @@ namespace Cpm\JovenesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Cpm\JovenesBundle\Entity\InstanciaEvento;
 use Cpm\JovenesBundle\Entity\Proyecto;
-
+use Gedmo\Mapping\Annotation as GEDMO;
 /**
  * Cpm\JovenesBundle\Entity\Invitacion
  *
@@ -24,10 +24,12 @@ class Invitacion
     private $id;
 
     /**
-     * @var datetime $fechaCreacion
+     * @var DateTime $fechaCreacion
      *
-     * @ORM\Column(name="fecha_creacion", type="datetime")
+     * @ORM\Column(type="datetime", name="fecha_creacion")
+     * @GEDMO\Timestampable(on="create")
      */
+    
     private $fechaCreacion;
 
     /**
