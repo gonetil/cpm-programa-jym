@@ -26,9 +26,9 @@ class InstanciaEventoController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findAll();
+        $entities = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findAllQuery();
 
-        return array('entities' => $entities);
+        return $this->paginate($entities);
     }
 
     /**
