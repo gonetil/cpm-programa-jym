@@ -9,9 +9,8 @@
     <thead>
         <tr>
             <th>Id</th>
+            <th>Evento</th>
             <th>Subtítulo</th>
-            <th>Descripción</th>
-            <th>Url</th>
             <th>Lugar</th>
             <th>Inicio</th>
             <th>Fin</th>
@@ -22,9 +21,8 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('instancia_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.evento.titulo }}</td>
             <td>{{ entity.subtitulo }}</td>
-            <td>{{ entity.descripcion }}</td>
-            <td>{{ entity.url }}</td>
             <td>{{ entity.lugar }}</td>
             <td>{% if entity.fechaInicio %}{{ entity.fechaInicio|date('d-m-Y H:i:s') }}{% endif%}</td>
             <td>{% if entity.fechaFin %}{{ entity.fechaFin|date('d-m-Y H:i:s') }}{% endif%}</td>
@@ -39,8 +37,9 @@
                 </ul>
             </td>
         </tr>
-        {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+        
     {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
     </tbody>
 </table>
 

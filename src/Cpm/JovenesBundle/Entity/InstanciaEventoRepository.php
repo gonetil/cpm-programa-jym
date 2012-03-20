@@ -12,4 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class InstanciaEventoRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','ie')
+		->add('from','CpmJovenesBundle:InstanciaEvento ie');
+	
+		return  $qb->getQuery();
+	}
 }
