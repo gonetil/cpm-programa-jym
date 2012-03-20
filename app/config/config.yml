@@ -15,6 +15,7 @@ framework:
     session:
         default_locale: %locale%
         auto_start:     true
+        storage_id: session.storage.filesystem
 
 # Twig Configuration
 twig:
