@@ -84,13 +84,21 @@ abstract class BaseController extends Controller
 		
 		
 		$paginator = $this->get('ideup.simple_paginator');
-		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
+		$entities = $paginator->setItemsPerPage(1, 'entities')->paginate($query,'entities')->getResult();
 		
-		$routeName = $this->container->get('request')->get('_route');
+		$request = ($this->container->get('request'));
+		
+		$routeName = $request->get('_route');
+
+		$vars = $request->getQueryString();
+		$vars = preg_replace("/page=(\d+)/","",$vars);
+		$vars = preg_replace("/paginatorId=entities/","",$vars);
+
+
 		if (empty($routeName))
 			$routeName = "home";
 
-		return array_merge( array('entities' => $entities ,  'paginator' => $paginator , 'pagination_route'=>$routeName) , $extra_params);
+		return array_merge( array('entities' => $entities ,  'paginator' => $paginator , 'pagination_route'=>$routeName, 'extraVars'=>"&$vars") , $extra_params);
 	}
 	
 	/**

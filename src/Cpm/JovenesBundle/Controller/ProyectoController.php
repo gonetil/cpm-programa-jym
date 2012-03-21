@@ -40,9 +40,12 @@ class ProyectoController extends BaseController
         $searchValues = new ProyectoSearch();
         $searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
         $proyectos = null;
+        
+        
         $ciclo = $this->getJYM()->getCicloActivo();
         $response = array();
-        if ($request->getMethod() == 'POST') {
+        if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype"))) 
+         {	
         	$searchForm->bindRequest($request);
         
         	if ($searchForm->isValid()) {

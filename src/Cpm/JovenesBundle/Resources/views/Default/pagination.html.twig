@@ -1,12 +1,12 @@
 {# agrega la paginacion a los listados . Debe usarse como una ultima fila de las tablas, antes del /table #}
 
 {% if paginator is defined and paginator.totalItems('entities') > paginator.itemsPerPage('entities') %}  
-
+ 
 <tr> <td colspan="100%">
 <div class="total_count">Total: {{ paginator.totalItems('entities') }} resultados</div> 
 <ul id="paginate_elements">
   {% if paginator.currentPage('entities') > 1 %}
-    <li><a href="{{ path(pagination_route, {'page': paginator.previousPage('entities'), 'paginatorId': 'entities'}) }}">anterior</a></li>
+    <li><a href="{{ path(pagination_route, {'page': paginator.previousPage('entities'), 'paginatorId': 'entities'}) }}{{extraVars}}">anterior</a></li>
   {% else %}
     <li class="left_disabled"><a href="#">anterior</a></li>
   {% endif %}
@@ -15,12 +15,12 @@
     {% if page == paginator.currentPage('entities') %}
       <li><a class="current" href="#">{{ page }}</a></li>
     {% else %}
-      <li><a href="{{ path(pagination_route, {'page': page , 'paginatorId': 'entities'} ) }}">{{ page }}</a></li>
+      <li><a href="{{ path(pagination_route, {'page': page , 'paginatorId': 'entities'} ) }}{{extraVars}}">{{ page }}</a></li>
     {% endif %}
   {% endfor %}
 
   {% if paginator.currentPage('entities') < paginator.lastPage('entities') %}
-    <li class="right"><a href="{{ path(pagination_route, {'page': paginator.nextPage('entities'), 'paginatorId': 'entities'}) }}">siguiente</a></li>
+    <li class="right"><a href="{{ path(pagination_route, {'page': paginator.nextPage('entities'), 'paginatorId': 'entities'}) }}{{extraVars}}">siguiente</a></li>
   {% else %}
     <li class="right_disabled">siguiente</li>
   {% endif %}
