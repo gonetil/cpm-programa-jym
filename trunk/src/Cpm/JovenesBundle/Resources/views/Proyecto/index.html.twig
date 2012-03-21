@@ -7,6 +7,8 @@
 {% block content %}
 
 <script>
+
+			
 			$(document).ready(function() { 
 					$('select.region-selector').change(buscar_distritos);
 					$('select.distrito-selector').change(buscar_localidades);
@@ -21,9 +23,9 @@
 						options = "{% for l in localidades %}<option value='{{l.id}}' {% if (form.vars.value.localidad is defined) and ( form.vars.value.localidad == l.id ) %} selected='selected'{% endif %}>{{l.nombre}}</option>{% endfor %}";
 						$('select.localidad-selector').append(options);
 					{% endif %}
-
-					}) //document ready
-			;
+			}) //document.ready
+					;
+			
 </script>
 <div id="before_list">
 		
@@ -45,11 +47,11 @@
 
 </div>
 
-
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
+            <th><input type="checkbox" id="select_all" target="proyectos[]"></th>
             <th>Coordinador</th>
             <th>Datos de contacto</th>
             <th>Escuela</th>
@@ -64,6 +66,7 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td class="primera_vez_checkboxes"><input type="checkbox" name="proyectos[]" id="proyecto{{entity.id}}" value="{{ entity.id }}" /></td>
             <td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">
             {{ entity.coordinador.nombre }} {{ entity.coordinador.apellido }} 
             </td>
@@ -103,5 +106,15 @@
             Agregar proyecto
         </a>
     </li>
+</ul>
+
+<ul class="batch_actions">
+	<li> 
+		<div>Enviar invitacion</div>
+		<ul class="sub_actions">
+			<li><a href="/invitaciones/enviar" class="selected_only" target="proyectos[]"> A los elementos seleccionados </a></li>
+			<li><a href="/invitaciones/enviar" class="all_elements" target="#filter_form"> A todos los elementos </a></li>
+		</ul>	
+	</li>
 </ul>
 {% endblock %}
