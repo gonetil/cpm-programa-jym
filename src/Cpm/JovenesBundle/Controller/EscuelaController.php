@@ -47,11 +47,10 @@ class EscuelaController extends BaseController
             throw $this->createNotFoundException('Escuela no encontrada');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
+   
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
+        );
     }
 
     /**
@@ -71,12 +70,10 @@ class EscuelaController extends BaseController
         }
 
         $editForm = $this->createForm(new EscuelaType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -98,7 +95,6 @@ class EscuelaController extends BaseController
         }
 
         $editForm   = $this->createForm(new EscuelaType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
 
@@ -114,44 +110,7 @@ class EscuelaController extends BaseController
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
-    /**
-     * Deletes a Escuela entity.
-     *
-     * @Route("/{id}/delete", name="escuela_delete")
-     * @Method("post")
-     */
-    public function deleteAction($id)
-    {
-        $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
-
-        $form->bindRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Escuela')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Escuela no encontrada');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('escuela'));
-    }
-
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
-    }
-    
 }
