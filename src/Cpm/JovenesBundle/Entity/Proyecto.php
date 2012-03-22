@@ -67,10 +67,8 @@ class Proyecto
     private $escuela;
     
     /**
-    *  @ORM\ManyToOne(targetEntity="Usuario")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="coordinador_id", referencedColumnName="id")
-    * })
+    *  @ORM\ManyToOne(targetEntity="Usuario", inversedBy="proyectosCoordinados")
+    *  
     */    
     private $coordinador;
     

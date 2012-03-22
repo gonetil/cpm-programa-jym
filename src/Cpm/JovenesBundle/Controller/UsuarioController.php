@@ -207,15 +207,23 @@ class UsuarioController extends BaseController
 				$this->setErrorMessage("No se puede eliminar al usuario dado que tiene  rol ADMIN. ");
 				
 			}else{
-
-				$em->remove($entity);
-				
-				$this->setSuccessMessage("Usuario eliminado satisfactoriamente");
-	            try{
-					$em->flush();
-	            }catch(\PDOException $e){
-	            	$this->setErrorMessage("No se puede eliminar al usuario , revise que no tenga proyectos relacionados");
-	            }
+				$proyectos = $entity->getProyectosCoordinados();
+				if (!empty($proyectos))
+					$this->setErrorMessage("No se puede eliminar al usuario dado que tiene proyectos asociados como coordinador");
+				else{
+					$proyectos = $entity->getProyectosColaborados();
+					if (!empty($proyectos))
+						$this->setErrorMessage("No se puede eliminar al usuario dado que tiene proyectos asociados como colaborador");
+					else {
+						try{
+			            	$em->remove($entity);
+							$em->flush();
+							$this->setSuccessMessage("Usuario eliminado satisfactoriamente");
+			            }catch(\PDOException $e){
+			            	$this->setErrorMessage("No se puede eliminar al usuario , revise que no tenga proyectos relacionados");
+			            }
+	            	}
+				}
 			}
         }
 

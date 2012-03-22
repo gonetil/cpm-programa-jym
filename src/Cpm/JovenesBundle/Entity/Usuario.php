@@ -105,13 +105,19 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\ManyToMany(targetEntity="Proyecto", mappedBy="colaboradores")
      **/
-    private $colaboraEn;
+    private $proyectosColaborados;
 
+	/**
+     * @ORM\OneToMany(targetEntity="Proyecto", mappedBy="coordinador")
+     **/
+    private $proyectosCoordinados;
     
     public function __construct()
     {
     	parent::__construct();
-        $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();//TODO qué sentido tiene guardar los correos disponibles aca?
+        $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->proyectosCoordinados = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->proyectosColaborados = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     public function getNombreComleto(){
@@ -308,26 +314,36 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Add colaboraEn
-     *
-     * @param Cpm\JovenesBundle\Entity\Proyecto $colaboraEn
-     */
-    public function addProyecto(\Cpm\JovenesBundle\Entity\Proyecto $colaboraEn)
-    {
-        $this->colaboraEn[] = $colaboraEn;
-    }
-
-    /**
-     * Get colaboraEn
+     * Get proyectosColaborados
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getColaboraEn()
+    public function getProyectosColaborados()
     {
-        return $this->colaboraEn;
+        return $this->proyectosColaborados;
     }
     
     public function __toString() {
     	return "{$this->nombre} {$this->apellido} <{$this->email}>";
+    }
+
+    /**
+     * Add proyectosColaborados
+     *
+     * @param Cpm\JovenesBundle\Entity\Proyecto $proyectosColaborados
+     */
+    public function addProyecto(\Cpm\JovenesBundle\Entity\Proyecto $proyectosColaborados)
+    {
+        $this->proyectosColaborados[] = $proyectosColaborados;
+    }
+
+    /**
+     * Get proyectosCoordinados
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getProyectosCoordinados()
+    {
+        return $this->proyectosCoordinados;
     }
 }
