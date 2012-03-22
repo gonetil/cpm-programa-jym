@@ -4,8 +4,14 @@
 	function addDynamicForm(holder) { 
 	    var collectionHolder = $(holder);
 	    var prototype = collectionHolder.attr('data-prototype');
-	    form = prototype.replace(/\$\$name\$\$/g, collectionHolder.children().length);
-	    collectionHolder.append(form);
+	    count = collectionHolder.children().length;
+	    form = prototype.replace(/\$\$name\$\$/g, count );
+	    
+	    form_id = "dynamic_form"+count;
+	    wrapper = "<div class='dynamic_form' id='"+form_id+"'><a href='#' class='quitar_colaborador' onclick='removeForm(\"#"+form_id+"\")';>Quitar</a>"+form+"</div>";
+	    collectionHolder.append(wrapper);
+	    
+	    
 	}
 	
 	
