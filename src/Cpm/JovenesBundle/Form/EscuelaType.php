@@ -12,7 +12,10 @@ class EscuelaType extends AbstractType
         $builder
 	        ->add('tipoInstitucion', 'entity', array( 'class' => 'CpmJovenesBundle:TipoInstitucion','label'=>'Tipo de Institución', 'empty_value'=>'Otro', 'required'=>false))
 	        ->add('otroTipoInstitucion',null,array('required' => false,'label'=>'Otro tipo de institución'))
-	        ->add('numero',null,array('label'  => 'Número de Escuela', 'attr'=>array('class'=>'number')))
+	        ->add('numero',null,array('label'  => 'Número de Escuela',
+	        						  'required'=> false, 
+	        						  'attr'=>array('class'=>'number')
+	        						  ))
 	        ->add('tipoEscuela','entity',
             					array('label' => 'Tipo de Escuela',
             						  'class' => 'CpmJovenesBundle:TipoEscuela',
@@ -20,7 +23,7 @@ class EscuelaType extends AbstractType
     								    ))
         	->add('nombre',null, array('label'=>'Nombre de la Escuela'))
             ->add('email',null,array('attr'=>array('class'=>'email')))
-            ->add('telefono')
+            ->add('telefono',null,array('attr'=>array('class'=>'number')))
             ->add('domicilio')
             ->add('codigoPostal',null,array('label'=>'Código postal' , 'attr'=>array( "minlength"=>"4")))
             ->add('director')
