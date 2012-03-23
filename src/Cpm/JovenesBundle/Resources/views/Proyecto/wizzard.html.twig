@@ -72,7 +72,22 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 			</div>
 
 			<div id="colaboradores">
-				{{ form_row(form.colaboradores) }} <a href="#"
+				
+				{% for form_colaborador in form.colaboradores %}
+					<div class='innerForm' id="form{{loop.index - 1}}">
+					<a href="#" class='borrar_form_colaborador' ref="{{loop.index - 1}}"> Quitar </a>
+					{{ form_row(form_colaborador.nombre ) }}
+					{{ form_row(form_colaborador.apellido ) }}
+					{{ form_row(form_colaborador.email ) }}
+					</div>
+				{% endfor %}
+				{% if entity.colaboradores | length > 0 %} 
+					{# cuando ya habia colaboradores cargados, tengo que poner el template del form de colaboradores a mano... asco! #}
+					<div id="cpm_jovenesbundle_proyectotype_colaboradores" data-prototype="&lt;div&gt;&lt;label class=&quot; required&quot;&gt;$$name$$&lt;/label&gt;&lt;div id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$&quot;&gt;&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_nombre&quot; class=&quot; required&quot;&gt;Nombre&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_nombre&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][nombre]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_apellido&quot; class=&quot; required&quot;&gt;Apellido&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_apellido&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][apellido]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_email&quot; class=&quot; required&quot;&gt;Email&lt;/label&gt;&lt;input type=&quot;email&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_email&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][email]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;">		
+				{% endif %}  
+				
+					
+				 <a href="#"
 					onclick="addDynamicForm('#cpm_jovenesbundle_proyectotype_colaboradores'); return false;">
 					Agregar colaborador </a> </br>
 			</div>

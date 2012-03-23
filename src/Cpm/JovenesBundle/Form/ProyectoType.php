@@ -41,7 +41,7 @@ class ProyectoType extends AbstractType
     				'expanded' => true,
     				 'attr'=>array('class'=>'radios-en-linea'),
     		))
-            ->add('colaboradores','collection',array('allow_add'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
+            ->add('colaboradores','collection',array('allow_add'=>true, 'allow_delete'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
             ->add('temaPrincipal','entity',
             					array('label' => 'Tema Principal',
             						  'class' => 'CpmJovenesBundle:Tema',
@@ -56,6 +56,7 @@ class ProyectoType extends AbstractType
 	        ->add('motivoRealizacion',null,array('label'=>'¿Por qué queremos investigar este tema?'))
 	        ->add('impactoBuscado',null,array('label'=>'¿Qué impacto tendrá en la comunidad?'))
         	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
+        	
         // ->add('coordinador',new UsuarioType(),array('label' => 'Docente Coordinador'))
         
         ;

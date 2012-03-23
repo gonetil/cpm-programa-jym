@@ -133,6 +133,10 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
         return $this->id;
     }
 
+    public function setId($id) 
+    {
+    	$this->id = $id;
+    }
     /**
      * Set dni
      *

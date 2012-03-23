@@ -55,6 +55,9 @@
    		}
    }
    
+   
+   
+   
    $(document).ready(function() {
    					
 					setup_validation();

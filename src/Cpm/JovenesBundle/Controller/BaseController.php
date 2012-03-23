@@ -105,13 +105,21 @@ abstract class BaseController extends Controller
 	*
 	* Toma una lista de colaboradores, y se fija si ya existen en la BBDD.
 	* Si eso sucede, reemplaza el colaborador de la lista por el de la bbdd.
-	* Si esto NO sucede, normaliza los datos del colaborador
+	* Si esto NO sucede, normaliza los datos del colaborador 
 	* Esta funcion es usada en PerfilController y en ProyectoController, al crear y editar proyectos
 	* @param array $colaboradores
 	*/
 	protected function procesar_colaboradores($colaboradores) {
+
 		foreach ($colaboradores as $colaborador) {
-			if ($c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($colaborador->getEmail())) //el colaborador ya existia en la bbdd
+			$email = $colaborador->getEmail();
+			$id = $colaborador->getId();
+		
+			if ($email == null) //hay un colaborador que no tiene email... o sea, se esta eliminando uno
+			{ 
+				$colaboradores->removeElement($colaborador);
+			}
+			elseif ( $c = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($email)) //el colaborador ya existia en la bbdd
 			{ //si el email del colaborador estaba en la BBDD, no creo uno nuevo
 				$colaboradores->removeElement($colaborador);
 				$colaboradores->add($c);
@@ -123,11 +131,44 @@ abstract class BaseController extends Controller
 				$colaborador->setApellido(ucwords(strtolower($colaborador->getApellido())));
 				$colaborador->setNombre(ucwords(strtolower($colaborador->getNombre())));
 				$colaborador->setPassword("");
+				$colaborador->setId("");
 			}
 		}
+		return $colaboradores;
 	}
 	
-	
+	/**
+	 * 
+	 * Cuando un colaborador es eliminado de un proyecto, debe verificarse si tiene sentido mantenerlo en el sistema
+	 * Se elimina un colaborador del sistema cuando:
+	 * 	1. No es admin ni docente y
+	 *  2. No participa en ningún otro proyecto
+	 * @param Proyecto $proyecto
+	 * @param array(email:String) $antiguos_colaboradores
+	 */
+	protected function eliminar_usuarios_sueltos($proyecto,$antiguos_colaboradores) {
+		$em = $this->getDoctrine()->getEntityManager();
+		$colaboradores = $proyecto->getColaboradores();
+		
+		foreach ($colaboradores as $c)
+			if (($pos = array_search($c->getEmail(),$antiguos_colaboradores)) !== FALSE) 
+				unset($antiguos_colaboradores[$pos]);
+
+		
+		foreach ($antiguos_colaboradores as $email) {
+			$colaborador = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($email);
+			if ($colaborador) echo "Deberia borrarse el colaborador ".$colaborador;
+			if ( $colaborador //existe el colaborador
+				&& (count($colaborador->getProyectosColaborados()) <= 1) //no esta en ningun proyecto, o esta en este solo
+				&& (!$colaborador->isEnabled()) //es colaborador solamente
+				)
+			{
+				$em->remove($colaborador);
+				$em->flush();
+			}
+		}
+		
+	}
 	
     protected function getJYM(){
     	//return JYM::instance();

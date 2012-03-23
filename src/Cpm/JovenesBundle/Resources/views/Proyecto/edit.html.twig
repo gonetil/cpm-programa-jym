@@ -7,53 +7,6 @@
 <script src="{{ asset('js/dynamic_forms.js') }}" type="text/javascript"></script>
 
 
-<script type="text/javascript">
-
-  var email; 
-  var form;
-   
-  $(document).ready(function() {
-  
-  $(".quitar_colaborador").click(function(e) {
-    e.preventDefault();
-    var number = $(this).attr("ref");
-    email = $("#cpm_jovenesbundle_proyectotype_colaboradores_"+number+"_email").val();    
-    form = $("#form"+number);
-   
-    $("#dialog").dialog("open");
-  });
-  
-    $("#dialog").dialog({
-      autoOpen: false,
-      modal: true,
-      buttons : {
-		        "Confirmar" : function() {
-		        		$.post("{{ path('proyecto_quitar_colaborador') }}", 
-								{	
-									id_proyecto : {{ entity.id }} ,
-								 	email_colaborador : email 
-								 } ,
-							    function(result) {
-							    	$("#dialog").dialog("open");
-							    if (result = "success") { 
-							    		form.empty().html("Colaborador eliminado satisfactoriamente");
-							    	} else { 
-							    		alert('Error al quitar el colaborador');
-									}
-							
-					   });
-		      },
-		        "Cancelar" : function() {
-		          $(this).dialog("close");
-		      }
-      }
-    });
-  });
-
-  
-</script>
-
-
 <form action="{{ path('proyecto_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     
     {{ form_row(edit_form.titulo) }}
