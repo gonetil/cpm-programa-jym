@@ -26,11 +26,7 @@
 	  $(document).ready(function() {
 	  
 			  $(".quitar_colaborador").click(function(e) {
-			    e.preventDefault();
-			    var number = $(this).attr("ref");
-			    email = $("#cpm_jovenesbundle_proyectotype_colaboradores_"+number+"_email").val();    
-			    form = $("#form"+number);
-			    $("#dialog").dialog("open");
+				  $(this).parent().remove();
 			  });
 			  
 			  $(".borrar_form_colaborador").click(function(e)
