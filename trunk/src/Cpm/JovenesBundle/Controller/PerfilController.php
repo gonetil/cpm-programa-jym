@@ -168,6 +168,10 @@ class PerfilController extends BaseController
     	$em = $this->getDoctrine()->getEntityManager();
     
     	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+    	
+    	$colabs = array(); foreach ($entity->getColaboradores() as $c) {
+    			$colabs[] = $c->getEmail();
+    	}
     	    	 
     	if (!$entity) {
     		throw $this->createNotFoundException('Unable to find Proyecto entity.');
@@ -177,15 +181,23 @@ class PerfilController extends BaseController
     	 
     	$editForm   = $this->createForm(new ProyectoType(), $entity);
     	$editForm->remove('coordinador');
-    	
     	$request = $this->getRequest();
-    
+    	
+    	
     	$editForm->bindRequest($request);
-    	$this->procesar_colaboradores($entity->getColaboradores());
-    
+    	
+    	$entity->setColaboradores($this->procesar_colaboradores($entity->getColaboradores()));
+    	
     	if ($editForm->isValid()) {
+    		
+    		
     		$em->persist($entity);
     		$em->flush();
+    		
+    		//los colaboradores eliminados que no estan en otro proyecto seran eliminados
+    		$this->eliminar_usuarios_sueltos($entity,$colabs);
+    		
+    		
     		$this->setSuccessMessage("Los datos fueron actualizados satisfactoriamente");
     		
     		return $this->redirect($this->generateUrl('home_usuario'));

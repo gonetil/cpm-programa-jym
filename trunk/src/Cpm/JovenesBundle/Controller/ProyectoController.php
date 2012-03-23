@@ -199,12 +199,17 @@ class ProyectoController extends BaseController
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-
-        if (!$entity) {
+        
+        $colabs = array(); //colaboradores que tenia la entidad
+        foreach ($entity->getColaboradores() as $c) {
+        	$colabs[] = $c->getEmail();
+        }
+        
+        if (!$entity) 
+        {
             throw $this->createNotFoundException('No se encontro el Proyecto');
         }
 
-        
         $editForm   = $this->createForm(new ProyectoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -213,9 +218,12 @@ class ProyectoController extends BaseController
         $editForm->bindRequest($request);
 
         $this->procesar_colaboradores($entity->getColaboradores());
-                
+                        
         if ($editForm->isValid()) {
             $em->persist($entity);
+            //los colaboradores eliminados que no estan en otro proyecto seran eliminados
+            $this->eliminar_usuarios_sueltos($entity,$colabs);
+            
             $em->flush();
             $this->setSuccessMessage("Proyecto fue modificado satisfactoriamente");
             return $this->redirect($this->generateUrl('proyecto_show', array('id' => $id)));
