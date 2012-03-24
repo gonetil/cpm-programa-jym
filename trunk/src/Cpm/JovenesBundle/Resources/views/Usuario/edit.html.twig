@@ -2,6 +2,10 @@
 
 {% block title %}Edicion de Usuario{% endblock %}
  
+{% form_theme form _self %}
+
+{% use 'CpmJovenesBundle:Usuario:common.html.twig' %}
+
 {% block content %}
 
 <form action="{{ path('usuario_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
@@ -11,23 +15,27 @@
 
     {{ form_widget(form) }}
     <p>
-        <button type="submit">Editar</button>
+        <button type="submit">Guardar</button>
     </p>
 </form>
-
 <ul class="record_actions">
     <li>
         <a href="{{ path('usuario') }}">
-            Volver al listado
+            Cancelar y volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">
+            Cancelar y abrir info del usuario
         </a>
     </li>
 
-    <li>
-        <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el usuario? También se eliminarán todos los correos enviados al usuario')">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
+<!--     <li> -->
+<!--         <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el usuario? También se eliminarán todos los correos enviados al usuario')"> -->
+<!--             {{ form_widget(delete_form) }} -->
+<!--             <button type="submit">Eliminar</button> -->
+<!--         </form> -->
+<!--     </li> -->
    
 </ul>
 {% endblock %}

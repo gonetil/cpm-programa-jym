@@ -93,7 +93,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     */
     private $localidad;
         
-    private $distrito;
+    
     /**
     *  @ORM\OneToMany(targetEntity="Correo",mappedBy="destinatario")
     *  @ORM\JoinColumns({
@@ -112,12 +112,17 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      **/
     private $proyectosCoordinados;
     
+    private $distrito;
+    private $resetPassword;
+    
+    
     public function __construct()
     {
     	parent::__construct();
         $this->correosRecibidos = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyectosCoordinados = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyectosColaborados = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->resetPassword = false;
     }
     
     public function getNombreComleto(){
@@ -286,17 +291,6 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
         return $this->localidad;
     }
 	
-    public function getDistrito() {
-	 if ($this->localidad)
-    	return $this->localidad->getDistrito();
-	 else return "";
-    }
-    /**
-     * esta funcion no hace nada
-     */
-    public function setDistrito($distrito) {
-    	$this->distrito = $distrito;
-    }
     /**
      * Add correosRecibidos
      *
@@ -350,4 +344,30 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     {
         return $this->proyectosCoordinados;
     }
+    
+    public function getDistrito() {
+		if ($this->localidad)
+			return $this->localidad->getDistrito();
+		else 
+			return "";
+    }
+
+    public function setDistrito($distrito) {
+    	$this->distrito = $distrito;
+    }
+    
+        
+    public function getResetPassword() {
+		return $this->resetPassword;
+    }
+
+    public function setResetPassword($rp) {
+    	$this->resetPassword = $rp;
+    }
+    
+    
+
+    
+    
+    
 }
