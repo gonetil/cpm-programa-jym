@@ -83,30 +83,29 @@ class UsuarioController extends BaseController
      */
     public function createAction()
     {
-    	$confirmationEnabled = false; //TODO recuperar confirmationEnabled de algun lado
-        
-        $user = $this->getUserManager()->createUser();
-        $form = $this->createForm(new UsuarioType(), $user );
+       $user = $this->getUserManager()->createUser();
+       $form = $this->createForm(new UsuarioType(), $user );
 
-	    $form->bindRequest($this->getRequest());
+	   $form->bindRequest($this->getRequest());
 	    
-	    $user->setApellido(ucwords(strtolower($user->getApellido())));
-	    $user->setNombre(ucwords(strtolower($user->getNombre())));
-	    
-	     
+	   $user->setApellido(ucwords(strtolower($user->getApellido())));
+	   $user->setNombre(ucwords(strtolower($user->getNombre())));
+	   
        if ($form->isValid()) {
-       		if ($confirmationEnabled) {
-				$user->setEnabled(false);
-				$user->setPassword('');
-	            $this->getMailer()->sendConfirmationEmailMessage($user);
-	        } else {
-	            $user->setConfirmationToken(null);
-	            $user->setEnabled(true);
-	        }
-			$this->getUserManager()->updateUser($user);
-			$this->setSuccessMessage('Se creo el usuario correctamente.' . ($confirmationEnabled?'se le envió un correo de confirmación.':''));
-				
-      	 	return $this->redirect($this->generateUrl('usuario_show', array('id' => $user->getId())));
+       		if ($this->getUserManager()->findUserByEmail($user->getEmail())){
+       			$this->setErrorMessage('Ya existe un usuario con email ' . ($user->getEmail()));
+       		}else{
+	       		if (!$user->getResetPassword()) {
+					$user->setPassword('');
+		            $this->getMailer()->sendConfirmationEmailMessage($user);
+		        } else {
+		            $user->setConfirmationToken(null);
+		        }
+				$this->getUserManager()->updateUser($user);
+				$this->setSuccessMessage('Se creo el usuario correctamente.' . ($user->getResetPassword()?' La cuenta está activada.':' Se le envió un correo de activación.'));
+					
+	      	 	return $this->redirect($this->generateUrl('usuario_show', array('id' => $user->getId())));
+       		}
         }
 
         return array(
@@ -152,31 +151,39 @@ class UsuarioController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
-
-        if (!$entity) {
+        $user = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
+        if (!$user) {
             throw $this->createNotFoundException('Unable to find Usuario entity.');
         }
 
-        $editForm   = $this->createForm(new UsuarioType(), $entity);
+        $editForm   = $this->createForm(new UsuarioType(), $user);
         $deleteForm = $this->createDeleteForm($id);
-
         $request = $this->getRequest();
 
         $editForm->bindRequest($request);
 
-        $entity->setApellido(ucwords(strtolower($entity->getApellido())));
-        $entity->setNombre(ucwords(strtolower($entity->getNombre())));
+        $user->setApellido(ucwords(strtolower($user->getApellido())));
+        $user->setNombre(ucwords(strtolower($user->getNombre())));
         
         if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-            $this->setSuccessMessage("Usuario modificado satisfactoriamente");
-            return $this->redirect($this->generateUrl('usuario_edit', array('id' => $id)));
+        	$otherUser = $this->getUserManager()->findUserByEmail($user->getEmail());
+        	if (!$otherUser->equals($user)){
+       			$this->setErrorMessage('Ya existe un usuario con email ' . ($user->getEmail()));
+       		}else{
+       			if ($user->getResetPassword()) {
+       				//Se le esta asignando password a un user que nunca estuvo activado. Se lo habilita
+					$user->setEnabled(true);
+		            $user->setConfirmationToken(null);
+		        }
+				$this->getUserManager()->updateUser($user);
+				$this->setSuccessMessage('Se modificó el usuario correctamente.' . ($user->getResetPassword()?' La cuenta fue activada.':''));
+				
+	            return $this->redirect($this->generateUrl('usuario_show', array('id' => $id)));
+	        }
         }
 
         return array(
-            'entity'      => $entity,
+            'entity'      => $user,
             'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
@@ -237,4 +244,37 @@ class UsuarioController extends BaseController
             ->getForm()
         ;
     }
+
+    /**
+     * Bloquea o desbloquea al usuario para que pueda loguearse o no
+     *
+     * @Route("/{id}/toggle_lock", name="usuario_toggle_lock")
+     * @Template()
+     */
+    public function toggleLockAction($id)
+    {	
+        $form = $this->createDeleteForm($id);
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $user = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
+            
+            if (!$user->isEnabled()){
+            	$this->setErrorMessage('No tiene sentido bloquear un usuario que no esta habilitado para loguearse en el sistema.');
+            }else{
+            	if (!$user->isLocked() && ($user->hasRole('ROLE_ADMIN') || $user->isSuperAdmin())){
+					$this->setErrorMessage("No se puede bloquear un usuario Administrador. ");
+            	}else{
+		            $user->setLocked(!$user->isLocked());
+		            $this->getUserManager()->updateUser($user);
+					$this->setSuccessMessage('El usuario '.$user->getEmail().' ha sido '. (($user->isLocked())?'bloqueado.':'desbloqueado.'));
+            	}
+            }
+        }
+		return $this->redirect($this->generateUrl('usuario_show', array('id' => $user->getId())));
+    }
+
 }

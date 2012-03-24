@@ -34,7 +34,10 @@ class UsuarioType extends AbstractType
     														}
     											))
             ->add('roles', 'choice', array('choices'=> array('ROLE_USER'=>'Docente','ROLE_ADMIN'=>'Administrador'), 'multiple'=>true))
-            ->add('plainPassword', 'repeated', array('required'=>false,'type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir Clave"))
+            ->add('resetPassword', 'checkbox', array('label'=>"Asignar clave?", 'required'=>false))
+            ->add('plainPassword', 'repeated', array('required'=>false,'type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir", 
+            	'invalid_message' => 'Las claves no coinciden'
+            ))
         ;
     }
     
