@@ -79,6 +79,8 @@ class ProyectoSearch
     
     public $coordinador;
     public $escuela;
+    
+    public $proyectos_seleccionados;
     /**
      * Get id
      *
@@ -248,5 +250,12 @@ class ProyectoSearch
     public function getEscuela() 
     {
     	return $this->escuela;
+    }
+
+    public function getProyectos_seleccionados() {
+    	return $this->proyectos_seleccionados;
+    }
+    public function setProyectos_seleccionados($proyectos_seleccionados) {
+    	$this->proyectos_seleccionados = $proyectos_seleccionados;
     }
 }

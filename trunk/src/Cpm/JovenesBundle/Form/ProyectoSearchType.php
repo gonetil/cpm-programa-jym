@@ -120,6 +120,7 @@ class ProyectoSearchType extends AbstractType
 		    										'required' => false ))
         	->add('escuela', null, array('label' => 'Nombre o numero de escuela',
         								'required' => false))
+			->add('proyectos_seleccionados','collection', array('allow_add'=>true, 'allow_delete'=>true))				
         ;
     }
     
