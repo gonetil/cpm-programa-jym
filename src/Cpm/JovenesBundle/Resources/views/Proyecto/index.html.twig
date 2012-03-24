@@ -28,7 +28,7 @@
 			
 </script>
 <div id="before_list">
-		
+		<form method="GET" id="filter_form">
 		{{ filter_form.show(form) }}
 		
 		
@@ -51,7 +51,7 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th><input type="checkbox" id="select_all" target="proyectos[]"></th>
+            <th><input type="checkbox" id="select_all" target=".checkable"></th>
             <th>Coordinador</th>
             <th>Datos de contacto</th>
             <th>Escuela</th>
@@ -66,7 +66,8 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td class="primera_vez_checkboxes"><input type="checkbox" name="proyectos[]" id="proyecto{{entity.id}}" value="{{ entity.id }}" /></td>
+            <td class="primera_vez_checkboxes">
+            <input type="checkbox" class='checkable' name="cpm_jovenesbundle_proyectosearchtype[proyectos_seleccionados][{{entity.id}}]" id="proyecto{{entity.id}}" value="{{ entity.id }}" /></td>
             <td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">
             {{ entity.coordinador.nombre }} {{ entity.coordinador.apellido }} 
             </td>
@@ -94,6 +95,9 @@
     {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
     </tbody>
 </table>
+	
+    {{ form_row(form._token) }}
+    </form>
 
 <div class="llamada">
 	<div class="primera_vez llamada"></div>
@@ -112,8 +116,15 @@
 	<li> 
 		<div>Enviar invitacion</div>
 		<ul class="sub_actions">
-			<li><a href="/invitaciones/enviar" class="selected_only" target="proyectos[]"> A los elementos seleccionados </a></li>
-			<li><a href="/invitaciones/enviar" class="all_elements" target="#filter_form"> A todos los elementos </a></li>
+			<li><a href="/invitaciones/enviar" target="#filter_form"> A los elementos seleccionados </a></li>
+			<li><a href="/invitaciones/enviar" target="#filter_form"> A todos los elementos </a></li>
+		</ul>	
+	</li>
+	<li> 
+		<div>Enviar mensaje</div>
+		<ul class="sub_actions">
+			<li><a href="{{ path('correo_new_multicast') }}" target="#filter_form"> A los proyectos seleccionados </a></li>
+			<li><a href="{{ path('correo_new_multicast') }}" target="#filter_form"> A todos los proyectos </a></li>
 		</ul>	
 	</li>
 </ul>

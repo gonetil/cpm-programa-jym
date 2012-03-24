@@ -30,36 +30,12 @@ class DefaultController extends BaseController
     	elseif ($this->get("security.context")->isGranted("ROLE_USER")) {
     		return $this->forward("CpmJovenesBundle:Perfil:index");
     	}
-    	else 
+    	else
     	return $this->forward("CpmJovenesBundle:Default:_login");
     	
     }
     
-    /**
-     * @Route("/public/login", name="_login")
-     * 
-     */
-    public function loginAction()
-    {
-    	
-        if ($this->getRequest()->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $this->getRequest()->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } else {
-            $error = $this->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
-        }
-        if (get_class($error) =="Symfony\Component\Security\Core\Exception\LockedException"){
-        	$error = "Su cuenta se encuentra pendiente de activacion. Siga el enlace que se le envio a su cuenta de correo electrónico.";
-        }elseif (is_a($error, "\Exception")){
-        	$error = $error->getMessage();
-        }
-        
-        if ($error) 
-        	$this->setErrorMessage($error);
-        
-        return $this->render('CpmJovenesBundle:Default:login.html.twig', array(
-            'last_username' => $this->getSession()->get(SecurityContext::LAST_USERNAME)
-        ));
-    }
+    
 
     /**
      * @Route("/login_check", name="_security_check")
@@ -125,83 +101,22 @@ class DefaultController extends BaseController
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }
-/*
-    / **
-     * @Route("/public/recuperar_clave", name="recuperar_clave_form")
-     * @Template()
-     * /
-    public function recuperarClaveAction()
-    {
+    
+    /**
+    * @Route("/instructivo_usuarios", name="instructivo_usuarios")
+     * @Template("CpmJovenesBundle:Default:instructivo_usuarios.html.twig")
+    */
+    public function instructivoUsuariosAction() {
     	return array();
     }
-    
-    / **
-     * @Method ("post")
-     * @Route("/public/recuperar_clave", name="recuperar_clave_submit")
-     * /
-    public function recuperarClaveSubmitAction()
-    {
-    	 return $this->loginAction();
-    }
-    
-    / **
-     * @Method("post")
-     * @Route("/public/registrarse", name="registrarse_submit")
-     * 
-     * /
-    public function registrarseSubmitAction()
-    {
-    	$entity  = new Usuario();
-  		$request = $this->getRequest();
-        $form    = $this->createForm(new RegistroUsuarioType(), $entity);
-        $form->bindRequest($request);
-		
-		$preexistente = $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($entity->getEmail());
-		$mail_enviado = $this->enviarMail($entity->getEmail(), Plantilla::REGISTRO_USUARIO, array('user'=>$entity));
-            
-        if ($mail_enviado && !$preexistente && $form->isValid()) {
-        	$entity->setClave($this->encodePasswordFor($entity, $entity->getPassword()));
-			$entity->setEstaHabilitado(false);
-			$this->doPersist($entity);
-            
-            
-            $this->setSuccessMessage('Se le ha enviado un correo de confirmación a '.$entity->getEmail()
-					.'. Deberá seguir el enlace que alli se incluye para completar el proceso de registración. ');
-            return $this->loginAction();
-        }else{
 
-	 		if ($preexistente)
-	            $this->setErrorMessage('Ya existe un usuario con el mismo email ..');
-			elseif (!$mail_enviado)
-				$this->setErrorMessage('Lo sentimos pero no se pudo enviar el mail. Intentelo nuevamente y si el problema persiste contactese con la Comision...');
-			else
-				$this->setErrorMessage('Faltan datos :S');
-				
-	        return $this->render('CpmJovenesBundle:Default:registrarse.html.twig', array(
-	            'entity' => $entity,
-	            'form'   => $form->createView(),
-	            'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll() 
-	        ));
-        }
-    }
+    /**
+    * @Route("/choice", name="index_si_no")
+    * @Template("CpmJovenesBundle:Default:index_si_no.html.twig")
+    */
     
-    
-    / **
-     * @Route("/public/registrarse", name="registrarse_form")
-     * @Template()
-     * /
-    public function registrarseAction()
-    {
-    	$entity = new Usuario();
-        $form   = $this->createForm(new RegistroUsuarioType(), $entity);
-        
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-            'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll() 
-        );
+    public function indexSiNO() {
+    	return array();
     }
-
-*/
     
 }

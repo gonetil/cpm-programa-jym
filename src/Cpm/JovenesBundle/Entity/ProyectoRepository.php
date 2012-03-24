@@ -121,7 +121,7 @@ class ProyectoRepository extends EntityRepository
 			}
 			
 			$qb->add('orderBy','p.id AsC');
-
+	  
 		$proyectos = $qb->getQuery();
 		return $proyectos;
 	}

@@ -9,6 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Correo;
 use Cpm\JovenesBundle\Form\CorreoType;
 
+use Cpm\JovenesBundle\Entity\ProyectoSearch;
+use Cpm\JovenesBundle\Form\ProyectoSearchType;
+
+
 /**
  * Correo controller.
  *
@@ -66,7 +70,7 @@ class CorreoController extends BaseController
             'form'   => $form->createView()
         );
     }
-
+    
     /**
      * Creates a new Correo entity.
      *
@@ -96,4 +100,31 @@ class CorreoController extends BaseController
         );
     }
 
+    
+    /**
+     * 
+     * Permite enviar un correo a muchos destinatarios
+     * @Route("/new_multicast", name="correo_new_multicast")
+     * @Template("CpmJovenesBundle:Correo:new_multicast.html.twig")
+  
+     */
+    public function newMulticastAction() {
+    	$request = $this->getRequest();
+    	
+    	$searchValues = new ProyectoSearch();
+    	$searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
+    	$proyectos = null;
+    	
+    	$response = array();
+    	if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype")))
+    	{
+    		$searchForm->bindRequest($request);
+    		if ($searchForm->isValid()) {
+    			$destinatarios = $searchForm->getData()->getProyectos_seleccionados();
+    			echo "sending email to projects: <br/>"; 
+    			var_dump($destinatarios);
+    			die;
+    		}
+    	}
+    }
 }

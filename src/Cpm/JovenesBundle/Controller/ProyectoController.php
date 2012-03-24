@@ -26,7 +26,7 @@ class ProyectoController extends BaseController
 	
     /**
      * Lists all Proyecto entities.
-     *
+     * @Method("get")
      * @Route("/", name="proyecto")
      * @Template()
      */
@@ -35,21 +35,21 @@ class ProyectoController extends BaseController
     	
         $em = $this->getDoctrine()->getEntityManager();
         $repository = $em->getRepository('CpmJovenesBundle:Proyecto');
+        $ciclo = $this->getJYM()->getCicloActivo();
+        
         
         $request = $this->getRequest();
+        
         $searchValues = new ProyectoSearch();
         $searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
         $proyectos = null;
         
-        
-        $ciclo = $this->getJYM()->getCicloActivo();
         $response = array();
         if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype"))) 
          {	
         	$searchForm->bindRequest($request);
-        
+       		 
         	if ($searchForm->isValid()) {
-        		// 
         		$proyectos =$repository ->findBySearchCriteriaQuery($searchForm->getData(),$ciclo);
         		
         		if ($searchForm->getData()->getRegion()) {

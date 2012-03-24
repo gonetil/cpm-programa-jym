@@ -1,0 +1,25 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block title %}Bienvenido al Sistema de Gestión del Programa Jóvenes y Memoria{% endblock %}
+
+{% block fos_user_content %}
+
+	<div class="index_message">
+		<div class="message left">
+			¿Ya está registrado en este sistema? <br/>
+			Entonces haga clic <a href="{{path('fos_user_security_login')}}">aquí</a>
+		</div>
+		<hr/>	
+		<div class="message right">
+			¿Aún no se ha registrado? <br/>
+			Siga <a href="{{path('fos_user_registration_register')}}">este enlace</a>
+		</div>
+		<hr/>	
+		<div class="message left">
+			¿Tiene dudas? <br/>
+			Vea <a href="{{path('instructivo_usuarios')}}">este</a> instructivo
+		</div>
+		
+	</div>
+				
+{% endblock %}
