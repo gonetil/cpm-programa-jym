@@ -1,6 +1,6 @@
 <?php
 
-namespace Cpm\JovenesBundle\Entity;
+namespace Cpm\JovenesBundle\EntityDummy;
 
 
 /**

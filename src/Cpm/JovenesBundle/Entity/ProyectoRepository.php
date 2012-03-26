@@ -125,4 +125,16 @@ class ProyectoRepository extends EntityRepository
 		$proyectos = $qb->getQuery();
 		return $proyectos;
 	}
+	
+	function findAllInArray($ids=array()) {
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		
+		$qb->add('select','p')
+		->add('from','CpmJovenesBundle:Proyecto p')
+		->andWhere("p.id in (:proyectos)")->setParameter("proyectos",array_values($ids))
+		;
+		
+		return $qb->getQuery();
+	
+	}
 }

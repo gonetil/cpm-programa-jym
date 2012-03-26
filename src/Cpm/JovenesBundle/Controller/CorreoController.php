@@ -103,28 +103,58 @@ class CorreoController extends BaseController
     
     /**
      * 
-     * Permite enviar un correo a muchos destinatarios
-     * @Route("/new_multicast", name="correo_new_multicast")
-     * @Template("CpmJovenesBundle:Correo:new_multicast.html.twig")
-  
+     * Permite enviar un correo a un conjunto de destinatarios seleccionados
+     * @Route("/write_to_selected", name="correo_write_to_selected")
+     * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
      */
-    public function newMulticastAction() {
+    public function writeToSelectedAction() {
     	$request = $this->getRequest();
     	
     	$searchValues = new ProyectoSearch();
     	$searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
+    	
     	$proyectos = null;
     	
     	$response = array();
     	if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype")))
     	{
     		$searchForm->bindRequest($request);
+    		$repository = $this->getEntityManager()->getRepository('CpmJovenesBundle:Proyecto');
+    		
     		if ($searchForm->isValid()) {
     			$destinatarios = $searchForm->getData()->getProyectos_seleccionados();
-    			echo "sending email to projects: <br/>"; 
-    			var_dump($destinatarios);
-    			die;
+    			$proyectos = $repository->findAllInArray($destinatarios);
     		}
     	}
+    	return array('proyectos' => $proyectos->getResult());
+    }
+
+    /**
+    *
+    * Permite enviar un correo a todos los proyectos resultantes del filtro (o a todos en caso de no encontrarse el filtro)
+    * @Route("/write_to_all", name="correo_write_to_all_results")
+    * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
+    */
+    public function writeToAllAction() { 
+        $em = $this->getDoctrine()->getEntityManager();
+        $repository = $em->getRepository('CpmJovenesBundle:Proyecto');
+        $ciclo = $this->getJYM()->getCicloActivo();
+        $request = $this->getRequest();
+
+        $searchValues = new ProyectoSearch();
+        $searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
+        $proyectos = null;
+    	
+        if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype")))
+        {
+        	$searchForm->bindRequest($request);
+        	if ($searchForm->isValid())
+        		$proyectos =$repository ->findBySearchCriteriaQuery($searchForm->getData(),$ciclo);
+        } else {
+        	$proyectos = $repository->findAllQuery($ciclo);
+        }
+
+        return array('proyectos' => $proyectos->getResult());
+        
     }
 }

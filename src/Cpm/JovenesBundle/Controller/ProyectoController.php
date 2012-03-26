@@ -13,7 +13,7 @@ use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 
-use Cpm\JovenesBundle\Entity\ProyectoSearch;
+use Cpm\JovenesBundle\EntityDummy\ProyectoSearch;
 use Cpm\JovenesBundle\Form\ProyectoSearchType;
 
 /**
