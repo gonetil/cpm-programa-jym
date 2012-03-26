@@ -1,0 +1,14 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Enviar mensaje{% endblock %}
+
+{% block content %}
+ 
+ Se enviará el correo a {{ proyectos | length }} proyectos
+ {% for p in proyectos %}
+ 
+ "{{ p.titulo }}" < {{ p.coordinador.email }}> <br/>
+ 
+{% endfor %}
+
+{% endblock %}
