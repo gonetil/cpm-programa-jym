@@ -18,15 +18,24 @@
 	<div id="proyecto_fullbox">
 <!-- 		<div class="operaciones"> -->
 <!-- 			<a href="#" onclick="$('#detalle_proyecto').fadeOut(); "> <img src="/images/shared/close.png" /></a> -->
-<!-- 		</div> -->
-		<h3> Titulo: {{ proyecto.titulo }} </h3>
-		<h4>
-		 	Coordinador: {{ proyecto.coordinador.nombre }} {{proyecto.coordinador.apellido}}
-		 	{% if proyecto.esPrimeraVezDocente %}<sup>*</sup>{% endif %}		
-		</h4>
-
-		<ul class="">
-			Invitaciones a eventos
+<!-- 		</div> Titulo: {{ proyecto.titulo }} -->
+		<h3>Integrantes</h3>
+		<p>
+			<b>Coordinador</b>: {{ proyecto.coordinador.nombre }} {{proyecto.coordinador.apellido}} &lt;<a href="mailto:{{proyecto.coordinador.email}}">{{proyecto.coordinador.email}}</a>&gt;{% if proyecto.esPrimeraVezDocente %}<sup>*</sup>{% endif %}		
+		</p>
+		{% if proyecto.colaboradores | length > 0 %}
+			<p>
+				<b>Colaboradores: </b>
+				<ul class="colaboradores">
+					{% for colaboradores in proyecto.colaboradores %}
+						<li> {{colaboradores.nombre}} {{colaboradores.apellido}} &lt;<a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;</li>
+					{% endfor %}
+				</ul>
+			</p>
+		{% endif %}
+	
+		<h3> Invitaciones a eventos </h3>
+		<ul class="listado-items">
 			{% for invitacion in proyecto.invitaciones %}
 				<li class="actions">
 					{{ invitacion.instanciaEvento.titulo }}
@@ -38,24 +47,19 @@
 						{% else %}
 							{% if invitacion.aceptoInvitacion %}
 								Invitacion Aceptada
+								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar?</a>
+								<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
 							{% else %}
 								Invitacion Rechazada
+								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
 							{% endif %}
-							<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar?</a>
-						{% endif %}
+							
+    					{% endif %}
 					{% endif %}
 				</li>
 			{%endfor %}
 		</ul>
 		
-		{% if proyecto.colaboradores | length > 0 %}
-			<h4> Colaboradores </h4>
-			<ul class="colaboradores">
-				{% for colaboradores in proyecto.colaboradores %}
-					<li> {{colaboradores.nombre}} {{colaboradores.apellido}} &lt; <a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;
-				{% endfor %}
-			</ul>
-		{% endif %}
 		
 		{% set escuela = proyecto.escuela %}
 		<h3> Datos de la Escuela </h3>

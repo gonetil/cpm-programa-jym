@@ -1,28 +1,22 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block title %}Ha recibido una Invitación{% endblock %}
+{% block title %}Rechazar Invitación?{% endblock %}
 
 {% block content %}
 
-<p>
+<p class="warning-message">
 	¿Está seguro que desea rechazar la invitación para el evento <b>{{invitacion.instanciaEvento.titulo}}</b>? 
 </p>
 
 <ul class="record_actions">
-    
-    <li>
-        <a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'aceptar' }) }}">
-            Aceptar Invitacion
-        </a>
-    </li>
     <li>
         <a href="{{ path('abrir_invitacion_submit', { 'id': invitacion.id, accion: 'rechazar' }) }}">
-            Rechazar Invitacion
+            Si, Rechazar Invitacion
         </a>
     </li>
     <li>
         <a href="{{ path('home') }}">
-            Cancelar
+            No, Volver al proyecto
         </a>
     </li>
 </ul>

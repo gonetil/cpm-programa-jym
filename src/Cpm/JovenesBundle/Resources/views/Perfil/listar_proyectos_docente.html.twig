@@ -32,7 +32,7 @@
 	{% for proyecto in proyectos %}
 	<li target="proyecto_{{proyecto.id}}"> 
 			<h3> 
-		    	{{ proyecto.titulo }}
+		    	Proyecto N° {{proyecto.id}}: {{ proyecto.titulo }}
 		    	{% set numinvitacionesPendientes = proyecto.invitacionesPendientes|length %}
 		    	{% if numinvitacionesPendientes == 1 %}
 		    		({{numinvitacionesPendientes}} invitación pendiente)

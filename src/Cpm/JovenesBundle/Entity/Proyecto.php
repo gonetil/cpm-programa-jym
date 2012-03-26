@@ -500,7 +500,7 @@ class Proyecto
     {
     	$pendientes = array();
     	foreach ($this->invitaciones as $i){
-        	if (!$i->estaPendiente())
+        	if ($i->estaPendiente())
         		$pendientes[] = $i;
         }
         return $pendientes;
