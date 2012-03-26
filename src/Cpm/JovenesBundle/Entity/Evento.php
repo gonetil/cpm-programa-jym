@@ -76,6 +76,13 @@ class Evento
      * @ORM\OneToMany(targetEntity="InstanciaEvento", mappedBy="evento")
      */
     private $instancias;
+
+    /**
+     * @var string action
+     *
+     * @ORM\Column(name="action", type="string", nullable="true")
+     */
+    private $action;
     
 	public function __construct(){
 		$this->pedirNumeroAsistentes = false;
@@ -262,5 +269,25 @@ class Evento
     public function __toString()
     {
     	return $this->titulo;
+    }
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string 
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 }

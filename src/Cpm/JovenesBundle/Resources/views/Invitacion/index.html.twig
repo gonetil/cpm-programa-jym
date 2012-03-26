@@ -7,10 +7,11 @@
 <table class="records_list">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Fecha de Creación</th>
-            <th>Invitación aceptada</th>
-            <th>Número de asistentes</th>
+	        <th>Evento</th>
+            <th>Proyecto</th>
+            <th>Coordinador</th>
+            <th>Aceptó?</th>
+            <th># Asistentes</th>
             <th>Solicita viaje?</th>
             <th>Solicita hospedaje?</th>
             <th>Observaciones</th>
@@ -22,9 +23,21 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td><a href="{{ path('invitaciones_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{% if entity.fechaCreacion %}{{ entity.fechaCreacion|date('Y-m-d H:i:s') }}{% endif%}</td>
-            <td>{{ entity.aceptoInvitacion }}</td>
+        	<td><a href="{{ path('instancia_show', { 'id': entity.instanciaEvento.id }) }}">{{ entity.instanciaEvento.titulo }}</a></td>
+        	<td><a href="{{ path('proyecto_show', { 'id': entity.proyecto.id }) }}">{{ entity.proyecto.titulo | slice(0,50) }}</a></td>
+        	<td><a href="{{ path('usuario_show', { 'id': entity.proyecto.coordinador.id }) }}">{{ entity.proyecto.coordinador.apellido }}, {{ entity.proyecto.coordinador.nombre }}</a></td>
+        	
+            <td>
+            	{% if not entity.aceptoInvitacion is defined %}
+            		?
+            	{% else %}
+            		{% if entity.aceptoInvitacion %}
+            			Si
+            		{% else %}
+            			No
+            		{% endif %}
+            	{% endif %}
+            </td>
             <td>{{ entity.numeroAsistentes }}</td>
             <td>{{ entity.solicitaViaje }}</td>
             <td>{{ entity.solicitaHospedaje }}</td>

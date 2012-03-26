@@ -13,6 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Proyecto
 {
+    const __ESTADO_INICIADO = 'Iniciado';
+    const __ESTADO_RECHAZADO = 'Rechazado';
+
     /**
      * @var integer $id
      *
@@ -123,18 +126,23 @@ class Proyecto
     *
     * @ORM\Column(name="estado", type="string")
     */
-    private $estado = Proyecto::__ESTADO_INICIADO;
+    private $estado;
     
     /**
      *  @ORM\ManyToOne(targetEntity="Ciclo")
      */
     private $ciclo;
     
+	/**
+     * @ORM\OneToMany(targetEntity="Invitacion", mappedBy="proyecto")
+     **/
+    private $invitaciones;
     
-    const __ESTADO_INICIADO = 'Iniciado';
-    const __ESTADO_RECHAZADO = 'Rechazado';
-    
-    
+    public function __construct()
+    {
+    	$this->estado = Proyecto::__ESTADO_INICIADO;
+        $this->colaboradores = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
             
     /**
@@ -265,10 +273,6 @@ class Proyecto
     public function getEscuela()
     {
         return $this->escuela;
-    }
-    public function __construct()
-    {
-        $this->colaboradores = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -466,4 +470,55 @@ class Proyecto
     { 
     	return "Escuela {$this->escuela} / Coordinador {$this->coordinador}";
     }
+
+    /**
+     * Add invitaciones
+     *
+     * @param Cpm\JovenesBundle\Entity\Invitacion $invitaciones
+     */
+    public function addInvitacion(\Cpm\JovenesBundle\Entity\Invitacion $invitaciones)
+    {
+        $this->invitaciones[] = $invitaciones;
+    }
+
+    /**
+     * Get invitaciones
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getInvitaciones()
+    {
+        return $this->invitaciones;
+    }
+    
+    /**
+     * Get invitaciones pendientes
+     *
+     * @return array 
+     */
+    public function getInvitacionesPendientes()
+    {
+    	$pendientes = array();
+    	foreach ($this->invitaciones as $i){
+        	if (!$i->estaPendiente())
+        		$pendientes[] = $i;
+        }
+        return $pendientes;
+    }
+    
+    /**
+     * Get invitaciones vigentes
+     *
+     * @return array 
+     */
+    public function getInvitacionesVigentes()
+    {
+    	$vigentes = array();
+    	foreach ($this->invitaciones as $i){
+        	if ($i->estaVigente())
+        		$vigentes[] = $i;
+        }
+        return $vigentes;
+    }
+    
 }

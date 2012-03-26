@@ -10,7 +10,6 @@
         <tr>
             <th>Id</th>
             <th>Evento</th>
-            <th>Subtítulo</th>
             <th>Lugar</th>
             <th>Inicio</th>
             <th>Fin</th>
@@ -22,7 +21,6 @@
         <tr>
             <td><a href="{{ path('instancia_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.evento.titulo }}</td>
-            <td>{{ entity.subtitulo }}</td>
             <td>{{ entity.lugar }}</td>
             <td>{% if entity.fechaInicio %}{{ entity.fechaInicio|date('d-m-Y H:i:s') }}{% endif%}</td>
             <td>{% if entity.fechaFin %}{{ entity.fechaFin|date('d-m-Y H:i:s') }}{% endif%}</td>

@@ -1,0 +1,31 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Ha recibido una Invitación{% endblock %}
+
+{% block content %}
+
+<p>
+Posee una invitacion pendiente para el evento <b>{{invitacion.instanciaEvento.titulo}}</b>
+Por favor complete los campos que se le solicitan a continuación 
+</p>
+<form action="{{ path('abrir_invitacion_submit', { 'id': invitacion.id, accion: 'aceptar' }) }}" method="post" {{ form_enctype(edit_usuario_form) }}>
+    {{ form_widget(edit_usuario_form) }}
+    <p>
+        <button type="submit">Guardar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('home') }}">
+            Cancelar
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">
+            Rechazar Invitacion
+        </a>
+    </li>
+</ul>
+
+{% endblock %}

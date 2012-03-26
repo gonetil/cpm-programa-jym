@@ -15,7 +15,12 @@
 				{% if not is_granted("ROLE_ADMIN") %}
 					<li><a href="{{path('home')}}">Mis proyectos</a></li>
 					<li><a href="{{path('correos_usuario')}}">Mis Correos</a></li>
-<!-- 				<li><a href="{{path('home')}}">Mis reuniones</a></li> -->
+			
+				    {% for accionUsuario in jym.getAccionesUsuario() %}
+					<li>
+							<li><a href="{{path(accionUsuario.href)}}">{{accionUsuario.label}}</a></li>
+					</li>
+					{% endfor %}
 				{% else %}
 					<li><a href="{{path('proyecto')}}">Ver todos los proyectos</a></li>
 					<li><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
