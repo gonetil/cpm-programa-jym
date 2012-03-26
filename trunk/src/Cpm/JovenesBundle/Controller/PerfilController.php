@@ -11,6 +11,7 @@ use Cpm\JovenesBundle\Form\ProyectoType;//
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Plantilla;
+use Cpm\JovenesBundle\Form\InvitacionUsuarioType;
 /**
  * Perfil controller.
  *
@@ -27,28 +28,14 @@ class PerfilController extends BaseController
     	$usuario = $this->getLoggedInUser();
     	$mis_proyectos = $this->getRepository('CpmJovenesBundle:Proyecto')->findBy(
 						    	array('coordinador' => $usuario->getId())
-				    	);
+		);
+		$this->setInfoMessage(" Por favor, conserve su nombre de usuario y contraseña. Trabajaremos juntos todo el año, y está página será nuestro canal de comunicación principal.");
         return array (
         			'proyectos' => $mis_proyectos ,
         			'usuario' => $usuario,
-        		);
+        );
     }
     
-    /**
-    * Muestra informacion de un proyecto del usuario
-    * @Route("miproyecto", name="miproyecto_usuario")
-    * @Template()
-    */
-    public function myprojectAction() {
-    	$id = $this->getRequest()->get('id'); 
-    	$usuario = $this->getLoggedInUser();
-    	$proyecto = $this->getRepository("CpmJovenesBundle:Proyecto")->findOneById($id);
-    	
-    	if ($proyecto && $usuario->equals($proyecto->getCoordinador())) 
-    		return array( 'proyecto' => $proyecto );
-    	else 
-    		return array();
-    }
     /**
     * Displays a form to create a new Proyecto entity.
     *
@@ -240,5 +227,96 @@ class PerfilController extends BaseController
 			return array('correo' => $correo);
 		else return "";	 
 				
+    }
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////// EVENTOS DE USUARIOS ////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////
+	
+    /**
+     * Registra la aceptacion o rechazo de la invitacion a un evento por parte de un usuario. 
+     *
+     * @Route("/invitaciones/{id}/{accion}", name="abrir_invitacion")
+     * 
+     */
+    public function abrirInvitacionAction($id, $accion)
+    {
+    	if (!in_array($accion, array('rechazar', 'aceptar')))
+    		throw $this->createNotFoundException('Accion inválida.');
+    	
+        $invitacion = $this->getRepository('CpmJovenesBundle:Invitacion')->find($id);
+        if (!$invitacion) 
+            throw $this->createNotFoundException('No exite la Invitacion solicitada');
+        
+        $user = $this->getLoggedInUser();
+        if (!$user->isAdmin() && !$user->equals($invitacion->getProyecto()->getCoordinador())){
+        	throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("Solo el coordinador del proyecto puede aceptar o rechazar sus invitaciones");
+        }
+        
+        if ($invitacion->getInstanciaEvento()->fue() || ($invitacion->estaPendiente() && !$invitacion->estaVigente())){
+    		$this->setWarnMessage("El plazo de inscripción para el evento '".$invitacion->getInstanciaEvento()->getTitulo()."'ya cerró.");    	
+		    if (!$user->isAdmin())
+		    	return $this->redirect($this->generateUrl('home'));
+        }
+		
+					
+					
+		$args = array('invitacion' => $invitacion);
+		if ($accion == 'rechazar'){
+			return $this->render('CpmJovenesBundle:Perfil:rechazarInvitacion.html.twig', $args);
+		}else{
+			$editForm = $this->createForm(new InvitacionUsuarioType(), $invitacion);
+			$args['edit_usuario_form']=$editForm->createView();
+			return $this->render('CpmJovenesBundle:Perfil:aceptarInvitacion.html.twig', $args);
+		}
+    }
+    
+    /**
+     * Registra la aceptacion o rechazo de la invitacion a un evento por parte de un usuario. 
+     *
+     * @Route("/invitaciones/{id}/{accion}/submit", name="abrir_invitacion_submit")
+     * 
+     */
+    public function abrirInvitacionSubmitAction($id, $accion)
+    {
+        if (!in_array($accion, array('rechazar', 'aceptar')))
+    		throw $this->createNotFoundException('Accion inválida.');
+    	
+        $invitacion = $this->getRepository('CpmJovenesBundle:Invitacion')->find($id);
+        if (!$invitacion) 
+            throw $this->createNotFoundException('No exite la Invitacion solicitada');
+        
+        $user = $this->getLoggedInUser();
+        if (!$user->isAdmin() && !$user->equals($invitacion->getProyecto()->getCoordinador())){
+        	throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("Solo el coordinador del proyecto puede aceptar o rechazar sus invitaciones");
+        }
+        
+        if ($invitacion->getInstanciaEvento()->fue() || ($invitacion->estaPendiente() && !$invitacion->estaVigente())){
+    		$this->setWarnMessage("El plazo de inscripción para el evento '".$invitacion->getInstanciaEvento()->getTitulo()."'ya cerró.");    	
+		    if (!$user->isAdmin())
+		    	return $this->redirect($this->generateUrl('home'));
+        }
+        
+		if ($accion == 'rechazar'){
+			$invitacion->setAceptoInvitacion(false);
+		}else{
+			$invitacion->setAceptoInvitacion(true);
+			$editForm = $this->createForm(new InvitacionUsuarioType(), $invitacion);
+			
+			$request = $this->getRequest();
+	        $editForm->bindRequest($request);
+	
+	        if (!$editForm->isValid()) {
+	            return $this->render('CpmJovenesBundle:Perfil:aceptarInvitacion.html.twig', 
+	            	array('invitacion' => $invitacion, 'edit_usuario_form' => $editForm->createView())
+	            );
+	            //FIXME, redireccionar al action del evento
+			}
+        }
+		$this->setSuccessMessage("La invitación fue guardada satisfactoriamente.");
+        $this->doPersist($invitacion);
+	    
+	    return $this->redirect($this->generateUrl('home'));
+
     }
 }

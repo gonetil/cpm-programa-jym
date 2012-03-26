@@ -38,7 +38,9 @@ abstract class BaseController extends Controller
 	protected function setInfoMessage($msg){
 		$this->get('session')->setFlash('info', $msg);
 	}
-	
+	protected function setWarnMessage($msg){
+		$this->get('session')->setFlash('warning', $msg);
+	}
 	protected function setErrorMessage($msg){
 		$this->get('session')->setFlash('error', $msg);
 	}
@@ -58,7 +60,6 @@ abstract class BaseController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
         $em->persist($entity);
         $em->flush();
-		
 	}
 	
 	protected function isUserAuthenticated() { 

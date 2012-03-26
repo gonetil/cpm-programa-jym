@@ -8,30 +8,7 @@
 
 <div id="welcome-message">
 	<h2>Hola {{usuario.nombre}}, le damos la bienvenida al Sistema de usuarios del <i>Programa Jóvenes y Memoria, recordamos para el futuro </i></h2>
-	<h3> Por favor, conserve su nombre de usuario y contraseña. Trabajaremos juntos todo el año, y está página será nuestro canal de comunicación principal.</h3>  
-	<hr/>
-</div>
-<script>
-	function cargar_proyecto(id) { 
-		$("#detalle_proyecto").hide()
-		$.post("{{ path('miproyecto_usuario') }}", 
-				{id : id } ,
-			    function(detalle) { $("#detalle_proyecto").html(detalle).show(); }
-		);
-		return false;
-	}
 	
-	$(document).ready(function() { 
-		$('#loading-indicator-mini')
-		.hide()
-	    .ajaxStart(function() {
-	        $(this).show();
-	    })
-	    .ajaxStop(function() {
-	        $(this).hide();
-	    });
-	});
-</script>
 
 	<ul id="user-actions" class="record_actions" style="float:right">
 	    {% for accionUsuario in jym.getAccionesUsuario() %}
@@ -40,20 +17,8 @@
 		</li>
 		{% endfor %}
 	</ul>
- 	<h4> 
-	 	{% if proyectos|length == 0 %} 		
-			No posee ninguna escuela inscripta
-		{% else %}
- 			Usted posee {{ proyectos|length }} 
-			{% if proyectos|length > 1 %}
-				escuelas inscriptas
-			{% else %}
-				escuela inscripta
-			{% endif %}
-		
-		{% endif %}
-	</h4>
-		
+		<hr/>
+</div>
 		{% if proyectos|length > 0 %}
 		<script>	
 			$("a[href='{{path('proyecto_wizzard')}}']").click(function(event) { 
@@ -83,16 +48,7 @@
 				 </p>
 			</div>
 	{% endif %}
-	<ul class="mis_proyectos">
-		{% for proyecto in proyectos %}
-			<li>		             
-		    	{{ proyecto_box.showSmall(proyecto) }}
-		    	
-		    </li>
-		{% endfor %}
-	</ul>
-	<div id="loading-indicator-mini" class="cargando_detalle_proyecto"> &nbsp; </div> 
-	<div id="detalle_proyecto" class="right-panel"></div>		
 	
-		        
+	{% include 'CpmJovenesBundle:Perfil:listar_proyectos_docente.html.twig' %}
+			        
 {% endblock %}

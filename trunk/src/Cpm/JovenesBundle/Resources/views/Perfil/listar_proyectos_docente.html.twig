@@ -1,0 +1,62 @@
+{% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
+	<style type="text/css">
+	
+	</style>
+	<script type="text/javascript">
+	currentTab = null;
+	currentLi = null;
+	$(function() {
+ 		$("ul#tabs-proyectos li").click(function(li){
+ 			li = $(li.currentTarget);
+ 			var target = li.attr('target');
+ 			
+ 			if (currentTab !=target) {
+ 				$('#'+target).css('display','block');
+ 				li.addClass('selected');
+ 				if (currentTab){
+	 				$('#'+currentTab).css('display','none');
+	 				currentLi.removeClass('selected');
+	 				}
+ 				currentTab =target;
+ 				currentLi=li;
+ 			}
+ 		});
+ 		$("ul#tabs-proyectos li").first().click();
+	});
+	</script>
+	
+<h4>{% if proyectos|length == 0 %} No posee ninguna escuela inscripta {% else %} Usted posee {{ proyectos|length }} {% if
+	proyectos|length > 1 %} escuelas inscriptas {% else %} escuela inscripta {% endif %} {% endif %}</h4>
+<div id="listado-proyectos">
+<ul id="tabs-proyectos">
+	{% for proyecto in proyectos %}
+	<li target="proyecto_{{proyecto.id}}"> 
+			<h3> 
+		    	{{ proyecto.titulo }}
+		    	{% set numinvitacionesPendientes = proyecto.invitacionesPendientes|length %}
+		    	{% if numinvitacionesPendientes == 1 %}
+		    		({{numinvitacionesPendientes}} invitación pendiente)
+		    	{% elseif numinvitacionesPendientes > 1 %}
+		    		({{numinvitacionesPendientes}} invitaciones pendientes)
+		    	{%endif%}
+		    </h3>
+		    <h4> 
+		    		{{ proyecto_box.nombreEscuela(proyecto.escuela) }}
+		   	</h4>
+		    <ul id="project-actions" class="record_actions">
+				{% for accion in jym.getAccionesProjecto(proyecto) %}
+						<li>
+							<a href="{{ path(accion.href, {'id':proyecto.id}) }}">{{accion.label}}</a>
+						</li>
+				{% endfor %}
+			</ul>
+	</li>
+	{% endfor %}
+	</ul>
+	{% for proyecto in proyectos %}
+		<div id="proyecto_{{proyecto.id}}" class="detalle_proyecto">
+	     {{ proyecto_box.showFull(proyecto) }}
+	    </div>
+	{% endfor %}
+	
+</div>

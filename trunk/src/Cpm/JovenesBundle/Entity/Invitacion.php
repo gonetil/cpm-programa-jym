@@ -313,4 +313,13 @@ class Invitacion
     {
         return $this->instanciaEvento;
     }
+    
+    public function estaPendiente(){
+    	return $this->aceptoInvitacion === null;
+    }
+    
+    public function estaVigente(){
+    	return $this->instanciaEvento->estaAbiertaInscripcion();
+    }
+    
 }

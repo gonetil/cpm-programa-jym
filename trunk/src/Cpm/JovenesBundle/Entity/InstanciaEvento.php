@@ -26,13 +26,6 @@ class InstanciaEvento
     private $id;
 
     /**
-     * @var string $subtitulo
-     *
-     * @ORM\Column(name="subtitulo", type="string", length=255, nullable="true")
-     */
-    private $subtitulo;
-
-    /**
      * @var string $descripcion
      *
      * @ORM\Column(name="descripcion", type="text", nullable="true")
@@ -67,6 +60,18 @@ class InstanciaEvento
     private $fechaFin;
 
     /**
+     * @var datetime $fechaCierreInscripcion
+     * @ORM\Column(name="fecha_cierre_inscripcion", type="datetime")
+     */
+    private $fechaCierreInscripcion;
+
+    /**
+     * @var boolean $fechaCierreInscripcion
+     * @ORM\Column(name="cerrar_inscripcion", type="boolean")
+     */
+    private $cerrarInscripcion;
+    
+    /**
      * @var Cpm\JovenesBundle\Entity\Evento $evento
      * 
      * @ORM\ManyToOne(targetEntity="Evento", inversedBy="instancias")
@@ -81,7 +86,7 @@ class InstanciaEvento
     private $invitaciones;
 
 	public function __construct(){
-		
+		$this->cerrarInscripcion = false;
 		$this->invitaciones = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
@@ -95,27 +100,6 @@ class InstanciaEvento
         return $this->id;
     }
 
-    /**
-     * Set subtitulo
-     *
-     * @param string $subtitulo
-     */
-    public function setSubtitulo($subtitulo)
-    {
-        $this->subtitulo = $subtitulo;
-    }
-
-    /**
-     * Get subtitulo
-     *
-     * @return string 
-     */
-    public function getSubtitulo()
-    {
-        return $this->subtitulo;
-    }
-
-    
 
     /**
      * Set descripcion
@@ -265,9 +249,74 @@ class InstanciaEvento
     {
         return $this->invitaciones;
     }
-    
     public function __toString()
     {
-    	return $this->evento->getTitulo() . " - (Inst. {$this->id}" .( ($this->subtitulo != "")? ": ".$this->subtitulo : "").")";
+    	return $this->getTitulo();
     }
+    
+    public function getTitulo()
+    {
+    	$referencia = $this->fechaInicio->format('d/m');
+    	$dia_fin = $this->fechaFin->format('d/m');
+    	if ($referencia != $dia_fin)
+    		$referencia.=" al ".$dia_fin;
+    	
+    	return $this->evento->getTitulo()." ($referencia)";
+    }
+
+    /**
+     * Set fechaCierreInscripcion
+     *
+     * @param datetime $fechaCierreInscripcion
+     */
+    public function setFechaCierreInscripcion($fechaCierreInscripcion)
+    {
+        $this->fechaCierreInscripcion = $fechaCierreInscripcion;
+    }
+
+    /**
+     * Get fechaCierreInscripcion
+     *
+     * @return datetime 
+     */
+    public function getFechaCierreInscripcion()
+    {
+        return $this->fechaCierreInscripcion;
+    }
+
+    /**
+     * Set cerrarInscripcion
+     *
+     * @param boolean $cerrarInscripcion
+     */
+    public function setCerrarInscripcion($cerrarInscripcion)
+    {
+        $this->cerrarInscripcion = $cerrarInscripcion;
+    }
+
+    /**
+     * Get cerrarInscripcion
+     *
+     * @return boolean 
+     */
+    public function getCerrarInscripcion()
+    {
+        return $this->cerrarInscripcion;
+    }
+    
+    public function fue(){
+    	return $this->fechaInicio < new \DateTime();
+    } 
+    
+    public function estaAbiertaInscripcion(){
+    	$now =new \DateTime();
+    	
+    	if ($this->fechaInicio < $now)
+    		return false;
+    	elseif (!empty($this->fechaCierreInscripcion) && $this->fechaCierreInscripcion < $now && $this->cerrarInscripcion)
+    		return false;
+    	else
+    		return true;
+    } 
+    
 }

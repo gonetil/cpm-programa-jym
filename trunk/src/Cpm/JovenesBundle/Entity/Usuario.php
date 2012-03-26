@@ -365,8 +365,9 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     	$this->resetPassword = $rp;
     }
     
-    
-
+    public function isAdmin(){
+    	return $this->hasRole(self::ROL_ADMIN);
+    }
     
     
     
