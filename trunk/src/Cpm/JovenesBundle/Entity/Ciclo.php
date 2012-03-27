@@ -164,4 +164,9 @@ class Ciclo
     {
         $this->historial[] = date("Y-m-d H:i")." : ".$evento;
     }
+    
+    public function __toString()
+    {
+        return $this->titulo;
+    }
 }

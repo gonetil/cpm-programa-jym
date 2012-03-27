@@ -7,28 +7,18 @@
 <table class="records_list">
     <thead>
         <tr>
-            <th>Id</th>
+            <th>Ciclo</th>
             <th>Título</th>
             <th>Descripción</th>
-            <th>¿se debe solicitar número de asistentes?</th>
-            <th>¿se permite ingresar un suplente?</th>
-            <th>¿se ofrece hospedaje? </th>
-            <th>¿se ofrece viaje?</th>
-            <th>¿se permite ingresar observaciones?</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td><a href="{{ path('evento_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.ciclo }}</td>
             <td>{{ entity.titulo }}</td>
             <td>{{ entity.descripcion }}</td>
-            <td>{{ entity.pedirNumeroAsistentes }}</td>
-            <td>{{ entity.permitirSuplente }}</td>
-            <td>{{ entity.ofrecerHospedaje }}</td>
-            <td>{{ entity.ofrecerViaje }}</td>
-            <td>{{ entity.permitirObservaciones }}</td>
             <td>
                 <ul>
                     <li>

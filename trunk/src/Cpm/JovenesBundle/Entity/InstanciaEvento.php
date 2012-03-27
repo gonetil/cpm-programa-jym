@@ -88,6 +88,9 @@ class InstanciaEvento
 	public function __construct(){
 		$this->cerrarInscripcion = false;
 		$this->invitaciones = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->fechaInicio = new \Datetime();
+		$this->fechaFin = new \Datetime();
+		$this->fechaCierreInscripcion = new \Datetime();
 	}
 
     /**

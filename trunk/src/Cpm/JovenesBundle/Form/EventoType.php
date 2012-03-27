@@ -9,14 +9,16 @@ class EventoType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
+    	
         $builder
+         //   ->add('ciclo')
             ->add('titulo',null,array('label' => 'Título'))
             ->add('descripcion',null,array('label' => 'Descripción', 'required'=>false))
-            ->add('pedirNumeroAsistentes',null,array('label' => '¿solicitar número de asistentes?', 'required'=>false))
-            ->add('permitirSuplente',null,array('label' => '¿permitir indicar suplentes?', 'required'=>false))
-            ->add('ofrecerHospedaje',null,array('label' => '¿ofrecer hospedaje?', 'required'=>false))
-            ->add('ofrecerViaje',null,array('label' => '¿ofrecer viaje?', 'required'=>false))
-            ->add('permitirObservaciones',null,array('label' => '¿permitir indicar observaciones?', 'required'=>false))
+            ->add('pedirNumeroAsistentes','choice',array('label' => '¿Solicitar número de asistentes?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
+            ->add('permitirSuplente','choice',array('label' => '¿permitir indicar suplentes?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
+            ->add('ofrecerHospedaje','choice',array('label' => '¿Ofrecer hospedaje?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
+            ->add('ofrecerViaje','choice',array('label' => '¿Ofrecer viaje?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
+            ->add('permitirObservaciones','choice',array('label' => '¿Permitir Observaciones?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
         ;
     }
 
