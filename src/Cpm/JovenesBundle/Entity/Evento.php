@@ -84,6 +84,11 @@ class Evento
      */
     private $action;
     
+    /**
+     *  @ORM\ManyToOne(targetEntity="Ciclo")
+     */
+    private $ciclo;
+    
 	public function __construct(){
 		$this->pedirNumeroAsistentes = false;
 		$this->permitirSuplente = false;
@@ -290,4 +295,26 @@ class Evento
     {
         return $this->action;
     }
+
+    /**
+     * Get ciclo
+     *
+     * @return Cpm\JovenesBundle\Entity\Ciclo
+     */
+    public function getCiclo()
+    {
+        return $this->ciclo;
+    }
+
+    /**
+     * Set ciclo
+     *
+     * @param Cpm\JovenesBundle\Entity\Ciclo $ciclo
+     */
+    public function setCiclo(\Cpm\JovenesBundle\Entity\Ciclo $ciclo)
+    {
+        $this->ciclo = $ciclo;
+    }
+    
+    
 }

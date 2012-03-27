@@ -83,6 +83,8 @@ class EventoController extends BaseController
         $entity  = new Evento();
         $request = $this->getRequest();
         $form    = $this->createForm(new EventoType(), $entity);
+        $entity->setCiclo($this->getJYM()->getCicloActivo());
+        
         $form->bindRequest($request);
 
         if ($form->isValid()) {

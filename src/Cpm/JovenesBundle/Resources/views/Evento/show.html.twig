@@ -1,19 +1,11 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block title %}Evento{% endblock %}
+{% block title %}Evento {{ entity.id }}: "{{ entity.titulo }}"{% endblock %}
 
 {% block content %}
 
 <table class="record_properties">
     <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
-            <th>Título</th>
-            <td>{{ entity.titulo }}</td>
-        </tr>
         <tr>
             <th>Descripción</th>
             <td>{{ entity.descripcion }}</td>
@@ -53,7 +45,7 @@
         </a>
     </li>
     <li>
-        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el evento?')">
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>
