@@ -18,10 +18,14 @@ class Plantilla
 	const _FECHA = "fecha";
 	const _PROYECTO = "proyecto";
 	const _URL_SITIO = "url_sitio";
+	const _INVITACION = "invitacion";
+	
+	//codigos de plantillas
 	const CONFIRMACION_REGISTRO = "confirmar_registro_usuario";
 	const RESETEAR_CUENTA = "resetear_cuenta_usuario";
-	const ALTA_PROYECTO= "alta_proyecto";
-	
+	const ALTA_PROYECTO = "alta_proyecto";
+	const INVITACION_A_EVENTO = "invitacion_a_evento";
+	const COMUNICACION_USUARIO = "comunicacion_usuario";
 
     /**
      * @var integer $id
