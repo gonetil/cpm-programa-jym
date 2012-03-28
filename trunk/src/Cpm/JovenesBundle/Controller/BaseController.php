@@ -60,7 +60,7 @@ abstract class BaseController extends Controller
      * Enviar un correo con asunto $asunto y cuerpo $cuerpo a las direcciones asociadas al proyecto
      * Aqui no hay plantillas involucradas
      */
-    protected function enviarMailAProyecto($proyecto,$asunto,$cuerpo,$cc_coordinador=true,$cc_escuela=false,$cc_colaboradores=false) 
+    protected function enviarMailAProyecto($proyecto,$asunto,$cuerpo,$cc_coordinador=true,$cc_escuela=false,$cc_colaboradores=false,$contexto = array()) 
     {
     	$mailer = $this->getMailer();
     	
