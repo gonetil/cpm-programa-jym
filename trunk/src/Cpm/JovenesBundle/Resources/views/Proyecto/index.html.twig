@@ -96,6 +96,8 @@
     </tbody>
 </table>
 	
+	{{ form_row(form.batch_action) }}
+	{{ form_row(form.batch_action_type) }}
     {{ form_row(form._token) }}
     </form>
 
@@ -123,8 +125,8 @@
 	<li> 
 		<div>Enviar mensaje</div>
 		<ul class="sub_actions">
-			<li><a href="{{ path('correo_write_to_selected') }}" target="#filter_form"> A los proyectos seleccionados </a></li>
-			<li><a href="{{ path('correo_write_to_all_results') }}" target="#filter_form"> A todos los proyectos </a></li>
+			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Correo:writeToMany" target="#filter_form" type="seleccionados"> A los proyectos seleccionados </a></li>
+			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Correo:writeToMany" target="#filter_form" type="todos"> A todos los proyectos </a></li>
 		</ul>	
 	</li>
 </ul>

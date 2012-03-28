@@ -142,6 +142,23 @@ class CorreoController extends BaseController
         );
         
     }
+    
+    /**
+     * 
+     * Permite enviar un correo a un conjunto de destinatarios seleccionados
+     * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
+     */
+    public function writeToManyAction($proyectos_query) {
+    	$correoMasivo = new CorreoMasivo();
+    	$correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
+    	
+    	$proyectos = $proyectos_query->getResult();
+    	
+    	return array('form' => $correoMasivoForm->createView() , 
+    			   	 'proyectos' => $proyectos
+    				);
+    	        	  
+    }
 
     /**
     *
@@ -238,7 +255,9 @@ class CorreoController extends BaseController
     			$this->enviarMailAProyecto($proyecto,$asunto,$cuerpo,$ccCoordinadores,$ccEscuelas,$ccColaboradores,$context);
     		}
     		$this->setSuccessMessage("Los correos fueron enviados satisfactoriamente");
-    		return $this->forward("CpmJovenesBundle:Correo:index");
+    		
+    		return $this->redirect($this->generateUrl('proyecto'));
+    		
     		} //valid == success
     	} // form->isValid
 		

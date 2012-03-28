@@ -80,6 +80,8 @@ class ProyectoSearch
     public $escuela;
     
     public $proyectos_seleccionados;
+    public $batch_action;
+    public $batch_action_type; //selection or all
     /**
      * Get id
      *
@@ -257,4 +259,20 @@ class ProyectoSearch
     public function setProyectos_seleccionados($proyectos_seleccionados) {
     	$this->proyectos_seleccionados = $proyectos_seleccionados;
     }
+    
+    public function getBatch_action() {
+    	return $this->batch_action;
+    }
+    public function setBatch_action($batch) {
+    	$this->batch_action = $batch;
+    }
+    
+    public function getBatch_action_type() { 
+    	return $this->batch_action_type;
+    }
+    
+    public function setBatch_action_type($type) {
+    	return $this->batch_action_type = $type;
+    }
+    
 }

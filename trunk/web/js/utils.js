@@ -48,7 +48,13 @@ add_batch_actions_support = function() {
 	$(".batch_actions .sub_actions a").click(function(event){
 		event.preventDefault();
 		$clicked= $(event.target);		
-		action = $clicked.attr('href');
+		action = $clicked.attr('href'); //el action que procesara el formulario
+		type = $clicked.attr('type'); //se deben buscar todos los proyectos o solo los seleccionados
+		batch_action = $clicked.attr('batch_action'); //el action a forwardear
+		
+		$(".batch_action_hidden").val(batch_action);
+		$(".batch_action_type_hidden").val(type);
+		
 		target_form = $clicked.attr('target');
 		$(target_form).attr('action',action).submit();
 	});

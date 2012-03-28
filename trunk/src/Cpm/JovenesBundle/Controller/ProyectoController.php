@@ -301,5 +301,49 @@ class ProyectoController extends BaseController
 		return new Response("error");
 		
 	}
+
+	/**
+	* 
+	*   @Route("/batch_action" , name="proyecto_batch_action")
+	*
+	* */	
+	public function executeBatchAction() {
+		$em = $this->getDoctrine()->getEntityManager();
+		$repository = $em->getRepository('CpmJovenesBundle:Proyecto');
+		$ciclo = $this->getJYM()->getCicloActivo();
+		$request = $this->getRequest();
+		
+		$searchValues = new ProyectoSearch();
+		$searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
+		
+		
+		$proyectos = array();
+		 
+		if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype")))
+		{				
+			$searchForm->bindRequest($request);
+			if ($searchForm->isValid()) {
+
+				$batch_action_type = $searchValues->getBatch_action_type(); //todos o seleccionados
+				$batch_action = $searchValues->getBatch_action();
+					
+				if ($batch_action_type == 'todos') {
+					$proyectos =$repository->findBySearchCriteriaQuery($searchForm->getData(),$ciclo);
+				}
+				elseif ($batch_action_type == 'seleccionados') {
+					$destinatarios = $searchValues->getProyectos_seleccionados();
+					if (count($destinatarios) > 0)
+						$proyectos = $repository->findAllInArray($destinatarios);
+				}
+				
+				
+				$response = $this->forward($batch_action,array('proyectos_query'=>$proyectos));
+				return $response;
+			}
+		}
+		return $this->redirect($this->generateUrl('proyecto'),array('form'=>$searchForm->createView()));
+
+		
+	}
     
 }
