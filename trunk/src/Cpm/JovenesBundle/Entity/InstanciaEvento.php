@@ -211,6 +211,12 @@ class InstanciaEvento
     		$context->setPropertyPath($propertyPath);
     		$context->addViolation('La fecha de inicio tiene que ser anterior a la fecha de fin', array(), null);
     	}
+    	
+    	if ($this->fechaCierreInscripcion > $this->fechaFin) {
+    		$propertyPath = $context->getPropertyPath() . '.fechaCierreInscripcion';
+    		$context->setPropertyPath($propertyPath);
+    		$context->addViolation('La fecha de cierre de inscripcion tiene que ser anterior a la fecha de fin', array(), null);
+    	}
     }
     /**
      * Set evento
@@ -265,6 +271,27 @@ class InstanciaEvento
     		$referencia.=" al ".$dia_fin;
     	
     	return $this->evento->getTitulo()." ($referencia)";
+    }
+    
+    public function getPeriodoComoTexto()
+    {
+    	$dia_inicio = $this->fechaInicio->format('d/m');
+    	$hora_incio = $this->fechaInicio->format('H:i');
+    	
+    	$dia_fin = $this->fechaFin->format('d/m');
+    	$hora_fin = $this->fechaFin->format('H:i');
+    	$referencia="";
+    	if ($dia_inicio == $dia_fin){
+	    	$referencia .= "el día $dia_inicio";
+	    	if ($hora_incio != '00:00')
+	    		$referencia .=" de $hora_incio a $hora_fin";
+    	}else{
+    		$referencia .="desde el $dia_inicio";
+    		if ($hora_incio != '00:00')
+	    		$referencia .="a las $hora_incio ";
+	    	$referencia .= " hasta el $dia_fin";
+    	}
+    	return $referencia;
     }
 
     /**
