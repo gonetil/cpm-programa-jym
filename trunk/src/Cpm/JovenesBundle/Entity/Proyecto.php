@@ -23,8 +23,10 @@ class Proyecto
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
-
+    public $id;
+	public function setId($id) {
+		$this->id = $id;
+	}
     /**
      * @var string $titulo
      *

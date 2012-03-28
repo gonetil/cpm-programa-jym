@@ -6,12 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
+
 use Cpm\JovenesBundle\Entity\Correo;
 use Cpm\JovenesBundle\Form\CorreoType;
 
-use Cpm\JovenesBundle\Entity\ProyectoSearch;
+use Cpm\JovenesBundle\EntityDummy\ProyectoSearch;
 use Cpm\JovenesBundle\Form\ProyectoSearchType;
 
+use Cpm\JovenesBundle\EntityDummy\CorreoMasivo;
+use Cpm\JovenesBundle\Form\CorreoMasivoType;
+
+use Cpm\JovenesBundle\Entity\Plantilla;
 
 /**
  * Correo controller.
@@ -123,10 +129,18 @@ class CorreoController extends BaseController
     		
     		if ($searchForm->isValid()) {
     			$destinatarios = $searchForm->getData()->getProyectos_seleccionados();
-    			$proyectos = $repository->findAllInArray($destinatarios);
+    			if (count($destinatarios) > 0)
+    				$proyectos = $proyectos = $repository->findAllInArray($destinatarios);
     		}
     	}
-    	return array('proyectos' => $proyectos->getResult());
+    	
+    	$correoMasivo = new CorreoMasivo();
+        $correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
+
+        return array('form' => $correoMasivoForm->createView(),
+        			 'proyectos' => (($proyectos==null)?array():$proyectos->getResult())
+        );
+        
     }
 
     /**
@@ -154,7 +168,83 @@ class CorreoController extends BaseController
         	$proyectos = $repository->findAllQuery($ciclo);
         }
 
-        return array('proyectos' => $proyectos->getResult());
+        $correoMasivo = new CorreoMasivo();
+        $correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
         
+        return array('form' => $correoMasivoForm->createView(),
+        			 'proyectos' => $proyectos->getResult());
+    }
+    
+    /**
+    *
+    * Envia un correo masivo
+    * @Route("/send_mass_email", name="correo_send_mass_email")
+    * @Template("CpmJovenesBundle:Correo:send_mass_email.html.twig")
+    */
+    public function sendMassEmailAction() { 
+    	$request = $this->getRequest();
+    	$correoMasivo = new CorreoMasivo();
+    	
+    	$correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
+    	$correoMasivoForm->bindRequest($request);
+    	
+    	if ($correoMasivoForm->isValid()) {
+    		
+
+    		$repository = $this->getEntityManager()->getRepository('CpmJovenesBundle:Proyecto');
+    		$destinatarios = $correoMasivo->getProyectos();
+    		
+
+    		if (count($destinatarios) > 0)
+    			$proyectos = $repository->findAllInArray($destinatarios)->getResult();
+    		else $proyectos=array();
+    		
+    		$mailer = $this->getMailer();
+    		$valid  = $mailer->isValidTemplate($correoMasivo->getCuerpo());
+    		
+    		if ($valid == "success") {
+    			
+    			
+    			$example = $proyectos[0];
+    			$context = array(Plantilla::_USUARIO => $example->getCoordinador(),
+    							  Plantilla::_EMISOR => $this->getLoggedInUser(),
+    							  Plantilla::_PROYECTO => $example,
+    							  Plantilla::_URL_SITIO => 'www.lacomi.com',
+    							  Plantilla::_URL => 'test_url'
+    							  
+    			);
+    			$template= $mailer->renderTemplate($correoMasivo->getCuerpo(),$context);
+    			$correoMasivo->setCuerpo($template);
+    		}
+    		
+    		
+    		if ($correoMasivo->getPreview()) { //aun no deben mandarse los emails, sino que hay que previsualizarlos
+    			$correoMasivo->setPreview(false); //para la prox
+    			$correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
+    			$content = $this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
+    										array('form'   => $correoMasivoForm->createView(),
+    		    			    				  'proyectos' => $proyectos,
+    											  'show_preview' => true, 
+    											  'correo' => $correoMasivo ));
+    			$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
+    			return new Response($content);
+    		}
+    		
+    		$ccEscuelas = $correoMasivo->getCcEscuelas();
+    		$ccColaboradores = $correoMasivo->getCcColaboradores();
+    		$ccCoordinadores = $correoMasivo->getCcCoordinadores();
+    		$cuerpo = $correoMasivo->getCuerpo();
+    		$asunto = $correoMasivo->getAsunto();
+    		
+    		foreach ($proyectos as $proyecto) {
+    			$this->enviarMailAProyecto($proyecto,$asunto,$cuerpo,$ccCoordinadores,$ccEscuelas,$ccColaboradores);
+    		}
+    		$this->setSuccessMessage("Los correos fueron enviados satisfactoriamente");
+    		return $this->forward("CpmJovenesBundle:Correo:index");
+    	}
+		
+    	return array(
+    	            'form'   => $correoMasivoForm->createView(),
+    				'proyectos' => $correoMasivoForm->getData()->getProyectos());
     }
 }

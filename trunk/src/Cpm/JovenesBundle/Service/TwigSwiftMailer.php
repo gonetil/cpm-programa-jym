@@ -66,7 +66,7 @@ class TwigSwiftMailer implements MailerInterface
 		return $this->sendMessage($usuario->getEmail(), $plantilla->getAsunto(),$plantilla->getCuerpo(), null, $context );
 	}
 	
-    protected function sendMessage($to, $subject, $twig_text, $twig_html, $context)
+    public function sendMessage($to, $subject, $twig_text, $twig_html, $context)
     {
     	$text_template = $this->twig->loadTemplate($twig_text);
 		$textBody = $text_template->render($context);
@@ -98,7 +98,7 @@ class TwigSwiftMailer implements MailerInterface
         return $sent; 
     }
     
-    protected function guardarCorreo($message, $context){
+    public function guardarCorreo($message, $context){
     	
         $correo = new Correo();
 		$correo->setFecha(new \DateTime());
@@ -109,13 +109,43 @@ class TwigSwiftMailer implements MailerInterface
 		if (!empty($context[Plantilla::_EMISOR]) && ($context[Plantilla::_EMISOR] instanceof Usuario)){
     		$correo->setEmisor($context[Plantilla::_EMISOR]);
     	}
+
+		if (!empty($context[Plantilla::_PROYECTO]) && ($context[Plantilla::_PROYECTO] instanceof Proyecto)){
+    		$correo->setProyecto($context[Plantilla::_PROYECTO]);
+    	}
+    	
     	$correo->setEmail(implode(', ', array_keys($message->getTo())));
 		$correo->setAsunto($message->getSubject());
 		$correo->setCuerpo($message->getBody());
 		$em=$this->doctrine->getEntityManager();
 		$em->persist($correo);
-		if ($context[Plantilla::_USUARIO]->getId())
+		if  ( (!empty($context[Plantilla::_USUARIO])) && ($context[Plantilla::_USUARIO]->getId()))
 			$em->flush();
 		
     } 
+    
+    /**
+    * @param string $template : un string con tags twig dentro
+    * returns boolean
+    */
+    public function isValidTemplate($twig_template)
+    {
+    	$twig = $this->twig;
+    	try {
+    		$token_stream = $twig->tokenize($twig_template);
+    		$twig->parse($token_stream);
+    	} catch (\Twig_Error_Syntax $e) {
+    
+    		return $e->getMessage();
+    	}
+    	return "success";
+    }
+    
+    
+    public function renderTemplate($twig_template,$context) {
+    	$template= $this->twig->loadTemplate($twig_template);
+    	$rendered = $template->render($context);
+    	return $rendered;
+    }
+
 }

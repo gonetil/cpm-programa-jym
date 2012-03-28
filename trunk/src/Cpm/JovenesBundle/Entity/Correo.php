@@ -59,8 +59,13 @@ class Correo
      *  @ORM\ManyToOne(targetEntity="Usuario")
      */
     private $emisor;
-    
 
+    
+    /**
+    *  @ORM\ManyToOne(targetEntity="Proyecto" )
+    *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="true")
+    */
+    private $proyecto;
     /**
      * Get id
      *
@@ -189,6 +194,14 @@ class Correo
     public function getEmail()
     {
         return $this->email;
+    }
+    
+    public function getProyecto() { 
+    	return $this->proyecto;
+    }
+    
+    public function setProyecto($proyecto) {
+    	$this->proyecto = $proyecto;
     }
     
     public function __toString(){
