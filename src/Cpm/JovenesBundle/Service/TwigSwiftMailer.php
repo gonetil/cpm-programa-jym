@@ -55,6 +55,12 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendPlantilla($plantilla, $usuario, $context);
     }
 
+    public function getParameter($param_name) {
+    	if (isset($this->parameters[$param_name]))
+    		return $this->parameters[$param_name];
+    	else 
+    		return null;
+    }
 	public function sendPlantilla($plantilla, Usuario $usuario, $context, $sender = null){
 		$context[Plantilla::_USUARIO] = $usuario;
 		$context[Plantilla::_FECHA] = new \DateTime();

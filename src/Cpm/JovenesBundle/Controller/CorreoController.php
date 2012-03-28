@@ -203,19 +203,16 @@ class CorreoController extends BaseController
     		$valid  = $mailer->isValidTemplate($correoMasivo->getCuerpo());
     		
     		if ($valid == "success") {
-    			
-    			
     			$example = $proyectos[0];
     			$context = array(Plantilla::_USUARIO => $example->getCoordinador(),
-    							  Plantilla::_EMISOR => $this->getLoggedInUser(),
     							  Plantilla::_PROYECTO => $example,
-    							  Plantilla::_URL_SITIO => 'www.lacomi.com',
-    							  Plantilla::_URL => 'test_url'
-    							  
+    							  Plantilla::_URL => '?',
+    							  Plantilla::_URL_SITIO => $mailer->getParameter('url_sitio'),
+    							  Plantilla::_FECHA  => new \DateTime()
     			);
     			$template= $mailer->renderTemplate($correoMasivo->getCuerpo(),$context);
-    			$correoMasivo->setCuerpo($template);
-    		}
+    			$cuerpo = $template;
+    		
     		
     		
     		if ($correoMasivo->getPreview()) { //aun no deben mandarse los emails, sino que hay que previsualizarlos
@@ -224,8 +221,9 @@ class CorreoController extends BaseController
     			$content = $this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
     										array('form'   => $correoMasivoForm->createView(),
     		    			    				  'proyectos' => $proyectos,
-    											  'show_preview' => true, 
-    											  'correo' => $correoMasivo ));
+    											  'show_preview' => true,
+    											  'asunto' => $correoMasivo->getAsunto(), 
+    											  'cuerpo' => $cuerpo ));
     			$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
     			return new Response($content);
     		}
@@ -237,11 +235,12 @@ class CorreoController extends BaseController
     		$asunto = $correoMasivo->getAsunto();
     		
     		foreach ($proyectos as $proyecto) {
-    			$this->enviarMailAProyecto($proyecto,$asunto,$cuerpo,$ccCoordinadores,$ccEscuelas,$ccColaboradores);
+    			$this->enviarMailAProyecto($proyecto,$asunto,$cuerpo,$ccCoordinadores,$ccEscuelas,$ccColaboradores,$context);
     		}
     		$this->setSuccessMessage("Los correos fueron enviados satisfactoriamente");
     		return $this->forward("CpmJovenesBundle:Correo:index");
-    	}
+    		} //valid == success
+    	} // form->isValid
 		
     	return array(
     	            'form'   => $correoMasivoForm->createView(),

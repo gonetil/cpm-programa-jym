@@ -12,6 +12,7 @@
 					  {
 					  $("select.select-plantilla")
 					  	.change(function(event) {
+					  		$(".preview").val("1"); //si cambio, debera volver a chequearse
 					  		id_plantilla = $(event.target).val();
 					  		if (id_plantilla == "") return;
 							$.getJSON("{{ path('plantilla_find_by_id') }}", { plantilla_id : id_plantilla} ,
@@ -30,6 +31,7 @@
 					  	 $("#mailer_form .cuerpo-correo").change(function(){
 					  		$(".preview").val("1"); //si cambio, debera volver a chequearse
 					  	 });
+					  	 
 
 	 }); //ready
 </script>
@@ -37,10 +39,10 @@
 	<div class="preview_email">
 		<h2> Vista preliminar del mensaje </h2>
 	 	<div>
-	 		Asunto: <strong> {{correo.asunto}}</strong> 
+	 		Asunto: <strong> {{asunto}}</strong> 
 		</div>
 		<div>
-			Cuerpo: {{ correo.cuerpo }}
+			Cuerpo: {{ cuerpo }}
 		</div>
 		<a href="#" onclick="$('#mail_body').show();">Modificar</a>
 		<script>
