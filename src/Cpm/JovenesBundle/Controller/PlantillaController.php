@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Plantilla;
 use Cpm\JovenesBundle\Form\PlantillaType;
-
+use Symfony\Component\HttpFoundation\Response;
 /**
  * Plantilla controller.
  *
@@ -85,7 +85,8 @@ class PlantillaController extends BaseController
         $form    = $this->createForm(new PlantillaType(), $entity);
         $form->bindRequest($request);
 
-        $template_is_correct = $this->isValidTemplate($entity->getCuerpo());
+        $mailer = $this->getMailer();
+        $template_is_correct = 	$mailer->isValidTemplate($entity->getCuerpo());
         $entity->setCodigo($this->slug($entity->getAsunto()));
         if ($form->isValid() && ($template_is_correct == "success")) {
             $em = $this->getDoctrine()->getEntityManager();
@@ -163,7 +164,8 @@ class PlantillaController extends BaseController
 
         $editForm->bindRequest($request);
         
-        $parsed = $this->isValidTemplate($entity->getCuerpo());
+        $mailer = $this->getMailer();
+        $parsed = 	$mailer->isValidTemplate($entity->getCuerpo());
 
         if ($editForm->isValid() && ($parsed == "success")) {
             $em->persist($entity);
@@ -224,21 +226,29 @@ class PlantillaController extends BaseController
         ;
     }
     
+
     /**
-     * @param string $template : un string con tags twig dentro
-     * returns boolean
-     */
-    private function isValidTemplate($template) 
-    {
-    	$twig = $this->get('twig');
-    	try {
-    		$token_stream = $twig->tokenize($template);
-    		$twig->parse($token_stream);
-    	} catch (\Twig_Error_Syntax $e) {
-    		
-    		return $e->getMessage(); 
-    	}
-    	return "success";
+    * Busca todas las escuelas de un distrito
+    *
+    * @Route("/plantilla/find_by_id", name="plantilla_find_by_id")
+    */
+    
+    public function findByIdAction() { 
+
+    	$plantilla_id = $this->get('request')->query->get('plantilla_id');
     	
+    	$em = $this->getDoctrine()->getEntityManager();
+    	if ($plantilla_id > 0)
+    		$plantillas= $em->getRepository('CpmJovenesBundle:Plantilla')->findById($plantilla_id);
+
+    	$json = array();
+    	foreach ($plantillas as $plantilla) {
+    		$json[] = array("asunto"=>$plantilla->getAsunto(), "cuerpo" => $plantilla->getCuerpo());
+    	}
+    	$response = new Response(json_encode($json));
+    	 
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    	 
     }
 }

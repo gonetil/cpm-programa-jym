@@ -2,9 +2,8 @@
 
 namespace Cpm\JovenesBundle\EntityDummy;
 
-
 /**
- *
+ * Formulario de busqueda y filtrado de proyctos
  */
 class ProyectoSearch
 {

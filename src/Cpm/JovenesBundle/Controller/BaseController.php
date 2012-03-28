@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Cpm\JovenesBundle\Service\JYM;
+use Cpm\JovenesBundle\Entity\Plantilla;
 
 abstract class BaseController extends Controller
 {
@@ -53,6 +54,50 @@ abstract class BaseController extends Controller
 			$sender = null;
 			
 		return $mailer->sendPlantilla($plantilla, $destinatario, $args,$sender );
+    }
+    
+    /**
+     * Enviar un correo con asunto $asunto y cuerpo $cuerpo a las direcciones asociadas al proyecto
+     * Aqui no hay plantillas involucradas
+     */
+    protected function enviarMailAProyecto($proyecto,$asunto,$cuerpo,$cc_coordinador=true,$cc_escuela=false,$cc_colaboradores=false) 
+    {
+    	$mailer = $this->getMailer();
+    	
+
+    	if ($cc_coordinador)
+    	{
+    		$to = $proyecto->getCoordinador()->getEmail();
+    		if (!empty($to)) 
+    		{
+    			$contexto[Plantilla::_USUARIO] = $proyecto->getCoordinador();
+    			$mailer->sendMessage($to,$asunto,$cuerpo,null,$contexto);
+    		} 
+    		
+    	}
+    	if ($cc_colaboradores)
+    	{
+    		foreach ($proyecto->getColaboradores() as $colaborador) {
+    			$to = $colaborador->getEmail();
+    			if (!empty($to))
+    			{
+    				$contexto[Plantilla::_USUARIO] = $colaborador;
+    				$mailer->sendMessage($to,$asunto,$cuerpo,null,$contexto);
+    			}
+    		}	
+    	}
+    	
+    	if ($cc_escuela)
+    	{
+    		$to = $proyecto->getEscuela()->getEmail();
+    		unset($contexto[Plantilla::_USUARIO]);
+    		if (!empty($to))
+    		{
+    			$contexto[Plantilla::_PROYECTO] = $proyecto;
+    			$mailer->sendMessage($to,$asunto,$cuerpo,null,$contexto);
+    		}
+    	}
+    		
     }
 
 	//ABM
@@ -175,4 +220,5 @@ abstract class BaseController extends Controller
     	//return JYM::instance();
     	return $this->get('cpm_jovenes_bundle.application');
     }
+    
 }
