@@ -326,7 +326,8 @@ class ProyectoController extends BaseController
 
 				$batch_action_type = $searchValues->getBatch_action_type(); //todos o seleccionados
 				$batch_action = $searchValues->getBatch_action();
-					
+
+				
 				if ($batch_action_type == 'todos') {
 					$proyectos =$repository->findBySearchCriteriaQuery($searchForm->getData(),$ciclo);
 				}
@@ -334,6 +335,7 @@ class ProyectoController extends BaseController
 					$destinatarios = $searchValues->getProyectos_seleccionados();
 					if (count($destinatarios) > 0)
 						$proyectos = $repository->findAllInArray($destinatarios);
+					
 				}
 				
 

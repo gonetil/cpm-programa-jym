@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\InstanciaEvento;
 use Cpm\JovenesBundle\Form\InstanciaEventoType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * InstanciaEvento controller.
@@ -198,5 +199,33 @@ class InstanciaEventoController extends BaseController
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+
+    /**
+    * Busca todas las instancias del evento evento_id
+    *
+    * @Route("/instancia/find_by_evento_id", name="instancia_find_by_evento_id")
+    */
+    
+    public function findInstanciaDeEvento() 
+    { 
+    	
+    		$evento_id = $this->get('request')->query->get('evento_id');
+    		 
+    		$em = $this->getDoctrine()->getEntityManager();
+    		if ($evento_id > 0)
+    			$instancias = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findByEvento($evento_id);
+    	
+    		$json = array();
+    		foreach ($instancias as $instancia) {
+    			$json[] = array("nombre"=>$instancia->__toString(), 
+    							"id" => $instancia->getId());
+    		}
+    		$response = new Response(json_encode($json));
+    	
+    		$response->headers->set('Content-Type', 'application/json');
+    		return $response;
+    	
+    	    	
     }
 }

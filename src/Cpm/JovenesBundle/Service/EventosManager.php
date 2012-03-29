@@ -69,7 +69,7 @@ class EventosManager
 			 		$correoColaborador->setProyecto($p);	
 				 	$this->mailer->enviarCorreoAColaboradores($admin, $correoColaborador, $context);
 				}
-				$context[Plantilla::_URL]=$this->mailer->resolveUrl('', array('id'=>$invitacion->getId(), 'accion'=>'aceptar'));
+				$context[Plantilla::_URL]=$this->mailer->resolveUrlParameter('abrir_invitacion', array('id'=>$invitacion->getId(), 'accion'=>'aceptar'));
 				$correoCoordinador->setProyecto($p);
 				 	
 				$this->mailer->enviarCorreoACoordinador($admin, $correoCoordinador, $context);

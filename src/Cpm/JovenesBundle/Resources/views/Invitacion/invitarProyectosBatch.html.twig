@@ -3,9 +3,47 @@
 {% block title %}Modificar invitación{% endblock %}
 
 {% block content %}
+	<script>
+		buscar_instancias = function() {
+			id = $("#cpm_jovenesbundle_invitacionbatchtype_evento").val();
+			instancias = $("#cpm_jovenesbundle_invitacionbatchtype_instancia");
+			if (id == '') return instancias.empty(); 
+		   	
+		   	instancias.empty();
+		   	$.getJSON("{{ path('instancia_find_by_evento_id') }}", { evento_id : id} , function(data) {
+		   		if (data.length > 0) {
+			   		for (var i=0; i<data.length; i++) 
+			   			instancias.append("<option value="+data[i].id+">"+data[i].nombre+"</option>");
+			   		
+			   	}
+			});
+		};
+					
+
+	 	$(document).ready(function() { 
+					$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);
+					$("#cpm_jovenesbundle_invitacionbatchtype_evento").change(buscar_instancias);
+					});  
+					
+	</script>	
 
 <form action="{{ path('invitar_proyectos_submit') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+
+ <div class="checklist" style="float:right">
+	 <strong> Escuelas </strong>
+	 <select name="cpm_jovenesbundle_invitacionbatchtype[proyectos][]" id="cpm_jovenesbundle_invitacionbatchtype_proyectos" multiple="yes">
+		{% for p in proyectos %}
+			<option value="{{p.id}}" selected> {{p}} </option>
+		{% endfor %} 
+	 </select>
+	<a href="#" onclick="$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);" > Seleccionar todo </a>
+ </div>
+
+    {{ form_row(form.evento) }}
+    {{ form_row(form.instancia) }}
+    {{ form_row(form.ccColaboradores) }}
+    {{ form_row(form.ccEscuelas) }}
+    {{ form_row(form._token) }}
     <p>
         <button type="submit">Invitar</button>
     </p>

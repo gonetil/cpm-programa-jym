@@ -116,11 +116,15 @@ class CorreoController extends BaseController
     	
     	$correoBatch = new CorreoBatch();
     	
+    	$proyectos = new \Doctrine\Common\Collections\ArrayCollection($proyectos_query->getResult());
+    	
+    	
+    	$correoBatch->setProyectos($proyectos);
+    	
     	$correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
-    	
-    	
-    	return array('form' => $correoBatchForm->createView() , 
-    			   	 'proyectos' => $proyectos_query->getResult()
+    	return array(
+    					'form' => $correoBatchForm->createView(),
+    					'proyectos' => $proyectos_query->getResult(),
     				);
     	        	  
     }

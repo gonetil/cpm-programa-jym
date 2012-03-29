@@ -50,19 +50,20 @@
 					$("#mail_body").hide(); });
 		</script>		  		 
 	</div>
-{% else %}
-	<script>
-	 	$(document).ready(function() { 
-					$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);
-					});  
-	</script>	
 {% endif %}
  
- {{ form_errors(form) }}	
+ 
  <form method="post" action="{{ path('correo_send_mass_email') }}" id="mailer_form">
  
  <div class="checklist" style="float:right">
- {{form_row(form.proyectos) }}
+ <strong> Escuelas </strong>
+ <select name="cpm_jovenesbundle_correobatchtype[proyectos][]" id="cpm_jovenesbundle_correobatchtype_proyectos" multiple="yes">
+	{% for p in proyectos %}
+		<option value="{{p.id}}" selected> {{p}} </option>
+	{% endfor %} 
+ </select>
+
+ 
  <a href="#" onclick="$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);" > Seleccionar todo </a>
  </div>
  <span id="mail_body">
