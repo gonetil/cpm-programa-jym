@@ -26,6 +26,7 @@ class CorreoBatchType extends ProyectoBatchType
         		        										'preferred_choices' => array("ninguna"),
         				            						 	'query_builder' => function($er) {
 																				        return $er->createQueryBuilder('p')
+																				        ->where('p.puedeBorrarse = 1')
 																				        ->orderBy('p.codigo', 'ASC');
 																				        },
 																'required'=>false,

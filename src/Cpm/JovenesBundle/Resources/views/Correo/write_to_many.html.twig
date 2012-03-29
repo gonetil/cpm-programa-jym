@@ -49,8 +49,13 @@
 			$(document).ready(function() { 
 					$("#mail_body").hide(); });
 		</script>		  		 
-	</div>	
-	
+	</div>
+{% else %}
+	<script>
+	 	$(document).ready(function() { 
+					$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);
+					});  
+	</script>	
 {% endif %}
  
  {{ form_errors(form) }}	

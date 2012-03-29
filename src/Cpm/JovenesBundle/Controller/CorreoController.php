@@ -110,52 +110,13 @@ class CorreoController extends BaseController
     /**
      * 
      * Permite enviar un correo a un conjunto de destinatarios seleccionados
-     * @Route("/write_to_selected", name="correo_write_to_selected")
-     * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
-     */
-    public function writeToSelectedAction() {
-    	$request = $this->getRequest();
-    	
-    	$searchValues = new ProyectoSearch();
-    	$searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
-    	
-    	$proyectos = null;
-    	
-    	$response = array();
-    	if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype")))
-    	{
-    		$searchForm->bindRequest($request);
-    		$repository = $this->getEntityManager()->getRepository('CpmJovenesBundle:Proyecto');
-    		
-    		if ($searchForm->isValid()) {
-    			$destinatarios = $searchForm->getData()->getProyectos_seleccionados();
-    			if (count($destinatarios) > 0)
-    				$proyectos = $proyectos = $repository->findAllInArray($destinatarios);
-    		}
-    	}
-    	
-    	$correoBatch = new CorreoBatch();
-        $correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
-
-        return array('form' => $correoBatchForm->createView(),
-        			 'proyectos' => (($proyectos==null)?array():$proyectos->getResult())
-        );
-        
-    }
-    
-    /**
-     * 
-     * Permite enviar un correo a un conjunto de destinatarios seleccionados
      * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
      */
     public function writeToManyAction($proyectos_query) {
     	
     	$correoBatch = new CorreoBatch();
-    	//$correoBatch->setProyectos($proyectos_query->getResult());
     	
     	$correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
-    	
-    	
     	
     	
     	return array('form' => $correoBatchForm->createView() , 
@@ -166,41 +127,8 @@ class CorreoController extends BaseController
 
     /**
     *
-    * Permite enviar un correo a todos los proyectos resultantes del filtro (o a todos en caso de no encontrarse el filtro)
-    * @Route("/write_to_all", name="correo_write_to_all_results")
-    * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
-    */
-    public function writeToAllAction() { 
-        $em = $this->getDoctrine()->getEntityManager();
-        $repository = $em->getRepository('CpmJovenesBundle:Proyecto');
-        $ciclo = $this->getJYM()->getCicloActivo();
-        $request = $this->getRequest();
-
-        $searchValues = new ProyectoSearch();
-        $searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
-        $proyectos = null;
-    	
-        if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype")))
-        {
-        	$searchForm->bindRequest($request);
-        	if ($searchForm->isValid())
-        		$proyectos =$repository ->findBySearchCriteriaQuery($searchForm->getData(),$ciclo);
-        } else {
-        	$proyectos = $repository->findAllQuery($ciclo);
-        }
-
-        $correoBatch = new CorreoBatch();
-        $correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
-        
-        return array('form' => $correoBatchForm->createView(),
-        			 'proyectos' => $proyectos->getResult());
-    }
-    
-    /**
-    *
     * Envia un correo masivo
     * @Route("/send_mass_email", name="correo_send_mass_email")
-    * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
     */
     public function sendMassEmailAction() { 
     	$request = $this->getRequest();
@@ -227,35 +155,53 @@ class CorreoController extends BaseController
     			$template= $mailer->renderTemplate($correoBatch->getCuerpo(),$context);
     			$cuerpo = $template;
     		
-    		if ($correoBatch->getPreview()) { //aun no deben mandarse los emails, sino que hay que previsualizarlos
-    			$correoBatch->setPreview(false); //para la prox
-    			$correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
-    			$content = $this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
-    										array('form'   => $correoBatchForm->createView(),
-    		    			    				  'proyectos' => $proyectos,
-    											  'show_preview' => true,
-    											  'asunto' => $correoBatch->getAsunto(), 
-    											  'cuerpo' => $cuerpo ));
-    			$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
-    			return new Response($content);
-    		}
+	    		if ($correoBatch->getPreview()) //aun no deben mandarse los emails, sino que hay que previsualizarlos 
+	    		{ 
+	    			$correoBatch->setPreview(false); //para la prox
+	    			$correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
+	    			$content = $this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
+	    										array('form'   => $correoBatchForm->createView(),
+	    		    			    				  'proyectos' => $proyectos,
+	    											  'show_preview' => true,
+	    											  'asunto' => $correoBatch->getAsunto(), 
+	    											  'cuerpo' => $cuerpo ));
+	    			$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
+	    			return new Response($content);
+	    		}
     		
-    		$ccEscuelas = $correoBatch->getCcEscuelas();
-    		$ccColaboradores = $correoBatch->getCcColaboradores();
-    		$ccCoordinadores = $correoBatch->getCcCoordinadores();
-    		$cuerpo = $correoBatch->getCuerpo();
-    		$asunto = $correoBatch->getAsunto();
-    		
+    		$correo = new Correo();
+    		$correo->setAsunto($correoBatch->getAsunto());
+    		$correo->setCuerpo($correoBatch->getCuerpo());
+    		$emisor = $this->getLoggedInUser();
+    		$cant = 0;
     		foreach ($proyectos as $proyecto) {
-    			$this->enviarMailAProyecto($proyecto,$asunto,$cuerpo,$ccCoordinadores,$ccEscuelas,$ccColaboradores,$context);
+
+    			$correo->setProyecto($proyecto);
+    			if ($correoBatch->getCcColaboradores()) {
+    				$mailer->enviarCorreoAColaboradores($emisor, $correo);
+    				$cant += count($proyecto->getColaboradores());
+    			}
+
+    			if ($correoBatch->getCcEscuelas()) {
+    				$mailer->enviarCorreoAEscuela($emisor,$correo);
+    				$cant++;
+    			}
+
+    			if ($ccCoordinadores = $correoBatch->getCcCoordinadores()) {
+    				$mailer->enviarCorreoACoordinador($emisor,$correo);
+    				$cant++;
+    			}
+
     		}
-    		$this->setSuccessMessage("Los correos fueron enviados satisfactoriamente");
+    		
+    		$this->setSuccessMessage("Se enviaron $cant correos satisfactoriamente");
     		
     		return $this->redirect($this->generateUrl('proyecto'));
     		
     		} //valid == success
     	}  // form->isValid
 		
+    	
     	return array(
     	            'form'   => $correoBatchForm->createView(),
     				'proyectos' => $correoBatch->getProyectos());

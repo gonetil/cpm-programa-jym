@@ -169,8 +169,8 @@ class TwigSwiftMailer implements MailerInterface
             $message->setBody($textBody);
         }
 		
-		$testmode= $this->parameters['test_mode'];
-		if ($testmode) die($testmode);
+		$testmode= $this->parameters['testmode'];
+		
 		$sent= $testmode || $this->mailer->send($message);
 		if ($sent)
 	        $this->guardarCorreo($message, $context);
