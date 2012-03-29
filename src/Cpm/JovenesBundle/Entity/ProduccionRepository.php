@@ -13,11 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class ProduccionRepository extends EntityRepository
 {
 	public function findAllQuery() {
-		$qb = $this->getEntityManager()->createQueryBuilder()
-		->add('select','p')
-		->add('from','CpmJovenesBundle:Produccion p');
-	
-		return  $qb->getQuery();
+		return $this->createQueryBuilder('p');
 	}
 	
 }

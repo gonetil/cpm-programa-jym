@@ -101,7 +101,6 @@ class Invitacion
 		$this->numeroAsistentes=1;
 		$this->solicitaViaje = false;
 		$this->solicitaHospedaje = false;
-		
 	}
 	
     /**

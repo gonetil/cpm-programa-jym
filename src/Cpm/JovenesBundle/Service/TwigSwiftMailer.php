@@ -30,49 +30,121 @@ class TwigSwiftMailer implements MailerInterface
         $this->parameters = $parameters;
         
     }
-    
-	protected function getPlantilla($codigo_plantilla){
+	
+	public function getCorreoFromPlantilla($codigo_plantilla){
 		$plantilla=$this->doctrine->getEntityManager()->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
 		if (!$plantilla)
 			throw new \InvalidArgumentException("No existe la plantilla $codigo_plantilla");
-		return $plantilla;
+		$correo = new Correo();
+		$correo->setAsunto($plantilla->getAsunto());
+		$correo->setCuerpo($plantilla->getCuerpo());
+		
+		return $correo;
 	}
-	
+
+    public function sendConfirmacionAltaProyecto(Proyecto $proyecto)
+    {
+        $correo = $this->getCorreoFromPlantilla(Plantilla::ALTA_PROYECTO);
+        $correo->setDestinatario($proyecto->getCoordinador());
+        $correo->setProyecto($proyecto);
+        
+	    return $this->enviarCorreo($correo);
+    }
+
+    public function resolveUrlParameter($pathname, $args)
+    {
+        return  $this->router->generate($pathname, $args, true);
+    }
+    
     public function sendConfirmationEmailMessage(UserInterface $usuario)
     {
-        $plantilla = $this->getPlantilla(Plantilla::CONFIRMACION_REGISTRO);
+        $correo = $this->getCorreoFromPlantilla(Plantilla::CONFIRMACION_REGISTRO);
+		$correo->setDestinatario($usuario);
+
         $url = $this->router->generate('fos_user_registration_confirm', array('token' => $usuario->getConfirmationToken()), true);
         $context = array(Plantilla::_URL => $url);
-
-        return $this->sendPlantilla($plantilla, $usuario, $context);
+        
+        return $this->enviarCorreo($correo, $context);
     }
 
     public function sendResettingEmailMessage(UserInterface $usuario)
     {
-        $plantilla = $this->getPlantilla(Plantilla::RESETEAR_CUENTA);
+        $correo = $this->getCorreoFromPlantilla(Plantilla::RESETEAR_CUENTA);
+		$correo->setDestinatario($usuario);
+
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $usuario->getConfirmationToken()), true);
         $context = array(Plantilla::_URL => $url);
-        return $this->sendPlantilla($plantilla, $usuario, $context);
+        
+        return $this->enviarCorreo($correo, $context);
+    }
+    
+	/**
+     * Enviar un correo al coordinador del proyecto
+     */
+    public function enviarCorreoACoordinador(Usuario $emisor, Correo $correo, $context=array()) 
+    {
+    	$proyecto = $correo->getProyecto();
+    	if (empty($proyecto)) 
+    		throw new \InvalidArgumentException("Debe especificar el proyecto");
+    	
+    	$correo->setEmisor($emisor);
+    	$correo->setDestinatario($proyecto->getCoordinador());
+		$correo->setEmail($proyecto->getCoordinador()->getEmail());
+		$this->enviarCorreo($correo,$context);
+    }
+    
+	/**
+     * Enviar un correo a la escuela del proyecto
+     */
+    public function enviarCorreoAEscuela(Usuario $emisor, Correo $correo, $context=array()) 
+    {
+    	$proyecto = $correo->getProyecto();
+    	if (empty($proyecto)) 
+    		throw new \InvalidArgumentException("Debe especificar el proyecto");
+    	
+    	$correo->setEmisor($emisor);
+    	$correo->setEmail($proyecto->getEscuela()->getEmail());
+		
+		$this->enviarCorreo($correo,$context);
+    }
+    
+    /**
+     * Enviar un correo a los colaboradores del proyecto
+     */
+    public function enviarCorreoAColaboradores(Usuario $emisor, Correo $correo, $context=array()) 
+    {
+    	$proyecto = $correo->getProyecto();
+    	if (empty($proyecto)) 
+    		throw new \InvalidArgumentException("Debe especificar el proyecto");
+    	
+	    $correo->setEmisor($emisor);
+    	foreach($proyecto->getColaboradores() as $c ){
+				$correo->setDestinatario($c); 
+				$correo->setEmail($c->getEmail());
+				$this->enviarCorreo($correo,$context);
+		}
+    	
     }
 
-    public function getParameter($param_name) {
-    	if (isset($this->parameters[$param_name]))
-    		return $this->parameters[$param_name];
-    	else 
-    		return null;
-    }
-	public function sendPlantilla($plantilla, Usuario $usuario, $context, $sender = null){
-		$context[Plantilla::_USUARIO] = $usuario;
+	
+	private function enviarCorreo(Correo $correo, $context=array()){
+		$context[Plantilla::_USUARIO] = $correo->getDestinatario();
+		$context[Plantilla::_EMISOR] = $correo->getEmisor();
+		$context[Plantilla::_PROYECTO] = $correo->getProyecto();
 		$context[Plantilla::_FECHA] = new \DateTime();
 		$context[Plantilla::_URL_SITIO] = $this->parameters['url_sitio'];
-		if (!empty($sender)) 
-			$context[Plantilla::_EMISOR] = $sender;
 		
+		$email = $correo->getEmail();
+		if (empty($email) && !empty($context[Plantilla::_USUARIO]))
+			$email = $correo->getDestinatario()->getEmail();
+			
 		//se asume que la plantilla tiene texto twig nomas, nada de HTML
-		return $this->sendMessage($usuario->getEmail(), $plantilla->getAsunto(),$plantilla->getCuerpo(), null, $context );
+		$sent = $this->sendMessage($email, $correo->getAsunto(),$correo->getCuerpo(), null, $context );
+		
+		return $sent;
 	}
 	
-    public function sendMessage($to, $subject, $twig_text, $twig_html, $context)
+    private function sendMessage($to, $subject, $twig_text, $twig_html, $context)
     {
     	$text_template = $this->twig->loadTemplate($twig_text);
 		$textBody = $text_template->render($context);
@@ -97,14 +169,15 @@ class TwigSwiftMailer implements MailerInterface
             $message->setBody($textBody);
         }
 		
-		$sent= $this->mailer->send($message);
+		$testmode= $this->parameters['test_mode'];
+		if ($testmode) die($testmode);
+		$sent= $testmode || $this->mailer->send($message);
 		if ($sent)
 	        $this->guardarCorreo($message, $context);
-		
         return $sent; 
     }
     
-    public function guardarCorreo($message, $context){
+    private function guardarCorreo($message, $context){
     	
         $correo = new Correo();
 		$correo->setFecha(new \DateTime());
@@ -141,7 +214,6 @@ class TwigSwiftMailer implements MailerInterface
     		$token_stream = $twig->tokenize($twig_template);
     		$twig->parse($token_stream);
     	} catch (\Twig_Error_Syntax $e) {
-    
     		return $e->getMessage();
     	}
     	return "success";
@@ -154,4 +226,10 @@ class TwigSwiftMailer implements MailerInterface
     	return $rendered;
     }
 
+    public function getParameter($param_name) {
+    	if (isset($this->parameters[$param_name]))
+    		return $this->parameters[$param_name];
+    	else 
+    		return null;
+    }
 }

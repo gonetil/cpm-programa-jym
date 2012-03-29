@@ -12,13 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class InstanciaEventoRepository extends EntityRepository
 {
-	public function findAllQuery() {
-		$qb = $this->getEntityManager()->createQueryBuilder()
-		->add('select','ie')
-		->add('from','CpmJovenesBundle:InstanciaEvento ie')
-		->add('orderBy','ie.fechaInicio ASC, ie.fechaFin ASC')
-		;
 	
+	public function findAllQuery($ciclo = null) {
+		$qb = $this->createQueryBuilder('ie')
+			->add('orderBy','ie.fechaInicio ASC, ie.fechaFin ASC')
+		;
+		if ($ciclo)
+			$qb->andWhere('ie.evento.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		
 		return  $qb->getQuery();
+	}
+	
+	public function getInstanciasVigentes($ciclo) {
+		$qb = $this->createQueryBuilder('ie')
+			->add('orderBy','ie.fechaInicio ASC, ie.fechaFin ASC')
+		;
+		$qb->andWhere('ie.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		$qb->andWhere('ie.fechaFin < :now')->setParameter('now',new \Datetime());
+		
+		return  $qb->getQuery()->getResult();
 	}
 }

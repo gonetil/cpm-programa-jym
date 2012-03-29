@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Invitacion;
 use Cpm\JovenesBundle\Form\InvitacionType;
+use Cpm\JovenesBundle\EntityDummy\InvitacionBatch;
+use Cpm\JovenesBundle\Form\InvitacionBatchType;
 
 /**
  * Invitacion controller.
@@ -30,6 +32,49 @@ class InvitacionController extends BaseController
 
         return $this->paginate($entities);
     }
+    
+    /**
+     * Muetsra un form de invitacion de proyectos a una instancia de un evento
+     *
+     * @Route("/invitar_proyectos", name="invitar_proyectos")
+     * @Template()
+     */
+    public function invitarProyectosBatchAction()
+    {
+        $editForm = $this->createForm(new InvitacionBatchType(), new InvitacionBatch());
+        
+        return array(
+            'form'   => $editForm->createView()
+        );
+    }
+    
+    /**
+     * Invitacion una serie de proyectos a una instancia de un evento
+     *
+     * @Route("/invitar_proyectos_submit", name="invitar_proyectos_submit")
+     * @Method("post")
+     * @Template("CpmJovenesBundle:Invitacion:invitarProyectosBatch.html.twig")
+     */
+    public function invitarProyectosBatchSubmitAction()
+    {
+
+        $invitacionBatch = new InvitacionBatch();
+		$editForm = $this->createForm(new InvitacionBatchType(), $invitacionBatch);
+        $request = $this->getRequest();
+        $editForm->bindRequest($request);
+		$ev_mgr= $this->getEventosManager();
+        if ($editForm->isValid()) {
+        	$ev_mgr->invitarProyectos($this->getLoggedInUser(), $invitacionBatch);
+            return $this->redirect($this->generateUrl('instancia_show', array('id' => $invitacionBatch->getInstancia()->getId())));
+        }
+
+        return array(
+            'invitacionBatch'      => $invitacionBatch,
+            'form'   => $editForm->createView(),
+        );
+    }
+    
+        
 
     /**
      * Finds and displays a Invitacion entity.
@@ -51,55 +96,10 @@ class InvitacionController extends BaseController
 
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
+            'delete_form' => $deleteForm->createView(),);
     }
 
-    /**
-     * Displays a form to create a new Invitacion entity.
-     *
-     * @Route("/new", name="invitaciones_new")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $entity = new Invitacion();
-        $form   = $this->createForm(new InvitacionType(), $entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView()
-        );
-    }
-
-    /**
-     * Creates a new Invitacion entity.
-     *
-     * @Route("/create", name="invitaciones_create")
-     * @Method("post")
-     * @Template("CpmJovenesBundle:Invitacion:new.html.twig")
-     */
-    public function createAction()
-    {
-        $entity  = new Invitacion();
-        $request = $this->getRequest();
-        $form    = $this->createForm(new InvitacionType(), $entity);
-        $form->bindRequest($request);
-		
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('invitaciones_show', array('id' => $entity->getId())));
-            
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView()
-        );
-    }
-
+  
     /**
      * Displays a form to edit an existing Invitacion entity.
      *

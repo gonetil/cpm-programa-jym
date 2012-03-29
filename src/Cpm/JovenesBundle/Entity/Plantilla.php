@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\PlantillaRepository")
  */
-class Plantilla
+class Plantilla 
 {
 	const _USUARIO = "usuario";
 	const _URL = "url";
@@ -25,6 +25,8 @@ class Plantilla
 	const RESETEAR_CUENTA = "resetear_cuenta_usuario";
 	const ALTA_PROYECTO = "alta_proyecto";
 	const INVITACION_A_EVENTO = "invitacion_a_evento";
+	const INVITACION_A_EVENTO_A_ESCUELA = "invitacion_a_evento";//invitacion_a_evento_a_escuela
+	const INVITACION_A_EVENTO_A_COLABORADORES = "invitacion_a_evento";//invitacion_a_evento_a_colaboradores
 	const COMUNICACION_USUARIO = "comunicacion_usuario";
 
     /**
