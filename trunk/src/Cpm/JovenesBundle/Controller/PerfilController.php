@@ -95,7 +95,8 @@ class PerfilController extends BaseController
     	 
     	if ($form->isValid()) {
     		$this->doPersist($proyecto);
-    		$this->enviarMail($coordinador, Plantilla::ALTA_PROYECTO, array(Plantilla::_PROYECTO => $proyecto));
+    		
+    		$this->getMailer()->sendConfirmacionAltaProyecto($proyecto);
     		$this->setSuccessMessage("Los datos fueron registrados satifactoriamente");
     		$this->setInfoMessage("Usted se ha inscripto al Programa Jóvenes y Memoria, Convocatoria 2012");
     		

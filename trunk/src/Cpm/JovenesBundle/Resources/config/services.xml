@@ -26,7 +26,6 @@
         </service>
 
 		<service id="cpm_jovenes_bundle.application" class="Cpm\JovenesBundle\Service\JYM">
-		 <!--  factory-class="Cpm\JovenesBundle\Service\JYM" factory-method="initServices"  -->
             <argument type="service" id="doctrine" />
             <argument type="service" id="logger" />
         </service>
@@ -39,11 +38,19 @@
             <argument type="collection">
                 <argument key="from_name">%jym_from_name%</argument>
                 <argument key="from_email">%jym_from_email%</argument>
+                <argument key="testmode">%jym_mailer_testmode%</argument>
                 <argument key="url_sitio">%jym_url_sitio%</argument>
                 <argument key="xxx">%jym_xxx%</argument>
             </argument>            
 		</service>
 		
+		
+		<service id="cpm_jovenes_bundle.eventos_manager" class="Cpm\JovenesBundle\Service\EventosManager">
+			<argument type="service" id="cpm_jovenes_bundle.mailer" />
+            <argument type="service" id="cpm_jovenes_bundle.application" />
+            <argument type="service" id="doctrine" />
+            <argument type="service" id="logger" />
+        </service>
     </services>
 
 

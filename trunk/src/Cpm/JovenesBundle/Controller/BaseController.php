@@ -46,60 +46,7 @@ abstract class BaseController extends Controller
 		$this->get('session')->setFlash('error', $msg);
 	}
 	
-	protected function enviarMail($destinatario, $codigo_plantilla, $args=array()){
-		$plantilla = $this->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);
-		$mailer = $this->getMailer();
-		$sender = $this->getLoggedInUser();
-		if ($destinatario->equals($sender))
-			$sender = null;
-			
-		return $mailer->sendPlantilla($plantilla, $destinatario, $args,$sender );
-    }
     
-    /**
-     * Enviar un correo con asunto $asunto y cuerpo $cuerpo a las direcciones asociadas al proyecto
-     * Aqui no hay plantillas involucradas
-     */
-    protected function enviarMailAProyecto($proyecto,$asunto,$cuerpo,$cc_coordinador=true,$cc_escuela=false,$cc_colaboradores=false,$contexto = array()) 
-    {
-    	$mailer = $this->getMailer();
-    	
-
-    	if ($cc_coordinador)
-    	{
-    		$to = $proyecto->getCoordinador()->getEmail();
-    		if (!empty($to)) 
-    		{
-    			$contexto[Plantilla::_USUARIO] = $proyecto->getCoordinador();
-    			$mailer->sendMessage($to,$asunto,$cuerpo,null,$contexto);
-    		} 
-    		
-    	}
-    	if ($cc_colaboradores)
-    	{
-    		foreach ($proyecto->getColaboradores() as $colaborador) {
-    			$to = $colaborador->getEmail();
-    			if (!empty($to))
-    			{
-    				$contexto[Plantilla::_USUARIO] = $colaborador;
-    				$mailer->sendMessage($to,$asunto,$cuerpo,null,$contexto);
-    			}
-    		}	
-    	}
-    	
-    	if ($cc_escuela)
-    	{
-    		$to = $proyecto->getEscuela()->getEmail();
-    		unset($contexto[Plantilla::_USUARIO]);
-    		if (!empty($to))
-    		{
-    			$contexto[Plantilla::_PROYECTO] = $proyecto;
-    			$mailer->sendMessage($to,$asunto,$cuerpo,null,$contexto);
-    		}
-    	}
-    		
-    }
-
 	//ABM
 	protected function doPersist($entity){
 		$em = $this->getDoctrine()->getEntityManager();
@@ -124,6 +71,10 @@ abstract class BaseController extends Controller
 	
 	protected function getMailer(){
 		return $this->get('cpm_jovenes_bundle.mailer');
+	}
+	
+	protected function getEventosManager(){
+		return $this->get('cpm_jovenes_bundle.eventos_manager');
 	}
 	
 	protected function paginate($query, $extra_params = array() ){ 

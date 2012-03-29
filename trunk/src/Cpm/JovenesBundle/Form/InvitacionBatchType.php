@@ -3,32 +3,36 @@
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class InvitacionMasivaType extends CorreoMasivoType
+class InvitacionBatchType extends ProyectoBatchType
 {
     public function buildForm(FormBuilder $builder, array $options)
 	{
-				$builder->add('evento','entity',array(
+		parent::buildForm($builder, $options);
+    	
+    	$builder
+    	->add('evento','entity',array(
 		            									'label' => 'Evento',
 		            									'class' => 'CpmJovenesBundle:Evento',
 		    								    		'empty_value' => "Todos",
 		    								            'preferred_choices' => array("Todos"),
 		            									'query_builder' => function($er) {
-																	        return $er->createQueryBuilder('t')
-															            ->orderBy('t.titulo', 'ASC');
+																	        return $er->createQueryBuilder('t')->orderBy('t.titulo', 'ASC');
 		    														},
-        												'required'=>false
-        								))
-        			->add('instancia','entity',array(
+        												'required'=>true
+        			))
+        ->add('instancia','entity',array(
 		            									'label' => 'Instancia',
 		            									'class' => 'CpmJovenesBundle:InstanciaEvento',
 		    								    		'empty_value' => "Todos",
 		    								            'preferred_choices' => array("Todos"),
 		            									'query_builder' => function($er) {
-																	        return $er->createQueryBuilder('t')
-															            ->orderBy('t.subtitulo', 'ASC');
-		    														},
-        												'required'=>false
-        								))
+																        return $er->createQueryBuilder('t')->orderBy('t.fechaInicio', 'ASC');
+			    														},
+        												'required'=>true
+    				))
+        ->add('ccColaboradores','checkbox',array('required'=>false,'label'=>'Enviar copia a los colaboradores?'))
+        ->add('ccEscuelas','checkbox',array('required'=>false,'label'=>'Enviar copia a las escuelas?'))
+        ;
         								
     }
     

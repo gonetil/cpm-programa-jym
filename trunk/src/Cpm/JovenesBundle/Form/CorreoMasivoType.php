@@ -5,19 +5,21 @@ namespace Cpm\JovenesBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class CorreoMasivoType extends AbstractType
+class CorreoMasivoType extends ProyectoBatchType
 {
     public function buildForm(FormBuilder $builder, array $options)
-    {	    	
+    {
+    	parent::buildForm($builder, $options);
+    	
         $builder
         	->add('preview','hidden',array('attr'=>array('class'=>'preview')))
-        	->add('proyectos','collection', array('allow_add'=>true, 'allow_delete'=>true))
+            ->add('ccColaboradores','checkbox',array('required'=>false,'label'=>'Enviar a los colaboradores ?'))
+            ->add('ccEscuelas','checkbox',array('required'=>false,'label'=>'Enviar a las escuelas ?'))
+       	    ->add('ccCoordinadores','checkbox',array('required'=>false,'label'=>'Enviar a los coordinadores ?'))
+        
             ->add('asunto',null,array('required'=>true , 'attr' => array('class' => 'asunto-correo')))
             ->add('cuerpo','textarea',array('required'=>true , 'attr' => array('class' => 'cuerpo-correo')))
-            ->add('ccCoordinadores','checkbox',array('required'=>false,'label'=>'Enviar a los coordinadores'))
-            ->add('ccColaboradores','checkbox',array('required'=>false,'label'=>'Enviar a los colaboradores'))
-            ->add('ccEscuelas','checkbox',array('required'=>false,'label'=>'Enviar a las escuelas'))
-        	->add('plantilla','entity',array(
+           	->add('plantilla','entity',array(
         				            							'label' => 'Plantilla',
         				            						 	'class' => 'CpmJovenesBundle:Plantilla',
         				            						 	'empty_value' => "ninguna",

@@ -5,9 +5,8 @@ namespace Cpm\JovenesBundle\EntityDummy;
  * formulario de envio de correos masivos
  */
 
-class CorreoMasivo {
+class CorreoMasivo extends ProyectoBatch{
 	
-	public $proyectos;
 	public $ccCoordinadores;
 	public $ccColaboradores;
 	public $ccEscuelas;
@@ -19,32 +18,29 @@ class CorreoMasivo {
 	public $preview;
 	
 	public function __construct() {
+		parent::__construct();
 		$this->ccCoordinadores = true;
 		$this->ccColaboradores = false;
 		$this->ccEscuelas = false;
-		$this->proyectos = array();
 		$this->preview = true;		
 	}
 	
-	public function getProyectos() {
-		return $this->proyectos ;
-	}
-	public function setProyectos($x) {
-		$this->proyectos = $x;
-	}
-
 	public function getCcCoordinadores() {
 		return $this->ccCoordinadores ;
 	}
+	
 	public function setCcCoordinadores($x) {
 		$this->CcCoordinadores = $x;
 	}
+	
 	public function getCcColaboradores() {
 		return $this->ccColaboradores ;
 	}
+	
 	public function setCcColaboradores($x) {
 		$this->ccColaboradores = $x;
 	}
+	
 	public function getCcEscuelas() {
 		return $this->ccEscuelas ;
 	}
