@@ -38,7 +38,7 @@ class InvitacionBatchType extends ProyectoBatchType
     
     public function getName()
     {
-    	return 'cpm_jovenesbundle_invitacionmasivatype';
+    	return 'cpm_jovenesbundle_invitacionbatchtype';
     }
 }
 ?>
