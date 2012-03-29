@@ -14,8 +14,8 @@ use Cpm\JovenesBundle\Form\CorreoType;
 use Cpm\JovenesBundle\EntityDummy\ProyectoSearch;
 use Cpm\JovenesBundle\Form\ProyectoSearchType;
 
-use Cpm\JovenesBundle\EntityDummy\CorreoMasivo;
-use Cpm\JovenesBundle\Form\CorreoMasivoType;
+use Cpm\JovenesBundle\EntityDummy\CorreoBatch;
+use Cpm\JovenesBundle\Form\CorreoBatchType;
 
 use Cpm\JovenesBundle\Entity\Plantilla;
 
@@ -134,10 +134,10 @@ class CorreoController extends BaseController
     		}
     	}
     	
-    	$correoMasivo = new CorreoMasivo();
-        $correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
+    	$correoBatch = new CorreoBatch();
+        $correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
 
-        return array('form' => $correoMasivoForm->createView(),
+        return array('form' => $correoBatchForm->createView(),
         			 'proyectos' => (($proyectos==null)?array():$proyectos->getResult())
         );
         
@@ -149,13 +149,17 @@ class CorreoController extends BaseController
      * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
      */
     public function writeToManyAction($proyectos_query) {
-    	$correoMasivo = new CorreoMasivo();
-    	$correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
     	
-    	$proyectos = $proyectos_query->getResult();
+    	$correoBatch = new CorreoBatch();
+    	//$correoBatch->setProyectos($proyectos_query->getResult());
     	
-    	return array('form' => $correoMasivoForm->createView() , 
-    			   	 'proyectos' => $proyectos
+    	$correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
+    	
+    	
+    	
+    	
+    	return array('form' => $correoBatchForm->createView() , 
+    			   	 'proyectos' => $proyectos_query->getResult()
     				);
     	        	  
     }
@@ -185,10 +189,10 @@ class CorreoController extends BaseController
         	$proyectos = $repository->findAllQuery($ciclo);
         }
 
-        $correoMasivo = new CorreoMasivo();
-        $correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
+        $correoBatch = new CorreoBatch();
+        $correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
         
-        return array('form' => $correoMasivoForm->createView(),
+        return array('form' => $correoBatchForm->createView(),
         			 'proyectos' => $proyectos->getResult());
     }
     
@@ -196,28 +200,21 @@ class CorreoController extends BaseController
     *
     * Envia un correo masivo
     * @Route("/send_mass_email", name="correo_send_mass_email")
-    * @Template("CpmJovenesBundle:Correo:send_mass_email.html.twig")
+    * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
     */
     public function sendMassEmailAction() { 
     	$request = $this->getRequest();
-    	$correoMasivo = new CorreoMasivo();
+    	$correoBatch = new CorreoBatch();
     	
-    	$correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
-    	$correoMasivoForm->bindRequest($request);
-    	
-    	if ($correoMasivoForm->isValid()) {
-    		
-
+    	$correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
+    	$correoBatchForm->bindRequest($request);
+    	    	
+    	if ($correoBatchForm->isValid()) {
     		$repository = $this->getEntityManager()->getRepository('CpmJovenesBundle:Proyecto');
-    		$destinatarios = $correoMasivo->getProyectos();
-    		
-
-    		if (count($destinatarios) > 0)
-    			$proyectos = $repository->findAllInArray($destinatarios)->getResult();
-    		else $proyectos=array();
+    		$proyectos = $correoBatch->getProyectos();
     		
     		$mailer = $this->getMailer();
-    		$valid  = $mailer->isValidTemplate($correoMasivo->getCuerpo());
+    		$valid  = $mailer->isValidTemplate($correoBatch->getCuerpo());
     		
     		if ($valid == "success") {
     			$example = $proyectos[0];
@@ -227,29 +224,27 @@ class CorreoController extends BaseController
     							  Plantilla::_URL_SITIO => $mailer->getParameter('url_sitio'),
     							  Plantilla::_FECHA  => new \DateTime()
     			);
-    			$template= $mailer->renderTemplate($correoMasivo->getCuerpo(),$context);
+    			$template= $mailer->renderTemplate($correoBatch->getCuerpo(),$context);
     			$cuerpo = $template;
     		
-    		
-    		
-    		if ($correoMasivo->getPreview()) { //aun no deben mandarse los emails, sino que hay que previsualizarlos
-    			$correoMasivo->setPreview(false); //para la prox
-    			$correoMasivoForm = $this->createForm(new CorreoMasivoType(),$correoMasivo);
+    		if ($correoBatch->getPreview()) { //aun no deben mandarse los emails, sino que hay que previsualizarlos
+    			$correoBatch->setPreview(false); //para la prox
+    			$correoBatchForm = $this->createForm(new CorreoBatchType(),$correoBatch);
     			$content = $this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
-    										array('form'   => $correoMasivoForm->createView(),
+    										array('form'   => $correoBatchForm->createView(),
     		    			    				  'proyectos' => $proyectos,
     											  'show_preview' => true,
-    											  'asunto' => $correoMasivo->getAsunto(), 
+    											  'asunto' => $correoBatch->getAsunto(), 
     											  'cuerpo' => $cuerpo ));
     			$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
     			return new Response($content);
     		}
     		
-    		$ccEscuelas = $correoMasivo->getCcEscuelas();
-    		$ccColaboradores = $correoMasivo->getCcColaboradores();
-    		$ccCoordinadores = $correoMasivo->getCcCoordinadores();
-    		$cuerpo = $correoMasivo->getCuerpo();
-    		$asunto = $correoMasivo->getAsunto();
+    		$ccEscuelas = $correoBatch->getCcEscuelas();
+    		$ccColaboradores = $correoBatch->getCcColaboradores();
+    		$ccCoordinadores = $correoBatch->getCcCoordinadores();
+    		$cuerpo = $correoBatch->getCuerpo();
+    		$asunto = $correoBatch->getAsunto();
     		
     		foreach ($proyectos as $proyecto) {
     			$this->enviarMailAProyecto($proyecto,$asunto,$cuerpo,$ccCoordinadores,$ccEscuelas,$ccColaboradores,$context);
@@ -259,10 +254,10 @@ class CorreoController extends BaseController
     		return $this->redirect($this->generateUrl('proyecto'));
     		
     		} //valid == success
-    	} // form->isValid
+    	}  // form->isValid
 		
     	return array(
-    	            'form'   => $correoMasivoForm->createView(),
-    				'proyectos' => $correoMasivoForm->getData()->getProyectos());
+    	            'form'   => $correoBatchForm->createView(),
+    				'proyectos' => $correoBatch->getProyectos());
     }
 }
