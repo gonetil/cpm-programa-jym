@@ -336,7 +336,7 @@ class ProyectoController extends BaseController
 						$proyectos = $repository->findAllInArray($destinatarios);
 				}
 				
-				
+
 				$response = $this->forward($batch_action,array('proyectos_query'=>$proyectos));
 				return $response;
 			}

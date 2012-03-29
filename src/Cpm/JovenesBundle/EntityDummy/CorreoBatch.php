@@ -5,7 +5,7 @@ namespace Cpm\JovenesBundle\EntityDummy;
  * formulario de envio de correos masivos
  */
 
-class CorreoMasivo extends ProyectoBatch{
+class CorreoBatch extends ProyectoBatch{
 	
 	public $ccCoordinadores;
 	public $ccColaboradores;

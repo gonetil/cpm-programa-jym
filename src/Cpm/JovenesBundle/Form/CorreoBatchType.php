@@ -5,7 +5,7 @@ namespace Cpm\JovenesBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class CorreoMasivoType extends ProyectoBatchType
+class CorreoBatchType extends ProyectoBatchType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
@@ -36,6 +36,6 @@ class CorreoMasivoType extends ProyectoBatchType
 
     public function getName()
     {
-        return 'cpm_jovenesbundle_correomasivotype';
+        return 'cpm_jovenesbundle_correobatchtype';
     }
 }

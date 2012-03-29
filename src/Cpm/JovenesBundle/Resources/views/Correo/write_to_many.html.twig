@@ -53,20 +53,12 @@
 	
 {% endif %}
  
+ {{ form_errors(form) }}	
  <form method="post" action="{{ path('correo_send_mass_email') }}" id="mailer_form">
  
  <div class="checklist" style="float:right">
- <div class="list_title">Escuelas </div>
- <hr/>
- {% for p in proyectos %}
- 	
- 	<div id="escuela{{loop.index}}" class="list_item">
- 	Escuela N. {{p.escuela.numero}}:
- 	{{p.escuela.nombre}}  <a href="#" class="btn_borrar" onclick="quitar('#escuela{{loop.index}}');" title='Quitar de la lista'></a>
- 	<input type="hidden" name="cpm_jovenesbundle_correomasivotype[proyectos][{{ p.id }}]" value=" {{ p.id }}" />
- 	</div>
- 	
- {% endfor %}
+ {{form_row(form.proyectos) }}
+ <a href="#" onclick="$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);" > Seleccionar todo </a>
  </div>
  <span id="mail_body">
  	{{ form_row(form.plantilla) }}
