@@ -48,9 +48,9 @@ class EventosManager
     	$ccEscuela=$invitacionBatch->getCcEscuelas();
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();
     	
-    	$plantillaCoordinador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO);
-    	$plantillaEscuela = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_ESCUELA);
-    	$plantillaColaborador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_COLABORADORES);
+    	$correoCoordinador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO);
+    	$correoEscuela = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_ESCUELA);
+    	$correoColaborador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_COLABORADORES);
     	
         foreach ( $invitacionBatch->getProyectos() as $p ) {
 			 $invitacion = $this->getInvitacion($instancia, $p);
@@ -62,17 +62,17 @@ class EventosManager
 			 	$context=array(Plantilla::_INVITACION => $invitacion);
 			 	
 			 	if ($ccEscuela){
-			 		$plantillaEscuela->setProyecto($p);	
-				 	$this->mailer->enviarCorreoAEscuela($admin, $plantillaEscuela, $context);
+			 		$correoEscuela->setProyecto($p);	
+				 	$this->mailer->enviarCorreoAEscuela($admin, $correoEscuela, $context);
 			 	}
 				if ($ccColaboradores){
-			 		$plantillaColaborador->setProyecto($p);	
-				 	$this->mailer->enviarCorreoAColaboradores($admin, $plantillaColaborador, $context);
+			 		$correoColaborador->setProyecto($p);	
+				 	$this->mailer->enviarCorreoAColaboradores($admin, $correoColaborador, $context);
 				}
 				$context[Plantilla::_URL]=$this->mailer->resolveUrl('', array('id'=>$invitacion->getId(), 'accion'=>'aceptar'));
-				$plantillaCoordinador->setProyecto($p);
+				$correoCoordinador->setProyecto($p);
 				 	
-				$this->mailer->enviarCorreoACoordinador($admin, $plantillaCoordinador, $context);
+				$this->mailer->enviarCorreoACoordinador($admin, $correoCoordinador, $context);
 			 	
 			 }else{
 				$this->logger->trace("Ya exise una invitacion para el proyecto '".$proyecto->getId()."' al evento '".$instancia->getTitulo()."', no se hace nada.");
