@@ -22,10 +22,12 @@
 					</li>
 					{% endfor %}
 				{% else %}
-					<li><a href="{{path('proyecto')}}">Ver todos los proyectos</a></li>
-					<li><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
-					<li><a href="{{path('usuario')}}">Ver todos los usuarios</a></li>
+					<li><a href="{{path('proyecto')}}">Proyectos</a></li>
+					<li><a href="{{path('usuario')}}">Usuarios</a></li>
+					<li><a href="{{path('instancia')}}">Instancias de Eventos</a></li>
 					<li><a href="{{path('correo')}}">Correos Enviados</a></li>
+					<li><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
+					
 				{% endif %}
 				</ul>
 				</div>
@@ -51,7 +53,7 @@
 			<div class="select_sub show">
 				<ul class="sub">
 					<li><a href="{{path('proyecto_new')}}">Agregar Proyecto</a></li>
-					<li><a href="{{path('proyecto')}}">Ver todos los proyectos</a></li>
+					<li><a href="{{path('proyecto')}}">Proyectos</a></li>
 					<li><a href="{{path('escuela')}}">Escuelas</a></li>
 					<li><a href="{{path('tema')}}">Temas</a></li>
 					<li><a href="{{path('produccion')}}">Producciones</a></li>
@@ -67,9 +69,9 @@
 						<ul class="sub">
 							<li><a href="{{path('evento')}}">Eventos</a></li>
 							<li><a href="{{path('evento_new')}}">Agregar Evento</a></li>
-							<li><a href="{{path('instancia_new')}}">Agregar Instancia</a></li>
-							<li><a href="{{path('instancia')}}">Ver Instancias</a></li>
-							<li><a href="{{path('invitaciones')}}">Ver Invitaciones</a></li>
+							<li><a href="{{path('instancia_new')}}">Agregar Instancia de Evento</a></li>
+							<li><a href="{{path('instancia')}}">Instancias de Eventos</a></li>
+							<li><a href="{{path('invitaciones')}}">Invitaciones Enviadas</a></li>
 						</ul>
 					</div>
 				</li>
@@ -80,11 +82,12 @@
 			<li><a href="{{path('proyecto')}}"><b>Mas</b></a>
 			<div class="select_sub show">
 				<ul class="sub">
+					<li><a href="{{path('plantilla')}}">Plantillas</a></li>
 					<li><a href="{{path('localidad')}}">Localidades</a></li>
 					<li><a href="{{path('distrito')}}">Municipios/Distritos</a></li>
 					<li><a href="{{path('region')}}">Regiones</a></li>
-					<li><a href="{{path('tipo_institucion')}}">Tipo de Institucion</a></li>
-					<li><a href="{{path('tipo_escuela')}}">Tipo de Escuela</a></li>
+					<li><a href="{{path('tipo_institucion')}}">Tipos de Institucion</a></li>
+					<li><a href="{{path('tipo_escuela')}}">Tipos de Escuela</a></li>
 				</ul>
 			</div>
 		</li>
@@ -102,17 +105,17 @@
 				</li>
 				</ul>
 				
-				<div class="nav-divider">&nbsp;</div>
-			<ul class="select">
-				<li><a href="{{path('correo')}}"><b>Comunicaciones</b></a>
-				<div class="select_sub show">
-					<ul class="sub">
-						<li><a href="{{path('correo')}}">Correos Enviados</a></li>
-						<li><a href="{{path('plantilla')}}">Plantillas</a></li>
-					</ul>
-				</div>
-			</li>
-			</ul>
+<!-- 				<div class="nav-divider">&nbsp;</div> -->
+<!-- 			<ul class="select"> -->
+<!-- 				<li><a href="{{path('correo')}}"><b>Comunicaciones</b></a> -->
+<!-- 				<div class="select_sub show"> -->
+<!-- 					<ul class="sub"> -->
+<!-- 						<li><a href="{{path('correo')}}">Correos Enviados</a></li> -->
+						
+<!-- 					</ul> -->
+<!-- 				</div> -->
+<!-- 			</li> -->
+<!-- 			</ul> -->
 				
 			{% endif %}
 		{% endif %}	

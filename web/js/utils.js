@@ -71,11 +71,16 @@ $(document).ready(function() {
 	
 	/**
 	 * Elimina la clase "current" de los items del menu que no tienen hover
-	 */
-	$("ul.select").mousemove(function(event) { 
-		$("ul.select").each(function(index,elem) { $(elem).removeClass('current'); });
-		$(event.target).addClass('current');	
-	});
+	*/
+	var primer = $("ul.select").first();
+	$("ul.select").hover(function(event) { 
+			primer.removeClass('current');
+			$(event.currentTarget).addClass('current');	
+		},function(event) { 
+			$(event.currentTarget).removeClass('current');
+			primer.addClass('current');
+		}
+	);
 	
 	add_checkall_ability();
 	add_batch_actions_support();
