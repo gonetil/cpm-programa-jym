@@ -333,9 +333,12 @@ class ProyectoController extends BaseController
 				}
 				elseif ($batch_action_type == 'seleccionados') {
 					$destinatarios = $searchValues->getProyectos_seleccionados();
+					
 					if (count($destinatarios) > 0)
 						$proyectos = $repository->findAllInArray($destinatarios);
-					
+					 else 
+					 	return $this->redirect($this->generateUrl('proyecto'));
+						
 				}
 				
 

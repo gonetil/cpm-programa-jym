@@ -44,7 +44,6 @@
 			    <li> Cantidad de coordinadores: {{ total_Coordinadores }} </li>	
 			  </ul>
 		</div>
-
 </div>
 
 <table class="records_list">
@@ -102,8 +101,7 @@
     </form>
 
 <div class="llamada">
-	<div class="primera_vez llamada"></div>
-	<p> participa por primera vez </p>
+	<div class="primera_vez llamada" style="padding:10px;">participa por primera vez</div>
 </div>
 
 <ul class="record_actions">
@@ -116,14 +114,14 @@
 
 <ul class="batch_actions">
 	<li> 
-		<div>Enviar invitacion</div>
+		<span>Enviar invitacion</span>
 		<ul class="sub_actions">
 			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Invitacion:invitarProyectosBatch" target="#filter_form" type="seleccionados"> A los proyectos seleccionados </a></li>
 			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Invitacion:invitarProyectosBatch" target="#filter_form" type="todos"> A todos los proyectos </a></li>
 		</ul>	
 	</li>
 	<li> 
-		<div>Enviar mensaje</div>
+		<span>Enviar mensaje</span>
 		<ul class="sub_actions">
 			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Correo:writeToMany" target="#filter_form" type="seleccionados"> A los proyectos seleccionados </a></li>
 			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Correo:writeToMany" target="#filter_form" type="todos"> A todos los proyectos </a></li>
