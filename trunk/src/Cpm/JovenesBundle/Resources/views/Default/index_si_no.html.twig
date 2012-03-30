@@ -1,25 +1,21 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Convocatoria 2012</title>
+<link rel="stylesheet" href="{{ asset('css/convoca.css') }}" />
 
-{% block title %}Bienvenido al Sistema de Gestión del Programa Jóvenes y Memoria{% endblock %}
+</head>
 
-{% block fos_user_content %}
-
-	<div class="index_message">
-		<div class="message left">
-			¿Ya está registrado en este sistema? <br/>
-			Entonces haga clic <a href="{{path('fos_user_security_login')}}">aquí</a>
-		</div>
-		<hr/>	
-		<div class="message right">
-			¿Aún no se ha registrado? <br/>
-			Siga <a href="{{path('fos_user_registration_register')}}">este enlace</a>
-		</div>
-		<hr/>	
-		<div class="message left">
-			¿Tiene dudas? <br/>
-			Vea <a href="{{path('instructivo_usuarios')}}">este</a> instructivo
-		</div>
-		
+<body>
+<div id="headercolor"></div>
+<div id="contenedor">
+  <div id="logo">
+  	<img src="/images/login/logo.png" alt="Jóvenes y Memoria, Recordamos para el futuro" border="0" height="109" width="260">
+  </div>
+	<div id="contenido">
+				<img src="/images/inicio/bienve.png" alt="Bienvenidos!" border="0" height="351" width="282">
+				<a href="{{path('fos_user_security_login')}}"><img src="/images/inicio/si.png" alt="Ya estoy registrado!" class="imgspace" border="0" height="319" width="219"></a>
+				<a href="{{path('fos_user_registration_register')}}"><img src="/images/inicio/no.png" alt="No estoy registrado!" class="imgspace" border="0" height="319" width="219"></a>
+				<a href="/files/instructivo.doc"><img src="/images/inicio/instructivo.png" alt="Instructivo para usuarios" border="0" height="319" width="181"></a>
 	</div>
-				
-{% endblock %}
+</div>

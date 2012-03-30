@@ -15,7 +15,7 @@ security:
             form_login:
                 provider: custom_user_provider
                 csrf_provider: form.csrf_provider
-#                login_path: /public/login
+                login_path: /choose
             logout:       true
             anonymous:    true
  
@@ -24,7 +24,7 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/instructivo_usuarios, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/choice, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/choose, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
