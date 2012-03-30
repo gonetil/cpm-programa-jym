@@ -90,4 +90,12 @@ class EventosManager
         $em->flush();
         return $invitacion;
 	}
+	
+	public function getReporteInvitaciones(InstanciaEvento $instancia){
+		
+		$res = $this->doctrine->getRepository('CpmJovenesBundle:Invitacion')->getCantidadesPorInstancia($instancia);
+		
+		return $res;
+	}
+	
 }

@@ -349,4 +349,11 @@ class InstanciaEvento
     		return true;
     } 
     
+    public function getCantidadesPorAceptacion(){
+    	
+  		return ;  	
+    } 
+ 
+ 
+    
 }

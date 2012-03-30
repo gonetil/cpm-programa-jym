@@ -22,4 +22,29 @@ class InvitacionRepository extends EntityRepository
 		return  $qb->getQuery();
 	}
 	
+	
+	public function getCantidadesPorInstancia($instancia) {
+		
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','i.aceptoInvitacion, count(i.aceptoInvitacion) as cant')
+		->add('from','CpmJovenesBundle:Invitacion i')
+		->andWhere('i.instanciaEvento = :instancia')->setParameter('instancia',$instancia)
+		->add('groupBy','i.aceptoInvitacion')
+		;
+		$cantidades=array('invitados'=>0, 'confirmaciones'=>0, 'rechazos'=>0);
+		$rows = $qb->getQuery()->getResult();
+		
+		foreach ( $rows as $row ) {
+			$cantidades['invitados']+=$row['cant'];
+			if ($row['aceptoInvitacion'] == '0'){
+				$cantidades['rechazos']=$row['cant'];
+			}elseif ($row['aceptoInvitacion'] == '1'){
+				$cantidades['confirmaciones']=$row['cant'];
+			}
+				
+		}
+		
+		return $cantidades;
+	}
+	
 }

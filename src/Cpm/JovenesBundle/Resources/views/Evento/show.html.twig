@@ -30,8 +30,32 @@
             <th>Permitir observaciones</th>
             <td>{% if entity.permitirObservaciones %} Sí {% else %} No {% endif %}</td>
         </tr>
+        
     </tbody>
 </table>
+
+<div class="">
+Instancias
+<table>
+    <thead>
+        <tr>
+            <th>Instancia</th>
+            <th>Invitados/Aceptaron/Rechazaron</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in entity.instancias %}
+        <tr>
+            <td>{{i.titulo}}</td>
+            {% set cant=jym.eventosManager.getReporteInvitaciones(i) %}
+            <td>{{cant.invitados}}/{{cant.confirmaciones}}/{{cant.rechazos}}</td>
+            <td><a href="{{path('instancia_show', {'id':i.id})}}">Ver</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
 
 <ul class="record_actions">
     <li>
