@@ -111,7 +111,7 @@ class DefaultController extends BaseController
     }
 
     /**
-    * @Route("/choice", name="index_si_no")
+    * @Route("/choose", name="index_si_no")
     * @Template("CpmJovenesBundle:Default:index_si_no.html.twig")
     */
     
