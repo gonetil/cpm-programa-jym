@@ -38,7 +38,6 @@ add_checkall_ability = function() {
 add_batch_actions_support = function() {
 	
 	$(".batch_actions li").mouseenter(function(event){
-		posX = event.pageX + $(event.target).css('width')
 		$(this).children(".sub_actions").show();
 	}).mouseleave(function(event) { 
 		$(this).children(".sub_actions").hide();
