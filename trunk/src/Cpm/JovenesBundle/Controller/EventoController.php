@@ -186,9 +186,15 @@ class EventoController extends BaseController
             if (!$entity) {
                 throw $this->createNotFoundException('Evento no encontrado.');
             }
-            $this->setSuccessMessage("Evento eliminado satisfactoriamente");
-            $em->remove($entity);
-            $em->flush();
+
+			$instancias = $entity->getInstancias();
+			if (!empty($instancias)){
+				$this->setErrorMessage("No se puede eliminar un evento que posee instancias. Debe eliminar primero las instancias");
+			}else{
+	            $this->setSuccessMessage("Evento eliminado satisfactoriamente");
+	            $em->remove($entity);
+	            $em->flush();
+			}
         }
 
         return $this->redirect($this->generateUrl('evento'));

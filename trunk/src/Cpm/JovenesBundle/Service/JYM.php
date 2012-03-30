@@ -7,36 +7,22 @@ use Cpm\JovenesBundle\StaticConfig;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Entity\Ciclo;
-use Symfony\Component\DependencyInjection\ContainerInterface; 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class JYM {
+class JYM  {
 	private $etapasPorNombre;
 	private $etapas;
 	private $ciclo;
 	private $numeroEtapaActual;
-	
+	private $container;
 	private $doctrine;
 	private $logger;
-/*
-	public static function instance(){
-		if (empty(self::$instance)){
-			throw new \IllegalStateException("No existe una instancia de JYM");
-		}
-		return self::$instance;
-	}
-	
-	public static function initServices($doctrine, $logger){
-		if (!empty(self::$instance)){
-			throw new \IllegalStateException("Ya existe una instancia de JYM");
-		}
-		self::$instance=new JYM($doctrine, $logger);
-		self::$instance->lastInit();
-		
-	}
-	*/
-	public function __construct($doctrine, $logger){
+
+	public function __construct($doctrine, $logger, ContainerInterface $container){
 		$this->doctrine=$doctrine;
 		$this->logger=$logger;
+		$this->container=$container;
+		
 		$this->setEtapas(StaticConfig::getEtapas());
 		$this->ciclo=null;
 		$this->lastInit();
@@ -181,5 +167,9 @@ class JYM {
 	public function getNombresEtapas(){
 		return $this->etapas;
 	}
+	
+	public function getEventosManager(){
+		return $this->container->get('cpm_jovenes_bundle.eventos_manager');
+	}	
 	
 }
