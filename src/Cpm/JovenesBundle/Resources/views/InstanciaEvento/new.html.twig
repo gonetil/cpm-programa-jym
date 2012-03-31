@@ -3,7 +3,16 @@
 {% block title %}Crear Instancia de Evento{% endblock %}
 
 {% block content %}
+	<script>
 
+	$(function() {
+		
+		$("#cpm_jovenesbundle_instanciaeventotype_fechaCierreInscripcion_date").datepicker();
+		definirIntervalo("cpm_jovenesbundle_instanciaeventotype_fechaInicio_date","cpm_jovenesbundle_instanciaeventotype_fechaFin_date");
+//		definirIntervalo("cpm_jovenesbundle_instanciaeventotype_fechaCierreInscripcion_date","cpm_jovenesbundle_instanciaeventotype_fechaInicio_date");
+		
+	});
+	</script>
 
 <form action="{{ path('instancia_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

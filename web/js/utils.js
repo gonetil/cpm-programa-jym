@@ -86,3 +86,26 @@ $(document).ready(function() {
 	
 }); //document.ready
 
+
+function definirIntervalo(inicioID, finID){
+	var d = $("#"+inicioID+", #" +finID).datepicker({
+		defaultDate: "+1w",
+		changeMonth: true,
+		numberOfMonths: 3,
+		onSelect: function( selectedDate ) {
+			var option = this.id == inicioID ? "minDate" : "maxDate",
+				instance = $( this ).data( "datepicker" ),
+				date = $.datepicker.parseDate(
+					instance.settings.dateFormat ||
+					$.datepicker._defaults.dateFormat,
+					selectedDate, instance.settings );
+			d.not( this ).datepicker( "option", option, date );
+		}
+	});
+}
+$(function() {
+	$.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+	$.datepicker.setDefaults( { dateFormat: 'dd/mm/yy' } );
+	$.datepicker.setDefaults( { monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'] });
+	$.datepicker.setDefaults( { monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'] });
+});
