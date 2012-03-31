@@ -33,16 +33,27 @@
 	<li target="proyecto_{{proyecto.id}}"> 
 			<h3> 
 		    	Proyecto N° {{proyecto.id}}: {{ proyecto.titulo }}
-		    	{% set numinvitacionesPendientes = proyecto.invitacionesPendientes|length %}
-		    	{% if numinvitacionesPendientes == 1 %}
-		    		({{numinvitacionesPendientes}} invitación pendiente)
-		    	{% elseif numinvitacionesPendientes > 1 %}
-		    		({{numinvitacionesPendientes}} invitaciones pendientes)
-		    	{%endif%}
 		    </h3>
 		    <h4> 
 		    		{{ proyecto_box.nombreEscuela(proyecto.escuela) }}
 		   	</h4>
+		    
+		     
+		    {% set numinvitacionesPendientes = proyecto.invitacionesPendientes|length %}
+		    {% if numinvitacionesPendientes > 0 %}
+		    <div class="invitacion">	
+		    	{% if numinvitacionesPendientes == 1 %}
+		    	<div class="one-pending">
+		    		{{numinvitacionesPendientes}}
+		    		</div> invitación pendiente
+		    	{% elseif numinvitacionesPendientes > 1 %}
+		    	<div class="many-pending">
+		    		{{numinvitacionesPendientes}} 
+		    	</div> invitaciones pendientes
+		    	{%endif%}
+		    </div>	
+		    {% endif %}	
+		    
 		    <ul id="project-actions" class="record_actions">
 				{% for accion in jym.getAccionesProjecto(proyecto) %}
 						<li>

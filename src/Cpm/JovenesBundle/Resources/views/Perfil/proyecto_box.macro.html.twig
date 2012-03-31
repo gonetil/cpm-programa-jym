@@ -19,6 +19,46 @@
 <!-- 		<div class="operaciones"> -->
 <!-- 			<a href="#" onclick="$('#detalle_proyecto').fadeOut(); "> <img src="/images/shared/close.png" /></a> -->
 <!-- 		</div> Titulo: {{ proyecto.titulo }} -->
+
+
+	{% if proyecto.invitaciones | length > 0 %}
+	<div class="invitaciones">
+		<div class="minimizer" onclick="$('.invitaciones .listado-items').toggle();"> - </div>
+		<div class="invitacion">	
+		    	<div class="many-pending"></div> Invitaciones a eventos 
+		    	 
+		 </div>   	
+		<ul class="listado-items">
+			{% for invitacion in proyecto.invitaciones %}
+				<li class="actions">
+					{{ invitacion.instanciaEvento.titulo }}
+					{% if not invitacion.instanciaEvento.fue() %}
+						<div class="status">
+						{% if invitacion.estaPendiente %}
+							{% if invitacion.estaVigente %}
+								 <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions">Confirmar</a>  
+								 <a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a>
+							{% endif %}
+							
+						{% else %}
+							{% if invitacion.aceptoInvitacion %}
+								<span class='aceptado'>Confirmado</span>
+								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a>
+								<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
+							{% else %}
+								<span class='rechazado'>Rechazado</span>
+								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
+							{% endif %}
+							
+    					{% endif %}
+    					</div>
+					{% endif %}
+				</li>
+			{%endfor %}
+			</ul>
+		</div>	
+
+	  {% endif %}	
 		<h3>Integrantes</h3>
 		<p>
 			<b>Coordinador</b>: {{ proyecto.coordinador.nombre }} {{proyecto.coordinador.apellido}} &lt;<a href="mailto:{{proyecto.coordinador.email}}">{{proyecto.coordinador.email}}</a>&gt;{% if proyecto.esPrimeraVezDocente %}<sup>*</sup>{% endif %}		
@@ -33,34 +73,7 @@
 				</ul>
 			</p>
 		{% endif %}
-	
-		<h3> Invitaciones a eventos </h3>
-		<ul class="listado-items">
-			{% for invitacion in proyecto.invitaciones %}
-				<li class="actions">
-					{{ invitacion.instanciaEvento.titulo }}
-					{% if not invitacion.instanciaEvento.fue() %}
-						{% if invitacion.estaPendiente %}
-							{% if invitacion.estaVigente %}
-								Aceptar? <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions">Si</a> | <a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">No</a>
-							{% endif %}
-						{% else %}
-							{% if invitacion.aceptoInvitacion %}
-								Invitacion Aceptada
-								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar?</a>
-								<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
-							{% else %}
-								Invitacion Rechazada
-								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
-							{% endif %}
-							
-    					{% endif %}
-					{% endif %}
-				</li>
-			{%endfor %}
-		</ul>
-		
-		
+			
 		{% set escuela = proyecto.escuela %}
 		<h3> Datos de la Escuela </h3>
 
