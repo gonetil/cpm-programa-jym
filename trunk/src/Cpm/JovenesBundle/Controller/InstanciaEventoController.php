@@ -63,7 +63,12 @@ class InstanciaEventoController extends BaseController
      */
     public function newAction()
     {
-        $entity = new InstanciaEvento();
+    	$entity = new InstanciaEvento();
+        
+        $eventoid = $this->getRequest()->query->get('evento_id', 0);
+    	if ($eventoid)
+    		$entity->setEvento($this->getRepository('CpmJovenesBundle:Evento')->find($eventoid));
+    		
         $form   = $this->createForm(new InstanciaEventoType(), $entity);
 
         return array(
