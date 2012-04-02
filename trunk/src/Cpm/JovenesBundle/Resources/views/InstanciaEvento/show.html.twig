@@ -38,7 +38,14 @@
 {# invitaciones enviadas para esta instancia del evento #}
 {% set aceptaciones = 0 %}
 {% set asistentes = 0 %}
+{% set pendientes = 0 %}
+{% set rechazadas = 0 %}
 <div class="right-panel invitaciones" style="display:block; border:none; width: auto; min-width: 400px;">
+	<div id='resumen-box'>
+	<h4>Resumen:</h4>
+	<ul class='listado-items' id="resumen">
+	</ul>
+	</div>
 	<a href="#" style="float:right; font-weight:bold;" onclick="$('#invitaciones').toggle();">_</a>
 	<h2>Invitaciones enviadas a esta instancia</h2>
 	{% if entity.invitaciones | length > 0 %}
@@ -68,46 +75,52 @@
 		    </thead>
 		    <tbody>
 	    	{% for inv in entity.invitaciones %}
-		        <tr>
+		        <tr {% if inv.sinResponder %} class="pendiente" {% endif %}>
 		            <td>{{ inv.id }}</th>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
-		            <td class="{% if inv.aceptoInvitacion %}yes{% else %}no{% endif %}"></td>
-		            
-		            {% if inv.aceptoInvitacion %}
-		            {% set aceptaciones = aceptaciones + 1 %}
-		            	{% if entity.evento.pedirNumeroAsistentes %}
-		            	{% set asistentes = asistentes + inv.numeroAsistentes %}
-			            	<td>{{ inv.numeroAsistentes }}</td>
-			            {% else %}
-			            	{% set asistentes = asistentes + 1 %}	
-			        	{% endif %}
-			            {% if entity.evento.permitirSuplente %}
-			            	<td>{{ inv.suplente }}</th>
-			            {% endif %}
-			            {% if entity.evento.ofrecerHospedaje %}
-			            	<td class="{% if inv.solicitaHospedaje %}yes{% else %}no{% endif %}"></td>
-			            {% endif %}
-			            {% if entity.evento.ofrecerViaje %}
-				            <td class="{% if inv.solicitaViaje %}yes{% else %}no{% endif %}"></td>
-			            {% endif %}
-			            {% if entity.evento.permitirObservaciones %}
-			            	<td>{{ inv.observaciones }}</td>
-			            {% endif %}	  
-			            <td class="{% if inv.asistio %}yes{% else %}no{% endif %}"></td>
-			            
-		            {% else %}
-		            <td colspan="100%"> </td>
-		            {% endif %}
+		            <td class="{% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"></td>
+		            {% if not inv.sinResponder %}
+				            {% if inv.aceptoInvitacion %}
+				            {% set aceptaciones = aceptaciones + 1 %}
+				            	{% if entity.evento.pedirNumeroAsistentes %}
+				            	{% set asistentes = asistentes + inv.numeroAsistentes %}
+					            	<td>{{ inv.numeroAsistentes }}</td>
+					            {% else %}
+					            	{% set asistentes = asistentes + 1 %}	
+					        	{% endif %}
+					            {% if entity.evento.permitirSuplente %}
+					            	<td>{{ inv.suplente }}</th>
+					            {% endif %}
+					            {% if entity.evento.ofrecerHospedaje %}
+					            	<td class="{% if inv.solicitaHospedaje %}yes{% else %}no{% endif %}"></td>
+					            {% endif %}
+					            {% if entity.evento.ofrecerViaje %}
+						            <td class="{% if inv.solicitaViaje %}yes{% else %}no{% endif %}"></td>
+					            {% endif %}
+					            {% if entity.evento.permitirObservaciones %}
+					            	<td>{{ inv.observaciones }}</td>
+					            {% endif %}	  
+					            <td class="{% if inv.asistio %}yes{% else %}no{% endif %}"></td>
+					            
+				            {% else %}
+					            {% set rechazadas= rechazadas+1 %}	
+					            <td colspan="100%" class="rechazada"> </td>
+				            {% endif %}
+				        <td colspan="100%">  </td>    
+				        {% else %}
+				        	{% set pendientes=pendientes+1 %}
+				      {% endif %} {# inv.aceptoInvitacion #}      
 		        </tr>
 		        {% endfor %}
 		</table>
 	{% endif %} {# invitaciones > 0 #}	
-	<h4>Resumen:</h4>
-	<ul class='listado-items'>
-		<li>Invitaciones enviadas: <span class="status">{{ entity.invitaciones | length}}</span></li>
-		<li>Invitaciones aceptadas: <span class="status"> {{ aceptaciones }}</span> </li>
-		<li>Cantidad de asistenes confirmados: <span class="status">{{asistentes }}</span> </li>
-	</ul>	
+		<script>
+		$("#resumen").html('<li>Invitaciones enviadas: <span class="status">{{ entity.invitaciones | length}}</span></li> \
+		<li>Invitaciones aceptadas: <span class="status"> {{ aceptaciones }}</span> </li> \
+		<li>Invitaciones pendientes: <span class="status">{{ pendientes }}</span> </li> \
+		<li>Invitaciones rechazadas: <span class="status">{{ rechazadas }}</span> </li> \
+		<li>Cantidad de asistenes confirmados: <span class="status">{{asistentes }}</span> </li>');
+		</script>
 </div>	
 
 <div style="width:100%; clear:both">

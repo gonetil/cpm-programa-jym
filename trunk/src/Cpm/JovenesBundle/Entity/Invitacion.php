@@ -152,6 +152,14 @@ class Invitacion
     {
         return $this->aceptoInvitacion;
     }
+    
+    public function getRechazoInvitacion() { 
+    	return ($this->aceptoInvitacion === false);
+    }
+    public function getSinResponder() {
+    	
+    	return is_null($this->aceptoInvitacion);
+    }
 
     /**
      * Set numeroAsistentes
