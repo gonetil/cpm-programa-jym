@@ -31,6 +31,9 @@ class TwigSwiftMailer implements MailerInterface
         //$this->twig = new \Twig_Environment(new \Twig_Loader_String());
 	    $this->doctrine = $doctrine;
         $this->parameters = $parameters;
+
+        if ($this->parameters['setlocaldomain'])
+        	$mailer->getTransport()->setLocalDomain('127.0.0.1');
         
     }
 	
@@ -184,9 +187,7 @@ class TwigSwiftMailer implements MailerInterface
         } else {
             $message->setBody($textBody);
         }
-		//$testmode= $this->parameters['testmode'];
-		//$testmode || 
-		
+
 		$sent= $this->mailer->send($message);
 		    
         return array($message,$sent); 

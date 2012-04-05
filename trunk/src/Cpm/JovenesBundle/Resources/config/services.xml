@@ -38,11 +38,11 @@
             <argument type="service" id="twig" />
             <argument type="service" id="doctrine" />
             <argument type="collection">
-                <argument key="from_name">%jym_from_name%</argument>
-                <argument key="from_email">%jym_from_email%</argument>
-                <argument key="testmode">%jym_mailer_testmode%</argument>
+<!--                 <argument key="from_name">%jym_from_name%</argument> -->
+                <argument key="from_email">%jym_mailer_from%</argument>
+                <argument key="setlocaldomain">%jym_mailer_setlocaldomain%</argument>
                 <argument key="url_sitio">%jym_url_sitio%</argument>
-                <argument key="xxx">%jym_xxx%</argument>
+
             </argument>            
 		</service>
 		
