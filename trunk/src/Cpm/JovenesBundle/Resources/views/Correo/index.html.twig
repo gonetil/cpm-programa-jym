@@ -44,7 +44,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td><a href="#" onclick="cargar_correo({{entity.id}})">{{ entity.id }}</a></td>
+            <td><a href="{{ path('correo_show',{id:entity.id}) }}">{{ entity.id }}</a></td>
             <td>{% if entity.fecha %}{{ entity.fecha|date('d-m-Y H:i:s') }}{% endif%}</td>
             <td>{{ entity.email }}</td>
             <td>{%if entity.destinatario %}{{ entity.destinatario.apellido }}, {{ entity.destinatario.nombre }}{%endif%}</td>
@@ -52,7 +52,7 @@
             <td>
                 <ul>
                     <li>
-                        <a href="#" onclick="cargar_correo({{entity.id}})">Ver</a>
+                        <a href="{{ path('correo_show',{id:entity.id}) }}">Ver</a>
                     </li>
                 </ul>
             </td>
@@ -65,7 +65,7 @@
 	<div id="loading-indicator-mini" class="cargando_detalle_proyecto"> &nbsp; </div> 
 	<div id="detalle_correo"></div>		
 
-<ul>
+<ul class="record_actions">
     <li>
         <a href="{{ path('correo_new') }}">
             Redactar Correo
