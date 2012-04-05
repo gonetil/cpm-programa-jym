@@ -17,8 +17,7 @@ class InstanciaEventoType extends AbstractType
             ->add('cerrarInscripcion',null,array('label' => 'Debe bloquearse la inscripcion luego de la fecha de fin de inscripción?', 'required'=>false))
             ->add('fechaCierreInscripcion',null,array('label' => 'Fin de inscripción (Fecha y Hora)', 'date_widget'=>'single_text', 'time_widget'=>'single_text'))
 		    ->add('fechaInicio',null,array('label' => 'Fecha y Hora de Inicio del evento', 'date_widget'=>'single_text', 'time_widget'=>'single_text'))
-            ->add('fechaFin',null,array('label' => 'Fecha y Hora de Fin del evento', 'date_widget'=>'single_text', 'time_widget'=>'single_text'))
-         	
+            ->add('fechaFin',null,array('label' => 'Fecha y Hora de Fin del evento', 'date_widget'=>'single_text', 'time_widget'=>'single_text'))         	
         ;
     }
 
