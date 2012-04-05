@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Cpm\JovenesBundle\Entity\Correo
@@ -30,7 +31,7 @@ class Correo
 
     /**
      * @var string $email
-     *
+     * @Assert\Email(message = "La dirección de correo no es válida.", checkMX = false)
      * @ORM\Column(name="email", type="string")
      */
     private $email;
@@ -207,5 +208,17 @@ class Correo
     public function __toString(){
     	return "{$this->fecha} Destinatario {$this->email} Asunto {$this->asunto}";
     }
+ 	
+ 	public function clonar(){
+ 		$copia = new Correo();
+ 		$copia->fecha=$this->fecha;
+	    $copia->email=$this->email;
+	    $copia->asunto=$this->asunto;
+	    $copia->cuerpo=$this->cuerpo;
+	    $copia->destinatario=$this->destinatario;
+	    $copia->emisor=$this->emisor;
+		$copia->proyecto=$this->proyecto;
+		return $copia;
+	 }
     
 }

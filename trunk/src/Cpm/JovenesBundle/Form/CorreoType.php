@@ -10,11 +10,11 @@ class CorreoType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('fecha')
+            ->add('destinatario', null, array('required'=>false, "empty_value"=>'Ninguno', 'label'=> "Usuario"))
             ->add('email', 'email')
             ->add('asunto')
             ->add('cuerpo')
-            ->add('destinatario')
+            ->add('proyecto', null, array('required'=>false, "empty_value"=>'Ninguno', 'label'=> "Sobre proyecto"))
         ;
     }
 

@@ -65,8 +65,15 @@ class InvitacionController extends BaseController
         $editForm->bindRequest($request);
 		$ev_mgr= $this->getEventosManager();
         if ($editForm->isValid()) {
-        	$ev_mgr->invitarProyectos($this->getLoggedInUser(), $invitacionBatch);
-            return $this->redirect($this->generateUrl('instancia_show', array('id' => $invitacionBatch->getInstancia()->getId())));
+        	try{
+        		$ev_mgr->invitarProyectos($this->getLoggedInUser(), $invitacionBatch);
+        		return $this->redirect($this->generateUrl('instancia_show', array('id' => $invitacionBatch->getInstancia()->getId())));
+        	}catch(InvalidTemplateException $e){
+					$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+			}catch(MailCannotBeSentException $e){
+				this->setErrorMessage('No se pudieron enviar las invitaciones por correo. Verifique que los datos ingresados sean válidos');
+			}	
+		
         }
 
         return array(

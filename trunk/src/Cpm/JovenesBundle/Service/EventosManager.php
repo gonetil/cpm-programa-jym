@@ -48,46 +48,52 @@ class EventosManager
     	$ccEscuela=$invitacionBatch->getCcEscuelas();
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();
     	
+        foreach ( $invitacionBatch->getProyectos() as $p ) {
+			 $invitacion = $this->invitarProyecto($instancia, $p);
+		}
+    }
+    private enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores){
+    //FIXME cachear y usar clonar()
     	$correoCoordinador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO);
+    
     	$correoEscuela = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_ESCUELA);
     	$correoColaborador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_COLABORADORES);
     	
-        foreach ( $invitacionBatch->getProyectos() as $p ) {
-			 $invitacion = $this->getInvitacion($instancia, $p);
+    	$context=array(Plantilla::_INVITACION => $invitacion);
+		
+		if ($ccEscuela){
+			$correoEscuela->setProyecto($p);	
+			$this->mailer->enviarCorreoAEscuela($correoEscuela, $context);
+		}
+		if ($ccColaboradores){
+			$correoColaborador->setProyecto($p);	
+			$this->mailer->enviarCorreoAColaboradores($correoColaborador, $context);
+		}
+		
+		$context[Plantilla::_URL]=$this->mailer->resolveUrlParameter('abrir_invitacion', array('id'=>$invitacion->getId(), 'accion'=>'aceptar'));
+		$correoCoordinador->setProyecto($p);
+		$this->mailer->enviarCorreoACoordinador($correoCoordinador, $context);
+			 	
+    }
+
+	public function invitarProyecto($instancia, $p){
+		$invitacion = $this->getInvitacion($instancia, $p);
 			 if (empty($invitacion)){
 			    $this->logger->info("Se invita al proyecto '".$p->getId()."' al evento '".$instancia->getTitulo()."'");
 		
-			 	$invitacion = $this->invitarProyecto($instancia, $p);
-			 	
-			 	$context=array(Plantilla::_INVITACION => $invitacion);
-			 	
-			 	if ($ccEscuela){
-			 		$correoEscuela->setProyecto($p);	
-				 	$this->mailer->enviarCorreoAEscuela($admin, $correoEscuela, $context);
-			 	}
-				if ($ccColaboradores){
-			 		$correoColaborador->setProyecto($p);	
-				 	$this->mailer->enviarCorreoAColaboradores($admin, $correoColaborador, $context);
-				}
-				$context[Plantilla::_URL]=$this->mailer->resolveUrlParameter('abrir_invitacion', array('id'=>$invitacion->getId(), 'accion'=>'aceptar'));
-				$correoCoordinador->setProyecto($p);
-				 	
-				$this->mailer->enviarCorreoACoordinador($admin, $correoCoordinador, $context);
+				$invitacion = new Invitacion();
+				$invitacion->setInstanciaEvento($instancia);
+				$invitacion->setProyecto($p);
+				
+				$em = $this->doctrine->getEntityManager();
+		        $em->persist($invitacion);
+		        $em->flush();
+				//FIXME si falla el envio de mail por na invitacion, cuando se reenvia?
+			 	$this->enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores);
 			 	
 			 }else{
 				$this->logger->trace("Ya exise una invitacion para el proyecto '".$proyecto->getId()."' al evento '".$instancia->getTitulo()."', no se hace nada.");
 			}
-		}
-    }
-
-	public function invitarProyecto($instancia, $p){
-		$invitacion = new Invitacion();
-		$invitacion->setInstanciaEvento($instancia);
-		$invitacion->setProyecto($p);
-		
-		$em = $this->doctrine->getEntityManager();
-        $em->persist($invitacion);
-        $em->flush();
         return $invitacion;
 	}
 	

@@ -9,6 +9,9 @@ use Cpm\JovenesBundle\Entity\Correo;
 use FOS\UserBundle\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+use Cpm\JovenesBundle\Exception\Mailer\InvalidTemplateException;
+use Cpm\JovenesBundle\Exception\Mailer\MailCannotBeSentException;
+
 /**
  */
 class TwigSwiftMailer implements MailerInterface
@@ -63,7 +66,7 @@ class TwigSwiftMailer implements MailerInterface
 
         $url = $this->router->generate('fos_user_registration_confirm', array('token' => $usuario->getConfirmationToken()), true);
         $context = array(Plantilla::_URL => $url);
-        
+        //FIXME debo capturar las exceptions d eenviar correo?
         return $this->enviarCorreo($correo, $context);
     }
 
@@ -81,28 +84,27 @@ class TwigSwiftMailer implements MailerInterface
 	/**
      * Enviar un correo al coordinador del proyecto
      */
-    public function enviarCorreoACoordinador(Usuario $emisor, Correo $correo, $context=array()) 
+    public function enviarCorreoACoordinador(Correo $correo, $context=array()) 
     {
     	$proyecto = $correo->getProyecto();
     	if (empty($proyecto)) 
     		throw new \InvalidArgumentException("Debe especificar el proyecto");
     	
-    	$correo->setEmisor($emisor);
     	$correo->setDestinatario($proyecto->getCoordinador());
 		$correo->setEmail($proyecto->getCoordinador()->getEmail());
+		
 		return $this->enviarCorreo($correo,$context);
     }
     
 	/**
      * Enviar un correo a la escuela del proyecto
      */
-    public function enviarCorreoAEscuela(Usuario $emisor, Correo $correo, $context=array()) 
+    public function enviarCorreoAEscuela(Correo $correo, $context=array()) 
     {
     	$proyecto = $correo->getProyecto();
     	if (empty($proyecto)) 
     		throw new \InvalidArgumentException("Debe especificar el proyecto");
     	
-    	$correo->setEmisor($emisor);
     	$correo->setEmail($proyecto->getEscuela()->getEmail());
 		
 		return $this->enviarCorreo($correo,$context);
@@ -111,25 +113,27 @@ class TwigSwiftMailer implements MailerInterface
     /**
      * Enviar un correo a los colaboradores del proyecto
      */
-    public function enviarCorreoAColaboradores(Usuario $emisor, Correo $correo, $context=array()) 
+    public function enviarCorreoAColaboradores(Correo $correo, $context=array()) 
     {
     	$proyecto = $correo->getProyecto();
     	if (empty($proyecto)) 
     		throw new \InvalidArgumentException("Debe especificar el proyecto");
     	
-	    $correo->setEmisor($emisor);
-	    $resEnvio = true;
+	    $correos = array();
     	foreach($proyecto->getColaboradores() as $c ){
 				$correo->setDestinatario($c); 
 				$correo->setEmail($c->getEmail());
-				if(!$this->enviarCorreo($correo,$context))
-				   	return false;
-				
+				$correos[]=$this->enviarCorreo($correo,$context);			
 		}
+		return $correos;
     }
 
-	
-	private function enviarCorreo(Correo $correo, $context=array()){
+	/**
+	 * Envia un Correo.
+	 * @throws MailCannotBeSentException
+	 * @throws InvalidTemplateException
+	 */
+	public function enviarCorreo(Correo $correo, $context=array()){
 		$context[Plantilla::_USUARIO] = $correo->getDestinatario();
 		$context[Plantilla::_EMISOR] = $correo->getEmisor();
 		$context[Plantilla::_PROYECTO] = $correo->getProyecto();
@@ -141,20 +145,30 @@ class TwigSwiftMailer implements MailerInterface
 			$email = $correo->getDestinatario()->getEmail();
 			
 		//se asume que la plantilla tiene texto twig nomas, nada de HTML
-		$sent = $this->sendMessage($email, $correo->getAsunto(),$correo->getCuerpo(), null, $context );
+		list($message,$sent) = $this->sendMessage($email, $correo->getAsunto(),$correo->getCuerpo(), null, $context );
+		if ($sent)
+	        return $this->guardarCorreo($message, $context);
+	    else
+	    	throw new MailCannotBeSentException($correo);
 		
-		return $sent;
 	}
 	
     private function sendMessage($to, $subject, $twig_text, $twig_html, $context)
     {
-    	$text_template = $this->twig->loadTemplate($twig_text);
-		$textBody = $text_template->render($context);
-        
-		if($twig_html){
-			$html_template= $this->twig->loadTemplate($twig_html);
-        	$htmlBody = $html_template->render($context);
+    	try{
+	    	$text_template = $this->twig->loadTemplate($twig_text);
+			$textBody = $text_template->render($context);
+	        
+			if($twig_html){
+				$html_template= $this->twig->loadTemplate($twig_html);
+	        	$htmlBody = $html_template->render($context);
+			}
+		}catch(\Twig_Error_Syntax $e){
+			throw new InvalidTemplateException("Template Invalido",0,$e);
+		}catch(\Twig_Error $e){
+			throw new InvalidTemplateException("Error con el template ",0,$e);
 		}
+		
 		
     	$fromEmail= $this->parameters['from_email'];
 
@@ -172,15 +186,13 @@ class TwigSwiftMailer implements MailerInterface
         }
 		//$testmode= $this->parameters['testmode'];
 		//$testmode || 
+		
 		$sent= $this->mailer->send($message);
-		if ($sent)
-	        $this->guardarCorreo($message, $context);
-	    else
-	    	var_dump($sent);
-        return $sent; 
+		    
+        return array($message,$sent); 
     }
     
-    private function guardarCorreo($message, $context){
+    private function guardarCorreo(\Swift_Message $message, $context){
     	
         $correo = new Correo();
 		$correo->setFecha(new \DateTime());
@@ -201,9 +213,9 @@ class TwigSwiftMailer implements MailerInterface
 		$correo->setCuerpo($message->getBody());
 		$em=$this->doctrine->getEntityManager();
 		$em->persist($correo);
-		if  ( (!empty($context[Plantilla::_USUARIO])) && ($context[Plantilla::_USUARIO]->getId()))
+		//if  ( (!empty($context[Plantilla::_USUARIO])) && ($context[Plantilla::_USUARIO]->getId()))
 			$em->flush();
-		
+		return $correo;
     } 
     
     /**
