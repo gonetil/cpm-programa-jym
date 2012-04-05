@@ -74,7 +74,9 @@ swiftmailer:
     encryption: %mailer_encryption%
 #    sender_address
 #    logging: true
-    
+    spool:
+        type: file
+        path: %kernel.root_dir%/spool    
 jms_security_extra:
     secure_controllers:  true
     secure_all_services: false
