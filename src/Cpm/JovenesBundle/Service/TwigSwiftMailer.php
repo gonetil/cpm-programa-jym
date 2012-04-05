@@ -90,7 +90,7 @@ class TwigSwiftMailer implements MailerInterface
     	$correo->setEmisor($emisor);
     	$correo->setDestinatario($proyecto->getCoordinador());
 		$correo->setEmail($proyecto->getCoordinador()->getEmail());
-		$this->enviarCorreo($correo,$context);
+		return $this->enviarCorreo($correo,$context);
     }
     
 	/**
@@ -105,7 +105,7 @@ class TwigSwiftMailer implements MailerInterface
     	$correo->setEmisor($emisor);
     	$correo->setEmail($proyecto->getEscuela()->getEmail());
 		
-		$this->enviarCorreo($correo,$context);
+		return $this->enviarCorreo($correo,$context);
     }
     
     /**
@@ -118,12 +118,14 @@ class TwigSwiftMailer implements MailerInterface
     		throw new \InvalidArgumentException("Debe especificar el proyecto");
     	
 	    $correo->setEmisor($emisor);
+	    $resEnvio = true;
     	foreach($proyecto->getColaboradores() as $c ){
 				$correo->setDestinatario($c); 
 				$correo->setEmail($c->getEmail());
-				$this->enviarCorreo($correo,$context);
+				if(!$this->enviarCorreo($correo,$context))
+				   	return false;
+				
 		}
-    	
     }
 
 	
@@ -168,12 +170,13 @@ class TwigSwiftMailer implements MailerInterface
         } else {
             $message->setBody($textBody);
         }
-		
-		$testmode= $this->parameters['testmode'];
-		
-		$sent= $testmode || $this->mailer->send($message);
+		//$testmode= $this->parameters['testmode'];
+		//$testmode || 
+		$sent= $this->mailer->send($message);
 		if ($sent)
 	        $this->guardarCorreo($message, $context);
+	    else
+	    	var_dump($sent);
         return $sent; 
     }
     

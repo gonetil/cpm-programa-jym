@@ -13,6 +13,7 @@
             <th>Lugar</th>
             <th>Inicio</th>
             <th>Fin</th>
+            <th>Descripción</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -24,6 +25,7 @@
             <td>{{ entity.lugar }}</td>
             <td>{% if entity.fechaInicio %}{{ entity.fechaInicio|date('d-m-Y H:i:s') }}{% endif%}</td>
             <td>{% if entity.fechaFin %}{{ entity.fechaFin|date('d-m-Y H:i:s') }}{% endif%}</td>
+            <td>{{ entity.descripcion }}</td>
             <td>
                 <ul>
                     <li>

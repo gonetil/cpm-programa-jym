@@ -21,3 +21,7 @@ monolog:
 
 assetic:
     use_controller: true
+    
+swiftmailer:
+#    delivery_address:  arieljlira@gmail.com
+#    disable_delivery:  true

@@ -136,7 +136,8 @@
         </a>
     </li>
     <li>
-        <form action="{{ path('instancia_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('instancia_delete', { 'id': entity.id }) }}" method="post"
+        	onsubmit="return confirm('Esta seguro que desea eliminar la instancia del evento?')">
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>
