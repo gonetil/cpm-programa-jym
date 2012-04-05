@@ -186,6 +186,7 @@ class CorreoController extends BaseController
 		);
 
 	}
+	
 
 	/**
 	*
@@ -202,12 +203,12 @@ class CorreoController extends BaseController
 		$proyectos = $correoBatch->getProyectos();
 
 		if ($correoBatchForm->isValid() && count($proyectos)) {
+			
 			$repository = $this->getEntityManager()->getRepository('CpmJovenesBundle:Proyecto');
 			
 
 			$mailer = $this->getMailer();
-			$valid = $mailer->isValidTemplate($correoBatch->getCuerpo());
-
+			$valid = $mailer->isValidTemplate($correoBatch->getCuerpo());			
 			if ($valid == "success") {
 				$example = $proyectos[0];
 				$context = array (
@@ -218,9 +219,19 @@ class CorreoController extends BaseController
 					Plantilla :: _FECHA => new \ DateTime()
 				);
 				//FIXME, estas cosas con las variables del context lo deebria hacer el mailer
-				$template = $mailer->renderTemplate($correoBatch->getCuerpo(), $context);
-				$cuerpo = $template;
-
+				try {
+					$template = $mailer->renderTemplate($correoBatch->getCuerpo(), $context);
+					$cuerpo = $template;
+				}
+				  catch(InvalidTemplateException $e){
+						$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+						return new Response(
+											$this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
+															array('form' => $correoBatchForm->createView(), 
+																  "proyectos" => $correoBatch->getProyectos()
+											)));
+				}
+				
 				if ($correoBatch->getPreview()) //aun no deben mandarse los emails, sino que hay que previsualizarlos 
 				{
 					$correoBatch->setPreview(false); //para la prox
@@ -268,7 +279,10 @@ class CorreoController extends BaseController
 					$this->setErrorMessage("Se produjo un error al tratar de enviar los correos. Espere unos minutos e intente nuevamente. Si el problema persiste, contáctese con los administradores.".($cant?"Sin embargo, se enviaron $cant correos satisfactoriamente":""));
 				}	
 			
-				} //valid == success
+				}  else { //valid == success
+					$this->setErrorMessage('La plantilla no es valida: ' .$valid);
+				 
+				}	
 			} // form->isValid
 
 			return array (
