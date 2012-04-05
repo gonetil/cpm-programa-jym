@@ -214,7 +214,7 @@ class TwigSwiftMailer implements MailerInterface
 		$correo->setCuerpo($message->getBody());
 		$em=$this->doctrine->getEntityManager();
 		$em->persist($correo);
-		//if  ( (!empty($context[Plantilla::_USUARIO])) && ($context[Plantilla::_USUARIO]->getId()))
+		if  ( (empty($context[Plantilla::_USUARIO])) || ($context[Plantilla::_USUARIO]->getId() != 0))
 			$em->flush();
 		return $correo;
     } 
