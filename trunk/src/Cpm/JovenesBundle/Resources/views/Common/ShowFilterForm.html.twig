@@ -1,0 +1,9 @@
+<form method="get" {{ form_enctype(form) }} class="filter-form">
+    <h3>Filtrar</h3>
+    {{ form_widget(form) }}
+    
+    <p>
+        <button type="submit">Enviar</button>
+        <button onclick="alert('TODO limpiar el form')">Limpiar</button>
+    </p>
+</form>
