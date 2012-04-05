@@ -3,6 +3,16 @@
 {% block title %}Modificar Instancia de Evento{% endblock %}
 
 {% block content %}
+<script>
+
+	$(function() {
+		
+		$("#cpm_jovenesbundle_instanciaeventotype_fechaCierreInscripcion_date").datepicker();
+		definirIntervalo("cpm_jovenesbundle_instanciaeventotype_fechaInicio_date","cpm_jovenesbundle_instanciaeventotype_fechaFin_date");
+//		definirIntervalo("cpm_jovenesbundle_instanciaeventotype_fechaCierreInscripcion_date","cpm_jovenesbundle_instanciaeventotype_fechaInicio_date");
+		
+	});
+	</script>
 
 <form action="{{ path('instancia_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
