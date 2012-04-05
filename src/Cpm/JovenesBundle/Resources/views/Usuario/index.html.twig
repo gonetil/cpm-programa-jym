@@ -3,8 +3,24 @@
 {% block title %}Listado de Usuarios{% endblock %}
  
 {% block content %}
+<form action="{{ path('usuario') }}">
+<div id="before_list">
 
+<div class="filters" style="border:none">
 
+<div class="left">
+{{ form_row(form.apellido) }}
+{{ form_row(form.email) }}
+{{ form_row(form.habilitados) }}
+</div>
+<div class="right">
+{{ form_rest(form) }}
+<input type='submit' style="min-height:auto; height:auto;"/>
+</div>
+</div>
+</form>
+
+</div>
 <table class="records_list">
     <thead>
         <tr>
