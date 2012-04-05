@@ -72,7 +72,8 @@
         </a>
     </li>
     <li>
-        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el evento?')">
+        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post" 
+        onsubmit="return confirm('Esta seguro que desea eliminar el evento?')">
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>

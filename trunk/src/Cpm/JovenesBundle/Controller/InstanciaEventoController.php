@@ -191,8 +191,15 @@ class InstanciaEventoController extends BaseController
                 throw $this->createNotFoundException('Unable to find InstanciaEvento entity.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            if ($entity->getInvitaciones()) {
+                $this->setErrorMessage("No se puede eliminar la instancia de evento porque posee invitaciones");
+                return $this->redirect($this->generateUrl('instancia_show', array('id'=>$id)));
+            }else{
+            	$em->remove($entity);
+            	$em->flush();
+            	$this->setSuccessMessage("Se elimino la instancia del evento satisfactoriamente");
+            }
+
         }
 
         return $this->redirect($this->generateUrl('instancia'));
