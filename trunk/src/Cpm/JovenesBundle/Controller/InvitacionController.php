@@ -71,7 +71,7 @@ class InvitacionController extends BaseController
         	}catch(InvalidTemplateException $e){
 					$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
 			}catch(MailCannotBeSentException $e){
-				this->setErrorMessage('No se pudieron enviar las invitaciones por correo. Verifique que los datos ingresados sean válidos');
+				$this->setErrorMessage('No se pudieron enviar las invitaciones por correo. Verifique que los datos ingresados sean válidos');
 			}	
 		
         }
