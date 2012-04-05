@@ -230,14 +230,23 @@ class TwigSwiftMailer implements MailerInterface
     		$twig->parse($token_stream);
     	} catch (\Twig_Error_Syntax $e) {
     		return $e->getMessage();
+    	} catch(\Twig_Error $e){
+    		return $e->getMessage();
     	}
+    	
     	return "success";
     }
     
     
     public function renderTemplate($twig_template,$context) {
-    	$template= $this->twig->loadTemplate($twig_template);
-    	$rendered = $template->render($context);
+    	try {
+    		$template= $this->twig->loadTemplate($twig_template);
+    		$rendered = $template->render($context);
+    	}catch(\Twig_Error_Syntax $e){
+			throw new InvalidTemplateException("Template Invalido",0,$e);
+		}catch(\Twig_Error $e){
+			throw new InvalidTemplateException("Error con el template ",0,$e);
+		}
     	return $rendered;
     }
 
