@@ -25,7 +25,7 @@ class EscuelaType extends AbstractType
 	        						  ))
         	->add('nombre',null, array('label'=>'Nombre de la Escuela', 'required'=>false))
             ->add('email',null,array('attr'=>array('class'=>'email')))
-            ->add('telefono',null,array('attr'=>array('class'=>'number'), 'required'=>false))
+            ->add('telefono',null,array('attr'=>array('class'=>'number'), 'required'=>false, 'data' => '0'))
             ->add('domicilio')
             ->add('codigoPostal',null,array('label'=>'Código postal' , 'attr'=>array( "minlength"=>"4")))
             ->add('director')
