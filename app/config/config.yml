@@ -67,10 +67,13 @@ stof_doctrine_extensions:
 swiftmailer:
     transport: %mailer_transport%
     host:      %mailer_host%
-    username:  %mailer_user%
+    port:      %mailer_port%
+    username:  %mailer_username%
     password:  %mailer_password%
-    auth_mode:  %mailer_auth_mode%
+#    auth_mode:  %mailer_auth_mode%
     encryption: %mailer_encryption%
+#    sender_address
+#    logging: true
     
 jms_security_extra:
     secure_controllers:  true
