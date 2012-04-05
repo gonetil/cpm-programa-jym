@@ -78,7 +78,8 @@
 		        <tr {% if inv.sinResponder %} class="pendiente" {% endif %}>
 		            <td>{{ inv.id }}</th>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
-		            <td class="{% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"></td>
+		            <td  class="{% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
+		            			{% if inv.sinResponder %} colspan="100%" {% endif %}></td>
 		            {% if not inv.sinResponder %}
 				            {% if inv.aceptoInvitacion %}
 				            {% set aceptaciones = aceptaciones + 1 %}

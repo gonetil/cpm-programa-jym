@@ -52,7 +52,7 @@ class EventosManager
 			 $invitacion = $this->invitarProyecto($instancia, $p);
 		}
     }
-    private enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores){
+    private function enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores){
     //FIXME cachear y usar clonar()
     	$correoCoordinador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO);
     
