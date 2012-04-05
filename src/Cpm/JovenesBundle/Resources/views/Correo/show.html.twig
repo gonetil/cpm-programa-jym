@@ -1,6 +1,6 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block title %}Correo{% endblock %}
+{% block title %}Correo {{ entity.id }}{% endblock %}
 
 {% block content %}
 
@@ -12,12 +12,22 @@
         </tr>
         <tr>
         	<th>De:</th>
-        	<td>{{ entity.emisor.nombre }} {{ entity.emisor.apellido }} &lt; {{ entity.emisor.email }} &gt;
+        	<td>{%if entity.emisor %}{{ entity.emisor.apellido }}, {{ entity.emisor.nombre }}{%else%}Mail del sistema{%endif%}</td>
         </tr>	 
  
         <tr>
-        	<th>Para:</th>
-        	<td>{{ entity.destinatario.nombre }} {{ entity.destinatario.apellido }} &lt; {{ entity.destinatario.email }} &gt;
+        	<th>Para Usuario:</th>
+        	<td>{%if entity.destinatario %}{{ entity.destinatario.apellido }}, {{ entity.destinatario.nombre }} &lt; {{ entity.destinatario.email }} &gt;{%else%}Usuario Anónimo?{%endif%}</td>
+        </tr>	
+      
+        <tr>
+        	<th>Para email:</th>
+        	<td>{{ entity.email }}</td>
+        </tr>
+ 
+        <tr>
+        	<th>Sobre proyecto:</th>
+        	<td>{%if entity.proyecto %}{{ entity.proyecto }}{%else%}Ninguno{%endif%}</td>
         </tr>	 
  
         <tr>
@@ -31,4 +41,21 @@
     </tbody>
 </table>
 
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('correo') }}">
+            Volver al listado de Correos
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('correo_reenviar', {id: entity.id}) }}">
+            Reenviar Este Correo
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('correo_new') }}">
+            Redactar Nuevo Correo
+        </a>
+    </li>
+</ul>
 {% endblock %}

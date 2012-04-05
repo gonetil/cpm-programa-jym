@@ -8,7 +8,7 @@
 	function cargar_correo(id) { 
 		$("#detalle_correo").hide()
 		$.post("{{ path('correo_show') }}", 
-				{correo : id } ,
+				{id : id } ,
 			    function(correo) { 
 			    		$("#detalle_correo").html(correo).show();
 			    }
@@ -64,11 +64,11 @@
 	<div id="loading-indicator-mini" class="cargando_detalle_proyecto"> &nbsp; </div> 
 	<div id="detalle_correo"></div>		
 
-<!-- <ul> -->
-<!--     <li> -->
-<!--         <a href="{{ path('correo_new') }}"> -->
-<!--             Agregar -->
-<!--         </a> -->
-<!--     </li> -->
-<!-- </ul> -->
+<ul>
+    <li>
+        <a href="{{ path('correo_new') }}">
+            Redactar Correo
+        </a>
+    </li>
+</ul>
 {% endblock %}

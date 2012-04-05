@@ -17,6 +17,8 @@ use Cpm\JovenesBundle\EntityDummy\CorreoBatch;
 use Cpm\JovenesBundle\Form\CorreoBatchType;
 
 use Cpm\JovenesBundle\Entity\Plantilla;
+use Cpm\JovenesBundle\Exception\Mailer\InvalidTemplateException;
+use Cpm\JovenesBundle\Exception\Mailer\MailCannotBeSentException;
 
 /**
  * Correo controller.
@@ -48,7 +50,7 @@ class CorreoController extends BaseController
      */
     public function showAction()
     {
-		$id_correo = $this->getRequest()->get('correo');
+		$id_correo = $this->getRequest()->get('id');
 		$entity = $this->getRepository("CpmJovenesBundle:Correo")->findOneById($id_correo);
 
 		if (!$entity) {
@@ -58,6 +60,41 @@ class CorreoController extends BaseController
 		return array (
 			'entity' => $entity
 		);
+	}
+	
+	/**
+     * Reenvia un correo
+     *
+     * @Route("/{id}/reenviar", name="correo_reenviar")
+     * @Template()
+     */
+    public function reenviarAction($id)
+    {
+		$correoViejo = $this->getRepository("CpmJovenesBundle:Correo")->findOneById($id);
+
+		if (!$correoViejo) {
+			throw $this->createNotFoundException('Unable to find Correo entity.');
+		}
+
+		$mailer = $this->getMailer();
+		$correo = $correoViejo->clonar();
+		$correo->setEmisor($this->getLoggedInUser());
+
+		try{
+			$correo = $mailer->enviarCorreo($correo);
+			$this->setSuccessMessage('El correo número '.$id.' ha sido reenviado con éxito a ' .$correo->getEmail());
+			return $this->redirect($this->generateUrl('correo_show', array (
+					'id' => $correo->getId()
+				)));
+		}catch(InvalidTemplateException $e){
+			$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+		}catch(MailCannotBeSentException $e){
+			$this->setErrorMessage('No se pudo enviar el correo. Verifique que los datos ingresados sean válidos');
+		}
+
+		return $this->redirect($this->generateUrl('correo_show', array (
+					'id' => $id
+		)));
 	}
 
 	/**
@@ -84,24 +121,30 @@ class CorreoController extends BaseController
 	 * @Template("CpmJovenesBundle:Correo:new.html.twig")
 	 */
 	public function createAction() {
-		$entity = new Correo();
+		$correo = new Correo();
 		$request = $this->getRequest();
-		$form = $this->createForm(new CorreoType(), $entity);
+		$form = $this->createForm(new CorreoType(), $correo);
 		$form->bindRequest($request);
 
 		if ($form->isValid()) {
-			$em = $this->getDoctrine()->getEntityManager();
-			$em->persist($entity);
-			$em->flush();
-
-			return $this->redirect($this->generateUrl('correo_show', array (
-				'id' => $entity->getId()
-			)));
+			$mailer = $this->getMailer();
+			$correo->setEmisor($this->getLoggedInUser());
+			try{
+				$correo = $mailer->enviarCorreo($correo);
+				$this->setSuccessMessage('El correo ha sido enviado con éxito a ' .$correo->getEmail());
+				return $this->redirect($this->generateUrl('correo_show', array (
+					'id' => $correo->getId()
+				)));
+			}catch(InvalidTemplateException $e){
+				$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+			}catch(MailCannotBeSentException $e){
+				$this->setErrorMessage('No se pudo enviar el correo. Verifique que los datos ingresados sean válidos');
+			}
 
 		}
 
 		return array (
-			'entity' => $entity,
+			'entity' => $correo,
 			'form' => $form->createView()
 		);
 	}
@@ -159,6 +202,7 @@ class CorreoController extends BaseController
 					Plantilla :: _URL_SITIO => $mailer->getParameter('url_sitio'),
 					Plantilla :: _FECHA => new \ DateTime()
 				);
+				//FIXME, estas cosas con las variables del context lo deebria hacer el mailer
 				$template = $mailer->renderTemplate($correoBatch->getCuerpo(), $context);
 				$cuerpo = $template;
 
@@ -180,47 +224,35 @@ class CorreoController extends BaseController
 				$correo = new Correo();
 				$correo->setAsunto($correoBatch->getAsunto());
 				$correo->setCuerpo($correoBatch->getCuerpo());
-				$emisor = $this->getLoggedInUser();
+				$correo->setEmisor($this->getLoggedInUser());
 				$cant = 0;
-				foreach ($proyectos as $proyecto) {
-
-					$correo->setProyecto($proyecto);
-					if ($correoBatch->getCcColaboradores()) {
-						$resEnvio = $mailer->enviarCorreoAColaboradores($emisor, $correo);
-						if ($resEnvio)
-							$cant += count($proyecto->getColaboradores());
-						else{
-	//						echo "No se pudo enviar al colaborador";
-							break;
+				try{
+					foreach ($proyectos as $proyecto) {
+	
+						$correo->setProyecto($proyecto);
+						if ($correoBatch->getCcColaboradores()) {
+							$enviados = $mailer->enviarCorreoAColaboradores($correo);
+							$cant += count($enviados);
 						}
-					}
-
-					if ($correoBatch->getCcEscuelas()) {
-						$resEnvio = $mailer->enviarCorreoAEscuela($emisor, $correo);
-						if ($resEnvio)
+	
+						if ($correoBatch->getCcEscuelas()) {
+							$mailer->enviarCorreoAEscuela($correo);
 							$cant++;
-						else{
-//							echo "No se pudo enviar al escuela";
-							break;
 						}
-					}
-
-					if ($ccCoordinadores = $correoBatch->getCcCoordinadores()) {
-						$resEnvio = $mailer->enviarCorreoACoordinador($emisor, $correo);
-						if ($resEnvio)
+	
+						if ($ccCoordinadores = $correoBatch->getCcCoordinadores()) {
+							$mailer->enviarCorreoACoordinador($correo);
 							$cant++;
-						else{
-//							echo "No se pudo enviar al coordinador";
-							break;
 						}
 					}
-				}
-					if ($resEnvio){
-						$this->setSuccessMessage("Se enviaron $cant correos satisfactoriamente");
-						return $this->redirect($this->generateUrl('proyecto'));
-					}else{
-						$this->setErrorMessage("Se produjo un error al tratar de enviar los correos. Espere unos minutos e intente nuevamente. Si el problema persiste, contáctese con los administradores.".($cant?"Sin embargo, se enviaron $cant correos satisfactoriamente":""));
-					}
+					$this->setSuccessMessage("Se enviaron $cant correos satisfactoriamente");
+					return $this->redirect($this->generateUrl('proyecto'));
+				}catch(InvalidTemplateException $e){
+					$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+				}catch(MailCannotBeSentException $e){
+					$this->setErrorMessage("Se produjo un error al tratar de enviar los correos. Espere unos minutos e intente nuevamente. Si el problema persiste, contáctese con los administradores.".($cant?"Sin embargo, se enviaron $cant correos satisfactoriamente":""));
+				}	
+			
 				} //valid == success
 			} // form->isValid
 
