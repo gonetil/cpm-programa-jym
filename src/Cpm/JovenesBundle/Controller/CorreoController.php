@@ -20,6 +20,9 @@ use Cpm\JovenesBundle\Entity\Plantilla;
 use Cpm\JovenesBundle\Exception\Mailer\InvalidTemplateException;
 use Cpm\JovenesBundle\Exception\Mailer\MailCannotBeSentException;
 
+use Cpm\JovenesBundle\Filter\CorreoFilterForm;
+use Cpm\JovenesBundle\Filter\CorreoFilter;
+
 /**
  * Correo controller.
  *
@@ -35,10 +38,22 @@ class CorreoController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Correo')->findAllQuery();
-        return $this->paginate($entities);
+    	$filter = new CorreoFilter();
+		$form = $this->createForm(new CorreoFilterForm(), $filter);
+		$request = $this->getRequest();
+		if ($request->query->get($form->getName())){
+			$form->bindRequest($request);
+		}
+		//if ($form->isValid()) {
+		
+		$args= array (
+			'entity' => $filter,
+			'form' => $form->createView()
+			
+		);
+		
+        $q = $this->getRepository('CpmJovenesBundle:Correo')->filter($filter);
+        return $this->paginate($q,$args);
         
     }
 

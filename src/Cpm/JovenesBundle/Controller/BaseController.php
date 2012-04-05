@@ -81,7 +81,7 @@ abstract class BaseController extends Controller
 		
 		
 		$paginator = $this->get('ideup.simple_paginator');
-		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
+		$entities = $paginator->setItemsPerPage(10, 'entities')->paginate($query,'entities')->getResult();
 		
 		$request = ($this->container->get('request'));
 		

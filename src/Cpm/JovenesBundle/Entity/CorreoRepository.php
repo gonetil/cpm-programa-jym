@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Cpm\JovenesBundle\Filter\CorreoFilter;
 
 /**
  * CorreoRepository
@@ -23,6 +24,31 @@ class CorreoRepository extends EntityRepository
 				->setParameter('destinatario',$user_id);
 		
 		return  $qb->getQuery();
+	}
+	
+	public function filter(CorreoFilter $filter) {
+		$qb = $this->createQueryBuilder('c')->orderBy('c.fecha', 'DESC');
+	
+	 	if ($filter->getFecha())
+			$qb->andWhere('DATE(c.fecha) = :fecha')->setParameter('fecha',$fechas);
+		if ($filter->getFechaMin())
+			$qb->andWhere('c.fecha > :fechaMin')->setParameter('fechaMin',$filter->getFechaMin());
+		if ($filter->getFechaMax())
+			$qb->andWhere('c.fecha < :fechaMax')->setParameter('fechaMax',$filter->getFechaMax());
+		if ($filter->getEmail())
+			$qb->andWhere('c.email LIKE :email')->setParameter('email','%'.$filter->getEmail().'%');
+	    if ($filter->getAsunto())
+			$qb->andWhere('c.asunto LIKE :asunto')->setParameter('asunto',$filter->getAsunto());
+	    if ($filter->getCuerpo())
+			$qb->andWhere('c.cuerpo LIKE :cuerpo')->setParameter('cuerpo',$filter->getCuerpo());
+	    if ($filter->getDestinatario())
+			$qb->andWhere('c.destinatario = :destinatario')->setParameter('destinatario',$filter->getDestinatario());
+	    if ($filter->getEmisor())
+			$qb->andWhere('c.emisor = :emisor')->setParameter('emisor',$filter->getEmisor());
+		if ($filter->getProyecto())
+			$qb->andWhere('c.proyecto = :proyecto')->setParameter('proyecto',$filter->getProyecto());
+		
+		return $qb->getQuery();
 	}
 	
 }
