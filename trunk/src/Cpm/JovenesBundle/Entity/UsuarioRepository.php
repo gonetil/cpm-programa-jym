@@ -21,4 +21,23 @@ class UsuarioRepository extends EntityRepository
     return  $qb->getQuery();
   
 	}
+	
+	function findBySearchCriteriaQuery($data) {
+	
+		$qb = $this->getEntityManager()->createQueryBuilder();
+	
+		$qb->add('select','u')
+		->add('from','CpmJovenesBundle:Usuario u');
+		
+		if ($data->getApellido()) $qb->andWhere('u.apellido like :apellido')
+									 ->setParameter('apellido',(trim($data->getApellido())."%"));
+		if ($data->getEmail()) $qb->andWhere('u.email like :email')
+								 ->setParameter('email',(trim($data->getEmail())."%"));
+		
+		if ($data->getHabilitados()) $qb->andWhere('u.enabled = 1');
+		
+		return $qb->getQuery();
+		
+	}
+	
 }

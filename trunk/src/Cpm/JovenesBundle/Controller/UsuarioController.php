@@ -10,6 +10,10 @@ use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Form\UsuarioType;
 use FOS\UserBundle\Form\Handler\RegistrationFormHandler;
 
+use Cpm\JovenesBundle\EntityDummy\UsuarioSearch;
+use Cpm\JovenesBundle\Form\UsuarioSearchType;
+
+
 /**
  * Usuario controller.
  *
@@ -28,10 +32,22 @@ class UsuarioController extends BaseController
     public function indexAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $query = $em->getRepository('CpmJovenesBundle:Usuario')->findAllQuery();
+        $searchValues = new UsuarioSearch();
+        $searchForm = $this->createForm(new UsuarioSearchType(),$searchValues);
+        $request = $this->getRequest();
+        if (is_array($request->get("cpm_jovenesbundle_usuariosearchtype"))) {
+        	$usuarios = null;
+        	
+        	$searchForm->bindRequest($request);
+        	$repository = $em->getRepository('CpmJovenesBundle:Usuario');
+        	if ($searchForm->isValid()) {
+        		$usuarios=$repository ->findBySearchCriteriaQuery($searchForm->getData());
+        	}
+        } else {
+        	$usuarios = $em->getRepository('CpmJovenesBundle:Usuario')->findAllQuery();
+        }
         
-        return $this->paginate($query);
+        return $this->paginate($usuarios,array('form'=>$searchForm->createView()));
     }
 
     /**
