@@ -206,10 +206,19 @@ class CorreoController extends BaseController
 			
 			$repository = $this->getEntityManager()->getRepository('CpmJovenesBundle:Proyecto');
 			
-
 			$mailer = $this->getMailer();
-			$valid = $mailer->isValidTemplate($correoBatch->getCuerpo());			
-			if ($valid == "success") {
+			$valid = $mailer->isValidTemplate($correoBatch->getCuerpo());
+
+			if ($valid != "success") {
+				
+				$this->setErrorMessage('La plantilla no es valida: ' .$valid);					
+				return new Response(
+							$this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
+							array('form' => $correoBatchForm->createView(),
+								  "proyectos" => $correoBatch->getProyectos()
+				)));
+			}
+				
 				$example = $proyectos[0];
 				$context = array (
 					Plantilla :: _USUARIO => $example->getCoordinador(),
@@ -223,7 +232,7 @@ class CorreoController extends BaseController
 					$template = $mailer->renderTemplate($correoBatch->getCuerpo(), $context);
 					$cuerpo = $template;
 				}
-				  catch(InvalidTemplateException $e){
+				 catch(InvalidTemplateException $e){
 						$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
 						return new Response(
 											$this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
@@ -279,10 +288,7 @@ class CorreoController extends BaseController
 					$this->setErrorMessage("Se produjo un error al tratar de enviar los correos. Espere unos minutos e intente nuevamente. Si el problema persiste, contáctese con los administradores.".($cant?"Sin embargo, se enviaron $cant correos satisfactoriamente":""));
 				}	
 			
-				}  else { //valid == success
-					$this->setErrorMessage('La plantilla no es valida: ' .$valid);
-				 
-				}	
+				  	
 			} // form->isValid
 
 			return array (
