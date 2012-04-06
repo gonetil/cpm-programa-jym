@@ -1,5 +1,6 @@
 #Instalar sqlite, habilitar php-cli
 sudo apt-get install php-cli php5-sqlite 
+sudo apt-get install php-apc php5-intl
 
 #PHP.ini /etc/php5/apache2/php.ini
 #Definir date.timezone como corresponda
@@ -21,11 +22,15 @@ svn checkout https://cpm-programa-jym.googlecode.com/svn/trunk/ jym --username a
 
 #permitr RW sobre cache y logs
 cd jym
-chmod -R 777 app/logs/ app/cache/
+chmod -R 777 app/logs/ app/cache/ app/spool/
 
 #Descargar vedors
 php bin/vendors install
 
+
+#cronjob para envio de mails
+crontab -u cporlame -e
+*/5 * * * * /usr/bin/php /home/cporlame/public_html/jovenes-beta/app/console swiftmailer:spool:send --time-limit=120
 
 
 
