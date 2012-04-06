@@ -10,7 +10,8 @@ class CorreoFilterForm extends AbstractType {
 			'label' => 'Fecha Min',
 			'widget' => 'single_text',
 			'required' => false,
-			'attr' => array ('class' => 'datepicker')
+			'attr' => array ('class' => 'datepicker'),
+			'format' => 'dd/mm/y',
 		))->add('fechaMax', 'date', array (
 			'label' => 'Fecha Max',
 			'widget' => 'single_text',
