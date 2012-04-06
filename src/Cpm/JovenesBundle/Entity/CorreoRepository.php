@@ -28,9 +28,8 @@ class CorreoRepository extends EntityRepository
 	
 	public function filter(CorreoFilter $filter) {
 		$qb = $this->createQueryBuilder('c')->orderBy('c.fecha', 'DESC');
-	
 	 	if ($filter->getFecha())
-			$qb->andWhere('DATE(c.fecha) = :fecha')->setParameter('fecha',$fechas);
+			$qb->andWhere('DATE(c.fecha) = :fecha')->setParameter('fecha',$filter->getFecha());
 		if ($filter->getFechaMin())
 			$qb->andWhere('c.fecha > :fechaMin')->setParameter('fechaMin',$filter->getFechaMin());
 		if ($filter->getFechaMax())

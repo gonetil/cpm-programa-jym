@@ -5,6 +5,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
+	const DATE_FORMAT='dd/MM/yyyy';
     public function registerBundles()
     {
         $bundles = array(
