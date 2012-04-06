@@ -11,12 +11,13 @@ class CorreoFilterForm extends AbstractType {
 			'widget' => 'single_text',
 			'required' => false,
 			'attr' => array ('class' => 'datepicker'),
-			'format' => 'dd/mm/y',
+			'format' => \AppKernel::DATE_FORMAT,
 		))->add('fechaMax', 'date', array (
 			'label' => 'Fecha Max',
 			'widget' => 'single_text',
 			'required' => false,
-			'attr' => array ('class' => 'datepicker')
+			'attr' => array ('class' => 'datepicker'),
+			'format' => \AppKernel::DATE_FORMAT
 		))->add('destinatario', 'entity', array (
 			'label' => 'Destinatario',
 			'class' => 'CpmJovenesBundle:Usuario',
