@@ -80,6 +80,36 @@ class CorreoController extends BaseController
 	/**
      * Reenvia un correo
      *
+     * @Route("/reenviarunavez", name="correo_reenviarunavez")
+     */
+	public function reenviarunavezAction(){
+		$correos_ids = array(2, 3, 6, 11, 30, 34, 98, 105, 109, 111, 125, 126, 130, 135, 144, 147, 149, 170, 176, 177, 186, 197, 202, 203, 204, 214, 223, 233, 234, 240, 241, 246, 248, 259, 262, 267, 271, 280, 283, 292, 306, 312, 325, 346, 359, 362, 391, 405, 411, 412, 457, 475, 476, 496, 498, 499, 500, 501, 502, 503, 504, 505, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 526, 527, 529, 530, 531, 532, 533, 534, 535, 537, 538, 539, 540, 541, 542, 544, 545, 547, 548, 549, 550, 551, 553, 556, 557, 558, 559, 560, 561, 563, 564, 565, 567, 570, 573, 574, 575, 576, 578, 580, 581, 587, 588, 589, 590, 592, 593, 594, 596, 597, 602, 623, 625);
+		$cq= $this->getRepository("CpmJovenesBundle:Correo")->createQueryBuilder('c');
+		$cq->andWhere("c.id in (:ids)")->setParameter('ids',$correos_ids);
+		$correos = $cq->getQuery()->getResult();
+		
+		$mailer = $this->getMailer();
+		$emisor = $this->getLoggedInUser();
+		$enviados = 0;
+		try{
+			foreach ( $correos as $correoViejo) {
+				$correo = $correoViejo->clonar();
+				$correo->setEmisor($emisor);
+	
+				$correo = $mailer->enviarCorreo($correo);
+				$enviados++;
+			}
+			die('Se enviaron '.$enviados.' correos con exito');
+		}catch(InvalidTemplateException $e){
+			die('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+		}catch(MailCannotBeSentException $e){
+			die('No se pudo enviar el correo. Verifique que los datos ingresados sean válidos');
+		}
+	}
+	
+	/**
+     * Reenvia un correo
+     *
      * @Route("/{id}/reenviar", name="correo_reenviar")
      * @Template()
      */
