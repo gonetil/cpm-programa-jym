@@ -72,10 +72,9 @@
 	<h2>Invitaciones enviadas a esta instancia
 		<ul class="table-options" style="float:right">	
 			<li>
-				<a class="excel-icon icon" href="{{ path('instancia_export_to_excel', { 'id': entity.id }) }}" title="Exportar a Excel">
-		        </a>
+				<a class="excel-icon icon" href="{{ path('instancia_export_to_excel', { 'id': entity.id }) }}" title="Exportar a Excel">&nbsp;</a>
 		    </li>
-		    <li> <a class="asistencia-icon icon" title="pasar asistencia"> </a> </li>    
+		    <li> <a class="asistencia-icon icon" title="pasar asistencia">&nbsp;</a> </li>    
 		</ul>
 	</h2>
 	{% if entity.invitaciones | length > 0 %}
