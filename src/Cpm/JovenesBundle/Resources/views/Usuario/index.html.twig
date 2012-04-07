@@ -11,9 +11,12 @@
 <div class="left">
 {{ form_row(form.apellido) }}
 {{ form_row(form.email) }}
-{{ form_row(form.habilitados) }}
 </div>
 <div class="right">
+{{ form_row(form.habilitados) }}
+{{ form_row(form.coordinadores) }}
+</div>
+<div class="double">
 {{ form_rest(form) }}
 <input type='submit' style="min-height:auto; height:auto;"/>
 </div>

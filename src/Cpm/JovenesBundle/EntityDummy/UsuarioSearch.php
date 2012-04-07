@@ -20,6 +20,7 @@ class UsuarioSearch
     private $email;
 	private $apellido;
 	private $habilitados = true;
+	private $coordinadores = false;
 	
 	public function getEmail()  { return $this->email; }
 	public function getApellido() { return $this->apellido; }
@@ -27,5 +28,7 @@ class UsuarioSearch
 	public function setApellido($x) { $this->apellido = $x; }
 	public function getHabilitados() { return $this->habilitados;}
 	public function setHabilitados($x) { $this->habilitados = $x; }
+	public function getCoordinadores() { return $this->coordinadores; }
+	public function setCoordinadores($x) { $this->coordinadores = $x; }
 }
 ?>
