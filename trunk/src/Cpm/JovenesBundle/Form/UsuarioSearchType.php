@@ -13,6 +13,7 @@ class UsuarioSearchType extends AbstractType
             ->add('apellido',null,array('label'=>'Apellido', 'required'=>false))
             ->add('email',null,array('label'=>'Email', 'required'=>false))
         	->add('habilitados','checkbox',array('label'=>'Sólo habilitados', 'required'=>false))
+        	->add('coordinadores','checkbox',array('label'=>'Sólo coordinadores', 'required'=>false))
         ;
     }
     public function getName()

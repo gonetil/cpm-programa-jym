@@ -36,6 +36,8 @@ class UsuarioRepository extends EntityRepository
 		
 		if ($data->getHabilitados()) $qb->andWhere('u.enabled = 1');
 		
+		if ($data->getCoordinadores()) $qb->innerJoin('u.proyectosCoordinados','p');
+		
 		return $qb->getQuery();
 		
 	}
