@@ -137,6 +137,11 @@
         </a>
     </li>
     <li>
+        <a href="{{ path('instancia_export_to_excel', { 'id': entity.id }) }}">
+            Exportar
+        </a>
+    </li>
+    <li>
         <form action="{{ path('instancia_delete', { 'id': entity.id }) }}" method="post"
         	onsubmit="return confirm('Esta seguro que desea eliminar la instancia del evento?')">
             {{ form_widget(delete_form) }}

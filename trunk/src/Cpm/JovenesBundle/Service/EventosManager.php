@@ -49,7 +49,7 @@ class EventosManager
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();
     	
         foreach ( $invitacionBatch->getProyectos() as $p ) {
-			 $invitacion = $this->invitarProyecto($instancia, $p);
+			 $invitacion = $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores);
 		}
     }
     private function enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores){
@@ -76,7 +76,7 @@ class EventosManager
 			 	
     }
 
-	public function invitarProyecto($instancia, $p){
+	public function invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores){
 		$invitacion = $this->getInvitacion($instancia, $p);
 			 if (empty($invitacion)){
 			    $this->logger->info("Se invita al proyecto '".$p->getId()."' al evento '".$instancia->getTitulo()."'");
