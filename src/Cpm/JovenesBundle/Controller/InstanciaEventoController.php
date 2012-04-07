@@ -240,4 +240,29 @@ class InstanciaEventoController extends BaseController
     	
     	    	
     }
+
+    /**
+    * Edits an existing InstanciaEvento entity.
+    *
+    * @Route("/{id}/export_to_excel", name="instancia_export_to_excel")
+    * @Method("get")
+    * @Template("CpmJovenesBundle:InstanciaEvento:export_excel.x,s.twig")
+    */
+    
+    public function exportToExcelAction($id) {
+    	$em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('No se encontró la Instancia de Evento');
+        }
+		$filename = "{$entity->getEvento()->getTitulo()} ({$entity->getFechaInicio()->format('d-m H:i')} {$entity->getFechaFin()->format('d-m H:i')})";
+		
+		
+        $response = $this->render('CpmJovenesBundle:InstanciaEvento:export_excel.xls.twig',array('entity' => $entity));
+        $response->headers->set('Content-Type', 'application/msexcel');
+        $response->headers->set("Content-Disposition", 'Attachment;filename="'.$filename.'.xls"');
+    	return $response; 
+    	 
+    }
 }
