@@ -4,6 +4,9 @@
 
 {% block content %}
 
+<script>
+  $(document).ready(function() { pasar_asistencia(); });
+</script>
 <div class="left-panel">
 	<table class="record_properties">
 	    <tbody>
@@ -69,17 +72,18 @@
 </div>
 
 <div style="clear:both">
-	<h2>Invitaciones enviadas a esta instancia
-		<ul class="table-options" style="float:right">	
-			<li>
-				<a class="excel-icon icon" href="{{ path('instancia_export_to_excel', { 'id': entity.id }) }}" title="Exportar a Excel">&nbsp;</a>
-		    </li>
-		    <li> <a class="asistencia-icon icon" title="pasar asistencia">&nbsp;</a> </li>    
-		</ul>
-	</h2>
 	{% if entity.invitaciones | length > 0 %}
 		<table class="records_properties" id="invitaciones">
 		    <thead>
+		    <tr class='table-options'>
+		    	<td colspan="100%">
+				<ul class="table-options" style="float:right">	
+					<li><a href="#" class="yes icon" onclick="$('tr.aceptada').toggle(); return false;"  title="Mostrar/Ocultar aceptadas"> &nbsp;</a></li>
+			    	<li><a href="#" class="no icon" onclick="$('tr.rechazada').toggle(); return false;"   title="Mostrar/Ocultar rechazadas"> &nbsp;</a></li>
+			    	<li><a href="#" class="ns_nc icon" onclick="$('tr.pendiente').toggle(); return false;"  title="Mostrar/Ocultar pendientes"> &nbsp;</a></li>
+			    	<li><a class="excel-icon icon" href="{{ path('instancia_export_to_excel', { 'id': entity.id }) }}" title="Exportar a Excel">&nbsp;</a></li>
+			    </ul>
+		    </tr>
 		        <tr>
 		            <th>Id</th>
 		            <th>Fecha</th>
@@ -104,7 +108,7 @@
 		    </thead>
 		    <tbody>
 	    	{% for inv in entity.invitaciones %}
-		        <tr {% if inv.sinResponder %} class="pendiente" {% endif %}>
+		        <tr class="{% if inv.sinResponder %}pendiente{% elseif inv.aceptoInvitacion %}aceptada{%else%}rechazada{% endif %}" >
 		            <td>{{ inv.id }}</th>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
 		            <td  class="{% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
@@ -130,7 +134,10 @@
 					            {% if entity.evento.permitirObservaciones %}
 					            	<td>{{ inv.observaciones }}</td>
 					            {% endif %}	  
-					            <td class="{% if inv.asistio %}yes{% else %}no{% endif %}"></td>
+					            <td class="{% if inv.asistio %}yes{% else %}no{% endif %} col-asistencia">
+					            	<input type="checkbox" name="asistencia" value="{{ path('invitaciones_set_single_asistencia', { 'id': inv.id }) }}" {% if inv.asistio %} checked{%endif%}>
+					            	<div class="loading inline-loading"></div>
+					            </td>
 					            
 				            {% else %}
 					            {% set rechazadas= rechazadas+1 %}	

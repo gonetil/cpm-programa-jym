@@ -11,6 +11,8 @@ use Cpm\JovenesBundle\Form\InvitacionType;
 use Cpm\JovenesBundle\EntityDummy\InvitacionBatch;
 use Cpm\JovenesBundle\Form\InvitacionBatchType;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Invitacion controller.
  *
@@ -206,5 +208,27 @@ class InvitacionController extends BaseController
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+    
+    /**
+    * Actualiza el campo asistencia de una entidad
+    *
+    * @Route("/{id}/set_single_asistencia", name="invitaciones_set_single_asistencia")
+    * @Method("get")
+    */
+    public function set_single_asistencia($id) {
+    	    	
+    	$asistio = ($this->get('request')->query->get('asistencia') == 'true');
+
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
+    	
+    	if ($entity) {
+    		$entity->setAsistio($asistio);
+    		$em->persist($entity);
+    		$em->flush();
+    		return new Response("success");
+    	}
+    	else new Response("error");
     }
 }
