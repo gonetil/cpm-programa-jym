@@ -96,6 +96,36 @@ add_batch_actions_support = function() {
 }
 
 
+/*funcion para pasar asistencia a las instancias de eventos*/
+pasar_asistencia = function() { 
+	
+    $(".col-asistencia input:checkbox").click(function(target) {
+		$checkbox = $(this);
+		$checkbox.parent().removeClass('yes no');
+		$checkbox.siblings(".inline-loading").show();
+		url = $checkbox.val();
+		asistio = $checkbox.is(":checked");
+		$.get(url,{asistencia:asistio}, function( msg) {
+					  			if (msg == 'success') {
+					  				$checkbox.siblings(".inline-loading").hide();
+					  				var td = $checkbox.parent();
+					  				if (asistio)
+					  					td.addClass("yes");
+					  				else 
+					  					td.addClass("no");
+					  			}
+				  		}
+		);
+	});
+	
+	$(".col-asistencia").each(function(index,elem){
+		$elem = $(elem);
+		$elem.mouseenter(function() { $(this).children('input').show(); }).
+			  mouseleave(function() { $(this).children('input').hide(); });
+
+	});
+}
+
 /**
  *  inicializaciones comunes a toda la aplicacion
  */
