@@ -104,12 +104,13 @@
 		            <th>Observaciones</th>
 		            {% endif %}	          
 		            <th> Asistió </th>  	            	            	            
+		            
 		        </tr>
 		    </thead>
 		    <tbody>
 	    	{% for inv in entity.invitaciones %}
 		        <tr class="{% if inv.sinResponder %}pendiente{% elseif inv.aceptoInvitacion %}aceptada{%else%}rechazada{% endif %}" >
-		            <td>{{ inv.id }}</th>
+		            <td><a href="{{ path('invitaciones_edit',{id:inv.id}) }}">{{ inv.id }}</a></th>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
 		            <td  class="{% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
 		            			{% if inv.sinResponder %} colspan="100%" {% endif %}></td>
@@ -138,15 +139,16 @@
 					            	<input type="checkbox" name="asistencia" value="{{ path('invitaciones_set_single_asistencia', { 'id': inv.id }) }}" {% if inv.asistio %} checked{%endif%}>
 					            	<div class="loading inline-loading"></div>
 					            </td>
-					            
 				            {% else %}
 					            {% set rechazadas= rechazadas+1 %}	
-					            <td colspan="100%" class="rechazada"> </td>
+					            <td colspan="100%" class="rechazada">  </td>
 				            {% endif %}
-				        <td colspan="100%">  </td>    
+				           
 				        {% else %}
 				        	{% set pendientes=pendientes+1 %}
+				        	
 				      {% endif %} {# inv.aceptoInvitacion #}      
+				      
 		        </tr>
 		        {% endfor %}
 		</table>
