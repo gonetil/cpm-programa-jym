@@ -1,0 +1,22 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %} Modificar proyecto {% endblock %}
+
+{% block content %}
+
+<h2> Para enviar el proyecto, deberá primero seleccionar el archivo con el proyecto en cuestión. A continuación, 
+deberá verificar algunos datos de la propuesta que envió en la primera instancia. </h2>
+
+<div class="wizzard_stage presentar_proyecto">
+<form action="{{ path('proyecto_recibir_presentacion', { 'id': proyecto.id }) }}" method="post" {{ form_enctype(form) }}>
+<div class="file_upload">
+{{ form_row(form.archivo) }}
+<p> La extensión del archivo debe ser una de las siguientes: {{ valid_extensions }} </p>
+</div>
+<br/>
+<h4> Verifique y complete (de ser necesario) los siguientes datos de su presentación </h4> 
+{{ form_rest(form) }}
+<input type="submit" class="submit" value="Enviar">
+</form>
+</div>
+ {% endblock %}

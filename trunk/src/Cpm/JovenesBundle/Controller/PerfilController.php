@@ -7,11 +7,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Controller\BaseController;
 use Cpm\JovenesBundle\Entity\Proyecto;
-use Cpm\JovenesBundle\Form\ProyectoType;//
+use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Plantilla;
 use Cpm\JovenesBundle\Form\InvitacionUsuarioType;
+use Cpm\JovenesBundle\Form\PresentacionProyectoType;
+use Symfony\Component\HttpFoundation\Response;
 /**
  * Perfil controller.
  *
@@ -319,5 +321,103 @@ class PerfilController extends BaseController
 	    
 	    return $this->redirect($this->generateUrl('home'));
 
+    }
+    
+    
+    /**
+    * Muestra el formulario de presentación del proyecto
+    *
+    * @Route("/{id}/presentar", name="proyecto_presentar")
+    * @Template("CpmJovenesBundle:Proyecto:presentar.html.twig")
+    */
+    public function presentarAction($id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+    
+    	if (!$proyecto) {
+    		throw $this->createNotFoundException("Proyecto $id no encontrado");
+    	}
+    
+    	$form = $this->createForm(new PresentacionProyectoType(), $proyecto);
+    	
+    	return array(
+                'proyecto'      => $proyecto,
+                'form'   => $form->createView(),
+                'valid_extensions' => implode(",",$this->getValidExtensions())
+    	);
+    }
+    
+    /**
+    * Procesa el formulario de envio de proyectos
+    *
+    * @Route("/{id}/recibir_presentacion", name="proyecto_recibir_presentacion")
+    * @Template("CpmJovenesBundle:Proyecto:presentar.html.twig")
+    */
+    
+    public function recibirPresentacion($id) { 
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	$proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+    	 
+        if (!$proyecto) {
+    		throw $this->createNotFoundException("Proyecto $id no encontrado");
+    	}
+    	
+    	$form = $this->createForm(new PresentacionProyectoType(), $proyecto);
+    	$form->bindRequest($this->getRequest());
+    	
+    	if ($form->isValid()) {
+    		$file = $form['archivo']->getData();
+    		
+    		if (in_array($file->guessExtension(),$this->getValidExtensions()))
+    		{
+	    		$new_filename = "Proyecto $id {$file->getClientOriginalName()}";
+	    		$file->move($this->getUploadDir()."$id","$new_filename");
+				$proyecto->setArchivo($new_filename);
+	    		$em->persist($proyecto);
+	    		$em->flush();
+	    		$this->setSuccessMessage("El archivo fue cargado satisfactoriamente");
+	    		return $this->redirect($this->generateUrl('home_usuario'));
+    		} 
+    		else 
+    			$this->setErrorMessage("Los tipos de archivos permitidos son: ".implode(", ",$this->getValidExtensions()));
+    	}
+    	
+    	return array(
+    	                'proyecto'      => $proyecto,
+    	                'form'   => $form->createView(),
+                'valid_extensions' => implode(",",$this->getValidExtensions())
+    	);
+    	 
+    }
+   
+    private function getValidExtensions() {
+    	return $valid_extensions = array("doc","docx","odt","pdf");
+    }
+    	
+    /**
+    * Envia el archivo del proyecto
+    *
+    * @Route("/{id}/descargar", name="proyecto_descargar_presentacion")
+    * 
+    */
+    
+    public function descargarPresentacionAction($id) {
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+        if (!$proyecto) {
+    		throw $this->createNotFoundException("Proyecto $id no encontrado");
+    	}
+
+    	$file = $this->getUploadDir()."$id/".$proyecto->getArchivo();    	
+    	
+    	$response = new Response();
+    	$response->headers->set('Content-Type', 'application/msword');
+    	$response->headers->set("Content-Disposition", 'Attachment;filename="'.$proyecto->getArchivo().'"');
+    	$response->send();
+    	readfile($file);
+    	return $response;
     }
 }

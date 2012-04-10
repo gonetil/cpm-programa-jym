@@ -172,4 +172,12 @@ abstract class BaseController extends Controller
     	return $this->get('cpm_jovenes_bundle.application');
     }
     
+    protected function getUploadDir() 
+    {
+    	$dir = $this->container->getParameter('upload_dir');
+    	if (substr($dir,strlen($dir)-1,1) != "/")
+    		$dir .= "/";
+    	return $dir;
+    }
+    
 }
