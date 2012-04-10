@@ -47,6 +47,10 @@ class ProyectoRepository extends EntityRepository
 		
 		if ($data->getTemaPrincipal()) $qb->andWhere('p.temaPrincipal = :tp')->setParameter('tp',$data->getTemaPrincipal());
 				
+		if ($archivo = $data->getArchivo()) {
+			$is = ($archivo == 1)?"is not":"is";
+			$qb->andWhere("p.archivo $is NULL");
+		}
 		$tiene_escuela = false;
 		if ($data->getLocalidad())
 		{  
