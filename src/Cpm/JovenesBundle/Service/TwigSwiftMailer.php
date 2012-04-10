@@ -48,7 +48,7 @@ class TwigSwiftMailer implements MailerInterface
 		return $correo;
 	}
 
-    public function sendConfirmacionAltaProyecto(Proyecto $proyecto)
+    public function sendConfirmacionAltaProyecto($proyecto)
     {
         $correo = $this->getCorreoFromPlantilla(Plantilla::ALTA_PROYECTO);
         $correo->setDestinatario($proyecto->getCoordinador());
