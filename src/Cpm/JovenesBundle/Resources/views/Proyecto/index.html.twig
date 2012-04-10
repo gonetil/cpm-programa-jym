@@ -57,6 +57,7 @@
             <th>Datos de la Escuela</th>
             <th>Localidad</th>
             <th>Distrito</th>  
+            <th>Proyecto</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -66,7 +67,9 @@
         <tr>
             <td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td class="primera_vez_checkboxes">
-            <input type="checkbox" class='checkable' name="cpm_jovenesbundle_proyectosearchtype[proyectos_seleccionados][{{entity.id}}]" id="proyecto{{entity.id}}" value="{{ entity.id }}" /></td>
+	            <input type="checkbox" class='checkable' name="cpm_jovenesbundle_proyectosearchtype[proyectos_seleccionados][{{entity.id}}]" id="proyecto{{entity.id}}" value="{{ entity.id }}" />
+            </td>
+            
             <td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">
             {{ entity.coordinador.nombre }} {{ entity.coordinador.apellido }} 
             </td>
@@ -79,6 +82,17 @@
              <br/>    E-mail {{ entity.escuela.email }} </td>           
             <td>{{ entity.escuela.localidad }} </td>
             <td> {{ entity.escuela.localidad.distrito }}</td>
+            <td>
+                 {% if not entity.archivo is null %} 
+                 	<div class="download_mini mini-icon"> 
+                 		<a href="{{ path('proyecto_descargar_presentacion',{'id' : entity.id}) }}"></a>
+                 	</div>
+                 	{% else %}
+                 	<div class="no mini-icon"> </div>
+                 {% endif %}
+                 
+			</td>                        	            
+            
             <td>
                 <ul>
                     <li>

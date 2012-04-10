@@ -112,7 +112,7 @@
 		        <tr class="{% if inv.sinResponder %}pendiente{% elseif inv.aceptoInvitacion %}aceptada{%else%}rechazada{% endif %}" >
 		            <td><a href="{{ path('invitaciones_edit',{id:inv.id}) }}">{{ inv.id }}</a></th>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
-		            <td  class="{% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
+		            <td  class="mini-icon {% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
 		            			{% if inv.sinResponder %} colspan="100%" {% endif %}></td>
 		            {% if not inv.sinResponder %}
 				            {% if inv.aceptoInvitacion %}
@@ -127,21 +127,21 @@
 					            	<td>{{ inv.suplente }}</th>
 					            {% endif %}
 					            {% if entity.evento.ofrecerHospedaje %}
-					            	<td class="{% if inv.solicitaHospedaje %}yes{% else %}no{% endif %}"></td>
+					            	<td class="mini-icon {% if inv.solicitaHospedaje %}yes{% else %}no{% endif %}"></td>
 					            {% endif %}
 					            {% if entity.evento.ofrecerViaje %}
-						            <td class="{% if inv.solicitaViaje %}yes{% else %}no{% endif %}"></td>
+						            <td class="mini-icon {% if inv.solicitaViaje %}yes{% else %}no{% endif %}"></td>
 					            {% endif %}
 					            {% if entity.evento.permitirObservaciones %}
 					            	<td>{{ inv.observaciones }}</td>
 					            {% endif %}	  
-					            <td class="{% if inv.asistio %}yes{% else %}no{% endif %} col-asistencia">
+					            <td class="mini-icon {% if inv.asistio %}yes{% else %}no{% endif %} col-asistencia">
 					            	<input type="checkbox" name="asistencia" value="{{ path('invitaciones_set_single_asistencia', { 'id': inv.id }) }}" {% if inv.asistio %} checked{%endif%}>
 					            	<div class="loading inline-loading"></div>
 					            </td>
 				            {% else %}
 					            {% set rechazadas= rechazadas+1 %}	
-					            <td colspan="100%" class="rechazada">  </td>
+					            <td colspan="100%" class="mini-icon rechazada">  </td>
 				            {% endif %}
 				           
 				        {% else %}
