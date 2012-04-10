@@ -59,6 +59,13 @@
 		</div>	
 
 	  {% endif %}	
+	    {% if proyecto.archivo %}
+	    	<div class="download_link">
+		    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : proyecto.id}) }}" title="Descargar archivo {{ proyecto.archivo }}"> 
+		    	 	&nbsp;
+		    	</a>
+	    	</div>
+	    {% endif %}
 		<h3>Integrantes</h3>
 		<p>
 			<b>Coordinador</b>: {{ proyecto.coordinador.nombre }} {{proyecto.coordinador.apellido}} &lt;<a href="mailto:{{proyecto.coordinador.email}}">{{proyecto.coordinador.email}}</a>&gt;{% if proyecto.esPrimeraVezDocente %}<sup>*</sup>{% endif %}		

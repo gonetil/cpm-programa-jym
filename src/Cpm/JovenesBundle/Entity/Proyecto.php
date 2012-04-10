@@ -135,6 +135,12 @@ class Proyecto
      */
     private $ciclo;
     
+    /**
+     * archivo con el proyecto completo 
+     * @ORM\Column(name="archivo", type="string", length=255, nullable=true)
+     */
+    private $archivo;
+    
 	/**
      * @ORM\OneToMany(targetEntity="Invitacion", mappedBy="proyecto")
      **/
@@ -521,6 +527,16 @@ class Proyecto
         		$vigentes[] = $i;
         }
         return $vigentes;
+    }
+    
+    public function getArchivo()
+    {
+    	return $this->archivo;
+    }
+    
+    public function setArchivo($archivo) 
+    {
+    	$this->archivo = $archivo;
     }
     
 }
