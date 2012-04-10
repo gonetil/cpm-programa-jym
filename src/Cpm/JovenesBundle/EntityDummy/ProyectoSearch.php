@@ -82,6 +82,8 @@ class ProyectoSearch
     public $proyectos_seleccionados;
     public $batch_action;
     public $batch_action_type; //selection or all
+    
+    public $archivo;
     /**
      * Get id
      *
@@ -273,6 +275,13 @@ class ProyectoSearch
     
     public function setBatch_action_type($type) {
     	return $this->batch_action_type = $type;
+    }
+    
+    public function getArchivo() {
+    	return $this->archivo;
+    }
+    public function setArchivo($archivo) {
+    	$this->archivo = $archivo;
     }
     
 }
