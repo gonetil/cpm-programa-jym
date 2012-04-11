@@ -322,7 +322,7 @@ class Invitacion
     }
     
     public function estaPendiente(){
-    	return $this->aceptoInvitacion === null;
+    	return ((! $this->instanciaEvento->fue()) && ($this->aceptoInvitacion === null));
     }
     
     public function estaVigente(){
