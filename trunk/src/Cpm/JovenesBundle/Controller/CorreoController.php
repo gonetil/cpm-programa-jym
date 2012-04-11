@@ -321,4 +321,9 @@ class CorreoController extends BaseController
 				'proyectos' => $correoBatch->getProyectos()
 			);
 		}
+		
+		
+		function fetchCorreoAction() { 
+			
+		}
 	}
