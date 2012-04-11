@@ -183,7 +183,7 @@ class UsuarioController extends BaseController
         
         if ($editForm->isValid()) {
         	$otherUser = $this->getUserManager()->findUserByEmail($user->getEmail());
-        	if (!$otherUser->equals($user)){
+        	if (($otherUser) && !$otherUser->equals($user)){
        			$this->setErrorMessage('Ya existe un usuario con email ' . ($user->getEmail()));
        		}else{
        			if ($user->getResetPassword()) {
