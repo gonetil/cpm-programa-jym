@@ -1,8 +1,10 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+{% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
 
 {% block title %}Informacion del Usuario {{ entity.apellido }}, {{ entity.nombre }} {% endblock %}
  
 {% block content %}
+
 
 
 	{% if entity.locked %}	
@@ -10,19 +12,75 @@
             <li>Cuenta bloqueada</li>
     </ul>
     {% endif%}
+<div class="proyectos_usuario">
+
+	{% if entity.proyectosCoordinados | length > 0 %}
+	<h2> Coordinador de... </h2>
+	<ul>
+	
+	{% for proyecto in entity.proyectosCoordinados %}
+	<li> 
+		
+		 {% if not proyecto.archivo is null %} 
+               <div class="download_mini mini-icon"> 
+                 		<a href="{{ path('proyecto_descargar_presentacion',{'id' : proyecto.id}) }}"></a>
+               </div>
+         {% endif %}
+		    		
+		 <a href="{{path('proyecto_show', {'id' : proyecto.id})}}">
+		   <h3>Proyecto N° {{proyecto.id}}: {{ proyecto.titulo }}</h3>
+		 </a>	
+		 <h4>{{ proyecto_box.nombreEscuela(proyecto.escuela) }}</h4>
+
+		    {% set numinvitacionesPendientes = proyecto.invitacionesPendientes|length %}
+		    {% if numinvitacionesPendientes > 0 %}
+		    <div class="invitacion">	
+		    	{% if numinvitacionesPendientes == 1 %}
+		    	<div class="one-pending">
+		    		{{numinvitacionesPendientes}}
+		    		</div> invitación pendiente
+		    	{% elseif numinvitacionesPendientes > 1 %}
+		    	<div class="many-pending">
+		    		{{numinvitacionesPendientes}} 
+		    	</div> invitaciones pendientes
+		    	{%endif%}
+		    </div>	
+		    {% endif %}	
+
+	</li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+
+
+
+	{% if entity.proyectosColaborados | length > 0 %}
+	<h2> Colaborador en... </h2>
+	<ul>
+	
+	{% for proyecto in entity.proyectosColaborados %}
+	<li> 
+		
+		 {% if not proyecto.archivo is null %} 
+               <div class="download_mini mini-icon"> 
+                 		<a href="{{ path('proyecto_descargar_presentacion',{'id' : proyecto.id}) }}"></a>
+               </div>
+         {% endif %}
+		    		
+		 <a href="{{path('proyecto_show', {'id' : proyecto.id})}}">
+		   <h3>Proyecto N° {{proyecto.id}}: {{ proyecto.titulo }}</h3>
+		 </a>	
+		 <h4>{{ proyecto_box.nombreEscuela(proyecto.escuela) }}</h4>
+
+	</li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+	
+</div> {# proyectos_usuario #}
         
 <table class="record_properties">
     <tbody>
-<!--         <tr> -->
-<!--             <th>Nombre</th> -->
-<!--             <td></td> -->
-<!--         </tr> -->
-<!--         <tr> -->
-<!--             <th>Apellido</th> -->
-<!--             <td>{{ entity.apellido }}</td> -->
-<!--         </tr> -->
-
-        
         <tr>
             <th>Email</th>
             <td>{{ entity.email }}</td>
@@ -58,42 +116,77 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('usuario') }}">
-            Volver al listado
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">
-            Editar
-        </a>
-    </li>
-    {% if entity.enabled %}
-    <li>
-         <form action="{{ path('usuario_toggle_lock', { 'id': entity.id }) }}" method="post" 
-            onsubmit="return confirm('¿Esta seguro que desea {% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %} el usuario?');">
-            {{ form_widget(delete_form) }}
-            <button type="submit">{% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %}</button>
-        </form>
-    </li>
-    {% endif %}
-    
-    <li>
-        <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el usuario? También se eliminarán todos los correos enviados al usuario')">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
-   
-<!--    
-<!--     <li> -->
-<!--         <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" 
-            onsubmit="return confirm('¿Está seguro que desea eliminar el usuario?');"> -->
-<!--             {{ form_widget(delete_form) }} -->
-<!--             <button type="submit">Delete</button> -->
-<!--         </form> -->
-<!--     </li> -->
+        	<ul class="record_actions" style="clear:left">
+				    <li>
+				        <a href="{{ path('usuario') }}">Volver al listado</a>
+				    </li>
+    				<li>
+        				<a href="{{ path('usuario_edit', { 'id': entity.id }) }}">Editar</a>
+    				</li>
+				    {% if entity.enabled %}
+				    <li>
+				         <form action="{{ path('usuario_toggle_lock', { 'id': entity.id }) }}" method="post" 
+				            onsubmit="return confirm('¿Esta seguro que desea {% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %} el usuario?');">
+				            {{ form_widget(delete_form) }}
+				            <button type="submit">{% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %}</button>
+				        </form>
+				    </li>
+				    {% endif %}
+			        <li>
+				        <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el usuario? También se eliminarán todos los correos enviados al usuario')">
+				            {{ form_widget(delete_form) }}
+				            <button type="submit">Eliminar</button>
+				        </form>
+			    	</li>
+				</ul>
+				
+	<div class="correos_usuario">
+	<h2> Correos enviados </h2>
+	<script>
+		function buscar_correo(id) {
+						$loading = $("#correo_"+id+" .loading");
+						$loading.show();
+						$.getJSON("{{ path('correo_find_by_id') }}", 
+									{ correo_id : id} , 
+									function(data) {
+								   		if (data) {
+								   			$cuerpo = $("#correo_"+id+" .usuario_correo_cuerpo");
+								   			$loading.hide()
+								   			link = "<div class='correo_link'><a target='_blank' href='"+data.path+"'>Abrir</a></div>";
+									   		$cuerpo.append(data.cuerpo + link).slideDown();
+									   		$("#correo_"+id).unbind('click').click(function(event) { $cuerpo.toggle(); });
+									   	}
+									} //function
+								); //getJSON
+				return false; 				
+		} //buscar_correo
+		
+		
+		$(document).ready(function() {
+			$('.correo_usuario').click(function(event) {
+				event.preventDefault();
+				$item = $(event.target);
+				id = $item.attr('target');
+				console.log(id);
+				if (id != 0) {
+					$item.attr('target',0);
+					return buscar_correo(id);
+				}
+			 });
+			 
+			 $('.correo_usuario').click(function(event) { $(event.target).children('a').click(); });
+		});
+	</script>
+	<ul>
+	{% for correo in entity.correosRecibidos | reverse%}
+		<li id="correo_{{correo.id}}" class="correo_usuario" target="{{correo.id}}">
+				{{ correo.fecha |date('d-m-Y H:i:s') }} {{ correo.asunto }}
+			<div class="loading inline-loading"></div>
+			<div class="usuario_correo_cuerpo">
+			</div>
+		</li>
+	{% endfor %}
+	</ul>
+	<div>			
 
-</ul>
 {% endblock %}

@@ -119,4 +119,35 @@ class DefaultController extends BaseController
     	return array();
     }
     
+    
+    
+    /**
+    * Busca todos los distritos de una region
+    *
+    * @Route("/correo/find_by_email", name="correo_find_by_id")
+    */
+    public function findCorreoByIdAction() {
+    	$correo_id = $this->get('request')->query->get('correo_id');
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    	if ($correo_id) {
+    		$correo = $em->getRepository('CpmJovenesBundle:Correo')->findOneById($correo_id);
+			if (null === $correo) return "";
+    	}
+    	$json = array(	"asunto" => $correo->getAsunto(), 
+    					"cuerpo" => $correo->getCuerpo(), 
+    					"fecha" => $correo->getFecha(),
+    					"email" => $correo->getEmail(),
+    					"path" => $this->generateUrl('correo_show', array('id' => $correo_id)));
+    	
+    	if ($correo->getDestinatario()) $json["destinatario"] = $correo->getDestinatario();
+    	if ($correo->getEmisor()) $json["emisor"] = $correo->getEmisor();
+    	if ($correo->getProyecto()) $json["proyecto"] = $correo->getProyecto();
+    	
+    	$response = new Response(json_encode($json));
+    
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    }
+    
 }
