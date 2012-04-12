@@ -12,7 +12,13 @@ class UsuarioSearchType extends AbstractType
         $builder
             ->add('apellido',null,array('label'=>'Apellido', 'required'=>false))
             ->add('email',null,array('label'=>'Email', 'required'=>false))
-        	->add('habilitados','checkbox',array('label'=>'Sólo habilitados', 'required'=>false))
+        	->add('habilitados','choice',array('label'=>'Habilitados',
+        		  								'choices' => array(1=>"Si",2=>"No"),
+                    							'preferred_choices' => array("Todos"),
+                								'empty_value' => "Todos",
+                								'expanded'=>false,
+                								'required'=>false
+				))
         	->add('coordinadores','checkbox',array('label'=>'Sólo coordinadores', 'required'=>false))
         ;
     }
