@@ -16,7 +16,10 @@ class InvitacionBatchType extends ProyectoBatchType
 		    								    		'empty_value' => "Todos",
 		    								            'preferred_choices' => array("Todos"),
 		            									'query_builder' => function($er) {
-																	        return $er->createQueryBuilder('t')->orderBy('t.titulo', 'ASC');
+																	        return $er->createQueryBuilder('e')
+																	        		  ->innerJoin('e.ciclo','c')
+																	        		  ->andWhere('c.activo = 1')
+																	        		  ->orderBy('e.titulo', 'ASC');
 		    														},
         												'required'=>true
         			))
@@ -26,7 +29,11 @@ class InvitacionBatchType extends ProyectoBatchType
 		    								    		'empty_value' => "Todos",
 		    								            'preferred_choices' => array("Todos"),
 		            									'query_builder' => function($er) {
-																        return $er->createQueryBuilder('t')->orderBy('t.fechaInicio', 'ASC');
+																        return $er->createQueryBuilder('ie')
+																        	->innerJoin("ie.evento","e")
+																        	->innerJoin("e.ciclo","c")
+																        	->andWhere("c.activo = 1")
+																        	->orderBy('ie.fechaInicio', 'ASC');
 			    														},
         												'required'=>true
     				))
