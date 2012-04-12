@@ -42,6 +42,10 @@ class Escuela
     
     /**
     *  @ORM\ManyToOne(targetEntity="TipoEscuela")
+    *  @ORM\JoinColumns({
+    * 	  @ORM\JoinColumn(name="tipoEscuela_id", referencedColumnName="id", nullable="true")
+    *  })
+
     */
         private $tipoEscuela;
 
@@ -268,7 +272,7 @@ class Escuela
      *
      * @param Cpm\JovenesBundle\Entity\TipoEscuela $tipoEscuela
      */
-    public function setTipoEscuela(\Cpm\JovenesBundle\Entity\TipoEscuela $tipoEscuela)
+    public function setTipoEscuela($tipoEscuela)
     {
         $this->tipoEscuela = $tipoEscuela;
     }
