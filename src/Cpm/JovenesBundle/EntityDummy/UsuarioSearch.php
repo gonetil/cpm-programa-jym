@@ -19,7 +19,7 @@ class UsuarioSearch
      */
     private $email;
 	private $apellido;
-	private $habilitados = true;
+	private $habilitados;
 	private $coordinadores = false;
 	
 	public function getEmail()  { return $this->email; }
