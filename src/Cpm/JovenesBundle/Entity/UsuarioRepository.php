@@ -34,7 +34,11 @@ class UsuarioRepository extends EntityRepository
 		if ($data->getEmail()) $qb->andWhere('u.email like :email')
 								 ->setParameter('email',(trim($data->getEmail())."%"));
 		
-		if ($data->getHabilitados()) $qb->andWhere('u.enabled = 1');
+		if ($habilitados = $data->getHabilitados()) {
+			if ($habilitados == 1)
+				$qb->andWhere('u.enabled = 1');
+			else $qb->andWhere('u.enabled <> 1');
+		}
 		
 		if ($data->getCoordinadores()) $qb->innerJoin('u.proyectosCoordinados','p');
 		
