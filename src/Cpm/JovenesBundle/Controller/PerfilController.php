@@ -341,11 +341,14 @@ class PerfilController extends BaseController
     	}
     
     	$form = $this->createForm(new PresentacionProyectoType(), $proyecto);
+    	if ($proyecto->getArchivo()) { 
+    		$this->setWarnMessage("Atención: este proyecto ya ha sido cargado. Si lo carga nuevamente, la versión anterior será sobreescrita");
+    	}
     	
     	return array(
                 'proyecto'      => $proyecto,
                 'form'   => $form->createView(),
-                'valid_extensions' => implode(",",$this->getValidExtensions())
+                'valid_extensions' => implode(", ",$this->getValidExtensions())
     	);
     }
     
@@ -370,8 +373,11 @@ class PerfilController extends BaseController
     	
     	if ($form->isValid()) {
     		$file = $form['archivo']->getData();
+    		$ext =  $file->guessExtension();
+    		$valid = $this->getValidExtensions();
+    		if (!$ext) $ext = $valid[0]; //si la extension no se pudo obtener, le pongo una extension valida
     		
-    		if (in_array($file->guessExtension(),$this->getValidExtensions()))
+    		if (in_array($ext,$valid))
     		{
 	    		$new_filename = "Proyecto $id {$file->getClientOriginalName()}";
 	    		$file->move($this->getUploadDir()."$id","$new_filename");
@@ -381,14 +387,16 @@ class PerfilController extends BaseController
 	    		$this->setSuccessMessage("El archivo fue cargado satisfactoriamente");
 	    		return $this->redirect($this->generateUrl('home_usuario'));
     		} 
-    		else 
+    		else { 
+    			
     			$this->setErrorMessage("Los tipos de archivos permitidos son: ".implode(", ",$this->getValidExtensions()));
+    		}
     	}
     	
     	return array(
     	                'proyecto'      => $proyecto,
     	                'form'   => $form->createView(),
-                'valid_extensions' => implode(",",$this->getValidExtensions())
+                'valid_extensions' => implode(", ",$this->getValidExtensions())
     	);
     	 
     }

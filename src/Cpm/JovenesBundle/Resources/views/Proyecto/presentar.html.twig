@@ -1,11 +1,19 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block title %} Modificar proyecto {% endblock %}
+{% block title %} Enviar proyecto {% endblock %}
 
 {% block content %}
 
-<h2> Para enviar el proyecto, deberá primero seleccionar el archivo con el proyecto en cuestión. A continuación, 
-deberá verificar algunos datos de la propuesta que envió en la primera instancia. </h2>
+		    	{% if proyecto.archivo %}
+		    	<div class="download_link icon" style="float:none">
+			    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : proyecto.id}) }}" title="Descargar archivo {{ proyecto.archivo }}"> 
+			    	</a>
+		    	</div>
+		    	
+	    	{% endif %}
+
+<p><strong>Para enviar el proyecto, deberá primero seleccionar el archivo con el proyecto en cuestión. A continuación, 
+deberá verificar algunos datos de la propuesta que envió en la primera instancia.</strong></p>
 
 <div class="wizzard_stage presentar_proyecto">
 <form action="{{ path('proyecto_recibir_presentacion', { 'id': proyecto.id }) }}" method="post" {{ form_enctype(form) }}>
