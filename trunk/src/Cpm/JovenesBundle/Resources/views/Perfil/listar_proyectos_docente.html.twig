@@ -33,10 +33,19 @@
 	<li target="proyecto_{{proyecto.id}}"> 
 			<h3> 
 		    	Proyecto N° {{proyecto.id}}: {{ proyecto.titulo }}
+		    	{% if proyecto.archivo %}
+		    	<div class="download_mini mini-icon" style="float:right">
+			    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : proyecto.id}) }}" title="Descargar archivo {{ proyecto.archivo }}"> 
+			    	 	&nbsp;
+			    	</a>
+		    	</div>
+	    	{% endif %}
+		    	
 		    </h3>
 		    <h4> 
 		    		{{ proyecto_box.nombreEscuela(proyecto.escuela) }}
 		   	</h4>
+		    
 		    
 		     
 		    {% set numinvitacionesPendientes = proyecto.invitacionesPendientes|length %}
