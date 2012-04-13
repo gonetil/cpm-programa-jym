@@ -127,7 +127,7 @@
 				    <li>
 				         <form action="{{ path('usuario_toggle_lock', { 'id': entity.id }) }}" method="post" 
 				            onsubmit="return confirm('¿Esta seguro que desea {% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %} el usuario?');">
-				            {{ form_widget(delete_form) }}
+				            {{ form_widget(lock_form) }}
 				            <button type="submit">{% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %}</button>
 				        </form>
 				    </li>
