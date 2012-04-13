@@ -67,10 +67,12 @@ class UsuarioController extends BaseController
         }
 
         $deleteForm = $this->createDeleteForm($id);
+        $lockForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
+            'delete_form' => $deleteForm->createView(),
+        	'lock_form' => $lockForm->createView(),        );
     }
 
     /**
@@ -231,17 +233,18 @@ class UsuarioController extends BaseController
 				
 			}else{
 				$proyectos = $entity->getProyectosCoordinados();
-				if (!empty($proyectos))
+				if (count($proyectos) > 0 )
 					$this->setErrorMessage("No se puede eliminar al usuario dado que tiene proyectos asociados como coordinador");
 				else{
 					$proyectos = $entity->getProyectosColaborados();
-					if (!empty($proyectos))
+					if (count($proyectos) > 0)
 						$this->setErrorMessage("No se puede eliminar al usuario dado que tiene proyectos asociados como colaborador");
 					else {
 						try{
 			            	$em->remove($entity);
 							$em->flush();
 							$this->setSuccessMessage("Usuario eliminado satisfactoriamente");
+							return $this->redirect($this->generateUrl('usuario'));
 			            }catch(\PDOException $e){
 			            	$this->setErrorMessage("No se puede eliminar al usuario , revise que no tenga proyectos relacionados");
 			            }
@@ -249,8 +252,7 @@ class UsuarioController extends BaseController
 				}
 			}
         }
-
-        return $this->redirect($this->generateUrl('usuario'));
+        return $this->redirect($this->generateUrl('usuario_show', array('id' => $id)));
     }
 
     private function createDeleteForm($id)
