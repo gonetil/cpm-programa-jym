@@ -375,7 +375,16 @@ class PerfilController extends BaseController
     		$file = $form['archivo']->getData();
     		$ext =  $file->guessExtension();
     		$valid = $this->getValidExtensions();
-    		if (!$ext) $ext = $valid[0]; //si la extension no se pudo obtener, le pongo una extension valida
+
+    		if (!$ext) 
+    			$ext = $file->getExtension();
+    	
+    		if (!$ext)
+    		{
+	    		$pos = strrpos($file->getClientOriginalName(), '.');
+	    		if($pos!==false) 
+	    			$ext = substr($file->getClientOriginalName(), $pos+1);
+    		}
     		
     		if (in_array($ext,$valid))
     		{
@@ -387,10 +396,9 @@ class PerfilController extends BaseController
 	    		$this->setSuccessMessage("El archivo fue cargado satisfactoriamente");
 	    		return $this->redirect($this->generateUrl('home_usuario'));
     		} 
-    		else { 
-    			
+    		else 
     			$this->setErrorMessage("Los tipos de archivos permitidos son: ".implode(", ",$this->getValidExtensions()));
-    		}
+    		
     	}
     	
     	return array(
