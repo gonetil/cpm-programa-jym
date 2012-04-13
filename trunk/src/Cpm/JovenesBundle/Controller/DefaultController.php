@@ -25,7 +25,7 @@ class DefaultController extends BaseController
     {
     	$user = $this->getLoggedInUser();
     	if ($this->get("security.context")->isGranted("ROLE_ADMIN")) {
-    		return $this->forward("CpmJovenesBundle:Proyecto:index"); 
+    		return $this->redirect($this->generateUrl('proyecto')); 
     	}
     	elseif ($this->get("security.context")->isGranted("ROLE_USER")) {
     		return $this->forward("CpmJovenesBundle:Perfil:index");
