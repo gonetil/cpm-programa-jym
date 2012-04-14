@@ -76,13 +76,19 @@
 		<table class="records_properties" id="invitaciones">
 		    <thead>
 		    <tr class='table-options'>
-		    	<td colspan="100%">
-				<ul class="table-options" style="float:right">	
-					<li><a href="#" class="yes icon" onclick="$('tr.aceptada').toggle(); return false;"  title="Mostrar/Ocultar aceptadas"> &nbsp;</a></li>
-			    	<li><a href="#" class="no icon" onclick="$('tr.rechazada').toggle(); return false;"   title="Mostrar/Ocultar rechazadas"> &nbsp;</a></li>
-			    	<li><a href="#" class="ns_nc icon" onclick="$('tr.pendiente').toggle(); return false;"  title="Mostrar/Ocultar pendientes"> &nbsp;</a></li>
+		    	<td colspan="4">
+				<ul class="table-options" style="float:left">	
 			    	<li><a class="excel-icon icon" href="{{ path('instancia_export_to_excel', { 'id': entity.id }) }}" title="Exportar a Excel">&nbsp;</a></li>
+			    	<li><a class="repeat-email icon" href="#" title="Reenviar invitaciones pendientes" onclick="instancia_reinvitar(); return false;">&nbsp;</a></li>
 			    </ul>
+			    </td>
+			    <td colspan="100%">
+			    	<ul class="table-options" style="float:right">
+				    	<li><a href="#" class="yes icon" onclick="$('tr.aceptada').toggle(); return false;"  title="Mostrar/Ocultar aceptadas"> &nbsp;</a></li>
+				    	<li><a href="#" class="no icon" onclick="$('tr.rechazada').toggle(); return false;"   title="Mostrar/Ocultar rechazadas"> &nbsp;</a></li>
+				    	<li><a href="#" class="ns_nc icon" onclick="$('tr.pendiente').toggle(); return false;"  title="Mostrar/Ocultar pendientes"> &nbsp;</a></li>
+			    	</ul>
+			    </td>
 		    </tr>
 		        <tr>
 		            <th>Id</th>
@@ -160,5 +166,12 @@
 		<li>Invitaciones rechazadas: <span class="status">{{ rechazadas }}</span> </li> \
 		<li>Cantidad de asistenes confirmados: <span class="status">{{asistentes }}</span> </li>');
 		</script>
+		
+		<div id="reinvitar_form" title="Re-enviar invitaciones pendientes">
+			<form action="{{ path('instancia_reinvitar', {'id' : entity.id}) }}">
+			{{ form_row(reinvitar_form.ccColaboradores) }}
+			{{ form_row(reinvitar_form.ccEscuela) }}
+			{{ form_rest(reinvitar_form) }}
+		</div>
 </div>
 {% endblock %}

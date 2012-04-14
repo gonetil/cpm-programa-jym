@@ -1,3 +1,14 @@
+instancia_reinvitar = function() { 
+	$("#reinvitar_form").dialog({
+								 resizable: false, width:450, height:200, modal: true,
+								 buttons : { 
+									 		 "Re-enviar invitaciones" : function() { $("#reinvitar_form form").submit(); } ,
+									 		 "Cancelar" : function() { $(this).dialog('close'); }
+									 	}
+											
+								});
+	}
+
 aviso_coordinador_inscripcion_realizada = function(path) {
 	
   $(document).ready(function() {
@@ -25,10 +36,10 @@ aviso_coordinador_inscripcion_realizada = function(path) {
 				});
 	});
   });
-
-
 	
 }
+
+
 
 
 
@@ -147,6 +158,7 @@ $(document).ready(function() {
 	add_checkall_ability();
 	add_batch_actions_support();
 	
+	$(".icon").tooltip();
 }); //document.ready
 
 

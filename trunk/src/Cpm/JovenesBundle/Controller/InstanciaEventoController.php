@@ -49,10 +49,12 @@ class InstanciaEventoController extends BaseController
         }
 
         $deleteForm = $this->createDeleteForm($id);
-
+		$reinvitarForm = $this->createReinvitarForm($id);
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
+            'delete_form' => $deleteForm->createView(),
+        	'reinvitar_form' =>  $reinvitarForm->createView()
+              );
     }
 
     /**
@@ -242,9 +244,7 @@ class InstanciaEventoController extends BaseController
     }
 
     /**
-    * Edits an existing InstanciaEvento entity.
-    *
-    * @Route("/{id}/export_to_excel", name="instancia_export_to_excel")
+    *  @Route("/{id}/export_to_excel", name="instancia_export_to_excel")
     * @Method("get")
     * @Template("CpmJovenesBundle:InstanciaEvento:export_excel.x,s.twig")
     */
@@ -265,4 +265,47 @@ class InstanciaEventoController extends BaseController
     	return $response; 
     	 
     }
+    
+    /**
+     * @Route("/{id}/reinvitar_instancia", name="instancia_reinvitar")
+     */
+    
+    public function reinvitarInstancia($id) {
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('No se encontró la Instancia de Evento');
+        }
+        
+        $form = $this->createReinvitarForm($id);
+        $form->bindRequest($this->getRequest(),$form);
+        
+        if ($form->isValid()) {
+        	$ccColaboradores = $form['ccColaboradores']->getData();
+        	$ccEscuela= $form['ccEscuela']->getData();
+        	$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesPendientes($entity);
+        	$eventosManager = $this->getEventosManager();
+        	foreach ($invitaciones as $invitacion) {
+        		$eventosManager->reinvitarProyecto($entity, $invitacion->getProyecto(),$ccEscuela,$ccColaboradores);
+        	}
+        	$this->setSuccessMessage("Se reenviaron ".count($invitaciones)." pendientes invitaciones");
+        	
+        }        
+        
+		
+    	return $this->redirect($this->generateUrl('instancia_show', array('id' => $id)));
+    }
+    
+    private function createReinvitarForm($id)
+    {
+    	return $this->createFormBuilder(array('id' => $id))
+    	->add('id', 'hidden')
+    	->add('ccColaboradores','checkbox',array('label'=>'Enviar copia del mensaje a los colaboradores', 'required'=>false))
+    	->add('ccEscuela','checkbox',array('label'=>'Enviar copia del mensaje a la escuela', 'required'=>false))
+    	->getForm()
+    	;
+    }
+    
 }
