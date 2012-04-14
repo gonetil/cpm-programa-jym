@@ -123,14 +123,17 @@ class ProyectoSearchType extends AbstractType
 			->add('proyectos_seleccionados','collection', array('allow_add'=>true, 'allow_delete'=>true))
 			->add('batch_action','hidden', array('attr'=>array('class'=>'batch_action_hidden')))
 		    ->add('batch_action_type','hidden', array('attr'=>array('class'=>'batch_action_type_hidden')))
-            ->add('archivo', 'choice' ,array('label' => 'Archivo cargado' , 
+            /*->add('archivo', 'choice' ,array('label' => 'Archivo cargado' , 
             											'choices' => array(1=>"Con archivo",2=>"Sin archivo"),
             											'preferred_choices' => array("Todos"),
         												'empty_value' => "Todos",
         												'expanded'=>false,
         												'required'=>false
-                										))		    														
-		    						
+                										)) */
+                												    														
+		    ->add('orderBy','choice',array('label' => 'Ordenar por',
+		    								'choices'=>array('p.id'=>'Id', 'coordinador.apellido' => 'Apellido del Coordinador', 'p.titulo'=>'Titulo')
+		 	))						
         ;
     }
     
