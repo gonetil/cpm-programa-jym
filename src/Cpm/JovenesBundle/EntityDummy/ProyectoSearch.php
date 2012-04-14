@@ -83,7 +83,9 @@ class ProyectoSearch
     public $batch_action;
     public $batch_action_type; //selection or all
     
-    public $archivo;
+  //  public $archivo;
+    
+    public $orderBy;
     /**
      * Get id
      *
@@ -277,11 +279,19 @@ class ProyectoSearch
     	return $this->batch_action_type = $type;
     }
     
-    public function getArchivo() {
+/*    public function getArchivo() {
     	return $this->archivo;
     }
     public function setArchivo($archivo) {
     	$this->archivo = $archivo;
+    }
+  */  
+    public function getOrderBy() 
+    { 
+    	return $this->orderBy;
+    }
+    public function setOrderBy($order) { 
+    	$this->orderBy = $order;
     }
     
 }

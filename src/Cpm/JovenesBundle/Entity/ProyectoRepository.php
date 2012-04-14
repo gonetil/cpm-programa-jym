@@ -30,7 +30,8 @@ class ProyectoRepository extends EntityRepository
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		
 		$qb->add('select','p')
-			->add('from','CpmJovenesBundle:Proyecto p');
+			->add('from','CpmJovenesBundle:Proyecto p')
+			->innerJoin("p.coordinador","coordinador");
 		
 		if ($ciclo) 
 		{
@@ -47,9 +48,6 @@ class ProyectoRepository extends EntityRepository
 		
 		if ($data->getTemaPrincipal()) $qb->andWhere('p.temaPrincipal = :tp')->setParameter('tp',$data->getTemaPrincipal());
 				
-		if ($archivo = $data->getArchivo()) {
-			$qb->andWhere("p.archivo ".(($archivo == 1)?'is not':'is')." NULL");
-		}
 		$tiene_escuela = false;
 		if ($data->getLocalidad())
 		{  
@@ -102,8 +100,8 @@ class ProyectoRepository extends EntityRepository
 
 		
 			if (trim($data->getCoordinador()) != "") { 
-				$qb->innerJoin("p.coordinador","coordinador")
-					->andWhere("coordinador.apellido like :apellido")
+				
+					$qb->andWhere("coordinador.apellido like :apellido")
 					->setParameter("apellido",(trim($data->getCoordinador())."%"));
 			}
 			
@@ -123,7 +121,12 @@ class ProyectoRepository extends EntityRepository
 				
 			}
 			
-			$qb->add('orderBy','p.id AsC');
+/*			if ($archivo = $data->getArchivo()) {
+				$qb->andWhere("p.archivo ".(($archivo == 1)?'is not':'is')." NULL");
+			}
+*/
+			$order = $data->getOrderBy();
+			$qb->add('orderBy',"$order AsC");
 	  
 		$proyectos = $qb->getQuery();
 		return $proyectos;
