@@ -60,8 +60,8 @@
 
 	  {% endif %}	
 	    {% if proyecto.archivo %}
-	    	<div class="download_link icon">
-		    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : proyecto.id}) }}" title="Descargar archivo {{ proyecto.archivo }}"> 
+	    	<div class="download_link icon" title="Descargar archivo {{ proyecto.archivo }}">
+		    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : proyecto.id}) }}" > 
 		    	 	&nbsp;
 		    	</a>
 	    	</div>

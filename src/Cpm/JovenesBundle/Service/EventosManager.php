@@ -97,6 +97,15 @@ class EventosManager
         return $invitacion;
 	}
 	
+	public function reinvitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores) { 
+		$invitacion = $this->getInvitacion($instancia, $p);
+		if (empty($invitacion)) { 
+			return false;
+		} else { 
+			$this->enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores);
+		}
+		return $invitacion;
+	}
 	public function getReporteInvitaciones(InstanciaEvento $instancia){
 		
 		$res = $this->doctrine->getRepository('CpmJovenesBundle:Invitacion')->getCantidadesPorInstancia($instancia);

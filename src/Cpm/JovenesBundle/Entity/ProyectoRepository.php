@@ -121,10 +121,10 @@ class ProyectoRepository extends EntityRepository
 				
 			}
 			
-/*			if ($archivo = $data->getArchivo()) {
+			if ($archivo = $data->getArchivo()) {
 				$qb->andWhere("p.archivo ".(($archivo == 1)?'is not':'is')." NULL");
 			}
-*/
+
 			$order = $data->getOrderBy();
 			$qb->add('orderBy',"$order AsC");
 	  

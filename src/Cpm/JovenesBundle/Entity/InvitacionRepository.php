@@ -47,4 +47,15 @@ class InvitacionRepository extends EntityRepository
 		return $cantidades;
 	}
 	
+	public function getInvitacionesPendientes($instancia) { 
+		$qb = $this->getEntityManager()->createQueryBuilder()
+				->add('select','i')
+				->add('from','CpmJovenesBundle:Invitacion i')
+				->andWhere('i.instanciaEvento = :instancia')->setParameter('instancia',$instancia)
+				->andWhere('i.aceptoInvitacion is NULL');
+	
+			return $qb->getQuery()->getResult(); 
+				
+	}
+	
 }
