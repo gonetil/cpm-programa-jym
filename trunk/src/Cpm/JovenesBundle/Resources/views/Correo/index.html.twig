@@ -4,38 +4,13 @@
 
 {% block content %}
 
-<script>
-	function cargar_correo(id) { 
-		$("#detalle_correo").hide()
-		$.post("{{ path('correo_show') }}", 
-				{id : id } ,
-			    function(correo) { 
-			    		$("#detalle_correo").html(correo).show();
-			    }
-		);
-		return false;
-	}
-	
-	$(document).ready(function() { 
-		$('#loading-indicator-mini')
-		.hide()
-	    .ajaxStart(function() {
-	        $(this).show();
-	    })
-	    .ajaxStop(function() {
-	        $(this).hide();
-	    });
-	});
-</script>
-
-{{ common.filter_form_init(form) }}
-
+{{ filter.form_init(form) }}
 
 <table class="records_list correos">
     <thead>
         <tr>
             <th>Id</th>
-            <th><input type="checkbox" id="select_all" target=".checkable" /></th>
+            <th>{{ filter.select_all() }}</th>
             <th>Fecha</th>
             <th>Para</th>
 	        <th>Usuario</th>
@@ -47,9 +22,7 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('correo_show',{id:entity.id}) }}">{{ entity.id }}</a></td>
-             <td class="">
-	            <input type="checkbox" class='checkable' name="cpm_jovenesbundle_filter[selectedEntities][{{entity.id}}]" value="{{ entity.id }}" />
-            </td>
+            <td>{{ filter.select_this(entity) }}</td>
             <td>{% if entity.fecha %}{{ entity.fecha|date('d-m-Y H:i:s') }}{% endif%}</td>
             <td>{{ entity.email }}</td>
             <td>{%if entity.destinatario %}{{ entity.destinatario.apellido }}, {{ entity.destinatario.nombre }}{%endif%}</td>
@@ -67,11 +40,11 @@
     </tbody>
 </table>
 
-{{ common.filter_batch_actions([
+{{ filter.batch_actions([
 	{action:'CpmJovenesBundle:Correo:reenviarBatch', label: 'Reenviar correos', confirm: true},
 	])
 }}
-{{ common.filter_form_end(form) }}
+{{ filter.form_end(form) }}
 
 
 <ul class="record_actions">
