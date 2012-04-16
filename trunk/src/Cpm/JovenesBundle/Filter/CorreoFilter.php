@@ -4,11 +4,17 @@ namespace Cpm\JovenesBundle\Filter;
 
 use Cpm\JovenesBundle\Entity\Correo;
 
-class CorreoFilter extends Correo
+class CorreoFilter extends Correo implements ModelFilter
 {
 	private $fechaMin;
 	private $fechaMax;
-	private $sort;
+	
+	public function createForm(){
+		return new CorreoFilterForm($this);
+	}
+	public function getTargetEntity(){
+		return 'CpmJovenesBundle:Correo';
+	}
 	
 	public function getFechaMin(){
 		return $this->fechaMin;	
@@ -26,13 +32,4 @@ class CorreoFilter extends Correo
 		$this->fechaMax=$fechaMax;
 	}
 	
-	public function getSort(){
-		if (empty($this->sort))
-			$this->sort=new SortFilter('fecha');
-		return $this->sort;
-	}
-
-	public function setSort($sort){
-		$this->sort=$sort;
-	}
 }

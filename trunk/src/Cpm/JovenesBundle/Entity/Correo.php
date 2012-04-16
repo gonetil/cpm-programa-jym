@@ -165,6 +165,7 @@ class Correo
     public function setEmisor(\Cpm\JovenesBundle\Entity\Usuario $emisor)
     {
         $this->emisor = $emisor;
+        $this->email = $emisor->getEmail();
     }
 
     /**
@@ -205,9 +206,6 @@ class Correo
     	$this->proyecto = $proyecto;
     }
     
-    public function __toString(){
-    	return "{$this->fecha} Destinatario {$this->email} Asunto {$this->asunto}";
-    }
  	
  	public function clonar(){
  		$copia = new Correo();
@@ -220,5 +218,14 @@ class Correo
 		$copia->proyecto=$this->proyecto;
 		return $copia;
 	 }
-    
+ 
+ 
+    public function __toString() 
+    { 
+    	return "Correo {$this->id} {$this->email}";
+    }   
+
+    public function __toString2(){
+    	return "{$this->fecha} Destinatario {$this->email} Asunto {$this->asunto}";
+    }
 }

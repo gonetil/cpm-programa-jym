@@ -10,6 +10,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Cpm\JovenesBundle\Service\JYM;
 use Cpm\JovenesBundle\Entity\Plantilla;
 
+use Cpm\JovenesBundle\Filter\FilterForm;
+use Cpm\JovenesBundle\Filter\Filter;
+use Cpm\JovenesBundle\Filter\ModelFilterForm;
+use Cpm\JovenesBundle\Filter\ModelFilter; 
+
 abstract class BaseController extends Controller
 {
 
@@ -180,4 +185,72 @@ abstract class BaseController extends Controller
     	return $dir;
     }
     
+    /**
+     * 
+     */
+    public function filterAction(ModelFilter $modelfilter, $index_path)
+    {
+     	list($form, $batch_filter, $entitiesQuery) = $this->getFilterForm($modelfilter);
+    	if ($batch_filter->hasBatchAction()){
+			if ($batch_filter->isBatchActionTypeTodos()){
+				$entities = $entitiesQuery->getResult();
+			}else{
+				$entities = $batch_filter->getSelectedEntities();
+				if (count($entities) == 0){
+					$this->setInfoMessage("No se seleccionó ningun elemento");
+				 	return $this->redirect($this->generateUrl($index_path));
+				}
+			}
+			
+			return $this->forward($batch_filter->getBatchAction(),array('entities'=>$entities));				
+    	}
+    	
+    	return $this->getFilterResults($form, $batch_filter,$entitiesQuery);        
+    }
+
+	protected function getFilterForm(ModelFilter $modelFilter){
+		
+		$modelfilter_Form = $modelFilter->createForm();
+ 		$filterForm = new FilterForm($modelfilter_Form);
+ 		$filter = new Filter($modelFilter);
+ 		$form = $this->get('form.factory')->create($filterForm, $filter);
+		
+		$request = $this->getRequest();
+		
+		if ($request->query->get($form->getName())){
+			$form->bindRequest($request);
+			//var_dump(count($filter->getSelectedEntities()));
+			//exit;
+		}
+		
+//		$modelFilter = $filter->getModelFilter();
+        $qb = $this->getRepository($modelFilter->getTargetEntity())->filterQuery($modelFilter);
+		$query = $qb->getQuery();
+		
+		return array($form, $filter, $query);
+		
+	}
+	
+	protected function getFilterResults($form, Filter $filter, $query ,$args= array ()){
+		
+		$paginator = $this->get('ideup.simple_paginator');
+		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
+		
+		unset($form['selectedEntities']);
+
+		$args['filter'] = $filter;
+		$args['form'] = $form->createView();
+
+		$request = $this->getRequest();
+		$vars = $request->getQueryString();
+		$vars = preg_replace("/page=(\d+)/","",$vars);
+		$vars = preg_replace("/paginatorId=entities/","",$vars);
+
+		$routeName = $request->get('_route');
+		if (empty($routeName))
+			$routeName = "home";
+			
+		
+		return array_merge( array('entities' => $entities ,  'paginator' => $paginator , 'pagination_route'=>$routeName, 'extraVars'=>"&$vars") , $args);        
+	}    
 }

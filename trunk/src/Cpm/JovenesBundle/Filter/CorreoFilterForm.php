@@ -1,10 +1,11 @@
 <?php
 namespace Cpm \ JovenesBundle \ Filter;
 
-use Symfony \ Component \ Form \ AbstractType;
 use Symfony \ Component \ Form \ FormBuilder;
 
-class CorreoFilterForm extends AbstractType {
+class CorreoFilterForm extends ModelFilterForm {
+
+		
 	public function buildForm(FormBuilder $builder, array $options) {
 		$builder->add('fechaMin', 'date', array (
 			'label' => 'Fecha Min',
@@ -34,11 +35,6 @@ class CorreoFilterForm extends AbstractType {
 			'required' => false
 		))
 		//->add('cuerpo')
-		//->add('sort', null)
 		;
-	}
-
-	public function getName() {
-		return 'cpm_jovenesbundle_correotype';
 	}
 }

@@ -1,0 +1,78 @@
+<?php
+
+namespace Cpm\JovenesBundle\Filter;
+
+class Filter
+{
+	private $modelFilter;
+	private $sortField;
+	private $sortOrder;
+    private $batchAction;
+    private $batchActionType; //todos o !todos FIXME
+	private $selectedEntities;
+	
+	public function __construct(ModelFilter $modelFilter, $sortField = '', $sortOrder = 'asc'){
+		$this->modelFilter = $modelFilter;
+		$this->sortField=$sortField;
+		$this->sortOrder=$sortOrder;
+		$this->selectedEntities = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+	
+	public function getModelFilter(){
+		return $this->modelFilter;	
+	}
+	
+	public function setModelFilter($modelFilter){
+		$this->modelFilter=$modelFilter;	
+	}	
+	
+	public function getSortField(){
+		return $this->sortField;	
+	}
+	
+	public function setSortField($sortField){
+		$this->sortField=$sortField;	
+	}
+	
+	public function getSortOrder(){
+		return $this->sortOrder;	
+	}
+	
+	public function setSortOrder($sortOrder){
+		$this->sortOrder=$sortOrder;	
+	}	
+
+
+    public function hasBatchAction() {
+    	return !empty($this->batchAction);
+    }
+    
+    public function getBatchAction() {
+    	return $this->batchAction;
+    }
+    public function setBatchAction($batch) {
+    	$this->batchAction = $batch;
+    }
+    
+    public function isBatchActionTypeTodos() { 
+    	return $this->batchActionType == "todos";
+    }
+    
+    public function getBatchActionType() { 
+    	return $this->batchActionType;
+    }
+    
+    public function setBatchActionType($type) {
+    	return $this->batchActionType = $type;
+    }
+    
+   	public function getSelectedEntities() {
+		return $this->selectedEntities;
+	}
+
+	public function setSelectedEntities($x) {
+		$this->selectedEntities = $x;
+	}
+	
+}
+	
