@@ -24,7 +24,7 @@ class InvitacionUsuarioType extends AbstractType
         if ($evento->getPermitirObservaciones())
 	        $builder->add('observaciones',null,array('label' => 'Observaciones', 'required'=>false));
         if ($evento->getPermitirSuplente())
-	        $builder->add('suplente',null,array('label' => 'En caso de enviar un suplemente (en vez de usted) indique su nombre por favor', 'required'=>false));
+	        $builder->add('suplente',null,array('label' => 'En caso de enviar un suplente (en vez de usted) indique su nombre por favor', 'required'=>false));
         
     }
 
