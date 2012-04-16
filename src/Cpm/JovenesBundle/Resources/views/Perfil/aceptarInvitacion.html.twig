@@ -4,12 +4,19 @@
 
 {% block content %}
 
-<h3>Por favor complete los campos que se le solicitan a continuación</h3>
+<h3>
+  {% if edit_usuario_form | length > 1 %} 
+  	Por favor complete los campos que se le solicitan a continuación
+  {% else %}
+    ¿Está seguro que desea confirmar su asistencia al evento?
+  {% endif %}	
+ </h3>
 
 <form action="{{ path('abrir_invitacion_submit', { 'id': invitacion.id, accion: 'aceptar' }) }}" method="post" {{ form_enctype(edit_usuario_form) }}>
+	 
     {{ form_widget(edit_usuario_form) }}
     <p>
-        <button type="submit">Guardar</button>
+        <button type="submit" class="resaltado">Confirmar asistencia</button>
     </p>
 </form>
 
