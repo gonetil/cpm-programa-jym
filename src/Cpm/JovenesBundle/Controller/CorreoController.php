@@ -31,31 +31,39 @@ use Cpm\JovenesBundle\Filter\CorreoFilter;
 class CorreoController extends BaseController
 {
     /**
-     * Lists all Correo entities.
-     *
      * @Route("/", name="correo")
      * @Template()
      */
     public function indexAction()
     {
-    	$filter = new CorreoFilter();
-		$form = $this->createForm(new CorreoFilterForm(), $filter);
-		$request = $this->getRequest();
-		if ($request->query->get($form->getName())){
-			$form->bindRequest($request);
-		}
-		//if ($form->isValid()) {
-		
-		$args= array (
-			'entity' => $filter,
-			'form' => $form->createView()
-			
-		);
-		
-        $q = $this->getRepository('CpmJovenesBundle:Correo')->filter($filter);
-        return $this->paginate($q,$args);
-        
+    	return $this->filterAction(new CorreoFilter(), 'correo');
     }
+
+	/**
+    */ 
+	public function reenviarBatchAction($entities){
+		$emisor = $this->getLoggedInUser();
+		$mailer = $this->getMailer();
+		$enviados = 0;
+		try{
+			foreach ( $entities as $correoViejo) {
+	       		$correo = $correoViejo->clonar();
+				$correo->setEmisor($emisor);
+				$correoEnviado = $mailer->enviarCorreo($correo);
+				$enviados++;
+				echo "reenvio a ".$correoViejo->getEmail();
+			}
+		}catch(InvalidTemplateException $e){
+			$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+		}catch(MailCannotBeSentException $e){
+			$this->setErrorMessage('No se pudo enviar el correo. Verifique que los datos ingresados sean válidos');
+		}
+		
+		$this->setSuccessMessage('Se reenviaron '.$enviados.' correos con éxito');
+		
+		return $this->redirect($this->generateUrl('correo'));
+		
+	}
 
     /**
      * Finds and displays a Correo entity.
@@ -78,7 +86,7 @@ class CorreoController extends BaseController
 	}
 
 	public function reenviarunavezAction(){
-		$correos_ids = array(2, 3, 6, 11, 30, 34, 98, 105, 109, 111, 125, 126, 130, 135, 144, 147, 149, 170, 176, 177, 186, 197, 202, 203, 204, 214, 223, 233, 234, 240, 241, 246, 248, 259, 262, 267, 271, 280, 283, 292, 306, 312, 325, 346, 359, 362, 391, 405, 411, 412, 457, 475, 476, 496, 498, 499, 500, 501, 502, 503, 504, 505, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 526, 527, 529, 530, 531, 532, 533, 534, 535, 537, 538, 539, 540, 541, 542, 544, 545, 547, 548, 549, 550, 551, 553, 556, 557, 558, 559, 560, 561, 563, 564, 565, 567, 570, 573, 574, 575, 576, 578, 580, 581, 587, 588, 589, 590, 592, 593, 594, 596, 597, 602, 623, 625);
+
 		$cq= $this->getRepository("CpmJovenesBundle:Correo")->createQueryBuilder('c');
 		$cq->andWhere("c.id in (:ids)")->setParameter('ids',$correos_ids);
 		$correos = $cq->getQuery()->getResult();
@@ -326,4 +334,38 @@ class CorreoController extends BaseController
 		function fetchCorreoAction() { 
 			
 		}
+		
+		
+		
+		
+	/**
+	 *
+	 * @Route("/enviar_a_usuarios", name="correo_persnalizado")
+	 */
+	public function enviar_a_usuariosAction() {
+		
+		$usuarios_ids = array( 1,  7,  8,  9);
+		$cq= $this->getRepository("CpmJovenesBundle:Usuario")->createQueryBuilder('c');
+		$cq->andWhere("c.id in (:ids)")->setParameter('ids',$usuarios_ids);
+		$destinatarios = $cq->getQuery()->getResult();
+		
+		$mailer = $this->getMailer();
+		
+		$cant = 0;
+		try{
+			foreach($destinatarios as $destinatario ){
+				$correo = $mailer->getCorreoFromPlantilla('inscripci-n-al-programa');
+				$correo->setEmisor($this->getLoggedInUser());
+				$correo->setDestinatario($destinatario);
+				$correo = $mailer->enviarCorreo($correo);
+				$cant++;
+			}
+		}catch(InvalidTemplateException $e){
+				$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+			}catch(MailCannotBeSentException $e){
+				$this->setErrorMessage('No se pudo enviar el correo. Verifique que los datos ingresados sean válidos');
+		}
+		echo "se enviaron $cant correos";
+		exit;
 	}
+}

@@ -26,7 +26,7 @@ class CorreoRepository extends EntityRepository
 		return  $qb->getQuery();
 	}
 	
-	public function filter(CorreoFilter $filter) {
+	public function filterQuery(CorreoFilter $filter) {
 		$qb = $this->createQueryBuilder('c')->orderBy('c.fecha', 'DESC');
 	 	if ($filter->getFecha())
 			$qb->andWhere('DATE(c.fecha) = :fecha')->setParameter('fecha',$filter->getFecha());
@@ -47,7 +47,7 @@ class CorreoRepository extends EntityRepository
 		if ($filter->getProyecto())
 			$qb->andWhere('c.proyecto = :proyecto')->setParameter('proyecto',$filter->getProyecto());
 		
-		return $qb->getQuery();
+		return $qb;
 	}
 	
 }
