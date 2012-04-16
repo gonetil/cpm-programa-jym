@@ -1,4 +1,6 @@
 {% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
+{% import "CpmJovenesBundle:Common:filter.html.twig" as filter %}
+
 {% if not app.request.isXmlHttpRequest() %}
 	<!DOCTYPE html>
 	<html>
@@ -113,12 +115,6 @@
 	<div class="clear">&nbsp;</div>
 	</div>
 	<!--  end content-outer........................................................END -->
-		
-			<script>
-				$(function(){
-					hacer_listados_selectables();
-				});	
-			</script>
 		        
 	        
 	        {% block javascripts %}{% endblock %}

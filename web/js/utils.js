@@ -59,54 +59,6 @@ confirmAndRelocate = function(confirmationMessage, gotoUrl) {
 }
 
 
-/**
- * agrega la capacidad de seleccionar todos los checkboxes
- * cuyo nombre es igual al atributo target del checkbox id='select_all'
- */
-add_checkall_ability = function() {
-	$("#select_all").change(function(elem){
-		target = $(this).attr('target');
-		$self = $(this);
-		$(target).each(function(index,elem) {
-											$(elem).attr("checked",$self.is(":checked")); 
-											}); //.each
-		
-	} //.change
-	).trigger('change');									
-}
-
-/**
- * agrega el soporte a las batch actions
- * 
- */
-add_batch_actions_support = function() {
-	
-	$(".batch_actions li").mouseenter(function(event){
-		$(this).children(".sub_actions").show();
-	}).mouseleave(function(event) { 
-		$(this).children(".sub_actions").hide();
-	});
-	
-	
-	$(".batch_actions .sub_actions a").click(function(event){
-		event.preventDefault();
-		$clicked= $(event.target);		
-		action = $clicked.attr('href'); //el action que procesara el formulario
-		type = $clicked.attr('type'); //se deben buscar todos los proyectos o solo los seleccionados
-		batch_action = $clicked.attr('batch_action'); //el action a forwardear
-		
-		$(".batch_action_hidden").val(batch_action);
-		$(".batch_action_type_hidden").val(type);
-		
-		target_form = $clicked.attr('target');
-		$(target_form).attr('action',action).submit();
-	});
-	
-	
-	
-}
-
-
 /*funcion para pasar asistencia a las instancias de eventos*/
 pasar_asistencia = function() { 
 	
@@ -137,31 +89,6 @@ pasar_asistencia = function() {
 	});
 }
 
-/**
- *  inicializaciones comunes a toda la aplicacion
- */
-$(document).ready(function() {
-	
-	/**
-	 * Elimina la clase "current" de los items del menu que no tienen hover
-	*/
-	var primer = $("ul.select").first();
-	$("ul.select").hover(function(event) { 
-			primer.removeClass('current');
-			$(event.currentTarget).addClass('current');	
-		},function(event) { 
-			$(event.currentTarget).removeClass('current');
-			primer.addClass('current');
-		}
-	);
-	
-	add_checkall_ability();
-	add_batch_actions_support();
-	
-	$(".icon").tooltip();
-}); //document.ready
-
-
 function definirIntervalo(inicioID, finID){
 	var d = $("#"+inicioID+", #" +finID).datepicker({
 		defaultDate: "+1w",
@@ -178,9 +105,8 @@ function definirIntervalo(inicioID, finID){
 		}
 	});
 }
-$(function() {
-	jQuery(function($){
-		$.datepicker.regional['es'] = {
+init_datepicker = function(dpSelector){
+	$.datepicker.regional['es'] = {
 			closeText: 'Cerrar',
 			prevText: '&#x3c;Ant',
 			nextText: 'Sig&#x3e;',
@@ -198,8 +124,47 @@ $(function() {
 			isRTL: false,
 			showMonthAfterYear: false,
 			yearSuffix: ''};
-		$.datepicker.setDefaults($.datepicker.regional['es']);
-	});
+	$.datepicker.setDefaults($.datepicker.regional['es']);
+	$(dpSelector).datepicker();
+
+}
+
+function clear_form_elements(form) {
+    $(form).find(':input').each(function() {
+        switch(this.type) {
+            case 'password':
+            case 'select-multiple':
+            case 'select-one':
+            case 'text':
+            case 'textarea':
+            	this.value="";
+                break;
+            case 'checkbox':
+            case 'radio':
+            	this.checked="checked";
+        }
+        return true;
+    });
+
+}
+/**
+ *  inicializaciones comunes a toda la aplicacion
+ */
+jQuery(function($){
+	init_datepicker('.datepicker');
 	
-	$('.datepicker').datepicker();
+	//Elimina la clase "current" de los items del menu que no tienen hover
+	var primer = $("ul.select").first();
+	$("ul.select").hover(function(event) { 
+			primer.removeClass('current');
+			$(event.currentTarget).addClass('current');	
+		},function(event) { 
+			$(event.currentTarget).removeClass('current');
+			primer.addClass('current');
+		}
+	);
+	
+	
+	$(".icon").tooltip();
 });
+	
