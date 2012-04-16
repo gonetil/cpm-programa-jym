@@ -410,7 +410,7 @@ class PerfilController extends BaseController
     }
    
     private function getValidExtensions() {
-    	return $valid_extensions = array("doc","docx","odt","pdf");
+    	return $valid_extensions = array("doc","docx","odt","pdf","rtf","wps");
     }
     	
     /**
