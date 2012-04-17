@@ -117,6 +117,7 @@ class UsuarioController extends BaseController
 					$user->setPassword('');
 		            $this->getMailer()->sendConfirmationEmailMessage($user);
 		        } else {
+		        	$user->setEnabled(true);
 		            $user->setConfirmationToken(null);
 		        }
 				$this->getUserManager()->updateUser($user);
