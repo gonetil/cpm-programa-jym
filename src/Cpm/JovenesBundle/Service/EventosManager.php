@@ -37,8 +37,9 @@ class EventosManager
 	}
 
 	public function getInvitacion(InstanciaEvento $instancia, Proyecto $proyecto){
+		
 		$ir = $this->doctrine->getRepository('CpmJovenesBundle:Invitacion');
-		return $ir->findOneBy(array('instanciaEvento'=>$instancia, 'proyecto'=>$proyecto));
+		return $ir->findOneBy(array('instanciaEvento'=>$instancia->getId(), 'proyecto'=>$proyecto->getId()));
 	}
     
  	public function invitarProyectos(Usuario $admin, InvitacionBatch $invitacionBatch){
@@ -55,17 +56,16 @@ class EventosManager
     private function enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores){
     //FIXME cachear y usar clonar()
     	$correoCoordinador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO);
-    
-    	$correoEscuela = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_ESCUELA);
-    	$correoColaborador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_COLABORADORES);
-    	
+
     	$context=array(Plantilla::_INVITACION => $invitacion);
 		
 		if ($ccEscuela){
+			$correoEscuela = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_ESCUELA);
 			$correoEscuela->setProyecto($p);	
 			$this->mailer->enviarCorreoAEscuela($correoEscuela, $context);
 		}
 		if ($ccColaboradores){
+			$correoColaborador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_COLABORADORES);
 			$correoColaborador->setProyecto($p);	
 			$this->mailer->enviarCorreoAColaboradores($correoColaborador, $context);
 		}
@@ -92,7 +92,7 @@ class EventosManager
 			 	$this->enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores);
 			 	
 		}else{
-				$this->logger->trace("Ya exise una invitacion para el proyecto '".$proyecto->getId()."' al evento '".$instancia->getTitulo()."', no se hace nada.");
+				$this->logger->info("Ya exise una invitacion para el proyecto '".$p->getId()."' al evento '".$instancia->getTitulo()."', no se hace nada.");
 		}
         return $invitacion;
 	}
