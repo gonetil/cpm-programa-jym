@@ -28,6 +28,11 @@
 		<td colspan="3">
 			<strong>Apellido, Nombre</strong>
 		</td>
+		<td ><strong>DNI</strong></td>
+		<td colspan="2"><strong>Localidad</strong></td>
+		<td colspan="4"><strong>Distrito (Region)</strong></td>
+		<td colspan="3"><strong>Escuela</strong></td>
+		<td colspan="2"><strong>Confirmado</strong></td>
 		{% if entity.evento.pedirNumeroAsistentes %}
 			<td colspan="2"><strong>Asistentes</strong></td>
 		{% endif %}
@@ -47,9 +52,14 @@
 		
 	</tr>
 {% for inv in entity.invitaciones %}
-	{% if inv.aceptoInvitacion %}
 		<tr align=center>
 			<td colspan="3"> {{ inv.proyecto.coordinador.apellido}}, {{ inv.proyecto.coordinador.nombre }} </td>
+			<td >{{ inv.proyecto.coordinador.dni }}</td>
+			<td colspan="2">{{ inv.proyecto.escuela.localidad }}</td>
+			<td colspan="4">{{ inv.proyecto.escuela.localidad.distrito }} ({{ inv.proyecto.escuela.localidad.distrito.region }})</td>
+			<td colspan="3">{{ inv.proyecto.escuela}}</td>
+			<td colspan="2">{% if inv.sinResponder %}Pendiente {% else %} {{ common.show_bool(inv.aceptoInvitacion) }} {% endif %}</td>
+			
 			{% if entity.evento.pedirNumeroAsistentes %}
 				<td colspan="2"> {{inv.numeroAsistentes}}</td>
 			{% endif %}
@@ -74,7 +84,6 @@
 					&nbsp;
 				{% endif %}
 			</td>
-		</tr>
-	{% endif %}	 
+		</tr>	 
 {% endfor %}
 </table>
