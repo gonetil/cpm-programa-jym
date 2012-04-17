@@ -56,7 +56,7 @@
 			<td colspan="3"> {{ inv.proyecto.coordinador.apellido}}, {{ inv.proyecto.coordinador.nombre }} </td>
 			<td >{{ inv.proyecto.coordinador.dni }}</td>
 			<td colspan="2">{{ inv.proyecto.escuela.localidad }}</td>
-			<td colspan="4">{{ inv.proyecto.escuela.localidad.distrito }} ({{ inv.proyecto.escuela.localidad.distrito.region }})</td>
+			<td colspan="4">{{ inv.proyecto.escuela.localidad.distrito }} ({{ inv.proyecto.escuela.localidad.distrito.region.id }})</td>
 			<td colspan="3">{{ inv.proyecto.escuela}}</td>
 			<td colspan="2">{% if inv.sinResponder %}Pendiente {% else %} {{ common.show_bool(inv.aceptoInvitacion) }} {% endif %}</td>
 			
