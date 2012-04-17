@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Cpm\JovenesBundle\Entity\Correo;
 use Cpm\JovenesBundle\Form\CorreoType;
 
-use Cpm\JovenesBundle\EntityDummy\ProyectoSearch;
-use Cpm\JovenesBundle\Form\ProyectoSearchType;
 
 use Cpm\JovenesBundle\EntityDummy\CorreoBatch;
 use Cpm\JovenesBundle\Form\CorreoBatchType;
@@ -41,7 +39,9 @@ class CorreoController extends BaseController
 
 	/**
     */ 
-	public function reenviarBatchAction($entities){
+	public function reenviarBatchAction($entitiesQuery){
+		$entities=$entitiesQuery->getResult();
+		
 		$emisor = $this->getLoggedInUser();
 		$mailer = $this->getMailer();
 		$enviados = 0;

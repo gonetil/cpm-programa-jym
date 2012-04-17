@@ -12,6 +12,7 @@
 	        <link rel="stylesheet" href="{{ asset('css/jquery.tooltip.css') }}" />
 	         
 	        {% block stylesheets %}{% endblock %}
+	        <script>var BASE_PATH="{{app.request.getBasePath()}}";</script>
 	        <script src="{{ asset('js/jquery-1.7.1.min.js') }}" type="text/javascript"></script>
 	        <script src="{{ asset('js/jquery-ui-1.8.18.custom.min.js') }}" type="text/javascript"></script>
 	        <script src="{{ asset('js/jquery.tooltip.min.js') }}" type="text/javascript"></script>

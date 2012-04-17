@@ -117,6 +117,12 @@ class Escuela
      */
     private $distrito;
     /**
+     * Este campo no se guarda en la DB, pero se pone aquí para que viaje con el formulario
+     *
+     */
+    private $region;
+    
+     /**
      * Get id
      *
      * @return integer 
@@ -315,7 +321,7 @@ class Escuela
      *
      * @param Cpm\JovenesBundle\Entity\Tema $temaPrincipal
      */
-    public function setTemaPrincipal(\Cpm\JovenesBundle\Entity\Tema $temaPrincipal)
+    public function setTemaPrincipal($temaPrincipal)
     {
         $this->temaPrincipal = $temaPrincipal;
     }
@@ -335,7 +341,7 @@ class Escuela
      *
      * @param Cpm\JovenesBundle\Entity\Produccion $produccionFinal
      */
-    public function setProduccionFinal(\Cpm\JovenesBundle\Entity\Produccion $produccionFinal)
+    public function setProduccionFinal($produccionFinal)
     {
         $this->produccionFinal = $produccionFinal;
     }

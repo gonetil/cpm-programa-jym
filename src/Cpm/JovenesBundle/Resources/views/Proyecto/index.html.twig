@@ -1,144 +1,138 @@
-{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %} {% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as
+proyecto_box %} {% block title %} Listado de Proyectos {% endblock %} {% block content %}
 
-{% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
-{% import "CpmJovenesBundle:Proyecto:filter_form.macro.html.twig" as filter_form %}
-
-{% block title %} Listado de Proyectos {% endblock %}
-{% block content %}
 
 <script>
-
-			
-			$(document).ready(function() { 
-					$('select.region-selector').change(buscar_distritos);
-					$('select.distrito-selector').change(buscar_localidades);
-					
-					
-					{% if distritos is defined %} 
-						options = "{% for d in distritos %}<option value='{{d.id}}' {% if (form.vars.value.distrito is defined) and ( form.vars.value.distrito == d.id ) %} selected='selected'{% endif %}>{{d.nombre}}</option>{% endfor %}";
-						$('select.distrito-selector').append(options);
-					{% endif %}
-					
-					{% if localidades is defined %} 
-						options = "{% for l in localidades %}<option value='{{l.id}}' {% if (form.vars.value.localidad is defined) and ( form.vars.value.localidad == l.id ) %} selected='selected'{% endif %}>{{l.nombre}}</option>{% endfor %}";
-						$('select.localidad-selector').append(options);
-					{% endif %}
-			}) //document.ready
-					;
+$(document).ready(function() { 
+	{% if distritos is defined %} 
+		options = "{% for d in distritos %}<option value='{{d.id}}' {% if (form.vars.value.distrito is defined) and ( form.vars.value.distrito == d.id ) %} selected='selected'{% endif %}>{{d.nombre}}</option>{% endfor %}";
+		$('select.distrito-selector').append(options);
+	{% endif %}
+	{% if localidades is defined %} 
+		options = "{% for l in localidades %}<option value='{{l.id}}' {% if (form.vars.value.localidad is defined) and ( form.vars.value.localidad == l.id ) %} selected='selected'{% endif %}>{{l.nombre}}</option>{% endfor %}";
+		$('select.localidad-selector').append(options);
+	{% endif %}
+});
 			
 </script>
+
+{{ filter.form_head(form) }}
+
 <div id="before_list">
-		<form method="GET" id="filter_form" action="{{ path("proyecto") }}">
-		{{ filter_form.show(form) }}
-		
-		
-		<div class="systats">
-				<h4> Estadísticas del Sistema </h4>
-			  <ul>
-			  <li> Cant. de proyectos: {{total_proyectos}}</li>
-			  {% if total_proyectos > 0 %}
-			    <li> % primera vez del docente: {{ 100 * total_PrimeraVezDocente / total_proyectos }}% ( {{total_PrimeraVezDocente}} )</li>
-			  	<li> % primera vez de los alumnos: {{ 100 * total_PrimeraVezAlumnos / total_proyectos }}% ({{total_PrimeraVezAlumnos}})</li>
-			  	<li> % primera vez de la escuela: {{100 * total_PrimeraVezEscuela / total_proyectos }}% ({{total_PrimeraVezEscuela}})</li>
-			  {% endif %}
-			    <li> Cantidad de coordinadores: {{ total_Coordinadores }} </li>	
-			  </ul>
+
+	<div class="filters">
+
+
+		<div class='left'>
+			<h4>Filtros sobre el proyecto</h4>
+			{{ form_row(form.modelFilter.coordinador) }} 
+			{{ form_row(form.modelFilter.esPrimeraVezDocente) }} 
+			{{form_row(form.modelFilter.esPrimeraVezEscuela) }} 
+			{{form_row(form.modelFilter.esPrimeraVezAlumnos) }} 
+			{{form_row(form.modelFilter.temaPrincipal) }}
+            {{ form_row(form.modelFilter.produccionFinal) }} 
+            {{ form_row(form.modelFilter.archivo) }}
 		</div>
+		<div class='right'>
+			<h4>Filtros sobre la escuela</h4>
+			{{ form_row(form.modelFilter.escuelaFilter.nombre) }}
+			{{ form_row(form.modelFilter.escuelaFilter.region) }} 
+			{{ form_row(form.modelFilter.escuelaFilter.distrito) }} 
+			{{ form_row(form.modelFilter.escuelaFilter.localidad) }}
+
+			<div class='range'>
+				{{ form_label(form.modelFilter.escuelaFilter.regionDesde) }} 
+				{{ form_errors(form.modelFilter.escuelaFilter.regionDesde) }} 
+				{{ form_widget(form.modelFilter.escuelaFilter.regionDesde) }} 
+				{{ form_label(form.modelFilter.escuelaFilter.regionHasta) }} 
+				{{ form_errors(form.modelFilter.escuelaFilter.regionHasta) }} 
+				{{ form_widget(form.modelFilter.escuelaFilter.regionHasta) }}
+			</div>
+			{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
+			{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }} 
+			{{ filter.form_buttons(form) }}
+		</div>
+
+	</div>
+
+	<div class="systats">
+		<h4>Estadísticas del Sistema</h4>
+		<ul>
+			<li>Cant. de proyectos: {{total_proyectos}}</li> {% if total_proyectos > 0 %}
+			<li>% primera vez del docente: {{ 100 * total_PrimeraVezDocente / total_proyectos }}% ( {{total_PrimeraVezDocente}} )</li>
+			<li>% primera vez de los alumnos: {{ 100 * total_PrimeraVezAlumnos / total_proyectos }}% ({{total_PrimeraVezAlumnos}})</li>
+			<li>% primera vez de la escuela: {{100 * total_PrimeraVezEscuela / total_proyectos }}% ({{total_PrimeraVezEscuela}})</li> {% endif %}
+			<li>Cantidad de coordinadores: {{ total_Coordinadores }}</li>
+		</ul>
+	</div>
 </div>
 
 <table class="records_list">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th><input type="checkbox" id="select_all" target=".checkable"></th>
-            <th>Coordinador</th>
-            <th>Datos de contacto</th>
-            <th>Escuela</th>
-            <th>Datos de la Escuela</th>
-            <th>Localidad</th>
-            <th>Distrito</th>  
-            <th>Archivo</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-    	{% include "CpmJovenesBundle:Default:pagination.html.twig" %}
-    {% for entity in entities %}
-        <tr>
-            <td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td class="primera_vez_checkboxes">
-	            <input type="checkbox" class='checkable' name="cpm_jovenesbundle_proyectosearchtype[proyectos_seleccionados][{{entity.id}}]" id="proyecto{{entity.id}}" value="{{ entity.id }}" />
-            </td>
-            
-            <td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">
-            {{ entity.coordinador.nombre }} {{ entity.coordinador.apellido }} 
-            </td>
-            <td> Tel:{% if entity.coordinador.telefonoCelular == '' %} {{entity.coordinador.telefono}} {% else %} {{ entity.coordinador.telefonoCelular }} {% endif %} 
-             <br/>Email: {{ entity.coordinador.email }} </td>
-            <td class="{% if entity.esPrimeraVezEscuela %}primera_vez{% endif %}">
-            		{{ proyecto_box.nombreEscuela(entity.escuela)  }}
-            </td>		
-            <td> Tel. {{ entity.escuela.telefono }} 
-             <br/>    E-mail {{ entity.escuela.email }} </td>           
-            <td>{{ entity.escuela.localidad }} </td>
-            <td> {{ entity.escuela.localidad.distrito }}</td>
-            <td>
-                 {% if not entity.archivo is null %} 
-                 	<div class="download_mini mini-icon"> 
-                 		<a href="{{ path('proyecto_descargar_presentacion',{'id' : entity.id}) }}"></a>
-                 	</div>
-                 	{% else %}
-                 	<div class="no mini-icon"> </div>
-                 {% endif %}
-			</td>                        	            
-            
-            <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('proyecto_show', { 'id': entity.id }) }}">Ver</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('proyecto_edit', { 'id': entity.id }) }}">Modificar</a>
-                    </li>
-                </ul>
-            </td>
-        </tr>
-    {% endfor %}
-    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
-    </tbody>
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>{{ filter.select_all() }}</th>
+			<th>Coordinador</th>
+			<th>Datos de contacto</th>
+			<th>Escuela</th>
+			<th>Datos de la Escuela</th>
+			<th>Localidad</th>
+			<th>Distrito</th>
+			<th>Archivo</th>
+			<th>Acciones</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% include "CpmJovenesBundle:Default:pagination.html.twig" %} {% for entity in entities %}
+		<tr>
+			<td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+			<td>{{ filter.select_this(entity) }}</td>
+
+			<td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">{{ entity.coordinador.nombre }} {{ entity.coordinador.apellido
+				}}</td>
+			<td>Tel:{% if entity.coordinador.telefonoCelular == '' %} {{entity.coordinador.telefono}} {% else %} {{
+				entity.coordinador.telefonoCelular }} {% endif %} <br />Email: {{ entity.coordinador.email }}
+			</td>
+			<td class="{% if entity.esPrimeraVezEscuela %}primera_vez{% endif %}">{{ proyecto_box.nombreEscuela(entity.escuela) }}</td>
+			<td>Tel. {{ entity.escuela.telefono }} <br /> E-mail {{ entity.escuela.email }}
+			</td>
+			<td>{{ entity.escuela.localidad }}</td>
+			<td>{{ entity.escuela.localidad.distrito }}</td>
+			<td>{% if not entity.archivo is null %}
+				<div class="download_mini mini-icon">
+					<a href="{{ path('proyecto_descargar_presentacion',{'id' : entity.id}) }}"></a>
+				</div> {% else %}
+				<div class="no mini-icon"></div> {% endif %}
+			</td>
+
+			<td>
+				<ul>
+					<li><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">Ver</a></li>
+					<li><a href="{{ path('proyecto_edit', { 'id': entity.id }) }}">Modificar</a></li>
+				</ul>
+			</td>
+		</tr>
+		{% endfor %} {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+	</tbody>
 </table>
-	
-	{{ form_row(form.batch_action) }}
-	{{ form_row(form.batch_action_type) }}
-    {{ form_row(form._token) }}
-    </form>
+
+{{ form_row(form.batch_action) }} {{ form_row(form.batch_action_type) }} {{ form_row(form._token) }}
+</form>
 
 <div class="llamada">
-	<div class="primera_vez llamada" style="padding:10px;">participa por primera vez</div>
+	<div class="primera_vez llamada" style="padding: 10px;">participa por primera vez</div>
 </div>
 
 <ul class="record_actions">
-    <li>
-        <a href="{{ path('proyecto_new') }}">
-            Agregar proyecto
-        </a>
-    </li>
+	<li><a href="{{ path('proyecto_new') }}"> Agregar proyecto </a></li>
 </ul>
 
-<ul class="batch_actions">
-	<li> 
-		<span>Enviar invitacion</span>
-		<ul class="sub_actions">
-			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Invitacion:invitarProyectosBatch" target="#filter_form" type="seleccionados"> A los proyectos seleccionados </a></li>
-			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Invitacion:invitarProyectosBatch" target="#filter_form" type="todos"> A todos los proyectos </a></li>
-		</ul>	
-	</li>
-	<li> 
-		<span>Enviar mensaje</span>
-		<ul class="sub_actions">
-			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Correo:writeToMany" target="#filter_form" type="seleccionados"> A los proyectos seleccionados </a></li>
-			<li><a href="{{path('proyecto_batch_action')}}" batch_action="CpmJovenesBundle:Correo:writeToMany" target="#filter_form" type="todos"> A todos los proyectos </a></li>
-		</ul>	
-	</li>
-</ul>
+
+{{ filter.batch_actions([ 
+	{action:'CpmJovenesBundle:Invitacion:invitarProyectosBatch', label: 'Enviar invitacion' },
+	 
+]) }}
+{# {action:'CpmJovenesBundle:Correo:writeToMany', label: 'Enviar mensaje', confirm: true}, #}
+{{ filter.form_end(form) }}
+
 {% endblock %}

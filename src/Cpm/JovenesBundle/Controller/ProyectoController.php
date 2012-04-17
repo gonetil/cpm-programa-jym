@@ -13,8 +13,8 @@ use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 
-use Cpm\JovenesBundle\EntityDummy\ProyectoSearch;
-use Cpm\JovenesBundle\Form\ProyectoSearchType;
+use Cpm\JovenesBundle\Filter\ProyectoFilter;
+use Cpm\JovenesBundle\Filter\ProyectoFilterForm;
 
 /**
  * Proyecto controller.
@@ -32,44 +32,11 @@ class ProyectoController extends BaseController
      */
     public function indexAction()
     {
+    	$stats = $this->getSystemStats();
+//    	/$ciclo = $this->getJYM()->getCicloActivo();
+        
+		return $this->filterAction(new ProyectoFilter(), 'proyecto', $stats);
     	
-        $em = $this->getDoctrine()->getEntityManager();
-        $repository = $em->getRepository('CpmJovenesBundle:Proyecto');
-        $ciclo = $this->getJYM()->getCicloActivo();
-        
-        
-        $request = $this->getRequest();
-        
-        $searchValues = new ProyectoSearch();
-        $searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
-        $proyectos = null;
-        
-        $response = array();
-        if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype"))) 
-         {	
-        	$searchForm->bindRequest($request);
-       		 
-        	if ($searchForm->isValid()) {
-        		$proyectos =$repository ->findBySearchCriteriaQuery($searchForm->getData(),$ciclo);
-        		
-        		if ($searchForm->getData()->getRegion()) {
-        			
-        			$response['distritos'] = $em->getRepository('CpmJovenesBundle:Distrito')->findByRegion($searchForm->getData()->getRegion()->getId());
-        		}
-        		
-        		if ($searchForm->getData()->getDistrito()) {
-        			$response['localidades'] = $em->getRepository('CpmJovenesBundle:Localidad')->findByDistrito($searchForm->getData()->getDistrito());
-        		}
-        	}
-        } else { 
-        	$proyectos = $repository->findAllQuery($ciclo);
-        }
-         
-
-		$response['form']=$searchForm->createView();
-		$stats = $this->getSystemStats();
-        return $this->paginate( $proyectos, array_merge($stats,$response));
-        
     }
 
     private function getSystemStats() {
@@ -88,6 +55,7 @@ class ProyectoController extends BaseController
     	
     	return $stats;
     }
+    
     /**
      * Finds and displays a Proyecto entity.
      *
@@ -302,53 +270,5 @@ class ProyectoController extends BaseController
 		
 	}
 
-	/**
-	* 
-	*   @Route("/batch_action" , name="proyecto_batch_action")
-	*
-	* */	
-	public function executeBatchAction() {
-		$em = $this->getDoctrine()->getEntityManager();
-		$repository = $em->getRepository('CpmJovenesBundle:Proyecto');
-		$ciclo = $this->getJYM()->getCicloActivo();
-		$request = $this->getRequest();
-		
-		$searchValues = new ProyectoSearch();
-		$searchForm = $this->createForm(new ProyectoSearchType(),$searchValues);
-		
-		
-		$proyectos = array();
-		 
-		if (is_array($request->get("cpm_jovenesbundle_proyectosearchtype")))
-		{				
-			$searchForm->bindRequest($request);
-			if ($searchForm->isValid()) {
-
-				$batch_action_type = $searchValues->getBatch_action_type(); //todos o seleccionados
-				$batch_action = $searchValues->getBatch_action();
-
-				
-				if ($batch_action_type == 'todos') {
-					$proyectos =$repository->findBySearchCriteriaQuery($searchForm->getData(),$ciclo);
-				}
-				elseif ($batch_action_type == 'seleccionados') {
-					$destinatarios = $searchValues->getProyectos_seleccionados();
-					
-					if (count($destinatarios) > 0)
-						$proyectos = $repository->findAllInArray($destinatarios);
-					 else 
-					 	return $this->redirect($this->generateUrl('proyecto'));
-						
-				}
-				
-
-				$response = $this->forward($batch_action,array('proyectos_query'=>$proyectos));
-				return $response;
-			}
-		}
-		return $this->redirect($this->generateUrl('proyecto'),array('form'=>$searchForm->createView()));
-
-		
-	}
     
 }

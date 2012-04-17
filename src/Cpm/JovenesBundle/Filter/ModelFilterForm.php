@@ -7,9 +7,11 @@ use Symfony \ Component \ Form \ FormBuilder;
 abstract class ModelFilterForm extends AbstractType {
 	
 	protected $modelFilter; 
+	protected $suffix;
 	
-	public function __construct(ModelFilter $modelFilter){
+	public function __construct(ModelFilter $modelFilter, $suffix=""){
 		$this->modelFilter = $modelFilter;
+		$this->suffix = $suffix;
 	}
 	
 	public  function getModelFilter(){
@@ -17,6 +19,6 @@ abstract class ModelFilterForm extends AbstractType {
 	}
 	
 	public function getName(){
-        return 'cpm_jovenesbundle_modelfilter';
+        return 'cpm_jovenesbundle_modelfilter'.$this->suffix;
 	}
 }

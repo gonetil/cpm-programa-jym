@@ -141,11 +141,52 @@ function clear_form_elements(form) {
                 break;
             case 'checkbox':
             case 'radio':
-            	this.checked="checked";
+            	this.checked="";
         }
         return true;
     });
 
+}
+
+autofill_select = function ( value_to_send , select_to_fill , url_to_json, empty_value)
+{
+   	select = $(select_to_fill)
+   			.first()
+   			.empty()
+   			.append("<option value=''>" + empty_value + "</option>");
+
+	if (value_to_send != null )
+	 {
+	   	$.getJSON(BASE_PATH + url_to_json, value_to_send , function(data) {
+	   		if (data.length > 0) {
+		   		for (var i=0; i<data.length; i++) 
+		   			select.append("<option value="+data[i].id+">"+data[i].nombre+"</option>");
+		   	}
+		}); 
+	}
+};
+
+buscar_localidades = function() {
+	id = jQuery("select.distrito-selector").val();
+			
+	select = "select.localidad-selector";
+	if (id == "") 
+		id = "-1";
+	autofill_select( { distrito_id : id} ,  select , "/public/find_by_distrito" , "Todas");			
+};
+
+buscar_distritos = function() {
+		id = jQuery("select.region-selector").val();
+			
+		select = "select.distrito-selector";
+		if (id == "")
+			id =-1;
+		autofill_select( { region_id : id} , select  , "/public/find_by_region" , "Todos");
+};
+
+bind_rdl_selects = function(){
+	$('select.region-selector').change(buscar_distritos);
+	$('select.distrito-selector').change(buscar_localidades);
 }
 /**
  *  inicializaciones comunes a toda la aplicacion
@@ -166,5 +207,7 @@ jQuery(function($){
 	
 	
 	$(".icon").tooltip();
+	
+	bind_rdl_selects();
 });
 	

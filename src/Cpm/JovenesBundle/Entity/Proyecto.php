@@ -268,7 +268,7 @@ class Proyecto
      *
      * @param Cpm\JovenesBundle\Entity\Escuela $escuela
      */
-    public function setEscuela(\Cpm\JovenesBundle\Entity\Escuela $escuela)
+    public function setEscuela($escuela)
     {
         $this->escuela = $escuela;
     }
@@ -288,7 +288,7 @@ class Proyecto
      *
      * @param Cpm\JovenesBundle\Entity\Usuario $coordinador
      */
-    public function setCoordinador(\Cpm\JovenesBundle\Entity\Usuario $coordinador)
+    public function setCoordinador($coordinador)
     {
         $this->coordinador = $coordinador;
     }

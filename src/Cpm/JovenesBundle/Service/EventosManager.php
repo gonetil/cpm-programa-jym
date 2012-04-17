@@ -49,7 +49,7 @@ class EventosManager
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();
     	
         foreach ( $invitacionBatch->getProyectos() as $p ) {
-			 $invitacion = $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores);
+			 $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores);
 		}
     }
     private function enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores){
@@ -78,7 +78,7 @@ class EventosManager
 
 	public function invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores){
 		$invitacion = $this->getInvitacion($instancia, $p);
-			 if (empty($invitacion)){
+		if (empty($invitacion)){
 			    $this->logger->info("Se invita al proyecto '".$p->getId()."' al evento '".$instancia->getTitulo()."'");
 		
 				$invitacion = new Invitacion();
@@ -91,9 +91,9 @@ class EventosManager
 				//FIXME si falla el envio de mail por na invitacion, cuando se reenvia?
 			 	$this->enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores);
 			 	
-			 }else{
+		}else{
 				$this->logger->trace("Ya exise una invitacion para el proyecto '".$proyecto->getId()."' al evento '".$instancia->getTitulo()."', no se hace nada.");
-			}
+		}
         return $invitacion;
 	}
 	
