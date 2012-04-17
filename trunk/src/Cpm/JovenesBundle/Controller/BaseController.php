@@ -188,7 +188,7 @@ abstract class BaseController extends Controller
     /**
      * 
      */
-    public function filterAction(ModelFilter $modelfilter, $index_path)
+    public function filterAction(ModelFilter $modelfilter, $index_path, $extra_args=array())
     {
      	list($form, $batch_filter, $entitiesQuery) = $this->getFilterForm($modelfilter);
     	if ($batch_filter->hasBatchAction()){
@@ -196,16 +196,28 @@ abstract class BaseController extends Controller
 				$entities = $entitiesQuery->getResult();
 			}else{
 				$entities = $batch_filter->getSelectedEntities();
+				
 				if (count($entities) == 0){
 					$this->setInfoMessage("No se seleccionó ningun elemento");
 				 	return $this->redirect($this->generateUrl($index_path));
 				}
+				
+				$entitiesIds = array();
+				foreach ( $entities as $entity ) 
+		       		$entitiesIds[]=$entity->getId();
+				
+				$entitiesQuery = $this->getRepository($modelfilter->getTargetEntity())
+				 	->createQueryBuilder('e')
+				 	->andWhere('e.id in (:entities)')->setParameter('entities',$entitiesIds)
+				 	->getQuery();
+				
 			}
 			
-			return $this->forward($batch_filter->getBatchAction(),array('entities'=>$entities));				
+			//TODO ver si le paso $extra_args al forward
+			return $this->forward($batch_filter->getBatchAction(),array('entitiesQuery'=>$entitiesQuery));				
     	}
     	
-    	return $this->getFilterResults($form, $batch_filter,$entitiesQuery);        
+    	return $this->getFilterResults($form, $batch_filter,$entitiesQuery,$extra_args);        
     }
 
 	protected function getFilterForm(ModelFilter $modelFilter){

@@ -38,16 +38,16 @@ class InvitacionController extends BaseController
     /**
      * Muetsra un form de invitacion de proyectos a una instancia de un evento
      *
-     * @Route("/invitar_proyectos", name="invitar_proyectos")
      * @Template()
      */
-    public function invitarProyectosBatchAction($proyectos_query)
+    public function invitarProyectosBatchAction($entitiesQuery)
     {
+    	$entities=$entitiesQuery->getResult();
         $editForm = $this->createForm(new InvitacionBatchType(), new InvitacionBatch());
         
         return array(
             'form'   => $editForm->createView(),
-            'proyectos' => $proyectos_query->getResult()
+            'proyectos' => $entities
         );
     }
     

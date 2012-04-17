@@ -1,14 +1,21 @@
-{% macro form_init(form) %}
+{% macro form_head(form) %}
 	<form method="get" {{ form_enctype(form) }} id="filter-form">
+{% endmacro %}
 
+{% macro form_buttons(form) %}
+	<p>
+        <button type="submit">Filtrar</button>
+        <button  type="submit" onclick="clear_form_elements($('#filter-form'));">Reiniciar Filtro</button>
+    </p>
+{% endmacro %}
+
+{% macro form_init(form) %}
+	{{_self.form_head(form) }}
 	<div class="filter-form-box">
     <h3>Filtrar</h3>
     {{ form_widget(form) }}
-     
-    <p>
-        <button type="submit">Enviar</button>
-        <button  type="submit" onclick="clear_form_elements($('#filter-form'));">Reiniciar Filtro</button>
-    </p>
+    {{_self.form_buttons(form) }}
+	 
     </div>
 {% endmacro %}
 
