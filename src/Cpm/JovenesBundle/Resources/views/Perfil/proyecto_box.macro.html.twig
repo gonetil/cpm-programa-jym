@@ -36,7 +36,7 @@
 						<div class="status">
 						{% if invitacion.estaPendiente %}
 							{% if invitacion.estaVigente %}
-								 <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions">Confirmar</a>  
+								 <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a>  
 								 <a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a>
 							{% endif %}
 							
