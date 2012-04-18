@@ -47,6 +47,7 @@ class CorreoRepository extends EntityRepository
 		if ($filter->getProyecto())
 			$qb->andWhere('c.proyecto = :proyecto')->setParameter('proyecto',$filter->getProyecto());
 		
+
 		return $qb;
 	}
 	

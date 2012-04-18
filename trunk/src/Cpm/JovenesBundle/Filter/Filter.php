@@ -74,5 +74,20 @@ class Filter
 		$this->selectedEntities = $x;
 	}
 	
+	private $page_size = 20;
+	private $page_number = 1;
+	public function getPageSize() {
+		return $this->page_size;
+	}
+	public function setPageSize($size) {
+		$this->page_size = $size;
+	}
+	
+	public function getPageNumber() {
+		return $this->page_number;
+	}
+	public function setPageNumber($number) {
+		$this->page_number = $number;
+	}
 }
 	
