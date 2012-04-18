@@ -5,3 +5,18 @@
 		No
 	{% endif %}		
 {% endmacro %}
+
+
+{% macro nombreEscuela(escuela) %}
+	({% if escuela.tipoInstitucion.id is defined %}
+		{{ escuela.tipoInstitucion }}:  	
+	{% else %}
+		{{ escuela.otroTipoInstitucion }}:
+	{% endif %})		
+		{{ escuela.tipoEscuela }}
+	   	{% if escuela.numero %}
+	    	N° {{ escuela.numero }}
+	    {%endif%}
+	    {{ escuela.nombre }}
+	
+{% endmacro %}

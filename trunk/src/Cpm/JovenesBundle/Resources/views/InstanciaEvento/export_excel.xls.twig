@@ -32,7 +32,7 @@
 		<td ><strong>DNI</strong></td>
 		<td colspan="2"><strong>Localidad</strong></td>
 		<td colspan="4"><strong>Distrito (Region)</strong></td>
-		<td colspan="3"><strong>Escuela</strong></td>
+		<td colspan="7"><strong>Escuela</strong></td>
 		<td colspan="2"><strong>Confirmado</strong></td>
 		{% if entity.evento.pedirNumeroAsistentes %}
 			<td colspan="2"><strong>Asistentes</strong></td>
@@ -58,7 +58,7 @@
 			<td >{{ inv.proyecto.coordinador.dni }}</td>
 			<td colspan="2">{{ inv.proyecto.escuela.localidad }}</td>
 			<td colspan="4">{{ inv.proyecto.escuela.localidad.distrito }} ({{ inv.proyecto.escuela.localidad.distrito.region.id }})</td>
-			<td colspan="3">{{ inv.proyecto.escuela}}</td>
+			<td colspan="7">{{ common.nombreEscuela(inv.proyecto.escuela) }}</td>
 			<td colspan="2">{% if inv.sinResponder %}Pendiente {% else %} {{ common.show_bool(inv.aceptoInvitacion) }} {% endif %}</td>
 			
 			{% if entity.evento.pedirNumeroAsistentes %}
