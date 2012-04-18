@@ -122,7 +122,7 @@
 		            <td><a href="{{ path('invitaciones_edit',{id:inv.id}) }}">{{ inv.id }}</a></th>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
 		            <td> {{ inv.proyecto.coordinador.nombre }} {{ inv.proyecto.coordinador.apellido }} </td>
-		            <td> {{ inv.proyecto.escuela }}</td>
+		            <td> {{ common.nombreEscuela(inv.proyecto.escuela) }}</td>
 		            <td  class="mini-icon {% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
 		            			{% if inv.sinResponder %} colspan="100%" {% endif %}></td>
 		            {% if not inv.sinResponder %}
