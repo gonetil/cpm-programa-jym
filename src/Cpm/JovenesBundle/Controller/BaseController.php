@@ -206,7 +206,6 @@ abstract class BaseController extends Controller
 				$entitiesIds = array();
 				foreach ( $entities as $entity ) 
 		       		$entitiesIds[]=$entity->getId();
-				
 				$entitiesQuery = $this->getRepository($modelfilter->getTargetEntity())
 				 	->createQueryBuilder('e')
 				 	->andWhere('e.id in (:entities)')->setParameter('entities',$entitiesIds)

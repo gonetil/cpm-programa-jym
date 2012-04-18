@@ -16,6 +16,7 @@ class CorreoBatch extends ProyectoBatch{
 	
 	public $plantilla;
 	public $preview;
+	public $previewText;
 	
 	public function __construct() {
 		parent::__construct();
@@ -23,6 +24,7 @@ class CorreoBatch extends ProyectoBatch{
 		$this->ccColaboradores = false;
 		$this->ccEscuelas = false;
 		$this->preview = true;		
+		$this->previewText = "";		
 	}
 	
 	public function getCcCoordinadores() {
@@ -75,5 +77,12 @@ class CorreoBatch extends ProyectoBatch{
 	}
 	public function setPreview($preview) {
 		$this->preview = $preview;
+	}
+	
+	public function getPreviewText() {
+		return $this->previewText;
+	}
+	public function setPreviewText($previewText) {
+		$this->previewText = $previewText;
 	}
 }

@@ -35,35 +35,35 @@
 
 	 }); //ready
 </script>
-{% if show_preview is defined %}
+{% if form.vars.value.previewText %}
 	<div class="preview_email">
 		<h2> Vista preliminar del mensaje </h2>
 	 	<div>
-	 		Asunto: <strong> {{asunto}}</strong> 
+	 		Asunto: <strong> {{form.asunto.vars.value}}</strong> 
 		</div>
 		<div>
-			Cuerpo: {{ cuerpo }}
+			Cuerpo: {{form.vars.value.previewText}}
 		</div>
 		<a href="#" onclick="$('#mail_body').show();">Modificar</a>
 		<script>
 			$(document).ready(function() { 
-					$("#mail_body").hide(); });
-		</script>		  		 
+					$("#mail_body").hide(); 
+			});
+		</script>
 	</div>
 {% endif %}
  
  
- <form method="post" action="{{ path('correo_send_mass_email') }}" id="mailer_form">
+ <form method="post" action="{{ path('correo_batch_submit') }}" id="mailer_form">
  
  <div class="checklist" style="float:right">
- <strong> Escuelas </strong>
- <select name="cpm_jovenesbundle_correobatchtype[proyectos][]" id="cpm_jovenesbundle_correobatchtype_proyectos" multiple="yes">
-	{% for p in proyectos %}
-		<option value="{{p.id}}" selected> {{p}} </option>
-	{% endfor %} 
- </select>
+	 <strong> Escuelas </strong>
+	 <select name="cpm_jovenesbundle_correobatchtype[proyectos][]" id="cpm_jovenesbundle_correobatchtype_proyectos" multiple="yes">
+		{% for p in proyectos %}
+			<option value="{{p.id}}" selected> {{p}} </option>
+		{% endfor %} 
+	 </select>
 
- 
  <a href="#" onclick="$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);" > Seleccionar todo </a>
  </div>
  <span id="mail_body">

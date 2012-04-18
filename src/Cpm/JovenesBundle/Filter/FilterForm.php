@@ -28,8 +28,10 @@ class FilterForm extends AbstractType {
         			'expanded'=>true, 
         			'required' =>true, 
         			'query_builder' => function($er) use ($mf,$filter){
-        						$qb = $er->filterQuery($mf);
-								$qb->setFirstResult($filter->getPageNumber())->setMaxResults($filter->getPageSize());
+        						$qb = $er->filterQuery($mf)
+								->setFirstResult(($filter->getPageNumber() - 1) * $filter->getPageSize())
+								->setMaxResults($filter->getPageSize())
+								;
         						return $qb;} ))
         ;
         

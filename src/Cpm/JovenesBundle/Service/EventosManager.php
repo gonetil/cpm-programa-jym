@@ -21,6 +21,9 @@ class EventosManager
 	protected $jym;
     protected $doctrine;
     protected $logger;
+    private $correoCoordinadorMaster;
+    private $correoEscuelaMaster;
+    private $correoColaboradoresMaster;
 
     public function __construct(TwigSwiftMailer $mailer, JYM $jym, $doctrine, $logger)
     {
@@ -28,6 +31,11 @@ class EventosManager
         $this->jym = $jym;
 	    $this->doctrine = $doctrine;
 	    $this->logger = $logger;
+	    
+	    $this->correoCoordinadorMaster = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO);
+	    $this->correoEscuelaMaster = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_ESCUELA);
+		$this->correoColaboradoresMaster = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_COLABORADORES);
+		
 //    throw new \InvalidArgumentException("No existe la plantilla ");
 }
     
@@ -45,35 +53,41 @@ class EventosManager
  	public function invitarProyectos(Usuario $admin, InvitacionBatch $invitacionBatch){
  		
     	$instancia = $invitacionBatch->getInstancia();
-    	
     	$ccEscuela=$invitacionBatch->getCcEscuelas();
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();
+    	
+    	set_time_limit(60+3*count($invitacionBatch->getProyectos()));
     	
         foreach ( $invitacionBatch->getProyectos() as $p ) {
 			 $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores);
 		}
     }
-    private function enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores){
-    //FIXME cachear y usar clonar()
-    	$correoCoordinador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO);
-
+    private function enviarInvitacionAProyecto($invitacion,$ccEscuela,$ccColaboradores){
+    	$p = $invitacion->getProyecto();
+		
     	$context=array(Plantilla::_INVITACION => $invitacion);
 		
 		if ($ccEscuela){
-			$correoEscuela = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_ESCUELA);
+			$correoEscuela = $this->correoEscuelaMaster->clonar(false);
 			$correoEscuela->setProyecto($p);	
 			$this->mailer->enviarCorreoAEscuela($correoEscuela, $context);
+			unset($correoEscuela);
 		}
 		if ($ccColaboradores){
-			$correoColaborador = $this->mailer->getCorreoFromPlantilla(Plantilla::INVITACION_A_EVENTO_A_COLABORADORES);
+			$correoColaborador = $this->correoColaboradoresMaster->clonar(false);
 			$correoColaborador->setProyecto($p);	
 			$this->mailer->enviarCorreoAColaboradores($correoColaborador, $context);
+			unset($correoColaborador);
 		}
-		
 		$context[Plantilla::_URL]=$this->mailer->resolveUrlParameter('abrir_invitacion', array('id'=>$invitacion->getId(), 'accion'=>'aceptar'));
+		$correoCoordinador = $this->correoCoordinadorMaster->clonar(false);
 		$correoCoordinador->setProyecto($p);
 		$this->mailer->enviarCorreoACoordinador($correoCoordinador, $context);
-			 	
+		unset($correoCoordinador);
+		
+		unset($p);
+		unset($invitacion);
+		unset($context);
     }
 
 	public function invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores){
@@ -88,8 +102,8 @@ class EventosManager
 				$em = $this->doctrine->getEntityManager();
 		        $em->persist($invitacion);
 		        $em->flush();
-				//FIXME si falla el envio de mail por na invitacion, cuando se reenvia?
-			 	$this->enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores);
+
+			 	$this->enviarInvitacionAProyecto($invitacion,$ccEscuela,$ccColaboradores);
 			 	
 		}else{
 				$this->logger->info("Ya exise una invitacion para el proyecto '".$p->getId()."' al evento '".$instancia->getTitulo()."', no se hace nada.");
@@ -97,15 +111,35 @@ class EventosManager
         return $invitacion;
 	}
 	
-	public function reinvitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores) { 
-		$invitacion = $this->getInvitacion($instancia, $p);
-		if (empty($invitacion)) { 
-			return false;
-		} else { 
-			$this->enviarInvitacionAProyecto($invitacion, $p,$ccEscuela,$ccColaboradores);
+	public function reinvitarProyectos($instancia,$ccEscuela,$ccColaboradores) {
+		
+	//	$memoInitZero = memory_get_usage();
+    //	echo "comenzamos con $memoInitZero <br>";
+    	
+		$invitaciones = $this->doctrine->getEntityManager()->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesPendientes($instancia);
+        
+    	set_time_limit(60+3*count($invitaciones));
+    	$i = 0;
+    //	$memoInit = memory_get_usage();
+    //	echo "el init se comio :".($memoInit - $memoInitZero);
+      	$em = $this->doctrine->getEntityManager();
+		$batchSize = 20;
+    	foreach ($invitaciones as $invitacion) {
+    //		$memo = memory_get_usage();
+    		$this->enviarInvitacionAProyecto($invitacion[0], $ccEscuela,$ccColaboradores);
+    		//$this->doctrine->getEntityManager()->clear();
+    		if (($i++ % $batchSize) == 0) {
+		        $em->flush();
+		        $em->clear(); // Detaches all objects from Doctrine!
+		    }
+  //  		echo "envio ".$i. ", termino con delta mem".(memory_get_usage() - $memo)."<br>";
+    		
 		}
-		return $invitacion;
+		
+//		echo "finalizo con ".(memory_get_usage() - $memoInit);
+		return $i;
 	}
+	
 	public function getReporteInvitaciones(InstanciaEvento $instancia){
 		
 		$res = $this->doctrine->getRepository('CpmJovenesBundle:Invitacion')->getCantidadesPorInstancia($instancia);
