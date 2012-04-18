@@ -193,10 +193,11 @@ abstract class BaseController extends Controller
      	list($form, $batch_filter, $entitiesQuery) = $this->getFilterForm($modelfilter);
     	if ($batch_filter->hasBatchAction()){
 			if ($batch_filter->isBatchActionTypeTodos()){
+				
 				$entities = $entitiesQuery->getResult();
+				
 			}else{
 				$entities = $batch_filter->getSelectedEntities();
-				
 				if (count($entities) == 0){
 					$this->setInfoMessage("No se seleccionó ningun elemento");
 				 	return $this->redirect($this->generateUrl($index_path));
@@ -225,8 +226,9 @@ abstract class BaseController extends Controller
 		$modelfilter_Form = $modelFilter->createForm();
  		$filterForm = new FilterForm($modelfilter_Form);
  		$filter = new Filter($modelFilter);
+ 		
  		$form = $this->get('form.factory')->create($filterForm, $filter);
-		
+ 		
 		$request = $this->getRequest();
 		
 		if ($request->query->get($form->getName())){
@@ -246,6 +248,9 @@ abstract class BaseController extends Controller
 	protected function getFilterResults($form, Filter $filter, $query ,$args= array ()){
 		
 		$paginator = $this->get('ideup.simple_paginator');
+		$filter->setPageSize($paginator->getItemsPerPage());
+		$filter->setPageNumber($paginator->getCurrentPage());
+		
 		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
 		
 		unset($form['selectedEntities']);

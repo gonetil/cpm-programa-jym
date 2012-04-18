@@ -31,5 +31,6 @@ class CorreoFilter extends Correo implements ModelFilter
 	public function setFechaMax($fechaMax){
 		$this->fechaMax=$fechaMax;
 	}
+
 	
 }

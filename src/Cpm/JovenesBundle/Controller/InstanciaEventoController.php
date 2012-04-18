@@ -260,7 +260,7 @@ class InstanciaEventoController extends BaseController
 		
 		
         $response = $this->render('CpmJovenesBundle:InstanciaEvento:export_excel.xls.twig',array('entity' => $entity));
-        $response->headers->set('Content-Type', 'application/msexcel');
+        $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
         $response->headers->set("Content-Disposition", 'Attachment;filename="'.$filename.'.xls"');
     	return $response; 
     	 
