@@ -130,9 +130,9 @@ $(document).ready(function() {
 
 {{ filter.batch_actions([ 
 	{action:'CpmJovenesBundle:Invitacion:invitarProyectosBatch', label: 'Enviar invitacion' },
+	 {action:'CpmJovenesBundle:Correo:showCorreoBatchForm', label: 'Enviar mensaje', confirm: true}, 
 	 
 ]) }}
-{# {action:'CpmJovenesBundle:Correo:writeToMany', label: 'Enviar mensaje', confirm: true}, #}
 {{ filter.form_end(form) }}
 
 {% endblock %}

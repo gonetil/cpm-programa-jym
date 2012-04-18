@@ -145,6 +145,7 @@ class Correo
     public function setDestinatario(\Cpm\JovenesBundle\Entity\Usuario $destinatario)
     {
         $this->destinatario = $destinatario;
+        $this->email = $destinatario->getEmail();
     }
 
     /**
@@ -165,7 +166,6 @@ class Correo
     public function setEmisor(\Cpm\JovenesBundle\Entity\Usuario $emisor)
     {
         $this->emisor = $emisor;
-        $this->email = $emisor->getEmail();
     }
 
     /**
@@ -207,15 +207,17 @@ class Correo
     }
     
  	
- 	public function clonar(){
+ 	public function clonar($full = true){
  		$copia = new Correo();
- 		$copia->fecha=$this->fecha;
-	    $copia->email=$this->email;
-	    $copia->asunto=$this->asunto;
+ 		$copia->asunto=$this->asunto;
 	    $copia->cuerpo=$this->cuerpo;
-	    $copia->destinatario=$this->destinatario;
 	    $copia->emisor=$this->emisor;
-		$copia->proyecto=$this->proyecto;
+		if ($full){
+		    $copia->fecha=$this->fecha;
+		    $copia->email=$this->email;
+		    $copia->destinatario=$this->destinatario;
+			$copia->proyecto=$this->proyecto;
+		}
 		return $copia;
 	 }
  

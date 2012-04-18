@@ -86,7 +86,8 @@ class PlantillaController extends BaseController
         $form->bindRequest($request);
 
         $mailer = $this->getMailer();
-        $template_is_correct = 	$mailer->isValidTemplate($entity->getCuerpo());
+        $mailer->validateTemplate($entity->getCuerpo());
+        //FIXME
         $entity->setCodigo($this->slug($entity->getAsunto()));
         if ($form->isValid() && ($template_is_correct == "success")) {
             $em = $this->getDoctrine()->getEntityManager();

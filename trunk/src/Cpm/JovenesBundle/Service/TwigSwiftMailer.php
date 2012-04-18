@@ -94,7 +94,6 @@ class TwigSwiftMailer implements MailerInterface
     		throw new \InvalidArgumentException("Debe especificar el proyecto");
     	
     	$correo->setDestinatario($proyecto->getCoordinador());
-		$correo->setEmail($proyecto->getCoordinador()->getEmail());
 		
 		return $this->enviarCorreo($correo,$context);
     }
@@ -122,13 +121,14 @@ class TwigSwiftMailer implements MailerInterface
     	if (empty($proyecto)) 
     		throw new \InvalidArgumentException("Debe especificar el proyecto");
     	
-	    $correos = array();
-    	foreach($proyecto->getColaboradores() as $c ){
-				$correo->setDestinatario($c); 
-				$correo->setEmail($c->getEmail());
-				$correos[]=$this->enviarCorreo($correo,$context);			
+	    $cant = 0;
+    	foreach($proyecto->getColaboradores() as $colab ){
+    			$c = $correo->clonar();
+				$c->setDestinatario($colab); 
+				$this->enviarCorreo($c,$context);
+				$cant++;			
 		}
-		return $correos;
+		return $cant;
     }
 
 	/**
@@ -136,13 +136,15 @@ class TwigSwiftMailer implements MailerInterface
 	 * @throws MailCannotBeSentException
 	 * @throws InvalidTemplateException
 	 */
-	public function enviarCorreo(Correo $correo, $context=array()){
+	public function enviarCorreo(Correo $correo, $context=array(), $dryrun=false){
 		$context[Plantilla::_USUARIO] = $correo->getDestinatario();
 		$context[Plantilla::_EMISOR] = $correo->getEmisor();
 		$context[Plantilla::_PROYECTO] = $correo->getProyecto();
 		$context[Plantilla::_FECHA] = new \DateTime();
 		$context[Plantilla::_URL_SITIO] = $this->parameters['url_sitio'];
-		
+		if ($dryrun)
+			$context['dry-run']=true;
+			
 		$email = $correo->getEmail();
 		if (empty($email) && !empty($context[Plantilla::_USUARIO]))
 			$email = $correo->getDestinatario()->getEmail();
@@ -187,10 +189,14 @@ class TwigSwiftMailer implements MailerInterface
         } else {
             $message->setBody($textBody);
         }
-
-		$sent= $this->mailer->send($message);
-		    
+		
+		$sent = $this->isDryRun($context) || $this->mailer->send($message);
+			    
         return array($message,$sent); 
+    }
+
+    private function isDryRun($context){
+    	return !empty($context['dry-run']);
     }
     
     private function guardarCorreo(\Swift_Message $message, $context){
@@ -214,7 +220,7 @@ class TwigSwiftMailer implements MailerInterface
 		$correo->setCuerpo($message->getBody());
 		$em=$this->doctrine->getEntityManager();
 		$em->persist($correo);
-		if  ( (empty($context[Plantilla::_USUARIO])) || ($context[Plantilla::_USUARIO]->getId() != 0))
+		if  (!$this->isDryRun($context) && (empty($context[Plantilla::_USUARIO]) || ($context[Plantilla::_USUARIO]->getId() != 0)))
 			$em->flush();
 		return $correo;
     } 
@@ -222,21 +228,19 @@ class TwigSwiftMailer implements MailerInterface
     /**
     * @param string $template : un string con tags twig dentro
     * returns boolean
-    */
-    public function isValidTemplate($twig_template)
+    public function validateTemplate($twig_template)
     {
     	$twig = $this->twig;
     	try {
     		$token_stream = $twig->tokenize($twig_template);
     		$twig->parse($token_stream);
-    	} catch (\Twig_Error_Syntax $e) {
-    		return $e->getMessage();
-    	} catch(\Twig_Error $e){
-    		return $e->getMessage();
-    	}
-    	
-    	return "success";
+    	}catch(\Twig_Error_Syntax $e){
+			throw new InvalidTemplateException("Template Invalido",0,$e);
+		}catch(\Twig_Error $e){
+			throw new InvalidTemplateException("Error con el template ",0,$e);
+		}
     }
+    */
     
     
     public function renderTemplate($twig_template,$context) {

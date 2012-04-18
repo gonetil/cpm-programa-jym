@@ -116,9 +116,8 @@ class InstanciaEventoController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
+        $entity = $this->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find InstanciaEvento entity.');
@@ -226,9 +225,8 @@ class InstanciaEventoController extends BaseController
     	
     		$evento_id = $this->get('request')->query->get('evento_id');
     		 
-    		$em = $this->getDoctrine()->getEntityManager();
     		if ($evento_id > 0)
-    			$instancias = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findByEvento($evento_id);
+    			$instancias = $this->getRepository('CpmJovenesBundle:InstanciaEvento')->findByEvento($evento_id);
     	
     		$json = array();
     		foreach ($instancias as $instancia) {
@@ -272,29 +270,26 @@ class InstanciaEventoController extends BaseController
     
     public function reinvitarInstancia($id) {
     	
-    	$em = $this->getDoctrine()->getEntityManager();
-        $entity = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
-
-        if (!$entity) {
+		$instanciaEvento = $this->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
+        if (!$instanciaEvento) 
             throw $this->createNotFoundException('No se encontró la Instancia de Evento');
-        }
-        
+
         $form = $this->createReinvitarForm($id);
         $form->bindRequest($this->getRequest(),$form);
         
-        if ($form->isValid()) {
+        if ($instanciaEvento->estaFinalizado()){
+        	$this->setErrorMessage("No se pueden reenviar las invitaciones porque la instancia del evento ya finalizo");
+        }elseif ($form->isValid()) {
         	$ccColaboradores = $form['ccColaboradores']->getData();
         	$ccEscuela= $form['ccEscuela']->getData();
-        	$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesPendientes($entity);
         	$eventosManager = $this->getEventosManager();
-        	foreach ($invitaciones as $invitacion) {
-        		$eventosManager->reinvitarProyecto($entity, $invitacion->getProyecto(),$ccEscuela,$ccColaboradores);
-        	}
-        	$this->setSuccessMessage("Se reenviaron ".count($invitaciones)." pendientes invitaciones");
         	
-        }        
+        	$numInvitacionesEnviadas = $eventosManager->reinvitarProyectos($instanciaEvento,$ccEscuela,$ccColaboradores);
+        	$this->setSuccessMessage("Se reenviaron $numInvitacionesEnviadas invitaciones que estaban pendientes ");
+        } else {
+        	$this->setErrorMessage("No se pueden reenviar las invitaciones, el form no es válido");
+        }       
         
-		
     	return $this->redirect($this->generateUrl('instancia_show', array('id' => $id)));
     }
     

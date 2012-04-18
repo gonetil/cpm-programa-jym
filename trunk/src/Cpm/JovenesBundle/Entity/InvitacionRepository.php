@@ -54,7 +54,7 @@ class InvitacionRepository extends EntityRepository
 				->andWhere('i.instanciaEvento = :instancia')->setParameter('instancia',$instancia)
 				->andWhere('i.aceptoInvitacion is NULL');
 	
-			return $qb->getQuery()->getResult(); 
+			return $qb->getQuery()->iterate();//->getResult(); 
 				
 	}
 	

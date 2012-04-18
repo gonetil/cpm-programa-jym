@@ -337,6 +337,10 @@ class InstanciaEvento
     public function fue(){
     	return $this->fechaInicio < new \DateTime();
     } 
+
+    public function estaFinalizado(){
+    	return $this->fechaFin < new \DateTime();
+    } 
     
     public function estaAbiertaInscripcion(){
     	$now =new \DateTime();
@@ -347,13 +351,6 @@ class InstanciaEvento
     		return false;
     	else
     		return true;
-    } 
-    
-    public function getCantidadesPorAceptacion(){
-    	
-  		return ;  	
-    } 
+    }
  
- 
-    
 }

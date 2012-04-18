@@ -45,13 +45,15 @@ class CorreoController extends BaseController
 		$emisor = $this->getLoggedInUser();
 		$mailer = $this->getMailer();
 		$enviados = 0;
+		set_time_limit(60+3*count($entities));
+		
 		try{
 			foreach ( $entities as $correoViejo) {
 	       		$correo = $correoViejo->clonar();
 				$correo->setEmisor($emisor);
 				$correoEnviado = $mailer->enviarCorreo($correo);
 				$enviados++;
-				echo "reenvio a ".$correoViejo->getEmail();
+//				echo "reenvio a ".$correoViejo->getEmail();
 			}
 		}catch(InvalidTemplateException $e){
 			$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
@@ -200,22 +202,19 @@ class CorreoController extends BaseController
 	/**
 	 * 
 	 * Permite enviar un correo a un conjunto de destinatarios seleccionados
-	 * @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
+	 * @Template("CpmJovenesBundle:Correo:show_correo_batch_form.html.twig")
 	 */
-	public function writeToManyAction($proyectos_query) {
+	public function showCorreoBatchFormAction($entitiesQuery) {
 
 		$correoBatch = new CorreoBatch();
-
-		$proyectos = new \ Doctrine \ Common \ Collections \ ArrayCollection($proyectos_query->getResult());
-
-		$correoBatch->setProyectos($proyectos);
+		
+		$proyectos = $entitiesQuery->getResult();
+		$correoBatch->setProyectos(new \ Doctrine \ Common \ Collections \ ArrayCollection($proyectos));
 
 		$correoBatchForm = $this->createForm(new CorreoBatchType(), $correoBatch);
 		return array (
 			'form' => $correoBatchForm->createView(),
-			'proyectos' => $proyectos_query->getResult(),
-
-			
+			'proyectos' => $proyectos,
 		);
 
 	}
@@ -224,116 +223,86 @@ class CorreoController extends BaseController
 	/**
 	*
 	* Envia un correo masivo
-	* @Route("/send_mass_email", name="correo_send_mass_email")
-	* @Template("CpmJovenesBundle:Correo:write_to_many.html.twig")
+	* @Route("/correo_batch_submit", name="correo_batch_submit")
+	* @Template("CpmJovenesBundle:Correo:show_correo_batch_form.html.twig")
 	*/
-	public function sendMassEmailAction() {
+	public function correoBatchSubmitAction() {
 		$request = $this->getRequest();
 		$correoBatch = new CorreoBatch();
 
 		$correoBatchForm = $this->createForm(new CorreoBatchType(), $correoBatch);
 		$correoBatchForm->bindRequest($request);
 		$proyectos = $correoBatch->getProyectos();
+		$mailer = $this->getMailer();
 
 		if ($correoBatchForm->isValid() && count($proyectos)) {
 			
-			$repository = $this->getEntityManager()->getRepository('CpmJovenesBundle:Proyecto');
-			
-			$mailer = $this->getMailer();
-			$valid = $mailer->isValidTemplate($correoBatch->getCuerpo());
-
-			if ($valid != "success") {
+			//	$valid = $mailer->validateTemplate($correoBatch->getCuerpo());
 				
-				$this->setErrorMessage('La plantilla no es valida: ' .$valid);					
-				return new Response(
-							$this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
-							array('form' => $correoBatchForm->createView(),
-								  "proyectos" => $correoBatch->getProyectos()
-				)));
-			}
+			$correoMaestro = new Correo();
+			$correoMaestro->setAsunto($correoBatch->getAsunto());
+			$correoMaestro->setCuerpo($correoBatch->getCuerpo());
+			$correoMaestro->setEmisor($this->getLoggedInUser());
 				
-				$example = $proyectos[0];
-				$context = array (
-					Plantilla :: _USUARIO => $example->getCoordinador(),
-					Plantilla :: _PROYECTO => $example,
-					Plantilla :: _URL => '?',
-					Plantilla :: _URL_SITIO => $mailer->getParameter('url_sitio'),
-					Plantilla :: _FECHA => new \ DateTime()
-				);
-				//FIXME, estas cosas con las variables del context lo deebria hacer el mailer
+			if ($correoBatch->getPreview()) //aun no deben mandarse los emails, sino que hay que previsualizarlos 
+			{
+				$exampleCorreo = $correoMaestro->clonar();
+				$exampleCorreo->setDestinatario($proyectos[0]->getCoordinador());
+				$exampleCorreo->setProyecto($proyectos[0]);
 				try {
-					$template = $mailer->renderTemplate($correoBatch->getCuerpo(), $context);
-					$cuerpo = $template;
-				}
-				 catch(InvalidTemplateException $e){
+					$exampleCorreo= $mailer->enviarCorreo($exampleCorreo, array(), true);
+					$correoBatch->setPreviewText($exampleCorreo->getCuerpo()); 
+					$correoBatch->setPreview(false);
+					$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
+				}catch(InvalidTemplateException $e){
 						$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
-						return new Response(
-											$this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig",
-															array('form' => $correoBatchForm->createView(), 
-																  "proyectos" => $correoBatch->getProyectos()
-											)));
 				}
 				
-				if ($correoBatch->getPreview()) //aun no deben mandarse los emails, sino que hay que previsualizarlos 
-				{
-					$correoBatch->setPreview(false); //para la prox
-					$correoBatchForm = $this->createForm(new CorreoBatchType(), $correoBatch);
-					$content = $this->renderView("CpmJovenesBundle:Correo:write_to_many.html.twig", array (
-						'form' => $correoBatchForm->createView(),
-						'proyectos' => $proyectos,
-						'show_preview' => true,
-						'asunto' => $correoBatch->getAsunto(),
-						'cuerpo' => $cuerpo
-					));
-					$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
-					return new Response($content);
-				}
+			}else{
+				//LO mando
 
-				$correo = new Correo();
-				$correo->setAsunto($correoBatch->getAsunto());
-				$correo->setCuerpo($correoBatch->getCuerpo());
-				$correo->setEmisor($this->getLoggedInUser());
+					
 				$cant = 0;
+				set_time_limit(60+3*count($proyectos));
 				try{
 					foreach ($proyectos as $proyecto) {
-	
+						$correo=$correoMaestro->clonar();
 						$correo->setProyecto($proyecto);
 						if ($correoBatch->getCcColaboradores()) {
-							$enviados = $mailer->enviarCorreoAColaboradores($correo);
-							$cant += count($enviados);
+								$enviados = $mailer->enviarCorreoAColaboradores($correo);
+								$cant += count($enviados);
 						}
-	
+		
 						if ($correoBatch->getCcEscuelas()) {
-							$mailer->enviarCorreoAEscuela($correo);
-							$cant++;
+								$mailer->enviarCorreoAEscuela($correo);
+								$cant++;
 						}
-	
+		
 						if ($ccCoordinadores = $correoBatch->getCcCoordinadores()) {
-							$mailer->enviarCorreoACoordinador($correo);
-							$cant++;
+								$mailer->enviarCorreoACoordinador($correo);
+								$cant++;
 						}
 					}
 					$this->setSuccessMessage("Se enviaron $cant correos satisfactoriamente");
 					return $this->redirect($this->generateUrl('proyecto'));
 				}catch(InvalidTemplateException $e){
-					$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+						$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
 				}catch(MailCannotBeSentException $e){
-					$this->setErrorMessage("Se produjo un error al tratar de enviar los correos. Espere unos minutos e intente nuevamente. Si el problema persiste, contáctese con los administradores.".($cant?"Sin embargo, se enviaron $cant correos satisfactoriamente":""));
+						$this->setErrorMessage("Se produjo un error al tratar de enviar los correos. Espere unos minutos e intente nuevamente. Si el problema persiste, contáctese con los administradores.".($cant?"Sin embargo, se enviaron $cant correos satisfactoriamente":""));
 				}	
-			
+				
+			}
 				  	
-			} // form->isValid
+		} // form->isValid
 
-			return array (
+$correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
+		return array (
 				'form' => $correoBatchForm->createView(),
 				'proyectos' => $correoBatch->getProyectos()
-			);
-		}
+		);
+	}
 		
 		
-		function fetchCorreoAction() { 
-			
-		}
 		
 		
 		
