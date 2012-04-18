@@ -200,6 +200,9 @@ abstract class BaseController extends Controller
 				$entities = $batch_filter->getSelectedEntities();
 				if (count($entities) == 0){
 					$this->setInfoMessage("No se seleccionó ningun elemento");
+					//FIXME aca deberia hacerse un forward seguro para no perder el filter
+//				 	return $this->forward("CpmJovenesBundle:Correo:index");
+
 				 	return $this->redirect($this->generateUrl($index_path));
 				}
 				
@@ -232,9 +235,22 @@ abstract class BaseController extends Controller
 		
 		if ($request->query->get($form->getName())){
 			$form->bindRequest($request);
-			//var_dump(count($filter->getSelectedEntities()));
-			//exit;
+			$queryForm = $request->query->get($form->getName());
+			
+			if (!empty($queryForm['selectedEntities'])){
+							$selectedEntities = $this->getRepository($modelFilter->getTargetEntity())
+				 	->createQueryBuilder('e')
+				 	->andWhere('e.id in (:entities)')->setParameter('entities',array_values($queryForm['selectedEntities']))
+				 	->getQuery()->getResult();
+//				var_dump($queryForm['selectedEntities']);exit;
+				 	
+				$filter->setSelectedEntities($selectedEntities);
+			}
+			unset($queryForm['selectedEntities'] );
+			
 		}
+		
+		unset($form['selectedEntities']);
 		
 //		$modelFilter = $filter->getModelFilter();
         $qb = $this->getRepository($modelFilter->getTargetEntity())->filterQuery($modelFilter);
@@ -252,7 +268,6 @@ abstract class BaseController extends Controller
 		
 		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
 		
-		unset($form['selectedEntities']);
 
 		$args['filter'] = $filter;
 		$args['form'] = $form->createView();
