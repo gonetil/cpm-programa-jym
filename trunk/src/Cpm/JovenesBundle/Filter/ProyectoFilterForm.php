@@ -11,21 +11,21 @@ class ProyectoFilterForm extends ModelFilterForm
     {
         $builder
             ->add('esPrimeraVezDocente', 'choice' ,array('label' => '¿primera vez del docente?',
-            											'choices' => array(1=>"si",0=>"no"),
+            											'choices' => array(1=>"si",2=>"no"),
             											'preferred_choices' => array("Todos"),
         												'empty_value' => "Todos",
         												'expanded'=>false,
         												'required'=>false
             										))
             ->add('esPrimeraVezEscuela', 'choice' ,array('label' => '¿primera vez de la escuela?', 
-            											'choices' => array(1=>"si",0=>"no"),
+            											'choices' => array(1=>"si",2=>"no"),
             											'preferred_choices' => array("Todos"),
         												'empty_value' => "Todos",
         												'expanded'=>false,
         												'required'=>false
         											))
             ->add('esPrimeraVezAlumnos', 'choice' ,array('label' => '¿primera vez de los alumnos?' , 
-            											'choices' => array(1=>"si",0=>"no"),
+            											'choices' => array(1=>"si",2=>"no"),
             											'preferred_choices' => array("Todos"),
         												'empty_value' => "Todos",
         												'expanded'=>false,

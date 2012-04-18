@@ -31,7 +31,7 @@
 
  <div class="checklist" style="float:right">
 	 <strong> Escuelas </strong>
-	 <select name="cpm_jovenesbundle_invitacionbatchtype[proyectos][]" id="cpm_jovenesbundle_invitacionbatchtype_proyectos" multiple="yes">
+	 <select name="cpm_jovenesbundle_invitacionbatchtype[proyectos][]" id="cpm_jovenesbundle_invitacionbatchtype_proyectos" multiple="yes" size="20">
 		{% for p in proyectos %}
 			<option value="{{p.id}}" selected> {{p}} </option>
 		{% endfor %} 

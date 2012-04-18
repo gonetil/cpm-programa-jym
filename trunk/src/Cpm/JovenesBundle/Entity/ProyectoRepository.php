@@ -38,16 +38,21 @@ class ProyectoRepository extends EntityRepository {
 			//FIXME conseguir el ciclo
 			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
 		}
-
-		if ($data->getEsPrimeraVezDocente())
-			$qb->andWhere('p.esPrimeraVezDocente = :pvd')->setParameter('pvd', $data->getEsPrimeraVezDocente());
-
-		if ($data->getEsPrimeraVezAlumnos())
-			$qb->andWhere('p.esPrimeraVezAlumnos = :pva')->setParameter('pva', $data->getEsPrimeraVezAlumnos());
-
-		if ($data->getEsPrimeraVezEscuela())
-			$qb->andWhere('p.esPrimeraVezEscuela = :pve')->setParameter('pve', $data->getEsPrimeraVezEscuela());
-
+		
+		if ($data->getEsPrimeraVezDocente()) {
+			$pv = ($data->getEsPrimeraVezDocente() != 1)?0 : 1;
+			$qb->andWhere('p.esPrimeraVezDocente = :pvd')->setParameter('pvd', $pv);
+		}
+		if ($data->getEsPrimeraVezAlumnos()) {
+			$pv = ($data->getEsPrimeraVezAlumnos() != 1)?0 : 1;
+			$qb->andWhere('p.esPrimeraVezAlumnos = :pva')->setParameter('pva', $pv);
+		}
+		
+		if ($data->getEsPrimeraVezEscuela()) {
+			$pv = ($data->getEsPrimeraVezEscuela() != 1)?0 : 1;
+			$qb->andWhere('p.esPrimeraVezEscuela = :pve')->setParameter('pve', $pv);
+		}
+		
 		if ($data->getProduccionFinal())
 			$qb->andWhere('p.produccionFinal = :pf')->setParameter('pf', $data->getProduccionFinal());
 
