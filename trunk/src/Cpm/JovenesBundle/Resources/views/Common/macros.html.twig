@@ -9,9 +9,9 @@
 
 {% macro nombreEscuela(escuela) %}
 	({% if escuela.tipoInstitucion.id is defined %}
-		{{ escuela.tipoInstitucion }}:  	
+		{{ escuela.tipoInstitucion }}  	
 	{% else %}
-		{{ escuela.otroTipoInstitucion }}:
+		{{ escuela.otroTipoInstitucion }}
 	{% endif %})		
 		{{ escuela.tipoEscuela }}
 	   	{% if escuela.numero %}
