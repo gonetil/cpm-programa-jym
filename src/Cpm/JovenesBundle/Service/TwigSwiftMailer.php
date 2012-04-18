@@ -229,7 +229,7 @@ class TwigSwiftMailer implements MailerInterface
     * @param string $template : un string con tags twig dentro
     * returns boolean
     */
-    public function isValidateTemplate($twig_template)
+    public function isValidTemplate($twig_template)
     {
     	$twig = $this->twig;
     	try {
