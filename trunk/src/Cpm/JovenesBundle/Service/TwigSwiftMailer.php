@@ -228,6 +228,7 @@ class TwigSwiftMailer implements MailerInterface
     /**
     * @param string $template : un string con tags twig dentro
     * returns boolean
+    */
     public function validateTemplate($twig_template)
     {
     	$twig = $this->twig;
@@ -240,7 +241,7 @@ class TwigSwiftMailer implements MailerInterface
 			throw new InvalidTemplateException("Error con el template ",0,$e);
 		}
     }
-    */
+    
     
     
     public function renderTemplate($twig_template,$context) {
