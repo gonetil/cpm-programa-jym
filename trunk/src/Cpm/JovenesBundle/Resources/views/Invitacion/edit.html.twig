@@ -5,7 +5,11 @@
 {% block content %}
 
 <form action="{{ path('invitaciones_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-    {{ form_widget(edit_form) }}
+    <strong> Advertencia: el cambio de instancia de evento no envía nuevamente la invitación al docente</strong> 
+    {{ form_row(edit_form.instanciaEvento) }}
+    {{ form_row(edit_form.proyecto) }}
+    
+    {{ form_rest(edit_form) }}
     <p>
         <button type="submit">Modificar</button>
     </p>
