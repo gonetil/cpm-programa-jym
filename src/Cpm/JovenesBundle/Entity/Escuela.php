@@ -381,7 +381,7 @@ class Escuela
      *
      * @param Cpm\JovenesBundle\Entity\Distrito $distrito
      */
-    public function setDistrito(\Cpm\JovenesBundle\Entity\Distrito $distrito)
+    public function setDistrito($distrito)
     {
         $this->distrito = $distrito;
     }
@@ -393,10 +393,8 @@ class Escuela
      */
     public function getDistrito()
     {
-    	if ($this->localidad) {
-    		return $this->localidad->getDistrito();
-    	}
-        return null;
+    	return $this->distrito;
+
     }
 
     /**
