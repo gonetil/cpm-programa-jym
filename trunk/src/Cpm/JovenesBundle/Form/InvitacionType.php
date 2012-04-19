@@ -15,7 +15,7 @@ class InvitacionType extends InvitacionUsuarioType
             //->add('fechaCreacion',null,array('label' => 'Fecha de Creación'))
             ->add('asistio',null,array('label' => '¿Asistió?', 'required'=>false))
             ->add('proyecto',null,array('label' => 'Proyecto', 'read_only' =>true))
-            ->add('instanciaEvento',null,array('label' => 'Instancia de evento', 'read_only' =>true))
+            ->add('instanciaEvento',null,array('label' => 'Instancia de evento'))
         ;
     }
 
