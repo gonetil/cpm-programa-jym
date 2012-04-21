@@ -13,6 +13,8 @@ use Cpm\JovenesBundle\Filter\InvitacionFilter;
  */
 class InvitacionRepository extends EntityRepository
 {
+		static $sort_criteria = array("id" => "c.id" , "Fecha envio" => "c.fechaCreacion");
+	
 	public function findAllQuery() {
 		$qb = $this->getEntityManager()->createQueryBuilder()
 		->add('select','i')
@@ -79,8 +81,13 @@ class InvitacionRepository extends EntityRepository
 	}
 
 	
-	public function filterQuery(InvitacionFilter $filter) {
-		$qb = $this->createQueryBuilder('c')->orderBy('c.fechaCreacion', 'DESC');
+	public function filterQuery(InvitacionFilter $filter, $sort_field = null, $sort_order) {
+		$qb = $this->createQueryBuilder('c');
+		if ($sort_field) {
+			$field = (isset(InvitacionRepository::$sort_criteria[$sort_field]))?InvitacionRepository::$sort_criteria[$sort_field]:InvitacionRepository::$sort_criteria['id'];
+			$qb->orderBy($field,$sort_order);
+		}
+		
 		if ($filter->getFechaMin())
 			$qb->andWhere('c.fechaCreacion > :fechaMin')->setParameter('fechaMin',$filter->getFechaMin());
 		if ($filter->getFechaMax())
