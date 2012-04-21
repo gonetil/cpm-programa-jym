@@ -25,7 +25,7 @@ class Filter
 	public function setModelFilter($modelFilter){
 		$this->modelFilter=$modelFilter;	
 	}	
-	
+					
 	public function getSortField(){
 		return $this->sortField;	
 	}

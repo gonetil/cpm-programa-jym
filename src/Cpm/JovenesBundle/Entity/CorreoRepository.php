@@ -13,6 +13,8 @@ use Cpm\JovenesBundle\Filter\CorreoFilter;
  */
 class CorreoRepository extends EntityRepository
 {
+	static $sort_criteria = array("id" => "c.id" , "Fecha envio" => "c.fecha");
+	
 	public function findAllQuery($user_id = null) {
 		$qb = $this->getEntityManager()->createQueryBuilder()
 		->add('select','c')
@@ -26,8 +28,13 @@ class CorreoRepository extends EntityRepository
 		return  $qb->getQuery();
 	}
 	
-	public function filterQuery(CorreoFilter $filter) {
+	public function filterQuery(CorreoFilter $filter,$sort_field = null, $sort_order) {
 		$qb = $this->createQueryBuilder('c')->orderBy('c.fecha', 'DESC');
+		if ($sort_field) {
+			$field = (isset(CorreoRepository::$sort_criteria[$sort_field]))?CorreoRepository::$sort_criteria[$sort_field]:CorreoRepository::$sort_criteria['id'];
+			$qb->orderBy($field,$sort_order);
+		}
+		
 	 	if ($filter->getFecha())
 			$qb->andWhere('DATE(c.fecha) = :fecha')->setParameter('fecha',$filter->getFecha());
 		if ($filter->getFechaMin())

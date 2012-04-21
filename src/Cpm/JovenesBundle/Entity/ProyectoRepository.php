@@ -11,7 +11,9 @@ use Doctrine \ ORM \ EntityRepository;
  * repository methods below.
  */
 class ProyectoRepository extends EntityRepository {
-
+	
+	static $sort_criteria = array("id" => "p.id" , "coordinador" => "coordinador.apellido", "titulo" => "p.titulo");
+	
 	function findAllQuery($ciclo = null) {
 		$qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -23,21 +25,25 @@ class ProyectoRepository extends EntityRepository {
 
 	}
 
-	public function filterQuery(ProyectoFilter $data, $ciclo = null) {
-
+	public function filterQuery(ProyectoFilter $data, $sort_field = null, $sort_order) {
+		
 		/*if ($filter->getFecha())
 			$qb->andWhere('DATE(c.fecha) = :fecha')->setParameter('fecha',$filter->getFecha());
 		if ($filter->getEmail())
 			$qb->andWhere('c.email LIKE :email')->setParameter('email','%'.$filter->getEmail().'%');*/
 		$qb = $this->createQueryBuilder('p')->innerJoin("p.coordinador", "coordinador");
 
-		//FIXME setear el orden
-		$qb->add('orderBy', "p.id ASC");
+		if ($sort_field) {
+			$field = (isset(ProyectoRepository::$sort_criteria[$sort_field]))?ProyectoRepository::$sort_criteria[$sort_field]:ProyectoRepository::$sort_criteria['id'];
+			$qb->orderBy($field,$sort_order);
+		}
+		
+		
 
-		if ($ciclo) {
+	/*	if ($ciclo) {
 			//FIXME conseguir el ciclo
 			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
-		}
+		}*/
 		
 		if ($data->getEsPrimeraVezDocente()) {
 			$pv = ($data->getEsPrimeraVezDocente() != 1)?0 : 1;

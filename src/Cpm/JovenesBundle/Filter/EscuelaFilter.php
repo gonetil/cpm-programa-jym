@@ -14,9 +14,14 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 		return new EscuelaFilterForm($this, '_escuela');
 	}
 
+	public function getSortFields() {
+		return array("e.id" => "Id","e.nombre" => "Nombre","e.numero"  => "Numero");
+	}
+	
 	public function getTargetEntity() {
 		return 'CpmJovenesBundle:Escuela';
 	}
+	
 	public function getRegionDesde() {
 		return $this->regionDesde;
 	}
@@ -65,5 +70,6 @@ class EscuelaFilter extends Escuela implements ModelFilter {
     {
         return $this->region;
     }
+
 
 }

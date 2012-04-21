@@ -191,6 +191,8 @@ abstract class BaseController extends Controller
     public function filterAction(ModelFilter $modelfilter, $index_path, $extra_args=array())
     {
      	list($form, $batch_filter, $entitiesQuery) = $this->getFilterForm($modelfilter);
+     	
+     	
     	if ($batch_filter->hasBatchAction()){
 			if ($batch_filter->isBatchActionTypeTodos()){
 				
@@ -252,8 +254,9 @@ abstract class BaseController extends Controller
 		
 		unset($form['selectedEntities']);
 		
+		
 //		$modelFilter = $filter->getModelFilter();
-        $qb = $this->getRepository($modelFilter->getTargetEntity())->filterQuery($modelFilter);
+        $qb = $this->getRepository($modelFilter->getTargetEntity())->filterQuery($modelFilter, $filter->getSortField(), $filter->getSortOrder() );
 		$query = $qb->getQuery();
 		
 		return array($form, $filter, $query);

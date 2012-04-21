@@ -3,6 +3,10 @@
 {% endmacro %}
 
 {% macro form_buttons(form) %}
+	<div class="filter_order">
+			{{ form_row(form.sortField) }}
+			{{ form_widget(form.sortOrder) }}
+	</div>
 	<p>
         <button type="submit">Filtrar</button>
         <button  type="submit" onclick="clear_form_elements($('#filter-form'));">Reiniciar Filtro</button>
@@ -13,7 +17,12 @@
 	{{_self.form_head(form) }}
 	<div class="filter-form-box">
     <h3>Filtrar</h3>
-    {{ form_widget(form) }}
+    {% for f in form %}
+	    {% if  not ( ( f.vars.full_name == 'cpm_jovenesbundle_filter[sortField]') or ( f.vars.full_name == 'cpm_jovenesbundle_filter[sortOrder]' )) %}
+	    	{{ form_row(f) }}  
+	    {% endif %}
+    
+    {% endfor %}
     {{_self.form_buttons(form) }}
 	 
     </div>

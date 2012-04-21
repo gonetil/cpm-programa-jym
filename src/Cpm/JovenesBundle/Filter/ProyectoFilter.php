@@ -16,7 +16,11 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 	public function getTargetEntity() {
 		return 'CpmJovenesBundle:Proyecto';
 	}
-
+	
+	public function getSortFields() {
+		return array("id" => "Id","titulo" => "Titulo","coordinador"  => "Apellido Coordinador");
+	}
+	
 	public function getEscuelaFilter() {
 		if (!$this->escuelaFilter)
 			$this->escuelaFilter=new EscuelaFilter();
