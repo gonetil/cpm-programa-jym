@@ -40,18 +40,21 @@ class InstanciaEventoController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
+        $entity = $this->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find InstanciaEvento entity.');
         }
 
+//		$init = memory_get_usage();
+        $invitaciones = $this->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesDTO(array('instancia'=> $id));
+        //die("levanto".count($invitaciones )."y uso ".( memory_get_usage() - $init)."bytes".count($invitaciones[0]));
+		
         $deleteForm = $this->createDeleteForm($id);
 		$reinvitarForm = $this->createReinvitarForm($id);
         return array(
             'entity'      => $entity,
+            'invitaciones'      => $invitaciones,
             'delete_form' => $deleteForm->createView(),
         	'reinvitar_form' =>  $reinvitarForm->createView()
               );

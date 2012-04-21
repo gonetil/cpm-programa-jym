@@ -142,7 +142,7 @@ class Proyecto
     private $archivo;
     
 	/**
-     * @ORM\OneToMany(targetEntity="Invitacion", mappedBy="proyecto")
+     * @ORM\OneToMany(targetEntity="Invitacion", mappedBy="proyecto", cascade={"persist", "remove"})
      **/
     private $invitaciones;
     

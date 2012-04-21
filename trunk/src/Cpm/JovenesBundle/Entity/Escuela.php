@@ -111,16 +111,6 @@ class Escuela
     */
     private $localidad;
     
-    /**
-     * Este campo no se guarda en la DB, pero se pone aquí para que viaje con el formulario
-     *
-     */
-    private $distrito;
-    /**
-     * Este campo no se guarda en la DB, pero se pone aquí para que viaje con el formulario
-     *
-     */
-    private $region;
     
      /**
      * Get id
@@ -380,11 +370,10 @@ class Escuela
      * Set distrito
      *
      * @param Cpm\JovenesBundle\Entity\Distrito $distrito
-     */
+   */
     public function setDistrito($distrito)
     {
-        $this->distrito = $distrito;
-    }
+    }  
 
     /**
      * Get distrito
@@ -393,7 +382,7 @@ class Escuela
      */
     public function getDistrito()
     {
-    	return $this->distrito;
+    	return $this->localidad->getDistrito();
 
     }
 
@@ -401,12 +390,11 @@ class Escuela
      * Set region
      *
      * @param Cpm\JovenesBundle\Entity\RegionEducativa $region
-     */
-    public function setRegion(\Cpm\JovenesBundle\Entity\RegionEducativa $region)
+  */  
+    public function setRegion($region)
     {
-        $this->region = $region;
     }
-
+ 
     /**
      * Get region
      *
@@ -414,7 +402,7 @@ class Escuela
      */
     public function getRegion()
     {
-        return $this->region;
+        return $this->getDistrito()->getRegion();
     }
     
     public function __toString() { 

@@ -8,13 +8,13 @@ class CorreoFilterForm extends ModelFilterForm {
 		
 	public function buildForm(FormBuilder $builder, array $options) {
 		$builder->add('fechaMin', 'date', array (
-			'label' => 'Fecha Min',
+			'label' => 'Fecha Desde',
 			'widget' => 'single_text',
 			'required' => false,
 			'attr' => array ('class' => 'datepicker'),
 			'format' => \AppKernel::DATE_FORMAT,
 		))->add('fechaMax', 'date', array (
-			'label' => 'Fecha Max',
+			'label' => 'Fecha Hasta',
 			'widget' => 'single_text',
 			'required' => false,
 			'attr' => array ('class' => 'datepicker'),
