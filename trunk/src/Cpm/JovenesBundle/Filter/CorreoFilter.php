@@ -15,6 +15,10 @@ class CorreoFilter extends Correo implements ModelFilter
 	public function getTargetEntity(){
 		return 'CpmJovenesBundle:Correo';
 	}
+
+	public function getSortFields() {
+		return array("c.id" => "Id","c.fecha" => "Fecha envio");
+	}
 	
 	public function getFechaMin(){
 		return $this->fechaMin;	
