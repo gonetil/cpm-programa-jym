@@ -7,7 +7,9 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 
 	public $regionDesde;
 	public $regionHasta;
-
+	public $distrito;
+	public $region;
+	
 	public function createForm() {
 		return new EscuelaFilterForm($this, '_escuela');
 	}
@@ -22,5 +24,46 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 	public function getRegionHasta() {
 		return $this->regionHasta;
 	}
+	
+	   /**
+     * Set distrito
+     *
+     * @param Cpm\JovenesBundle\Entity\Distrito $distrito
+     */
+    public function setDistrito($distrito)
+    {
+        $this->distrito = $distrito;
+    }  
+
+    /**
+     * Get distrito
+     *
+     * @return Cpm\JovenesBundle\Entity\Distrito 
+     */
+    public function getDistrito()
+    {
+    	return $this->distrito;
+
+    }
+
+    /**
+     * Set region
+     *
+     * @param Cpm\JovenesBundle\Entity\RegionEducativa $region
+    */
+    public function setRegion($region)
+    {
+    	$this->region=$region;
+    }
+ 
+    /**
+     * Get region
+     *
+     * @return Cpm\JovenesBundle\Entity\RegionEducativa 
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
 
 }

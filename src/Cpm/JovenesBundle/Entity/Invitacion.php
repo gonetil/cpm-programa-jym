@@ -328,5 +328,10 @@ class Invitacion
     public function estaVigente(){
     	return $this->instanciaEvento->estaAbiertaInscripcion();
     }
+ 
+    public function __toString()
+    {
+    	return "{$this->id}: proyecto ".$this->proyecto->getId()." / Instancia: ". $this->instanciaEvento->getTitulo();
+    }
     
 }

@@ -31,7 +31,7 @@
 	{% endfor %}
 	
 	{# incluyo el formulario de seleccion de distrito y localidad  #}  
-      {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
+    {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
 	
 		
 	</div>		
@@ -52,14 +52,13 @@
     </li>
     <li>
         <form action="{{ path('proyecto_delete', { 'id': entity.id }) }}" method="post"
-            onsubmit="return confirm('¿Está seguro que desea eliminar el proyecto?');">
+            onsubmit="return confirm('¿Está seguro que desea eliminar el proyecto? ESTA OPERACION NO SE PUEDE DESHACER!');">
             {{ form_widget(delete_form) }}
             <button type="submit">Eliminar</button>
         </form>
         
-        <div id="dialog" title="Se requiere confirmación">
-  			¿está seguro que desea quitar el colaborador del proyecto? Esta operación no puede deshacerse 
-		</div>
     </li>
+    
 </ul>
+
 {% endblock %}

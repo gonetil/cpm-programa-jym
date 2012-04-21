@@ -10,7 +10,7 @@ use Cpm\JovenesBundle\Entity\Invitacion;
 use Cpm\JovenesBundle\Form\InvitacionType;
 use Cpm\JovenesBundle\EntityDummy\InvitacionBatch;
 use Cpm\JovenesBundle\Form\InvitacionBatchType;
-
+use Cpm\JovenesBundle\Filter\InvitacionFilter;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -28,11 +28,9 @@ class InvitacionController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+    	return $this->filterAction(new InvitacionFilter(), 'invitacion');
 
-        $entities = $em->getRepository('CpmJovenesBundle:Invitacion')->findAllQuery();
 
-        return $this->paginate($entities);
     }
     
     /**

@@ -224,10 +224,17 @@ class ProyectoController extends BaseController
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Proyecto entity.');
             }
-
-            $em->remove($entity);
-            $em->flush();
-        }
+	
+			try{
+				$em->remove($entity);
+				$em->flush();
+				$this->setSuccessMessage("Proyecto eliminado satisfactoriamente");
+				return $this->redirect($this->generateUrl('proyecto'));
+			}catch(\PDOException $e){
+			    $this->setErrorMessage("No se puede eliminar al proyecto, es muy probable que tenga muchos elementos relacionados. Contactese con el equipo de desarrollo.");
+			}
+	    }
+		
 
         return $this->redirect($this->generateUrl('proyecto'));
     }

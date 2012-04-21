@@ -72,7 +72,7 @@
 </div>
 
 <div style="clear:both">
-	{% if entity.invitaciones | length > 0 %}
+	{% if invitaciones | length > 0 %}
 		<h2> Invitaciones enviadas </h2>
 		<table class="records_properties" id="invitaciones">
 		    <thead>
@@ -118,13 +118,14 @@
 		        </tr>
 		    </thead>
 		    <tbody>
-	    	{% for inv in entity.invitaciones %}
+	    	{% for i in invitaciones %}
+	    		{%  set inv=i[0]%}
 		        <tr class="{% if inv.sinResponder %}pendiente{% elseif inv.aceptoInvitacion %}aceptada{%else%}rechazada{% endif %}" >
 		            <td><a href="{{ path('invitaciones_edit',{id:inv.id}) }}">{{ inv.id }}</a></th>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
-		            <td> {{ inv.proyecto.coordinador.nombre }} {{ inv.proyecto.coordinador.apellido }} </td>
+		            <td> {{ i.apellido_coordinador }}, {{ i.nombre_coordinador }} </td>
 		            <td> {{ common.nombreEscuela(inv.proyecto.escuela) }}</td>
-		            <td> {{ inv.proyecto.escuela.localidad.distrito }}</td>
+		            <td> {{ i.distrito_escuela }}</td>
 		            <td  class="mini-icon {% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
 		            			{% if inv.sinResponder %} colspan="100%" {% endif %}></td>
 		            {% if not inv.sinResponder %}
@@ -167,7 +168,7 @@
 		</table>
 	{% endif %} {# invitaciones > 0 #}	
 		<script>
-		$("#resumen").html('<li>Invitaciones enviadas: <span class="status">{{ entity.invitaciones | length}}</span></li> \
+		$("#resumen").html('<li>Invitaciones enviadas: <span class="status">{{ invitaciones | length}}</span></li> \
 		<li>Invitaciones aceptadas: <span class="status"> {{ aceptaciones }}</span> </li> \
 		<li>Invitaciones pendientes: <span class="status">{{ pendientes }}</span> </li> \
 		<li>Invitaciones rechazadas: <span class="status">{{ rechazadas }}</span> </li> \
