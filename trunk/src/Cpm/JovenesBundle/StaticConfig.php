@@ -34,11 +34,11 @@ class StaticConfig {
 	    'nombre' => 'Etapa 3 - Desarrollo de proyectos',
 	    'accionesUsuario' => array (),
 	    'accionesProyecto' => array ( 
-/*		    'modificar_proyecto' => 
+		    'modificar_proyecto' => 
 		      array (
 		        'href' => 'proyecto_presentar',
 		        'label' => 'Enviar proyecto'
-		      ) */
+		      ) 
 		    ), 
 	  );
 	  $etapas[]=array (
