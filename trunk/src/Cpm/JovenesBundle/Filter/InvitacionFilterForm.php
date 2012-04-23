@@ -9,7 +9,10 @@ class InvitacionFilterForm extends ModelFilterForm
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
- 		$builder->add('fechaMin', 'date', array (
+ 		$builder->add('coordinador',null,array(
+ 				'label'=>'Apellido Coordinador',
+ 				'required' => false ))
+ 		->add('fechaMin', 'date', array (
 			'label' => 'Fecha Desde',
 			'widget' => 'single_text',
 			'required' => false,
