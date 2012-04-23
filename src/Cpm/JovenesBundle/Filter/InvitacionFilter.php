@@ -7,6 +7,7 @@ class InvitacionFilter extends Invitacion implements ModelFilter {
 
 	private $fechaMin;
 	private $fechaMax;
+	private $coordinador;
 	
 	public function createForm() {
 		return new InvitacionFilterForm($this);
@@ -36,4 +37,10 @@ class InvitacionFilter extends Invitacion implements ModelFilter {
 		$this->fechaMax=$fechaMax;
 	}
 	
+	public function getCoordinador() {
+		return $this->coordinador;
+	}
+	public function setCoordinador($coordinador) {
+		$this->coordinador = $coordinador;
+	}
 }

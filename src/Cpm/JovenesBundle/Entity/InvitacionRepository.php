@@ -88,6 +88,12 @@ class InvitacionRepository extends EntityRepository
 			$qb->orderBy($field,$sort_order);
 		}
 		
+		if ($filter->getCoordinador()) {
+			$qb	->innerJoin('c.proyecto','p')
+				->innerJoin("p.coordinador",'coordinador')
+				->andWhere("coordinador.apellido like :apellido")->setParameter("apellido",'%'.$filter->getCoordinador().'%');
+		}
+		
 		if ($filter->getFechaMin())
 			$qb->andWhere('c.fechaCreacion > :fechaMin')->setParameter('fechaMin',$filter->getFechaMin());
 		if ($filter->getFechaMax())
