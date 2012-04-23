@@ -47,7 +47,7 @@ class InstanciaEventoController extends BaseController
         }
 
 //		$init = memory_get_usage();
-        $invitaciones = $this->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesDTO(array('instancia'=> $id));
+        $invitaciones = $this->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesDTO(array('instanciaEvento'=> $id));
         //die("levanto".count($invitaciones )."y uso ".( memory_get_usage() - $init)."bytes".count($invitaciones[0]));
 		
         $deleteForm = $this->createDeleteForm($id);
