@@ -335,7 +335,7 @@ class PerfilController extends BaseController
     	$em = $this->getDoctrine()->getEntityManager();
     
     	$proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-    
+    	$proyecto->setDeQueSeTrata("");
     	if (!$proyecto) {
     		throw $this->createNotFoundException("Proyecto $id no encontrado");
     	}

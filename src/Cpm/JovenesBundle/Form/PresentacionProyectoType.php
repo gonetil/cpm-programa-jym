@@ -24,7 +24,7 @@ class PresentacionProyectoType extends AbstractType
 				        												return $er->createQueryBuilder('p')->where('p.anulado = 0');
 				        										}
         		))
-	        ->add('deQueSeTrata',null,array('label'=>'¿De qué se trata el proyecto?'))
+	        ->add('deQueSeTrata',null,array('label'=>'Breve descripción'))
 	        ->add('archivo','file',array('label' => 'Archivo con el proyecto'))
        ;
     }
