@@ -21,25 +21,23 @@ $(document).ready(function() {
 <div id="before_list">
 
 	<div class="filters">
-
-
 		<div class='left'>
 			<h4>Filtros sobre el proyecto</h4>
 			{{ form_row(form.modelFilter.coordinador) }} 
-			{{ form_row(form.modelFilter.esPrimeraVezDocente) }} 
-			{{form_row(form.modelFilter.esPrimeraVezEscuela) }} 
-			{{form_row(form.modelFilter.esPrimeraVezAlumnos) }} 
+			{{ form_row(form.modelFilter.esPrimeraVezDocente) }}
 			{{form_row(form.modelFilter.temaPrincipal) }}
-            {{ form_row(form.modelFilter.produccionFinal) }} 
-            {{ form_row(form.modelFilter.archivo) }}
+			{{ form_row(form.modelFilter.archivo) }} 
+			<div class="extra-filters">
+				{{form_row(form.modelFilter.esPrimeraVezEscuela) }} 
+				{{form_row(form.modelFilter.esPrimeraVezAlumnos) }} 
+	            {{ form_row(form.modelFilter.produccionFinal) }} 
+            </div>
 		</div>
 		<div class='right'>
 			<h4>Filtros sobre la escuela</h4>
 			{{ form_row(form.modelFilter.escuelaFilter.nombre) }}
-			{{ form_row(form.modelFilter.escuelaFilter.region) }} 
-			{{ form_row(form.modelFilter.escuelaFilter.distrito) }} 
 			{{ form_row(form.modelFilter.escuelaFilter.localidad) }}
-
+			{{ form_row(form.modelFilter.escuelaFilter.distrito) }} 
 			<div class='range'>
 				{{ form_label(form.modelFilter.escuelaFilter.regionDesde) }} 
 				{{ form_errors(form.modelFilter.escuelaFilter.regionDesde) }} 
@@ -47,12 +45,20 @@ $(document).ready(function() {
 				{{ form_label(form.modelFilter.escuelaFilter.regionHasta) }} 
 				{{ form_errors(form.modelFilter.escuelaFilter.regionHasta) }} 
 				{{ form_widget(form.modelFilter.escuelaFilter.regionHasta) }}
+			</div>			
+			<div class="extra-filters">
+				{{ form_row(form.modelFilter.escuelaFilter.region) }} 
+				{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
+				{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }}
 			</div>
-			{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
-			{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }} 
-			{{ filter.form_buttons(form) }}
+	 
 		</div>
-
+		
+		<div class="filter-separator">
+			<hr/>
+			<div class="slidedown" onclick="$('.extra-filters').toggle();"> </div>
+			{{ filter.form_buttons(form) }}
+		</div>	
 	</div>
 
 	<div class="systats">
