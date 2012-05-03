@@ -61,3 +61,16 @@ body {
 	float: left;
 	clear: none;
 }
+
+#footer { 
+		  height: 16px;
+		  margin: 94px 0px 0px 0px;
+		  text-align: center;
+		  font-size: 8.5pt;
+		  color: #FFF; 
+		  background: #000;
+		  clear: both;
+		  opacity:0.3;
+		  filter:alpha(opacity=30); /* For IE8 and earlier */
+		  }
+#footer a { text-decoration: none; color: inherit; }		  
