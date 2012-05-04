@@ -13,9 +13,11 @@ class InvitacionType extends InvitacionUsuarioType
     	
         $builder
             //->add('fechaCreacion',null,array('label' => 'Fecha de Creación'))
+            ->add('aceptoInvitacion',null,array('label'=>'¿Aceptó la invitación?'))
             ->add('asistio',null,array('label' => '¿Asistió?', 'required'=>false))
             ->add('proyecto',null,array('label' => 'Proyecto', 'read_only' =>true))
             ->add('instanciaEvento',null,array('label' => 'Instancia de evento'))
+            
         ;
     }
 
