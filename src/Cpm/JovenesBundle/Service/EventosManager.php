@@ -57,10 +57,14 @@ class EventosManager
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();
     	
     	set_time_limit(60+3*count($invitacionBatch->getProyectos()));
-    	
+    	$sin_enviar = array();
         foreach ( $invitacionBatch->getProyectos() as $p ) {
-			 $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores);
+			 list($invitacion,$enviada) = $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores);
+			 if (!$enviada) { 
+			 	$sin_enviar[] = $p;
+			 }
 		}
+		return $sin_enviar;
     }
     private function enviarInvitacionAProyecto($invitacion,$ccEscuela,$ccColaboradores){
     	$p = $invitacion->getProyecto();
@@ -107,8 +111,9 @@ class EventosManager
 			 	
 		}else{
 				$this->logger->info("Ya exise una invitacion para el proyecto '".$p->getId()."' al evento '".$instancia->getTitulo()."', no se hace nada.");
+				return array($invitacion,false);
 		}
-        return $invitacion;
+        return array($invitacion,true);
 	}
 	
 	public function reinvitarProyectos($instancia,$ccEscuela,$ccColaboradores) {

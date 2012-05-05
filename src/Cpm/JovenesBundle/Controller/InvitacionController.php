@@ -66,7 +66,14 @@ class InvitacionController extends BaseController
 		$ev_mgr= $this->getEventosManager();
         if ($editForm->isValid()) {
         	try{
-        		$ev_mgr->invitarProyectos($this->getLoggedInUser(), $invitacionBatch);
+        		$repetidas = $ev_mgr->invitarProyectos($this->getLoggedInUser(), $invitacionBatch);
+        		if (count($repetidas) > 0) { 
+        			$coordinadores = "";
+        			foreach ( $repetidas as $proyecto) {
+        				$coordinadores .= $proyecto->getCoordinador()." ; ";
+        			}
+        		$this->setInfoMessage("Lista de invitaciones repetidas (no fueron reenviadas): ".$coordinadores);	
+        		}
         		return $this->redirect($this->generateUrl('instancia_show', array('id' => $invitacionBatch->getInstancia()->getId())));
         	}catch(InvalidTemplateException $e){
 					$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
