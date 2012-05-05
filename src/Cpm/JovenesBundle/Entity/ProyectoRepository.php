@@ -132,9 +132,9 @@ class ProyectoRepository extends EntityRepository {
 		if ($ev = $evento->getEvento()) {  
 			if ($evento->getSinInvitacionFlag()) //sin invitacion 
 			{ 
-				$qb	->innerJoin('p.invitaciones','inv') 
-					->andWhere( 'inv NOT IN ('.
-											' SELECT DISTINCT invit FROM CpmJovenesBundle:Invitacion invit' .
+				$qb	->andWhere( 'p NOT IN ('.
+											' SELECT proyecto FROM CpmJovenesBundle:Invitacion invit' .
+											' INNER JOIN invit.proyecto proyecto ' .
 											' INNER JOIN invit.instanciaEvento inst ' .
 											' INNER JOIN inst.evento event'.
 											' WHERE event = :ev)')->setParameter('ev',$ev);
