@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Controller\BaseController;
 use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Form\ProyectoType;
+use Cpm\JovenesBundle\Form\ColaboradoresProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Plantilla;
@@ -436,4 +437,82 @@ class PerfilController extends BaseController
     	readfile($file);
     	return $response;
     }
+    
+    /**
+    * Displays a form to edit, add and remove colaboradores from an existing Proyecto entity.
+    *
+    * @Route("/{id}/edit_colaboradores", name="proyecto_edit_colaboradores")
+    * @Template("CpmJovenesBundle:Proyecto:editar_colaboradores.html.twig")
+    */
+    public function editColaboradoresAction($id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find Proyecto entity.');
+    	}
+    
+    	$editForm = $this->createForm(new ColaboradoresProyectoType(), $entity);
+    	
+    	return array(
+                'entity'      => $entity,
+                'form'   => $editForm->createView(),
+                'form_action' => 'proyecto_update_colaboradores'
+          
+    	);
+    }
+    
+    
+    
+    
+        /**
+    * Edits, adds and removes colaboradores from an existing Proyecto entity.
+    *
+    * @Route("/{id}/update_colaboradores", name="proyecto_update_colaboradores")
+    * @Method("post")
+    * @Template("CpmJovenesBundle:Proyecto:editar_colaboradores.html.twig")
+    */
+    public function updateColaboradoresAction($id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+    	
+    	$colabs = array(); 
+    	foreach ($entity->getColaboradores() as $c) {
+    			$colabs[] = $c->getEmail();
+    	}
+    	    	 
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find Proyecto entity.');
+    	}
+        	
+    	$editForm   = $this->createForm(new ColaboradoresProyectoType(), $entity);
+    	$request = $this->getRequest();
+    	
+    	$editForm->bindRequest($request);
+    	
+    	$entity->setColaboradores($this->procesar_colaboradores($entity->getColaboradores()));
+    	
+    	if ($editForm->isValid()) {
+    		$em->persist($entity);
+    		$em->flush();
+    		
+    		//los colaboradores eliminados que no estan en otro proyecto seran eliminados
+    		$this->eliminar_usuarios_sueltos($entity,$colabs);
+    		$this->setSuccessMessage("Los datos fueron actualizados satisfactoriamente");
+    		
+    		return $this->redirect($this->generateUrl('home_usuario'));
+    	}
+    	$this->setErrorMessage("Se produjeron errores al procesar los datos");
+    	return array(
+                'entity'      => $entity,
+                'form'   => $editForm->createView(),
+				'form_action' => 'proyecto_edit_colaboradores'
+    	);
+    }
+    
+    
 }
