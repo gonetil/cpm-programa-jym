@@ -64,9 +64,12 @@ class ProyectoFilterForm extends ModelFilterForm
                 										))
                 										;
 			$escuela = new EscuelaFilter();	
-            $builder->add('escuelaFilter', $escuela->createForm() ,array('label' => 'Escuela'))
+            $builder->add('escuelaFilter', $escuela->createForm() ,array('label' => 'Escuela'));
+            
+            $evento = new EventoFilter();
+            $builder->add('eventoFilter',$evento->createForm(),array('label'=>'Evento'));
                 												    	
-        ;
+        
     }
     
 }
