@@ -127,6 +127,25 @@ class ProyectoRepository extends EntityRepository {
 		if ($archivo = $data->getArchivo()) {
 			$qb->andWhere("p.archivo " . (($archivo == 1) ? 'is not' : 'is') . " NULL");
 		}
+		
+		$evento = $data->getEventoFilter(); 
+		if ($ev = $evento->getEvento()) {  
+			if ($evento->getSinInvitacionFlag()) //sin invitacion 
+			{ 
+				$qb	->innerJoin('p.invitaciones','inv') 
+					->andWhere( 'inv NOT IN ('.
+											' SELECT DISTINCT invit FROM CpmJovenesBundle:Invitacion invit' .
+											' INNER JOIN invit.instanciaEvento inst ' .
+											' INNER JOIN inst.evento event'.
+											' WHERE event = :ev)')->setParameter('ev',$ev);
+			} else {
+					$qb	->innerJoin('p.invitaciones','inv')
+					->innerJoin('inv.instanciaEvento','instancia')
+					->innerJoin('instancia.evento','ev')->andWhere('ev = :ev')->setParameter('ev',$ev);
+				//$qb->andWhere('p.tipoInstitucion is NULL');
+								 
+			}		
+		}
 
 		return $qb;
 	}
