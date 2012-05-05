@@ -26,13 +26,12 @@ $(document).ready(function() {
 			{{ form_row(form.modelFilter.coordinador) }} 
 			{{ form_row(form.modelFilter.esPrimeraVezDocente) }}
 			{{form_row(form.modelFilter.temaPrincipal) }}
-			{{ form_row(form.modelFilter.archivo) }} 
 			{{ form_row(form.modelFilter.eventoFilter.evento) }}
 			{{ form_row(form.modelFilter.eventoFilter.sinInvitacionFlag) }}
 			<div class="extra-filters">
-				{{form_row(form.modelFilter.esPrimeraVezEscuela) }} 
-				{{form_row(form.modelFilter.esPrimeraVezAlumnos) }} 
 	            {{ form_row(form.modelFilter.produccionFinal) }} 
+	            {{form_row(form.modelFilter.esPrimeraVezAlumnos) }}
+	            {{ form_row(form.modelFilter.archivo) }} 
             </div>
 		</div>
 		<div class='right'>
@@ -52,6 +51,7 @@ $(document).ready(function() {
 				{{ form_row(form.modelFilter.escuelaFilter.region) }} 
 				{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
 				{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }}
+				{{form_row(form.modelFilter.esPrimeraVezEscuela) }} 
 			</div>
 	 
 		</div>
