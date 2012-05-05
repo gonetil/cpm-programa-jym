@@ -19,6 +19,9 @@ buscar_localidades = function() {
   {% if (form.escuela.distrito is defined) %}
  	{{form_row(form.escuela.distrito) }}
  	{{ form_row(form.escuela.localidad) }}
+  {% elseif (edit_form.escuela.distrito is defined) %}
+ 	{{form_row(edit_form.escuela.distrito) }}
+ 	{{ form_row(edit_form.escuela.localidad) }}
   {% elseif (form.usuario.distrito is defined) %}
    	{{form_row(form.usuario.distrito) }}
    	{{form_row(form.usuario.localidad) }}  	
