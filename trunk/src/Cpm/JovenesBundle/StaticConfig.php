@@ -38,7 +38,13 @@ class StaticConfig {
 		      array (
 		        'href' => 'proyecto_presentar',
 		        'label' => 'Enviar proyecto'
+		      ),
+		    'modificar_colaboradores' => 
+		      array (
+		        'href' => 'proyecto_edit_colaboradores',
+		        'label' => 'Agregar o elminar colaboradores'
 		      ) 
+		       
 		    ), 
 	  );
 	  $etapas[]=array (
