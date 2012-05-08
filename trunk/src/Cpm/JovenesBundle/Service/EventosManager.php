@@ -66,7 +66,7 @@ class EventosManager
 		}
 		return $sin_enviar;
     }
-    private function enviarInvitacionAProyecto($invitacion,$ccEscuela,$ccColaboradores){
+    public function enviarInvitacionAProyecto($invitacion,$ccEscuela=false,$ccColaboradores=false){
     	$p = $invitacion->getProyecto();
 		
     	$context=array(Plantilla::_INVITACION => $invitacion);
