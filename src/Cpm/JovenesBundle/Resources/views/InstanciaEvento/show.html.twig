@@ -127,7 +127,13 @@
 		            <td> {{ common.nombreEscuela(inv.proyecto.escuela) }}</td>
 		            <td> {{ i.distrito_escuela }}</td>
 		            <td  class="mini-icon {% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
-		            			{% if inv.sinResponder %} colspan="100%" {% endif %}></td>
+		            			{% if inv.sinResponder %} colspan="100%">
+		            					<a href="#" target="{{ path( 'invitaciones_reenviar_una', { 'id': inv.id }) }}" 
+		            					title="Reenviar invitación" onclick="invitacion_reinvitar(this); return false;" class="repeat-email icon" style="margin-left: 100px; border:none;"></a>
+							    {% else %}
+							    > {# cierro el tag td #}
+							    {% endif %}
+		            </td>
 		            {% if not inv.sinResponder %}
 				            {% if inv.aceptoInvitacion %}
 				            {% set aceptaciones = aceptaciones + 1 %}
@@ -155,10 +161,12 @@
 					            </td>
 				            {% else %}
 					            {% set rechazadas= rechazadas+1 %}	
-					            <td colspan="100%" class="mini-icon rechazada">  </td>
+					            <td colspan="100%" class="mini-icon rechazada"> 
+					             </td>
 				            {% endif %}
 				           
 				        {% else %}
+												        
 				        	{% set pendientes=pendientes+1 %}
 				        	
 				      {% endif %} {# inv.aceptoInvitacion #}      

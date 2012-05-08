@@ -211,3 +211,14 @@ jQuery(function($){
 	bind_rdl_selects();
 });
 	
+invitacion_reinvitar = function(clicked_node,$destination) {
+	target = $(clicked_node).attr('target');
+	$.get(target, function( msg) {
+			if (msg == 'success') {
+				if ($destination)
+					$destination.removeClass().addClass("icon yes");
+				else
+					$(clicked_node).removeClass().addClass("icon yes");
+			}
+	});
+}

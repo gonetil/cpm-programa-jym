@@ -43,13 +43,18 @@
             <td>{{ entity.numeroAsistentes }}</td>
             <td>{{ entity.suplente }}</td>
             <td>
-                <ul>
+   
+                <ul style="padding-top:6px;">
                     <li>
                         <a href="{{ path('invitaciones_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
                         <a href="{{ path('invitaciones_edit', { 'id': entity.id }) }}">Editar</a>
                     </li>
+                    <li>
+                    	<a href="#" onclick="invitacion_reinvitar(this,$('#icon{{entity.id}}')); return false;" target="{{ path( 'invitaciones_reenviar_una', { 'id': entity.id }) }}">Reinvitar</a>
+                    </li>
+                 	<span style="border:none" id="icon{{entity.id}}"></span>
                 </ul>
             </td>
         </tr>

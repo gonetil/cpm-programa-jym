@@ -236,4 +236,24 @@ class InvitacionController extends BaseController
     	}
     	else new Response("error");
     }
+    
+    
+    /**
+     * Reenvia una invitación previamente existente
+     * @Route("/{id}/reenviar_invitacion" , name="invitaciones_reenviar_una")
+     * @Method("get")
+     */
+    public function reenviarInvitacion($id) { 
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+        $invitacion = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
+
+        if (!$invitacion) {
+            throw $this->createNotFoundException('No se encontró la invitación '.$id);
+            return new Response("error");
+        }
+		$eventosManager = $this->getEventosManager();    	
+    	$eventosManager->enviarInvitacionAProyecto($invitacion, false,false); //no se envía cc a los colaboradores ni a la escuela 
+    	return new Response("success");
+    }
 }
