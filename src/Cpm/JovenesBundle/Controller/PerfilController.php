@@ -389,7 +389,7 @@ class PerfilController extends BaseController
     		
     		if (in_array($ext,$valid))
     		{
-	    		$new_filename = "Proyecto $id";
+	    		$new_filename = "Proyecto $id.$ext";
 	    		$file->move($this->getUploadDir()."$id","$new_filename");
 				$proyecto->setArchivo($new_filename);
 	    		$em->persist($proyecto);
