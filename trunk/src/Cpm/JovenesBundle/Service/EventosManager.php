@@ -55,11 +55,12 @@ class EventosManager
     	$instancia = $invitacionBatch->getInstancia();
     	$ccEscuela=$invitacionBatch->getCcEscuelas();
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();
+    	$avoidMail = $invitacionBatch->getNoEnviarCorreo();
     	
     	set_time_limit(60+3*count($invitacionBatch->getProyectos()));
     	$sin_enviar = array();
         foreach ( $invitacionBatch->getProyectos() as $p ) {
-			 list($invitacion,$enviada) = $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores);
+			 list($invitacion,$enviada) = $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores,$avoidMail);
 			 if (!$enviada) { 
 			 	$sin_enviar[] = $p;
 			 }
@@ -94,7 +95,7 @@ class EventosManager
 		unset($context);
     }
 
-	public function invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores){
+	public function invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores,$avoidMail){
 		$invitacion = $this->getInvitacion($instancia, $p);
 		if (empty($invitacion)){
 			    $this->logger->info("Se invita al proyecto '".$p->getId()."' al evento '".$instancia->getTitulo()."'");
@@ -107,7 +108,8 @@ class EventosManager
 		        $em->persist($invitacion);
 		        $em->flush();
 
-			 	$this->enviarInvitacionAProyecto($invitacion,$ccEscuela,$ccColaboradores);
+				if (! $avoidMail)
+			 		$this->enviarInvitacionAProyecto($invitacion,$ccEscuela,$ccColaboradores);
 			 	
 		}else{
 				$this->logger->info("Ya exise una invitacion para el proyecto '".$p->getId()."' al evento '".$instancia->getTitulo()."', no se hace nada.");
