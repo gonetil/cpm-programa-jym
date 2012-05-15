@@ -39,6 +39,7 @@ class InvitacionBatchType extends ProyectoBatchType
     				))
         ->add('ccColaboradores','checkbox',array('required'=>false,'label'=>'Enviar copia a los colaboradores?'))
         ->add('ccEscuelas','checkbox',array('required'=>false,'label'=>'Enviar copia a las escuelas?'))
+        ->add('noEnviarCorreo','checkbox',array('required'=>false,'label'=>'No enviar ningún correo'));
         ;
         								
     }

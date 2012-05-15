@@ -11,7 +11,7 @@ class InvitacionBatch extends ProyectoBatch{
 	private $instancia;
 	public $ccColaboradores;
 	public $ccEscuelas;
-
+	public $noEnviarCorreo;
 
 	public function __construct() {
 		parent::__construct();
@@ -50,5 +50,12 @@ class InvitacionBatch extends ProyectoBatch{
 	}
 	public function setCcEscuelas($x) {
 		$this->ccEscuelas = $x;
-	}	
+	}
+	
+	public function getNoEnviarCorreo() {
+		return $this->noEnviarCorreo ;
+	}
+	public function setNoEnviarCorreo($noEnviarCorreo) {
+		$this->noEnviarCorreo = $noEnviarCorreo;
+	}		
 }
