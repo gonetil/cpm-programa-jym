@@ -14,10 +14,10 @@
 		    	</div> 
 			{% endif %}
 		  	
-		    <h2> Proyecto: {{ entity.titulo }} </h2>
+		    <h2 class="proyeto_title"> Proyecto: {{ entity.titulo }} </h2>
 			{% set escuela = entity.escuela %}
 	
-			<h3 class="info_header"> <a href="#" onclick="$('.info_escuela').toggle(); return false;"> {{ proyecto_box.nombreEscuela(entity.escuela) }} </a></h3>
+			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_escuela').toggle(); return false;"> {{ proyecto_box.nombreEscuela(entity.escuela) }} </a></h4>
 			<div class="info_escuela hidden extra_info">
 				<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p> 
 				<p> Localidad {{escuela.localidad.nombre }} , Distrito {{ escuela.localidad.distrito }} </p>
@@ -26,25 +26,27 @@
 				<p> Director: {{ escuela.director }} </p>
 			</div> <!-- info_escuela -->
 		
-			<h3 class="info_header">
+			<h4 class="info_header extra_info">
 				<a href="#" onclick="$('.info_coordinador').toggle(); return false;";>
 					Coordinador {{ entity.coordinador.nombre }} {{entity.coordinador.apellido}}
 				</a>			
-			</h3>
+			</h4>
 			<div class="info_coordinador hidden extra_info"> 
 				<p>Email <a href="mailto:{{entity.coordinador.email}}">{{entity.coordinador.email}}</a></p>
 				<p> DNI: {{ entity.coordinador.dni }}</p>
 	        	<p>Teléfono {{ entity.coordinador.telefono }}</p>
 				<p>Teléfono celular {{ entity.coordinador.telefonoCelular }}</p>
+				<p>Domicilio {{ entity.coordinador.domicilio }}</p>
 	        	<p>Código postal {{ entity.coordinador.codigoPostal }}</p>
+	        	
 			</div>	<!-- info_coordinador -->
 
 			{% if entity.colaboradores | length > 0 %}
-				<h3 class="info_header">
+				<h4 class="info_header extra_info">
 					<a href="#" onclick="$('ul.colaboradores').toggle(); return false;";>
 						Colaboradores ({{ entity.colaboradores | length }})
 					</a>
-				</h3>
+				</h4>
 				<ul class="colaboradores hidden extra_info">
 					{% for colaboradores in entity.colaboradores %}
 						<li> {{colaboradores.nombre}} {{colaboradores.apellido}} &lt;<a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;</li>
@@ -53,7 +55,7 @@
 				
 			{% endif %}
 		
-			<h3 class="info_header"> <a href="#" onclick="$('.info_proyecto').toggle(); return false;">Acerca del proyecto (tema, alumnos, impacto...) </a></h3>
+			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_proyecto').toggle(); return false;">Acerca del proyecto (tema, alumnos, impacto...) </a></h4>
 			<div class="info_proyecto hidden extra_info">
 				<ul>	
 			    	<li>Primera vez del docente: {{ common.show_bool(entity.esPrimeraVezDocente) }}</li>
