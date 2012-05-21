@@ -48,6 +48,27 @@ class TwigSwiftMailer implements MailerInterface
 		return $correo;
 	}
 
+	public function sendCorreoEvaluacionProyecto($proyecto,$codigo_plantilla) {
+		$correo = $this->getCorreoFromPlantilla($codigo_plantilla);
+		$correo->setDestinatario($proyecto->getCoordinador());
+		$correo->setProyecto($proyecto);
+		
+		$cc = array();
+		
+		foreach($proyecto->getColaboradores() as $colab ){
+			$email = $colab->getEmail();
+			$nombre = $colab->getNombre() . " " . $colab->getApellido();
+			$cc["$email"] = "$nombre" ;
+		}
+		
+		$email =  $proyecto->getEscuela()->getEmail();
+		$nombre = $proyecto->getEscuela()->__toString();
+		$cc["$email"] = "$nombre";
+		
+		$context['cc'] = $cc;
+		return $this->enviarCorreo($correo,$context);
+	}
+	
     public function sendConfirmacionAltaProyecto($proyecto)
     {
         $correo = $this->getCorreoFromPlantilla(Plantilla::ALTA_PROYECTO);
@@ -175,6 +196,7 @@ class TwigSwiftMailer implements MailerInterface
 		}
 		
 		
+		 
     	$fromEmail= $this->parameters['from_email'];
 
 		$message = \Swift_Message::newInstance()
@@ -182,6 +204,8 @@ class TwigSwiftMailer implements MailerInterface
 	        ->setFrom($fromEmail)
 	        ->setTo($to)
 	    ;
+		if (isset($context['cc']))
+			$message->setCC( $context['cc'] );
 		
         if (!empty($htmlBody)) {
             $message->setBody($htmlBody, 'text/html')
