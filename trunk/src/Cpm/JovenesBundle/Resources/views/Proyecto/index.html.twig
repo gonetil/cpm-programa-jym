@@ -87,6 +87,7 @@ $(document).ready(function() {
 			<th>Localidad</th>
 			<th>Distrito</th>
 			<th>Archivo</th>
+			<th>Nota</th>
 			<th>Acciones</th>
 		</tr>
 	</thead>
@@ -108,13 +109,32 @@ $(document).ready(function() {
 			<td>{{ entity.escuela.localidad.distrito }}</td>
 			
 			<td> 
-				{% if ( entity.estadoActual) and (entity.estadoActual.estado >= 10) %}
+				{% if ( entity.estadoActual) and (entity.estadoActual.estado >= constant('ESTADO_PRESENTADO')) %}
 																 {# 10 es el estado presentado #}
 					<div class="download_mini mini-icon">
 						<a href="{{ path('proyecto_descargar_presentacion',{'id' : entity.id}) }}"></a>
 					</div> {% else %}
 					<div class="no mini-icon"></div> 
 				{% endif %}
+			</td>
+			<td>
+				{% if ( entity.estadoActual) %}
+					{% set estado = entity.estadoActual.estado %}
+					{% if estado == constant('ESTADO_APROBADO') %} 
+						Aprobado
+					{% elseif estado == constant('ESTADO_APROBADO_CLINICA') %}
+						Aprobado C
+					{% elseif estado == constant('ESTADO_DESAPROBADO') %}
+						Desaprobado
+					{% elseif estado == constant('ESTADO_REHACER') %}
+						Rehacer
+					{% else %}
+						-
+					{% endif %}		
+				{% else %}
+					-	
+				{% endif %}
+				
 			</td>
 
 			<td>
