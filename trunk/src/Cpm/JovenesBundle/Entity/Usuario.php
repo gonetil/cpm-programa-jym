@@ -116,6 +116,13 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     private $resetPassword;
     
     
+    /**
+     * @var string $domicilio
+     * @ORM\Column(name="domicilio", type="string", nullable=true)
+     */    
+    private $domicilio;
+    
+    
     public function __construct()
     {
     	parent::__construct();
@@ -369,6 +376,11 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     	return $this->hasRole(self::ROL_ADMIN);
     }
     
+	public function getDomicilio() {
+		return $this->domicilio;
+	}    
     
-    
+    public function setDomicilio($domicilio) { 
+    	$this->domicilio = $domicilio;
+    }
 }

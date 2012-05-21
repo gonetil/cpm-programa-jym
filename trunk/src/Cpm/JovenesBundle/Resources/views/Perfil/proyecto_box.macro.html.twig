@@ -57,14 +57,15 @@
 		</div>	
 
 	  {% endif %}	
-	    {% if proyecto.archivo %}
-	    	<div class="download_link icon" title="Descargar archivo {{ proyecto.archivo }}">
+	  	{% if ( proyecto.estadoActual) and (proyecto.estadoActual.estado >= 10) %}
+																 {# 10 es el estado presentado #}
+			<div class="download_link icon" title="Descargar archivo">
 		    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : proyecto.id}) }}" > 
 		    	 	&nbsp;
 		    	</a>
-	    	</div>
-	    {% endif %}
-	    
+	    	</div> 
+		{% endif %}
+	  	    
 	    <h2> Titulo: {{ proyecto.titulo }} </h2>
 	    <ul>	
 	    	<li>Primera vez del docente: {{ common.show_bool(proyecto.esPrimeraVezDocente) }}</li>

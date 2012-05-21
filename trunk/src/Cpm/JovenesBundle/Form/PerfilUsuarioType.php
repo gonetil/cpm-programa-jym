@@ -43,6 +43,7 @@ class PerfilUsuarioType extends BaseType
     														}
     											))
     		->add('localidad',null,array('attr'=>array('class'=>'localidad-selector')))
+    		->add('domicilio',null,array('label'=>'Domicilio'))
             ->add('codigoPostal',null,array('label'=>'Código Postal'))
             ->add('telefono',null,array('label'=>'Teléfono'))
             ->add('telefonoCelular', 'text', array('required'=>false,

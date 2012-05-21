@@ -146,6 +146,15 @@ class Proyecto
      **/
     private $invitaciones;
     
+    /**
+     *     /**
+    *  @ORM\OneToOne(targetEntity="EstadoProyecto",cascade={"persist"})
+    *  @ORM\JoinColumns({
+    *   @ORM\JoinColumn(name="estadoActual_id", referencedColumnName="id", nullable=true, onDelete="SET NULL", onUpdate="SET NULL")
+    * })
+    */
+    private $estadoActual;
+    
     public function __construct()
     {
     	$this->estado = Proyecto::__ESTADO_INICIADO;
@@ -538,5 +547,13 @@ class Proyecto
     {
     	$this->archivo = $archivo;
     }
-    
+ 
+ 	public function getEstadoActual() {
+ 		return $this->estadoActual;
+ 	}   
+ 	
+ 	public function setEstadoActual($estadoActual) {
+ 		$this->estadoActual = $estadoActual;
+ 	}
+
 }

@@ -12,6 +12,8 @@ use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
+use Cpm\JovenesBundle\Entity\EstadoProyecto;
+use Cpm\JovenesBundle\Form\EstadoProyectoType;
 
 use Cpm\JovenesBundle\Filter\ProyectoFilter;
 use Cpm\JovenesBundle\Filter\ProyectoFilterForm;
@@ -73,11 +75,18 @@ class ProyectoController extends BaseController
         }
 
         $deleteForm = $this->createDeleteForm($id);
+        $nuevoEstado = new EstadoProyecto();
+        $estadoForm = $this->createForm(new EstadoProyectoType($this->getEstadosManager()),$nuevoEstado );
+
+        $historialEstados = $em->getRepository('CpmJovenesBundle:EstadoProyecto')->getEstadosAnteriores($entity);
 
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
-    }
+            'delete_form' => $deleteForm->createView(),
+            'estado_form' => $estadoForm->createView(),
+            'estados_anteriores' => $historialEstados, 
+            );
+    }		
 
     /**
      * Displays a form to create a new Proyecto entity.
@@ -277,5 +286,94 @@ class ProyectoController extends BaseController
 		
 	}
 
+    /**
+     * Elimina el ultimo estado de un proyecto y fueve al anteriro
+     *
+     * @Route("/{id}/rollback", name="proyecto_rollback")
+     * @Method("get")
+     */
     
+    public function deshacerEstado($id) {
+    	$em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Proyecto no encontrado');
+        }
+        
+		$manager = $this->getEstadosManager();
+		$manager->deshacerEstadoDeProyecto($entity);    
+		
+		return $this->redirect($this->generateUrl('proyecto_show', array('id' => $entity->getId())));	
+    }
+
+
+    /**
+     * Elimina el ultimo estado de un proyecto y fueve al anteriro
+     *
+     * @Route("/{id}/cambiar_estado", name="proyecto_cambiar_estado")
+     * @Method("post")
+     */
+     public function cambiarEstado($id) { 
+    	$em = $this->getDoctrine()->getEntityManager();
+        $proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+
+		$nuevoEstado = new EstadoProyecto();
+		$nuevoEstado->setUsuario($this->getLoggedInUser());
+		
+        $estadoForm = $this->createForm(new EstadoProyectoType($this->getEstadosManager()), $nuevoEstado);
+        $estadoForm->bindRequest($this->getRequest());
+        
+        
+        if ($estadoForm->isValid()) {
+        	$file = $estadoForm['archivo']->getData();
+        	
+	        if ($file) {
+				$new_filename = $this->subir_archivo($file,$proyecto);
+				$nuevoEstado->setArchivo($new_filename);
+	        }
+	        $result = $this->getEstadosManager()->cambiarEstadoAProyecto($proyecto,$nuevoEstado);
+	        
+	        //TODO: enviar email si el estado es aprobado, rehacer, desaprobado o aprobado C        
+	        if ($result == "success") { 
+	        	$this->setSuccessMessage("El proyecto fue actualizado satisfactoriamente");
+	     	}
+	        else {
+	        	$this->setErrorMessage($result);
+	        }
+	        
+        }
+        
+        return $this->redirect($this->generateUrl('proyecto_show', array('id' => $proyecto->getId())));
+        
+    }
+
+
+	/**
+	 * @Route("/{id}/descargar_archivo_viejo", name="proyecto_descargar_archivo_viejo")
+     * @Method("get")
+     */
+    function descargarArchivoEstadoAnterior($id) {
+    	$em = $this->getDoctrine()->getEntityManager();
+        $estado = $em->getRepository('CpmJovenesBundle:EstadoProyecto')->find($id);
+        if (!$estado) { 
+        	throw $this->createNotFoundException('Estado no encontrado');
+        }
+        
+        if (! ($archivo=$estado->getArchivo())) { 
+        	throw $this->createNotFoundException('Estado no posee archivo adjunto');
+        }
+    	
+    	
+    	$proyecto_id = $estado->getProyecto()->getId();
+    	$file = $this->getUploadDir()."$proyecto_id/".$archivo;
+		
+		$response = new Response();
+		$response->headers->set('Content-Type', 'application/msword');
+		$response->headers->set("Content-Disposition", 'Attachment;filename="'.$archivo.'"');
+		$response->send();
+		readfile($file);
+		return $response;
+		    	
+    }
 }

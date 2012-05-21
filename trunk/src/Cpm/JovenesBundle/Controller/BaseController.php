@@ -81,6 +81,10 @@ abstract class BaseController extends Controller
 	protected function getEventosManager(){
 		return $this->get('cpm_jovenes_bundle.eventos_manager');
 	}
+
+	protected function getEstadosManager(){
+		return $this->get('cpm_jovenes_bundle.estados_manager');
+	}
 	
 	protected function paginate($query, $extra_params = array() ){ 
 		
@@ -183,6 +187,42 @@ abstract class BaseController extends Controller
     	if (substr($dir,strlen($dir)-1,1) != "/")
     		$dir .= "/";
     	return $dir;
+    }
+    
+    public function getValidExtensions() {
+    	return $valid_extensions = array("doc","docx","odt","pdf","rtf","wps","zip");
+    }
+    
+    
+    /**
+     * guarda un archivo de un proyecto con el nombre correcto y en el dir. correcto
+     */
+       public function subir_archivo($file,$proyecto) {
+    	    $ext =  $file->guessExtension();
+    		$valid = $this->getValidExtensions();
+
+    		if (!$ext) 
+    			$ext = $file->getExtension();
+    	
+    		if (!$ext)
+    		{
+	    		$pos = strrpos($file->getClientOriginalName(), '.');
+	    		if($pos!==false) 
+	    			$ext = substr($file->getClientOriginalName(), $pos+1);
+    		}
+    		
+    		if (in_array($ext,$valid))
+    		{
+    			$id = $proyecto->getId();
+	    		$new_filename = "Proyecto ".$id."_".rand().".$ext";
+	    		$file->move($this->getUploadDir()."$id","$new_filename");
+	    		return $new_filename;
+    		} 	
+    		else 
+    			$this->setErrorMessage("Los tipos de archivos permitidos son: ".implode(", ",$this->getValidExtensions()));
+    		
+    		return "";
+    	
     }
     
     /**
