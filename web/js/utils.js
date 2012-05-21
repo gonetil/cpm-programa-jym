@@ -17,7 +17,7 @@ aviso_coordinador_inscripcion_realizada = function(path) {
 						Usted ya inscribió a una escuela <strong> ¿está seguro que quiere inscribir otra?</strong>\
 						</p>'
 	 );
-	
+	javascript:
 	
 	$("a[href='"+path+"']").click(function(event) { 
 		
@@ -221,4 +221,40 @@ invitacion_reinvitar = function(clicked_node,$destination) {
 					$(clicked_node).removeClass().addClass("icon yes");
 			}
 	});
+}
+
+mostrar_campo_archivo = function() { 
+	$("#cpm_jovenesbundle_estadoproyectotype_estado").change(function() {
+		val = $("#cpm_jovenesbundle_estadoproyectotype_estado").val();
+		if (val == 10) //presentado... FIXME: usar la constante de PHP
+			$("#archivo_presentacion").show();
+		else
+			$("#archivo_presentacion").hide();
+		$("#archivo_presentacion .error").remove();
+	});
+}
+
+validar_form_cambio_estado = function() {
+	archivo = $("#cpm_jovenesbundle_estadoproyectotype_archivo");
+	if  ( (archivo.is(":visible")) && (archivo.val() == "") ) {
+		parent = $("#archivo_presentacion"); 
+		parent.children(".error").remove();
+		parent.append("<p class='error'>Debe seleccionar un archivo para subir</p>");
+		return false;
+	}
+	return true;
+		
+}
+
+cambiar_estado = function() { 
+	$("#estado_proyecto_form").dialog({
+		 title: "Nuevo estado del proyecto",
+		 resizable: false, width:650, height:350, modal: true,
+		 buttons : { 
+			 		 "Aceptar" : function() { $("#nuevo_estado_proyecto_form").submit(); } ,
+			 		 "Cancelar" : function() { $(this).dialog('close'); }
+			 	}
+					
+		});
+	
 }

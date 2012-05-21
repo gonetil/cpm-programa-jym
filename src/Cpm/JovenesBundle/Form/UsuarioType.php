@@ -17,6 +17,7 @@ class UsuarioType extends AbstractType
             ->add('telefono', null, array('required'=>false))
             ->add('telefonoCelular', null, array('required'=>false))
             ->add('codigoPostal')
+            ->add('domicilio')
 	        ->add('localidad','entity',array( 'class' => 'CpmJovenesBundle:Localidad',
 	                    									'label'=>'Localidad', 
 	                    									'attr' => array('class'=>'localidad-selector'),

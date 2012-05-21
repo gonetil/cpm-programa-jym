@@ -15,6 +15,9 @@ use Cpm\JovenesBundle\Entity\Plantilla;
 use Cpm\JovenesBundle\Form\InvitacionUsuarioType;
 use Cpm\JovenesBundle\Form\PresentacionProyectoType;
 use Symfony\Component\HttpFoundation\Response;
+use Cpm\JovenesBundle\Entity\EstadoProyecto;
+
+
 /**
  * Perfil controller.
  *
@@ -353,6 +356,7 @@ class PerfilController extends BaseController
     	);
     }
     
+    
     /**
     * Procesa el formulario de envio de proyectos
     *
@@ -373,32 +377,23 @@ class PerfilController extends BaseController
     	$form->bindRequest($this->getRequest());
     	
     	if ($form->isValid()) {
-    		$file = $form['archivo']->getData();
-    		$ext =  $file->guessExtension();
-    		$valid = $this->getValidExtensions();
-
-    		if (!$ext) 
-    			$ext = $file->getExtension();
-    	
-    		if (!$ext)
-    		{
-	    		$pos = strrpos($file->getClientOriginalName(), '.');
-	    		if($pos!==false) 
-	    			$ext = substr($file->getClientOriginalName(), $pos+1);
-    		}
-    		
-    		if (in_array($ext,$valid))
-    		{
-	    		$new_filename = "Proyecto $id.$ext";
-	    		$file->move($this->getUploadDir()."$id","$new_filename");
-				$proyecto->setArchivo($new_filename);
-	    		$em->persist($proyecto);
-	    		$em->flush();
-	    		$this->setSuccessMessage("El archivo fue cargado satisfactoriamente");
+    			$file = $form['archivo']->getData();
+    			
+    			$new_filename = $this->subir_archivo($file,$proyecto);
+    			$estadosManager = $this->getEstadosManager();
+	    		$estadoProyecto = new EstadoProyecto();
+	    		$estadoProyecto->setEstado(ESTADO_PRESENTADO);
+	    		$estadoProyecto->setArchivo($new_filename);
+	    		$estadoProyecto->setUsuario($this->getLoggedInUser());
+				$result = $estadosManager->cambiarEstadoAProyecto($proyecto,$estadoProyecto);
+	    		if ($result == "success") { 
+        			$this->setSuccessMessage("El archivo fue cargado satisfactoriamente");
+     			}
+		        else {
+		        	$this->setErrorMessage($result);
+		        }
+	    		
 	    		return $this->redirect($this->generateUrl('home_usuario'));
-    		} 
-    		else 
-    			$this->setErrorMessage("Los tipos de archivos permitidos son: ".implode(", ",$this->getValidExtensions()));
     		
     	}
     	
@@ -410,9 +405,6 @@ class PerfilController extends BaseController
     	 
     }
    
-    private function getValidExtensions() {
-    	return $valid_extensions = array("doc","docx","odt","pdf","rtf","wps","zip");
-    }
     	
     /**
     * Envia el archivo del proyecto
@@ -428,14 +420,24 @@ class PerfilController extends BaseController
     		throw $this->createNotFoundException("Proyecto $id no encontrado");
     	}
 
-    	$file = $this->getUploadDir()."$id/".$proyecto->getArchivo();    	
-    	
-    	$response = new Response();
-    	$response->headers->set('Content-Type', 'application/msword');
-    	$response->headers->set("Content-Disposition", 'Attachment;filename="'.$proyecto->getArchivo().'"');
-    	$response->send();
-    	readfile($file);
-    	return $response;
+		$archivo = $this->getEstadosManager()->getArchivoPresentacion($proyecto);
+ 
+		if ($archivo) {
+		    	$file = $this->getUploadDir()."$id/".$archivo;
+		    	
+		    	$pos = strrpos($file, '.');
+		    	$ext =  ($pos!==false)?substr($file, $pos+1) : "";
+		    	$human_name = "Proyecto {$proyecto->getId()}.$ext";
+		    	$response = new Response();
+		    	$response->headers->set('Content-Type', 'application/msword');
+		    	$response->headers->set("Content-Disposition", 'Attachment;filename="'.$human_name.'"');
+		    	$response->send();
+		    	readfile($file);
+		    	return $response;
+		} else { 
+			$response = new Response();
+			return $response;
+		}
     }
     
     /**

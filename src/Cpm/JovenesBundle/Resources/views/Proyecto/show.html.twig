@@ -3,28 +3,189 @@
 
 {% block title %} Detalle del proyecto{% endblock %} 
 {% block content %}
+ 
+ 	  	<div class="proyecto_box_admin">	    
+		  	{% if ( entity.estadoActual) and (entity.estadoActual.estado >= 10) %}
+																	 {# 10 es el estado presentado #}
+				<div class="download_link icon" title="Descargar archivo">
+			    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : entity.id}) }}" > 
+			    	 	&nbsp;
+			    	</a>
+		    	</div> 
+			{% endif %}
+		  	
+		    <h2> Proyecto: {{ entity.titulo }} </h2>
+			{% set escuela = entity.escuela %}
+	
+			<h3 class="info_header"> <a href="#" onclick="$('.info_escuela').toggle(); return false;"> {{ proyecto_box.nombreEscuela(entity.escuela) }} </a></h3>
+			<div class="info_escuela hidden extra_info">
+				<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p> 
+				<p> Localidad {{escuela.localidad.nombre }} , Distrito {{ escuela.localidad.distrito }} </p>
+				<p> Región Educativa: {{ entity.escuela.localidad.distrito.region }} </p>
+				<p> Tel. {{ escuela.telefono }} / Email {{ escuela.email }} </p>
+				<p> Director: {{ escuela.director }} </p>
+			</div> <!-- info_escuela -->
+		
+			<h3 class="info_header">
+				<a href="#" onclick="$('.info_coordinador').toggle(); return false;";>
+					Coordinador {{ entity.coordinador.nombre }} {{entity.coordinador.apellido}}
+				</a>			
+			</h3>
+			<div class="info_coordinador hidden extra_info"> 
+				<p>Email <a href="mailto:{{entity.coordinador.email}}">{{entity.coordinador.email}}</a></p>
+				<p> DNI: {{ entity.coordinador.dni }}</p>
+	        	<p>Teléfono {{ entity.coordinador.telefono }}</p>
+				<p>Teléfono celular {{ entity.coordinador.telefonoCelular }}</p>
+	        	<p>Código postal {{ entity.coordinador.codigoPostal }}</p>
+			</div>	<!-- info_coordinador -->
 
-<h4> Región Educativa: {{ entity.escuela.localidad.distrito.region }} </h4>
+			{% if entity.colaboradores | length > 0 %}
+				<h3 class="info_header">
+					<a href="#" onclick="$('ul.colaboradores').toggle(); return false;";>
+						Colaboradores ({{ entity.colaboradores | length }})
+					</a>
+				</h3>
+				<ul class="colaboradores hidden extra_info">
+					{% for colaboradores in entity.colaboradores %}
+						<li> {{colaboradores.nombre}} {{colaboradores.apellido}} &lt;<a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;</li>
+					{% endfor %}
+				</ul>
+				
+			{% endif %}
+		
+			<h3 class="info_header"> <a href="#" onclick="$('.info_proyecto').toggle(); return false;">Acerca del proyecto (tema, alumnos, impacto...) </a></h3>
+			<div class="info_proyecto hidden extra_info">
+				<ul>	
+			    	<li>Primera vez del docente: {{ common.show_bool(entity.esPrimeraVezDocente) }}</li>
+			    	<li>Primera vez de la escuela: {{ common.show_bool(entity.esPrimeraVezEscuela) }}</li>
+			    	<li>Primera vez de los alumnos: {{ common.show_bool(entity.esPrimeraVezAlumnos) }}</li>
+			    </ul>
+						
+			
+				<p> Cantidad de alumnos que participan: {{ entity.nroAlumnos }} </p>
+				 
+				<p> Tema principal: {{ entity.temaPrincipal }} </p>
+				<p>  Producción Final: {{ entity.produccionFinal }} </p>
+				
+				<h4>¿De qué trata el proyecto?</h4>
+				<p>  {{ entity.deQueSeTrata }} </p>
+				
+				<h4>¿Cuál es el motivo de su realización?</h4>
+				<p>  {{ entity.motivoRealizacion }} </p>
+				
+				<h4>¿Cuál es el impacto buscado?</h4>
+				<p>  {{ entity.impactoBuscado }} </p>
+				<p> &nbsp; </p>
+			</div> <!-- info_proyecto -->
+			
+			
+			<ul class="record_actions">
+			    <li>
+			        <a href="{{ path('proyecto') }}">
+			            Vovler al listado
+			        </a>
+			    </li>
+			    <li>
+			        <a href="{{ path('proyecto_edit', { 'id': entity.id }) }}">
+			            Modificar
+			        </a>
+			    </li>
+			    <li>
+			        <form action="{{ path('proyecto_delete', { 'id': entity.id }) }}" method="post"
+			            onsubmit="return confirm('¿Está seguro que desea eliminar el proyecto?');">
+			            {{ form_widget(delete_form) }}
+			            <button type="submit">Eliminar</button>
+			        </form>
+			    </li>
+			</ul>
+				
+	</div> <!-- proyecto_box_admin -->
+	
+	
+	<div class="proyecto_right_box">
+	
+		<h3 class="info_header"> 
+								<a href="#" onclick="$('.info_estados').toggle(); return false;" >Estado actual: {{ entity.estadoActual }} </a> 
+								<a style="float:right;" href="javascript:cambiar_estado();">Cambiar estado</a>
+		</h3>
+	 		
+	 		
+	 		<div class="info_estados hidden extra_info">
+				<ul class="estados_list">
+				{% set first = true %}
+				{% for estado in estados_anteriores %}
+					<li> 
+						<p><strong>{{ estado }}  ( {{ estado.fecha|date('d-m-Y') }} ) </strong> 
+							{% if first %} {# solo se muestra el boton de borrar en el primer estado del listado #}
+								<a class="undo_link" onclick='confirmAndRelocate("¿Está seguro que desea cancelar este estado? Esta operación no se puede deshacer","{{ path('proyecto_rollback', { 'id': entity.id }) }}"); return false;' href="#"> Cancelar </a>
+								{% set first = false %}
+							{% endif %}
+						</p>
+						<ul class="estado_more_info">
+							{% if estado.archivo %} 
+								<li> Archivo:
+									<a href="{{ path('proyecto_descargar_archivo_viejo', { 'id': estado.id }) }}">
+										 {{ estado.archivo }}
+									</a>
+								</li>
+							 {% endif %}
+							<li>Observaciones: {{ estado.observaciones }} </li>
+						</ul>
+					</li>
+				{% endfor %}
+				</ul> 
+				
+				<div id="estado_proyecto_form">
+					<form id="nuevo_estado_proyecto_form" action="{{ path('proyecto_cambiar_estado', { 'id' : entity.id }) }}" method="post" {{ form_enctype(estado_form) }} onsubmit="return validar_form_cambio_estado();">
+						{{ form_row(estado_form.estado) }}
+						<div id="archivo_presentacion">
+							{{ form_row(estado_form.archivo) }}
+						</div>
+						{{ form_rest(estado_form) }}
+						<script> mostrar_campo_archivo(); </script>
+					</form>
+				</div>
+			</div> <!-- info_estados -->
+			
+			
+			{% if entity.invitaciones | length > 0 %}
+	<div class="invitaciones">
+		<div class="minimizer" onclick="$('.invitaciones .listado-items').toggle();"> - </div>
+		<div class="invitacion">	
+		    	<div class="many-pending"></div> Invitaciones a eventos 
+		 </div>   	
+		<ul class="listado-items">
+			{% for invitacion in entity.invitaciones %}
+				<li class="actions">
+					{{ invitacion.instanciaEvento.titulo }}
+					{% if not invitacion.instanciaEvento.fue() %}
+						<div class="status">
+						{% if invitacion.estaPendiente %}
+							{% if invitacion.estaVigente %}
+								 <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a>  
+								 <a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a>
+							{% endif %}
+							
+						{% else %}
+							{% if invitacion.aceptoInvitacion %}
+								<span class='aceptado'>Confirmado</span>
+								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a>
+								<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
+							{% else %}
+								<span class='rechazado'>Rechazado</span>
+								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
+							{% endif %}
+							
+    					{% endif %}
+    					</div>
+					{% endif %}
+				</li>
+			{%endfor %}
+			</ul>
+		</div>	<!-- invitaciones -->
 
-{{ proyecto_box.showFull(entity) }}
+	  {% endif %}	
+	
+	</div> <!-- proyecto_right_box -->
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('proyecto') }}">
-            Vovler al listado
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('proyecto_edit', { 'id': entity.id }) }}">
-            Modificar
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('proyecto_delete', { 'id': entity.id }) }}" method="post"
-            onsubmit="return confirm('¿Está seguro que desea eliminar el proyecto?');">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
-</ul>
 {% endblock %}

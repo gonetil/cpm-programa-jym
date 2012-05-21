@@ -53,6 +53,14 @@
             <argument type="service" id="doctrine" />
             <argument type="service" id="logger" />
         </service>
+        
+        <service id="cpm_jovenes_bundle.estados_manager" class="Cpm\JovenesBundle\Service\EstadosManager">
+			<argument type="service" id="cpm_jovenes_bundle.mailer" />
+            <argument type="service" id="cpm_jovenes_bundle.application" />
+            <argument type="service" id="doctrine" />
+            <argument type="service" id="logger" />
+        </service>
+        
     </services>
 
 
