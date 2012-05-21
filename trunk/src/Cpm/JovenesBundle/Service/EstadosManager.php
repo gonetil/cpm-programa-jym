@@ -77,23 +77,26 @@ class EstadosManager
     	}
     	return $resultado; 
     }
-    //TODO completar esta funcion
+    //TODO: completar esta funcion
     public function informarCambioDeEstado($proyecto) { 
     	$template = false;
     	switch ( $proyecto->getEstadoActual()->getEstado() ) {
 			case ESTADO_APROBADO:
 			case ESTADO_APROBADO_CLINICA:
-				$template = "proyecto_aprobado";	
+				$template = "proyecto-aprobado";	
 				break;
 			case ESTADO_DESAPROBADO: 
-				$template = "proyecto_desaprobado";	
+				$template = "proyecto-desaprobado";	
 				break;
 			case ESTADO_REHACER:
-				$template = "proyecto_rehacer";	
+				$template = "rehacer-proyecto";	
 				break;
 			default: //no se envian emails en otros casos
 				break;
 		}
+		
+		if ($template)
+			$this->mailer->sendCorreoEvaluacionProyecto($proyecto,$template);
 		
     }
     

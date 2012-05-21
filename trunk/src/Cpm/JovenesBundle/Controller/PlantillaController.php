@@ -86,10 +86,17 @@ class PlantillaController extends BaseController
         $form->bindRequest($request);
 
         $mailer = $this->getMailer();
-        $mailer->validateTemplate($entity->getCuerpo());
+        $valid = false;
+        try {
+        	$valid = $mailer->isValidTemplate($entity->getCuerpo());
+		}
+		catch( Exception $e ) {
+			$this->setErrorMessage("Error al procesar la plantilla");
+		}
+        
         //FIXME
         $entity->setCodigo($this->slug($entity->getAsunto()));
-        if ($form->isValid() && ($template_is_correct == "success")) {
+        if ($form->isValid() && ($valid)) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
@@ -103,7 +110,6 @@ class PlantillaController extends BaseController
 			            'entity' => $entity,
 			            'form'   => $form->createView()
 			        );
-		if ($template_is_correct != "success") $retorno['template_error'] = "Error en la plantilla ($template_is_correct)";
         return $retorno; 
     }
     
