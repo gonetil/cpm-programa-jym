@@ -35,6 +35,7 @@ class ProyectoController extends BaseController
     public function indexAction()
     {
     	$stats = $this->getSystemStats();
+    	$estadosManager = $this->getEstadosManager(); //agrego esto para que las constantes aparezcan en el twig
 //    	/$ciclo = $this->getJYM()->getCicloActivo();
         
 		return $this->filterAction(new ProyectoFilter(), 'proyecto', $stats);

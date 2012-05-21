@@ -80,7 +80,7 @@ class EstadosManager
     //TODO completar esta funcion
     public function informarCambioDeEstado($proyecto) { 
     	$template = false;
-    	switch ( $proyecto->getEstadoActual() ) {
+    	switch ( $proyecto->getEstadoActual()->getEstado() ) {
 			case ESTADO_APROBADO:
 			case ESTADO_APROBADO_CLINICA:
 				$template = "proyecto_aprobado";	

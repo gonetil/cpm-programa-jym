@@ -5,8 +5,8 @@
 {% block content %}
  
  	  	<div class="proyecto_box_admin">	    
-		  	{% if ( entity.estadoActual) and (entity.estadoActual.estado >= 10) %}
-																	 {# 10 es el estado presentado #}
+		  	{% if ( entity.estadoActual) and (entity.estadoActual.estado >= constant('ESTADO_PRESENTADO')) %}
+																	 
 				<div class="download_link icon" title="Descargar archivo">
 			    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : entity.id}) }}" > 
 			    	 	&nbsp;
