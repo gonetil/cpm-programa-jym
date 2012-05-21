@@ -171,5 +171,8 @@ class JYM  {
 	public function getEventosManager(){
 		return $this->container->get('cpm_jovenes_bundle.eventos_manager');
 	}	
-	
+
+	public function getEsadosManager(){
+		return $this->container->get('cpm_jovenes_bundle.estados_manager');
+	}		
 }
