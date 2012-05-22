@@ -302,8 +302,12 @@ class ProyectoController extends BaseController
             throw $this->createNotFoundException('Proyecto no encontrado');
         }
         
+        $estadoAnterior = $entity->getEstadoActual();
 		$manager = $this->getEstadosManager();
 		$manager->deshacerEstadoDeProyecto($entity);    
+		
+		if ($entity->getEstadoActual() != $estadoAnterior) 
+			$this->setSuccessMessage("Estado deshecho satisfactoriamente.");
 		
 		return $this->redirect($this->generateUrl('proyecto_show', array('id' => $entity->getId())));	
     }

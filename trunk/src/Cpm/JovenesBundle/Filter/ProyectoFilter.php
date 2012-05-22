@@ -9,6 +9,7 @@ use Cpm \ JovenesBundle \ Entity \ Proyecto;
 class ProyectoFilter extends Proyecto implements ModelFilter {
 	private $escuelaFilter;
 	private $eventoFilter;
+	private $estadoFilter;
 
 	public function createForm() {
 		return new ProyectoFilterForm($this);
@@ -40,6 +41,15 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 
 	public function setEventoFilter($eventoFilter) {
 		$this->eventoFilter = $eventoFilter;
+	}
+	
+	public function getEstadoFilter() {
+		if (!$this->estadoFilter)
+			$this->estadoFilter = new EstadoFilter();
+		return $this->estadoFilter;
+	}
+	public function setEstadoFilter($estadoFilter) {
+		$this->estadoFilter = $estadoFilter;
 	}
 
 }

@@ -31,7 +31,9 @@ $(document).ready(function() {
 			<div class="extra-filters">
 	            {{ form_row(form.modelFilter.produccionFinal) }} 
 	            {{form_row(form.modelFilter.esPrimeraVezAlumnos) }}
-	            {{ form_row(form.modelFilter.archivo) }} 
+	            {{ form_row(form.modelFilter.estadoFilter.conArchivo) }} 
+	            {{ form_row(form.modelFilter.estadoFilter.yaEvaluado) }}
+	            {{ form_row(form.modelFilter.estadoFilter.vigente) }}
             </div>
 		</div>
 		<div class='right'>
@@ -119,20 +121,9 @@ $(document).ready(function() {
 			</td>
 			<td>
 				{% if ( entity.estadoActual) %}
-					{% set estado = entity.estadoActual.estado %}
-					{% if estado == constant('ESTADO_APROBADO') %} 
-						Aprobado
-					{% elseif estado == constant('ESTADO_APROBADO_CLINICA') %}
-						Aprobado C
-					{% elseif estado == constant('ESTADO_DESAPROBADO') %}
-						Desaprobado
-					{% elseif estado == constant('ESTADO_REHACER') %}
-						Rehacer
-					{% else %}
-						-
-					{% endif %}		
+				    {{ entity.estadoActual }}
 				{% else %}
-					-	
+					Iniciado
 				{% endif %}
 				
 			</td>

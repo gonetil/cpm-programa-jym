@@ -106,10 +106,12 @@
 	
 	<div class="proyecto_right_box">
 	
-		<h3 class="info_header"> 
-								<a href="#" onclick="$('.info_estados').toggle(); return false;" >Estado actual: {{ entity.estadoActual }} </a> 
-								<a style="float:right;" href="javascript:cambiar_estado();">Cambiar estado</a>
-		</h3>
+	<div class="estados_proyecto_box">
+		<h3 class="info_header">Estado actual: {{ entity.estadoActual }}</h3>
+		<h4 class="info_header">
+			<a style="" href="#" onclick="$('.info_estados').toggle(); return false;" > <img src="/images/icons/slidedown.png"> Historial ({{ estados_anteriores | length }})</a> 
+			<a style="float:right;" href="javascript:cambiar_estado();">Cambiar estado</a>								
+		</h4>
 	 		
 	 		
 	 		<div class="info_estados hidden extra_info">
@@ -117,15 +119,19 @@
 				{% set first = true %}
 				{% for estado in estados_anteriores %}
 					<li> 
-						<p><strong>{{ estado }}  ( {{ estado.fecha|date('d-m-Y') }} ) </strong> 
+						<div class="undo_list">
+						 	{{ estado.fecha|date('d-m-Y') }}
 							{% if first %} {# solo se muestra el boton de borrar en el primer estado del listado #}
-								<a class="undo_link" onclick='confirmAndRelocate("¿Está seguro que desea cancelar este estado? Esta operación no se puede deshacer","{{ path('proyecto_rollback', { 'id': entity.id }) }}"); return false;' href="#"> Cancelar </a>
+								<a onclick='confirmAndRelocate("¿Está seguro que desea cancelar este estado? Esta operación no se puede deshacer","{{ path('proyecto_rollback', { 'id': entity.id }) }}"); return false;' href="#"> Cancelar </a>
 								{% set first = false %}
 							{% endif %}
+						 </div>	
+						
+						<p><strong>Estado: {{ estado }}  </strong>
 						</p>
 						<ul class="estado_more_info">
 							{% if estado.archivo %} 
-								<li> Archivo:
+								<li> Archivo adjunto:
 									<a href="{{ path('proyecto_descargar_archivo_viejo', { 'id': estado.id }) }}">
 										 {{ estado.archivo }}
 									</a>
@@ -148,7 +154,7 @@
 					</form>
 				</div>
 			</div> <!-- info_estados -->
-			
+		</div> <!-- estados_proyecto_box -->	
 			
 			{% if entity.invitaciones | length > 0 %}
 	<div class="invitaciones">
