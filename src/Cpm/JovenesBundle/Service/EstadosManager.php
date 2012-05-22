@@ -115,7 +115,8 @@ class EstadosManager
 		$em->remove($estadoActual);  
 		$nuevoEstado = (count($estados) > 1) ? $estados[1] : null;     	//FIXME aqui va null o se crea un estado "iniciado" ? 		
  		$proyecto->setEstadoActual($nuevoEstado);		
-		$em->persist($nuevoEstado);
+		
+		if ($nuevoEstado) $em->persist($nuevoEstado);
 		$em->persist($proyecto);
 
 	    $em->flush();

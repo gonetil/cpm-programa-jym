@@ -124,10 +124,6 @@ class ProyectoRepository extends EntityRepository {
 			"%"));
 		}
 
-		if ($archivo = $data->getArchivo()) {
-			$qb->andWhere("p.archivo " . (($archivo == 1) ? 'is not' : 'is') . " NULL");
-		}
-		
 		$evento = $data->getEventoFilter(); 
 		if ($ev = $evento->getEvento()) {  
 			if ($evento->getSinInvitacionFlag()) //sin invitacion 
@@ -147,6 +143,40 @@ class ProyectoRepository extends EntityRepository {
 			}		
 		}
 
+		$estado = $data->getEstadoFilter();
+		if ($estado) {
+				if ($estado->getConArchivo() || $estado->getYaEvaluado() || $estado->getVigente()) {
+					$qb	->leftJoin('p.estadoActual','est');
+						
+					if ($archivo=$estado->getConArchivo()) {
+						if ($archivo != 1) 
+							$qb->andWhere("(est.estado < :estado or (p.estadoActual is null))")->setParameter('estado', ESTADO_PRESENTADO);
+						else 
+							$qb->andWhere("est.estado >= :estado")->setParameter('estado', ESTADO_PRESENTADO);
+					}
+					if ($yev= $estado->getYaEvaluado()) {						
+						$estados_evaluados = array(ESTADO_APROBADO,ESTADO_APROBADO_CLINICA,ESTADO_DESAPROBADO,ESTADO_REHACER, ESTADO_FINALIZADO);
+						$estados_sin_evaluar = array(ESTADO_INICIADO); //ESTADO_ANULADO
+						
+						if ($yev == 1)
+							$qb->andWhere("est.estado IN (:estado)")->setParameter('estado', $estados_evaluados);						
+						else
+							$qb->andWhere("( (est.estado IN (:estado)) or (p.estadoActual is null) )")->setParameter('estado', $estados_sin_evaluar);
+					}
+					if ($vig = $estado->getVigente()) {
+						switch ( $vig ) {
+							case 1: //no anulados, o sea vigentes
+									$qb->andWhere("(est.estado != :est or p.estadoActual is null)")->setParameter('est', ESTADO_ANULADO);	
+								break;
+							case 2: //anulados
+								$qb->andWhere("est.estado = :est")->setParameter('est', ESTADO_ANULADO);
+								break; 	
+							default:
+								break;
+						}
+					}
+				}
+		}
 		return $qb;
 	}
 

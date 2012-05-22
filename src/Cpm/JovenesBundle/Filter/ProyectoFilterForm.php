@@ -53,7 +53,7 @@ class ProyectoFilterForm extends ModelFilterForm
 		    														},
         												'required'=>false
         								))
-		  ->add('coordinador',null,array( 'label' => 'Docente coordinador',
+		  ->add('coordinador', null,array( 'label' => 'Docente coordinador',
 		    										'required' => false ))
             ->add('archivo', 'choice' ,array('label' => 'Archivo cargado' , 
             											'choices' => array(1=>"Con archivo",2=>"Sin archivo"),
@@ -68,7 +68,9 @@ class ProyectoFilterForm extends ModelFilterForm
             
             $evento = new EventoFilter();
             $builder->add('eventoFilter',$evento->createForm(),array('label'=>'Evento'));
-                												    	
+                									
+            $estado = new EstadoFilter();
+            $builder->add('estadoFilter',$estado->createForm(),array('label'=>'Estado'));
         
     }
     
