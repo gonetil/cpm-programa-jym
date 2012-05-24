@@ -106,16 +106,16 @@ class EstadosManager
     public function deshacerEstadoDeProyecto($proyecto) {
     	$em = $this->doctrine->getEntityManager();
     	$estados = $em->getRepository('CpmJovenesBundle:EstadoProyecto')->getEstadosAnteriores($proyecto);
+    	
     	$estadoActual = $proyecto->getEstadoActual();
     	if (count($estados) == 0) { 
     		$this->logger->info("Se ignora el deshacer estado del proyecto {$proyecto->getId()} : no hay estados");
     		return false;
     	}
-
 		$em->remove($estadoActual);  
+		array_map(function($x){ echo $x->getId()."<br/>"; },$estados); die;
 		$nuevoEstado = (count($estados) > 1) ? $estados[1] : null;     	//FIXME aqui va null o se crea un estado "iniciado" ? 		
- 		$proyecto->setEstadoActual($nuevoEstado);		
-		
+ 		$proyecto->setEstadoActual($nuevoEstado);
 		if ($nuevoEstado) $em->persist($nuevoEstado);
 		$em->persist($proyecto);
 
