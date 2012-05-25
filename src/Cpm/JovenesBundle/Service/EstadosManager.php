@@ -113,7 +113,6 @@ class EstadosManager
     		return false;
     	}
 		$em->remove($estadoActual);  
-		array_map(function($x){ echo $x->getId()."<br/>"; },$estados); die;
 		$nuevoEstado = (count($estados) > 1) ? $estados[1] : null;     	//FIXME aqui va null o se crea un estado "iniciado" ? 		
  		$proyecto->setEstadoActual($nuevoEstado);
 		if ($nuevoEstado) $em->persist($nuevoEstado);
