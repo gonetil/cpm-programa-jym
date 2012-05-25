@@ -137,6 +137,9 @@
 									</a>
 								</li>
 							 {% endif %}
+							 {% if estado.valoracion %}
+							 	<li> Valoración: <strong> {{estado.valoracion}}</strong></li>
+							 {% endif %}
 							<li>Observaciones: {{ estado.observaciones }} </li>
 						</ul>
 					</li>
@@ -148,6 +151,9 @@
 						{{ form_row(estado_form.estado) }}
 						<div id="archivo_presentacion">
 							{{ form_row(estado_form.archivo) }}
+						</div>
+						<div id="valoracion">
+							{{ form_row(estado_form.valoracion) }}
 						</div>
 						{{ form_rest(estado_form) }}
 						<script> mostrar_campo_archivo(); </script>

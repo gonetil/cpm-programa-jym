@@ -77,4 +77,35 @@ class MaintenanceController extends BaseController
 			
 			
 		}	
+		
+			/**
+			 *  @Route("/asignar_estados_presentado", name="asignar_estados_presentado")
+			 * @Method("get")
+			 */
+		public function downloadAllFiles() {
+					$em = $this->getDoctrine()->getEntityManager();
+			        $proyectos = $em->createQuery(
+										    'SELECT p FROM CpmJovenesBundle:Proyecto p WHERE p.archivo is not null'
+										)->getResult();
+		
+					$estadosManager = $this->getEstadosManager();
+
+					$uploadDir = $this->getUploadDir();
+							foreach ( $proyectos as $proyecto ) {
+								$id = $proyecto->getId();
+									$file = $estadosManager->getArchivoPresentacion($proyecto);
+									if ($file) { 
+										echo $uploadDir."$id/$file <br/>";
+									}
+							}
+					
+					    
+					$response = new Response();
+					return $response;
+								
+
+		 }
+		
+		
+		
 }

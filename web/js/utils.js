@@ -226,10 +226,14 @@ invitacion_reinvitar = function(clicked_node,$destination) {
 mostrar_campo_archivo = function() { 
 	$("#cpm_jovenesbundle_estadoproyectotype_estado").change(function() {
 		val = $("#cpm_jovenesbundle_estadoproyectotype_estado").val();
-		if (val == 10) //presentado... FIXME: usar la constante de PHP
+		if (val == 10) { //presentado... FIXME: usar la constante de PHP
 			$("#archivo_presentacion").show();
-		else
+			$("#valoracion").hide();
+		}
+		else {
 			$("#archivo_presentacion").hide();
+			$("#valoracion").show();
+		}
 		$("#archivo_presentacion .error").remove();
 	});
 }

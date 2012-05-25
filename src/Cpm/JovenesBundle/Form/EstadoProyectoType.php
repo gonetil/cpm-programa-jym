@@ -25,6 +25,12 @@ class EstadoProyectoType extends AbstractType
             ->add('archivo','file',array('label' => 'Archivo con el proyecto', 
 											'required' => false))
             ->add('observaciones',null,array('required'=>false))
+            ->add('valoracion','choice',array(
+												'required'=>false,
+												'choices' => array('Muy bueno'=>'Muy bueno','Bueno' => 'Bueno','Regular' => 'Regular'),
+												'expanded' => false,
+												'label' => 'Valoración',
+												))
 
         ;
     }

@@ -32,6 +32,7 @@ class PerfilController extends BaseController
     public function indexAction()
     {
     	$usuario = $this->getLoggedInUser();
+    	$estadosManager = $this->getEstadosManager();
     	if (!$usuario->getDomicilio()) { 
     		$this->setInfoMessage("Por favor, complete el campo Domicilio");
 			return $this->redirect($this->generateUrl('fos_user_profile_edit'));    			
