@@ -52,7 +52,11 @@ class EstadoProyecto
 	     * @ORM\ManyToOne(targetEntity="Proyecto")
 	     */
 		private $proyecto;
-
+		
+		/**
+		 * @ORM\Column(name="valoracion",type="string",length="30",nullable=true)
+		 */
+		private $valoracion; //muy bueno, bueno, regular
     /**
      * Get id
      *
@@ -183,8 +187,17 @@ class EstadoProyecto
         return $this->proyecto;
     }
     
+    public function getValoracion() {
+    	return $this->valoracion;
+    }
+    
+    public function setValoracion($valoracion) {
+    	$this->valoracion = $valoracion;
+    }
+    
  	public function __toString() {
- 		$estado = "";
+ 		$estado = "...";
+		
  		switch ( $this->getEstado() ) {
 			case ESTADO_PRESENTADO: $estado = "Presentado"; break;
 			case ESTADO_APROBADO: $estado = "Aprobado"; break;
@@ -194,8 +207,9 @@ class EstadoProyecto
 			case ESTADO_INICIADO: $estado =  "Iniciado"; break;
 			case ESTADO_REHACER: $estado =  "Rehacer"; break;
 			case ESTADO_ANULADO: $estado =  "Anulado"; break;
-			default: $estado = "ERROR";break; //FIXME 
+			default: $estado = "ERROR"; break; //FIXME 
 		}
+		
 		return $estado;
  	}   
 
