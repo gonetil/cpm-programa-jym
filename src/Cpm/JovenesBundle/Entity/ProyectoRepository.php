@@ -159,9 +159,12 @@ class ProyectoRepository extends EntityRepository {
 						$estados_sin_evaluar = array(ESTADO_INICIADO); //ESTADO_ANULADO
 						
 						if ($yev == 1)
-							$qb->andWhere("est.estado IN (:estado)")->setParameter('estado', $estados_evaluados);						
+							$qb->andWhere("est.estado between :estado_aprobado AND :estado_finalizado")
+											->setParameter('estado_aprobado', ESTADO_APROBADO)
+											->setParameter('estado_finalizado', ESTADO_FINALIZADO);						
 						else
-							$qb->andWhere("( (est.estado IN (:estado)) or (p.estadoActual is null) )")->setParameter('estado', $estados_sin_evaluar);
+							$qb->andWhere("( (est.estado = :estado_presentado) or (est.estado = :estado_iniciado) or (p.estadoActual is null) )")
+								->setParameter('estado_presentado', ESTADO_PRESENTADO)->setParameter('estado_iniciado', ESTADO_INICIADO);
 					}
 					if ($vig = $estado->getVigente()) {
 						switch ( $vig ) {
