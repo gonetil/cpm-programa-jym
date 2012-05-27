@@ -36,12 +36,25 @@ class ProyectoController extends BaseController
     {
     	$stats = $this->getSystemStats();
     	$estadosManager = $this->getEstadosManager(); //agrego esto para que las constantes aparezcan en el twig
-//    	/$ciclo = $this->getJYM()->getCicloActivo();
-        
 		return $this->filterAction(new ProyectoFilter(), 'proyecto', $stats);
     	
     }
-
+    
+    /**
+     * Lists all Proyecto entities.
+     * @Method("get")
+     * @Route("/proyectos_activos", name="proyectos_activos")
+     * @Template("CpmJovenesBundle:Proyecto:index.html.twig")
+     */
+	public function proyectosActivosAction() {
+    	$stats = $this->getSystemStats();
+    	$estadosManager = $this->getEstadosManager(); //agrego esto para que las constantes aparezcan en el twig
+    	$filter = new ProyectoFilter();
+    	$filter->getEstadoFilter()->setConArchivo(1);
+    	$this->setInfoMessage("Proyectos vigentes: proyectos en estado PRESENTADO hacia adelante");
+		return $this->filterAction($filter, 'proyecto', $stats);
+		
+	}
     private function getSystemStats() {
     	$stats = array(); 
     	$em = $this->getEntityManager();
