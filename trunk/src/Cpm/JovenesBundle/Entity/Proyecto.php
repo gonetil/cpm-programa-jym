@@ -556,4 +556,10 @@ class Proyecto
  		$this->estadoActual = $estadoActual;
  	}
 
+    public function hasArchivo() {
+    		if ($this->getEstadoActual()) 
+    	   		return ($this->getEstadoActual()->getEstado() >= ESTADO_PRESENTADO);
+    	   	else return false;	
+    }
+
 }
