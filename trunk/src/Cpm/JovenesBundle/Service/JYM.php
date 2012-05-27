@@ -9,6 +9,7 @@ use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Entity\Ciclo;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+
 class JYM  {
 	private $etapasPorNombre;
 	private $etapas;
@@ -17,6 +18,7 @@ class JYM  {
 	private $container;
 	private $doctrine;
 	private $logger;
+	private $perfil_dinamico;
 
 	public function __construct($doctrine, $logger, ContainerInterface $container){
 		$this->doctrine=$doctrine;
@@ -26,6 +28,7 @@ class JYM  {
 		$this->setEtapas(StaticConfig::getEtapas());
 		$this->ciclo=null;
 		$this->lastInit();
+		$this->perfil_dinamico = new PerfilDinamico();
 	} 
 	
 	private function setEtapas($etapas){
@@ -147,21 +150,24 @@ class JYM  {
 	}
 	
 	public function getAccionesUsuario(){
-		$acciones = array();
-		foreach ( $this->etapas[$this->numeroEtapaActual]['accionesUsuario'] as $key => $accion ) {
-			//if (eval($accion['condition']))
-			$acciones[]=$accion;
-		}
-		return $acciones;
+		
+		$usuario = $this->container->get('security.context')->getToken()->getUser();
+		return $this->perfil_dinamico->accionesDeUsuario($usuario,$this->etapas[$this->numeroEtapaActual]);
 	}
 	
 	public function getAccionesProjecto(Proyecto $proyecto){
-		$acciones = array();
-		foreach ( $this->etapas[$this->numeroEtapaActual]['accionesProyecto'] as $key => $accion ) {
-			//if (eval($accion['condition'] on $project))
-			$acciones[]=$accion;
-		}
-		return $acciones;
+	
+		$usuario = $this->container->get('security.context')->getToken()->getUser();
+		return $this->perfil_dinamico->accionesDeProyecto($proyecto,$usuario,$this->etapas[$this->numeroEtapaActual]);
+	}
+	
+	public function mensajesDeUsuario() {
+		$usuario = $this->container->get('security.context')->getToken()->getUser();
+		return $this->perfil_dinamico->mensajesDeUsuario($usuario,$this->etapas[$this->numeroEtapaActual]);
+	}
+	public function mensajesDeProyecto(Proyecto $proyecto) {
+		$usuario = $this->container->get('security.context')->getToken()->getUser();
+		return $this->perfil_dinamico->mensajesDeProyecto($proyecto,$usuario,$this->etapas[$this->numeroEtapaActual]);
 	}
 	
 	public function getNombresEtapas(){
@@ -172,7 +178,7 @@ class JYM  {
 		return $this->container->get('cpm_jovenes_bundle.eventos_manager');
 	}	
 
-	public function getEsadosManager(){
+	public function getEstadosManager(){
 		return $this->container->get('cpm_jovenes_bundle.estados_manager');
 	}		
 }
