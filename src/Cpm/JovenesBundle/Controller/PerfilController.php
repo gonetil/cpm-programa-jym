@@ -40,7 +40,6 @@ class PerfilController extends BaseController
     	$mis_proyectos = $this->getRepository('CpmJovenesBundle:Proyecto')->findBy(
 						    	array('coordinador' => $usuario->getId())
 		);
-		$this->setInfoMessage(" Por favor, conserve su nombre de usuario y contraseña. Trabajaremos juntos todo el año, y está página será nuestro canal de comunicación principal.");
         return array (
         			'proyectos' => $mis_proyectos ,
         			'usuario' => $usuario,
