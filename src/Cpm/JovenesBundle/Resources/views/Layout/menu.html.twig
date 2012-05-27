@@ -18,7 +18,7 @@
 			
 				    {% for accionUsuario in jym.getAccionesUsuario() %}
 					<li>
-							<li><a href="{{path(accionUsuario.href)}}">{{accionUsuario.label}}</a></li>
+							<li><a href="{{path(accionUsuario['path'])}}">{{accionUsuario['label']}}</a></li>
 					</li>
 					{% endfor %}
 					{% if app.user.proyectosCoordinados|length > 0 %}

@@ -5,15 +5,27 @@
 {% block title %}  {% endblock %}
 
 {% block content %}
-
+<ul id="user-messages"> 
+{% for mensajes in jym.mensajesDeUsuario() %}
+	{% for key,m in mensajes %} {# cada mensaje de usuario puede estar compuesto de varios mensajes #}
+		<li class="{{key}}"> {{ m }} </li>
+	{% endfor %}
+{% endfor %}
+</ul>
 <div id="welcome-message">
 	<h2>Hola {{usuario.nombre}}, le damos la bienvenida al Sistema de usuarios del <i>Programa Jóvenes y Memoria, recordamos para el futuro </i></h2>
 	
 
 	<ul id="user-actions" class="record_actions" style="float:right">
 	    {% for accionUsuario in jym.getAccionesUsuario() %}
-		<li>
-			<a href="{{ path(accionUsuario.href) }}">{{accionUsuario.label}}</a>
+	    <li>							<a 
+							{% if accionUsuario['validation'] %}
+								href="#" onclick="return confirmAndRelocate('{{accionUsuario['validation']}}','{{ path(accionUsuario['path']) }}');"
+							{% else %}
+								href="{{ path(accionUsuario['path']) }}"								
+							{% endif %}
+							>{{accionUsuario['label']}}</a>
+	    
 		</li>
 		{% endfor %}
 	</ul>
