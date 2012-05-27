@@ -24,11 +24,11 @@ $(document).ready(function() {
 		<div class='left'>
 			<h4>Filtros sobre el proyecto</h4>
 			{{ form_row(form.modelFilter.coordinador) }} 
-			{{ form_row(form.modelFilter.esPrimeraVezDocente) }}
-			{{form_row(form.modelFilter.temaPrincipal) }}
-			{{ form_row(form.modelFilter.eventoFilter.evento) }}
-			{{ form_row(form.modelFilter.eventoFilter.sinInvitacionFlag) }}
 			<div class="extra-filters">
+				{{ form_row(form.modelFilter.esPrimeraVezDocente) }}
+				{{form_row(form.modelFilter.temaPrincipal) }}
+				{{ form_row(form.modelFilter.eventoFilter.evento) }}
+				{{ form_row(form.modelFilter.eventoFilter.sinInvitacionFlag) }}
 	            {{ form_row(form.modelFilter.produccionFinal) }} 
 	            {{form_row(form.modelFilter.esPrimeraVezAlumnos) }}
 	            {{ form_row(form.modelFilter.estadoFilter.conArchivo) }} 
@@ -39,17 +39,17 @@ $(document).ready(function() {
 		<div class='right'>
 			<h4>Filtros sobre la escuela</h4>
 			{{ form_row(form.modelFilter.escuelaFilter.nombre) }}
-			{{ form_row(form.modelFilter.escuelaFilter.localidad) }}
-			{{ form_row(form.modelFilter.escuelaFilter.distrito) }} 
-			<div class='range'>
-				{{ form_label(form.modelFilter.escuelaFilter.regionDesde) }} 
-				{{ form_errors(form.modelFilter.escuelaFilter.regionDesde) }} 
-				{{ form_widget(form.modelFilter.escuelaFilter.regionDesde) }} 
-				{{ form_label(form.modelFilter.escuelaFilter.regionHasta) }} 
-				{{ form_errors(form.modelFilter.escuelaFilter.regionHasta) }} 
-				{{ form_widget(form.modelFilter.escuelaFilter.regionHasta) }}
-			</div>			
 			<div class="extra-filters">
+				{{ form_row(form.modelFilter.escuelaFilter.localidad) }}
+				{{ form_row(form.modelFilter.escuelaFilter.distrito) }} 
+				<div class='range'>
+					{{ form_label(form.modelFilter.escuelaFilter.regionDesde) }} 
+					{{ form_errors(form.modelFilter.escuelaFilter.regionDesde) }} 
+					{{ form_widget(form.modelFilter.escuelaFilter.regionDesde) }} 
+					{{ form_label(form.modelFilter.escuelaFilter.regionHasta) }} 
+					{{ form_errors(form.modelFilter.escuelaFilter.regionHasta) }} 
+					{{ form_widget(form.modelFilter.escuelaFilter.regionHasta) }}
+				</div>			
 				{{ form_row(form.modelFilter.escuelaFilter.region) }} 
 				{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
 				{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }}
