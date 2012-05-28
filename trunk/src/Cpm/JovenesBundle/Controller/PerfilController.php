@@ -431,6 +431,7 @@ class PerfilController extends BaseController
 		    	
 		    	$pos = strrpos($file, '.');
 		    	$ext =  ($pos!==false)?substr($file, $pos+1) : "";
+		    	if ($ext == 'zip') $ext = 'docx'; //renombro los zip a docx a drede
 		    	$human_name = "Proyecto {$proyecto->getId()}.$ext";
 		    	$response = new Response();
 		    	$response->headers->set('Content-Type', 'application/msword');
