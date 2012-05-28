@@ -190,7 +190,7 @@ abstract class BaseController extends Controller
     }
     
     public function getValidExtensions() {
-    	return $valid_extensions = array("doc","docx","odt","pdf","rtf","wps","zip");
+    	return $valid_extensions = array("doc","docx","odt","pdf","rtf","wps");
     }
     
     
