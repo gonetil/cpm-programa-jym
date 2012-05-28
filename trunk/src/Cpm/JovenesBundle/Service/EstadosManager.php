@@ -83,7 +83,10 @@ class EstadosManager
     	switch ( $proyecto->getEstadoActual()->getEstado() ) {
 			case ESTADO_APROBADO:
 			case ESTADO_APROBADO_CLINICA:
-				$template = "proyecto-aprobado";	
+				if ($proyecto->getEsPrimeraVezDocente())
+					$template = "proyecto-aprobado";	
+				else
+					$template = "proyecto-aprobado-docentes-reincidentes"; //docentes que ya participaron
 				break;
 			case ESTADO_DESAPROBADO: 
 				$template = "proyecto-desaprobado";	
