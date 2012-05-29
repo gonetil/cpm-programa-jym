@@ -145,7 +145,7 @@ class ProyectoRepository extends EntityRepository {
 
 		$estado = $data->getEstadoFilter();
 		if ($estado) {
-				if ($estado->getConArchivo() || $estado->getYaEvaluado() || $estado->getVigente()) {
+				if ($estado->getConArchivo() || $estado->getYaEvaluado() || $estado->getVigente() || $estado->getNota()) {
 					$qb	->leftJoin('p.estadoActual','est');
 						
 					if ($archivo=$estado->getConArchivo()) {
@@ -165,6 +165,9 @@ class ProyectoRepository extends EntityRepository {
 						else
 							$qb->andWhere("( (est.estado = :estado_presentado) or (est.estado = :estado_iniciado) or (p.estadoActual is null) )")
 								->setParameter('estado_presentado', ESTADO_PRESENTADO)->setParameter('estado_iniciado', ESTADO_INICIADO);
+					}
+					if ($nota = $estado->getNota()) {
+						$qb->andWhere('est.valoracion = :nota')->setParameter('nota',$nota);
 					}
 					if ($vig = $estado->getVigente()) {
 						switch ( $vig ) {

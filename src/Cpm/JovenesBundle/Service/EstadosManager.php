@@ -31,8 +31,10 @@ class EstadosManager
         $this->jym = $jym;
 	    $this->doctrine = $doctrine;
 	    $this->logger = $logger;
-	    
-	
+    }
+
+    public static function getNotasPosibles() { 
+    	return array('Muy bueno'=>'Muy bueno','Bueno' => 'Bueno','Regular' => 'Regular');
     }
     
     public function getPreferredChoices() { 

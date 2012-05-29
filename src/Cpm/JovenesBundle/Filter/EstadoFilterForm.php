@@ -4,6 +4,7 @@ namespace Cpm\JovenesBundle\Filter;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Cpm\JovenesBundle\Service\EstadosManager;
 
 class EstadoFilterForm extends ModelFilterForm
 {
@@ -32,6 +33,12 @@ class EstadoFilterForm extends ModelFilterForm
         												'expanded'=>false,
         												'required'=>false
                 										))
+			->add('nota','choice',array('label' => 'Nota' ,
+										  'choices' => EstadosManager::getNotasPosibles(),
+										  'empty_value'=>'Todas',
+										  'expanded'=>false,
+										  'required' => false
+										  ))                										
                 										;     
     }          	
 }
