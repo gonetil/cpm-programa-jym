@@ -27,7 +27,7 @@ class EstadoProyectoType extends AbstractType
             ->add('observaciones',null,array('required'=>false))
             ->add('valoracion','choice',array(
 												'required'=>false,
-												'choices' => array('Muy bueno'=>'Muy bueno','Bueno' => 'Bueno','Regular' => 'Regular'),
+												'choices' => $this->estadosManager->getNotasPosibles(),
 												'expanded' => false,
 												'label' => 'Valoración',
 												))
