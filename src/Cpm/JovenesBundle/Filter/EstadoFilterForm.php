@@ -34,7 +34,7 @@ class EstadoFilterForm extends ModelFilterForm
         												'required'=>false
                 										))
 			->add('nota','choice',array('label' => 'Nota' ,
-										  'choices' => EstadosManager::getNotasPosibles(),
+										  'choices' => EstadosManager::getEstadosEvaluados(),
 										  'empty_value'=>'Todas',
 										  'expanded'=>false,
 										  'required' => false

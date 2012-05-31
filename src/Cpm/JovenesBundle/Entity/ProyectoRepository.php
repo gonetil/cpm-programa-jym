@@ -167,7 +167,7 @@ class ProyectoRepository extends EntityRepository {
 								->setParameter('estado_presentado', ESTADO_PRESENTADO)->setParameter('estado_iniciado', ESTADO_INICIADO);
 					}
 					if ($nota = $estado->getNota()) {
-						$qb->andWhere('est.valoracion = :nota')->setParameter('nota',$nota);
+						$qb->andWhere('est.estado = :nota')->setParameter('nota',$nota);
 					}
 					if ($vig = $estado->getVigente()) {
 						switch ( $vig ) {

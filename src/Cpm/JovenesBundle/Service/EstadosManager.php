@@ -36,13 +36,7 @@ class EstadosManager
     public static function getNotasPosibles() { 
     	return array('Muy bueno'=>'Muy bueno','Bueno' => 'Bueno','Regular' => 'Regular');
     }
-    
-    public function getPreferredChoices() { 
-    	return array(
-				ESTADO_APROBADO, ESTADO_REHACER, ESTADO_DESAPROBADO, ESTADO_APROBADO_CLINICA
-				); 
-     }
-    public function getSelectableEstados() { 
+    public static function getEstados() { 
     	return array(
 					ESTADO_PRESENTADO 	=> "Presentado (subir archivo)",
 					ESTADO_APROBADO		=> "Aprobado",
@@ -50,8 +44,23 @@ class EstadosManager
 					ESTADO_DESAPROBADO		=> "Desaprobado",
 					ESTADO_REHACER => "Rehacer",
 					ESTADO_ANULADO		=> "Anulado"
-					//ESTADO_FINALIZADO => "Completado",
     	);
+    }
+    
+    public static function getEstadosEvaluados() {
+		$estados = EstadosManager::getEstados();
+		unset($estados[ESTADO_ANULADO]);
+		unset($estados[ESTADO_PRESENTADO]);
+		return $estados;
+    }
+    
+    public function getPreferredChoices() { 
+    	$evaluados = EstadosManager::getEstadosEvaluados();
+    	return array_keys($evaluados);
+     }
+     
+    public function getSelectableEstados() {
+    	return EstadosManager::getEstados(); 
     }
     
     public function validarEstado($estado) {
