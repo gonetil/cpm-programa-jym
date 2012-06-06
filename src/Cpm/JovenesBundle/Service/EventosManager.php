@@ -71,22 +71,25 @@ class EventosManager
     	$p = $invitacion->getProyecto();
 		
     	$context=array(Plantilla::_INVITACION => $invitacion);
-		
+		$asunto = "Invitación a Evento: " . $invitacion->getInstanciaEvento()->getEvento()->getTitulo();
 		if ($ccEscuela){
 			$correoEscuela = $this->correoEscuelaMaster->clonar(false);
-			$correoEscuela->setProyecto($p);	
+			$correoEscuela->setProyecto($p);
+			$correoEscuela->setAsunto($asunto);	
 			$this->mailer->enviarCorreoAEscuela($correoEscuela, $context);
 			unset($correoEscuela);
 		}
 		if ($ccColaboradores){
 			$correoColaborador = $this->correoColaboradoresMaster->clonar(false);
-			$correoColaborador->setProyecto($p);	
+			$correoColaborador->setProyecto($p);
+			$correoColaborador->setAsunto($asunto);		
 			$this->mailer->enviarCorreoAColaboradores($correoColaborador, $context);
 			unset($correoColaborador);
 		}
 		$context[Plantilla::_URL]=$this->mailer->resolveUrlParameter('abrir_invitacion', array('id'=>$invitacion->getId(), 'accion'=>'aceptar'));
 		$correoCoordinador = $this->correoCoordinadorMaster->clonar(false);
 		$correoCoordinador->setProyecto($p);
+		$correoCoordinador->setAsunto($asunto);
 		$this->mailer->enviarCorreoACoordinador($correoCoordinador, $context);
 		unset($correoCoordinador);
 		
