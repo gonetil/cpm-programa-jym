@@ -88,6 +88,33 @@ class Evento
      *  @ORM\ManyToOne(targetEntity="Ciclo")
      */
     private $ciclo;
+   
+    
+    /**
+     * @var boolean $preguntarSolicitaTren
+     *
+     * @ORM\Column(name="preguntar_solicita_tren", type="boolean")
+     */
+    private $preguntarSolicitaTren;
+    
+    
+    /**
+     * @var boolean $solicitarListaInvitados
+     *
+     * @ORM\Column(name="solicitar_lista_invitados", type="boolean")
+     */
+    private $solicitarListaInvitados;
+    /**
+     * @var integer $numeroMaximoInvitados
+     *
+     * @ORM\Column(name="numero_maximo_invitados", type="integer")
+     */
+    private $numeroMaximoInvitados;
+    
+    
+    
+    
+    
     
 	public function __construct(){
 		$this->pedirNumeroAsistentes = false;
@@ -315,6 +342,37 @@ class Evento
     {
         $this->ciclo = $ciclo;
     }
+ 
+ 
+	public function setNumeroMaximoInvitados($numero)
+	{
+		$this->numeroMaximoInvitados = $numero;
+	}
+	
+	public function getNumeroMaximoInvitados() 
+    {
+    	return $this->numeroMaximoInvitados;
+    }
+    
+    public function setSolicitarListaInvitados($aBool)
+    {
+    	$this->solicitarListaInvitados = $aBool;
+    }
+
+    public function getSolicitarListaInvitados()
+	{
+		return $this->solicitarListaInvitados;
+	}
+	
+	public function setPreguntarSolicitaTren($aBool)
+	{
+		$this->preguntarSolicitaTren = $aBool;
+	}
+	
+	public function getPreguntarSolicitaTren()
+	{
+		return $this->preguntarSolicitaTren;
+	}
     
     
 }

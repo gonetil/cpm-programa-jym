@@ -55,6 +55,7 @@ class ProyectoController extends BaseController
 		return $this->filterAction($filter, 'proyecto', $stats);
 		
 	}
+	
     private function getSystemStats() {
     	$stats = array(); 
     	$em = $this->getEntityManager();

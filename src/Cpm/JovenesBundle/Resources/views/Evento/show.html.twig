@@ -30,7 +30,18 @@
             <th>Permitir observaciones</th>
             <td>{% if entity.permitirObservaciones %} Sí {% else %} No {% endif %}</td>
         </tr>
-        
+        <tr>
+            <th>Preguntar si solicita tren</th>
+            <td>{% if entity.preguntarSolicitaTren %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Solicitar que se cargue la lista de invitados</th>
+            <td>{% if entity.solicitarListaInvitados %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Limitar la lista de invitados a</th>
+            <td>{{ entity.numeroMaximoInvitados }}</td>
+        </tr>
     </tbody>
 </table>
 
