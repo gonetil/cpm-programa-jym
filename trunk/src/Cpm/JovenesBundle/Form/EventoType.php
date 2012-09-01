@@ -19,6 +19,10 @@ class EventoType extends AbstractType
             ->add('ofrecerHospedaje','choice',array('label' => '¿Ofrecer hospedaje?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
             ->add('ofrecerViaje','choice',array('label' => '¿Ofrecer viaje?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
             ->add('permitirObservaciones','choice',array('label' => '¿Permitir Observaciones?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
+            ->add('preguntarSolicitaTren','choice',array('label' => '¿Preguntar si solicita tren?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
+            ->add('solicitarListaInvitados','choice',array('label' => '¿Solicitar que se cargue la lista de invitados?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
+            ->add('numeroMaximoInvitados',null,array('label' => 'Limitar la lista de invitados a:', 'attr'=>array('class'=>'inline number'), 'required' => false,'data' => '0'))
+            
         ;
     }
 
