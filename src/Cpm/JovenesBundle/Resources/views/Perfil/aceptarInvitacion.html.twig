@@ -12,13 +12,35 @@
   {% endif %}	
  </h3>
 
-<form action="{{ path('abrir_invitacion_submit', { 'id': invitacion.id, accion: 'aceptar' }) }}" method="post" {{ form_enctype(edit_usuario_form) }}>
+<form action="{{ path('abrir_invitacion_submit', { 'id': invitacion.id, accion: 'aceptar' }) }}" method="post" {{ form_enctype(edit_usuario_form) }} id="formInvitacion">
 	 
-    {{ form_widget(edit_usuario_form) }}
-    <p>
-        <button type="submit" class="resaltado">Confirmar asistencia</button>
-    </p>
-</form>
+	{% if invitacion.instanciaEvento.evento.preguntarSolicitaTren %}
+		<div>
+			{{ form_label(edit_usuario_form.solicitaTren) }}
+			{{ form_widget(edit_usuario_form.solicitaTren) }}
+				<strong>
+				 Esta opción no garantiza pasajes gratuitos en tren. A la brevedad informaremos al respecto.
+				</strong>
+			
+		</div>		
+	{% endif %} 
+	{{ form_rest(edit_usuario_form) }}
+	
+	{% if invitacion.instanciaEvento.evento.solicitarListaInvitados %}
+			{{ common.listaDeInvitados(invitacion) }}
+			<p>
+		        <button type="submit" class="resaltado">Confirmar asistencia</button>
+		    </p>
+			
+	{% else %}  
+			<p>
+		        <button type="submit" class="resaltado">Confirmar asistencia</button>
+		    </p>
+	
+			</form>	
+	{% endif %}
+    
+
 
 <ul class="record_actions">
     <li>

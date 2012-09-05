@@ -20,3 +20,34 @@
 	    {{ escuela.nombre }}
 	
 {% endmacro %}
+
+
+
+
+{% macro listaDeInvitados(invitacion) %}
+		</form>
+		<script> 
+			maxInvitados = {{ invitacion.instanciaEvento.evento.numeroMaximoInvitados }};
+			cantInvitados = 0;
+		</script>
+		<script src="{{ asset('js/lista_invitados.js') }}" type="text/javascript"></script>
+		 
+		<div id="lista_invitados">
+			<h3> Lista de Invitados </h3>
+			
+			<div class="invitados_topbar">
+				<div class='add_button'>Agregar invitado</div>
+				<div class="invitados_count"> </div>
+			</div>		
+			<table>
+				<tr>
+					<td>Nombre</td></th>
+					<td>Apellido</td></th>
+					<td>Fecha de Nacimiento <br/>(dd/mm/aaaa)</td>
+					<td>Tipo Documento</td>
+					<td>Número</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+{% endmacro %}

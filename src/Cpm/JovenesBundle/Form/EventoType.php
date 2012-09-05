@@ -22,6 +22,8 @@ class EventoType extends AbstractType
             ->add('preguntarSolicitaTren','choice',array('label' => '¿Preguntar si solicita tren?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
             ->add('solicitarListaInvitados','choice',array('label' => '¿Solicitar que se cargue la lista de invitados?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
             ->add('numeroMaximoInvitados',null,array('label' => 'Limitar la lista de invitados a:', 'attr'=>array('class'=>'inline number'), 'required' => false,'data' => '0'))
+            ->add('solicitarDuracionPresentacion','choice',array('label' => '¿Solicitar la duración (estimada) de la presentación?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
+            ->add('permitirModificarLaInvitacion','choice',array('label' => '¿Permitir modificar la invitación una vez aceptada o confirmada?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
             
         ;
     }

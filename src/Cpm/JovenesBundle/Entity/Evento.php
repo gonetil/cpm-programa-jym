@@ -111,9 +111,19 @@ class Evento
      */
     private $numeroMaximoInvitados;
     
+    /**
+     * @var boolean $solicitarDuracionPresentacion
+     *
+     * @ORM\Column(name="solicitar_duracion_presentacion", type="boolean")
+     */
+    private $solicitarDuracionPresentacion;
     
-    
-    
+    /**
+     * @var boolean $permitirModificarLaInvitacion
+     *
+     * @ORM\Column(name="permitir_modificar_invitacion", type="boolean")
+     */   
+    private $permitirModificarLaInvitacion;
     
     
 	public function __construct(){
@@ -374,5 +384,21 @@ class Evento
 		return $this->preguntarSolicitaTren;
 	}
     
-    
+ 	public function getSolicitarDuracionPresentacion()
+ 	{
+ 		return $this->solicitarDuracionPresentacion;
+ 	}
+
+ 	public function setSolicitarDuracionPresentacion($aBool)
+ 	{
+ 		$this->solicitarDuracionPresentacion = $aBool;
+ 	}
+
+	public function getPermitirModificarLaInvitacion() { 
+		return $this->permitirModificarLaInvitacion;
+	}
+	
+	public function setPermitirModificarLaInvitacion($aBool) { 
+		$this->permitirModificarLaInvitacion = $aBool;
+	}
 }
