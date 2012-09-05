@@ -13,7 +13,7 @@
     
     {{ form_rest(edit_form) }}
     	{% if entity.instanciaEvento.evento.solicitarListaInvitados %}
-			{{ common.listaDeInvitados(entity) }}
+			{{ common.listaDeInvitados(entity,false) }}
 			<p>
 		        <button type="submit" class="resaltado">Modificar</button>
 		    </p>

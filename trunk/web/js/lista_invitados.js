@@ -46,8 +46,8 @@ addRow = function() {
 }
 
 removeRow = function(event) { 
-	if (cantInvitados > 0) {
-		console.log($(event.target).parent("td").parent("tr"));
+	if (cantInvitados > 1) //siempre tiene que haber un invitado como mínimo
+	{
 		$(event.target).parent("td").parent("tr").remove();
 		cantInvitados--;
 		updateLegend();
@@ -64,12 +64,26 @@ unInvitadoToJson = function(row) {
 	return invitado;
 }
 
+jsonToInvitados = function(json) {
+	$.each(json,function(index,invitado) {
+		row = $(newLine(index));
+		$(row).find(":input[name='nombre']").val(invitado['nombre']);
+		$(row).find(":input[name='apellido']").val(invitado['apellido']);
+		$(row).find(":input[name='fechaNac']").val(invitado['fechaNac']);
+		$(row).find(":input[name='tipoDoc']").val(invitado['tipoDoc']);
+		$(row).find(":input[name='doc']").val(invitado['doc']);
+		$("#lista_invitados table").append(row);
+		cantInvitados++;
+	});
+}
+
 invitadosToJson = function() {
 	var cumulative = {};
 	var count = 0;
 	$("#lista_invitados table tr.invitado_row").each(function(index,tr) {
 		cumulative[count++] = unInvitadoToJson(tr);
 	});
+	
 	return JSON.stringify(cumulative, null, 2);
 }
 
@@ -78,16 +92,44 @@ submitForm = function() {
 	if (checkLine(last)) {
 		invitados = invitadosToJson();
 		$("#cpm_jovenesbundle_invitaciontype_invitados").val(invitados);
-		$("#formInvitacion").submit();
+		
+		if (confirmOnSubmit)  {
+			if (confirm("Los datos ingresados en el formulario no podrán ser modificados. Revise que estén correctos y completos antes de enviar la inscripción. ¿Está seguro que estos son los datos?")) {
+				 $("#formInvitacion").submit();
+			}
+		}
+		else 
+			{
+				$("#formInvitacion").submit();
+			}
 	}
 }
 
 $(document).ready(function() {
-	$("#lista_invitados .add_button").click(addRow);
-	$("#lista_invitados .remove_button").live('click',removeRow);
-	addRow(); //insert first line
+	if ($("#cpm_jovenesbundle_invitaciontype_invitados").val() == "")
+			addRow(); //insert first line
+	else {
+		json = $("#cpm_jovenesbundle_invitaciontype_invitados").val();
+		jsonToInvitados($.parseJSON( json ));
+		updateLegend();
+	}
 	
-	$("button[type='submit']").click(submitForm);
+	if (invitadosReadOnly) {
+		$("#formInvitacion :input").attr("disabled","disabled");
+		$('#lista_invitados :input').attr("disabled","disabled");
+		$("#lista_invitados .add_button").hide();
+		$("#lista_invitados .remove_button").hide();
+		$("button[type='submit']").hide();	
+	} 
+	else
+		{	
+			$("#lista_invitados .add_button").click(addRow);
+			$("#lista_invitados .remove_button").live('click',removeRow);
+			$("#lista_invitados :input.number").live('keyup',function() {  this.value = this.value.replace(/[^0-9\.]/g,''); });
+			$("button[type='submit']").click(submitForm);
+			
+		}
+	
 	
 	
 });
