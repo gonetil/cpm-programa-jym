@@ -44,12 +44,12 @@
 								{% if  invitacion.instanciaEvento.evento.permitirModificarLaInvitacion %}
 									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a>
 									<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
+								{% else %}  {# se redirige a aceptar, dado que las invitaciones de Chapa (las unicas que no se pueden modificar luego) manejan por si sola la NO edicion de sus campos #}	
+									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Ver</a>
 								{% endif %}	
 							{% else %}
 								<span class='rechazado'>Rechazado</span>
-								{% if  invitacion.instanciaEvento.evento.permitirModificarLaInvitacion %}
 									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
-								{% endif %}	
 							{% endif %}
 							
     					{% endif %}

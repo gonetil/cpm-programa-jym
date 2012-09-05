@@ -19,16 +19,16 @@
 			{{ form_label(edit_usuario_form.solicitaTren) }}
 			{{ form_widget(edit_usuario_form.solicitaTren) }}
 				<strong>
-				 Esta opción no garantiza pasajes gratuitos en tren. A la brevedad informaremos al respecto.
-				</strong>
-			
+					 Esta opción no garantiza pasajes gratuitos en tren. A la brevedad informaremos al respecto.
+				</strong>			
 		</div>		
 	{% endif %} 
 	{{ form_rest(edit_usuario_form) }}
 	
 	{% if invitacion.instanciaEvento.evento.solicitarListaInvitados %}
-			{{ common.listaDeInvitados(invitacion) }}
-			<p>
+		
+			{{ common.listaDeInvitados(invitacion,(invitacion.instanciaEvento.evento.permitirModificarLaInvitacion != 1) )}}
+			<p> 
 		        <button type="submit" class="resaltado">Confirmar asistencia</button>
 		    </p>
 			

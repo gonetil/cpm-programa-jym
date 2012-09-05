@@ -308,10 +308,8 @@ class PerfilController extends BaseController
 		    	return $this->redirect($this->generateUrl('home'));
         }
         
-        if (! $invitacion->getInstanciaEvento()->getEvento()->getPermitirModificarLaInvitacion()) 
-        {
-        	throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("Este tipo de invitaciones no puede ser modificada una vez confirmada o rechazada");
-        }
+
+
 		if ($accion == 'rechazar'){
 			$invitacion->setAceptoInvitacion(false);
 		}else{
