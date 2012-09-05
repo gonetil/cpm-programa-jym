@@ -41,11 +41,15 @@
 						{% else %}
 							{% if invitacion.aceptoInvitacion %}
 								<span class='aceptado'>Confirmado</span>
-								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a>
-								<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
+								{% if  invitacion.instanciaEvento.evento.permitirModificarLaInvitacion %}
+									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a>
+									<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
+								{% endif %}	
 							{% else %}
 								<span class='rechazado'>Rechazado</span>
-								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
+								{% if  invitacion.instanciaEvento.evento.permitirModificarLaInvitacion %}
+									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
+								{% endif %}	
 							{% endif %}
 							
     					{% endif %}

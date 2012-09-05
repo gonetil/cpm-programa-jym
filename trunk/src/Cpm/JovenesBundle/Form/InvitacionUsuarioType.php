@@ -24,8 +24,14 @@ class InvitacionUsuarioType extends AbstractType
         if ($evento->getPermitirObservaciones())
 	        $builder->add('observaciones',null,array('label' => 'Observaciones', 'required'=>false));
         if ($evento->getPermitirSuplente())
-	        $builder->add('suplente',null,array('label' => 'En caso de asistir un suplente en lugar de usted, indique su nombre y DNI por favor', 'required'=>false));
-        
+	        $builder->add('suplente',null,array('label' => 'En caso de asistir un suplente en lugar de usted, indique su nombre y DNI por favor', 'required'=>false));    
+     	if ($evento->getPreguntarSolicitaTren()) 
+		     $builder->add('solicitaTren',null,array('label' => '¿Solicita tren?', 'required'=>false));
+		if ($evento->getSolicitarListaInvitados()) 
+			$builder->add('invitados','hidden',array('label' => 'Lista de invitados', 'required'=>false));
+		if ($evento->getSolicitarDuracionPresentacion())
+			$builder->add('duracion',null,array('label' => 'Duración (en minutos) estimada de la presentación', 'required'=>false, 'attr'=>array('class'=>'inline number'),'data' => '0' ));
+		
     }
 
     public function getName()

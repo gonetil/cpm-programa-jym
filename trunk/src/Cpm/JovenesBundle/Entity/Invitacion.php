@@ -97,6 +97,30 @@ class Invitacion
      */
     private $instanciaEvento;
 
+
+    /**
+     * @var boolean $solicitaTren
+     *
+     * @ORM\Column(name="solicitaTren", type="boolean", nullable="true")
+     */
+
+	private $solicitaTren;
+    
+    
+    /**
+     * @var text $invitados
+     *
+     * @ORM\Column(name="invitados", type="text", nullable = true)
+     */
+    private $invitados;
+    
+    /**
+     * @var integer $duracion
+     * @ORM\Column(name="duracion", type="integer", nullable = true)
+     * 
+     **/
+    private $duracion;
+    
 	public function __construct(){
 		$this->numeroAsistentes=1;
 		$this->solicitaViaje = false;
@@ -333,5 +357,33 @@ class Invitacion
     {
     	return "{$this->id}: proyecto ".$this->proyecto->getId()." / Instancia: ". $this->instanciaEvento->getTitulo();
     }
-    
+
+	
+	public function setInvitados($invitados) {
+		$this->invitados = $invitados;
+	}
+	public function getInvitados()
+	{
+		return $this->invitados;
+	}
+	
+	public function setSolicitaTren($aBool)
+	{
+		$this->solicitaTren = $aBool;
+	}
+	
+	public function getSolicitaTren()
+	{
+		return $this->solicitaTren;
+	}
+	
+	public function getDuracion()
+	{ 
+		return $this->duracion;
+	}
+	
+	public function setDuracion($duracion)
+	{
+		$this->duracion = $duracion;
+	}
 }
