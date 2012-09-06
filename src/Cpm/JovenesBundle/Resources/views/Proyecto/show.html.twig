@@ -81,6 +81,15 @@
 			</div> <!-- info_proyecto -->
 			
 			
+			{% if entity.requerimientosDeEdicion | length > 0 %}
+				<h4 class="info_header extra_info"> 
+						<a href="#" onclick="$('.info_edicion').toggle(); return false;">Requerimientos de Edición </a></h4>
+				<div class="info_edicion hidden extra_info">
+					<p> Cantidad de alumnos que participan: {{ entity.requerimientosDeEdicion }} </p>
+				</div> <!-- info_edicion -->
+			{% endif %}
+			
+			
 			<ul class="record_actions">
 			    <li>
 			        <a href="{{ path('proyecto') }}">

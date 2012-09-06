@@ -72,6 +72,8 @@ class PerfilController extends BaseController
     	
     	$form = $this->createForm(new ProyectoType(), $proyecto);
     	$form->remove('coordinador');
+    	$form->remove('requerimientosDeEdicion');
+    	
     	return array(
                 'entity' => $proyecto,
                 'coordinador' => $this->getLoggedInUser(),
@@ -99,6 +101,7 @@ class PerfilController extends BaseController
         
     	$form = $this->createForm(new ProyectoType(), $proyecto);
     	$form->remove('coordinador');
+    	$form->remove('requerimientosDeEdicion');
     	
     	$form->bindRequest($this->getRequest());
     	$this->procesar_colaboradores($proyecto->getColaboradores());
@@ -144,6 +147,8 @@ class PerfilController extends BaseController
     	$editForm = $this->createForm(new ProyectoType(), $entity);
     	
     	$editForm->remove('coordinador');
+    	$editForm->remove('requerimientosDeEdicion');
+    	
     	return array(
                 'entity'      => $entity,
 		    	'coordinador' => $entity->getCoordinador(),
