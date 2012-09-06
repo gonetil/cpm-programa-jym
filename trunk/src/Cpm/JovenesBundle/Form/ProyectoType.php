@@ -56,7 +56,7 @@ class ProyectoType extends AbstractType
 	        ->add('motivoRealizacion',null,array('label'=>'¿Por qué queremos investigar este tema?'))
 	        ->add('impactoBuscado',null,array('label'=>'¿Qué impacto tendrá en la comunidad?'))
         	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
-        	
+			->add('requerimientosDeEdicion',null,array('label'=>'Requerimientos de edición'))        	
         // ->add('coordinador',new UsuarioType(),array('label' => 'Docente Coordinador'))
         
         ;

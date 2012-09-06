@@ -155,6 +155,15 @@ class Proyecto
     */
     private $estadoActual;
     
+    /**
+     * @var string $requerimientosDeEdicion
+     *
+     * @ORM\Column(name="requerimientos_de_edicion", type="text", nullable=true)
+     */
+    
+    private $requerimientosDeEdicion;
+    
+    
     public function __construct()
     {
     	$this->estado = Proyecto::__ESTADO_INICIADO;
@@ -562,4 +571,11 @@ class Proyecto
     	   	else return false;	
     }
 
+	public function getRequerimientosDeEdicion() {
+		return $this->requerimientosDeEdicion;
+	}
+	
+	public function setRequerimientosDeEdicion($req) {
+		$this->requerimientosDeEdicion = $req;
+	}
 }

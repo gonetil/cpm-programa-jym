@@ -62,6 +62,14 @@ class ProyectoFilterForm extends ModelFilterForm
         												'expanded'=>false,
         												'required'=>false
                 										))
+            ->add('requerimientosDeEdicion', 'choice' ,array('label' => 'Requiere edición' , 
+            											'choices' => array(1=>"si",2=>"no"),
+            											'preferred_choices' => array("Todos"),
+        												'empty_value' => "Todos",
+        												'expanded'=>false,
+        												'required'=>false
+                										))
+                										
                 										;
 			$escuela = new EscuelaFilter();	
             $builder->add('escuelaFilter', $escuela->createForm() ,array('label' => 'Escuela'));

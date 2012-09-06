@@ -124,6 +124,13 @@ class ProyectoRepository extends EntityRepository {
 			"%"));
 		}
 
+		if ($data->getRequerimientosDeEdicion()) {
+			if ($data->getRequerimientosDeEdicion() != 1)
+				$qb->andWhere("p.requerimientosDeEdicion like ''");
+			else	
+				$qb->andWhere("p.requerimientosDeEdicion not like ''");
+		}
+
 		$evento = $data->getEventoFilter(); 
 		if ($ev = $evento->getEvento()) {  
 			if ($evento->getSinInvitacionFlag()) //sin invitacion 
