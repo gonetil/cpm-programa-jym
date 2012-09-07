@@ -9,6 +9,7 @@ use Cpm\JovenesBundle\Controller\BaseController;
 use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Form\ProyectoType;
 use Cpm\JovenesBundle\Form\ColaboradoresProyectoType;
+
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Plantilla;
@@ -17,6 +18,8 @@ use Cpm\JovenesBundle\Form\PresentacionProyectoType;
 use Symfony\Component\HttpFoundation\Response;
 use Cpm\JovenesBundle\Entity\EstadoProyecto;
 
+use Cpm\JovenesBundle\Form\ConfirmacionCamposChapaType;
+use Cpm\JovenesBundle\EntityDummy\ConfirmarCamposChapa;
 
 /**
  * Perfil controller.
@@ -275,12 +278,15 @@ class PerfilController extends BaseController
 		    	return $this->redirect($this->generateUrl('home'));
         }
 		
-					
+	
 					
 		$args = array('invitacion' => $invitacion);
-		if ($accion == 'rechazar'){
+		if ($accion == 'rechazar')
+		{
 			return $this->render('CpmJovenesBundle:Perfil:rechazarInvitacion.html.twig', $args);
-		}else{
+		}
+		else
+		{
 			$editForm = $this->createForm(new InvitacionUsuarioType(), $invitacion);
 			$args['edit_usuario_form']=$editForm->createView();
 			return $this->render('CpmJovenesBundle:Perfil:aceptarInvitacion.html.twig', $args);
@@ -319,20 +325,24 @@ class PerfilController extends BaseController
 			$invitacion->setAceptoInvitacion(false);
 		}else{
 			$invitacion->setAceptoInvitacion(true);
+			
+			
 			$editForm = $this->createForm(new InvitacionUsuarioType(), $invitacion);
 			
 			$request = $this->getRequest();
 	        $editForm->bindRequest($request);
-	
+			
 	        if (!$editForm->isValid()) {
 	            return $this->render('CpmJovenesBundle:Perfil:aceptarInvitacion.html.twig', 
 	            	array('invitacion' => $invitacion, 'edit_usuario_form' => $editForm->createView())
 	            );
-	            //FIXME, redireccionar al action del evento
 			}
         }
+
 		$this->setSuccessMessage("La invitación fue guardada satisfactoriamente.");
         $this->doPersist($invitacion);
+	    
+	    
 	    
 	    return $this->redirect($this->generateUrl('home'));
 

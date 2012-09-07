@@ -84,6 +84,7 @@ class Evento
      */
     private $action;
     
+                
     /**
      *  @ORM\ManyToOne(targetEntity="Ciclo")
      */

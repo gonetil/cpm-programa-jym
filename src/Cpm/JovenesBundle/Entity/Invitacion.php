@@ -121,6 +121,10 @@ class Invitacion
      **/
     private $duracion;
     
+    
+    
+    private $embeddedForm	;  //
+    
 	public function __construct(){
 		$this->numeroAsistentes=1;
 		$this->solicitaViaje = false;
@@ -386,4 +390,27 @@ class Invitacion
 	{
 		$this->duracion = $duracion;
 	}
+	
+	public function getEmbeddedForm() 
+	{
+		
+		if ($this->embeddedForm != null) { 
+			return $this->embeddedForm;
+		}
+		else {  
+			if ($subAction = $this->getInstanciaEvento()->getEvento()->getAction())	
+				{ 
+					$subAction = "Cpm\\JovenesBundle\\EntityDummy\\".$subAction;
+					$this->embeddedForm = new $subAction($this);
+					return $this->embeddedForm;
+				}
+				else throw new \Exception("No hay embedded form");
+		}
+	}
+	
+	public function setEmbeddedForm($form) 
+	{
+		$this->embeddedForm = $form;
+	}
+	
 }
