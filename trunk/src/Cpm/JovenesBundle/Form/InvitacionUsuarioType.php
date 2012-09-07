@@ -32,6 +32,14 @@ class InvitacionUsuarioType extends AbstractType
 		if ($evento->getSolicitarDuracionPresentacion())
 			$builder->add('duracion',null,array('label' => 'Duración (en minutos) estimada de la presentación', 'required'=>false, 'attr'=>array('class'=>'inline number'),'data' => '0' ));
 		
+		 if ($action = $evento->getAction())
+			{ 
+				$type = "Cpm\\JovenesBundle\\Form\\".$action."Type";
+				$form = new $type(); 
+				$builder->add('embeddedForm',$form);  			
+			} 
+		
+
     }
 
     public function getName()
