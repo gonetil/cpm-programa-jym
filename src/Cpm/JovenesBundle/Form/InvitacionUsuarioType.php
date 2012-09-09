@@ -36,7 +36,7 @@ class InvitacionUsuarioType extends AbstractType
 			{ 
 				$type = "Cpm\\JovenesBundle\\Form\\".$action."Type";
 				$form = new $type(); 
-				$builder->add('embeddedForm',$form);  			
+				$builder->add('embeddedForm',$form,array('label'=>'Confirme los siguientes datos de su proyecto'));  			
 			} 
 		
 
