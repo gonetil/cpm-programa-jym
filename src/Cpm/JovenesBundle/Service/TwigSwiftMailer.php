@@ -104,6 +104,14 @@ class TwigSwiftMailer implements MailerInterface
         
         return $this->enviarCorreo($correo, $context);
     }
+
+    public function enviarAceptacionInvitacion($invitacion)
+    {
+        $correo = $this->getCorreoFromPlantilla(Plantilla::ACEPTACION_INVITACION);
+        $correo->setProyecto($invitacion->getProyecto());
+        return $this->enviarCorreoACoordinador($correo);
+    }
+    
     
 	/**
      * Enviar un correo al coordinador del proyecto

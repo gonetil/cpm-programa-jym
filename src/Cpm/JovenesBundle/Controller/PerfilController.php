@@ -337,15 +337,19 @@ class PerfilController extends BaseController
 	            	array('invitacion' => $invitacion, 'edit_usuario_form' => $editForm->createView())
 	            );
 			}
-        }
+		}
+        
 
 		$this->setSuccessMessage("La invitación fue guardada satisfactoriamente.");
         $this->doPersist($invitacion);
 	    
-	    
-	    
+        //Si la invitacion es válida y fue aceptada, mando la notificacion al coordinador por mail
+        if ($invitacion->getAceptoInvitacion()){
+    		$mailer = $this->getMailer();
+    		$mailer->enviarAceptacionInvitacion($invitacion);
+    	}
+        
 	    return $this->redirect($this->generateUrl('home'));
-
     }
     
     
