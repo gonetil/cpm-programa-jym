@@ -288,8 +288,10 @@ class InstanciaEvento
     	}else{
     		$referencia .="desde el $dia_inicio";
     		if ($hora_incio != '00:00')
-	    		$referencia .="a las $hora_incio ";
+	    		$referencia .=" a las $hora_incio ";
 	    	$referencia .= " hasta el $dia_fin";
+	    	if ($hora_fin != '00:00')
+	    		$referencia .=" a las $hora_fin ";
     	}
     	return $referencia;
     }
