@@ -94,7 +94,7 @@ submitForm = function() {
 		$("#cpm_jovenesbundle_invitaciontype_invitados").val(invitados);
 		
 		if (confirmOnSubmit)  {
-			if (confirm("Los datos ingresados en el formulario no podrán ser modificados. Revise que estén correctos y completos antes de enviar la inscripción. ¿Está seguro que estos son los datos?")) {
+			if (confirm("Los datos ingresados en el formulario no podrán ser modificados. Por favor, revise que estén correctos y completos todos los participantes antes de enviar la inscripción. ¿Está seguro que estos son los datos?")) {
 				 $("#formInvitacion").submit();
 			}
 		}
