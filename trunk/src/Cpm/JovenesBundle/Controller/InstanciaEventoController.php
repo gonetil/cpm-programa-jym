@@ -247,7 +247,7 @@ class InstanciaEventoController extends BaseController
     /**
     *  @Route("/{id}/export_to_excel", name="instancia_export_to_excel")
     * @Method("get")
-    * @Template("CpmJovenesBundle:InstanciaEvento:export_excel.x,s.twig")
+    * @Template("CpmJovenesBundle:InstanciaEvento:export_excel.xls.twig")
     */
     
     public function exportToExcelAction($id) {
@@ -262,7 +262,7 @@ class InstanciaEventoController extends BaseController
 		
         $response = $this->render('CpmJovenesBundle:InstanciaEvento:export_excel.xls.twig',array('entity' => $entity));
         $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
-        $response->headers->set("Content-Disposition", 'Attachment;filename="'.$filename.'.xls"');
+        $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
     	return $response; 
     	 
     }

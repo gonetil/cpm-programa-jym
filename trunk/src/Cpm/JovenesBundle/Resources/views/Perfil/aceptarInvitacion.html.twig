@@ -28,8 +28,11 @@
 	{{ form_rest(edit_usuario_form) }}
 	
 	{% if invitacion.instanciaEvento.evento.solicitarListaInvitados %}
+		 {% if not isAdmin is defined %}
+		 {% set isAdmin = false %}
+		 {% endif %}
 		
-			{{ common.listaDeInvitados(invitacion,(invitacion.instanciaEvento.evento.permitirModificarLaInvitacion != 1) )}}
+			{{ common.listaDeInvitados(invitacion,(invitacion.instanciaEvento.evento.permitirModificarLaInvitacion != 1), isAdmin )}}
 			<p> 
 		        <button type="submit" class="resaltado">Confirmar asistencia</button>
 		    </p>

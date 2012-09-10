@@ -185,20 +185,32 @@
 					{% if not invitacion.instanciaEvento.fue() %}
 						
 						{% if invitacion.estaPendiente %}
-							Pendiente
+							<span class='pendiente with-operations'>Pendiente
 							{% if invitacion.estaVigente %}
-								 <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a>  
+							<div class="ops">
+								 <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a>   
+								 <a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a>
 								 <a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a>
+								 </div>
 							{% endif %}
+							</span>
 							
 						{% else %}
 							{% if invitacion.aceptoInvitacion %}
-								<span class='aceptado'>Confirmado</span>
-								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a>
-								<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
+							<span class='aceptado with-operations'>Confirmado
+								<div class="ops">
+								{#	<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a> #}
+									<a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Modificar</a>
+									<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>									
+								</div>	
+							</span>
 							{% else %}
-								<span class='rechazado'>Rechazado</span>
-								<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
+								<span class='rechazado with-operations'>Rechazado
+								<div class="ops">
+									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
+									<a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a>
+								</div>	
+								</span>
 							{% endif %}
 							
     					{% endif %}
