@@ -24,13 +24,14 @@
 
 
 
-{% macro listaDeInvitados(invitacion,readOnly) %}
+{% macro listaDeInvitados(invitacion,readOnly, isAdmin) %}
 		</form>
 		<script> 
 			maxInvitados = {{ invitacion.instanciaEvento.evento.numeroMaximoInvitados }};
 			cantInvitados = 0;
 			invitadosReadOnly = {% if (readOnly and invitacion.aceptoInvitacion  ) %} true; {% else %} false; {% endif %} {# para que el formulario no se puede editar, tiene que estar en modo ReadOnly y ademas aun no se tiene que haber completado #}
 			confirmOnSubmit = {% if ( invitacion.instanciaEvento.evento.permitirModificarLaInvitacion != 1) %} true; {% else %} false; {% endif %}
+			hideAlert = {% if (isAdmin) %} true; {% else %} false; {% endif %}
 		</script>
 		<script src="{{ asset('js/lista_invitados.js') }}" type="text/javascript"></script>
 		 

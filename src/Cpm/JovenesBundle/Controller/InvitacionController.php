@@ -135,6 +135,7 @@ class InvitacionController extends BaseController
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
+        	'isAdmin' => 1,
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -255,5 +256,37 @@ class InvitacionController extends BaseController
 		$eventosManager = $this->getEventosManager();    	
     	$eventosManager->enviarInvitacionAProyecto($invitacion, false,false); //no se envía cc a los colaboradores ni a la escuela 
     	return new Response("success");
+    }
+    
+    
+   /**
+    *  @Route("/{id}/export_invitados_to_excel", name="invitados_export_to_excel")
+    * @Method("get")
+    * @Template("CpmJovenesBundle:Invitacion:invitados_excel.xls.twig")
+    */
+    
+    public function exportInvitadosToExcelAction($id) {
+    	$em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('No se encontró la Invitación');
+        }
+        
+		$filename = "Invitados - {$entity->getProyecto()->getEscuela()})";
+		
+		$invitados = $entity->getInvitados();
+		if (!$invitados) 
+			$invitados = array();
+		else		
+			$invitados = json_decode($invitados, true);
+		
+        $response = $this->render('CpmJovenesBundle:Invitacion:invitados_excel.xls.twig',
+        						   array('invitacion' => $entity ,
+        						   		 'invitados' => $invitados));
+        $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
+        $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
+    	return $response; 
+    	 
     }
 }
