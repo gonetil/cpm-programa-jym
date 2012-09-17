@@ -289,4 +289,32 @@ class InvitacionController extends BaseController
     	return $response; 
     	 
     }
+    
+     /**
+     * Modifica la instancia de una invitacion
+     * @Route("/{invitacion_id}/{instancia_id}/modificar_invitacion_de_instancia" , name="modificar_invitacion_de_instancia")
+     * @Method("get")
+     */
+    
+    public function cambiarInvitacionDeInstancia($invitacion_id,$instancia_id) {
+    	$em = $this->getDoctrine()->getEntityManager();
+        $invitacion = $em->getRepository('CpmJovenesBundle:Invitacion')->find($invitacion_id);
+
+        if (!$invitacion) {
+            throw $this->createNotFoundException('No se encontró la Invitación');
+        }
+    	
+    	$instancia = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($instancia_id);
+    	if (!$instancia) {
+    		throw $this->createNotFoundException('No se encontró la Instancia');
+    	}
+    	
+    	$invitacion->setInstanciaEvento($instancia);
+    	
+    	$em->persist($invitacion);
+    	$em->flush();
+    	return new Response("success");
+    	
+    	
+    }
 }
