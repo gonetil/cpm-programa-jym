@@ -209,6 +209,8 @@ jQuery(function($){
 	$(".icon").tooltip();
 	
 	bind_rdl_selects();
+	
+	invitaciones_actionx_fx();
 });
 	
 invitacion_reinvitar = function(clicked_node,$destination) {
@@ -261,4 +263,21 @@ cambiar_estado = function() {
 					
 		});
 	
+}
+
+invitaciones_actionx_fx = function() {
+	$(".with-operations").click(function(event){
+		$(event.target).children(".ops").toggle();
+	});
+}
+
+
+cambiarInvitacionDeInstancia = function(select) {
+	$select = $(select);
+	nueva_instancia = $select.val();
+	$.get(nueva_instancia,function(msg) {
+		if (msg == 'success') {
+			window.location.reload();
+		}
+	});
 }
