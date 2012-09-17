@@ -188,9 +188,11 @@
 							<span class='pendiente with-operations'>Pendiente
 							{% if invitacion.estaVigente %}
 							<div class="ops">
-								 <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a>   
-								 <a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a>
-								 <a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a>
+								 <ul>
+								  	<li><a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a></li>   
+								 	<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a></li>
+								 	<li><a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a></li>
+								 </ul>
 								 </div>
 							{% endif %}
 							</span>
@@ -199,16 +201,24 @@
 							{% if invitacion.aceptoInvitacion %}
 							<span class='aceptado with-operations'>Confirmado
 								<div class="ops">
+									<ul>
 								{#	<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a> #}
-									<a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Modificar</a>
-									<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>									
+									<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Modificar</a></li>
+									<li><a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a></li>
+									{% if invitacion.instanciaEvento.evento.solicitarListaInvitados %}
+										<li><a href="{{ path('invitados_export_to_excel', { 'id': invitacion.id }) }}">Exportar lista de invitados</a></li>
+									{% endif %}								
+									
+									<li> {{ common.SelectCambiarInvitacionDeInstancia(invitacion) }} </li>
 								</div>	
 							</span>
 							{% else %}
 								<span class='rechazado with-operations'>Rechazado
 								<div class="ops">
-									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
-									<a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a>
+									<ul>
+									<li><a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a></li>
+									<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a></li>
+									</ul>
 								</div>	
 								</span>
 							{% endif %}
