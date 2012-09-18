@@ -180,7 +180,9 @@
 		<ul class="listado-items">
 			{% for invitacion in entity.invitaciones %}
 				<li class="actions">
-					{{ invitacion.instanciaEvento.titulo }}
+					<a class="show_instancia_link" href="{{path('instancia_show', {id:invitacion.instanciaEvento.id})}}">{{ invitacion.instanciaEvento.titulo }}</a>
+					
+	
 					<div class="status">
 					{% if not invitacion.instanciaEvento.fue() %}
 						

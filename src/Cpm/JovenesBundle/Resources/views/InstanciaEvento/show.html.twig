@@ -11,8 +11,8 @@
 	<table class="record_properties">
 	    <tbody>
 	        <tr>
-	            <th>Evento</th>
-	            <td>{{ entity.evento.titulo }}</td>
+	            <th><h2>Evento</h2></th>
+	            <td><h2>{{ entity.evento.titulo }} <a href="{{ path('evento_show', { id: entity.evento.id}) }}">(Ir al evento)</a></h2></td>
 	        </tr>
 	        <tr>
 	            <th>Descripción</th>
@@ -40,7 +40,7 @@
 <ul class="record_actions">
     <li>
         <a href="{{ path('instancia') }}">
-            Volver al listado
+            Ver todas las instancias de eventos
         </a>
     </li>
     <li>
@@ -133,7 +133,7 @@
 		            </td>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
 		            <td> {{ i.apellido_coordinador }}, {{ i.nombre_coordinador }} </td>
-		            <td> <a href=" {{ path('proyecto_show',{ id:inv.proyecto.getId }) }}">
+		            <td> <a href=" {{ path('proyecto_show',{ id:inv.proyecto.getId }) }}" title="Ver proyecto">
 		            			{{ common.nombreEscuela(inv.proyecto.escuela) }}
 		            	</a>		
 		            </td>
@@ -159,7 +159,7 @@
 					        	{% if entity.evento.solicitarListaInvitados %}
 					        		  {% set misInvitados = inv.countInvitados %}
 					        		  {% set invitados = invitados + misInvitados %}
-					              <td> {{ misInvitados }} </td>
+					              <td> {{ misInvitados }} <a class="mini-excel-icon tiny-icon" href="{{ path('invitados_export_to_excel', { 'id': inv.id }) }}" title="Exportar lista de invitados">&nbsp;</a> </td>
 					            {% endif %}
 					        	
 					            {% if entity.evento.permitirSuplente %}
