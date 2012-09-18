@@ -123,7 +123,9 @@ class Invitacion
     
     
     
-    private $embeddedForm	;  //
+    private $embeddedForm	; 
+    
+    private $cantInvitados;
     
 	public function __construct(){
 		$this->numeroAsistentes=1;
@@ -364,11 +366,19 @@ class Invitacion
 
 	
 	public function setInvitados($invitados) {
+		$this->cantInvitados = count(json_decode($invitados, true));
 		$this->invitados = $invitados;
 	}
 	public function getInvitados()
 	{
 		return $this->invitados;
+	}
+	
+	public function countInvitados() {
+		if (! isset($this->cantInvitados))
+			$this->cantInvitados = count(json_decode($this->invitados, true));
+			
+		return $this->cantInvitados;
 	}
 	
 	public function setSolicitaTren($aBool)

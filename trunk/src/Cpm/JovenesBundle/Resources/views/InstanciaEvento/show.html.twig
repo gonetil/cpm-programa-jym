@@ -64,6 +64,8 @@
 {% set asistentes = 0 %}
 {% set pendientes = 0 %}
 {% set rechazadas = 0 %}
+{% set invitados = 0 %}
+
 
 <div id='resumen-box'>
 	<h4>Resumen:</h4>
@@ -101,6 +103,9 @@
 		            <th>Aceptada</th>
 		            {% if entity.evento.pedirNumeroAsistentes %}
 		            <th>Asistentes</th>
+		            {% endif %}
+		            {% if entity.evento.solicitarListaInvitados %}
+		            <th>Invitados</th>
 		            {% endif %}
 		            {% if entity.evento.permitirSuplente %}
 		            <th>Suplente</th>
@@ -150,6 +155,13 @@
 					            {% else %}
 					            	{% set asistentes = asistentes + 1 %}	
 					        	{% endif %}
+					        	
+					        	{% if entity.evento.solicitarListaInvitados %}
+					        		  {% set misInvitados = inv.countInvitados %}
+					        		  {% set invitados = invitados + misInvitados %}
+					              <td> {{ misInvitados }} </td>
+					            {% endif %}
+					        	
 					            {% if entity.evento.permitirSuplente %}
 					            	<td>{{ inv.suplente }}</th>
 					            {% endif %}
@@ -183,11 +195,18 @@
 		</table>
 	{% endif %} {# invitaciones > 0 #}	
 		<script>
-		$("#resumen").html('<li>Invitaciones enviadas: <span class="status">{{ invitaciones | length}}</span></li> \
+		var resumen = '<li>Invitaciones enviadas: <span class="status">{{ invitaciones | length}}</span></li> \
 		<li>Invitaciones aceptadas: <span class="status"> {{ aceptaciones }}</span> </li> \
 		<li>Invitaciones pendientes: <span class="status">{{ pendientes }}</span> </li> \
 		<li>Invitaciones rechazadas: <span class="status">{{ rechazadas }}</span> </li> \
-		<li>Cantidad de asistenes confirmados: <span class="status">{{asistentes }}</span> </li>');
+		<li>Cantidad de asistenes confirmados: <span class="status">{{asistentes }}</span> </li>';
+		
+		{% if invitados > 0 %}
+			resumen += '<li>Cantidad total de invitados cargados: <span class="status">{{ invitados }}</span> </li>';
+		{% endif %}
+		
+		
+		$("#resumen").html(resumen);
 		</script>
 		
 		<div id="reinvitar_form" title="Re-enviar invitaciones pendientes">

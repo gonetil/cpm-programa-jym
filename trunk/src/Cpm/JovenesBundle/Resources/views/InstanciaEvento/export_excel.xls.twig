@@ -31,11 +31,29 @@
 		</td>
 		<td ><strong>DNI</strong></td>
 		<td  colspan="3"><strong>Email</strong></td>
+		<td colspan="3"><strong>Celular</strong></td>
 		<td colspan="2"><strong>Localidad</strong></td>
 		<td colspan="4"><strong>Distrito (Region)</strong></td>
 		<td colspan="7"><strong>Escuela</strong></td>
+		<td colspan="3"><strong>Tel. Escuela</strong></td>
 		<td colspan="5"><strong>Tema Principal</strong></td>
+		<td colspan="4"><strong>Título</strong></td>
+		<td colspan="4"><strong>Soporte</strong></td>
 		<td colspan="2"><strong>Confirmado</strong></td>
+		
+		
+		{% if entity.evento.solicitarDuracionPresentacion %}
+			<td colspan="2"><strong>Duracion</strong></td>
+		{% endif %}
+
+		{% if entity.evento.solicitarListaInvitados %}
+			<td colspan="2"><strong>Cant. Invitados</strong></td>
+		{% endif %}
+
+		{% if entity.evento.preguntarSolicitaTren %}
+			<td colspan="2"><strong>Solicita tren</strong></td>
+		{% endif %}
+		
 		{% if entity.evento.pedirNumeroAsistentes %}
 			<td colspan="2"><strong>Asistentes</strong></td>
 		{% endif %}
@@ -59,12 +77,30 @@
 			<td colspan="3"> {{ inv.proyecto.coordinador.apellido}}, {{ inv.proyecto.coordinador.nombre }} </td>
 			<td >{{ inv.proyecto.coordinador.dni }}</td>
 			<td colspan="3">{{ inv.proyecto.coordinador.email }}</td>
+			<td colspan="3">{{ inv.proyecto.coordinador.telefonoCelular }}</td>
 			<td colspan="2">{{ inv.proyecto.escuela.localidad }}</td>
 			<td colspan="4">{{ inv.proyecto.escuela.localidad.distrito }} ({{ inv.proyecto.escuela.localidad.distrito.region.id }})</td>
 			<td colspan="7">{{ common.nombreEscuela(inv.proyecto.escuela) }}</td>
+			<td colspan="3">{{ inv.proyecto.escuela.telefono }}</td>
 			<td colspan="5"> {{ inv.proyecto.temaPrincipal }} </td>
+			<td colspan="4"> {{ inv.proyecto.titulo }} </td>
+			<td colspan="4"> {{ inv.proyecto.produccionFinal }} </td>
+			
 			<td colspan="2">{% if inv.sinResponder %}Pendiente {% else %} {{ common.show_bool(inv.aceptoInvitacion) }} {% endif %}</td>
 			
+			
+			{% if entity.evento.solicitarDuracionPresentacion %}
+				<td colspan="2"><strong>{{ inv.duracion }} </strong></td>
+			{% endif %}
+	
+			{% if entity.evento.solicitarListaInvitados %}
+				<td colspan="2"><strong> {{ inv.countInvitados }}</strong></td>
+			{% endif %}
+	
+			{% if entity.evento.preguntarSolicitaTren %}
+				<td colspan="2"><strong> {{ common.show_bool(inv.solicitaTren) }} </strong></td>
+			{% endif %}
+				
 			{% if entity.evento.pedirNumeroAsistentes %}
 				<td colspan="2"> {{inv.numeroAsistentes}}</td>
 			{% endif %}

@@ -102,6 +102,31 @@ class DefaultController extends BaseController
     	return $response;
     }
     
+   /**
+    * Busca todas las instancias de un evento
+    *
+    * @Route("/public/find_instancias_by_evento", name="find_instancias_by_evento")
+    */
+    public function findByEventoAction() {
+    	$evento_id = $this->get('request')->query->get('evento_id');
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    	if ($evento_id != -1)
+    		$instancias = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findByEvento($evento_id);
+    	else
+    		$instancias = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findAll();
+    	
+    	$json = array();
+    	foreach ($instancias as $inst) {
+    		$json[] = array("nombre"=>$inst->getTitulo(), "id" => $inst->getId());
+    	}
+    	$response = new Response(json_encode($json));
+    	 
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    }
+    
+    
     /**
     * @Route("/instructivo_usuarios", name="instructivo_usuarios")
      * @Template("CpmJovenesBundle:Default:instructivo_usuarios.html.twig")
