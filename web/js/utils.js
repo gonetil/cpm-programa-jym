@@ -184,10 +184,21 @@ buscar_distritos = function() {
 		autofill_select( { region_id : id} , select  , "/public/find_by_region" , "Todos");
 };
 
+buscar_instancias_eventos = function() {
+	id = jQuery("#cpm_jovenesbundle_filter_modelFilter_eventoFilter_evento").val();
+	select = "#cpm_jovenesbundle_filter_modelFilter_instanciaEventoFilter_instanciaEvento";
+	if (id == "")
+		id =-1;
+	autofill_select( { evento_id : id} , select  , "/public/find_instancias_by_evento" , "Todos");
+	
+};
+
 bind_rdl_selects = function(){
 	$('select.region-selector').change(buscar_distritos);
 	$('select.distrito-selector').change(buscar_localidades);
+	$("#cpm_jovenesbundle_filter_modelFilter_eventoFilter_evento").change(buscar_instancias_eventos);
 }
+
 /**
  *  inicializaciones comunes a toda la aplicacion
  */
@@ -266,8 +277,13 @@ cambiar_estado = function() {
 }
 
 invitaciones_actionx_fx = function() {
+	
 	$(".with-operations").click(function(event){
 		$(event.target).children(".ops").toggle();
+	});
+	
+	$(".invitaciones li.actions").click(function(event) { 
+		$(event.target).find(".with-operations").click();
 	});
 }
 
