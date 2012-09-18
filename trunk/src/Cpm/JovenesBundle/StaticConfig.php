@@ -28,7 +28,15 @@ class StaticConfig {
 	  );
 	  $etapas[]=array (
 	    'numero' => 6,
-	    'nombre' => 'Etapa 6 - Etapa final'
+	    'nombre' => 'Etapa 6 - Preparación para Chapadmalal'
+	  );
+	  $etapas[]=array (
+	    'numero' => 7,
+	    'nombre' => 'Etapa 7 - Durante Chapadmalal'
+	  );
+	  $etapas[]=array (
+	    'numero' => 8,
+	    'nombre' => 'Etapa 8 - Etapa final'
 	  );
 		return $etapas;
 	}
