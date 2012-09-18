@@ -263,8 +263,7 @@ class InvitacionController extends BaseController
     *  @Route("/{id}/export_invitados_to_excel", name="invitados_export_to_excel")
     * @Method("get")
     * @Template("CpmJovenesBundle:Invitacion:invitados_excel.xls.twig")
-    */
-    
+    */    
     public function exportInvitadosToExcelAction($id) {
     	$em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
@@ -295,7 +294,6 @@ class InvitacionController extends BaseController
      * @Route("/{invitacion_id}/{instancia_id}/modificar_invitacion_de_instancia" , name="modificar_invitacion_de_instancia")
      * @Method("get")
      */
-    
     public function cambiarInvitacionDeInstancia($invitacion_id,$instancia_id) {
     	$em = $this->getDoctrine()->getEntityManager();
         $invitacion = $em->getRepository('CpmJovenesBundle:Invitacion')->find($invitacion_id);

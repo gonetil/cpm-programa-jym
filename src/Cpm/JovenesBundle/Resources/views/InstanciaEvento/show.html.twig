@@ -92,7 +92,8 @@
 			    </td>
 		    </tr>
 		        <tr>
-		            <th>Id</th>
+		            <th>&nbsp;</th>
+		            <th>&nbsp;</th>
 		            <th>Fecha</th>
 		            <th>Coordinador</th>
 		            <th>Escuela</th>
@@ -113,18 +114,24 @@
 		            {% if entity.evento.permitirObservaciones %}
 		            <th>Observaciones</th>
 		            {% endif %}	          
-		            <th> Asistió </th>  	            	            	            
-		            
+		            <th> Asistió </th>  	            	            	            	            
 		        </tr>
 		    </thead>
-		    <tbody>
+		    <tbody class="records_list">
 	    	{% for i in invitaciones %}
 	    		{%  set inv=i[0]%}
 		        <tr class="{% if inv.sinResponder %}pendiente{% elseif inv.aceptoInvitacion %}aceptada{%else%}rechazada{% endif %}" >
-		            <td><a href="{{ path('invitaciones_edit',{id:inv.id}) }}">{{ inv.id }}</a></th>
+		            <td><a href="{{ path('invitaciones_edit',{id:inv.id}) }}">Editar invitación</a></th>
+		            <td>
+		            	<a href="#" onclick="mostrarSelectCambioInstancia(this);">Cambiar de día</a>
+		            	{{ common.SelectCambiarInvitacionDeInstancia(inv,false) }}
+		            </td>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
 		            <td> {{ i.apellido_coordinador }}, {{ i.nombre_coordinador }} </td>
-		            <td> {{ common.nombreEscuela(inv.proyecto.escuela) }}</td>
+		            <td> <a href=" {{ path('proyecto_show',{ id:inv.proyecto.getId }) }}">
+		            			{{ common.nombreEscuela(inv.proyecto.escuela) }}
+		            	</a>		
+		            </td>
 		            <td> {{ i.distrito_escuela }}</td>
 		            <td  class="mini-icon {% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
 		            			{% if inv.sinResponder %} colspan="100%">

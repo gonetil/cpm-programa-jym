@@ -275,9 +275,17 @@ invitaciones_actionx_fx = function() {
 cambiarInvitacionDeInstancia = function(select) {
 	$select = $(select);
 	nueva_instancia = $select.val();
-	$.get(nueva_instancia,function(msg) {
-		if (msg == 'success') {
-			window.location.reload();
-		}
-	});
+	
+	if (confirm("¿confirmar el cambio de instancia?")) { 
+		$.get(nueva_instancia,function(msg) {
+			if (msg == 'success') {
+				window.location.reload();
+			}
+		});
+	}	
+}
+
+mostrarSelectCambioInstancia = function(sibling) {
+	$(sibling).siblings(".invitacion_instancia_switcher").show();
+	$(sibling).hide();
 }
