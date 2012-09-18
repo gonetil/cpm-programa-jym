@@ -76,10 +76,14 @@ class ProyectoFilterForm extends ModelFilterForm
             
             $evento = new EventoFilter();
             $builder->add('eventoFilter',$evento->createForm(),array('label'=>'Evento'));
-                									
+            
+            $instanciaEvento = new InstanciaEventoFilter();
+  			$builder->add('instanciaEventoFilter',$instanciaEvento->createForm(),array('label'=>'Instancia de Evento'));      	    									
+        	    									
             $estado = new EstadoFilter();
             $builder->add('estadoFilter',$estado->createForm(),array('label'=>'Estado'));
         
+        	
     }
     
 }

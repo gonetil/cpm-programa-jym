@@ -10,6 +10,7 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 	private $escuelaFilter;
 	private $eventoFilter;
 	private $estadoFilter;
+	private $instanciaEventoFilter;
 
 	public function createForm() {
 		return new ProyectoFilterForm($this);
@@ -50,6 +51,15 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 	}
 	public function setEstadoFilter($estadoFilter) {
 		$this->estadoFilter = $estadoFilter;
+	}
+	
+	public function getInstanciaEventoFilter() {
+		if (!$this->instanciaEventoFilter)
+			$this->instanciaEventoFilter = new InstanciaEventoFilter();
+		return $this->instanciaEventoFilter;	
+	}
+	public function setInstanciaEventoFilter($instanciaEventoFilter) {
+		$this->instanciaEventoFilter = $instanciaEventoFilter;
 	}
 
 }
