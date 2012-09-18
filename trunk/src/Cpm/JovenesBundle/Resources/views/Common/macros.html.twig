@@ -57,9 +57,9 @@
 {% endmacro %}
 
 
-{% macro SelectCambiarInvitacionDeInstancia(invitacion) %}
+{% macro SelectCambiarInvitacionDeInstancia(invitacion,show_label) %}
 			<div class="invitacion_instancia_switcher">
-			Mover a otra Instancia
+			{% if show_label %} Mover a otra Instancia {% endif %}
 			<select name="instancia_id" id="instancia_id" onchange="cambiarInvitacionDeInstancia(this)">
 				{% for inst in invitacion.instanciaEvento.evento.instancias %}
 					<option value="{{path('modificar_invitacion_de_instancia', {invitacion_id:invitacion.id, instancia_id:inst.id})}}" > {{inst}} </option>

@@ -208,8 +208,7 @@
 									{% if invitacion.instanciaEvento.evento.solicitarListaInvitados %}
 										<li><a href="{{ path('invitados_export_to_excel', { 'id': invitacion.id }) }}">Exportar lista de invitados</a></li>
 									{% endif %}								
-									
-									<li> {{ common.SelectCambiarInvitacionDeInstancia(invitacion) }} </li>
+									<li> {{ common.SelectCambiarInvitacionDeInstancia(invitacion,true) }} </li>
 								</div>	
 							</span>
 							{% else %}
