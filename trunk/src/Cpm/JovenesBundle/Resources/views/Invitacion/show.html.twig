@@ -7,6 +7,25 @@
 {% set evento = entity.instanciaEvento.evento %}
 <table class="record_properties">
     <tbody>
+     	<tr>
+    		<th> Instancia de Evento </th>
+    		<td> {{ entity.instanciaEvento }} </td> 		
+    	</tr>
+
+    	<tr>
+    		<th> Escuela </th>
+    		<td> {{ entity.proyecto.escuela }} </td> 		
+    	</tr>
+    	<tr>
+    		<th> Coordinador </th>
+    		<td> {{ entity.proyecto.coordinador }} </td> 		
+    	</tr>
+
+    	<tr>
+    		<th> Proyecto </th>
+    		<td> {{ entity.proyecto.titulo }} </td> 		
+    	</tr>
+    	
         <tr>
             <th>Fecha de invitación</th>
             <td>{{ entity.fechaCreacion|date('d-m-Y H:i:s') }}</td>
