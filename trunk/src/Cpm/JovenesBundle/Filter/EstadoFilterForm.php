@@ -39,6 +39,13 @@ class EstadoFilterForm extends ModelFilterForm
 										  'expanded'=>false,
 										  'required' => false
 										  ))                										
+			->add('aprobado','choice',array('label' => 'Aprobado' ,
+            											'choices' => array(1=>"Si",2=>"No",3=>"Todos"),
+            											'data' => '1',
+										  'empty_value'=>'Todos',
+										  'expanded'=>false,
+										  'required' => false
+										  ))                										
                 										;     
     }          	
 }

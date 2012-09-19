@@ -76,6 +76,10 @@
 <div style="clear:both">
 	{% if invitaciones | length > 0 %}
 		<h2> Invitaciones enviadas </h2>
+		<div class="online_search_box">
+			<label for="search_online"><strong>Búsqueda rápida</strong></label><input type="text" name="search_online" id="search_online" />
+			<label> ej: nombre de coordinador, escuela, distrito </label>
+		</div>
 		<table class="records_properties" id="invitaciones">
 		    <thead>
 		    <tr class='table-options'>
