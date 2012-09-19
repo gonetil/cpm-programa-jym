@@ -43,10 +43,10 @@ class ProyectoController extends BaseController
     /**
      * Lists all Proyecto entities.
      * @Method("get")
-     * @Route("/proyectos_activos", name="proyectos_activos")
+     * @Route("/proyectos_presentados", name="proyectos_presentados")
      * @Template("CpmJovenesBundle:Proyecto:index.html.twig")
      */
-	public function proyectosActivosAction() {
+	public function proyectosPresentadosAction() {
     	$stats = $this->getSystemStats();
     	$estadosManager = $this->getEstadosManager(); //agrego esto para que las constantes aparezcan en el twig
     	$filter = new ProyectoFilter();
@@ -55,6 +55,22 @@ class ProyectoController extends BaseController
 		return $this->filterAction($filter, 'proyecto', $stats);
 		
 	}
+	
+    /**
+     * Lista todos los proyectos que fueron presentados y su estado es APROBADO o APROBADO C
+     * @Method("get")
+     * @Route("/proyectos_aprobados", name="proyectos_aprobados")
+     * @Template("CpmJovenesBundle:Proyecto:index.html.twig")
+     */
+	public function proyectosAprobadosAction() {
+    	$stats = $this->getSystemStats();
+    	$estadosManager = $this->getEstadosManager(); //agrego esto para que las constantes aparezcan en el twig
+    	$filter = new ProyectoFilter();
+    	$filter->getEstadoFilter()->setAprobado(1);
+    	$this->setInfoMessage("Proyectos vigentes: proyectos evaluados y en estado APROBADO o APROBADO C");
+		return $this->filterAction($filter, 'proyecto', $stats);
+	}
+	
 	
     private function getSystemStats() {
     	$stats = array(); 

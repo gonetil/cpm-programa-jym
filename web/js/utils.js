@@ -222,6 +222,16 @@ jQuery(function($){
 	bind_rdl_selects();
 	
 	invitaciones_actionx_fx();
+	
+    $('#search_online').keyup(function() {
+    			text = $.trim($(this).val());
+    			if (text != '')
+    				$(this).css('background','yellow');
+    			else
+    				$(this).css('background','none');
+		
+    			searchTable(text);
+    });
 });
 	
 invitacion_reinvitar = function(clicked_node,$destination) {
@@ -305,3 +315,26 @@ mostrarSelectCambioInstancia = function(sibling) {
 	$(sibling).siblings(".invitacion_instancia_switcher").show();
 	$(sibling).hide();
 }
+
+
+function searchTable(inputVal) {
+	var table = $('#invitaciones');
+	table.find('tr').each(function(index, row)
+	{
+		var allCells = $(row).find('td');
+		if(allCells.length > 0)
+		{
+		  var found = false;
+		  allCells.each(function(index, td) {
+		                var regExp = new RegExp(inputVal, 'i');
+		                if(regExp.test($(td).text()))
+		                {
+		                    found = true;
+		                    return false;
+		                }
+		            });
+		            if(found) $(row).show();
+		            else $(row).hide();
+		        }
+		    });
+		}

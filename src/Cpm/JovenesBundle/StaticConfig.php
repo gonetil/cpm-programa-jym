@@ -8,7 +8,8 @@ class StaticConfig {
 	$etapas = array ();
 	$etapas[]=array (
 	    'numero' => 1,
-	    'nombre' => 'Etapa 1 - Preparación'
+	    'nombre' => 'Etapa 1 - Preparación',
+	    'proyectos_activos_filter' => 'proyecto' //no borrar, se utilizará por default
 	);
 	$etapas[]=array (
 		'numero' => 2,
@@ -24,11 +25,13 @@ class StaticConfig {
 	  );
 	  $etapas[]=array (
 	    'numero' => 5,
-	    'nombre' => 'Etapa 5 - Presentación de proyectos'
+	    'nombre' => 'Etapa 5 - Presentación de proyectos',
+	    'proyectos_activos_filter' => 'proyectos_presentados'
 	  );
 	  $etapas[]=array (
 	    'numero' => 6,
-	    'nombre' => 'Etapa 6 - Preparación para Chapadmalal'
+	    'nombre' => 'Etapa 6 - Preparación para Chapadmalal',
+	    'proyectos_activos_filter' => 'proyectos_aprobados'
 	  );
 	  $etapas[]=array (
 	    'numero' => 7,

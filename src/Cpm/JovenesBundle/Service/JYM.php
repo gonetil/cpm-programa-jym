@@ -135,13 +135,29 @@ class JYM  {
 	public function getNombreEtapaActual(){
 		return $this->getNombreEtapa($this->numeroEtapaActual);
 	}
-
+	
 	public function getNombreEtapa($numeroEtapa){
 		if (!$this->hasEtapa($numeroEtapa)){
 			throw new \OutOfRangeException("No existe la etapa ".$numeroEtapa);
 		}
 		return $this->etapas[$numeroEtapa]['nombre'];
 	}	
+
+	public function getProyectoActualFilterEtapaActual() { 
+		return $this->getProyectoActualFilterEtapa($this->numeroEtapaActual);
+	}
+	
+	public function getProyectoActualFilterEtapa($numeroEtapa) {
+		if (!$this->hasEtapa($numeroEtapa)){
+			throw new \OutOfRangeException("No existe la etapa ".$numeroEtapa);
+		}
+		
+		for($i = $numeroEtapa; $i >=0; $i-- ) {  //busco hacia atrás la primer etapa que defina el filtro
+			if (isset( $this->etapas[$i]['proyectos_activos_filter']))
+				return $this->etapas[$i]['proyectos_activos_filter'];		
+		}	
+		return '';		
+	}
 	
 	public function getEtapaActual(){
 		if (empty($this->etapas[$this->numeroEtapaActual]))
