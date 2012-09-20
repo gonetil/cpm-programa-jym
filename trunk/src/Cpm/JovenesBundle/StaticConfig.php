@@ -6,7 +6,7 @@ class StaticConfig {
 	
 	public static function getEtapas() {
 	$etapas = array ();
-	$etapas[]=array (
+	$etapas[]=array(
 	    'numero' => 1,
 	    'nombre' => 'Etapa 1 - Preparación',
 	    'proyectos_activos_filter' => 'proyecto' //no borrar, se utilizará por default
