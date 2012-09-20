@@ -147,7 +147,7 @@ class Proyecto
     private $invitaciones;
     
     /**
-     *     /**
+     *    
     *  @ORM\OneToOne(targetEntity="EstadoProyecto",cascade={"persist"})
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="estadoActual_id", referencedColumnName="id", nullable=true, onDelete="SET NULL", onUpdate="SET NULL")
@@ -163,6 +163,12 @@ class Proyecto
     
     private $requerimientosDeEdicion;
     
+    /**
+    * @var string $color
+    *
+    * @ORM\Column(name="color", type="string", nullable=true)
+    */
+    private $color;
     
     public function __construct()
     {
@@ -577,5 +583,13 @@ class Proyecto
 	
 	public function setRequerimientosDeEdicion($req) {
 		$this->requerimientosDeEdicion = $req;
+	}
+	
+	public function getColor() {
+		return $this->color;
+	}
+	
+	public function setColor($color) {
+		$this->color = $color;
 	}
 }
