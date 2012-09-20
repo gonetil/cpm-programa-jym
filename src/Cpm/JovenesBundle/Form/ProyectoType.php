@@ -57,6 +57,15 @@ class ProyectoType extends AbstractType
 	        ->add('impactoBuscado',null,array('label'=>'¿Qué impacto tendrá en la comunidad?'))
         	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
 			->add('requerimientosDeEdicion',null,array('label'=>'Requerimientos de edición'))        	
+			->add('color', 'choice',	array(
+            		'label' => 'Color', 
+            		'required'=>false,
+    				'choices' => array("rojo"=>"rojo" , "naranja" => "naranja", "azul" => "azul" , "verde" => "verde"),
+    				'expanded' => false,
+    				'empty_value' => "",
+    				'preferred_choices' => array("")
+    				))
+
         // ->add('coordinador',new UsuarioType(),array('label' => 'Docente Coordinador'))
         
         ;

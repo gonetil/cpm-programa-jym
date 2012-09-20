@@ -314,6 +314,7 @@ cambiarInvitacionDeInstancia = function(select) {
 mostrarSelectCambioInstancia = function(sibling) {
 	$(sibling).siblings(".invitacion_instancia_switcher").show();
 	$(sibling).hide();
+	return false;
 }
 
 
@@ -337,4 +338,4 @@ function searchTable(inputVal) {
 		            else $(row).hide();
 		        }
 		    });
-		}
+}

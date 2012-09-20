@@ -15,6 +15,17 @@
 			{% endif %}
 		  	
 		    <h2 class="proyeto_title"> Proyecto: {{ entity.titulo }} </h2>
+		    
+		    
+		    {% if entity.color | length > 0 %}
+				<h4 class="info_header extra_info color-{{entity.color}}">
+					<a href="#" ;>
+						Color {{ entity.color }}
+					</a>			
+				</h4>
+			{% endif %}
+		    
+		    
 			{% set escuela = entity.escuela %}
 	
 			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_escuela').toggle(); return false;"> {{ proyecto_box.nombreEscuela(entity.escuela) }} </a></h4>
@@ -88,6 +99,7 @@
 					<p> Cantidad de alumnos que participan: {{ entity.requerimientosDeEdicion }} </p>
 				</div> <!-- info_edicion -->
 			{% endif %}
+			
 			
 			
 			<ul class="record_actions">

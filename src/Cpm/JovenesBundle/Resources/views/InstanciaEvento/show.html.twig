@@ -132,7 +132,7 @@
 		        <tr class="{% if inv.sinResponder %}pendiente{% elseif inv.aceptoInvitacion %}aceptada{%else%}rechazada{% endif %}" >
 		            <td><a href="{{ path('invitaciones_edit',{id:inv.id}) }}">Editar invitación</a></th>
 		            <td>
-		            	<a href="#" onclick="mostrarSelectCambioInstancia(this);">Cambiar de día</a>
+		            	<a href="#" onclick="return mostrarSelectCambioInstancia(this);">Cambiar de día</a>
 		            	{{ common.SelectCambiarInvitacionDeInstancia(inv,false) }}
 		            </td>
 		            <td>{{ inv.fechaCreacion|date('d-m-Y H:i:s') }}</th>
