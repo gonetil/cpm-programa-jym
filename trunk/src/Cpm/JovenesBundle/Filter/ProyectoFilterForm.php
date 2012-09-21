@@ -69,6 +69,13 @@ class ProyectoFilterForm extends ModelFilterForm
         												'expanded'=>false,
         												'required'=>false
                 										))
+       			->add('color', 'choice',	array( 'label' => 'Color', 
+            		'required'=>false,
+    				'choices' => array("rojo"=>"rojo" , "naranja" => "naranja", "azul" => "azul" , "verde" => "verde"),
+    				'expanded' => false,
+            		'preferred_choices' => array("Todos"),
+        			'empty_value' => "Todos",
+    				))         										
                 										
                 										;
 			$escuela = new EscuelaFilter();	
