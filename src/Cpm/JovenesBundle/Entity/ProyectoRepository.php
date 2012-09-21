@@ -65,6 +65,11 @@ class ProyectoRepository extends EntityRepository {
 		if ($data->getTemaPrincipal())
 			$qb->andWhere('p.temaPrincipal = :tp')->setParameter('tp', $data->getTemaPrincipal());
 
+		if ($color = $data->getColor()) {
+			$qb->andWhere('p.color like :color')->setParameter('color', $color);
+		}
+
+
 		if ($escuela = $data->getEscuelaFilter()) {
 	
 			$tiene_escuela = false;
