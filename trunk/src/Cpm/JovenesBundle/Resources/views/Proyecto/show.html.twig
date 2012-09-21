@@ -223,6 +223,9 @@
 										<li><a href="{{ path('invitados_export_to_excel', { 'id': invitacion.id }) }}">Exportar lista de invitados</a></li>
 									{% endif %}								
 									<li> {{ common.SelectCambiarInvitacionDeInstancia(invitacion,true) }} </li>
+									{% if invitacion.solicitaTren %}
+									<li> El coordinador indicó que solicita tren </li>
+									{% endif %}
 								</div>	
 							</span>
 							{% else %}
