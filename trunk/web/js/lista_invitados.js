@@ -35,14 +35,14 @@ updateLegend = function() { $("#lista_invitados .invitados_count").html("Total: 
 getLastRow = function() { return "#" + $("#lista_invitados table tr:last").attr("id"); }
 addRow = function() {
 	var last = getLastRow();
-	if ((cantInvitados < maxInvitados) && ( checkLine(last))) { 
-		cantInvitados++;
-		$("#lista_invitados table").append(newLine(cantInvitados));
-		$(".dateTime").datepicker();
-		updateLegend();
-	} else { 
-		console.log("reached to " + maxInvitados);
-	}
+	if ((isAdmin) || ((cantInvitados < maxInvitados) && ( checkLine(last))) ) { 
+			cantInvitados++;
+			$("#lista_invitados table").append(newLine(cantInvitados));
+			$(".dateTime").datepicker();
+			updateLegend();
+		} else { 
+			console.log("reached to " + maxInvitados);
+		}
 }
 
 removeRow = function(event) { 
