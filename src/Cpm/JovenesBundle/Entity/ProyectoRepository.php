@@ -167,6 +167,7 @@ class ProyectoRepository extends EntityRepository {
 		$estado = $data->getEstadoFilter();
 		if ($estado) {
 				if ($estado->getConArchivo() || $estado->getYaEvaluado() || $estado->getVigente() || $estado->getNota() || $estado->getAprobado()) {
+					
 					$qb	->leftJoin('p.estadoActual','est');
 						
 					if ($archivo=$estado->getConArchivo()) {
@@ -175,7 +176,7 @@ class ProyectoRepository extends EntityRepository {
 						else 
 							$qb->andWhere("est.estado >= :estado")->setParameter('estado', ESTADO_PRESENTADO);
 					}
-					if ($yev= $estado->getYaEvaluado()) {						
+					if ($yev= $estado->getYaEvaluado() && (! $estado->getAprobado())) {
 						$estados_evaluados = array(ESTADO_APROBADO,ESTADO_APROBADO_CLINICA,ESTADO_DESAPROBADO,ESTADO_REHACER, ESTADO_FINALIZADO);
 						$estados_sin_evaluar = array(ESTADO_INICIADO); //ESTADO_ANULADO
 						
@@ -187,25 +188,28 @@ class ProyectoRepository extends EntityRepository {
 							$qb->andWhere("( (est.estado = :estado_presentado) or (est.estado = :estado_iniciado) or (p.estadoActual is null) )")
 								->setParameter('estado_presentado', ESTADO_PRESENTADO)->setParameter('estado_iniciado', ESTADO_INICIADO);
 					}
-					if ($aprobado = $estado->getAprobado()) { 
-						$qb->andWhere('est.estado = :aprobado or est.estado = :aprobado_c')->setParameter('aprobado',ESTADO_APROBADO)->setParameter('aprobado_c',ESTADO_APROBADO_CLINICA);
-					}
 					
 					if ($nota = $estado->getNota()) {
 						$qb->andWhere('est.estado = :nota')->setParameter('nota',$nota);
 					}
-					if ($vig = $estado->getVigente()) {
-						switch ( $vig ) {
-							case 1: //no anulados, o sea vigentes
-									$qb->andWhere("(est.estado != :est or p.estadoActual is null)")->setParameter('est', ESTADO_ANULADO);	
-								break;
-							case 2: //anulados
-								$qb->andWhere("est.estado = :est")->setParameter('est', ESTADO_ANULADO);
-								break; 	
-							default:
-								break;
-						}
-					}
+
+					if ($aprobado = $estado->getAprobado()) { 
+						$qb->andWhere('est.estado in (:aprobado ,  :aprobado_c )')->setParameter('aprobado',ESTADO_APROBADO)->setParameter('aprobado_c',ESTADO_APROBADO_CLINICA);
+					} else
+					   {  
+						if ($vig = $estado->getVigente()) {  					
+							switch ( $vig ) {
+								case 1: //no anulados, o sea vigentes
+										$qb->andWhere("(est.estado != :est or p.estadoActual is null)")->setParameter('est', ESTADO_ANULADO);	
+									break;
+								case 2: //anulados
+									$qb->andWhere("est.estado = :est")->setParameter('est', ESTADO_ANULADO);
+									break; 	
+								default:
+									break;
+							}
+						  }	
+					  }
 				}
 		}
 		return $qb;

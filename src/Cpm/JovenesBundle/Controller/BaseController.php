@@ -234,6 +234,7 @@ abstract class BaseController extends Controller
      	
      	
     	if ($batch_filter->hasBatchAction()){
+
 			if ($batch_filter->isBatchActionTypeTodos()){
 				
 				$entities = $entitiesQuery->getResult();
@@ -257,11 +258,9 @@ abstract class BaseController extends Controller
 				 	->getQuery();
 				
 			}
-			
 			//TODO ver si le paso $extra_args al forward
 			return $this->forward($batch_filter->getBatchAction(),array('entitiesQuery'=>$entitiesQuery));				
     	}
-    	
     	return $this->getFilterResults($form, $batch_filter,$entitiesQuery,$extra_args);        
     }
 
