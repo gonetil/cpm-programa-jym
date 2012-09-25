@@ -337,4 +337,41 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 		echo "se enviaron $cant correos";
 		exit;
 	}
+	
+			
+	/**
+	 * Envia un recordatorio a todos los coordinadores invitados a Chapa que aún no confirmaron ni rechazaron la invitación
+	 * @Route("/recordar_chapa", name="recordar_chapa")
+	 */
+	public function recordar_chapaAction() {
+	   $chapa_id = 5; //el id interno de chapa
+	   $chapa= $this->getRepository("CpmJovenesBundle:Evento")->find($chapa_id);
+
+	   $query= $this->getRepository("CpmJovenesBundle:Invitacion")->createQueryBuilder('inv')->andWhere("inv.aceptoInvitacion is NULL");
+	   $query->innerJoin('inv.instanciaEvento', 'ie')->innerJoin("ie.evento", "e")
+	   		->andWhere("e = :eventoChapa")->setParameter('eventoChapa',$chapa);			
+	   $invitados = $query->getQuery()->getResult();
+	
+	   $mailer = $this->getMailer();
+		
+		$cant = 0;
+		try{
+			foreach($invitados as $invitacion){
+				$correo = $mailer->getCorreoFromPlantilla('invitaci-n-a-n-no-confirmada');
+				$correo->setEmisor($this->getLoggedInUser());
+				$correo->setDestinatario($invitacion->getProyecto()->getCoordinador());
+				$correo = $mailer->enviarCorreo($correo);
+				$cant++;
+			}
+		}catch(InvalidTemplateException $e){
+				$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+			}catch(MailCannotBeSentException $e){
+				$this->setErrorMessage('No se pudo enviar el correo. Verifique que los datos ingresados sean válidos');
+		}
+		echo "se enviaron $cant correos";
+		exit;
+	
+	
+	}
+	
 }

@@ -249,7 +249,7 @@ class ProyectoController extends BaseController
      *
      * @Route("/{id}/delete", name="proyecto_delete")
      * @Method("post")
-     */
+     **/
     public function deleteAction($id)
     {
         $form = $this->createDeleteForm($id);
@@ -344,7 +344,7 @@ class ProyectoController extends BaseController
 
 
     /**
-     * Elimina el ultimo estado de un proyecto y fueve al anteriro
+     * Elimina el ultimo estado de un proyecto y vuelve al anterior
      *
      * @Route("/{id}/cambiar_estado", name="proyecto_cambiar_estado")
      * @Method("post")
