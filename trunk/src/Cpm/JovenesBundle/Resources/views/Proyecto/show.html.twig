@@ -101,6 +101,19 @@
 			{% endif %}
 			
 			
+			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_transporte').toggle(); return false;">Transporte y observaciones</a></h4>
+			<div class="info_transporte hidden extra_info">
+				<p> Transporte: <strong>{% if entity.transporte | length > 0 %} {{ entity.transporte }} {% else %} - {% endif %} </strong> </p>
+				 
+				<h4> Observaciones: </h4>
+				<p>  {{ entity.observaciones }} </p>
+				<p> &nbsp; </p>
+			</div> <!-- info_transporte -->
+			
+			
+			
+			
+			
 			
 			<ul class="record_actions">
 			    <li>
