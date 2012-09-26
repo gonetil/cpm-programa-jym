@@ -69,6 +69,10 @@ class ProyectoRepository extends EntityRepository {
 			$qb->andWhere('p.color like :color')->setParameter('color', $color);
 		}
 
+		if ($transporte = $data->getTransporte()) {
+			$qb->andWhere('p.transporte like :transporte')->setParameter('transporte', $transporte);
+		}
+
 
 		if ($escuela = $data->getEscuelaFilter()) {
 	

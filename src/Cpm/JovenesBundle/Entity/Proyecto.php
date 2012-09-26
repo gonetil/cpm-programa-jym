@@ -170,6 +170,23 @@ class Proyecto
     */
     private $color;
     
+    
+    /**
+    * @var string $transporte
+    *
+    * @ORM\Column(name="transoprte", type="string", nullable=true)
+    */
+    private $transporte;
+
+
+    /**
+     * @var string $observaciones
+     *
+     * @ORM\Column(name="observaciones", type="text", nullable=true)
+     */
+    
+    private $observaciones;
+    
     public function __construct()
     {
     	$this->estado = Proyecto::__ESTADO_INICIADO;
@@ -591,5 +608,21 @@ class Proyecto
 	
 	public function setColor($color) {
 		$this->color = $color;
+	}
+	
+	public function getObservaciones() {
+		return $this->observaciones;
+	}
+	
+	public function setObservaciones($obs) {
+		$this->observaciones = $obs;
+	}
+	
+	public function getTransporte() {
+		return $this->transporte;
+	}
+	
+	public function setTransporte($transporte) {
+		$this->transporte = $transporte;
 	}
 }

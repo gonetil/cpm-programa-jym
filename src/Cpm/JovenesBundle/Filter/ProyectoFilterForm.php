@@ -76,7 +76,13 @@ class ProyectoFilterForm extends ModelFilterForm
             		'preferred_choices' => array("Todos"),
         			'empty_value' => "Todos",
     				))         										
-                										
+       			->add('transporte', 'choice',	array( 'label' => 'Transporte', 
+            		'required'=>false,
+    				'choices' => array("tren"=>"Tren" , "colectivo" => "Colectivo", "combi" => "Combi"),
+     				'expanded' => false,
+            		'preferred_choices' => array("Todos"),
+        			'empty_value' => "Todos",
+    				))                      										
                 										;
 			$escuela = new EscuelaFilter();	
             $builder->add('escuelaFilter', $escuela->createForm() ,array('label' => 'Escuela'));

@@ -353,19 +353,21 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 	   $invitados = $query->getQuery()->getResult();
 	
 	   $mailer = $this->getMailer();
-		
+
 		$cant = 0;
 		try{
 			foreach($invitados as $invitacion){
 				$correo = $mailer->getCorreoFromPlantilla('invitaci-n-a-n-no-confirmada');
 				$correo->setEmisor($this->getLoggedInUser());
+				$correo->setProyecto($invitacion->getProyecto());
 				$correo->setDestinatario($invitacion->getProyecto()->getCoordinador());
 				$correo = $mailer->enviarCorreo($correo);
 				$cant++;
+				
 			}
 		}catch(InvalidTemplateException $e){
 				$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
-			}catch(MailCannotBeSentException $e){
+		}catch(MailCannotBeSentException $e){
 				$this->setErrorMessage('No se pudo enviar el correo. Verifique que los datos ingresados sean válidos');
 		}
 		echo "se enviaron $cant correos";

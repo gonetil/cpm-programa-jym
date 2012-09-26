@@ -65,7 +65,15 @@ class ProyectoType extends AbstractType
     				'empty_value' => "",
     				'preferred_choices' => array("")
     				))
-
+			->add('transporte', 'choice',	array(
+            		'label' => 'Transporte', 
+            		'required'=>false,
+    				'choices' => array("tren"=>"Tren" , "colectivo" => "Colectivo", "combi" => "Combi"),
+    				'expanded' => false,
+    				'empty_value' => "",
+    				'preferred_choices' => array("")
+    				))
+			->add('observaciones',null,array('label'=>'Observaciones'))
         // ->add('coordinador',new UsuarioType(),array('label' => 'Docente Coordinador'))
         
         ;
