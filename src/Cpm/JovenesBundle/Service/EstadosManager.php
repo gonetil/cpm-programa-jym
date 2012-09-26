@@ -14,8 +14,7 @@ define("ESTADO_APROBADO_CLINICA",21);
 define("ESTADO_DESAPROBADO",22);
 define("ESTADO_REHACER",23);
 define("ESTADO_FINALIZADO",30);
-
-
+define("ESTADO_APROBADO_Y_APROBADO_C",40);
 /**
  */
 class EstadosManager
@@ -40,7 +39,7 @@ class EstadosManager
     	return array(
 					ESTADO_PRESENTADO 	=> "Presentado (subir archivo)",
 					ESTADO_APROBADO		=> "Aprobado",
-					ESTADO_APROBADO_CLINICA => "Aprobado C",
+					ESTADO_APROBADO_CLINICA => "Aprobado C",				
 					ESTADO_DESAPROBADO		=> "Desaprobado",
 					ESTADO_REHACER => "Rehacer",
 					ESTADO_ANULADO		=> "Anulado"

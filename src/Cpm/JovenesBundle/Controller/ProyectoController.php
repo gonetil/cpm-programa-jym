@@ -66,7 +66,7 @@ class ProyectoController extends BaseController
     	$stats = $this->getSystemStats();
     	$estadosManager = $this->getEstadosManager(); //agrego esto para que las constantes aparezcan en el twig
     	$filter = new ProyectoFilter();
-    	$filter->getEstadoFilter()->setAprobado(1);
+    	$filter->getEstadoFilter()->setNota(ESTADO_APROBADO_Y_APROBADO_C);
     	$this->setInfoMessage("Proyectos vigentes: proyectos evaluados y en estado APROBADO o APROBADO C");
 		return $this->filterAction($filter, 'proyecto', $stats);
 	}

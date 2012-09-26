@@ -233,8 +233,8 @@ abstract class BaseController extends Controller
      	list($form, $batch_filter, $entitiesQuery) = $this->getFilterForm($modelfilter);
      	
      	
+     	
     	if ($batch_filter->hasBatchAction()){
-
 			if ($batch_filter->isBatchActionTypeTodos()){
 				
 				$entities = $entitiesQuery->getResult();
@@ -260,7 +260,8 @@ abstract class BaseController extends Controller
 			}
 			//TODO ver si le paso $extra_args al forward
 			return $this->forward($batch_filter->getBatchAction(),array('entitiesQuery'=>$entitiesQuery));				
-    	}
+    	} 
+    	
     	return $this->getFilterResults($form, $batch_filter,$entitiesQuery,$extra_args);        
     }
 
@@ -269,9 +270,9 @@ abstract class BaseController extends Controller
 		$modelfilter_Form = $modelFilter->createForm();
  		$filterForm = new FilterForm($modelfilter_Form);
  		$filter = new Filter($modelFilter);
- 		
+		
  		$form = $this->get('form.factory')->create($filterForm, $filter);
- 		
+		
 		$request = $this->getRequest();
 		
 		if ($request->query->get($form->getName())){
@@ -295,6 +296,7 @@ abstract class BaseController extends Controller
 		
 		
 //		$modelFilter = $filter->getModelFilter();
+		
         $qb = $this->getRepository($modelFilter->getTargetEntity())->filterQuery($modelFilter, $filter->getSortField(), $filter->getSortOrder() );
 		$query = $qb->getQuery();
 		
@@ -310,7 +312,6 @@ abstract class BaseController extends Controller
 		
 		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
 		
-
 		$args['filter'] = $filter;
 		$args['form'] = $form->createView();
 
