@@ -190,13 +190,17 @@ class ProyectoRepository extends EntityRepository {
 					}
 					
 					if ($nota = $estado->getNota()) {
-						$qb->andWhere('est.estado = :nota')->setParameter('nota',$nota);
+						if ($nota == ESTADO_APROBADO_Y_APROBADO_C)
+							$qb->andWhere('est.estado in (:aprobado ,  :aprobado_c )')->setParameter('aprobado',ESTADO_APROBADO)->setParameter('aprobado_c',ESTADO_APROBADO_CLINICA);
+						else	
+							$qb->andWhere('est.estado = :nota')->setParameter('nota',$nota);
 					}
 
-					if ($aprobado = $estado->getAprobado()) { 
-						$qb->andWhere('est.estado in (:aprobado ,  :aprobado_c )')->setParameter('aprobado',ESTADO_APROBADO)->setParameter('aprobado_c',ESTADO_APROBADO_CLINICA);
-					} else
-					   {  
+//					if ($aprobado = $estado->getAprobado()) { 
+//						$qb->andWhere('est.estado in (:aprobado ,  :aprobado_c )')->setParameter('aprobado',ESTADO_APROBADO)->setParameter('aprobado_c',ESTADO_APROBADO_CLINICA);
+//					} 
+					  
+					   	
 						if ($vig = $estado->getVigente()) {  					
 							switch ( $vig ) {
 								case 1: //no anulados, o sea vigentes
@@ -207,9 +211,9 @@ class ProyectoRepository extends EntityRepository {
 									break; 	
 								default:
 									break;
-							}
-						  }	
-					  }
+							} //switch
+						  }	// if vig
+					  
 				}
 		}
 		return $qb;
