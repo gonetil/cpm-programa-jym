@@ -349,10 +349,11 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 
 	   $query= $this->getRepository("CpmJovenesBundle:Invitacion")->createQueryBuilder('inv')->andWhere("inv.aceptoInvitacion is NULL");
 	   $query->innerJoin('inv.instanciaEvento', 'ie')->innerJoin("ie.evento", "e")
-	   		->andWhere("e = :eventoChapa")->setParameter('eventoChapa',$chapa);			
+	   		 ->andWhere("e = :eventoChapa")->setParameter('eventoChapa',$chapa);			
 	   $invitados = $query->getQuery()->getResult();
 	
 	   $mailer = $this->getMailer();
+       set_time_limit(60+3*count($invitados));
 
 		$cant = 0;
 		try{
@@ -363,6 +364,8 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 				$correo->setDestinatario($invitacion->getProyecto()->getCoordinador());
 				$correo = $mailer->enviarCorreo($correo);
 				$cant++;
+				unset($correo);
+				unset($invitacion);
 				
 			}
 		}catch(InvalidTemplateException $e){
