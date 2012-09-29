@@ -347,11 +347,22 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 	   $chapa_id = 5; //el id interno de chapa
 	   $chapa= $this->getRepository("CpmJovenesBundle:Evento")->find($chapa_id);
 
+
+		$query1 = $this->getRepository("CpmJovenesBundle:Correo")->createQueryBuilder("correo")->andWhere("correo.asunto like 'Invitación aún no confirmada'");
+		$correos = $query1->getQuery()->getResult();
+		$emails = array();
+		foreach ( $correos as $correo) {
+			$emails[] = $correo->getDestinatario();
+      	}
 	   $query= $this->getRepository("CpmJovenesBundle:Invitacion")->createQueryBuilder('inv')->andWhere("inv.aceptoInvitacion is NULL");
 	   $query->innerJoin('inv.instanciaEvento', 'ie')->innerJoin("ie.evento", "e")
+	   		->innerJoin('inv.proyecto','p')->innerJoin('p.coordinador','coord')->andWhere('coord.email not in (:emails)')->setParameter('emails',$emails)
 	   		 ->andWhere("e = :eventoChapa")->setParameter('eventoChapa',$chapa);			
+	   		 
+	   		 
 	   $invitados = $query->getQuery()->getResult();
 	
+		
 	   $mailer = $this->getMailer();
        set_time_limit(60+3*count($invitados));
 
