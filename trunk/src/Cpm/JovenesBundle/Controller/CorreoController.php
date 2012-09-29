@@ -356,7 +356,7 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
       	}
 	   $query= $this->getRepository("CpmJovenesBundle:Invitacion")->createQueryBuilder('inv')->andWhere("inv.aceptoInvitacion is NULL");
 	   $query->innerJoin('inv.instanciaEvento', 'ie')->innerJoin("ie.evento", "e")
-	   		->innerJoin('inv.proyecto','p')->innerJoin('p.coordinador','coord')->andWhere('coord.email not in (:emails)')->setParameter('emails',$emails)
+	   	//	->innerJoin('inv.proyecto','p')->innerJoin('p.coordinador','coord')->andWhere('coord.email not in (:emails)')->setParameter('emails',$emails)
 	   		 ->andWhere("e = :eventoChapa")->setParameter('eventoChapa',$chapa);			
 	   		 
 	   		 
