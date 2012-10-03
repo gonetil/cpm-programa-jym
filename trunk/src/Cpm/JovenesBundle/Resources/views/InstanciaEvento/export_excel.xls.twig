@@ -66,6 +66,7 @@
 		{% if entity.evento.ofrecerViaje %}
 			<td colspan="2"><strong>Requiere pasaje</strong></td>
 		{% endif %}
+		<td colspan="2"><strong>Informaci&oacute;n de transporte</strong></td>
 		{% if entity.evento.permitirObservaciones %}
 		  <td colspan="2"><strong>Observaciones</strong></td>
 		{% endif %}	          
@@ -114,10 +115,10 @@
 			{% if entity.evento.ofrecerViaje %}
 				<td colspan="2"> {{ common.show_bool(inv.solicitaViaje) }}&nbsp;</td>
 			{% endif %}
+			<td colspan="2"> {% if inv.proyecto.transporte | length > 0 %} {{ inv.proyecto.transporte }} {% endif %} </td>			
 			{% if entity.evento.permitirObservaciones %}
 			  <td colspan="2">{{ inv.observaciones }}&nbsp;</td>
 			{% endif %}	          
-			
 			<td>
 				{% if entity.fue %} 
 					{{ common.show_bool(inv.asistio) }} 
