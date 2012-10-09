@@ -347,13 +347,14 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 	   $chapa_id = 5; //el id interno de chapa
 	   $chapa= $this->getRepository("CpmJovenesBundle:Evento")->find($chapa_id);
 
-
+		$plantilla = 
 		$query1 = $this->getRepository("CpmJovenesBundle:Correo")->createQueryBuilder("correo")->andWhere("correo.asunto like 'Invitación aún no confirmada'");
 		$correos = $query1->getQuery()->getResult();
 		$emails = array();
 		foreach ( $correos as $correo) {
 			$emails[] = $correo->getDestinatario();
       	}
+      	
 	   $query= $this->getRepository("CpmJovenesBundle:Invitacion")->createQueryBuilder('inv')->andWhere("inv.aceptoInvitacion is NULL");
 	   $query->innerJoin('inv.instanciaEvento', 'ie')->innerJoin("ie.evento", "e")
 	   	//	->innerJoin('inv.proyecto','p')->innerJoin('p.coordinador','coord')->andWhere('coord.email not in (:emails)')->setParameter('emails',$emails)
@@ -367,9 +368,11 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
        set_time_limit(60+3*count($invitados));
 
 		$cant = 0;
+//		$plantilla = 'invitaci-n-a-n-no-confirmada';  //recordatorio para que confirmen la invitacion!
+		$plantilla =  'inscripcion-finalizada';    //aviso de sorry laser, timeout
 		try{
 			foreach($invitados as $invitacion){
-				$correo = $mailer->getCorreoFromPlantilla('invitaci-n-a-n-no-confirmada');
+				$correo = $mailer->getCorreoFromPlantilla($plantilla);
 				$correo->setEmisor($this->getLoggedInUser());
 				$correo->setProyecto($invitacion->getProyecto());
 				$correo->setDestinatario($invitacion->getProyecto()->getCoordinador());
