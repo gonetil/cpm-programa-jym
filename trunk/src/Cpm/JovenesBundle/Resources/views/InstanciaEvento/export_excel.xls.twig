@@ -67,8 +67,9 @@
 			<td colspan="2"><strong>Requiere pasaje</strong></td>
 		{% endif %}
 		<td colspan="2"><strong>Informaci&oacute;n de transporte</strong></td>
+		<td colspan="2"><strong>Observaciones de transporte</strong></td>
 		{% if entity.evento.permitirObservaciones %}
-		  <td colspan="2"><strong>Observaciones</strong></td>
+		  <td colspan="2"><strong>Observaciones de la invitaci&oacute;n</strong></td>
 		{% endif %}	          
 		<td><strong>Asisti&oacute;</strong></td>  	            	            	            
 		
@@ -115,7 +116,9 @@
 			{% if entity.evento.ofrecerViaje %}
 				<td colspan="2"> {{ common.show_bool(inv.solicitaViaje) }}&nbsp;</td>
 			{% endif %}
-			<td colspan="2"> {% if inv.proyecto.transporte | length > 0 %} {{ inv.proyecto.transporte }} {% endif %} </td>			
+			<td colspan="2"> {% if inv.proyecto.transporte | length > 0 %} {{ inv.proyecto.transporte }} {% endif %} </td>
+			<td colspan="2"> {% if inv.proyecto.observaciones | length > 0 %} {{ inv.proyecto.observaciones }} {% endif %} </td>			
+						
 			{% if entity.evento.permitirObservaciones %}
 			  <td colspan="2">{{ inv.observaciones }}&nbsp;</td>
 			{% endif %}	          
