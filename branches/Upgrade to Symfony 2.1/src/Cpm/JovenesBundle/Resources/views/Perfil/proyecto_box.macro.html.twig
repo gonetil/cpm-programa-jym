@@ -1,0 +1,121 @@
+{% macro nombreEscuela(escuela) %}
+	{% if escuela.tipoInstitucion.id is defined %}
+		{{ escuela.tipoInstitucion }}:  
+		{{ escuela.tipoEscuela }}
+	{% else %}
+		{{ escuela.otroTipoInstitucion }}:
+	{% endif %}		
+
+	<strong>
+	   	{% if escuela.numero %}
+	    	N° {{ escuela.numero }}
+	    {%endif%}
+	    {{ escuela.nombre }}
+	</strong>	
+{% endmacro %}
+
+{% macro showFull(proyecto) %}
+{% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
+	<div id="proyecto_fullbox">
+		
+
+	{% if proyecto.invitaciones | length > 0 %}
+	<div class="invitaciones">
+		<div class="minimizer" onclick="$('.invitaciones .listado-items').toggle();"> - </div>
+		<div class="invitacion">	
+		    	<div class="many-pending"></div> Invitaciones a eventos 
+		    	 
+		 </div>   	
+		<ul class="listado-items">
+			{% for invitacion in proyecto.invitaciones %}
+				<li class="actions">
+					{{ invitacion.instanciaEvento.titulo }}
+					{% if not invitacion.instanciaEvento.fue() %}
+						<div class="status">
+						{% if invitacion.estaPendiente %}
+							{% if invitacion.estaVigente %}
+								 <a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a>  
+								 <a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a>
+							{% endif %}
+							
+						{% else %}
+							{% if invitacion.aceptoInvitacion %}
+								<span class='aceptado'>Confirmado</span>
+								{% if  invitacion.instanciaEvento.evento.permitirModificarLaInvitacion %}
+									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a>
+									<a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a>
+								{% else %}  {# se redirige a aceptar, dado que las invitaciones de Chapa (las unicas que no se pueden modificar luego) manejan por si sola la NO edicion de sus campos #}	
+									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Ver</a>
+								{% endif %}	
+							{% else %}
+								<span class='rechazado'>Rechazado</span>
+									<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a>
+							{% endif %}
+							
+    					{% endif %}
+    					</div>
+					{% endif %}
+				</li>
+			{%endfor %}
+			</ul>
+		</div>	
+
+	  {% endif %}	
+	  	{% if ( proyecto.estadoActual) and (proyecto.estadoActual.estado >= 10) %}
+																 {# 10 es el estado presentado #}
+			<div class="download_link icon" title="Descargar archivo">
+		    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : proyecto.id}) }}" > 
+		    	 	&nbsp;
+		    	</a>
+	    	</div> 
+		{% endif %}
+	  	    
+	    <h2> Titulo: {{ proyecto.titulo }} </h2>
+	    <h3 class="info_header">Estado actual: {{ proyecto.estadoActual }}</h3>
+	    <ul>	
+	    	<li>Primera vez del docente: {{ common.show_bool(proyecto.esPrimeraVezDocente) }}</li>
+	    	<li>Primera vez de la escuela: {{ common.show_bool(proyecto.esPrimeraVezEscuela) }}</li>
+	    	<li>Primera vez de los alumnos: {{ common.show_bool(proyecto.esPrimeraVezAlumnos) }}</li>
+	    </ul>
+
+		<h3>Integrantes</h3>
+		<p>
+			<b>Coordinador</b>: {{ proyecto.coordinador.nombre }} {{proyecto.coordinador.apellido}} &lt;<a href="mailto:{{proyecto.coordinador.email}}">{{proyecto.coordinador.email}}</a>&gt;		
+		</p>
+		{% if proyecto.colaboradores | length > 0 %}
+			<p>
+				<b>Colaboradores: </b>
+				<ul class="colaboradores">
+					{% for colaboradores in proyecto.colaboradores %}
+						<li> {{colaboradores.nombre}} {{colaboradores.apellido}} &lt;<a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;</li>
+					{% endfor %}
+				</ul>
+			</p>
+		{% endif %}
+			
+		{% set escuela = proyecto.escuela %}
+		<h3> Datos de la Escuela </h3>
+
+		<p> {{ _self.nombreEscuela(proyecto.escuela) }} </p>
+		<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p> 
+		<p> Localidad {{escuela.localidad.nombre }} , Distrito {{ escuela.localidad.distrito }} </p>
+		<p> Tel. {{ escuela.telefono }} / Email {{ escuela.email }} </p>
+		<p> Director: {{ escuela.director }} </p>
+		
+		<h3> Acerca del proyecto </h3>
+		<p> Cantidad de alumnos que participan: {{ proyecto.nroAlumnos }} </p>
+		 
+		<p> Tema principal: {{ proyecto.temaPrincipal }} </p>
+		<p>  Producción Final: {{ proyecto.produccionFinal }} </p>
+		
+		<h4>¿De qué trata el proyecto?</h4>
+		<p>  {{ proyecto.deQueSeTrata }} </p>
+		
+		<h4>¿Cuál es el motivo de su realización?</h4>
+		<p>  {{ proyecto.motivoRealizacion }} </p>
+		
+		<h4>¿Cuál es el impacto buscado?</h4>
+		<p>  {{ proyecto.impactoBuscado }} </p>
+		<p> &nbsp; </p>
+		</div>
+{% endmacro %}

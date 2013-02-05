@@ -1,0 +1,45 @@
+<script>
+buscar_localidades = function() {
+	id = $("select.distrito-selector").val();
+   	localidad_select = $("select.localidad-selector").first();
+   	localidad_select.empty();
+   	$.getJSON("{{ path('localidad_find_by_distrito') }}", { distrito_id : id} , function(data) {
+   		if (data.length > 0) {
+	   		for (var i=0; i<data.length; i++) 
+	   			localidad_select.append("<option value="+data[i].id+">"+data[i].nombre+"</option>");
+	   		localidad_select.removeAttr("disabled");	
+	   	}
+	});
+};
+  $(document).ready(function() {
+		$(".distrito-selector").change(buscar_localidades);
+		});
+</script>
+
+  {% if (form.escuela.distrito is defined) %}
+ 	{{form_row(form.escuela.distrito) }}
+ 	{{ form_row(form.escuela.localidad) }}
+  {% elseif (edit_form.escuela.distrito is defined) %}
+ 	{{form_row(edit_form.escuela.distrito) }}
+ 	{{ form_row(edit_form.escuela.localidad) }}
+  {% elseif (form.usuario.distrito is defined) %}
+   	{{form_row(form.usuario.distrito) }}
+   	{{form_row(form.usuario.localidad) }}  	
+  {% elseif (form.user.distrito is defined) %}
+  		{{form_row(form.user.distrito) }}
+  		{{form_row(form.user.localidad) }} 	
+  {% elseif (form.distrito is defined) %}
+   	{{form_row(form.distrito) }}
+   	{{form_row(form.localidad) }}  	
+  		
+  {% else %}
+	<script>
+	  $(document).ready(function() {
+	  
+		$(".distrito-selector").trigger("change");
+	 });
+	 </script>
+ {% endif %}
+ 	
+
+

@@ -1,0 +1,56 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Ciclo{% endblock %}
+
+{% block content %}
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Titulo</th>
+            <td>{{ entity.titulo }}</td>
+        </tr>
+        <tr>
+            <th>Activo</th>
+            <td>{{ entity.activo?'Si':'No' }}</td>
+        </tr>
+        <tr>
+            <th>Etapa Actual</th>
+            <td>{{ entity.etapaActual }}</td>
+        </tr>
+        <tr>
+            <th>Historial</th>
+            <td>
+            {% autoescape false %}
+            	{{ entity.historial|join('<br>') }}
+            {% endautoescape %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('ciclo') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('ciclo_edit', { 'id': entity.id }) }}">
+            Modificar
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('ciclo_delete', { 'id': entity.id }) }}" method="post"
+             onsubmit="return confirm('¿Está seguro que desea eliminar el ciclo?');">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Eliminar</button>
+        </form>
+    </li>
+</ul>
+
+{% endblock %}

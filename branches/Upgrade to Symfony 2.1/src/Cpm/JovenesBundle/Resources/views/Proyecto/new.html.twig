@@ -1,0 +1,32 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %} Cargar nuevo proyecto {% endblock %}
+{% block content %}
+
+<script src="{{ asset('js/dynamic_forms.js') }}" type="text/javascript"></script>
+
+<form action="{{ path('proyecto_create') }}" method="post" {{ form_enctype(form) }}>
+	{{ form_row(form.titulo) }}
+	{{ form_row(form.coordinador) }}
+	{{ form_row(form.colaboradores ) }}
+
+    <a href="#" class="jslink" onclick="addDynamicForm('#cpm_jovenesbundle_proyectotype_colaboradores'); return false;">
+            Agregar colaborador
+    </a>
+    {# incluyo el formulario de seleccion de distrito y localidad  #}  
+      {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
+	  
+    {{form_rest(form) }}
+    <p>
+        <button type="submit">Agregar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('proyecto') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>
+{% endblock %}

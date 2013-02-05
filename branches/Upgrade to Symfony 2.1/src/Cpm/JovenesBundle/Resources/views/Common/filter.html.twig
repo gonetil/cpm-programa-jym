@@ -1,0 +1,89 @@
+{% macro form_head(form) %}
+	<form method="get" {{ form_enctype(form) }} id="filter-form">
+{% endmacro %}
+
+{% macro form_buttons(form) %}
+	<div class="filter_order">
+			{{ form_row(form.sortField) }}
+			{{ form_widget(form.sortOrder) }}
+	</div>
+	<p>
+        <button type="submit">Filtrar</button>
+        <button  type="submit" onclick="clear_form_elements($('#filter-form'));">Reiniciar Filtro</button>
+    </p>
+{% endmacro %}
+
+{% macro form_init(form) %}
+	{{_self.form_head(form) }}
+	<div class="filter-form-box">
+    <h3>Filtrar</h3>
+    {% for f in form %}
+	    {% if  not ( ( f.vars.full_name == 'cpm_jovenesbundle_filter[sortField]') or ( f.vars.full_name == 'cpm_jovenesbundle_filter[sortOrder]' )) %}
+	    	{{ form_row(f) }}  
+	    {% endif %}
+    
+    {% endfor %}
+    {{_self.form_buttons(form) }}
+	 
+    </div>
+{% endmacro %}
+
+{% macro form_end(form) %}
+   
+</form>
+
+<script>
+		$(function(){
+			
+			$("#select_all").change(function(elem){
+				target = $(this).attr('target');
+				checked = $(this).is(":checked");
+				$(target).each(function(index,elem){
+					$(elem).attr("checked",checked); 
+				});
+			});	
+			
+			//registro el click Event handler para los actions
+			$('.the_actions a').click(function(event){
+				event.preventDefault();
+				a= $(event.target);	
+				
+				if (a.attr('confirm') && a.attr('confirm')){
+					if (!confirm("Esta seguro que desea ejecutar esta acción?"))
+						return;
+				}
+				$("#cpm_jovenesbundle_filter_batch_action").val(a.attr('action'));
+				$("#cpm_jovenesbundle_filter_batch_action_type").val(a.attr('type'));
+				
+				$("#filter-form").submit();
+			});
+
+			
+		});
+</script>
+
+{% endmacro %}
+
+
+{% macro batch_actions(batch_actions) %}
+	<ul class="batch_actions_list">
+		{% for ba in batch_actions %}
+		<li> 
+			<span>{{ba.label}}</span>
+			<ul class="the_actions">
+				<li><a href="#" action="{{ba.action}}" type="seleccionados" {% if ba.confirm is defined %}confirm="{{ba.confirm}}"{% endif %}> Seleccionados </a></li>
+				<li><a href="#" action="{{ba.action}}" type="todos" {% if ba.confirm is defined %}confirm="{{ba.confirm}}"{% endif %}> Todos </a></li>
+			</ul>	
+		</li>
+		{% endfor %}
+	</ul>
+{% endmacro %}
+
+{% macro select_all() %}
+	<input type="checkbox" id="select_all" target=".checkable" />
+{% endmacro %}
+
+
+{% macro select_this(entity) %}
+    <input type="checkbox" class='checkable' name="cpm_jovenesbundle_filter[selectedEntities][{{entity.id}}]" value="{{ entity.id }}" />
+{% endmacro %}

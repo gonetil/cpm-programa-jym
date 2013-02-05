@@ -1,0 +1,21 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Tipos Instituciones{% endblock %}
+
+{% block content %}
+
+<form action="{{ path('tipo_institucion_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Agregar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('tipo_institucion') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>
+{% endblock %}

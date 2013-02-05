@@ -1,0 +1,51 @@
+security:
+    encoders:
+#        Symfony\Component\Security\Core\User\User: plaintext
+#        Cpm\JovenesBundle\Entity\Usuario: sha1
+        FOS\UserBundle\Model\UserInterface: sha1
+
+    firewalls:
+
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            pattern: ^/
+            form_login:
+                provider: custom_user_provider
+                csrf_provider: form.csrf_provider
+                login_path: /choose
+                failure_path: /login
+            logout:       true
+            anonymous:    true
+ 
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/instructivo_usuarios, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/choose, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, role: ROLE_USER }
+
+        
+    providers:
+#        fos_userbundle:
+#            id: fos_user.user_manager
+        custom_user_provider:
+            id: cpm_jovenes_bundle.custom_user_provider
+#       chain_provider:
+#            providers: [in_memory, user_db]
+#       user_db:
+#            entity: { class: CpmJovenesBundle:Usuario, property: email }
+#       in_memory:
+#            users:
+#                user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+#                admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+        
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN]
+

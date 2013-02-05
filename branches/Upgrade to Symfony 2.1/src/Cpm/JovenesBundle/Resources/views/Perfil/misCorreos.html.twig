@@ -1,0 +1,64 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+
+{% block title %}  {% endblock %}
+
+{% block content %}
+<script>
+	function cargar_correo(id) { 
+		$("#detalle_correo").hide()
+		$.post("{{ path('ver_correo_usuario') }}", 
+				{correo : id } ,
+			    function(correo) { 
+			    		$("#detalle_correo").html(correo).show();
+			    }
+		);
+		return false;
+	}
+	
+	$(document).ready(function() { 
+		$('#loading-indicator-mini')
+		.hide()
+	    .ajaxStart(function() {
+	        $(this).show();
+	    })
+	    .ajaxStop(function() {
+	        $(this).hide();
+	    });
+	});
+</script>
+
+<table class="records_list left-panel">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fecha</th>
+            <th>De</th>
+            <th>Asunto</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('correo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif%}</td>
+            <td>{{ entity.emisor }}</td>
+            <td>{{ entity.asunto }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="#" onclick="cargar_correo({{ entity.id }}); return false;">Ver</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+    </tbody>
+</table>
+
+	<div id="loading-indicator-mini" class="cargando_detalle_proyecto"> &nbsp; </div> 
+	<div id="detalle_correo" class="right-panel"></div>		
+
+{% endblock %}

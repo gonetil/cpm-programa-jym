@@ -1,0 +1,26 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Agregar Plantilla de Correo{% endblock %}
+
+{% block content %}
+
+{% include 'CpmJovenesBundle:Plantilla:template_tip.html.twig' %}
+<form action="{{ path('plantilla_create') }}" method="post" {{ form_enctype(form) }}>
+	{% if template_error is defined %}
+		<strong>{{ template_error }}</strong>
+	{% endif %}	
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Agregar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('plantilla') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>
+
+{% endblock %}

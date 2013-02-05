@@ -1,0 +1,126 @@
+{% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
+{% import "CpmJovenesBundle:Common:filter.html.twig" as filter %}
+
+{% if not app.request.isXmlHttpRequest() %}
+	<!DOCTYPE html>
+	<html>
+	    <head>
+	        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	        <title>CPM - Programa Jóvenes y Memoria - {% block title %}{% endblock %}</title>
+	        <link rel="stylesheet" href="{{ asset('css/screen.css') }}" />
+	        <link rel="stylesheet" href="{{ asset('css/jquery-ui/jquery-ui-1.8.18.custom.css') }}" />
+	        <link rel="stylesheet" href="{{ asset('css/jquery.tooltip.css') }}" />
+	         
+	        {% block stylesheets %}{% endblock %}
+	        <script>var BASE_PATH="{{app.request.getBasePath()}}";</script>
+	        <script src="{{ asset('js/jquery-1.7.1.min.js') }}" type="text/javascript"></script>
+	        <script src="{{ asset('js/jquery-ui-1.8.18.custom.min.js') }}" type="text/javascript"></script>
+	        <script src="{{ asset('js/jquery.tooltip.min.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('js/jquery.validate.min.js') }}" type="text/javascript"></script>
+		 	<script src="{{ asset('js/validation_messages_es.js') }}" type="text/javascript"></script>
+		 	<script src="{{ asset('js/dynamic_forms.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('js/utils.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('js/analytics.js') }}" type="text/javascript"></script>
+			
+			          
+	        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+	    </head>
+	    <body>
+	
+	 	    {#% include 'CpmJovenesBundle:Layout:header.html.twig' %#}
+	 	    
+	        <div id="page-top-top">
+	        	<div id="page-top-top-title">
+	        	    <a href="http://www.comisionporlamemoria.org/">Comisión provincial por la memoria</a>
+	        	     - 
+	        	    <a href="http://www.comisionporlamemoria.org/jovenesymemoria/inicio.php">Programa Jóvenes y memoria</a>
+	        	</div>
+				
+			</div>
+			<div class="clear"></div>
+        
+	 	    {% include 'CpmJovenesBundle:Layout:menu.html.twig' %}
+	 	    <div class="clear"></div>
+	        
+	        
+	<!-- start content-outer ........................................................................................................................START -->
+	<div id="content-outer">
+	<!-- start content -->
+	<div id="content">
+	
+		<!--  start page-heading -->
+		<div id="page-heading">
+			<h1>{{ block('title') }}</h1>
+		</div>
+		<!-- end page-heading -->
+	
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" id="content-table">
+		<tbody><tr>
+			<th class="sized" rowspan="3"><img width="20" height="300" alt="" src="{{asset('images/shared/side_shadowleft.jpg')}}"></th>
+			<th class="topleft"></th>
+			<td id="tbl-border-top">&nbsp;</td>
+			<th class="topright"></th>
+			<th class="sized" rowspan="3"><img width="20" height="300" alt="" src="{{asset('images/shared/side_shadowright.jpg')}}"></th>
+		</tr>
+		<tr>
+			<td id="tbl-border-left"></td>
+			<td>
+			<!--  start content-table-inner ...................................................................... START -->
+			<div id="content-table-inner">
+			
+				<!--  start messages  red, yellow, blue, green -->
+				{% for key, message in app.session.getFlashes() %}
+				    <div class="{{key}}-message">
+				        {{ message|trans({}) }}
+				    </div>
+				{% endfor %}	
+				
+			    <!--  start table-content  -->
+				<div id="table-content">
+				
+					<!--  start content-block ....................................... -->
+{% endif %}
+
+{% block content %}{% endblock %}
+
+{% if not app.request.isXmlHttpRequest() %}
+					<!--  end content-block................................... --> 
+				</div>
+				<!--  end content-table  -->
+			
+				<!--  start actions-box ............................................... -->
+				
+				<!-- end actions-box........... -->
+				
+				<!--  start paging..................................................... -->
+				
+				<!--  end paging................ -->
+				
+				<div class="clear"></div>
+			 
+			</div>
+			<!--  end content-table-inner ............................................END  -->
+			</td>
+			<td id="tbl-border-right"></td>
+		</tr>
+		<tr>
+			<th class="sized bottomleft"></th>
+			<td id="tbl-border-bottom">&nbsp;</td>
+			<th class="sized bottomright"></th>
+		</tr>
+		</tbody></table>
+		<div class="clear">&nbsp;</div>
+	
+	</div>
+	<!--  end content -->
+	<div class="clear">&nbsp;</div>
+	</div>
+	<!--  end content-outer........................................................END -->
+		        
+	        
+	        {% block javascripts %}{% endblock %}
+	        <div class="clear"></div>
+	    	{% include 'CpmJovenesBundle:Layout:footer.html.twig' %}
+	    </body>
+	</html>
+{% endif %}

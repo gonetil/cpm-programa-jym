@@ -1,0 +1,82 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Enviar mensaje{% endblock %}
+
+{% block content %}
+<script>
+	function quitar(item) {
+		$(item).fadeOut(1000).html(""); 
+	}
+	
+	$(document).ready(function() 
+					  {
+					  $("select.select-plantilla")
+					  	.change(function(event) {
+					  		$(".preview").val("1"); //si cambio, debera volver a chequearse
+					  		id_plantilla = $(event.target).val();
+					  		if (id_plantilla == "") return;
+							$.getJSON("{{ path('plantilla_find_by_id') }}", { plantilla_id : id_plantilla} ,
+							 function(data) {
+											if (data.length > 0) {
+													$("input.asunto-correo").val(data[0].asunto);
+													$("textarea.cuerpo-correo").val(data[0].cuerpo);
+												   	}
+									}); //getJSON
+					  	
+					  	}); //change
+					  	
+					  	$("#mailer_form .asunto-correo").change(function(){
+					  		$(".preview").val("1"); //si cambio, debera volver a chequearse
+					  	 });
+					  	 $("#mailer_form .cuerpo-correo").change(function(){
+					  		$(".preview").val("1"); //si cambio, debera volver a chequearse
+					  	 });
+					  	 
+
+	 }); //ready
+</script>
+{% if form.vars.value.previewText %}
+	<div class="preview_email">
+		<h2> Vista preliminar del mensaje </h2>
+	 	<div>
+	 		Asunto: <strong> {{form.asunto.vars.value}}</strong> 
+		</div>
+		<div>
+			Cuerpo: {{form.vars.value.previewText}}
+		</div>
+		<a href="#" onclick="$('#mail_body').show();">Modificar</a>
+		<script>
+			$(document).ready(function() { 
+					$("#mail_body").hide(); 
+			});
+		</script>
+	</div>
+{% endif %}
+ 
+ 
+ <form method="post" action="{{ path('correo_batch_submit') }}" id="mailer_form">
+ 
+ <div class="checklist" style="float:right">
+	 <strong> Escuelas </strong>
+	 <select name="cpm_jovenesbundle_correobatchtype[proyectos][]" id="cpm_jovenesbundle_correobatchtype_proyectos" multiple="yes">
+		{% for p in proyectos %}
+			<option value="{{p.id}}" selected> {{p}} </option>
+		{% endfor %} 
+	 </select>
+
+ <a href="#" onclick="$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);" > Seleccionar todo </a>
+ </div>
+ <span id="mail_body">
+ 	{{ form_row(form.plantilla) }}
+ 	{{ form_row(form.asunto) }}
+ 	{{ form_row(form.cuerpo) }}
+ </span>	
+ 	{{ form_row(form.ccCoordinadores) }}
+ 	{{ form_row(form.ccEscuelas) }}
+ 	{{ form_row(form.ccColaboradores) }}
+ 	{{ form_row(form.preview) }}
+   {{ form_row(form._token) }}
+ <input type="submit" value="Enviar correo"/>
+ <input type="button" value="Cancelar" onclick="window.history.back();"; />
+</form>
+{% endblock %}

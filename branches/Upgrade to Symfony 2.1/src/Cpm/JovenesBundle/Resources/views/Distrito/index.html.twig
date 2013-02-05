@@ -1,0 +1,47 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Listado de Distritos{% endblock %}
+
+{% block content %}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Distrito</th>
+            <th>Region Educativa</th>
+            <th>Acciones</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('distrito_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.nombre }}</td>
+            <td>{{ entity.region.nombre }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('distrito_show', { 'id': entity.id }) }}">Ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('distrito_edit', { 'id': entity.id }) }}">Modificar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('distrito_new') }}">
+            Agregar
+        </a>
+    </li>
+</ul>
+
+    
+{% endblock %}

@@ -1,0 +1,76 @@
+body {
+	background-image: url(../images/login/content_bg.png);
+	background-repeat: repeat;
+	margin: 0px;
+	padding: 0px;
+}
+#contenedor {
+	background-image: url(../images/login/bg_logo.png);
+	background-repeat: repeat-x;
+	height: 257px;
+	width: 100%;
+	padding-top: 20px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0px;
+	margin-left: auto;
+}
+#headercolor {
+	background-image: url(../images/login/bg_top.png);
+	background-repeat: repeat-x;
+	height: 8px;
+	width: auto;
+	margin: 0px;
+	padding: 0px;
+}
+
+#logo {
+	height: auto;
+	width: 950px;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: left;
+	padding-left: 10px;
+}
+.imgspace {
+	margin-right: 9px;
+}
+
+#contenido {
+	height: 350px;
+	width: 920px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 15px;
+	background-color: #FFF;
+	border-right-width: 4px;
+	border-right-style: solid;
+	border-right-color: #015B6B;
+	border-bottom-width: 4px;
+	border-bottom-style: solid;
+	border-bottom-color: #015B6B;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 10px;
+}
+#contenido  img{
+	float: left;
+	clear: none;
+}
+
+#footer { 
+		  height: 16px;
+		  margin: 94px 0px 0px 0px;
+		  text-align: center;
+		  font-size: 8.5pt;
+		  color: #FFF; 
+		  background: #000;
+		  clear: both;
+		  opacity:0.3;
+		  filter:alpha(opacity=30); /* For IE8 and earlier */
+		  }
+#footer a { text-decoration: none; color: inherit; }		  

@@ -1,0 +1,57 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Correos{% endblock %}
+
+{% block content %}
+
+{{ filter.form_init(form) }}
+
+<table class="records_list correos">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>{{ filter.select_all() }}</th>
+            <th>Fecha</th>
+            <th>Para</th>
+	        <th>Usuario</th>
+            <th>Asunto</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('correo_show',{id:entity.id}) }}">{{ entity.id }}</a></td>
+            <td>{{ filter.select_this(entity) }}</td>
+            <td>{% if entity.fecha %}{{ entity.fecha|date('d-m-Y H:i:s') }}{% endif%}</td>
+            <td>{{ entity.email }}</td>
+            <td>{%if entity.destinatario %}{{ entity.destinatario.apellido }}, {{ entity.destinatario.nombre }}{%endif%}</td>
+            <td>{{ entity.asunto }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('correo_show',{id:entity.id}) }}">Ver</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+    </tbody>
+</table>
+
+{{ filter.batch_actions([
+	{action:'CpmJovenesBundle:Correo:reenviarBatch', label: 'Reenviar correos', confirm: true},
+	])
+}}
+{{ filter.form_end(form) }}
+
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('correo_new') }}">
+            Redactar Correo
+        </a>
+    </li>
+</ul>
+{% endblock %}

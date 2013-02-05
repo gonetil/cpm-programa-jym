@@ -1,0 +1,134 @@
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+{% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
+{% set header_label = "colspan=2 bgcolor=#FFFFFF" %}
+{% set header_value = "colspan=6 bgcolor=#EFEFEF align=left" %}
+
+<table border=1 >
+	<tr>
+		<td colspan="8" align="center"> <h2> Resumen </h2> </td>
+	<tr>
+		<td {{ header_label }}> <h4>Evento</h4></td>
+		<td {{ header_value }} > {{ entity.evento.titulo }}</td>
+	</tr>
+	<tr>
+		<td {{ header_label }}> <h4>Inicio</h4> </td>
+		<td {{ header_value }}> {{ entity.fechaInicio|date('d-m-Y H:i:s') }} </td>
+	</tr>
+	<tr>
+		<td {{ header_label }}> <h4>Fin</h4> </td>
+		<td {{ header_value }}> {{ entity.fechaFin|date('d-m-Y H:i:s') }} </td>
+	</tr>
+	
+	<tr>
+		<td {{ header_label }}> <h4> Lugar </h4> </td>
+		<td {{ header_value }}> {{ entity.lugar}} </td>
+	<tr>
+		<td colspan="8" align="center"><h3> Participantes </h3></td>
+	</tr>
+	<tr  align=center>
+		<td colspan="3">
+			<strong>Apellido, Nombre</strong>
+		</td>
+		<td ><strong>DNI</strong></td>
+		<td  colspan="3"><strong>Email</strong></td>
+		<td colspan="3"><strong>Celular</strong></td>
+		<td colspan="2"><strong>Localidad</strong></td>
+		<td colspan="4"><strong>Distrito (Region)</strong></td>
+		<td colspan="7"><strong>Escuela</strong></td>
+		<td colspan="3"><strong>Tel. Escuela</strong></td>
+		<td colspan="5"><strong>Tema Principal</strong></td>
+		<td colspan="4"><strong>Título</strong></td>
+		<td colspan="4"><strong>Soporte</strong></td>
+		<td colspan="2"><strong>Confirmado</strong></td>
+		
+		
+		{% if entity.evento.solicitarDuracionPresentacion %}
+			<td colspan="2"><strong>Duracion</strong></td>
+		{% endif %}
+
+		{% if entity.evento.solicitarListaInvitados %}
+			<td colspan="2"><strong>Cant. Invitados</strong></td>
+		{% endif %}
+
+		{% if entity.evento.preguntarSolicitaTren %}
+			<td colspan="2"><strong>Solicita tren</strong></td>
+		{% endif %}
+		
+		{% if entity.evento.pedirNumeroAsistentes %}
+			<td colspan="2"><strong>Asistentes</strong></td>
+		{% endif %}
+		{% if entity.evento.permitirSuplente %}
+			<td colspan="2"><strong>Suplente</strong></td>
+		{% endif %}
+		{% if entity.evento.ofrecerHospedaje %}
+			<td colspan="2"><strong>Requiere hospedaje</strong></td>
+		{% endif %}
+		{% if entity.evento.ofrecerViaje %}
+			<td colspan="2"><strong>Requiere pasaje</strong></td>
+		{% endif %}
+		<td colspan="2"><strong>Informaci&oacute;n de transporte</strong></td>
+		<td colspan="2"><strong>Observaciones de transporte</strong></td>
+		{% if entity.evento.permitirObservaciones %}
+		  <td colspan="2"><strong>Observaciones de la invitaci&oacute;n</strong></td>
+		{% endif %}	          
+		<td><strong>Asisti&oacute;</strong></td>  	            	            	            
+		
+	</tr>
+{% for inv in entity.invitaciones %}
+		<tr align=center>
+			<td colspan="3"> {{ inv.proyecto.coordinador.apellido}}, {{ inv.proyecto.coordinador.nombre }} </td>
+			<td >{{ inv.proyecto.coordinador.dni }}</td>
+			<td colspan="3">{{ inv.proyecto.coordinador.email }}</td>
+			<td colspan="3">{{ inv.proyecto.coordinador.telefonoCelular }}</td>
+			<td colspan="2">{{ inv.proyecto.escuela.localidad }}</td>
+			<td colspan="4">{{ inv.proyecto.escuela.localidad.distrito }} ({{ inv.proyecto.escuela.localidad.distrito.region.id }})</td>
+			<td colspan="7">{{ common.nombreEscuela(inv.proyecto.escuela) }}</td>
+			<td colspan="3">{{ inv.proyecto.escuela.telefono }}</td>
+			<td colspan="5"> {{ inv.proyecto.temaPrincipal }} </td>
+			<td colspan="4"> {{ inv.proyecto.titulo }} </td>
+			<td colspan="4"> {{ inv.proyecto.produccionFinal }} </td>
+			
+			<td colspan="2">{% if inv.sinResponder %}Pendiente {% else %} {{ common.show_bool(inv.aceptoInvitacion) }} {% endif %}</td>
+			
+			
+			{% if entity.evento.solicitarDuracionPresentacion %}
+				<td colspan="2"><strong>{{ inv.duracion }} </strong></td>
+			{% endif %}
+	
+			{% if entity.evento.solicitarListaInvitados %}
+				<td colspan="2"><strong> {{ inv.countInvitados }}</strong></td>
+			{% endif %}
+	
+			{% if entity.evento.preguntarSolicitaTren %}
+				<td colspan="2"><strong> {{ common.show_bool(inv.solicitaTren) }} </strong></td>
+			{% endif %}
+				
+			{% if entity.evento.pedirNumeroAsistentes %}
+				<td colspan="2"> {{inv.numeroAsistentes}}</td>
+			{% endif %}
+			
+			{% if entity.evento.permitirSuplente %}
+				<td colspan="2">{{inv.suplente|e}}&nbsp;</td>
+			{% endif %}
+			{% if entity.evento.ofrecerHospedaje %}
+				<td colspan="2"> {{ common.show_bool(inv.solicitaHospedaje)}}&nbsp;</td>
+			{% endif %}
+			{% if entity.evento.ofrecerViaje %}
+				<td colspan="2"> {{ common.show_bool(inv.solicitaViaje) }}&nbsp;</td>
+			{% endif %}
+			<td colspan="2"> {% if inv.proyecto.transporte | length > 0 %} {{ inv.proyecto.transporte }} {% endif %} </td>
+			<td colspan="2"> {% if inv.proyecto.observaciones | length > 0 %} {{ inv.proyecto.observaciones }} {% endif %} </td>			
+						
+			{% if entity.evento.permitirObservaciones %}
+			  <td colspan="2">{{ inv.observaciones }}&nbsp;</td>
+			{% endif %}	          
+			<td>
+				{% if entity.fue %} 
+					{{ common.show_bool(inv.asistio) }} 
+				{% else %}
+					&nbsp;
+				{% endif %}
+			</td>
+		</tr>	 
+{% endfor %}
+</table>

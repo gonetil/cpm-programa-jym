@@ -1,0 +1,108 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Invitación{% endblock %}
+
+{% block content %}
+
+{% set evento = entity.instanciaEvento.evento %}
+<table class="record_properties">
+    <tbody>
+     	<tr>
+    		<th> Instancia de Evento </th>
+    		<td> {{ entity.instanciaEvento }} </td> 		
+    	</tr>
+
+    	<tr>
+    		<th> Escuela </th>
+    		<td> {{ entity.proyecto.escuela }} </td> 		
+    	</tr>
+    	<tr>
+    		<th> Coordinador </th>
+    		<td> {{ entity.proyecto.coordinador }} </td> 		
+    	</tr>
+
+    	<tr>
+    		<th> Proyecto </th>
+    		<td> {{ entity.proyecto.titulo }} </td> 		
+    	</tr>
+    	
+        <tr>
+            <th>Fecha de invitación</th>
+            <td>{{ entity.fechaCreacion|date('d-m-Y H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Invitación aceptada</th>
+            <td>
+                {% if not entity.aceptoInvitacion is defined %}
+            		? (El usuario no respondió])
+            	{% else %}
+            		{% if entity.aceptoInvitacion %}
+            			Si
+            		{% else %}
+            			No
+            		{% endif %}
+            	{% endif %}
+        </tr>
+        {% if evento.PedirNumeroAsistentes %}
+        <tr>
+            <th>Número de Asistentes</th>
+            <td>{{ entity.numeroAsistentes }}</td>
+        </tr>
+        {% endif %}
+        {% if evento.ofrecerViaje %}
+        <tr>
+            <th>Solicita Viaje?</th>
+            <td>{% if not entity.solicitaViaje is defined %}? (El usuario no respondió){% else %}{% if entity.solicitaViaje %}Si{% else %}No{% endif %}{% endif %}</td>
+        </tr>
+        {% endif %}
+        {% if evento.ofrecerHospedaje %}
+        <tr>
+            <th>Solicita Hospedaje?</th>
+            <td>{% if not entity.solicitaHospedaje is defined %}? (El usuario no respondió){% else %}{% if entity.solicitaHospedaje %}Si{% else %}No{% endif %}{% endif %}</td>
+            <td>{{ entity.solicitaHospedaje }}</td>
+        </tr>
+        {% endif %}
+        {% if evento.permitirObservaciones %}
+        <tr>
+            <th>Observaciones</th>
+            <td>{{ entity.observaciones }}</td>
+        </tr>
+        {% endif %}
+        {% if evento.permitirSuplente %}
+        <tr>
+            <th>Suplente</th>
+            <td>
+            	{% if entity.suplente %}
+            		{{ entity.suplente }}
+            	{% else %}
+            		Ninguno
+            	{% endif %}
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <th>Asistió</th>
+            <td>{% if not entity.asistio is defined %}? (Aún no cargado){% else %}{% if entity.asistio %}Si{% else %}No{% endif %}{% endif %}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('invitaciones') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('invitaciones_edit', { 'id': entity.id }) }}">
+            Modificar
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('invitaciones_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

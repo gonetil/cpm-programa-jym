@@ -1,0 +1,71 @@
+{% macro show_bool(boolean) %}
+	{% if (boolean) %}
+		S&iacute;
+	{% else %}
+		No
+	{% endif %}		
+{% endmacro %}
+
+
+{% macro nombreEscuela(escuela) %}
+	({% if escuela.tipoInstitucion.id is defined %}
+		{{ escuela.tipoInstitucion }}  	
+	{% else %}
+		{{ escuela.otroTipoInstitucion }}
+	{% endif %})		
+		{{ escuela.tipoEscuela }}
+	   	{% if escuela.numero %}
+	    	N° {{ escuela.numero }}
+	    {%endif%}
+	    {{ escuela.nombre }}
+	
+{% endmacro %}
+
+
+
+
+{% macro listaDeInvitados(invitacion,readOnly, isAdmin) %}
+		</form>
+		<script> 
+			maxInvitados = {{ invitacion.instanciaEvento.evento.numeroMaximoInvitados }};
+			cantInvitados = 0;
+			invitadosReadOnly = {% if (readOnly and invitacion.aceptoInvitacion  ) %} true; {% else %} false; {% endif %} {# para que el formulario no se puede editar, tiene que estar en modo ReadOnly y ademas aun no se tiene que haber completado #}
+			confirmOnSubmit = {% if ( invitacion.instanciaEvento.evento.permitirModificarLaInvitacion != 1) %} true; {% else %} false; {% endif %}
+			hideAlert = {% if (isAdmin) %} true; {% else %} false; {% endif %}
+			isAdmin = {% if isAdmin %} true; {% else %} false; {% endif %}
+		</script>
+		<script src="{{ asset('js/lista_invitados.js') }}" type="text/javascript"></script>
+		 
+		<div id="lista_invitados">
+			<h3> Lista de Participantes </h3>
+	
+			<table>
+				<tr>
+					<td>Nombre</td></th>
+					<td>Apellido</td></th>
+					<td>Fecha de Nacimiento <br/>(dd/mm/aaaa)</td>
+					<td>Tipo Documento</td>
+					<td>Número</td>
+					<td></td>
+				</tr>
+			</table>
+			
+			<div class="invitados_topbar">
+				<div class='add_button'>Agregar participante</div>
+				<div class="invitados_count"> </div>
+			</div>		
+		</div>
+{% endmacro %}
+
+
+{% macro SelectCambiarInvitacionDeInstancia(invitacion,show_label) %}
+			<div class="invitacion_instancia_switcher">
+			{% if show_label %} Mover a otra Instancia {% endif %}
+			<select name="instancia_id" id="instancia_id" onchange="cambiarInvitacionDeInstancia(this)">
+				{% for inst in invitacion.instanciaEvento.evento.instancias %}
+					<option value="{{path('modificar_invitacion_de_instancia', {invitacion_id:invitacion.id, instancia_id:inst.id})}}" 
+					{% if invitacion.instanciaEvento == inst %} selected="selected" {% endif %}> {{inst}} </option>
+				{% endfor %}
+			</select>
+			</div>
+{% endmacro %}

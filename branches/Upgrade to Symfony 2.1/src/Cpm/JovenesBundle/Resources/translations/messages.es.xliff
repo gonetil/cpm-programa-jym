@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="es" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>registration.flash.user_created</source>
+                <target></target>
+            </trans-unit>
+             <trans-unit id="2">
+                <source>profile.flash.updated</source>
+                <target>El perfil fue actualizado satisfactoriamente</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

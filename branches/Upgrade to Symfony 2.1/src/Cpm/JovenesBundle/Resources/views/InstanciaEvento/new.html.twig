@@ -1,0 +1,31 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Crear Instancia de Evento{% endblock %}
+
+{% block content %}
+	<script>
+
+	$(function() {
+		
+		$("#cpm_jovenesbundle_instanciaeventotype_fechaCierreInscripcion_date").datepicker();
+		definirIntervalo("cpm_jovenesbundle_instanciaeventotype_fechaInicio_date","cpm_jovenesbundle_instanciaeventotype_fechaFin_date");
+//		definirIntervalo("cpm_jovenesbundle_instanciaeventotype_fechaCierreInscripcion_date","cpm_jovenesbundle_instanciaeventotype_fechaInicio_date");
+		
+	});
+	</script>
+
+<form action="{{ path('instancia_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Crear</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('instancia') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>
+{% endblock %}

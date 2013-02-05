@@ -1,0 +1,62 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Modificar invitación{% endblock %}
+
+{% block content %}
+
+<form action="{{ path('invitaciones_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }} id="formInvitacion">
+    <strong> Advertencia: el cambio de instancia de evento no envía nuevamente la invitación al docente</strong> 
+    {{ form_row(edit_form.instanciaEvento) }}
+
+<h3>
+    {{ form_label(edit_form.proyecto) }} 
+   <a href="{{ path('proyecto_show', { 'id' : entity.proyecto.id }) }}"> {{ entity.proyecto }} </a>
+    <span style="display:none">    
+    {{ form_widget(edit_form.proyecto) }} 
+   </span>
+</h3>   
+    
+    
+    
+    
+    
+    {{ form_rest(edit_form) }}
+    	{% if entity.instanciaEvento.evento.solicitarListaInvitados %}
+	    	{% if not isAdmin is defined %}
+				 {% set isAdmin = false %}
+			{% endif %}
+	    	
+			{{ common.listaDeInvitados(entity,false,isAdmin) }}
+			<p>
+		        <button type="submit" class="resaltado">Modificar</button>
+		    </p>
+			
+	{% else %}  
+			<p>
+		        <button type="submit">Modificar</button>
+		    </p>
+	
+			</form>	
+	{% endif %}
+    
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('invitaciones') }}">
+            Volver al listado de invitaciones
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('proyecto_show', { 'id' : entity.proyecto.id }) }}">
+            Ir al proyecto
+        </a>
+    </li>
+    
+    <li>
+        <form action="{{ path('invitaciones_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Modificar Plantilla de correo{% endblock %}
+
+{% block content %}
+{% include 'CpmJovenesBundle:Plantilla:template_tip.html.twig' %}
+<form action="{{ path('plantilla_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+	{% if template_error is defined %}
+		<strong>{{ template_error }}</strong>
+	{% endif %}	
+    {{ form_widget(edit_form) }}
+    <p>
+        <button type="submit">Modificar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('plantilla') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('plantilla_delete', { 'id': entity.id }) }}" method="post"
+            onsubmit="return confirm('¿Está seguro que desea eliminar la plantilla?');">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Eliminar</button>
+        </form>
+    </li>
+</ul>
+
+{% endblock %}

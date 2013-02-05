@@ -1,0 +1,45 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Eventos{% endblock %}
+
+{% block content %}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Ciclo</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.ciclo }}</td>
+            <td>{{ entity.titulo }}</td>
+            <td>{{ entity.descripcion }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('evento_show', { 'id': entity.id }) }}">Ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('evento_edit', { 'id': entity.id }) }}">Editar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('evento_new') }}">
+            Crear nuevo evento
+        </a>
+    </li>
+</ul>
+{% endblock %}

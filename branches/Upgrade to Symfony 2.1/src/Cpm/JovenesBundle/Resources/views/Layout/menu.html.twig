@@ -1,0 +1,189 @@
+<!--  start nav-outer-repeat................................................................................................. START -->
+<div class="nav-outer-repeat"> 
+
+<!--  start nav-outer -->
+<div class="nav-outer"> 
+	<!--  start nav -->
+	<div class="nav">
+	<div class="table">
+		
+		<ul  class="select current" >
+			<li>
+				<a href="{{path('home')}}"><b>Panel de Control</b></a>
+				<div class="select_sub show">
+				<ul class="sub">
+				{% if not is_granted("ROLE_ADMIN") %}
+					<li><a href="{{path('home')}}">Mis proyectos</a></li>
+					<li><a href="{{path('correos_usuario')}}">Mis Correos</a></li>
+			
+				    {% for accionUsuario in jym.getAccionesUsuario() %}
+					<li>
+							<li><a href="{{path(accionUsuario['path'])}}">{{accionUsuario['label']}}</a></li>
+					</li>
+					{% endfor %}
+					{% if app.user.proyectosCoordinados|length > 0 %}
+							<script> aviso_coordinador_inscripcion_realizada('{{path('proyecto_wizzard')}}'); </script>
+					{% endif %}	
+					
+					
+					
+			</div>
+					
+				{% else %}
+				
+					<li><a href="{{path(jym.getProyectoActualFilterEtapaActual())}}">Proyectos vigentes</a></li>
+					<li><a href="{{path('proyecto')}}">Todos los Proyectos</a></li>
+					<li><a href="{{path('usuario')}}">Usuarios</a></li>
+					<li><a href="{{path('instancia')}}">Instancias de Eventos</a></li>
+					<li><a href="{{path('invitaciones')}}">Invitaciones Enviadas</a></li>
+					<li><a href="{{path('correo')}}">Correos Enviados</a></li>
+					
+				{% endif %}
+				</ul>
+				</div>
+			</li>
+		</ul>
+		
+		{% if is_granted("ROLE_ADMIN") %}<!-- Comienzo de las opciones de admin -->
+		<div class="nav-divider">&nbsp;</div>
+		<ul class="select">
+			<li><a href="{{path('usuario')}}"><b>Usuarios</b></a>
+			<div class="select_sub show">
+				<ul class="sub">
+					<li><a href="{{path('usuario')}}">Ver todos los usuarios</a></li>
+					<li class="sub_show"><a href="{{path('usuario_new')}}">Agregar Usuario</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+		
+		<div class="nav-divider">&nbsp;</div>
+		<ul class="select">
+			<li><a href="{{path('proyecto')}}"><b>Proyectos</b></a>
+			<div class="select_sub show">
+				<ul class="sub">
+					<li><a href="{{path('proyecto_new')}}">Agregar Proyecto</a></li>
+					<li><a href="{{path('proyecto')}}">Proyectos</a></li>
+					<li><a href="{{path('escuela')}}">Escuelas</a></li>
+					<li><a href="{{path('tema')}}">Temas</a></li>
+					<li><a href="{{path('produccion')}}">Producciones</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+		
+		<div class="nav-divider">&nbsp;</div>
+				<ul class="select">
+					<li><a href="{{path('evento')}}"><b>Eventos</b></a>
+					<div class="select_sub show">
+						<ul class="sub">
+							<li><a href="{{path('evento')}}">Eventos</a></li>
+							<li><a href="{{path('evento_new')}}">Agregar Evento</a></li>
+							<li><a href="{{path('instancia_new')}}">Agregar Instancia de Evento</a></li>
+							<li><a href="{{path('instancia')}}">Instancias de Eventos</a></li>
+							<li><a href="{{path('invitaciones')}}">Invitaciones Enviadas</a></li>
+						</ul>
+					</div>
+				</li>
+				</ul>
+				
+		<div class="nav-divider">&nbsp;</div>
+		<ul class="select">
+			<li><a href="{{path('proyecto')}}"><b>Mas</b></a>
+			<div class="select_sub show">
+				<ul class="sub">
+					<li><a href="{{path('plantilla')}}">Plantillas</a></li>
+					<li><a href="{{path('localidad')}}">Localidades</a></li>
+					<li><a href="{{path('distrito')}}">Municipios/Distritos</a></li>
+					<li><a href="{{path('region')}}">Regiones</a></li>
+					<li><a href="{{path('tipo_institucion')}}">Tipos de Institucion</a></li>
+					<li><a href="{{path('tipo_escuela')}}">Tipos de Escuela</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+			{% if is_granted("ROLE_SUPER_ADMIN") %}<!-- Comienzo de las opciones de admin -->
+				<div class="nav-divider">&nbsp;</div>
+				<ul class="select">
+					<li><a href="{{path('ciclo')}}"><b>Ciclos y Etapas</b></a>
+					<div class="select_sub show">
+						<ul class="sub">
+							<li><a href="{{path('ciclo')}}">Ciclo</a></li>
+							
+						</ul>
+					</div>
+				</li>
+				</ul>
+				
+<!-- 				<div class="nav-divider">&nbsp;</div> -->
+<!-- 			<ul class="select"> -->
+<!-- 				<li><a href="{{path('correo')}}"><b>Comunicaciones</b></a> -->
+<!-- 				<div class="select_sub show"> -->
+<!-- 					<ul class="sub"> -->
+<!-- 						<li><a href="{{path('correo')}}">Correos Enviados</a></li> -->
+						
+<!-- 					</ul> -->
+<!-- 				</div> -->
+<!-- 			</li> -->
+<!-- 			</ul> -->
+				
+			{% endif %}
+		{% endif %}	
+	</div>
+	<div class="clear"></div>
+	</div>
+	<!-- end nav -->
+		
+	<!-- start nav-right -->
+	<div id="nav-right" class="nav">
+			<div class="showhide-account">
+                <img width="11" height="14" alt="" src="{{asset('images/shared/nav/nav_myaccount.gif')}}">
+            </div>
+			
+			<div class="nav-divider">&nbsp;</div>
+			<ul class="select">
+				<li><a href="{{path('fos_user_profile_edit')}}"><b>{{ app.user.username}}</b></a></li>
+			</ul>
+
+			{% if not is_granted("ROLE_ADMIN") %}
+            <div class="nav-divider">&nbsp;</div>
+			<ul class="select">
+				<li id="acc-settings"><a href="{{path('fos_user_profile_edit')}}"><b>Mi cuenta</b></a></li>
+			</ul>
+			{% endif %}
+			
+			<div class="nav-divider">&nbsp;</div>
+			<ul class="select">
+				<li><a id="logout" href="{{path('_logout')}}"><b>Salir</b></a></li>
+			</ul>
+
+			<div class="clear">&nbsp;</div>
+		
+			<!--  start account-content 
+			<div class="account-content">
+			<div class="account-drop-inner">
+				<a id="acc-settings" href="">Settings</a>
+				<div class="clear">&nbsp;</div>
+				<div class="acc-line">&nbsp;</div>
+				<a id="acc-details" href="">Personal details </a>
+				<div class="clear">&nbsp;</div>
+				<div class="acc-line">&nbsp;</div>
+				<a id="acc-project" href="">Project details</a>
+				<div class="clear">&nbsp;</div>
+				<div class="acc-line">&nbsp;</div>
+				<a id="acc-inbox" href="">Inbox</a>
+				<div class="clear">&nbsp;</div>
+				<div class="acc-line">&nbsp;</div>
+				<a id="acc-stats" href="">Statistics</a> 
+			</div>
+			</div>
+			  end account-content -->
+		
+		</div>
+		<!-- end nav-right -->
+
+</div>
+<div class="clear"></div>
+<!--  start nav-outer -->
+</div>
+<!--  start nav-outer-repeat................................................... END -->

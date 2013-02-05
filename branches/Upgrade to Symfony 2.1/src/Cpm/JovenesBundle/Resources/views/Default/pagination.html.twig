@@ -1,0 +1,46 @@
+{# agrega la paginacion a los listados . Debe usarse como una ultima fila de las tablas, antes del /table #}
+
+{% if paginator is defined %} 
+<tr> <td colspan="100%">
+{% if paginator.totalItems('entities') <= paginator.itemsPerPage('entities') %}
+	  <div class="total_count">Visualizando {{ paginator.totalItems('entities') }} resultado/s</div>
+{% else %}
+	{%if paginator.currentPage('entities') * paginator.itemsPerPage('entities') > paginator.totalItems('entities')%}
+		{%set lastInThisPage  = paginator.totalItems('entities') %}
+	{%else%}
+		{%set lastInThisPage  = paginator.currentPage('entities') * paginator.itemsPerPage('entities') %}
+	{%endif%}
+	 
+<div class="total_count">
+	Visualizando  
+	{{(paginator.currentPage('entities') - 1) * paginator.itemsPerPage('entities') + 1}} a 
+	{{ lastInThisPage }} 
+	de un total {{ paginator.totalItems('entities') }} resultados
+</div> 
+<ul id="paginate_elements">
+  {% if paginator.currentPage('entities') > 1 %}
+  	<li><a href="{{ path(pagination_route, {'page': paginator.firstPage('entities'), 'paginatorId': 'entities'}) }}{{extraVars}}">&lt;&lt; Inicio</a></li>
+    <li><a href="{{ path(pagination_route, {'page': paginator.previousPage('entities'), 'paginatorId': 'entities'}) }}{{extraVars}}">&lt; Anterior</a></li>
+  {% else %}
+    <li class="left_disabled"><a href="#">anterior</a></li>
+  {% endif %}
+
+  {% for page in paginator.minPageInRange('entities') .. paginator.maxPageInRange('entities') %}
+    {% if page == paginator.currentPage('entities') %}
+      <li><a class="current" href="#">{{ page }}</a></li>
+    {% else %}
+      <li><a href="{{ path(pagination_route, {'page': page , 'paginatorId': 'entities'} ) }}{{extraVars}}">{{ page }}</a></li>
+    {% endif %}
+  {% endfor %}
+
+  {% if paginator.currentPage('entities') < paginator.lastPage('entities') %}
+    <li class="right"><a href="{{ path(pagination_route, {'page': paginator.nextPage('entities'), 'paginatorId': 'entities'}) }}{{extraVars}}">Siguiente &gt;</a></li>
+    <li class="right"><a href="{{ path(pagination_route, {'page': paginator.lastPage('entities'), 'paginatorId': 'entities'}) }}{{extraVars}}">Fin &gt;&gt;</a></li>
+  {% else %}
+    <li class="right_disabled">siguiente</li>
+  {% endif %}
+</ul>
+	{% endif %}
+	</td>
+</tr>
+{% endif %}

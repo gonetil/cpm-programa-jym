@@ -1,0 +1,64 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %} Modificar proyecto {% endblock %}
+
+{% block content %}
+
+<script src="{{ asset('js/dynamic_forms.js') }}" type="text/javascript"></script>
+
+
+<form action="{{ path('proyecto_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    
+    {{ form_row(edit_form.titulo) }}
+	{{ form_row(edit_form.coordinador) }}
+	
+		<label class=" required">Colaboradores</label>
+	    <a href="#" class="jslink" onclick="addDynamicForm('#cpm_jovenesbundle_proyectotype_colaboradores'); return false;">
+            Agregar colaborador
+    	</a>	
+    
+    <div id="cpm_jovenesbundle_proyectotype_colaboradores"	
+			data-prototype="&lt;div&gt;&lt;label class=&quot; required&quot;&gt;$$name$$&lt;/label&gt;&lt;div id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$&quot;&gt;&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_nombre&quot; class=&quot; required&quot;&gt;Nombre&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_nombre&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][nombre]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_apellido&quot; class=&quot; required&quot;&gt;Apellido&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_apellido&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][apellido]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_email&quot; class=&quot; required&quot;&gt;Email&lt;/label&gt;&lt;input type=&quot;email&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_email&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][email]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;"	  
+		>
+		  
+	{% for form_colaborador in edit_form.colaboradores %}
+		<div class='innerForm' id="form{{loop.index - 1}}">
+		<a href="#" class='quitar_colaborador' ref="{{loop.index - 1}}"> Quitar </a>
+		{{ form_row(form_colaborador.nombre ) }}
+		{{ form_row(form_colaborador.apellido ) }}
+		{{ form_row(form_colaborador.email ) }}
+		</div>
+	{% endfor %}
+	
+	{# incluyo el formulario de seleccion de distrito y localidad  #}  
+    {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
+	
+		
+	</div>		
+	
+    
+    {{ form_rest(edit_form) }}
+    
+    <p>
+        <button type="submit">Modificar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('proyecto') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('proyecto_delete', { 'id': entity.id }) }}" method="post"
+            onsubmit="return confirm('¿Está seguro que desea eliminar el proyecto? ESTA OPERACION NO SE PUEDE DESHACER!');">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Eliminar</button>
+        </form>
+        
+    </li>
+    
+</ul>
+
+{% endblock %}

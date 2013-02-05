@@ -1,0 +1,52 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Plantilla{% endblock %}
+
+{% block content %}
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Codigo</th>
+            <td>{{ entity.codigo }}</td>
+        </tr>
+        <tr>
+            <th>Asunto</th>
+            <td>{{ entity.asunto }}</td>
+        </tr>
+        <tr>
+            <th>Cuerpo</th>
+            <td>{{ entity.cuerpo }}</td>
+        </tr>
+        <tr>
+            <th>Puede Borrarse</th>
+            <td>{{ entity.puedeBorrarse }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('plantilla') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('plantilla_edit', { 'id': entity.id }) }}">
+            Modificar
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('plantilla_delete', { 'id': entity.id }) }}" method="post"
+            onsubmit="return confirm('¿Está seguro que desea eliminar la plantilla?');">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Eliminar</button>
+        </form>
+    </li>
+</ul>
+
+{% endblock %}

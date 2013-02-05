@@ -1,0 +1,37 @@
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+{% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
+{% set header_label = "colspan=2 bgcolor=#FFFFFF" %}
+{% set header_value = "colspan=6 bgcolor=#EFEFEF align=left" %}
+
+
+<table>
+	<tr>
+		<td colspan="5"> Tanda: {{ invitacion.instanciaEvento }} </td>
+	</tr>
+	<tr>
+		<td colspan="5">Escuela: {{ common.nombreEscuela(invitacion.proyecto.escuela) }} </td>
+	</tr>
+	<tr>
+		<td colspan="5">Localidad: {{ invitacion.proyecto.escuela.localidad }} </td>
+	</tr>
+	<tr>
+		<td colspan="5">Distrito: {{ invitacion.proyecto.escuela.localidad.distrito }} </td>
+	</tr>
+
+	<tr>
+		<td><b> Nombre </b></td>
+		<td><b> Apellido </b></td>
+		<td><b> Fecha de Nacimiento </b></td>
+		<td><b> Tipo de Documento </b></td>
+		<td><b> Número de Documento </b></td>
+	</tr>	
+	{% for inv in invitados %}
+		<tr>
+			<td>{{ inv.nombre }}</td>
+			<td>{{ inv.apellido }}</td>
+			<td>{{ inv.fechaNac }}</td>
+			<td>{{ inv.tipoDoc }}</td>
+			<td>{{ inv.doc }}</td>
+		</tr>		
+	{% endfor %}
+</table>		

@@ -1,0 +1,47 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Plantillas de correo{% endblock %}
+
+{% block content %}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Código</th>
+            <th>Asunto</th>
+            <th>Cuerpo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('plantilla_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.codigo }}</td>
+            <td>{{ entity.asunto }}</td>
+            <td>{{ entity.cuerpo }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('plantilla_show', { 'id': entity.id }) }}">Ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('plantilla_edit', { 'id': entity.id }) }}">Modificar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('plantilla_new') }}">
+            Agregar plantilla
+        </a>
+    </li>
+</ul>
+{% endblock %}

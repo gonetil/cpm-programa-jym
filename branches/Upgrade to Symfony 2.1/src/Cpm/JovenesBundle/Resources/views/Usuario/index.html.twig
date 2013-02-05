@@ -1,0 +1,74 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Listado de Usuarios{% endblock %}
+ 
+{% block content %}
+<form action="{{ path('usuario') }}">
+<div id="before_list">
+
+<div class="filters" style="border:none">
+
+<div class="left">
+{{ form_row(form.apellido) }}
+{{ form_row(form.email) }}
+</div>
+<div class="right">
+{{ form_row(form.habilitados) }}
+{{ form_row(form.coordinadores) }}
+</div>
+<div class="double">
+{{ form_rest(form) }}
+<input type='submit' style="min-height:auto; height:auto;"/>
+</div>
+</div>
+</form>
+
+</div>
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Apellido, Nombres [Habilitado]</th>
+            <th>Email</th>
+            <th>Dni</th>
+            <th>Telefono</th>
+            <th>Ultimo Acceso</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.id }}</td>
+            <td><b><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.apellido }}, {{ entity.nombre }}</a> [{{ entity.enabled?'Si':'No' }}]<b></td>
+            <td>{{ entity.email }}</td>
+            <td>{{ entity.dni }}</td>
+            <td>{{ entity.telefono }}{{ (entity.telefono) and (entity.telefonoCelular)?',':'' }}{{ entity.telefonoCelular }}</td>
+            <td>{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif%}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('usuario_show', { 'id': entity.id }) }}">Ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">Modificar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+
+    	{% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+    </tbody>
+</table>
+			
+<ul>
+    <li>
+        <a href="{{ path('usuario_new') }}">
+            Crear nuevo usuario
+        </a>
+    </li>
+</ul>
+
+
+{% endblock %}

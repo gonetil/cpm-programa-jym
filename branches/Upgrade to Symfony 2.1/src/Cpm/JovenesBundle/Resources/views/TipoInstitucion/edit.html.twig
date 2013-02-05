@@ -1,0 +1,29 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Modificar Tipo de Institución{% endblock %}
+
+{% block content %}
+
+
+<form action="{{ path('tipo_institucion_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    {{ form_widget(edit_form) }}
+    <p>
+        <button type="submit">Modificar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('tipo_institucion') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('tipo_institucion_delete', { 'id': entity.id }) }}" method="post"
+            onsubmit="return confirm('¿Está seguro que desea eliminar el tipo de institución?');">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Eliminar</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Redactar Correo{% endblock %}
+
+{% block content %}
+
+<form action="{{ path('correo_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Enviar</button>
+    </p>
+</form>
+<script>
+	$(function(){
+		$('#cpm_jovenesbundle_correotype_destinatario').change(function (){
+			var label = this.options[this.selectedIndex].label;
+			var i = label.substring(label.lastIndexOf("<") + 1, label.lastIndexOf(">"));
+			$('#cpm_jovenesbundle_correotype_email').val(i);
+		});
+	});
+</script>
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('correo') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>
+{% endblock %}

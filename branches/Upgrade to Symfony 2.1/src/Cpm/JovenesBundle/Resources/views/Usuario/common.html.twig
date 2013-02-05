@@ -1,0 +1,23 @@
+{% block _cpm_jovenesbundle_usuariotype_plainPassword_row %}
+	<div id="passwords-box" >
+        {{ block('field_rows') }}
+    </div>
+    
+	<script>
+	$(function(){
+		if ({{form.parent.vars.value.resetPassword?'true':'false'}}){
+			$('#cpm_jovenesbundle_usuariotype_plainPassword_Clave').attr('required', true);
+			$('#cpm_jovenesbundle_usuariotype_plainPassword_Repetir').attr('required', true);
+		}else{
+			$('#passwords-box').css('display','none');
+		}
+
+		$('#cpm_jovenesbundle_usuariotype_resetPassword').click(function(){
+			$('#passwords-box').toggle();
+			$('#cpm_jovenesbundle_usuariotype_plainPassword_Clave').attr('required', !$('#cpm_jovenesbundle_usuariotype_plainPassword_Clave').attr('required'));
+			$('#cpm_jovenesbundle_usuariotype_plainPassword_Repetir').attr('required', !$('#cpm_jovenesbundle_usuariotype_plainPassword_Repetir').attr('required'));
+		});
+	});
+	</script>
+
+{% endblock %}

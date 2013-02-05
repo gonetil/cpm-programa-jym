@@ -1,0 +1,28 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Creación de Usuario{% endblock %}
+
+{% form_theme form _self %}
+
+{% use 'CpmJovenesBundle:Usuario:common.html.twig' %}
+
+{% block content %}
+
+<form action="{{ path('usuario_create') }}" method="post" {{ form_enctype(form) }}>
+	{# incluyo el formulario de seleccion de distrito y localidad  #}
+    {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
+
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Crear</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('usuario') }}">
+            Volver al listado de usuarios
+        </a>
+    </li>
+</ul>
+{% endblock %}

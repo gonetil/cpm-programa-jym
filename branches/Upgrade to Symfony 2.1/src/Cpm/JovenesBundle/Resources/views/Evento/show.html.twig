@@ -1,0 +1,93 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Evento {{ entity.id }}: "{{ entity.titulo }}"{% endblock %}
+
+{% block content %}
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Descripción</th>
+            <td>{{ entity.descripcion }}</td>
+        </tr>
+        <tr>
+            <th>Solicitar número de asistentes</th>
+            <td>{% if entity.pedirNumeroAsistentes %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Permitir suplentes</th>
+            <td>{% if entity.permitirSuplente %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Ofrecer hospedaje</th>
+            <td>{% if entity.ofrecerHospedaje %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Ofrecer viaje</th>
+            <td>{% if entity.ofrecerViaje %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Permitir observaciones</th>
+            <td>{% if entity.permitirObservaciones %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Preguntar si solicita tren</th>
+            <td>{% if entity.preguntarSolicitaTren %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Solicitar que se cargue la lista de invitados</th>
+            <td>{% if entity.solicitarListaInvitados %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Limitar la lista de invitados a</th>
+            <td>{{ entity.numeroMaximoInvitados }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="right-box">
+<h3>
+	Instancias del evento
+	<a href="{{path('instancia_new', {'evento_id': entity.id })}}">Crear</a>
+</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Instancia</th>
+            <th>Invitados/Aceptaron/Rechazaron</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in entity.instancias %}
+        <tr>
+            <td>{{i.titulo}}</td>
+            {% set cant=jym.eventosManager.getReporteInvitaciones(i) %}
+            <td>{{cant.invitados}}/{{cant.confirmaciones}}/{{cant.rechazos}}</td>
+            <td><a href="{{path('instancia_show', {'id':i.id})}}">Ver</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('evento') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('evento_edit', { 'id': entity.id }) }}">
+            Editar
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post" 
+        onsubmit="return confirm('Esta seguro que desea eliminar el evento?')">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

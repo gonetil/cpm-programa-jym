@@ -1,0 +1,110 @@
+imports:
+    - { resource: parameters.ini }
+    - { resource: security.yml }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    charset:         UTF-8
+    router:          { resource: "%kernel.root_dir%/config/routing.yml" }
+    form:            true
+    csrf_protection: true
+    validation:      { enable_annotations: true }
+    templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
+    session:
+        default_locale: %locale%
+        auto_start:     true
+#        storage_id: session.storage.filesystem
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+    form:
+        resources:
+            - 'CpmJovenesBundle:Form:fields.html.twig'
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    # java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        # closure:
+        #     jar: %kernel.root_dir%/java/compiler.jar
+        # yui_css:
+        #     jar: %kernel.root_dir%/java/yuicompressor-2.4.2.jar
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
+
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+        mappings:
+            StofDoctrineExtensionsBundle: false
+
+stof_doctrine_extensions:
+    default_locale: en_US
+    orm:
+        default:
+            timestampable: true
+#            tree: false
+#            sluggable: false
+#            translatable: false
+#            loggable: false
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    port:      %mailer_port%
+    username:  %mailer_username%
+    password:  %mailer_password%
+#    auth_mode:  %mailer_auth_mode%
+    encryption: %mailer_encryption%
+#    sender_address
+#    logging: true
+    spool:
+        type: file
+        path: %kernel.root_dir%/spool    
+jms_security_extra:
+    secure_controllers:  true
+    secure_all_services: false
+
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    service:
+        mailer: cpm_jovenes_bundle.mailer
+    user_class: Cpm\JovenesBundle\Entity\Usuario
+    registration:
+        form:
+            type: cpm_jovenesbundle_registrousuariotype
+        confirmation:
+            enabled:    true
+    profile:
+        form:
+            type: cpm_jovenesbundle_perfilusuariotype
+            
+services:
+        
+cpm_jovenes:
+    etapas:
+#        etapaX:
+#            nombre: "Etapa X - XX XX XX"
+#            accionesUsuario:
+#                action_0:
+#                    label: Action label
+#                    href: /internal_action_name
+#                    condition: user.name == 'coco'
+#                    enabled: true

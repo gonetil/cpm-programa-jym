@@ -1,0 +1,74 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Invitaciones{% endblock %}
+
+{% block content %}
+
+{{ filter.form_init(form) }}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>{{ filter.select_all() }}</th>
+	        <th>Evento</th>
+            <th>Proyecto</th>
+            <th>Coordinador</th>
+            <th>Aceptó?</th>
+            <th># Asistentes</th>
+            <th>Suplente</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+	        <td><a href="{{ path('invitaciones_show',{id:entity.id}) }}">{{ entity.id }}</a></td>
+            <td>{{ filter.select_this(entity) }}</td>
+            <td><a href="{{ path('instancia_show', { 'id': entity.instanciaEvento.id }) }}">{{ entity.instanciaEvento.titulo }}</a></td>
+        	<td><a href="{{ path('proyecto_show', { 'id': entity.proyecto.id }) }}">{{ entity.proyecto.titulo | slice(0,50) }}</a></td>
+        	<td><a href="{{ path('usuario_show', { 'id': entity.proyecto.coordinador.id }) }}">{{ entity.proyecto.coordinador.apellido }}, {{ entity.proyecto.coordinador.nombre }}</a></td>
+        	
+            <td>
+            	{% if not entity.aceptoInvitacion is defined %}
+            		?
+            	{% else %}
+            		{% if entity.aceptoInvitacion %}
+            			Si
+            		{% else %}
+            			No
+            		{% endif %}
+            	{% endif %}
+            </td>
+            <td>{{ entity.numeroAsistentes }}</td>
+            <td>{{ entity.suplente }}</td>
+            <td>
+   
+                <ul style="padding-top:6px;">
+                    <li>
+                        <a href="{{ path('invitaciones_show', { 'id': entity.id }) }}">Ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('invitaciones_edit', { 'id': entity.id }) }}">Editar</a>
+                    </li>
+                    <li>
+                    	<a href="#" onclick="invitacion_reinvitar(this,$('#icon{{entity.id}}')); return false;" target="{{ path( 'invitaciones_reenviar_una', { 'id': entity.id }) }}">Reinvitar</a>
+                    </li>
+                 	<span style="border:none" id="icon{{entity.id}}"></span>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+    </tbody>
+</table>
+
+
+{# filter.batch_actions([
+	{action:'CpmJovenesBundle:Correo:reenviarBatch', label: 'Reenviar correos', confirm: true},
+	])
+#}
+{{ filter.form_end(form) }}
+
+
+{% endblock %}
