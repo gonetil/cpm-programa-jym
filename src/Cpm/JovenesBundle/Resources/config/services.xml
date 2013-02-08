@@ -40,6 +40,7 @@
             <argument type="collection">
 <!--                 <argument key="from_name">%jym_from_name%</argument> -->
                 <argument key="from_email">%jym_mailer_from%</argument>
+                <argument key="from_email_title">%jym_mailer_from_title%</argument>
                 <argument key="setlocaldomain">%jym_mailer_setlocaldomain%</argument>
                 <argument key="url_sitio">%jym_url_sitio%</argument>
 
