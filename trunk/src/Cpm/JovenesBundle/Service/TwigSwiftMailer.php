@@ -206,10 +206,11 @@ class TwigSwiftMailer implements MailerInterface
 		
 		 
     	$fromEmail= $this->parameters['from_email'];
-
+    	$fromEmailTitle= $this->parameters['from_email_title'];
+    	
 		$message = \Swift_Message::newInstance()
 	        ->setSubject($subject)
-	        ->setFrom($fromEmail)
+	        ->setFrom($fromEmail,$fromEmailTitle)
 	        ->setTo($to)
 	    ;
 		if (isset($context['cc']))
