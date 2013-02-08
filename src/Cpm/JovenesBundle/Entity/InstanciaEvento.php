@@ -260,7 +260,7 @@ class InstanciaEvento
     }
     public function __toString()
     {
-    	return $this->getTitulo();
+    	return $this->getTitulo() . " - sede " .$this->getLugar();
     }
     
     public function getTitulo()
