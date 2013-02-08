@@ -120,7 +120,7 @@ class ProyectoRepository extends EntityRepository {
 				if (is_numeric($escuelaSel)) {
 					$qb->andWhere("e.numero = :numero")->setParameter("numero", $escuelaSel);
 				} else {
-					$qb->andWhere("e.nombre like :nombreEscuela")->setParameter("nombreEscuela", $escuelaSel .
+					$qb->andWhere("e.nombre like :nombreEscuela")->setParameter("nombreEscuela", "%". $escuelaSel .
 					"%");
 				}
 
