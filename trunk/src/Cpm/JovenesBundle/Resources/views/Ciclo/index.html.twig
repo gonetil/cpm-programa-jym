@@ -9,7 +9,8 @@
 	<h3>Etapas disponibles</h3><br/>
 	<ul id="listado_etapas">
 		{% for etapa in jym.getNombresEtapas() %}
-			<li>{{etapa.nombre}}</li>
+			<li title="{{ etapa.descripcion }}">{{etapa.nombre}}
+			</li>
 		{% endfor %}
 	</ul>
 
@@ -28,8 +29,12 @@
 			<a href="{{path('goto_siguiente_etapa')}}">Pasar a la siguiente Etapa</a>
 			</li>
 		{% endif %}
-		
 	</ul>
+	
+	<div class="descripcion-etapa">
+			{{jym.getDescripcionEtapaActual()}}
+	</div>
+	
 </div>
 
 <h3>Ciclos disponibles</h3><br/>
