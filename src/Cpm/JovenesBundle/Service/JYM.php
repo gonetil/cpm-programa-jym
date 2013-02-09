@@ -142,6 +142,17 @@ class JYM  {
 		}
 		return $this->etapas[$numeroEtapa]['nombre'];
 	}	
+	
+	public function getDescripcionEtapa($numeroEtapa) { 
+		if (!$this->hasEtapa($numeroEtapa)){
+			throw new \OutOfRangeException("No existe la etapa ".$numeroEtapa);
+		}
+		return $this->etapas[$numeroEtapa]['descripcion'];
+	}	
+	
+	public function getDescripcionEtapaActual(){
+		return $this->getDescripcionEtapa($this->numeroEtapaActual);
+	}
 
 	public function getProyectoActualFilterEtapaActual() { 
 		return $this->getProyectoActualFilterEtapa($this->numeroEtapaActual);
