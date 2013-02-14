@@ -38,7 +38,8 @@ class EstadoFilterForm extends ModelFilterForm
 										  'empty_value'=>'Todas',
 										  'expanded'=>false,
 										  'required' => false
-										  ))                										
+										  ))    
+								              										
                 										;     
     }          	
 }

@@ -38,12 +38,11 @@ class ProyectoRepository extends EntityRepository {
 			$qb->orderBy($field,$sort_order);
 		}
 		
-		
-
-	/*	if ($ciclo) {
+		$cicloFilter = $data->getCicloFilter();
+		if  ($ciclo = $cicloFilter->getCiclo()) { 
 			//FIXME conseguir el ciclo
 			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
-		}*/
+		}
 		
 		if ($data->getEsPrimeraVezDocente()) {
 			$pv = ($data->getEsPrimeraVezDocente() != 1)?0 : 1;

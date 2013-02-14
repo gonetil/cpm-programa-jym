@@ -26,5 +26,7 @@ class EventoFilterForm extends ModelFilterForm
 													'required' => false		  
 		  ))  	
 		  ;
+		  
+
     }
 }

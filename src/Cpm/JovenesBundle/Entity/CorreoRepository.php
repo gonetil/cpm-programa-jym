@@ -35,6 +35,10 @@ class CorreoRepository extends EntityRepository
 			$qb->orderBy($field,$sort_order);
 		}
 		
+		$cicloFilter = $filter->getCicloFilter();
+		if  ($ciclo = $cicloFilter->getCiclo()) { 
+			//$qb->innerJoin('c.proyecto', 'p')->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
+		}
 	 	if ($filter->getFecha())
 			$qb->andWhere('DATE(c.fecha) = :fecha')->setParameter('fecha',$filter->getFecha());
 		if ($filter->getFechaMin())
@@ -51,8 +55,10 @@ class CorreoRepository extends EntityRepository
 			$qb->andWhere('c.destinatario = :destinatario')->setParameter('destinatario',$filter->getDestinatario());
 	    if ($filter->getEmisor())
 			$qb->andWhere('c.emisor = :emisor')->setParameter('emisor',$filter->getEmisor());
-		if ($filter->getProyecto())
-			$qb->andWhere('c.proyecto = :proyecto')->setParameter('proyecto',$filter->getProyecto());
+		/*if ($filter->getProyecto())
+			$qb->innerJoin('c.proyecto', 'p')->andWhere('p = :proyecto')->setParameter('proyecto',$filter->getProyecto());;
+			*/
+			//$qb->andWhere('c.proyecto = :proyecto')->setParameter('proyecto',$filter->getProyecto());
 		
 
 		return $qb;

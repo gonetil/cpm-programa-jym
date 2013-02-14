@@ -29,5 +29,6 @@ class EventoFilter extends Evento implements ModelFilter {
 	public function setEvento($evento) { 
 		$this->evento = $evento;
 	}
+
 	
 }
