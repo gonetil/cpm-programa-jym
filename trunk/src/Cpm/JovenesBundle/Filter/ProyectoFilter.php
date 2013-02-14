@@ -11,6 +11,8 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 	private $eventoFilter;
 	private $estadoFilter;
 	private $instanciaEventoFilter;
+	private $cicloFilter;
+
 
 	public function createForm() {
 		return new ProyectoFilterForm($this);
@@ -62,4 +64,14 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 		$this->instanciaEventoFilter = $instanciaEventoFilter;
 	}
 
+	public function setCicloFilter($cicloFilter) {
+		$this->cicloFilter = $cicloFilter;
+	}
+	
+	public function getCicloFilter() {
+		if (!$this->cicloFilter)
+			$this->cicloFilter = new CicloFilter();
+			
+		return $this->cicloFilter;
+	}
 }

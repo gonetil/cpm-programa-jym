@@ -232,8 +232,6 @@ abstract class BaseController extends Controller
     {
      	list($form, $batch_filter, $entitiesQuery) = $this->getFilterForm($modelfilter);
      	
-     	
-     	
     	if ($batch_filter->hasBatchAction()){
 			if ($batch_filter->isBatchActionTypeTodos()){
 				
@@ -252,10 +250,10 @@ abstract class BaseController extends Controller
 				$entitiesIds = array();
 				foreach ( $entities as $entity ) 
 		       		$entitiesIds[]=$entity->getId();
-				$entitiesQuery = $this->getRepository($modelfilter->getTargetEntity())
-				 	->createQueryBuilder('e')
-				 	->andWhere('e.id in (:entities)')->setParameter('entities',$entitiesIds)
-				 	->getQuery();
+					$entitiesQuery = $this->getRepository($modelfilter->getTargetEntity())
+					 	->createQueryBuilder('e')
+					 	->andWhere('e.id in (:entities)')->setParameter('entities',$entitiesIds)
+					 	->getQuery();
 				
 			}
 			//TODO ver si le paso $extra_args al forward

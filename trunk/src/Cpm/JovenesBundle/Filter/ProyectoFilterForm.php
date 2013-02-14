@@ -82,7 +82,7 @@ class ProyectoFilterForm extends ModelFilterForm
      				'expanded' => false,
             		'preferred_choices' => array("Todos"),
         			'empty_value' => "Todos",
-    				))                      										
+    				))               										
                 										;
 			$escuela = new EscuelaFilter();	
             $builder->add('escuelaFilter', $escuela->createForm() ,array('label' => 'Escuela'));
@@ -95,7 +95,9 @@ class ProyectoFilterForm extends ModelFilterForm
         	    									
             $estado = new EstadoFilter();
             $builder->add('estadoFilter',$estado->createForm(),array('label'=>'Estado'));
-        
+       
+       		$miCiclo = new CicloFilter();
+       		$builder->add('cicloFilter',$miCiclo->createForm(),array('label'=>'Ciclo'));
         	
     }
     

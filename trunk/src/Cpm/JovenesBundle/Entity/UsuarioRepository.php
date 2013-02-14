@@ -42,6 +42,32 @@ class UsuarioRepository extends EntityRepository
 		
 		if ($data->getCoordinadores()) $qb->innerJoin('u.proyectosCoordinados','p');
 		
+		if ($ciclo = $data->getCiclo()) {
+			if ($data->getCoordinadores()) 
+			{  //si solo queria coordinarores, ya estaba el join con proyectos, solo agrego
+				$qb->innerJoin('p.ciclo','ciclo')->andWhere('ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+			}
+			else 
+			{ //si quiere coordinadores y colaboradores, tengo que hacer leftJoins
+			 	
+			 	$qb_colaboradores = $this->getEntityManager()->createQueryBuilder();
+			 	$qb_coordinadores = $this->getEntityManager()->createQueryBuilder();
+			 	
+			 	$qb_colaboradores->add('select','colaboradores')->add('from','CpmJovenesBundle:Proyecto proyecto')
+						 	->innerJoin('proyecto.colaboradores','colaboradores')
+						 	->innerJoin('proyecto.ciclo','ciclo')->andWhere('ciclo = :ciclo');
+				
+				$qb_coordinadores->add('select','coordinadores')->add('from','CpmJovenesBundle:Proyecto proyecto2')
+						 	->innerJoin('proyecto2.coordinador','coordinadores')
+						 	->innerJoin('proyecto2.ciclo','ciclo2')->andWhere('ciclo2 = :ciclo');
+				
+			 	
+			 	$qb->orWhere($qb->expr()->in('u',$qb_coordinadores->getDQL()))->setParameter('ciclo',$ciclo);
+			 	$qb->orWhere($qb->expr()->in('u',$qb_colaboradores->getDQL()));
+			 	//NOTA: GUARDA CON PONER UN ANDWHERE despues de estos, porque se puede romper el query
+			}  
+			
+		} 
 		return $qb->getQuery();
 		
 	}

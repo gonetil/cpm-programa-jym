@@ -21,6 +21,7 @@ class UsuarioSearch
 	private $apellido;
 	private $habilitados;
 	private $coordinadores = false;
+	private $ciclo;
 	
 	public function getEmail()  { return $this->email; }
 	public function getApellido() { return $this->apellido; }
@@ -30,5 +31,7 @@ class UsuarioSearch
 	public function setHabilitados($x) { $this->habilitados = $x; }
 	public function getCoordinadores() { return $this->coordinadores; }
 	public function setCoordinadores($x) { $this->coordinadores = $x; }
+	public function getCiclo() { return $this->ciclo; }
+	public function setCiclo($c) { $this->ciclo =  $c; }
 }
 ?>

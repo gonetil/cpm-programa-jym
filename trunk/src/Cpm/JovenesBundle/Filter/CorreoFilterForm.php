@@ -28,12 +28,15 @@ class CorreoFilterForm extends ModelFilterForm {
 			'required' => false
 		))->add('asunto', null, array (
 			'required' => false
-		))->add('proyecto', 'entity', array (
+		))
+		
+		/*->add('proyecto', 'entity', array (
 			'label' => 'Proyecto',
 			'class' => 'CpmJovenesBundle:Proyecto',
 			'empty_value' => "Todos",
 			'required' => false
-		))
+		)) */
+		
 		//->add('cuerpo')
 		;
 	}

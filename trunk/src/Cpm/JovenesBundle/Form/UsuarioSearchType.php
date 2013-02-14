@@ -20,6 +20,18 @@ class UsuarioSearchType extends AbstractType
                 								'required'=>false
 				))
         	->add('coordinadores','checkbox',array('label'=>'Sólo coordinadores', 'required'=>false))
+        	->add('ciclo','entity',array('label' => 'Ciclo',
+		    							'class' => 'CpmJovenesBundle:Ciclo',
+		    							'query_builder' => function($er) {
+		    														return $er->createQueryBuilder('c')
+		    																  ->orderBy('c.activo', 'DESC')
+		    																  ->orderBy('c.titulo', 'ASC');;
+		    														},
+		    							'empty_value' => "Cualquiera",
+		    							'preferred_choices' => array("Cualquiera"),
+		    							'required'=>false
+		    					)) 
+		  		
         ;
     }
     public function getName()
