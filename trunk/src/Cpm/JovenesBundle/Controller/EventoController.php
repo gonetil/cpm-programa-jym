@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Evento;
 use Cpm\JovenesBundle\Form\EventoType;
 
+
+use Cpm\JovenesBundle\Filter\EventoFilter;
+use Cpm\JovenesBundle\Filter\EventoFilterForm;
 /**
  * Evento controller.
  *
@@ -26,9 +29,10 @@ class EventoController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Evento')->findAll();
+//        $entities = $em->getRepository('CpmJovenesBundle:Evento')->findAll();
+		return $this->filterAction(new EventoFilter(), 'evento');
 
-        return array('entities' => $entities);
+//        return array('entities' => $entities);
     }
 
     /**
