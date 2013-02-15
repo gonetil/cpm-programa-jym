@@ -46,7 +46,8 @@
             <th>Titulo</th>
             <th>Activo</th>
             <th>Etapa Actual</th>
-            <th>Actions</th>
+            <th>Acciones</th>
+            <th>Ciclo activo</th>
         </tr>
     </thead>
     <tbody>
@@ -61,15 +62,22 @@
                 	<li>
                         <a href="{{ path('ciclo_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
-                    {% if ciclo_activo.id != entity.id %}
-                    <li>
-                        <a href="{{ path('ciclo_activate', { 'id': entity.id }) }}">Activar</a>
-                    </li>
-                    {% endif %}
                     <li>
                         <a href="{{ path('ciclo_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
                 </ul>
+            </td>
+            <td style="text-align:center">
+
+	             {% if ciclo_activo.id != entity.id %}
+    	          <li>
+    	            <a href="{{ path('ciclo_activate', { 'id': entity.id }) }}">Activar</a>
+    	          </li>
+        		 {% else %}
+        		      <h3>X</h3>
+        	     {% endif %}
+
+    
             </td>
         </tr>
     {% endfor %}
