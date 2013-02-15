@@ -22,5 +22,15 @@ class InstanciaEventoFilterForm extends ModelFilterForm
         												'required'=>false		    				
 		    	))
 		  ;
+		
+				         
+       	$miEvento = new EventoFilter();
+       	$builder->add('eventoFilter',$miEvento->createForm(),array('label'=>'Evento'));
+		  
+				         
+       	$miCiclo = new CicloFilter();
+       	$builder->add('cicloFilter',$miCiclo->createForm(),array('label'=>'Ciclo'));
+		  
+		  
     }
 }

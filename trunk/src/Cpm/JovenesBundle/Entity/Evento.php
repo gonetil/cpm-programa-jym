@@ -311,7 +311,7 @@ class Evento
     
     public function __toString()
     {
-    	return $this->titulo;
+    	return $this->titulo . ' - '.$this->ciclo;
     }
 
     /**

@@ -44,7 +44,6 @@ class EscuelaRepository extends EntityRepository
 				
 			$qb->andWhere($qb->expr()->in('e',$qb_proyectos->getDQL()))->setParameter('ciclo',$ciclo);
 				
-				echo "filtering";
 		}
 		
 		

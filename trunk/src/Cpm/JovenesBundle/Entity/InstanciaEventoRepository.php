@@ -1,7 +1,7 @@
 <?php
 
 namespace Cpm\JovenesBundle\Entity;
-
+use Cpm \ JovenesBundle \ Filter \ InstanciaEventoFilter;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class InstanciaEventoRepository extends EntityRepository
 {
+	static $sort_criteria = array("id" => "ie.id");
 	
 	public function findAllQuery($ciclo = null) {
 		$qb = $this->createQueryBuilder('ie')
@@ -32,4 +33,28 @@ class InstanciaEventoRepository extends EntityRepository
 		
 		return  $qb->getQuery()->getResult();
 	}
+	
+	public function filterQuery(InstanciaEventoFilter $data, $sort_field = null, $sort_order) {
+		$qb = $this->createQueryBuilder('ie');
+										
+		 if ($sort_field) {
+			$field = (isset(EscuelaRepository::$sort_criteria[$sort_field]))?EscuelaRepository::$sort_criteria[$sort_field]:EscuelaRepository::$sort_criteria['id'];
+			$qb->orderBy($field,$sort_order);
+		} 
+
+		$qb->innerJoin('ie.evento','e');
+		
+		$eventoFilter = $data->getEventoFilter();
+		if  ($eventoFilter && ($evento = $eventoFilter['evento'])) {
+				$qb->andWhere('e = :evento')->setParameter('evento',$evento);
+		}
+		
+		$cicloFilter = $data->getCicloFilter();
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) { 
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
+		}
+		
+		return $qb;
+	} 
+	
 }
