@@ -54,6 +54,9 @@ class InvitacionFilterForm extends ModelFilterForm
 		))
 		
         ;
+        				         
+       	$miCiclo = new CicloFilter();
+       	$builder->add('cicloFilter',$miCiclo->createForm(),array('label'=>' '));
     }
     
 }
