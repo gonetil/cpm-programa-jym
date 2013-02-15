@@ -102,6 +102,7 @@ class InvitacionRepository extends EntityRepository
 			$qb->andWhere('c.suplente LIKE :sup')->setParameter('sup','%'.$filter->getSuplente().'%');
 		if ($filter->getProyecto())
 			$qb->andWhere('c.proyecto = :proyecto')->setParameter('proyecto',$filter->getProyecto());
+		
 		if ($filter->getInstanciaEvento())
 			$qb->andWhere('c.instanciaEvento = :instancia')->setParameter('instancia',$filter->getInstanciaEvento());
 		
@@ -115,6 +116,13 @@ class InvitacionRepository extends EntityRepository
 			$qb->andWhere('c.solicitaViaje = :pvv')->setParameter('pvv', $pvv);
 		}
 
+		$cicloFilter = $filter->getCicloFilter();
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
+			$qb->innerJoin('c.instanciaEvento','ie')
+				->innerJoin('ie.evento','evento')
+				->innerJoin('evento.ciclo','ciclo')
+				->andWhere('evento.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
+		}
 		return $qb;
 	}
 	
