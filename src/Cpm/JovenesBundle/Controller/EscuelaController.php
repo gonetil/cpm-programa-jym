@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Escuela;
 use Cpm\JovenesBundle\Form\EscuelaType;
 
+use Cpm\JovenesBundle\Filter\EscuelaFilter;
+use Cpm\JovenesBundle\Filter\EscuelaFilterForm;
 /**
  * Escuela controller.
  *
@@ -26,9 +28,9 @@ class EscuelaController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entities = $em->getRepository('CpmJovenesBundle:Escuela')->findAllQuery();
-
-        return $this->paginate($entities);
+/*        $entities = $em->getRepository('CpmJovenesBundle:Escuela')->findAllQuery();
+        return $this->paginate($entities); */
+        return $this->filterAction(new EscuelaFilter(), 'escuela');
     }
 
     /**
