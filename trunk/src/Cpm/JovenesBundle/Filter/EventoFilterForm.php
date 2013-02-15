@@ -5,6 +5,7 @@ namespace Cpm\JovenesBundle\Filter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
+
 class EventoFilterForm extends ModelFilterForm
 {
     public function buildForm(FormBuilder $builder, array $options)
@@ -24,8 +25,12 @@ class EventoFilterForm extends ModelFilterForm
 		  ->add('sinInvitacionFlag','checkbox',array(
 													'label' => 'Sin invitación al evento',
 													'required' => false		  
-		  ))  	
+		  )) 	
 		  ;
+		  
+		         
+       		$miCiclo = new CicloFilter();
+       		$builder->add('cicloFilter',$miCiclo->createForm(),array('label'=>'Ciclo'));
 		  
 
     }
