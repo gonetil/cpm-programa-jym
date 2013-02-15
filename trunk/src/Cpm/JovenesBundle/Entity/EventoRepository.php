@@ -2,6 +2,8 @@
 
 namespace Cpm\JovenesBundle\Entity;
 
+use Cpm \ JovenesBundle \ Filter \ EventoFilter;
+
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,4 +14,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventoRepository extends EntityRepository
 {
+	
+	static $sort_criteria = array("id" => "e.id","titulo"=>"e.titulo");
+	
+	public function filterQuery(EventoFilter $data, $sort_field = null, $sort_order) {
+		$qb = $this->createQueryBuilder('e');
+		
+		
+		if ($sort_field) {
+			$field = (isset(EventoRepository::$sort_criteria[$sort_field]))?EventoRepository::$sort_criteria[$sort_field]:EventoRepository::$sort_criteria['id'];
+			$qb->orderBy($field,$sort_order);
+		}
+		
+		$cicloFilter = $data->getCicloFilter();
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) { 
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
+		}
+		
+		return $qb;
+	} 
 }
