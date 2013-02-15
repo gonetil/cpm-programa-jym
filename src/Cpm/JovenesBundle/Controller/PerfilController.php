@@ -40,8 +40,12 @@ class PerfilController extends BaseController
     		$this->setInfoMessage("Por favor, complete el campo Domicilio");
 			return $this->redirect($this->generateUrl('fos_user_profile_edit'));    			
     	}
+    	
+    	
     	$mis_proyectos = $this->getRepository('CpmJovenesBundle:Proyecto')->findBy(
-						    	array('coordinador' => $usuario->getId())
+						    	array('coordinador' => $usuario->getId(), 
+									  'ciclo' => $this->getJYM()->getCicloActivo()->getId() //agrego el ciclo actual
+									  ) 
 		);
         return array (
         			'proyectos' => $mis_proyectos ,
@@ -146,12 +150,15 @@ class PerfilController extends BaseController
     	if (!$entity) {
     		throw $this->createNotFoundException('Unable to find Proyecto entity.');
     	}
-    
+    	
     	$editForm = $this->createForm(new ProyectoType(), $entity);
     	
-    	$editForm->remove('coordinador');
-    	$editForm->remove('requerimientosDeEdicion');
-    	
+    	if ($entity->getCiclo() != $this->getJYM()->getCicloActivo()) {
+    		 $this->setErrorMessage('No se puede editar un proyecto de otro ciclo');
+    	} else { 
+	    	$editForm->remove('coordinador');
+	    	$editForm->remove('requerimientosDeEdicion');
+    	}
     	return array(
                 'entity'      => $entity,
 		    	'coordinador' => $entity->getCoordinador(),
@@ -180,9 +187,13 @@ class PerfilController extends BaseController
     	}
     	    	 
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proyecto entity.');
+    		throw $this->createNotFoundException('Proyecto no encontrado.');
     	}
-        	
+        
+        if ($entity->getCiclo() != $this->getJYM()->getCicloActivo()) {
+    		 throw $this->createNotFoundException('No se puede editar un proyecto de otro ciclo');
+    	}
+        else 	
     	$entity->setCoordinador($this->getLoggedInUser());
     	 
     	$editForm   = $this->createForm(new ProyectoType(), $entity);
@@ -479,7 +490,7 @@ class PerfilController extends BaseController
     	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
     
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proyecto entity.');
+    		throw $this->createNotFoundException('Proyecto no encontrado.');
     	}
     
     	$editForm = $this->createForm(new ColaboradoresProyectoType(), $entity);
@@ -514,7 +525,12 @@ class PerfilController extends BaseController
     	}
     	    	 
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proyecto entity.');
+    		throw $this->createNotFoundException('Proyecto no encontrado.');
+    	}
+    	
+    	        
+        if ($entity->getCiclo() != $this->getJYM()->getCicloActivo()) {
+    		 $this->setErrorMessage('No se puede editar un proyecto de otro ciclo');
     	}
         	
     	$editForm   = $this->createForm(new ColaboradoresProyectoType(), $entity);
