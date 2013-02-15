@@ -9,6 +9,7 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 	public $regionHasta;
 	public $distrito;
 	public $region;
+	private $cicloFilter;
 	
 	public function createForm() {
 		return new EscuelaFilterForm($this, '_escuela');
@@ -71,5 +72,14 @@ class EscuelaFilter extends Escuela implements ModelFilter {
         return $this->region;
     }
 
-
+	
+	public function getCicloFilter()
+	{
+		return $this->cicloFilter;
+	}
+	
+	public function setCicloFilter($ciclo)
+	{
+		$this->cicloFilter = $ciclo;
+	}
 }

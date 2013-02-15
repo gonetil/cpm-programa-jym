@@ -77,6 +77,8 @@ class EscuelaFilterForm extends ModelFilterForm
         								'required' => false))
 		    					
         ;
+          		$miCiclo = new CicloFilter();
+       		$builder->add('cicloFilter',$miCiclo->createForm(),array('label'=>'Ciclo'));
     }
     
 }
