@@ -4,6 +4,12 @@
 
 {% block content %}
 
+		{{ filter.form_head(form) }}
+	    <label> Evento </label>{{form_widget(form.modelFilter.eventoFilter.evento ) }}
+		{{ form_row(form.modelFilter.cicloFilter.ciclo ) }}
+		{{ filter.form_buttons(form) }}
+
+<br/>
 
 <table class="records_list">
     <thead>

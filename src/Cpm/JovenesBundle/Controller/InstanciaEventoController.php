@@ -10,6 +10,8 @@ use Cpm\JovenesBundle\Entity\InstanciaEvento;
 use Cpm\JovenesBundle\Form\InstanciaEventoType;
 use Symfony\Component\HttpFoundation\Response;
 
+use Cpm\JovenesBundle\Filter\InstanciaEventoFilter;
+use Cpm\JovenesBundle\Filter\InstanciaEventoFilterForm;
 /**
  * InstanciaEvento controller.
  *
@@ -26,10 +28,10 @@ class InstanciaEventoController extends BaseController
     public function indexAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findAllQuery();
-
-        return $this->paginate($entities);
+		return $this->filterAction(new InstanciaEventoFilter(), 'instanciaEvento');
+        
+        /*$entities = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findAllQuery();
+        return $this->paginate($entities); */
     }
 
     /**
