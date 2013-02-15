@@ -3,6 +3,13 @@
 {% block title %}Escuelas{% endblock %}
 
 {% block content %}
+	
+	{{ filter.form_head(form) }}
+	    {{form_row(form.modelFilter.cicloFilter.ciclo ) }}
+		
+		{{ filter.form_buttons(form) }}
+
+<br/>
 
 <table class="records_list">
     <thead>
