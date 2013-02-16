@@ -10,7 +10,7 @@ class CicloFilterForm extends ModelFilterForm {
 
 		
 	public function buildForm(FormBuilder $builder, array $options) {
-		
+			
 	$builder  
 		  ->add('ciclo','entity',array(
 		    							'label' => 'Ciclo',

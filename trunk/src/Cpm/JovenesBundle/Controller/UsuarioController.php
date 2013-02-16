@@ -65,14 +65,15 @@ class UsuarioController extends BaseController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Usuario entity.');
         }
-
+		$ciclos = $em->getRepository('CpmJovenesBundle:Ciclo')->findBy(array(),array('id'=>'desc'));
         $deleteForm = $this->createDeleteForm($id);
         $lockForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-        	'lock_form' => $lockForm->createView(),        );
+        	'lock_form' => $lockForm->createView(), 
+        	'ciclos' => $ciclos      );
     }
 
     /**

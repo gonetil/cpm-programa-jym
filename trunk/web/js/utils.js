@@ -232,6 +232,8 @@ jQuery(function($){
 		
     			searchTable(text);
     });
+    
+    filtrarPorCiclo(); //fitra proyectos a partir del ciclo. Usado en user/show
 });
 	
 invitacion_reinvitar = function(clicked_node,$destination) {
@@ -338,4 +340,18 @@ function searchTable(inputVal) {
 		            else $(row).hide();
 		        }
 		    });
+}
+
+function filtrarPorCiclo() {
+	
+	$("#ciclo_selector li").click(function(event){
+
+		$("#ciclo_selector li.selected").removeClass("selected");
+		$("#proyectos_usuario li").addClass("hidden");
+		$li = $(event.target);
+		ciclo = $li.attr('target');
+
+		$("#proyectos_usuario li."+ciclo).removeClass("hidden");
+		$li.addClass("selected");
+	});	
 }
