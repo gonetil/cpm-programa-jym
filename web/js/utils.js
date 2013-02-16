@@ -234,6 +234,9 @@ jQuery(function($){
     });
     
     filtrarPorCiclo(); //fitra proyectos a partir del ciclo. Usado en user/show
+    
+    $(".draggable").draggable();
+
 });
 	
 invitacion_reinvitar = function(clicked_node,$destination) {
@@ -354,4 +357,82 @@ function filtrarPorCiclo() {
 		$("#proyectos_usuario li."+ciclo).removeClass("hidden");
 		$li.addClass("selected");
 	});	
+}
+
+
+function mostrarFormComentario(url,asunto,cuerpo,css_class) { 
+	$("#asunto_label").text(asunto);
+	$("#cuerpo_label").text(cuerpo);
+	$("#comentario_form form").attr('action',url);
+	$("#comentario_form").removeClass().addClass(css_class).slideDown();
+	$("#tipo_comentario").val(css_class);
+}
+
+function agregarPostit(post_url) {
+	mostrarFormComentario(post_url,"Asunto","Mensaje","postit");
+}
+
+function agregarTarea(post_url) {
+	mostrarFormComentario(post_url,"Tarea","Detalles","tarea");
+}
+
+function agregarComentario(post_url) {
+	mostrarFormComentario(post_url,"Titulo","Comentario","comentario");
+}
+
+
+
+function enviarComentarioAjax() { 
+	asunto = $("#comentario_form form #asunto").val();
+	cuerpo = $("#comentario_form form #cuerpo").val();
+	url = $("#comentario_form form").attr('action');
+	$.ajax({
+		  type: "POST",
+		  url: url,
+		  data: { asunto:asunto, cuerpo:cuerpo} ,
+		  success: function(message){
+			  if (message == 'success') { 
+				  console.log($("#tipo_comentario").val());
+				  if ($("#tipo_comentario").val() == 'postit') { 
+					  new_div = "<div class='postit draggable'>Recien creado<br/>" + asunto + " <br/> Cuerpo " + cuerpo + "</div>";
+					  $("#postits").append(new_div);
+					  $(".draggable").draggable();
+				  }
+				  $("#comentario_form form #asunto").val("");
+				  $("#comentario_form form #cuerpo").val("");
+				  $("#comentario_form").slideUp();
+			  }
+		  }
+		});
+}
+
+function eliminarComentarioAjax(url,elem_id) {
+	if (confirm('¿esta seguro que desea eliminar este mensaje?'))
+		$.ajax({
+			  type: "POST",
+			  url: url,
+			  success: function(message){
+				  if (message == 'success') { 
+					  $("#"+elem_id).remove();
+				  }
+			  }
+			});
+	
+}
+
+function marcarLeidoComentarioAjax(url,elem_id) {
+		$.ajax({
+			  type: "POST",
+			  url: url,
+			  success: function(message){
+				  if (message == 'success') { 
+					  $elem = $("#"+elem_id);
+					  if ($elem.hasClass('leido'))
+						  $elem.removeClass('leido');
+					  else 
+						  $elem.addClass('leido');
+				  }
+			  }
+			});
+	
 }
