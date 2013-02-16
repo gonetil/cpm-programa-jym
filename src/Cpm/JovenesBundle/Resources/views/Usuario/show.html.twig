@@ -16,10 +16,21 @@
 
 	{% if entity.proyectosCoordinados | length > 0 %}
 	<h2> Coordinador de... </h2>
-	<ul>
+	
+	<ul id="ciclo_selector">
+	
+	{% for ciclo in ciclos %}
+		<li  class="{% if ciclo.activo %}selected{% endif %}" target="ciclo_{{ciclo.id}}"> 
+				Ciclo {{ ciclo.titulo}}
+		</li>
+	{% endfor %}
+	</ul>
+	
+	<ul id="proyectos_usuario">
 	
 	{% for proyecto in entity.proyectosCoordinados %}
-	<li> 
+	{% set ciclo_activo=jym.getCicloActivo() %}
+	<li class="ciclo_{{proyecto.ciclo.id}} {% if proyecto.ciclo != ciclo_activo %} hidden {% endif %}"> 
 		
 		 {% if not proyecto.archivo is null %} 
                <div class="download_mini mini-icon"> 
