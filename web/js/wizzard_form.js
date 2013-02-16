@@ -23,12 +23,13 @@
   	   	
  		if( $(this).val() == "") //selecciono otra institucion
  		{  
- 			$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr('disabled').addClass('required'); 
- 			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").attr('disabled','disabled').removeClass('required');
+ 			$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr('disabled').addClass('required').attr("required","required"); 
+ 			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").attr('disabled','disabled').removeAttr("required").removeClass('required');
+ 			console.log("removeing");
  			
  		} else {
- 		 $("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr('disabled','disabled').removeClass('required'); 
- 			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").removeAttr('disabled').addClass('required');
+ 			$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr('disabled','disabled').removeClass('required').removeAttr("required"); 
+ 			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").removeAttr('disabled').addClass('required').attr("required","required");
  			
  			
  		}
