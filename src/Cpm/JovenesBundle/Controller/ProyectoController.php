@@ -18,6 +18,8 @@ use Cpm\JovenesBundle\Form\EstadoProyectoType;
 use Cpm\JovenesBundle\Filter\ProyectoFilter;
 use Cpm\JovenesBundle\Filter\ProyectoFilterForm;
 
+use Cpm\JovenesBundle\Entity\Comentario;
+
 /**
  * Proyecto controller.
  *
@@ -100,11 +102,14 @@ class ProyectoController extends BaseController
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Proyecto entity.');
         }
 
+		$postits = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity->getId(), 'tipo'=> Comentario::POSTIT));
+		$comentarios = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity,'tipo'=>Comentario::COMENTARIO));
+		$tareas = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity,'tipo'=>Comentario::TAREA));
+		
         $deleteForm = $this->createDeleteForm($id);
         $nuevoEstado = new EstadoProyecto();
         $estadoForm = $this->createForm(new EstadoProyectoType($this->getEstadosManager()),$nuevoEstado );
@@ -116,6 +121,9 @@ class ProyectoController extends BaseController
             'delete_form' => $deleteForm->createView(),
             'estado_form' => $estadoForm->createView(),
             'estados_anteriores' => $historialEstados, 
+            'postits' => $postits,
+            'comentarios' => $comentarios,
+            'tareas' => $tareas
             );
     }		
 
@@ -411,4 +419,102 @@ class ProyectoController extends BaseController
 		return $response;
 		    	
     }
+    
+    
+    
+    private function crearComentarioBase($id_proyecto,$tipo) {
+    	$em = $this->getDoctrine()->getEntityManager();
+        $proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id_proyecto);
+        
+    	$asunto = $this->getRequest()->get('asunto');
+ 		$cuerpo = $this->getRequest()->get('cuerpo');
+ 		
+        $autor = $this->getLoggedInUser();
+        
+		$comentario = new Comentario($asunto,$cuerpo,$autor,$proyecto,$tipo,false);
+ 		try{
+		 		$em->persist($comentario);
+		        $em->flush();    	
+				$message = "success";
+			}catch(\PDOException $e){
+ 				$message = "error";
+ 		}
+		
+		
+       return $message;
+    }
+    /**
+	 * @Route("/{id}/crear_postit", name="proyecto_crear_postit")
+     * @Method("post")
+     */
+    function crearPostIt($id) {
+    	$result = $this->crearComentarioBase($id,Comentario::POSTIT);
+    	return new Response($result);
+ 	}
+ 	
+ 	/**
+	 * @Route("/{id}/crear_tarea", name="proyecto_crear_tarea")
+     * @Method("post")
+     */
+    function crearTarea($id) {
+    	$result = $this->crearComentarioBase($id,Comentario::TAREA);
+    	return new Response($result);
+ 	}
+ 	
+ 	/**
+	 * @Route("/{id}/crear_comentario", name="proyecto_crear_comentario")
+     * @Method("post")
+     */
+    function crearComentario($id) {
+    	$result = $this->crearComentarioBase($id,Comentario::COMENTARIO);
+    	return new Response($result);
+ 	}
+ 	
+ 	
+ 	/**
+	 * @Route("/{id}/eliminar_comentario", name="proyecto_eliminar_comentario")
+     * @Method("post")
+     */
+ 	function eliminarComentario($id) {
+	      $em = $this->getDoctrine()->getEntityManager();
+          $comentario= $em->getRepository('CpmJovenesBundle:Comentario')->find($id);
+
+            if (!$comentario) {
+                return new Response("error");
+            }
+	
+			try{
+				$em->remove($comentario);
+				$em->flush();
+				return new Response('success');
+			}catch(\PDOException $e){	
+				return new Response($e->getMessage());	
+			}
+			 		
+ 	}
+ 	
+ 	
+ 	
+ 	/**
+	 * @Route("/{id}/cambiar_estado_comentario", name="proyecto_cambiar_estado_comentario")
+     * @Method("post")
+     */
+ 	function comentarioCambiarEstado($id) {
+	      $em = $this->getDoctrine()->getEntityManager();
+          $comentario= $em->getRepository('CpmJovenesBundle:Comentario')->find($id);
+
+            if (!$comentario) {
+                return new Response("error");
+            }
+	
+			try{
+				$comentario->setEstado( !$comentario->getEstado() );
+				$em->persist($comentario);
+		        $em->flush();    	
+				return new Response('success');
+			}catch(\PDOException $e){	
+				return new Response($e->getMessage());	
+			}
+			 		
+ 	}
 }

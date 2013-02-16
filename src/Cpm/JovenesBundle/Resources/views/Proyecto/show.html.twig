@@ -2,8 +2,24 @@
 {% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
 
 {% block title %} Detalle del proyecto{% endblock %} 
+
 {% block content %}
- 
+ 		<div style="clear:both: with:100%">
+	 		<a href="#" onclick='agregarPostit("{{ path('proyecto_crear_postit',{ 'id' : entity.id}) }}");return false;'> Agregar postit </a>
+	 		<a href="#" onclick='agregarComentario("{{ path('proyecto_crear_comentario',{ 'id' : entity.id}) }}"); return false; '> Agregar comentario </a>
+	 		<a href="#" onclick='agregarTarea("{{ path('proyecto_crear_tarea',{ 'id' : entity.id}) }}"); return false;'> Agregar tarea </a>
+	 		
+	 		<div id="comentario_form">
+	 		<a href="#" style='float:right;' onclick="$('#comentario_form').hide(); return false;";> x </a> <br/>
+	 			<form type="post">
+	 				<label for="asunto" id="asunto_label"></label><input type="text" name="asunto" id="asunto" />
+	 				<label for="cuerpo" id="cuerpo_label"></label><textarea name="cuerpo" id="cuerpo"></textarea>
+	 				<input type='hidden' id='tipo_comentario' value=''>
+	 			
+	 				<input type="button" onclick="enviarComentarioAjax()" value="Guardar">
+	 			</form>
+	 		</div>
+ 		</div>
  	  	<div class="proyecto_box_admin">	    
 		  	{% if ( entity.estadoActual) and (entity.estadoActual.estado >= constant('ESTADO_PRESENTADO')) %}
 																	 
@@ -274,5 +290,42 @@
 	  {% endif %}	
 	
 	</div> <!-- proyecto_right_box -->
+
+
+{% if postits | length > 0 %}
+<div id="postits">
+	{% set left = 1200 %}
+	{% set top = 150 %}
+	{% set cant_postits = 1 %}
+	{% for p in postits %}
+	
+		<div class="draggable ui-draggable postit {% if p.estado %} leido {% endif %}" style="left:{{left}}px; top:{{top}}px" id="postit_{{p.id}}">
+			Creado {{ p.getFechaCreado |date('d-m-Y H:i:s') }}
+			{% if p.getFechaCreado != p.getFechaModificado  %}
+				Modificado {{ p.getFechaModificado |date('d-m-Y  H:i:s') }}
+			{% endif %}	
+		
+		
+			Asunto {{p.asunto}} <br/>
+			Mensaje {{ p.cuerpo }} <br/>
+			Autor {{ p.autor }}  <br/>
+			
+			<a href="#" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> eliminar </a>
+			<a href="#" onclick="marcarLeidoComentarioAjax('{{ path('proyecto_cambiar_estado_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
+				marcar como {% if p.estado %} no {% endif %} leido 
+			</a>
+			
+		</div>	
+		{% set top = top + 90 %}
+		{% set cant_postits = cant_postits + 1 %}
+		{% if cant_postits > 5 %}
+			{% set left = left - 300 %}
+			{% set top = 150 %}
+			{% set cant_postits = 1 %}
+		{% endif %}
+	{% endfor %}
+</div>
+	
+{% endif %}
 
 {% endblock %}
