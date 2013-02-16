@@ -82,7 +82,11 @@ class ProyectoFilterForm extends ModelFilterForm
      				'expanded' => false,
             		'preferred_choices' => array("Todos"),
         			'empty_value' => "Todos",
-    				))               										
+    				))         
+ 			  ->add('deQueSeTrata', null,array( 'label' => 'Descripción',
+		    										'required' => false ))
+    				      							
+    				      										
                 										;
 			$escuela = new EscuelaFilter();	
             $builder->add('escuelaFilter', $escuela->createForm() ,array('label' => 'Escuela'));
