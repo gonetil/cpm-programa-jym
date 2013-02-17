@@ -364,7 +364,7 @@ function mostrarFormComentario(url,asunto,cuerpo,css_class) {
 	$("#asunto_label").text(asunto);
 	$("#cuerpo_label").text(cuerpo);
 	$("#comentario_form form").attr('action',url);
-	$("#comentario_form").removeClass().addClass(css_class).slideDown();
+	$("#comentario_form").removeClass().addClass(css_class).show();
 	$("#tipo_comentario").val(css_class);
 }
 
@@ -394,8 +394,14 @@ function enviarComentarioAjax() {
 			  if (message == 'success') { 
 				  console.log($("#tipo_comentario").val());
 				  if ($("#tipo_comentario").val() == 'postit') { 
-					  new_div = "<div class='postit draggable'>Recien creado<br/>" + asunto + " <br/> Cuerpo " + cuerpo + "</div>";
-					  $("#postits").append(new_div);
+					  new_div = "<div class='postit draggable'>" +
+					  		"			<div class='postit_content'>" +
+					  						"<div class='postit_metadata'>Creado recientemente</div>" +
+					  						"<div class='asunto'>" + asunto + "</div>" +
+					  						"<div class='cuerpo'>" + cuerpo + "</div>" +
+					  					"</div>" +
+					  			"</div>";
+					  $("body").append(new_div);
 					  $(".draggable").draggable();
 				  }
 				  $("#comentario_form form #asunto").val("");
