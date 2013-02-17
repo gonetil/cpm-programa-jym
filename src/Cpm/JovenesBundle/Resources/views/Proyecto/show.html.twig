@@ -10,13 +10,13 @@
 	 		<a href="#" onclick='agregarTarea("{{ path('proyecto_crear_tarea',{ 'id' : entity.id}) }}"); return false;'> Agregar tarea </a>
 	 		
 	 		<div id="comentario_form">
-	 		<a href="#" style='float:right;' onclick="$('#comentario_form').hide(); return false;";> x </a> <br/>
 	 			<form type="post">
 	 				<label for="asunto" id="asunto_label"></label><input type="text" name="asunto" id="asunto" />
 	 				<label for="cuerpo" id="cuerpo_label"></label><textarea name="cuerpo" id="cuerpo"></textarea>
 	 				<input type='hidden' id='tipo_comentario' value=''>
-	 			
-	 				<input type="button" onclick="enviarComentarioAjax()" value="Guardar">
+	 				<a href="#" title="Guardar nota" onclick="enviarComentarioAjax()"> <img src="/images/icons/success.png"> </a>
+	 				<a href="#" style='float:right;' title="Cerrar" onclick="$('#comentario_form').hide(); return false;";> <img src="/images/icons/error.png"> </a>
+	 				
 	 			</form>
 	 		</div>
  		</div>
@@ -300,20 +300,30 @@
 	{% for p in postits %}
 	
 		<div class="draggable ui-draggable postit {% if p.estado %} leido {% endif %}" style="left:{{left}}px; top:{{top}}px" id="postit_{{p.id}}">
-			Creado {{ p.getFechaCreado |date('d-m-Y H:i:s') }}
-			{% if p.getFechaCreado != p.getFechaModificado  %}
-				Modificado {{ p.getFechaModificado |date('d-m-Y  H:i:s') }}
-			{% endif %}	
-		
-		
-			Asunto {{p.asunto}} <br/>
-			Mensaje {{ p.cuerpo }} <br/>
-			Autor {{ p.autor }}  <br/>
-			
-			<a href="#" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> eliminar </a>
-			<a href="#" onclick="marcarLeidoComentarioAjax('{{ path('proyecto_cambiar_estado_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
-				marcar como {% if p.estado %} no {% endif %} leido 
-			</a>
+			<div class="postit_content">
+				<div class="postit_metadata">
+					Creado: {{ p.getFechaCreado |date('d-m-Y H:i:s') }}
+					{% if p.getFechaCreado != p.getFechaModificado  %}
+						<br/>Modificado {{ p.getFechaModificado |date('d-m-Y  H:i:s') }}
+					{% endif %}
+					<br/>Por: {{ p.autor.nombre }} {{ p.autor.apellido }} 	
+				</div>
+				<div class="asunto">
+					Asunto {{p.asunto}}
+				</div>
+				<div class="cuerpo">
+					Mensaje {{ p.cuerpo }}
+				</div>	
+			</div>
+			<div class="options_bar">
+				<a href="#" title="Borrar" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
+					<img src="/images/icons/delete.png">
+				 </a>
+				<a href="#" title="Marcar como {% if p.estado %} no {% endif %} leido" 
+							onclick="marcarLeidoComentarioAjax('{{ path('proyecto_cambiar_estado_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
+						<img src="/images/icons/success.png">
+				</a>
+			</div>
 			
 		</div>	
 		{% set top = top + 90 %}
