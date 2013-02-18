@@ -98,7 +98,16 @@ class Proyecto
     * })
     */
     private $produccionFinal;
-    
+
+
+    /**
+    *  @ORM\ManyToOne(targetEntity="Eje")
+    *  @ORM\JoinColumns({
+    *   @ORM\JoinColumn(name="eje_id", referencedColumnName="id")
+    * })
+    */
+    private $eje;
+        
     /**
     * @var string $deQueSeTrata
     *
@@ -414,7 +423,22 @@ class Proyecto
     {
         return $this->produccionFinal;
     }
-    
+
+    public function setEje(\Cpm\JovenesBundle\Entity\Eje $eje)
+    {
+        $this->eje = $eje;
+    }
+
+    /**
+     * Get eje
+     *
+     * @return Cpm\JovenesBundle\Entity\Eje
+     */
+    public function getEje()
+    {
+        return $this->eje;
+    }
+        
     /**
     * Set deQueSeTrata
     *

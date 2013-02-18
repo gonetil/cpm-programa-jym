@@ -96,7 +96,8 @@
 						
 			
 				<p> Cantidad de alumnos que participan: {{ entity.nroAlumnos }} </p>
-				 
+
+				<p> Eje: {% if entity.eje %} {{ entity.eje }} {% else %} SIN DEFINIR {% endif %} </p>
 				<p> Tema principal: {{ entity.temaPrincipal }} </p>
 				<p>  Producción Final: {{ entity.produccionFinal }} </p>
 				
