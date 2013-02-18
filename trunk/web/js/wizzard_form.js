@@ -25,7 +25,6 @@
  		{  
  			$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr('disabled').addClass('required').attr("required","required"); 
  			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").attr('disabled','disabled').removeAttr("required").removeClass('required');
- 			console.log("removeing");
  			
  		} else {
  			$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr('disabled','disabled').removeClass('required').removeAttr("required"); 
@@ -33,7 +32,12 @@
  			
  			
  		}
- 	});   
+ 	});
+  	   	
+  	   	
+  	   	$("#cpm_jovenesbundle_proyectotype_eje").change(function(event) {
+  	   		mostrarDescripcionEje($("#cpm_jovenesbundle_proyectotype_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"));
+  	   	});
 		   			
   }
    
@@ -48,11 +52,14 @@
    		 	
    		}
    		
+   		
  		if (go_on) {
  		   	prev = $("#stage_"+from);
    			next = $("#stage_"+to);
 		   	if (prev) prev.hide();
 		   	if (next) next.fadeIn();
+		   	
+			$("#cpm_jovenesbundle_proyectotype_eje").change();
    		}
    }
    
@@ -76,9 +83,24 @@
    }
 
    
+   function mostrarDescripcionEje(eje_id,$target_elem,$loading) {
+	   $loading.show();
+	   $target_elem.html("");
+	   url = $target_elem.attr('target');
+	   $.post( 
+		   	url,
+		   	{ eje_id : eje_id },
+		   	function(json) { 
+		   		$target_elem.html(json.descripcion);
+		   		$loading.hide();
+		   	}
+	   );
+   }
+   
    
    $(document).ready(function() {
    					
+	   				$("#cpm_jovenesbundle_proyectotype_eje").change();
 					setup_validation();
 					setup_selects();
 					enter_to_tab();
