@@ -78,10 +78,15 @@ class EstadosManager
     	if (($resultado = $this->validarEstado($estado_nuevo)) == "success") {
     		$proyecto->setEstadoActual($estado_nuevo);
     		$estado_nuevo->setProyecto($proyecto);
+    		
     		$em = $this->doctrine->getEntityManager();
 		    $em->persist($proyecto);
 		    $em->persist($estado_nuevo);
 		    $em->flush();
+
+    		if ($estado_nuevo->getEstado() == ESTADO_ANULADO) //hay que anular todas las invitaciones a instancias de eventos a futuro
+    			$this->anularInvitacionesFuturas($proyecto);
+    		
 		    
 		    $this->informarCambioDeEstado($proyecto);
     	}
@@ -152,6 +157,24 @@ class EstadosManager
 			}
      	}
      	return "";	
+     }
+     
+     /**
+      * Cuando un proyecto es anulado, se deben cancelar las invitaciones a instancias de eventos futuras
+      * 
+      */
+     private function anularInvitacionesFuturas($proyecto) 
+     {
+     		$em = $this->doctrine->getEntityManager();
+     		$hoy = new \DateTime("now");
+     		echo "hoy es {$hoy->format('d/m/Y')} <br/>";
+     		foreach ( $proyecto->getInvitaciones() as $invitacion ) {
+     			if ($invitacion->getInstanciaEvento()->getFechaInicio() > $hoy) {
+     				$em->remove($invitacion);
+     			} 
+			}
+			$em->flush();
+		
      }
 }    
 	

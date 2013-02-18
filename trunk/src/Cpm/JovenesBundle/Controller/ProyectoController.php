@@ -443,11 +443,12 @@ class ProyectoController extends BaseController
 		
        return $message;
     }
+    
     /**
 	 * @Route("/{id}/crear_postit", name="proyecto_crear_postit")
      * @Method("post")
      */
-    function crearPostIt($id) {
+    public function crearPostIt($id) {
     	$result = $this->crearComentarioBase($id,Comentario::POSTIT);
     	return new Response($result);
  	}

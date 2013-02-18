@@ -14,12 +14,12 @@
 	 				<label for="asunto" id="asunto_label"></label><input type="text" name="asunto" id="asunto" />
 	 				<label for="cuerpo" id="cuerpo_label"></label><textarea name="cuerpo" id="cuerpo"></textarea>
 	 				<input type='hidden' id='tipo_comentario' value=''>
-	 				<a href="#" title="Guardar nota" onclick="enviarComentarioAjax()"> <img src="/images/icons/success.png"> </a>
-	 				<a href="#" style='float:right;' title="Cerrar" onclick="$('#comentario_form').hide(); return false;";> <img src="/images/icons/error.png"> </a>
-	 				
+	 				<a href="#"  style="float:left;" title="Cerrar" onclick="$('#comentario_form').hide(); return false;";> <img src="/images/icons/error.png"> </a>
+	 				<a href="#" style='float:right;' title="Guardar nota" onclick="enviarComentarioAjax()"> <img src="/images/icons/success.png"> </a>
 	 			</form>
 	 		</div>
  		</div>
+ 		
  	  	<div class="proyecto_box_admin">	    
 		  	{% if ( entity.estadoActual) and (entity.estadoActual.estado >= constant('ESTADO_PRESENTADO')) %}
 																	 
@@ -326,9 +326,9 @@
 			</div>
 			
 		</div>	
-		{% set top = top + 90 %}
+		{% set top = top + 200 %}
 		{% set cant_postits = cant_postits + 1 %}
-		{% if cant_postits > 5 %}
+		{% if cant_postits > 3 %}
 			{% set left = left - 300 %}
 			{% set top = 150 %}
 			{% set cant_postits = 1 %}
