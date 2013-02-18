@@ -42,6 +42,11 @@ class ProyectoType extends AbstractType
     				 'attr'=>array('class'=>'radios-en-linea'),
     		))
             ->add('colaboradores','collection',array('allow_add'=>true, 'allow_delete'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
+            ->add('eje','entity',
+            					array('label' => 'Eje',
+            						  'class' => 'CpmJovenesBundle:Eje',
+            						  'query_builder' => function($er) { return $er->createQueryBuilder('e')->where('e.anulado = 0');}
+    								    ))
             ->add('temaPrincipal','entity',
             					array('label' => 'Tema Principal',
             						  'class' => 'CpmJovenesBundle:Tema',

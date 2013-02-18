@@ -1,0 +1,22 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Nuevo eje{% endblock %}
+
+{% block content %}
+
+
+<form action="{{ path('eje_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Guardar</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('eje') }}">
+          	Volver al listado
+        </a>
+    </li>
+</ul>
+{% endblock %}
