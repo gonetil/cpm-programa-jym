@@ -2767,7 +2767,16 @@ h4.info_header:hover { background-color: #FFF; }
 #comentario_form.postit img { padding: 1px 5px; }
 #comentario_form.postit form {
 	padding: 10px 15px;
+		
+	-webkit-transform: rotate(-5deg);
+	/* Firefox */
+	-moz-transform: rotate(-5deg);
+	/* IE */
+	-ms-transform: rotate(-5deg);
+	/* Opera */
+	-o-transform: rotate(-5deg);
 }
+#comentario_form.postit form label { min-width: 0px; }
 #comentario_form.postit form input {
 	height: 15px;
 	width: 10px;
