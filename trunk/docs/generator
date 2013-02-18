@@ -16,3 +16,8 @@ php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Escuela" --f
 php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Proyecto" --fields="titulo:string nroAlumnos:integer esPrimeraVezDocente:boolean esPrimeraVezEscuela:boolean esPrimeraVezAlumnos:boolean" --no-interaction --with-repository --format=annotation
 
 php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Usuario" --fields="usuario:string clave:string ultimoAcceso:datetime dni:string telefono:string telefonoCelular:string email:string codigoPostal:string salt:string" --no-interaction --with-repository --format=annotation
+
+
+
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Eje" --fields="nombre:string descripcion:string anulado:boolean" --no-interaction --with-repository --format=annotation
+php app/console generate:doctrine:crud --entity=CpmJovenesBundle:Eje --format=annotation --with-write --no-interaction
