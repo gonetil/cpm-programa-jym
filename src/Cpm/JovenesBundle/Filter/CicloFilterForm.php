@@ -10,18 +10,19 @@ class CicloFilterForm extends ModelFilterForm {
 
 		
 	public function buildForm(FormBuilder $builder, array $options) {
-			
-	$builder  
+		$ciclo = $this->getJYM()->getCicloActivo();
+		
+		$builder  
 		  ->add('ciclo','entity',array(
 		    							'label' => 'Ciclo',
 		    							'class' => 'CpmJovenesBundle:Ciclo',
+		    							'property_path' => false,
+		    							'data' => $ciclo,
 		    							'query_builder' => function($er) {
 		    														return $er->createQueryBuilder('c')
-		    																  ->orderBy('c.activo', 'DESC')
 		    																  ->orderBy('c.titulo', 'ASC');
 		    														},
 		    							'empty_value' => "Cualquiera",
-		    							'preferred_choices' => array(1),
 		    							'required'=>false
 		    					)) 
 		  		

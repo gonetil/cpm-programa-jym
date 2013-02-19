@@ -11,7 +11,7 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 	public $region;
 	private $cicloFilter;
 	
-	public function createForm(Cpm\JovenesBundle\Service\JYM $jym){
+	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new EscuelaFilterForm($this, $jym, '_escuela');
 	}
 	
