@@ -27,10 +27,6 @@ class ProyectoRepository extends EntityRepository {
 
 	public function filterQuery(ProyectoFilter $data, $sort_field = null, $sort_order) {
 		
-		/*if ($filter->getFecha())
-			$qb->andWhere('DATE(c.fecha) = :fecha')->setParameter('fecha',$filter->getFecha());
-		if ($filter->getEmail())
-			$qb->andWhere('c.email LIKE :email')->setParameter('email','%'.$filter->getEmail().'%');*/
 		$qb = $this->createQueryBuilder('p')->innerJoin("p.coordinador", "coordinador");
 
 		if ($sort_field) {
@@ -39,8 +35,9 @@ class ProyectoRepository extends EntityRepository {
 		}
 		
 		$cicloFilter = $data->getCicloFilter();
+//		echo $cicloFilter->getCiclo(); echo $cicloFilter['ciclo']; die;
 		if  ($ciclo = $cicloFilter->getCiclo()) { 
-			//FIXME conseguir el ciclo
+	//		echo $ciclo; die;
 			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
 		}
 		
