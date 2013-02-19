@@ -8,8 +8,8 @@ class EventoFilter extends Evento implements ModelFilter {
 	private $evento; 
 	private $cicloFilter;
 	
-	public function createForm() {
-		return new EventoFilterForm($this, '_evento');
+	public function createForm(Cpm\JovenesBundle\Service\JYM $jym){
+		return new EventoFilterForm($this, $jym, '_evento');
 	}
 	
 	public function getTargetEntity() {

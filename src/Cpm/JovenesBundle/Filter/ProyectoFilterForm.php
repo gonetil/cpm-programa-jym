@@ -89,19 +89,19 @@ class ProyectoFilterForm extends ModelFilterForm
     				      										
                 										;
 			$escuela = new EscuelaFilter();	
-            $builder->add('escuelaFilter', $escuela->createForm() ,array('label' => 'Escuela'));
+            $builder->add('escuelaFilter', $escuela->createForm($this->getJYM()) ,array('label' => 'Escuela'));
             
             $evento = new EventoFilter();
-            $builder->add('eventoFilter',$evento->createForm(),array('label'=>'Evento'));
+            $builder->add('eventoFilter',$evento->createForm($this->getJYM()),array('label'=>'Evento'));
             
             $instanciaEvento = new InstanciaEventoFilter();
-  			$builder->add('instanciaEventoFilter',$instanciaEvento->createForm(),array('label'=>'Instancia de Evento'));      	    									
+  			$builder->add('instanciaEventoFilter',$instanciaEvento->createForm($this->getJYM()),array('label'=>'Instancia de Evento'));      	    									
         	    									
             $estado = new EstadoFilter();
-            $builder->add('estadoFilter',$estado->createForm(),array('label'=>'Estado'));
+            $builder->add('estadoFilter',$estado->createForm($this->getJYM()),array('label'=>'Estado'));
        
        		$miCiclo = new CicloFilter();
-       		$builder->add('cicloFilter',$miCiclo->createForm(),array('label'=>'Ciclo'));
+       		$builder->add('cicloFilter',$miCiclo->createForm($this->getJYM()),array('label'=>'Ciclo'));
         	
     }
     

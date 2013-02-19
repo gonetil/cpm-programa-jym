@@ -10,8 +10,8 @@ class EstadoFilter extends EstadoProyecto implements ModelFilter {
 	private $vigente = 1;
 	private $nota;
 	
-	public function createForm() {
-		return new EstadoFilterForm($this, '_estado');
+	public function createForm(Cpm\JovenesBundle\Service\JYM $jym){
+		return new EstadoFilterForm($this, $jym, '_estado');
 	}
 	
 	public function getTargetEntity() {

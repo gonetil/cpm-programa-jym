@@ -78,7 +78,7 @@ class EscuelaFilterForm extends ModelFilterForm
 		    					
         ;
           		$miCiclo = new CicloFilter();
-       		$builder->add('cicloFilter',$miCiclo->createForm(),array('label'=>'Ciclo'));
+       		$builder->add('cicloFilter',$miCiclo->createForm($this->getJYM()),array('label'=>'Ciclo'));
     }
     
 }

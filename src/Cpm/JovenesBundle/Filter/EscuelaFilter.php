@@ -11,10 +11,10 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 	public $region;
 	private $cicloFilter;
 	
-	public function createForm() {
-		return new EscuelaFilterForm($this, '_escuela');
+	public function createForm(Cpm\JovenesBundle\Service\JYM $jym){
+		return new EscuelaFilterForm($this, $jym, '_escuela');
 	}
-
+	
 	public function getSortFields() {
 		return array("e.id" => "Id","e.nombre" => "Nombre","e.numero"  => "Numero");
 	}

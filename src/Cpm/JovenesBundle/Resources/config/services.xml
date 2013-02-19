@@ -19,7 +19,6 @@
 			<argument type="service" id="fos_user.user_manager"/>
         </service>
         
-        
         <service id="twig.extension.jym" class="Cpm\JovenesBundle\Service\JYMTwigExtension">
             <tag name="twig.extension" />
             <argument type="service" id="cpm_jovenes_bundle.application" />

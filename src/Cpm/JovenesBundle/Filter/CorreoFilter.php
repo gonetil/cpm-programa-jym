@@ -9,8 +9,8 @@ class CorreoFilter extends Correo implements ModelFilter
 	private $fechaMin;
 	private $fechaMax;
 	
-	public function createForm(){
-		return new CorreoFilterForm($this);
+	public function createForm(Cpm\JovenesBundle\Service\JYM $jym){
+		return new CorreoFilterForm($this,$jym);
 	}
 	public function getTargetEntity(){
 		return 'CpmJovenesBundle:Correo';

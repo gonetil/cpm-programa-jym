@@ -16,6 +16,7 @@ define("ESTADO_REHACER",23);
 define("ESTADO_FINALIZADO",30);
 define("ESTADO_APROBADO_Y_APROBADO_C",40);
 /**
+ * Clase encargada de gestionar los estados de un proyecto
  */
 class EstadosManager
 {
@@ -63,6 +64,7 @@ class EstadosManager
     }
     
     public function validarEstado($estado) {
+    	//TODO ver esto esta poco claro 
     	switch ( $estado->getEstado() ) {
 			case ESTADO_PRESENTADO:
 				if ($estado->getArchivo() == null) 
