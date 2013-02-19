@@ -8,8 +8,8 @@ class InstanciaEventoFilter extends InstanciaEvento implements ModelFilter {
 	private $cicloFilter;
 	private $eventoFilter;
 	
-	public function createForm() {
-		return new InstanciaEventoFilterForm($this, '_instancia_evento');
+	public function createForm(Cpm\JovenesBundle\Service\JYM $jym){
+		return new InstanciaEventoFilterForm($this, $jym, '_instancia_evento');
 	}
 	
 	public function getTargetEntity() {

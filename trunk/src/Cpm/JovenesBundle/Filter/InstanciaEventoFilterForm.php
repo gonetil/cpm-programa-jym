@@ -25,11 +25,11 @@ class InstanciaEventoFilterForm extends ModelFilterForm
 		
 				         
        	$miEvento = new EventoFilter();
-       	$builder->add('eventoFilter',$miEvento->createForm(),array('label'=>'Evento'));
+       	$builder->add('eventoFilter',$miEvento->createForm($this->getJYM()),array('label'=>'Evento'));
 		  
 				         
        	$miCiclo = new CicloFilter();
-       	$builder->add('cicloFilter',$miCiclo->createForm(),array('label'=>'Ciclo'));
+       	$builder->add('cicloFilter',$miCiclo->createForm($this->getJYM()),array('label'=>'Ciclo'));
 		  
 		  
     }

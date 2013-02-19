@@ -265,7 +265,7 @@ abstract class BaseController extends Controller
 
 	protected function getFilterForm(ModelFilter $modelFilter){
 		
-		$modelfilter_Form = $modelFilter->createForm();
+		$modelfilter_Form = $modelFilter->createForm($this->getJYM());
  		$filterForm = new FilterForm($modelfilter_Form);
  		$filter = new Filter($modelFilter);
 		

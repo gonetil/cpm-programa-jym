@@ -8,9 +8,10 @@ class CicloFilter extends Ciclo implements ModelFilter
 {
 	public $ciclo = null;
 	
-	public function createForm(){
-		return new CicloFilterForm($this, "_ciclo");
+	public function createForm(Cpm\JovenesBundle\Service\JYM $jym){
+		return new CicloFilterForm($this,$jym, "_ciclo");
 	}
+	
 	public function getTargetEntity(){
 		return 'CpmJovenesBundle:Ciclo';
 	}
