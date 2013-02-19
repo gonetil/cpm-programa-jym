@@ -67,10 +67,10 @@
 
 	{% if entity.proyectosColaborados | length > 0 %}
 	<h2> Colaborador en... </h2>
-	<ul>
-	
+	<ul id="proyectos_usuario">
+	{% set ciclo_activo=jym.getCicloActivo() %}
 	{% for proyecto in entity.proyectosColaborados %}
-	<li> 
+	<li class="ciclo_{{proyecto.ciclo.id}} {% if proyecto.ciclo != ciclo_activo %} hidden {% endif %}"> 
 		
 		 {% if not proyecto.archivo is null %} 
                <div class="download_mini mini-icon"> 

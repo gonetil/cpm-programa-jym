@@ -8,7 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Eje;
 use Cpm\JovenesBundle\Form\EjeType;
-
+use Symfony\Component\HttpFoundation\Response;
+use Cpm\JovenesBundle\Controller\BaseController;
 /**
  * Eje controller.
  *
@@ -198,5 +199,31 @@ class EjeController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+    
+    
+    
+    
+     /**
+     * Fetch one eje entity.
+     *
+     * @Route("/fetch_eje", name="eje_fetch")
+     * @Method("post")
+     */
+      public function crearComentarioBase() {
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$eje_id = $this->getRequest()->get('eje_id');
+ 		$eje = $em->getRepository('CpmJovenesBundle:Eje')->find($eje_id);
+ 		
+ 		$json = array();
+		if ($eje) { 
+			$json['descripcion'] = $eje->getDescripcion();
+			$json['id'] = $eje->getId();		
+		}
+		
+		$response = new Response(json_encode($json));
+    	
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;    
     }
 }
