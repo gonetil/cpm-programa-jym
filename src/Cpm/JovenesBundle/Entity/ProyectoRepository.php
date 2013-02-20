@@ -25,20 +25,21 @@ class ProyectoRepository extends EntityRepository {
 
 	}
 
-	public function filterQuery(ProyectoFilter $data, $sort_field = null, $sort_order) {
+	public function filterQuery(ProyectoFilter $data, $ciclo_activo, $sort_field = null, $sort_order) {
 		
 		$qb = $this->createQueryBuilder('p')->innerJoin("p.coordinador", "coordinador");
-
+		
 		if ($sort_field) {
 			$field = (isset(ProyectoRepository::$sort_criteria[$sort_field]))?ProyectoRepository::$sort_criteria[$sort_field]:ProyectoRepository::$sort_criteria['id'];
 			$qb->orderBy($field,$sort_order);
 		}
 		
+		
 		$cicloFilter = $data->getCicloFilter();
-//		echo $cicloFilter->getCiclo(); echo $cicloFilter['ciclo']; die;
 		if  ($ciclo = $cicloFilter->getCiclo()) { 
-	//		echo $ciclo; die;
 			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
+		} else {
+			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo_activo);
 		}
 		
 		if ($data->getEsPrimeraVezDocente()) {

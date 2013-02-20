@@ -16,18 +16,23 @@ class CicloFilterForm extends ModelFilterForm {
 		  ->add('ciclo','entity',array(
 		    							'label' => 'Ciclo',
 		    							'class' => 'CpmJovenesBundle:Ciclo',
-		    							'property_path' => false,
+		    							'property_path' => 'ciclo',
 		    							'data' => $ciclo,
 		    							'query_builder' => function($er) {
 		    														return $er->createQueryBuilder('c')
-		    																  ->orderBy('c.titulo', 'ASC');
+		    																  ->orderBy('c.id', 'DESC');
+		    																  //->orderBy('c.titulo', 'ASC');
 		    														},
-		    							'empty_value' => "Cualquiera",
-		    							'required'=>false
+		    							//'empty_value' => "Cualquiera",
+		    							'required'=>true
 		    					)) 
 		  		
 		    					
         ;
 	
+	}
+	
+	public function getCicloActivo() {
+		return $this->getJYM()->getCicloActivo();
 	}
 }

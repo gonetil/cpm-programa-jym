@@ -34,7 +34,7 @@ class InstanciaEventoRepository extends EntityRepository
 		return  $qb->getQuery()->getResult();
 	}
 	
-	public function filterQuery(InstanciaEventoFilter $data, $sort_field = null, $sort_order) {
+	public function filterQuery(InstanciaEventoFilter $data, $ciclo_activo,$sort_field = null, $sort_order) {
 		$qb = $this->createQueryBuilder('ie');
 										
 		 if ($sort_field) {
@@ -52,6 +52,8 @@ class InstanciaEventoRepository extends EntityRepository
 		$cicloFilter = $data->getCicloFilter();
 		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) { 
 			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
+		} else {
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo', $ciclo_activo);
 		}
 		
 		return $qb;

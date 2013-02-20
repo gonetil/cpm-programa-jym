@@ -25,7 +25,7 @@ class EscuelaRepository extends EntityRepository
 	}
 	
 	
-	public function filterQuery(EscuelaFilter $data, $sort_field = null, $sort_order) {
+	public function filterQuery(EscuelaFilter $data, $ciclo_activo,$sort_field = null, $sort_order) {
 		$qb = $this->createQueryBuilder('e');
 										
 		/* if ($sort_field) {
@@ -33,17 +33,17 @@ class EscuelaRepository extends EntityRepository
 			$qb->orderBy($field,$sort_order);
 		} */
 
-		
-		$cicloFilter = $data->getCicloFilter();
-		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
-			
 			$qb_proyectos = $this->getEntityManager()->createQueryBuilder();
 			$qb_proyectos->select('p')->from('CpmJovenesBundle:Proyecto','p')
 					->innerJoin('p.ciclo','ciclo')->andWhere('ciclo = :ciclo')
+					
 				; 
-				
-			$qb->andWhere($qb->expr()->in('e',$qb_proyectos->getDQL()))->setParameter('ciclo',$ciclo);
-				
+		
+		$cicloFilter = $data->getCicloFilter();
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
+				$qb->andWhere($qb->expr()->in('e',$qb_proyectos->getDQL()))->setParameter('ciclo',$ciclo);
+		} else {
+			$qb->andWhere($qb->expr()->in('e',$qb_proyectos->getDQL()))->setParameter('ciclo',$ciclo_activo);
 		}
 		
 		

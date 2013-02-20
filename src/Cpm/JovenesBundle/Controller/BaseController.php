@@ -267,9 +267,10 @@ abstract class BaseController extends Controller
 		
 		$modelfilter_Form = $modelFilter->createForm($this->getJYM());
  		$filterForm = new FilterForm($modelfilter_Form);
- 		$filter = new Filter($modelFilter);
+ 		$filter = new Filter($modelFilter,$this->getJYM()->getCicloActivo());
 		
  		$form = $this->get('form.factory')->create($filterForm, $filter);
+		
 		
 		$request = $this->getRequest();
 		
@@ -278,7 +279,8 @@ abstract class BaseController extends Controller
 			$queryForm = $request->query->get($form->getName());
 			
 			if (!empty($queryForm['selectedEntities'])){
-							$selectedEntities = $this->getRepository($modelFilter->getTargetEntity())
+				$repo = $this->getRepository($modelFilter->getTargetEntity());
+							$selectedEntities = $repo
 				 	->createQueryBuilder('e')
 				 	->andWhere('e.id in (:entities)')->setParameter('entities',array_values($queryForm['selectedEntities']))
 				 	->getQuery()->getResult();
@@ -295,7 +297,7 @@ abstract class BaseController extends Controller
 		
 //		$modelFilter = $filter->getModelFilter();
 		
-        $qb = $this->getRepository($modelFilter->getTargetEntity())->filterQuery($modelFilter, $filter->getSortField(), $filter->getSortOrder() );
+        $qb = $this->getRepository($modelFilter->getTargetEntity())->filterQuery($modelFilter,$this->getJYM()->getCicloActivo(), $filter->getSortField(), $filter->getSortOrder() );
 		$query = $qb->getQuery();
 		
 		return array($form, $filter, $query);

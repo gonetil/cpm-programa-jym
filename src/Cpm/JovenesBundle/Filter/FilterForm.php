@@ -39,7 +39,7 @@ class FilterForm extends AbstractType {
         			'expanded'=>true, 
         			'required' =>true, 
         			'query_builder' => function($er) use ($mf,$filter){
-        						$qb = $er->filterQuery($mf,$filter->getSortField(),$filter->getSortOrder())
+        						$qb = $er->filterQuery($mf,$filter->getCicloActivo(),$filter->getSortField(),$filter->getSortOrder())
 								->setFirstResult(($filter->getPageNumber() - 1) * $filter->getPageSize())
 								->setMaxResults($filter->getPageSize())
 								;

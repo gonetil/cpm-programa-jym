@@ -28,7 +28,7 @@ class CorreoRepository extends EntityRepository
 		return  $qb->getQuery();
 	}
 	
-	public function filterQuery(CorreoFilter $filter,$sort_field = null, $sort_order) {
+	public function filterQuery(CorreoFilter $filter,$ciclo_activo,$sort_field = null, $sort_order) {
 		$qb = $this->createQueryBuilder('c')->orderBy('c.fecha', 'DESC');
 		if ($sort_field) {
 			$field = (isset(CorreoRepository::$sort_criteria[$sort_field]))?CorreoRepository::$sort_criteria[$sort_field]:CorreoRepository::$sort_criteria['id'];

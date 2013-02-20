@@ -7,8 +7,10 @@ use Cpm \ JovenesBundle \ Entity \ Ciclo;
 class CicloFilter extends Ciclo implements ModelFilter
 {
 	public $ciclo = null;
+	public $jym;
 	
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
+		$this->jym = $jym;
 		return new CicloFilterForm($this,$jym, "_ciclo");
 	}
 	
@@ -28,4 +30,7 @@ class CicloFilter extends Ciclo implements ModelFilter
 		return $this->ciclo = $ciclo;
 	}
 	
+	public function getCicloActivo() {
+		return $this->jym->getCicloActivo();
+	}
 }	
