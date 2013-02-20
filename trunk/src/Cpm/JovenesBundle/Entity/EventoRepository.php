@@ -17,7 +17,7 @@ class EventoRepository extends EntityRepository
 	
 	static $sort_criteria = array("id" => "e.id","titulo"=>"e.titulo");
 	
-	public function filterQuery(EventoFilter $data, $sort_field = null, $sort_order) {
+	public function filterQuery(EventoFilter $data, $ciclo_activo,$sort_field = null, $sort_order) {
 		$qb = $this->createQueryBuilder('e');
 		
 		
@@ -29,7 +29,10 @@ class EventoRepository extends EntityRepository
 		$cicloFilter = $data->getCicloFilter();
 		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) { 
 			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
+		} else {
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo', $ciclo_activo);
 		}
+		
 		
 		return $qb;
 	} 

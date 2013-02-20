@@ -81,7 +81,7 @@ class InvitacionRepository extends EntityRepository
 	}
 
 	
-	public function filterQuery(InvitacionFilter $filter, $sort_field = null, $sort_order) {
+	public function filterQuery(InvitacionFilter $filter, $ciclo_activo, $sort_field = null, $sort_order) {
 		$qb = $this->createQueryBuilder('c');
 		if ($sort_field) {
 			$field = (isset(InvitacionRepository::$sort_criteria[$sort_field]))?InvitacionRepository::$sort_criteria[$sort_field]:InvitacionRepository::$sort_criteria['id'];
@@ -117,12 +117,18 @@ class InvitacionRepository extends EntityRepository
 		}
 
 		$cicloFilter = $filter->getCicloFilter();
-		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
-			$qb->innerJoin('c.instanciaEvento','ie')
+		
+		$qb->innerJoin('c.instanciaEvento','ie')
 				->innerJoin('ie.evento','evento')
 				->innerJoin('evento.ciclo','ciclo')
-				->andWhere('evento.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
+				->andWhere('evento.ciclo = :ciclo');
+		
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
+			$qb->setParameter('ciclo', $ciclo);
+		}else {
+			$qb->setParameter('ciclo', $ciclo_activo);
 		}
+		
 		return $qb;
 	}
 	

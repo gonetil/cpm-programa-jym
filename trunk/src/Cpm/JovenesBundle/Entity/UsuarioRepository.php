@@ -12,44 +12,61 @@ use Doctrine\ORM\EntityRepository;
  */
 class UsuarioRepository extends EntityRepository
 {
-	public function findAllQuery() {
+	public function findAllQuery($ciclo_activo) {
 		$qb = $this->getEntityManager()->createQueryBuilder()
 			->add('select','u')
 			->add('from','CpmJovenesBundle:Usuario u');
 		
-    	 
+		$qb = $this->incluirCoordinadoresYColaboradores($qb,$ciclo_activo);
+		 
     return  $qb->getQuery();
   
 	}
 	
-	function findBySearchCriteriaQuery($data) {
+	function findBySearchCriteriaQuery($data,$ciclo_activo) {
 	
 		$qb = $this->getEntityManager()->createQueryBuilder();
 	
 		$qb->add('select','u')
 		->add('from','CpmJovenesBundle:Usuario u');
 		
-		if ($data->getApellido()) $qb->andWhere('u.apellido like :apellido')
-									 ->setParameter('apellido',(trim($data->getApellido())."%"));
-		if ($data->getEmail()) $qb->andWhere('u.email like :email')
-								 ->setParameter('email',(trim($data->getEmail())."%"));
+		$ciclo = ($data->getCiclo()) ? $data->getCiclo() : $ciclo_activo;
+		
+		if ($data->getCoordinadores()) 
+		{  //si solo queria coordinarores, ya estaba el join con proyectos, solo agrego
+				$qb->innerJoin('u.proyectosCoordinados','p');
+				$qb->innerJoin('p.ciclo','ciclo')->andWhere('ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		}
+		else 
+		{  	
+			$qb = $this->incluirCoordinadoresYColaboradores($qb,$ciclo);
+		}  
+		
+		if ($data->getApellido()) 
+				$qb->andWhere('u.apellido like :apellido')
+					->setParameter('apellido',(trim($data->getApellido())."%"));
+		if ($data->getEmail()) 
+				$qb->andWhere('u.email like :email')
+					->setParameter('email',(trim($data->getEmail())."%"));
 		
 		if ($habilitados = $data->getHabilitados()) {
 			if ($habilitados == 1)
 				$qb->andWhere('u.enabled = 1');
-			else $qb->andWhere('u.enabled <> 1');
+			else 
+				$qb->andWhere('u.enabled <> 1');
 		}
 		
-		if ($data->getCoordinadores()) $qb->innerJoin('u.proyectosCoordinados','p');
+		return $qb->getQuery();
 		
-		if ($ciclo = $data->getCiclo()) {
-			if ($data->getCoordinadores()) 
-			{  //si solo queria coordinarores, ya estaba el join con proyectos, solo agrego
-				$qb->innerJoin('p.ciclo','ciclo')->andWhere('ciclo = :ciclo')->setParameter('ciclo',$ciclo);
-			}
-			else 
-			{ //si quiere coordinadores y colaboradores, tengo que hacer leftJoins
-			 	
+	}
+	
+	/**
+	 * Recibe un QueryBuilder con la entidad Usuario u, y un ciclo $ciclo. 
+	 * Retorna el mismo QueryBuilder al cual le agrega dos subqueries para buscar usuarios (u) en proyectos del ciclo $ciclo, ya sean colaboradores o coordinadores de dichos proyectos
+	 * 
+	 */
+	private function incluirCoordinadoresYColaboradores($qb,$ciclo) {
+		
 			 	$qb_colaboradores = $this->getEntityManager()->createQueryBuilder();
 			 	$qb_coordinadores = $this->getEntityManager()->createQueryBuilder();
 			 	
@@ -65,11 +82,8 @@ class UsuarioRepository extends EntityRepository
 			 	$qb->orWhere($qb->expr()->in('u',$qb_coordinadores->getDQL()))->setParameter('ciclo',$ciclo);
 			 	$qb->orWhere($qb->expr()->in('u',$qb_colaboradores->getDQL()));
 			 	//NOTA: GUARDA CON PONER UN ANDWHERE despues de estos, porque se puede romper el query
-			}  
-			
-		} 
-		return $qb->getQuery();
-		
+			 	
+			 	return $qb;
 	}
 	
 }

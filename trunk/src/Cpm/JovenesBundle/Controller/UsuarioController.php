@@ -35,16 +35,17 @@ class UsuarioController extends BaseController
         $searchValues = new UsuarioSearch();
         $searchForm = $this->createForm(new UsuarioSearchType(),$searchValues);
         $request = $this->getRequest();
-        if (is_array($request->get("cpm_jovenesbundle_usuariosearchtype"))) {
+        $repository = $em->getRepository('CpmJovenesBundle:Usuario');
+        
+        if (is_array($request->get("cpm_jovenesbundle_usuariosearchtype"))) 
+        {
         	$usuarios = null;
-        	
         	$searchForm->bindRequest($request);
-        	$repository = $em->getRepository('CpmJovenesBundle:Usuario');
         	if ($searchForm->isValid()) {
-        		$usuarios=$repository ->findBySearchCriteriaQuery($searchForm->getData());
+        		$usuarios=$repository ->findBySearchCriteriaQuery($searchForm->getData(),$this->getJYM()->getCicloActivo());
         	}
         } else {
-        	$usuarios = $em->getRepository('CpmJovenesBundle:Usuario')->findAllQuery();
+        	$usuarios = $repository->findAllQuery($this->getJYM()->getCicloActivo());
         }
         
         return $this->paginate($usuarios,array('form'=>$searchForm->createView()));

@@ -10,11 +10,13 @@ class Filter
     private $batchAction;
     private $batchActionType; //todos o !todos FIXME
 	private $selectedEntities;
+	private $ciclo_activo;
 	
-	public function __construct(ModelFilter $modelFilter, $sortField = '', $sortOrder = 'asc'){
+	public function __construct(ModelFilter $modelFilter, $ciclo_activo,$sortField = '', $sortOrder = 'asc'){
 		$this->modelFilter = $modelFilter;
 		$this->sortField=$sortField;
 		$this->sortOrder=$sortOrder;
+		$this->ciclo_activo = $ciclo_activo;
 		$this->selectedEntities = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
@@ -88,6 +90,17 @@ class Filter
 	}
 	public function setPageNumber($number) {
 		$this->page_number = $number;
+	}
+	
+	
+	public function getCicloActivo()
+	{
+		return $this->ciclo_activo;
+	}
+	
+	public function setCicloActivo($ciclo)
+	{
+		$this->ciclo_activo = $ciclo;
 	}
 }
 	

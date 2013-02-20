@@ -24,12 +24,9 @@ class UsuarioSearchType extends AbstractType
 		    							'class' => 'CpmJovenesBundle:Ciclo',
 		    							'query_builder' => function($er) {
 		    														return $er->createQueryBuilder('c')
-		    																  ->orderBy('c.activo', 'DESC')
-		    																  ->orderBy('c.titulo', 'ASC');;
+		    																  ->orderBy('c.activo', 'DESC');
 		    														},
-		    							'empty_value' => "Cualquiera",
-		    							'preferred_choices' => array("Cualquiera"),
-		    							'required'=>false
+		    							'required'=>true
 		    					)) 
 		  		
         ;
