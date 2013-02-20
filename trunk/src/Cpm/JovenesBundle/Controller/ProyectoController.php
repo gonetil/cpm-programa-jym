@@ -79,14 +79,26 @@ class ProyectoController extends BaseController
     	$em = $this->getEntityManager();
     	$repo = $em->getRepository('CpmJovenesBundle:Proyecto');
     	
+    	$ciclo = $this->getJYM()->getCicloActivo();
     	$qb = $repo->createQueryBuilder('p');
-    	$stats['total_proyectos'] = $qb->select($qb->expr()->count('p'))->getQuery()->getSingleScalarResult();
+    	$stats['total_proyectos'] = $qb->select($qb->expr()->count('p'))
+    									->where('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    									->getQuery()->getSingleScalarResult();
 
-    	$stats['total_PrimeraVezDocente'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezDocente = 1')->getQuery()->getSingleScalarResult();
-    	$stats['total_PrimeraVezAlumnos'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezAlumnos = 1')->getQuery()->getSingleScalarResult();
-    	$stats['total_PrimeraVezEscuela'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezEscuela = 1')->getQuery()->getSingleScalarResult();
+    	$stats['total_PrimeraVezDocente'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezDocente = 1')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getSingleScalarResult();
+    																			
+    	$stats['total_PrimeraVezAlumnos'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezAlumnos = 1')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getSingleScalarResult();
+    	$stats['total_PrimeraVezEscuela'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezEscuela = 1')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getSingleScalarResult();
     	 
-    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')->getQuery()->getResult());    	
+    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getResult());    	
     	
     	return $stats;
     }
