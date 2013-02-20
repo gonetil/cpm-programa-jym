@@ -2862,3 +2862,12 @@ h4.info_header:hover { background-color: #FFF; }
 .postit .postit_metadata { font-size: 9pt; color: #343434; text-align: right; }
 .postit .asunto { font-weight: bold; font-size:10pt;}
 .postit .cuerpo { font-style: italic; }
+
+.lista_variable { 
+	width: 500px;
+	font-size: 10pt;
+ }
+.lista_variable_item { 
+	padding-top: 2px; 
+	font-size: 10pt;
+}

@@ -207,5 +207,19 @@ class JYM  {
 
 	public function getEstadosManager(){
 		return $this->container->get('cpm_jovenes_bundle.estados_manager');
+	}
+	
+	public function getVariablesCorreo() {
+		$variables = array(
+		'{{ usuario.apellido }}, {{ usuario.nombre }}' => "Apellido, Nombre del docente destinatario",
+		'{{ usuario.email }}' => "Dirección de correo del docente destinatario", 
+		'{{ url_sitio }}' => "Dirección web (URL) de este sitio", 
+		'{{ proyecto.escuela }}' => "Escuela del proyecto seleccionado", 
+		'{{ proyecto.titulo}}' => "Título del proyecto seleccionado",
+		'{{ proyecto.coordinador.apellido }}, {{ proyecto.coordinador.nombre }},' => "Apellido, Nombre del coordinador del proyecto seleccionado",
+		'{{ proyecto.coordinador.email }}' => "Dirección de correo del coordinador del proyecto seleccionado",
+		' {% for c in proyecto.colaboradores %} {{ c.apellido}}, {{ c.nombre}} ( {{ c.email }} ); {% endfor %}' => " Apellido, Nombre y dirección de correo de los colaboradores del proyecto"
+		);
+		return $variables;
 	}		
 }

@@ -236,6 +236,13 @@ jQuery(function($){
     filtrarPorCiclo(); //fitra proyectos a partir del ciclo. Usado en user/show
     
     $(".draggable").draggable();
+    
+    $(".lista_variable").dblclick(function(){
+    	destination = $(this).attr('target');
+    	value = $(this).val();
+    	insertarVariableEnCorreo(value,destination)
+    });
+    
 
 });
 	
@@ -442,3 +449,40 @@ function marcarLeidoComentarioAjax(url,elem_id) {
 			});
 	
 }
+
+
+
+function insertarVariableEnCorreo(value,destination) { 
+	$(destination).insertAtCaret(value);
+}
+
+/**
+ * Esta funcion inserta un valor dentro de un textarea en el lugar donde esta el cursor
+ * */
+$.fn.extend({ 
+	  insertAtCaret: function(myValue){
+	  var obj;
+	  if( typeof this[0].name !='undefined' ) obj = this[0];
+	  else obj = this;
+
+	  if ($.browser.msie) {
+	    obj.focus();
+	    sel = document.selection.createRange();
+	    sel.text = myValue;
+	    obj.focus();
+	    }
+	  else if ($.browser.mozilla || $.browser.webkit) {
+	    var startPos = obj.selectionStart;
+	    var endPos = obj.selectionEnd;
+	    var scrollTop = obj.scrollTop;
+	    obj.value = obj.value.substring(0, startPos)+myValue+obj.value.substring(endPos,obj.value.length);
+	    obj.focus();
+	    obj.selectionStart = startPos + myValue.length;
+	    obj.selectionEnd = startPos + myValue.length;
+	    obj.scrollTop = scrollTop;
+	  } else {
+	    obj.value += myValue;
+	    obj.focus();
+	   }
+	 }
+});

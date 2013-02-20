@@ -156,7 +156,8 @@ class CorreoController extends BaseController
 	public function newAction() {
 		$entity = new Correo();
 		$form = $this->createForm(new CorreoType(), $entity);
-
+		
+	
 		return array (
 			'entity' => $entity,
 			'form' => $form->createView()

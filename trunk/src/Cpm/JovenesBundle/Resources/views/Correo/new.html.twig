@@ -3,6 +3,9 @@
 {% block title %}Redactar Correo{% endblock %}
 
 {% block content %}
+	<div class="proyecto_right_box">
+		{{ common.SelectVariablesDePlantillas("#cpm_jovenesbundle_correotype_cuerpo") }}
+	</div>
 
 <form action="{{ path('correo_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
@@ -10,6 +13,7 @@
         <button type="submit">Enviar</button>
     </p>
 </form>
+
 <script>
 	$(function(){
 		$('#cpm_jovenesbundle_correotype_destinatario').change(function (){
