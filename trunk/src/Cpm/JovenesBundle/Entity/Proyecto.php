@@ -196,6 +196,24 @@ class Proyecto
     
     private $observaciones;
     
+    
+    
+     /**
+     * @var boolean $recibioCapacitacion
+     * @ORM\Column(name="recibioCapacitacion", type="boolean")
+     * indica si recibió capacitación en años anteriores
+     */        
+    private $recibioCapacitacion;     
+    public function getRecibioCapacitacion()
+    {
+    	return $this->recibioCapacitacion;
+    }
+    
+    public function setRecibioCapacitacion($bool)
+    {
+    	$this->recibioCapacitacion = $bool;
+    }
+    
     public function __construct()
     {
     	$this->estado = Proyecto::__ESTADO_INICIADO;

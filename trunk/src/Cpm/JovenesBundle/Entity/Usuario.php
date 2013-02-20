@@ -121,6 +121,8 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @ORM\Column(name="domicilio", type="string", nullable=true)
      */    
     private $domicilio;
+
+
     
     
     public function __construct()
@@ -383,4 +385,6 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     public function setDomicilio($domicilio) { 
     	$this->domicilio = $domicilio;
     }
+
+
 }
