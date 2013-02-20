@@ -4,6 +4,15 @@
 
 {% block content %}
 
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('correo_new') }}">
+            Enviar nuevo correo
+        </a>
+    </li>
+</ul>
+
+<div class="clear">&nbsp;</div>
 {{ filter.form_init(form) }}
 
 <table class="records_list correos">
@@ -47,11 +56,4 @@
 {{ filter.form_end(form) }}
 
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('correo_new') }}">
-            Redactar Correo
-        </a>
-    </li>
-</ul>
 {% endblock %}
