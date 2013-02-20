@@ -69,3 +69,15 @@
 			</select>
 			</div>
 {% endmacro %}
+
+
+{% macro SelectVariablesDePlantillas(target) %}
+		{% set variables = jym.getVariablesCorreo %}
+		<h2> Variables predefinidas </h2>
+		<p> Doble clic para insertarlas en el texto del correo </p>
+	  	<select size="{{ variables | length }}" class="lista_variable" target="{{target}}">
+	  		{% for k,v in variables %}
+	  			<option class="lista_variable_item" value="{{k}}"> {{v}}</option>
+	  		{% endfor %}
+	  	</select>
+{% endmacro %}

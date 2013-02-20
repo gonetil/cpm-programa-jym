@@ -4,7 +4,15 @@
 
 {% block content %}
 
+
+	
 {% include 'CpmJovenesBundle:Plantilla:template_tip.html.twig' %}
+
+
+<div class="proyecto_right_box">
+		{{ common.SelectVariablesDePlantillas("#cpm_jovenesbundle_plantillatype_cuerpo") }}
+	</div>
+	
 <form action="{{ path('plantilla_create') }}" method="post" {{ form_enctype(form) }}>
 	{% if template_error is defined %}
 		<strong>{{ template_error }}</strong>
