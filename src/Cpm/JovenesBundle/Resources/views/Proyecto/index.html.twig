@@ -73,7 +73,7 @@ $(document).ready(function() {
 	</div>
 
 	<div class="systats">
-		<h4>Estadísticas del Sistema</h4>
+		<h4>Estadísticas del ciclo activo ({{ jym.getCicloActivo() }})</h4>
 		<ul>
 			<li>Cant. de proyectos: {{total_proyectos}}</li> {% if total_proyectos > 0 %}
 			<li>% primera vez del docente: {{ 100 * total_PrimeraVezDocente / total_proyectos }}% ( {{total_PrimeraVezDocente}} )</li>
