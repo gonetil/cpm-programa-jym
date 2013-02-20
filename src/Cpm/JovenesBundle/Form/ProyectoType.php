@@ -27,6 +27,13 @@ class ProyectoType extends AbstractType
     				'expanded' => true,
     				 'attr'=>array('class'=>'radios-en-linea'),
     		))
+    		 ->add('recibioCapacitacion', 'choice',	array(
+            		'label' => '¿recibió capacitación docente del programa Jóvenes y Memoria en años anteriores?', 
+            		'required'=>false,
+    				'choices' => array(1=>"si",0=>"no"),
+    				'expanded' => true,
+    				 'attr'=>array('class'=>'radios-en-linea'),
+    		))
     		->add('esPrimeraVezEscuela', 'choice',	array(
             		'label' => '¿participa por primera vez la escuela?', 
             		'required'=>false,
