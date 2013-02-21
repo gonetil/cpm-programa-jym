@@ -27,11 +27,24 @@ class InvitacionFilterForm extends ModelFilterForm
 		))->add('instanciaEvento', 'entity', array (
 			'label' => 'Instancia',
 			'class' => 'CpmJovenesBundle:InstanciaEvento',
+			'query_builder' => function($er) { 
+									return $er->createQueryBuilder('ie')
+											->innerJoin('ie.evento','e')
+											->innerJoin('e.ciclo','c')
+											->where('c.activo = 1')
+											;
+			},
 			'empty_value' => "Todas",
 			'required' => false
 		))->add('proyecto', 'entity', array (
 			'label' => 'Proyecto',
 			'class' => 'CpmJovenesBundle:Proyecto',
+			'query_builder' => function($er) { 
+									return $er->createQueryBuilder('p')
+											->innerJoin('p.ciclo','c')
+											->where('c.activo = 1')
+											;
+			},
 			'empty_value' => "Todos",
 			'required' => false
 		))
