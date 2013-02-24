@@ -38,14 +38,7 @@ class CicloController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Ciclo')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ciclo entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Ciclo', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -106,14 +99,7 @@ class CicloController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Ciclo')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ciclo entity.');
-        }
-
+    	$entity = $this->getEntityForUpdate('CpmJovenesBundle:Ciclo', $id);
         $editForm = $this->createForm(new CicloType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -135,11 +121,7 @@ class CicloController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:Ciclo')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ciclo entity.');
-        }
+    	$entity = $this->getEntityForUpdate('CpmJovenesBundle:Ciclo', $id, $em);
 
         $editForm   = $this->createForm(new CicloType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -177,11 +159,8 @@ class CicloController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Ciclo')->find($id);
+	    	$entity = $this->getEntityForDelete('CpmJovenesBundle:Ciclo', $id, $em);
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Ciclo entity.');
-            }
             //FIXME que pasa si se esta eliminando un ciclo con proyectos?
             if ($entity->getActivo()){
             	$this->setErrorMessage("No se puede eliminar un ciclo activo");	
@@ -210,7 +189,7 @@ class CicloController extends BaseController
      */
     public function activateAction($id)
     {
-    	$entity = $this->getRepository('CpmJovenesBundle:Ciclo')->find($id);
+    	$entity = $this->getEntityForUpdate('CpmJovenesBundle:Ciclo', $id);
     	
     	$jym = $this->getJYM();
     	$cicloActivo = $jym->getCicloActivo();
@@ -229,6 +208,7 @@ class CicloController extends BaseController
      */
     public function gotoSiguienteEtapaAction()
     {
+    	//TODO hay que validar permisos del usuairo aca?
     	$jym = $this->getJYM();
     	$jym->gotoEtapaSiguiente();
 		$this->setSuccessMessage("Se paso a la etapa siguiente");
@@ -240,6 +220,7 @@ class CicloController extends BaseController
      */
     public function gotoEtapaAnteriorAction()
     {
+    	//TODO hay que validar permisos del usuairo aca?
     	$jym = $this->getJYM();
     	$jym->gotoEtapaAnterior();
 		$this->setSuccessMessage("Se paso a la etapa anterior");

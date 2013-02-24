@@ -61,14 +61,18 @@ class Proyecto
      * @ORM\Column(name="esPrimeraVezAlumnos", type="boolean")
      */
     private $esPrimeraVezAlumnos=false;
-
-
+    
+     /**
+     * @var boolean $recibioCapacitacion
+     * @ORM\Column(name="recibioCapacitacion", type="boolean")
+     * indica si recibió capacitación en años anteriores
+     */        
+    private $recibioCapacitacion=false;     
+    
     /**
-    *  @ORM\OneToOne(targetEntity="Escuela",cascade={"persist"})
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="escuela_id", referencedColumnName="id")
-    * })
-    */
+     * @ORM\OneToOne(targetEntity="Escuela", inversedBy="proyecto",cascade={"persist"})
+     * @ORM\JoinColumn(name="escuela_id", referencedColumnName="id")
+     */
     private $escuela;
     
     /**
@@ -197,13 +201,7 @@ class Proyecto
     private $observaciones;
     
     
-    
-     /**
-     * @var boolean $recibioCapacitacion
-     * @ORM\Column(name="recibioCapacitacion", type="boolean")
-     * indica si recibió capacitación en años anteriores
-     */        
-    private $recibioCapacitacion;     
+
     public function getRecibioCapacitacion()
     {
     	return $this->recibioCapacitacion;

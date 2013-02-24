@@ -6,8 +6,8 @@
 {% block content %}
  		<div style="clear:both: with:100%">
 	 		<a href="#" onclick='agregarPostit("{{ path('proyecto_crear_postit',{ 'id' : entity.id}) }}");return false;'> Agregar postit </a>
-	 		<a href="#" onclick='agregarComentario("{{ path('proyecto_crear_comentario',{ 'id' : entity.id}) }}"); return false; '> Agregar comentario </a>
-	 		<a href="#" onclick='agregarTarea("{{ path('proyecto_crear_tarea',{ 'id' : entity.id}) }}"); return false;'> Agregar tarea </a>
+<!-- 	 		<a href="#" onclick='agregarComentario("{{ path('proyecto_crear_comentario',{ 'id' : entity.id}) }}"); return false; '> Agregar comentario </a> -->
+<!-- 	 		<a href="#" onclick='agregarTarea("{{ path('proyecto_crear_tarea',{ 'id' : entity.id}) }}"); return false;'> Agregar tarea </a> -->
 	 		
 	 		<div id="comentario_form">
 	 			<form type="post">
@@ -144,6 +144,7 @@
 			            Volver al listado
 			        </a>
 			    </li>
+			    {% if jym.puedeEditar(entity) %}
 			    <li>
 			        <a href="{{ path('proyecto_edit', { 'id': entity.id }) }}">
 			            Modificar
@@ -156,6 +157,7 @@
 			            <button type="submit">Eliminar</button>
 			        </form>
 			    </li>
+			    {% endif %}
 			</ul>
 				
 	</div> <!-- proyecto_box_admin -->
@@ -166,7 +168,7 @@
 	<div class="estados_proyecto_box">
 		<h3 class="info_header">Estado actual: {{ entity.estadoActual }}</h3>
 		<h4 class="info_header">
-			<a style="" href="#" onclick="$('.info_estados').toggle(); return false;" > <img src="/images/icons/slidedown.png"> Historial ({{ estados_anteriores | length }})</a> 
+			<a style="" href="#" onclick="$('.info_estados').toggle(); return false;" > <img src="{{ asset('images/icons/slidedown.png') }}"> Historial ({{ estados_anteriores | length }})</a> 
 			<a style="float:right;" href="javascript:cambiar_estado();">Cambiar estado</a>								
 		</h4>
 	 		

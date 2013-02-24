@@ -43,6 +43,7 @@
             Ver todas las instancias de eventos
         </a>
     </li>
+    {% if jym.puedeEditar(entity) %}
     <li>
         <a href="{{ path('instancia_edit', { 'id': entity.id }) }}">
             Editar
@@ -55,6 +56,7 @@
             <button type="submit">Borrar</button>
         </form>
     </li>
+    {% endif %}
 </ul>
 
 </div>

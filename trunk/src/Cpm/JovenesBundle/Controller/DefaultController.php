@@ -23,19 +23,14 @@ class DefaultController extends BaseController
      */
     public function indexAction()
     {
-    	$user = $this->getLoggedInUser();
-    	if ($this->get("security.context")->isGranted("ROLE_ADMIN")) {
+    	$usuario = $this->getJYM()->getLoggedInUser(false);
+    	if (!$usuario) 
+    		return $this->forward("CpmJovenesBundle:Default:_login");	
+    	elseif ($usuario->isAdmin()) 
     		return $this->redirect($this->generateUrl('proyecto')); 
-    	}
-    	elseif ($this->get("security.context")->isGranted("ROLE_USER")) {
-    		return $this->forward("CpmJovenesBundle:Perfil:index");
-    	}
     	else
-    	return $this->forward("CpmJovenesBundle:Default:_login");
-    	
+    		return $this->forward("CpmJovenesBundle:Perfil:index");
     }
-    
-    
 
     /**
      * @Route("/login_check", name="_security_check")
@@ -139,7 +134,6 @@ class DefaultController extends BaseController
     * @Route("/choose", name="index_si_no")
     * @Template("CpmJovenesBundle:Default:index_si_no.html.twig")
     */
-    
     public function indexSiNO() {
     	return array();
     }

@@ -76,8 +76,7 @@ class ProyectoController extends BaseController
 	
     private function getSystemStats() {
     	$stats = array(); 
-    	$em = $this->getEntityManager();
-    	$repo = $em->getRepository('CpmJovenesBundle:Proyecto');
+    	$repo = $this->getRepository('CpmJovenesBundle:Proyecto');
     	
     	$ciclo = $this->getJYM()->getCicloActivo();
     	$qb = $repo->createQueryBuilder('p');
@@ -99,7 +98,6 @@ class ProyectoController extends BaseController
     	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')
     																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
     																			->getQuery()->getResult());    	
-    	
     	return $stats;
     }
     
@@ -113,11 +111,8 @@ class ProyectoController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Proyecto entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Proyecto', $id, $em);
+        
 		$postits = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity->getId(), 'tipo'=> Comentario::POSTIT));
 		$comentarios = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity,'tipo'=>Comentario::COMENTARIO));
 		$tareas = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity,'tipo'=>Comentario::TAREA));
@@ -181,7 +176,6 @@ class ProyectoController extends BaseController
             $em->flush();
             $this->setSuccessMessage("Proyecto creado satisfactoriamente");
             return $this->redirect($this->generateUrl('proyecto_show', array('id' => $entity->getId())));
-            
         }
 
         return array(
@@ -198,14 +192,7 @@ class ProyectoController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Proyecto entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id);
         $editForm = $this->createForm(new ProyectoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
         return array(
@@ -225,19 +212,13 @@ class ProyectoController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id,$em);
         
         $colabs = array(); //colaboradores que tenia la entidad
         foreach ($entity->getColaboradores() as $c) {
         	$colabs[] = $c->getEmail();
         }
         
-        if (!$entity) 
-        {
-            throw $this->createNotFoundException('No se encontro el Proyecto');
-        }
-
         $editForm   = $this->createForm(new ProyectoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -278,24 +259,17 @@ class ProyectoController extends BaseController
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+            $em= $this->getDoctrine()->getEntityManager();
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:Proyecto', $id,$em);
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Proyecto entity.');
-            }
-	
 			try{
 				$em->remove($entity);
 				$em->flush();
 				$this->setSuccessMessage("Proyecto eliminado satisfactoriamente");
-				return $this->redirect($this->generateUrl('proyecto'));
 			}catch(\PDOException $e){
 			    $this->setErrorMessage("No se puede eliminar al proyecto, es muy probable que tenga muchos elementos relacionados. Contactese con el equipo de desarrollo.");
 			}
 	    }
-		
-
         return $this->redirect($this->generateUrl('proyecto'));
     }
 
@@ -314,12 +288,13 @@ class ProyectoController extends BaseController
      * 
      * */
 	public function quitarColaboradorDeProyecto() {
+		
+		$em = $this->getEntityManager();
+		
 		$id_proyecto = $this->getRequest()->get('id_proyecto');
 		$email_colaborador = $this->getRequest()->get('email_colaborador');
-		 
-		$proyecto = $this->getRepository('CpmJovenesBundle:Proyecto')->findOneById($id_proyecto);
-
-		$em = $this->getEntityManager();
+		
+		$proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id_proyecto,$em);
 		
 		foreach ($proyecto->getColaboradores() as $colab) { 
 			if ($colab->getEmail() == $email_colaborador) { 
@@ -331,35 +306,31 @@ class ProyectoController extends BaseController
 				return new Response('success');
 			}
 		}
-
-
+		//TODO el reporte de error no es muy completo que digamos ....
 		return new Response("error");
 		
 	}
 
+
+    /* ***********************************************************************/
+    /* ****************** ESTADOS     ****************************************/
+    /* ***********************************************************************/
+    
     /**
      * Elimina el ultimo estado de un proyecto y fueve al anteriro
      *
      * @Route("/{id}/rollback", name="proyecto_rollback")
      * @Method("get")
      */
-    
     public function deshacerEstado($id) {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Proyecto no encontrado');
-        }
-        
         $estadoAnterior = $entity->getEstadoActual();
-		$manager = $this->getEstadosManager();
-		$manager->deshacerEstadoDeProyecto($entity);    
-		
+		$this->getEstadosManager()->deshacerEstadoDeProyecto($entity);    
 		if ($entity->getEstadoActual() != $estadoAnterior) 
 			$this->setSuccessMessage("Estado deshecho satisfactoriamente.");
 		
-		return $this->redirect($this->generateUrl('proyecto_show', array('id' => $entity->getId())));	
+		return $this->redirect($this->generateUrl('proyecto_show', array('id' => $entity->getId())));
     }
 
 
@@ -370,11 +341,10 @@ class ProyectoController extends BaseController
      * @Method("post")
      */
      public function cambiarEstado($id) { 
-    	$em = $this->getDoctrine()->getEntityManager();
-        $proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+        $proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id);
 
 		$nuevoEstado = new EstadoProyecto();
-		$nuevoEstado->setUsuario($this->getLoggedInUser());
+		$nuevoEstado->setUsuario($this->getJYM()->getLoggedInUser());
 		
         $estadoForm = $this->createForm(new EstadoProyectoType($this->getEstadosManager()), $nuevoEstado);
         $estadoForm->bindRequest($this->getRequest());
@@ -409,11 +379,7 @@ class ProyectoController extends BaseController
      * @Method("get")
      */
     function descargarArchivoEstadoAnterior($id) {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $estado = $em->getRepository('CpmJovenesBundle:EstadoProyecto')->find($id);
-        if (!$estado) { 
-        	throw $this->createNotFoundException('Estado no encontrado');
-        }
+    	$estado = $this->getEntity('CpmJovenesBundle:EstadoProyecto', $id);
         
         if (! ($archivo=$estado->getArchivo())) { 
         	throw $this->createNotFoundException('Estado no posee archivo adjunto');
@@ -432,28 +398,28 @@ class ProyectoController extends BaseController
 		    	
     }
     
+    /* ***********************************************************************/
+    /* ****************** COMENTARIOS ****************************************/
+    /* ***********************************************************************/
     
-    
-    private function crearComentarioBase($id_proyecto,$tipo) {
+    private function crearComentarioBase($id_proyecto, $tipo) {
     	$em = $this->getDoctrine()->getEntityManager();
-        $proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id_proyecto);
+        $proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id_proyecto, $em);
         
     	$asunto = $this->getRequest()->get('asunto');
  		$cuerpo = $this->getRequest()->get('cuerpo');
  		
-        $autor = $this->getLoggedInUser();
+        $autor = $this->getJYM()->getLoggedInUser();
         
 		$comentario = new Comentario($asunto,$cuerpo,$autor,$proyecto,$tipo,false);
  		try{
-		 		$em->persist($comentario);
-		        $em->flush();    	
-				$message = "success";
-			}catch(\PDOException $e){
- 				$message = "error";
+		 	$em->persist($comentario);
+		    $em->flush();    	
+			$message = "success";
+		}catch(\PDOException $e){
+ 			$message = "error";
  		}
-		
-		
-       return $message;
+ 		return $message;
     }
     
     /**
@@ -489,21 +455,15 @@ class ProyectoController extends BaseController
      * @Method("post")
      */
  	function eliminarComentario($id) {
-	      $em = $this->getDoctrine()->getEntityManager();
-          $comentario= $em->getRepository('CpmJovenesBundle:Comentario')->find($id);
-
-            if (!$comentario) {
-                return new Response("error");
-            }
-	
-			try{
-				$em->remove($comentario);
-				$em->flush();
-				return new Response('success');
-			}catch(\PDOException $e){	
-				return new Response($e->getMessage());	
-			}
-			 		
+		try{
+			$em = $this->getDoctrine()->getEntityManager();
+          	$comentario = $this->getEntityForUpdate('CpmJovenesBundle:Comentario', $id);
+			$em->remove($comentario);
+		    $em->flush(); 
+			return new Response('success');
+		}catch(\Exception $e){	
+			return new Response("No se pudo eliminar el comentario. ".$e->getMessage());	
+		}		
  	}
  	
  	
@@ -513,21 +473,15 @@ class ProyectoController extends BaseController
      * @Method("post")
      */
  	function comentarioCambiarEstado($id) {
-	      $em = $this->getDoctrine()->getEntityManager();
-          $comentario= $em->getRepository('CpmJovenesBundle:Comentario')->find($id);
-
-            if (!$comentario) {
-                return new Response("error");
-            }
-	
-			try{
-				$comentario->setEstado( !$comentario->getEstado() );
-				$em->persist($comentario);
-		        $em->flush();    	
-				return new Response('success');
-			}catch(\PDOException $e){	
-				return new Response($e->getMessage());	
-			}
-			 		
+		try{
+			$em = $this->getDoctrine()->getEntityManager();
+          	$comentario = $this->getEntityForUpdate('CpmJovenesBundle:Comentario', $id);
+			$comentario->setEstado( !$comentario->getEstado() );
+			$em->persist($comentario);
+		    $em->flush(); 
+			return new Response('success');
+		}catch(\Exception $e){	
+			return new Response($e->getMessage());	
+		}	 		
  	}
 }

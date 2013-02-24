@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
 
 		$rootNode
 			->children()
+				->booleanNode('bloquear_ciclos_viejos')->end()
 				->arrayNode('etapas')
                 	->prototype('array')
 	                	->children()

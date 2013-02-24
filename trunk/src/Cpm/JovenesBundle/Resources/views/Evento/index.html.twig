@@ -30,9 +30,11 @@
                     <li>
                         <a href="{{ path('evento_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
+                    {% if jym.puedeEditar(entity) %}
                     <li>
                         <a href="{{ path('evento_edit', { 'id': entity.id }) }}">Editar</a>
                     </li>
+                    {% endif %}
                 </ul>
             </td>
         </tr>

@@ -42,18 +42,15 @@ class CorreoController extends BaseController
 	public function reenviarBatchAction($entitiesQuery){
 		$entities=$entitiesQuery->getResult();
 		
-		$emisor = $this->getLoggedInUser();
 		$mailer = $this->getMailer();
 		$enviados = 0;
 		set_time_limit(60+3*count($entities));
 		
 		try{
 			foreach ( $entities as $correoViejo) {
-	       		$correo = $correoViejo->clonar();
-				$correo->setEmisor($emisor);
+	       		$correo = $correoViejo->clonar(true);
 				$correoEnviado = $mailer->enviarCorreo($correo);
 				$enviados++;
-//				echo "reenvio a ".$correoViejo->getEmail();
 			}
 		}catch(InvalidTemplateException $e){
 			$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
@@ -76,11 +73,7 @@ class CorreoController extends BaseController
     public function showAction()
     {
 		$id_correo = $this->getRequest()->get('id');
-		$entity = $this->getRepository("CpmJovenesBundle:Correo")->findOneById($id_correo);
-
-		if (!$entity) {
-			throw $this->createNotFoundException('Unable to find Correo entity.');
-		}
+		$entity = $this->getEntity("CpmJovenesBundle:Correo", $id_correo);
 
 		return array (
 			'entity' => $entity
@@ -88,18 +81,16 @@ class CorreoController extends BaseController
 	}
 
 	public function reenviarunavezAction(){
-
+//TODO documentar, no se usa
 		$cq= $this->getRepository("CpmJovenesBundle:Correo")->createQueryBuilder('c');
 		$cq->andWhere("c.id in (:ids)")->setParameter('ids',$correos_ids);
 		$correos = $cq->getQuery()->getResult();
 		
 		$mailer = $this->getMailer();
-		$emisor = $this->getLoggedInUser();
 		$enviados = 0;
 		try{
 			foreach ( $correos as $correoViejo) {
-				$correo = $correoViejo->clonar();
-				$correo->setEmisor($emisor);
+				$correo = $correoViejo->clonar(true);
 	
 				$correo = $mailer->enviarCorreo($correo);
 				$enviados++;
@@ -120,16 +111,11 @@ class CorreoController extends BaseController
      */
     public function reenviarAction($id)
     {
-		$correoViejo = $this->getRepository("CpmJovenesBundle:Correo")->findOneById($id);
-
-		if (!$correoViejo) {
-			throw $this->createNotFoundException('Unable to find Correo entity.');
-		}
-
+    	$correoViejo  = $this->getEntity("CpmJovenesBundle:Correo", $id);
+    	
 		$mailer = $this->getMailer();
-		$correo = $correoViejo->clonar();
-		$correo->setEmisor($this->getLoggedInUser());
-
+		$correo = $correoViejo->clonar(true);
+		
 		try{
 			$correo = $mailer->enviarCorreo($correo);
 			$this->setSuccessMessage('El correo número '.$id.' ha sido reenviado con éxito a ' .$correo->getEmail());
@@ -157,7 +143,6 @@ class CorreoController extends BaseController
 		$entity = new Correo();
 		$form = $this->createForm(new CorreoType(), $entity);
 		
-	
 		return array (
 			'entity' => $entity,
 			'form' => $form->createView()
@@ -179,7 +164,6 @@ class CorreoController extends BaseController
 
 		if ($form->isValid()) {
 			$mailer = $this->getMailer();
-			$correo->setEmisor($this->getLoggedInUser());
 			try{
 				$correo = $mailer->enviarCorreo($correo);
 				$this->setSuccessMessage('El correo ha sido enviado con éxito a ' .$correo->getEmail());
@@ -191,7 +175,6 @@ class CorreoController extends BaseController
 			}catch(MailCannotBeSentException $e){
 				$this->setErrorMessage('No se pudo enviar el correo. Verifique que los datos ingresados sean válidos');
 			}
-
 		}
 
 		return array (
@@ -243,11 +226,10 @@ class CorreoController extends BaseController
 			$correoMaestro = new Correo();
 			$correoMaestro->setAsunto($correoBatch->getAsunto());
 			$correoMaestro->setCuerpo($correoBatch->getCuerpo());
-			$correoMaestro->setEmisor($this->getLoggedInUser());
 				
 			if ($correoBatch->getPreview()) //aun no deben mandarse los emails, sino que hay que previsualizarlos 
 			{
-				$exampleCorreo = $correoMaestro->clonar();
+				$exampleCorreo = $correoMaestro->clonar(false);
 				$exampleCorreo->setDestinatario($proyectos[0]->getCoordinador());
 				$exampleCorreo->setProyecto($proyectos[0]);
 				try {
@@ -267,7 +249,7 @@ class CorreoController extends BaseController
 				set_time_limit(60+3*count($proyectos));
 				try{
 					foreach ($proyectos as $proyecto) {
-						$correo=$correoMaestro->clonar();
+						$correo=$correoMaestro->clonar(false);
 						$correo->setProyecto($proyecto);
 						if ($correoBatch->getCcColaboradores()) {
 								$enviados = $mailer->enviarCorreoAColaboradores($correo);
@@ -313,7 +295,7 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 	 * @Route("/enviar_a_usuarios", name="correo_persnalizado")
 	 */
 	public function enviar_a_usuariosAction() {
-		
+		//TODO docuementar no se usa no?
 		$usuarios_ids = array( 1,  7,  8,  9);
 		$cq= $this->getRepository("CpmJovenesBundle:Usuario")->createQueryBuilder('c');
 		$cq->andWhere("c.id in (:ids)")->setParameter('ids',$usuarios_ids);
@@ -325,9 +307,8 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 		try{
 			foreach($destinatarios as $destinatario ){
 				$correo = $mailer->getCorreoFromPlantilla('inscripci-n-al-programa');
-				$correo->setEmisor($this->getLoggedInUser());
 				$correo->setDestinatario($destinatario);
-				$correo = $mailer->enviarCorreo($correo);
+				$mailer->enviarCorreo($correo);
 				$cant++;
 			}
 		}catch(InvalidTemplateException $e){
@@ -341,12 +322,15 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 	
 			
 	/**
+	 * FIXME que pasa con este metodo?
 	 * Envia un recordatorio a todos los coordinadores invitados a Chapa que aún no confirmaron ni rechazaron la invitación
 	 * @Route("/recordar_chapa", name="recordar_chapa")
 	 */
 	public function recordar_chapaAction() {
-	   $chapa_id = 5; //el id interno de chapa
-	   $chapa= $this->getRepository("CpmJovenesBundle:Evento")->find($chapa_id);
+		$chapa_id = 5; //el id interno de chapa
+		//TODO ver este 5 hardcodeado para chapa
+	   
+		$chapa= $this->getEntity("CpmJovenesBundle:Evento", $chapa_id);
 
 		$plantilla = 
 		$query1 = $this->getRepository("CpmJovenesBundle:Correo")->createQueryBuilder("correo")->andWhere("correo.asunto like 'Invitación aún no confirmada'");
@@ -374,7 +358,6 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 		try{
 			foreach($invitados as $invitacion){
 				$correo = $mailer->getCorreoFromPlantilla($plantilla);
-				$correo->setEmisor($this->getLoggedInUser());
 				$correo->setProyecto($invitacion->getProyecto());
 				$correo->setDestinatario($invitacion->getProyecto()->getCoordinador());
 				$correo = $mailer->enviarCorreo($correo);
@@ -390,8 +373,6 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 		}
 		echo "se enviaron $cant correos";
 		exit;
-	
-	
 	}
 	
 }

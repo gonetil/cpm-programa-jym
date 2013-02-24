@@ -50,8 +50,8 @@ class EventosManager
 		return $ir->findOneBy(array('instanciaEvento'=>$instancia->getId(), 'proyecto'=>$proyecto->getId()));
 	}
     
- 	public function invitarProyectos(Usuario $admin, InvitacionBatch $invitacionBatch){
- 		
+ 	public function invitarProyectos(InvitacionBatch $invitacionBatch){
+ 		//TODO validar permisos del usuario logueado?
     	$instancia = $invitacionBatch->getInstancia();
     	$ccEscuela=$invitacionBatch->getCcEscuelas();
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();

@@ -77,17 +77,19 @@
             Volver al listado
         </a>
     </li>
-    <li>
-        <a href="{{ path('evento_edit', { 'id': entity.id }) }}">
-            Editar
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post" 
-        onsubmit="return confirm('Esta seguro que desea eliminar el evento?')">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Borrar</button>
-        </form>
-    </li>
+    {% if jym.puedeEditar(entity) %}
+        <li>
+	        <a href="{{ path('evento_edit', { 'id': entity.id }) }}">
+	            Editar
+	        </a>
+	    </li>
+	    <li>
+	        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post" 
+	        onsubmit="return confirm('Esta seguro que desea eliminar el evento?')">
+	            {{ form_widget(delete_form) }}
+	            <button type="submit">Borrar</button>
+	        </form>
+	    </li>
+	{% endif %}
 </ul>
 {% endblock %}

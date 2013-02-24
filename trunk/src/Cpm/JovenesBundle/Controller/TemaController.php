@@ -40,14 +40,7 @@ class TemaController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Tema')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tema entity.');
-        }
-
+		$entity = $this->getEntity('CpmJovenesBundle:Tema', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -92,7 +85,6 @@ class TemaController extends BaseController
             $em->flush();
 
             return $this->redirect($this->generateUrl('tema_show', array('id' => $entity->getId())));
-            
         }
 
         return array(
@@ -109,14 +101,7 @@ class TemaController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Tema')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tema entity.');
-        }
-
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Tema', $id);
         $editForm = $this->createForm(new TemaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -138,12 +123,7 @@ class TemaController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:Tema')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tema entity.');
-        }
-
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Tema', $id,$em);
         $editForm   = $this->createForm(new TemaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -180,13 +160,8 @@ class TemaController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Tema')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Tema entity.');
-            }
-
-            $em->remove($entity);
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:Tema', $id, $em);
+			$em->remove($entity);
             $em->flush();
         }
 

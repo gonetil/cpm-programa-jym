@@ -62,14 +62,15 @@
                 	<li>
                         <a href="{{ path('ciclo_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
-                    <li>
-                        <a href="{{ path('ciclo_edit', { 'id': entity.id }) }}">Modificar</a>
-                    </li>
+                    {% if jym.puedeEditar(entity) %}
+	                    <li>
+	                        <a href="{{ path('ciclo_edit', { 'id': entity.id }) }}">Modificar</a>
+	                    </li>
+                    {% endif %}
                 </ul>
             </td>
             <td style="text-align:center">
-
-	             {% if ciclo_activo.id != entity.id %}
+                 {% if ciclo_activo.id != entity.id and jym.puedeEditar(entity) %}
     	          <li>
     	            <a href="{{ path('ciclo_activate', { 'id': entity.id }) }}">Activar</a>
     	          </li>

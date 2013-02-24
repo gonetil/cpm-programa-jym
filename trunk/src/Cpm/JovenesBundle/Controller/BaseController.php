@@ -51,23 +51,18 @@ abstract class BaseController extends Controller
 		$this->get('session')->setFlash('error', $msg);
 	}
 	
+	protected function createAccessDeniedException($msg){
+		return new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($msg);
+	}
+	protected function createInvalidArgumentException($msg){
+		return new \InvalidArgumentException($msg);
+	}
     
 	//ABM
 	protected function doPersist($entity){
 		$em = $this->getDoctrine()->getEntityManager();
         $em->persist($entity);
         $em->flush();
-	}
-	
-	protected function isUserAuthenticated() { 
-		return $this->get('security.context')->getToken() && $this->get('security.context')->getToken()->isAuthenticated();
-	}
-	
-	protected function getLoggedInUser() { 
-		$user = $this->get('security.context')->getToken()->getUser();
-		if (!$user) return null; 
-		//TODO ver si es necesario que se levante el user, me pa que es al pedo
-		return $this->getRepository('CpmJovenesBundle:Usuario')->findOneByEmail($user->getUsername());
 	}
 	
 	protected function getUserManager(){
@@ -327,4 +322,33 @@ abstract class BaseController extends Controller
 		
 		return array_merge( array('entities' => $entities ,  'paginator' => $paginator , 'pagination_route'=>$routeName, 'extraVars'=>"&$vars") , $args);        
 	}    
+	protected function getEntityForUpdate($repositoryName, $id, $em = null){
+		$e = $this->getEntity($repositoryName, $id, $em);
+		$this->getJYM()->puedeEditar($e, true);
+		return $e;
+	}
+	
+	protected function getEntityForDelete($repositoryName, $id, $em = null){
+		$e = $this->getEntity($repositoryName, $id, $em);
+		$this->getJYM()->puedeEditar($e, true);
+		return $e;
+	}
+	
+	protected function getEntity($repositoryName, $id, $em = null){
+		if (is_null($em))
+			$em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository($repositoryName)->find($id);
+
+        if (!$entity) 
+            throw $this->createNotFoundException('No se encontró la entidad con id '.$id. ' en el respository '.$repositoryName );
+        
+        return $entity;
+	}
+	
+	protected function createJsonResponse($json_array){
+    	$response = new Response(json_encode($json_array));
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    }
 }

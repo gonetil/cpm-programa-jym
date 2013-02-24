@@ -16,14 +16,16 @@ use Cpm\JovenesBundle\Exception\Mailer\MailCannotBeSentException;
  */
 class TwigSwiftMailer implements MailerInterface
 {
+	protected $jym;
 	protected $mailer;
     protected $router;
     protected $twig;
     protected $doctrine;
     protected $parameters;	
 
-    public function __construct(\Swift_Mailer $mailer, UrlGeneratorInterface $router, \Twig_Environment $twig, $doctrine, $parameters)
+    public function __construct(JYM $jym, \Swift_Mailer $mailer, UrlGeneratorInterface $router, \Twig_Environment $twig, $doctrine, $parameters)
     {
+        $this->jym = $jym;
         $this->mailer = $mailer;
         $this->router = $router;
         $this->twig = clone $twig;
@@ -152,7 +154,7 @@ class TwigSwiftMailer implements MailerInterface
     	
 	    $cant = 0;
     	foreach($proyecto->getColaboradores() as $colab ){
-    			$c = $correo->clonar();
+    			$c = $correo->clonar(true);
 				$c->setDestinatario($colab); 
 				$this->enviarCorreo($c,$context);
 				$cant++;			
@@ -166,6 +168,7 @@ class TwigSwiftMailer implements MailerInterface
 	 * @throws InvalidTemplateException
 	 */
 	public function enviarCorreo(Correo $correo, $context=array(), $dryrun=false){
+		//TODO ver si hay que validar los permisos del sender
 		$context[Plantilla::_USUARIO] = $correo->getDestinatario();
 		$context[Plantilla::_EMISOR] = $correo->getEmisor();
 		$context[Plantilla::_PROYECTO] = $correo->getProyecto();
@@ -242,6 +245,9 @@ class TwigSwiftMailer implements MailerInterface
     	}
 		if (!empty($context[Plantilla::_EMISOR]) && ($context[Plantilla::_EMISOR] instanceof Usuario)){
     		$correo->setEmisor($context[Plantilla::_EMISOR]);
+    	}else{
+    		$emisor = $this->jym->getLoggedInUser();
+    		$correo->setEmisor($emisor);
     	}
 
 		if (!empty($context[Plantilla::_PROYECTO]) && ($context[Plantilla::_PROYECTO] instanceof Proyecto)){
@@ -275,8 +281,6 @@ class TwigSwiftMailer implements MailerInterface
 		}
 		return true;
     }
-    
-    
     
     public function renderTemplate($twig_template,$context) {
     	try {

@@ -27,11 +27,7 @@ class InstanciaEventoController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
 		return $this->filterAction(new InstanciaEventoFilter(), 'instanciaEvento');
-        
-        /*$entities = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->findAllQuery();
-        return $this->paginate($entities); */
     }
 
     /**
@@ -42,16 +38,8 @@ class InstanciaEventoController extends BaseController
      */
     public function showAction($id)
     {
-        $entity = $this->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find InstanciaEvento entity.');
-        }
-
-//		$init = memory_get_usage();
-        $invitaciones = $this->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesDTO(array('instanciaEvento'=> $id));
-        //die("levanto".count($invitaciones )."y uso ".( memory_get_usage() - $init)."bytes".count($invitaciones[0]));
-		
+		$entity = $this->getEntity('CpmJovenesBundle:InstanciaEvento', $id);
+		$invitaciones = $this->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesDTO(array('instanciaEvento'=> $id));
         $deleteForm = $this->createDeleteForm($id);
 		$reinvitarForm = $this->createReinvitarForm($id);
         return array(
@@ -122,13 +110,8 @@ class InstanciaEventoController extends BaseController
     public function editAction($id)
     {
 
-        $entity = $this->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find InstanciaEvento entity.');
-        }
-
-        $editForm = $this->createForm(new InstanciaEventoType(), $entity);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:InstanciaEvento', $id);
+		$editForm = $this->createForm(new InstanciaEventoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -148,14 +131,8 @@ class InstanciaEventoController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find InstanciaEvento entity.');
-        }
-
-        $editForm   = $this->createForm(new InstanciaEventoType(), $entity);
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:InstanciaEvento', $id, $em);
+		$editForm   = $this->createForm(new InstanciaEventoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
@@ -191,11 +168,7 @@ class InstanciaEventoController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find InstanciaEvento entity.');
-            }
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:InstanciaEvento', $id);
 			
             if (count($entity->getInvitaciones()) > 0) {
                 $this->setErrorMessage("No se puede eliminar la instancia de evento porque posee invitaciones");
@@ -205,7 +178,6 @@ class InstanciaEventoController extends BaseController
             	$em->flush();
             	$this->setSuccessMessage("Se elimino la instancia del evento satisfactoriamente");
             }
-
         }
 
         return $this->redirect($this->generateUrl('instancia'));
@@ -224,10 +196,8 @@ class InstanciaEventoController extends BaseController
     *
     * @Route("/instancia/find_by_evento_id", name="instancia_find_by_evento_id")
     */
-    
     public function findInstanciaDeEvento() 
     { 
-    	
     		$evento_id = $this->get('request')->query->get('evento_id');
     		 
     		if ($evento_id > 0)
@@ -242,8 +212,6 @@ class InstanciaEventoController extends BaseController
     	
     		$response->headers->set('Content-Type', 'application/json');
     		return $response;
-    	
-    	    	
     }
 
     /**
@@ -253,15 +221,9 @@ class InstanciaEventoController extends BaseController
     */
     
     public function exportToExcelAction($id) {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $entity = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
+        $entity = $this->getEntity('CpmJovenesBundle:InstanciaEvento', $id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('No se encontró la Instancia de Evento');
-        }
 		$filename = "{$entity->getEvento()->getTitulo()} ({$entity->getFechaInicio()->format('d-m H:i')} {$entity->getFechaFin()->format('d-m H:i')})";
-		
-		
         $response = $this->render('CpmJovenesBundle:InstanciaEvento:export_excel.xls.twig',array('entity' => $entity));
         $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
         $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
@@ -275,9 +237,7 @@ class InstanciaEventoController extends BaseController
     
     public function reinvitarInstancia($id) {
     	
-		$instanciaEvento = $this->getRepository('CpmJovenesBundle:InstanciaEvento')->find($id);
-        if (!$instanciaEvento) 
-            throw $this->createNotFoundException('No se encontró la Instancia de Evento');
+		$instanciaEvento = $this->getEntity('CpmJovenesBundle:InstanciaEvento', $id);
 
         $form = $this->createReinvitarForm($id);
         $form->bindRequest($this->getRequest(),$form);
