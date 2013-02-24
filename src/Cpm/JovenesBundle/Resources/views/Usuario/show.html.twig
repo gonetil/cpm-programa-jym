@@ -128,6 +128,25 @@
             <th>Rol</th>
             <td>{% if entity.hasRole('ROLE_ADMIN') %}Administrador{% else %}Docente{% endif %}</td>
         </tr>
+        <tr>
+            <th>Años en los que participó</th>
+            <td>
+            	<input type="hidden" id="anios" value="{{entity.aniosParticipo}}" />
+            	
+            	{% if entity.aniosParticipo | length > 0 %}
+            	<div id="widgetAnios"> </div>
+            	<script> 
+            		cargarAnios($("#anios"));  
+            		$("#widgetAnios input").click(function(event){
+            			event.preventDefault();
+            		});	
+            	</script>
+            	{% else %}
+            	sin cargar
+            	{% endif %}
+            </td>
+        </tr>
+        
     </tbody>
 </table>
 

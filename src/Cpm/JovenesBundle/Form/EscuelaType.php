@@ -17,6 +17,7 @@ class EscuelaType extends AbstractType {
 			'required' => false,
 			'label' => 'Otro tipo de institución'
 		))->add('tipoEscuela', 'entity', array (
+			'required' => false,
 			'label' => 'Tipo de Escuela',
 			'class' => 'CpmJovenesBundle:TipoEscuela',
 			'query_builder' => function ($er) {
