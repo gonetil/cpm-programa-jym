@@ -486,3 +486,38 @@ $.fn.extend({
 	   }
 	 }
 });
+
+
+
+/**
+ * 
+ * Construye un JSON con todos los input marcados dentro del elemento #widgetAnios
+ * @param inputAnios id de objeto HTML donde se guardará el valor en formato json
+ */
+function updateAnios(input) { 
+	
+	inputAnios = $(input);
+	result = {};
+
+	$("#widgetAnios input:checked").each(function(index,value) {
+		result[$(value).val()]= $(value).val();
+	});
+
+	inputAnios.val(JSON.stringify(result));
+}
+
+/**
+ * Construye un listado de checkboxes con los años seleccionados por el usuario y los coloca dentro del elemento #widgetAnios
+ * @param inputAnios objeto jquery que contiene un JSON con los años seleccionados
+ */
+function cargarAnios(inputAnios) { 
+	anios = $.parseJSON(inputAnios.val());
+	elem_id = "#"+inputAnios.attr('id');
+	current_year = new Date().getFullYear(); 
+	
+	if (anios == null) anios = new Object();
+	for(i=2002;i<current_year;i++) { 
+		newInput = i + '<input type="checkbox" onclick=updateAnios("'+elem_id+'") ' + ( ( anios[i] ) ? 'checked' : ' ' ) + ' value="'+i+'" >';
+		$("#widgetAnios").append(newInput); 
+	}
+}

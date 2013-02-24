@@ -47,7 +47,9 @@ class PerfilUsuarioType extends BaseType
             ->add('codigoPostal',null,array('label'=>'Código Postal'))
             ->add('telefono',null,array('label'=>'Teléfono'))
             ->add('telefonoCelular', 'text', array('required'=>false,
-    												'label' => 'Teléfono Celular'));
+    												'label' => 'Teléfono Celular'))
+    		->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))										
+    												;
 
     }
 

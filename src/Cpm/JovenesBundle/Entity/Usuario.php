@@ -123,6 +123,11 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     private $domicilio;
 
 
+    /**
+     * @var string $aniosParticipo
+     * @ORM\Column(name="aniosParticipo", type="string", nullable=true)
+     */    
+    private $aniosParticipo;
     
     
     public function __construct()
@@ -385,6 +390,15 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     public function setDomicilio($domicilio) { 
     	$this->domicilio = $domicilio;
     }
+
+	public function getAniosParticipo() {
+		return $this->aniosParticipo;
+	}    
+    
+    public function setAniosParticipo($anios) { 
+    	$this->aniosParticipo = $anios;
+    }
+
 
 
 }

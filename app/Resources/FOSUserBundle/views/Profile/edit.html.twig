@@ -8,6 +8,13 @@
 {{ form_row(form.user) }}
 {{ form_row(form.user.nombre) }}
 {{ form_row(form.user.apellido) }}
+<div id="widgetAnios">
+{{ form_label(form.user.aniosParticipo) }}
+{{ form_widget(form.user.aniosParticipo) }}
+<script>
+cargarAnios($("#fos_user_profile_form_user_aniosParticipo"));
+</script>
+</div>
 {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
     {{ form_widget(form) }}
     <div>
