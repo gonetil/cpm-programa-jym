@@ -18,9 +18,10 @@ class EventoFilterForm extends ModelFilterForm
 		    								            'preferred_choices' => array("Todos"),
 		            									'query_builder' => function($er) {
 																	        return $er->createQueryBuilder('e')->innerJoin('e.ciclo','c')
+																	        			->where('c.activo = 1')
 															            				->orderBy('e.titulo', 'ASC')
-															            				->orderBy('c.titulo','ASC')
-															            				->orderBy('c.activo','desc')
+//															            				->orderBy('c.titulo','ASC')
+//															            				->orderBy('c.activo','desc')
 															            				;
 		    														},
         												'required'=>false		    				
