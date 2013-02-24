@@ -29,6 +29,7 @@ class RegistroUsuarioType extends BaseType
             ->add('apellido')
             ->add('dni', 'number')
     		->add('email', 'email')
+            ->add('domicilio',null,array('required'=>true))
             ->add('codigoPostal',null,array('label'=>'Código Postal','required'=>true))
             ->add('telefono',null,array('label'=>'Teléfono','required'=>true))
             ->add('telefonoCelular', 'text', array('required'=>false, 'label'=>'Teléfono Celular'))
