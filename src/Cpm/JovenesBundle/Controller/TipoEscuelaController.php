@@ -24,10 +24,7 @@ class TipoEscuelaController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:TipoEscuela')->findAll();
-
+        $entities = $this->getRepository('CpmJovenesBundle:TipoEscuela')->findAll();
         return array('entities' => $entities);
     }
 
@@ -39,14 +36,7 @@ class TipoEscuelaController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:TipoEscuela')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find TipoEscuela entity.');
-        }
-
+		$entity = $this->getEntity('CpmJovenesBundle:TipoEscuela', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -108,14 +98,7 @@ class TipoEscuelaController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:TipoEscuela')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find TipoEscuela entity.');
-        }
-
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:TipoEscuela', $id);
         $editForm = $this->createForm(new TipoEscuelaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -136,13 +119,7 @@ class TipoEscuelaController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:TipoEscuela')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find TipoEscuela entity.');
-        }
-
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:TipoEscuela', $id,$em);
         $editForm   = $this->createForm(new TipoEscuelaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -179,13 +156,8 @@ class TipoEscuelaController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:TipoEscuela')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find TipoEscuela entity.');
-            }
-
-            $em->remove($entity);
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:TipoEscuela', $id,$em);
+			$em->remove($entity);
             $em->flush();
         }
 

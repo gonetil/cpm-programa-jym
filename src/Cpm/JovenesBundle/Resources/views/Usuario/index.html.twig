@@ -3,28 +3,27 @@
 {% block title %}Listado de Usuarios{% endblock %}
  
 {% block content %}
-<form action="{{ path('usuario') }}">
 <div id="before_list">
+<form action="{{ path('usuario') }}">
 
 <div class="filters" style="border:none">
-
-<div class="left">
-{{ form_row(form.apellido) }}
-{{ form_row(form.email) }}
-</div>
-<div class="right">
-{{ form_row(form.habilitados) }}
-{{ form_row(form.ciclo) }}
-{{ form_row(form.coordinadores) }}
-</div>
-<div class="double">
-{{ form_rest(form) }}
-<input type='submit' style="min-height:auto; height:auto;"/>
-</div>
+	<div class="left">
+		{{ form_row(form.apellido) }}
+		{{ form_row(form.email) }}
+	</div>
+	<div class="right">
+		{{ form_row(form.habilitados) }}
+		{{ form_row(form.ciclo) }}
+		{{ form_row(form.coordinadores) }}
+	</div>
+	<div class="double">
+		{{ form_rest(form) }}
+		<input type='submit' style="min-height:auto; height:auto;"/>
+	</div>
 </div>
 </form>
-
 </div>
+
 <table class="records_list">
     <thead>
         <tr>
@@ -41,7 +40,10 @@
     {% for entity in entities %}
         <tr>
             <td>{{ entity.id }}</td>
-            <td><b><a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.apellido }}, {{ entity.nombre }}</a> [{{ entity.enabled?'Si':'No' }}]<b></td>
+            <td style="{{ entity.enabled?'':'text-decoration:line-through;' }}">
+            	<a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.apellido }}, {{ entity.nombre }}</a> 
+            	<b>{{ entity.isSuperAdmin()?'[SUPERADMIN]':entity.isAdmin()?'[ADMIN]':'' }}</b>
+            </td>
             <td>{{ entity.email }}</td>
             <td>{{ entity.dni }}</td>
             <td>{{ entity.telefono }}{{ (entity.telefono) and (entity.telefonoCelular)?',':'' }}{{ entity.telefonoCelular }}</td>
@@ -51,15 +53,17 @@
                     <li>
                         <a href="{{ path('usuario_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
+                    {% if jym.puedeEditar(entity) %}
                     <li>
                         <a href="{{ path('usuario_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
+                    {% endif %}
                 </ul>
             </td>
         </tr>
     {% endfor %}
 
-    	{% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+   	{% include "CpmJovenesBundle:Default:pagination.html.twig" %}
     </tbody>
 </table>
 			

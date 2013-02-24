@@ -26,10 +26,6 @@ class EscuelaController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-/*        $entities = $em->getRepository('CpmJovenesBundle:Escuela')->findAllQuery();
-        return $this->paginate($entities); */
         return $this->filterAction(new EscuelaFilter(), 'escuela');
     }
 
@@ -41,18 +37,8 @@ class EscuelaController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Escuela')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Escuela no encontrada');
-        }
-
-   
-        return array(
-            'entity'      => $entity,
-        );
+        $entity = $this->getEntity('CpmJovenesBundle:Escuela', $id);
+        return array('entity'  => $entity,);
     }
 
     /**
@@ -63,14 +49,7 @@ class EscuelaController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Escuela')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Escuela no encontrada');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Escuela', $id);
         $editForm = $this->createForm(new EscuelaType(), $entity);
 
         return array(
@@ -90,11 +69,7 @@ class EscuelaController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:Escuela')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Escuela no encontrada');
-        }
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Escuela', $id, $em);
 
         $editForm   = $this->createForm(new EscuelaType(), $entity);
 

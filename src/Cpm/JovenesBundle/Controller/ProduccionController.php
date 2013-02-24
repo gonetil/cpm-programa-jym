@@ -39,14 +39,7 @@ class ProduccionController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Produccion')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Produccion entity.');
-        }
-
+       $entity = $this->getEntity('CpmJovenesBundle:Produccion', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -108,15 +101,8 @@ class ProduccionController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Produccion')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Produccion entity.');
-        }
-
-        $editForm = $this->createForm(new ProduccionType(), $entity);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Produccion', $id);
+		$editForm = $this->createForm(new ProduccionType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -136,14 +122,8 @@ class ProduccionController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Produccion')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Produccion entity.');
-        }
-
-        $editForm   = $this->createForm(new ProduccionType(), $entity);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Produccion', $id, $em);
+		$editForm   = $this->createForm(new ProduccionType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
@@ -179,12 +159,7 @@ class ProduccionController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Produccion')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Produccion entity.');
-            }
-
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:Produccion', $id,$em);
             $em->remove($entity);
             $em->flush();
         }

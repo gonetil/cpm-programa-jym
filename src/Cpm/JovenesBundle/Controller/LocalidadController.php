@@ -26,9 +26,7 @@ class LocalidadController extends BaseController
     public function indexAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-
         $entities = $em->getRepository('CpmJovenesBundle:Localidad')->findAllQuery();
-
         return $this->paginate($entities);
     }
 
@@ -40,19 +38,13 @@ class LocalidadController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Localidad')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Localidad entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Localidad', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
+            'delete_form' => $deleteForm->createView(),        
+            );
     }
 
     /**
@@ -109,14 +101,7 @@ class LocalidadController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Localidad')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Localidad entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Localidad', $id);
         $editForm = $this->createForm(new LocalidadType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -137,14 +122,8 @@ class LocalidadController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Localidad')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Localidad entity.');
-        }
-
-        $editForm   = $this->createForm(new LocalidadType(), $entity);
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Localidad', $id, $em);
+		$editForm   = $this->createForm(new LocalidadType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
@@ -180,11 +159,7 @@ class LocalidadController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Localidad')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Localidad entity.');
-            }
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:Localidad', $id, $em);
 
             $em->remove($entity);
             $em->flush();

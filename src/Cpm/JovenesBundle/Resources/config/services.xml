@@ -32,6 +32,7 @@
         </service>
         
         <service id="cpm_jovenes_bundle.mailer" class="Cpm\JovenesBundle\Service\TwigSwiftMailer">
+            <argument type="service" id="cpm_jovenes_bundle.application" />
             <argument type="service" id="mailer" />
             <argument type="service" id="router" />
             <argument type="service" id="twig" />

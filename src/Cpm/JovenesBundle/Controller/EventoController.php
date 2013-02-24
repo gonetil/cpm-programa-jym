@@ -27,12 +27,7 @@ class EventoController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-//        $entities = $em->getRepository('CpmJovenesBundle:Evento')->findAll();
 		return $this->filterAction(new EventoFilter(), 'evento');
-
-//        return array('entities' => $entities);
     }
 
     /**
@@ -43,19 +38,13 @@ class EventoController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Evento')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Evento entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Evento', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
+            'delete_form' => $deleteForm->createView(),        
+           	);
     }
 
     /**
@@ -114,15 +103,8 @@ class EventoController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Evento')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Evento entity.');
-        }
-
-        $editForm = $this->createForm(new EventoType(), $entity);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Evento', $id);
+		$editForm = $this->createForm(new EventoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -142,14 +124,8 @@ class EventoController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Evento')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Evento entity.');
-        }
-
-        $editForm   = $this->createForm(new EventoType(), $entity);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Evento', $id, $em);
+		$editForm   = $this->createForm(new EventoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
@@ -185,11 +161,8 @@ class EventoController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Evento')->find($id);
+			$entity = $this->getEntityForDelete('CpmJovenesBundle:Evento', $id, $em);
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Evento no encontrado.');
-            }
 
 			$instancias = $entity->getInstancias();
 			if (!empty($instancias)){

@@ -34,7 +34,7 @@ class PerfilController extends BaseController
      */
     public function indexAction()
     {
-    	$usuario = $this->getLoggedInUser();
+    	$usuario = $this->getJYM()->getLoggedInUser();
     	$estadosManager = $this->getEstadosManager();
     	if (!$usuario->getDomicilio()) { 
     		$this->setInfoMessage("Por favor, complete el campo Domicilio");
@@ -70,11 +70,9 @@ class PerfilController extends BaseController
     * @Template("CpmJovenesBundle:Proyecto:wizzard.html.twig")
     */
     public function inscripcionAction($id_proyecto = 0) {
-    	if ($id_proyecto){
-    		$proyecto = $this->getRepository('CpmJovenesBundle:Proyecto')->find($id_proyecto);
-    		if (!$proyecto)
-    			throw new \Exception("No exite el Proyecto $id_proyecto "); 
-    	}else
+    	if ($id_proyecto)
+    		$proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id_proyecto);
+    	else
     		$proyecto = new Proyecto();
     	
     	$form = $this->createForm(new ProyectoType(), $proyecto);
@@ -83,7 +81,7 @@ class PerfilController extends BaseController
     	
     	return array(
                 'entity' => $proyecto,
-                'coordinador' => $this->getLoggedInUser(),
+                'coordinador' => $this->getJYM()->getLoggedInUser(),
                 'distritos' => $this->getRepository('CpmJovenesBundle:Distrito')->findAll(),
                 'form'   => $form->createView(),
     			'form_action' => 'proyecto_create_from_wizzard'
@@ -99,7 +97,7 @@ class PerfilController extends BaseController
     
     public function createFromWizzardAction() {
     	$proyecto = new Proyecto();
-    	$coordinador = $this->getLoggedInUser();
+    	$coordinador = $this->getJYM()->getLoggedInUser();
     
     	$proyecto->setCoordinador($coordinador);
     	$proyecto->setEstado(Proyecto::__ESTADO_INICIADO);
@@ -143,22 +141,11 @@ class PerfilController extends BaseController
     */
     public function editAction($id)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-    
-    	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-    
-    	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proyecto entity.');
-    	}
+    	$entity = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id);
+     	$editForm = $this->createForm(new ProyectoType(), $entity);
     	
-    	$editForm = $this->createForm(new ProyectoType(), $entity);
-    	
-    	if ($entity->getCiclo() != $this->getJYM()->getCicloActivo()) {
-    		 $this->setErrorMessage('No se puede editar un proyecto de otro ciclo');
-    	} else { 
-	    	$editForm->remove('coordinador');
-	    	$editForm->remove('requerimientosDeEdicion');
-    	}
+    	$editForm->remove('coordinador');
+	    $editForm->remove('requerimientosDeEdicion');
     	return array(
                 'entity'      => $entity,
 		    	'coordinador' => $entity->getCoordinador(),
@@ -180,49 +167,38 @@ class PerfilController extends BaseController
     {
     	$em = $this->getDoctrine()->getEntityManager();
     
-    	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-    	
+    	$entity = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id, $em);
+     	
     	$colabs = array(); foreach ($entity->getColaboradores() as $c) {
-    			$colabs[] = $c->getEmail();
-    	}
-    	    	 
-    	if (!$entity) {
-    		throw $this->createNotFoundException('Proyecto no encontrado.');
+    		$colabs[] = $c->getEmail();
     	}
         
-        if ($entity->getCiclo() != $this->getJYM()->getCicloActivo()) {
-    		 throw $this->createNotFoundException('No se puede editar un proyecto de otro ciclo');
-    	}
-        else 	
-    	$entity->setCoordinador($this->getLoggedInUser());
+    	$entity->setCoordinador($this->getJYM()->getLoggedInUser());
     	 
     	$editForm   = $this->createForm(new ProyectoType(), $entity);
     	$editForm->remove('coordinador');
     	$request = $this->getRequest();
-    	
     	
     	$editForm->bindRequest($request);
     	
     	$entity->setColaboradores($this->procesar_colaboradores($entity->getColaboradores()));
     	
     	if ($editForm->isValid()) {
-    		
-    		
     		$em->persist($entity);
     		$em->flush();
     		
     		//los colaboradores eliminados que no estan en otro proyecto seran eliminados
     		$this->eliminar_usuarios_sueltos($entity,$colabs);
     		
-    		
     		$this->setSuccessMessage("Los datos fueron actualizados satisfactoriamente");
     		
     		return $this->redirect($this->generateUrl('home_usuario'));
-    	}
-    	$this->setErrorMessage("Se produjeron errores al procesar los datos");
+    	}else{
+    		$this->setErrorMessage("Se produjeron errores al procesar los datos");
+    	}    	
     	return array(
                 'entity'      => $entity,
-    			'coordinador' => $this->getLoggedInUser(),
+    			'coordinador' => $this->getJYM()->getLoggedInUser(),
                 'form'   => $editForm->createView(),
 				'form_action' => 'proyecto_update_wizzard'
     	);
@@ -237,7 +213,7 @@ class PerfilController extends BaseController
     	
     public function misCorreosAction() 
     {
-    	$usuario = $this->getLoggedInUser();
+    	$usuario = $this->getJYM()->getLoggedInUser();
     	$query = $this->getRepository('CpmJovenesBundle:Correo')->findAllQuery($usuario->getId());
     	return $this->paginate($query);
 
@@ -250,13 +226,13 @@ class PerfilController extends BaseController
     * @Template()
     */
     public function verCorreoAction() {
-		$usuario = $usuario = $this->getLoggedInUser();
+		$usuario =$this->getJYM()->getLoggedInUser();
 		$id_correo = $this->getRequest()->get('correo');
-		$correo = $this->getRepository("CpmJovenesBundle:Correo")->findOneById($id_correo);
+		$correo = $this->getEntity("CpmJovenesBundle:Correo", $id_correo);
 		if ($correo->getDestinatario()->equals($usuario)) 
 			return array('correo' => $correo);
-		else return "";	 
-				
+		else 
+			return "";	
     }
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -274,14 +250,7 @@ class PerfilController extends BaseController
     	if (!in_array($accion, array('rechazar', 'aceptar')))
     		throw $this->createNotFoundException('Accion inválida.');
     	
-        $invitacion = $this->getRepository('CpmJovenesBundle:Invitacion')->find($id);
-        if (!$invitacion) 
-            throw $this->createNotFoundException('No exite la Invitacion solicitada');
-        
-        $user = $this->getLoggedInUser();
-        if (!$user->isAdmin() && !$user->equals($invitacion->getProyecto()->getCoordinador())){
-        	throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("Solo el coordinador del proyecto puede aceptar o rechazar sus invitaciones");
-        }
+        $invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id);
         
         if ($invitacion->getInstanciaEvento()->fue() || ($invitacion->estaPendiente() && !$invitacion->estaVigente())){
     		$this->setWarnMessage("El plazo de inscripción para el evento '".$invitacion->getInstanciaEvento()->getTitulo()."'ya cerró.");    	
@@ -289,8 +258,6 @@ class PerfilController extends BaseController
 		    	return $this->redirect($this->generateUrl('home'));
         }
 		
-	
-					
 		$args = array('invitacion' => $invitacion);
 		if ($accion == 'rechazar')
 		{
@@ -315,14 +282,9 @@ class PerfilController extends BaseController
         if (!in_array($accion, array('rechazar', 'aceptar')))
     		throw $this->createNotFoundException('Accion inválida.');
     	
-        $invitacion = $this->getRepository('CpmJovenesBundle:Invitacion')->find($id);
-        if (!$invitacion) 
-            throw $this->createNotFoundException('No exite la Invitacion solicitada');
+        $invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id);
         
-        $user = $this->getLoggedInUser();
-        if (!$user->isAdmin() && !$user->equals($invitacion->getProyecto()->getCoordinador())){
-        	throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("Solo el coordinador del proyecto puede aceptar o rechazar sus invitaciones");
-        }
+        $user = $this->getJYM()->getLoggedInUser();
         
         if ($invitacion->getInstanciaEvento()->fue() || ($invitacion->estaPendiente() && !$invitacion->estaVigente())){
     		$this->setWarnMessage("El plazo de inscripción para el evento '".$invitacion->getInstanciaEvento()->getTitulo()."'ya cerró.");    	
@@ -330,13 +292,10 @@ class PerfilController extends BaseController
 		    	return $this->redirect($this->generateUrl('home'));
         }
         
-
-
 		if ($accion == 'rechazar'){
 			$invitacion->setAceptoInvitacion(false);
 		}else{
 			$invitacion->setAceptoInvitacion(true);
-			
 			
 			$editForm = $this->createForm(new InvitacionUsuarioType(), $invitacion);
 			
@@ -349,8 +308,7 @@ class PerfilController extends BaseController
 	            );
 			}
 		}
-        
-
+    
 		$this->setSuccessMessage("La invitación fue guardada satisfactoriamente.");
         $this->doPersist($invitacion);
 	    
@@ -372,18 +330,12 @@ class PerfilController extends BaseController
     */
     public function presentarAction($id)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-    
-    	$proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
+    	$proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto',$id);
     	$proyecto->setDeQueSeTrata("");
-    	if (!$proyecto) {
-    		throw $this->createNotFoundException("Proyecto $id no encontrado");
-    	}
-    
+    	
     	$form = $this->createForm(new PresentacionProyectoType(), $proyecto);
-    	if ($proyecto->getArchivo()) { 
+    	if ($proyecto->getArchivo()) 
     		$this->setWarnMessage("Atención: este proyecto ya ha sido cargado. Si lo carga nuevamente, la versión anterior será sobreescrita");
-    	}
     	
     	return array(
                 'proyecto'      => $proyecto,
@@ -402,13 +354,7 @@ class PerfilController extends BaseController
     
     public function recibirPresentacion($id) { 
     	$em = $this->getDoctrine()->getEntityManager();
-    	
-    	$proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-    	 
-        if (!$proyecto) {
-    		throw $this->createNotFoundException("Proyecto $id no encontrado");
-    	}
-    	
+		$proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto',$id, $em);
     	$form = $this->createForm(new PresentacionProyectoType(), $proyecto);
     	$form->bindRequest($this->getRequest());
     	
@@ -420,7 +366,7 @@ class PerfilController extends BaseController
 	    		$estadoProyecto = new EstadoProyecto();
 	    		$estadoProyecto->setEstado(ESTADO_PRESENTADO);
 	    		$estadoProyecto->setArchivo($new_filename);
-	    		$estadoProyecto->setUsuario($this->getLoggedInUser());
+	    		$estadoProyecto->setUsuario($this->getJYM()->getLoggedInUser());
 				$result = $estadosManager->cambiarEstadoAProyecto($proyecto,$estadoProyecto);
 	    		if ($result == "success") { 
         			$this->setSuccessMessage("El archivo fue cargado satisfactoriamente");
@@ -430,15 +376,15 @@ class PerfilController extends BaseController
 		        }
 	    		
 	    		return $this->redirect($this->generateUrl('home_usuario'));
-    		
     	}
-    	
-    	return array(
-    	                'proyecto'      => $proyecto,
-    	                'form'   => $form->createView(),
-                'valid_extensions' => implode(", ",$this->getValidExtensions())
-    	);
-    	 
+    	else
+    	{
+	    	return array(
+	    	                'proyecto'      => $proyecto,
+	    	                'form'   => $form->createView(),
+	                'valid_extensions' => implode(", ",$this->getValidExtensions())
+	    	);
+    	}
     }
    
     	
@@ -450,12 +396,7 @@ class PerfilController extends BaseController
     */
     
     public function descargarPresentacionAction($id) {
-    	$em = $this->getDoctrine()->getEntityManager();
-    	$proyecto = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-        if (!$proyecto) {
-    		throw $this->createNotFoundException("Proyecto $id no encontrado");
-    	}
-
+    	$proyecto = $this->getEntity('CpmJovenesBundle:Proyecto', $id);
 		$archivo = $this->getEstadosManager()->getArchivoPresentacion($proyecto);
  
 		if ($archivo) {
@@ -473,6 +414,7 @@ class PerfilController extends BaseController
 		    	return $response;
 		} else { 
 			$response = new Response();
+			//asi?
 			return $response;
 		}
     }
@@ -485,28 +427,17 @@ class PerfilController extends BaseController
     */
     public function editColaboradoresAction($id)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-    
-    	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-    
-    	if (!$entity) {
-    		throw $this->createNotFoundException('Proyecto no encontrado.');
-    	}
-    
-    	$editForm = $this->createForm(new ColaboradoresProyectoType(), $entity);
+    	$entity = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id);
+		$editForm = $this->createForm(new ColaboradoresProyectoType(), $entity);
     	
     	return array(
                 'entity'      => $entity,
                 'form'   => $editForm->createView(),
                 'form_action' => 'proyecto_update_colaboradores'
-          
-    	);
+        );
     }
     
-    
-    
-    
-        /**
+    /**
     * Edits, adds and removes colaboradores from an existing Proyecto entity.
     *
     * @Route("/{id}/update_colaboradores", name="proyecto_update_colaboradores")
@@ -516,23 +447,12 @@ class PerfilController extends BaseController
     public function updateColaboradoresAction($id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-    
-    	$entity = $em->getRepository('CpmJovenesBundle:Proyecto')->find($id);
-    	
+    	$entity = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id, $em);
+   	
     	$colabs = array(); 
     	foreach ($entity->getColaboradores() as $c) {
     			$colabs[] = $c->getEmail();
     	}
-    	    	 
-    	if (!$entity) {
-    		throw $this->createNotFoundException('Proyecto no encontrado.');
-    	}
-    	
-    	        
-        if ($entity->getCiclo() != $this->getJYM()->getCicloActivo()) {
-    		 $this->setErrorMessage('No se puede editar un proyecto de otro ciclo');
-    	}
-        	
     	$editForm   = $this->createForm(new ColaboradoresProyectoType(), $entity);
     	$request = $this->getRequest();
     	

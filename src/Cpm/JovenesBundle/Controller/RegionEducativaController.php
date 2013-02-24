@@ -39,14 +39,7 @@ class RegionEducativaController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:RegionEducativa')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find RegionEducativa entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:RegionEducativa', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -108,14 +101,7 @@ class RegionEducativaController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:RegionEducativa')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find RegionEducativa entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:RegionEducativa', $id);
         $editForm = $this->createForm(new RegionEducativaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -137,13 +123,8 @@ class RegionEducativaController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:RegionEducativa')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find RegionEducativa entity.');
-        }
-
-        $editForm   = $this->createForm(new RegionEducativaType(), $entity);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:RegionEducativa', $id, $em);
+		$editForm   = $this->createForm(new RegionEducativaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
@@ -179,13 +160,8 @@ class RegionEducativaController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:RegionEducativa')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find RegionEducativa entity.');
-            }
-
-            $em->remove($entity);
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:RegionEducativa', $id, $em);
+			$em->remove($entity);
             $em->flush();
         }
 

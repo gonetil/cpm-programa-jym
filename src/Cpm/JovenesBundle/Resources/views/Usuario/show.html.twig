@@ -126,7 +126,7 @@
         </tr>
         <tr>
             <th>Rol</th>
-            <td>{% if entity.hasRole('ROLE_ADMIN') %}Administrador{% else %}Docente{% endif %}</td>
+            <td>{% if entity.isAdmin() %}Administrador{% else %}Docente{% endif %}</td>
         </tr>
         <tr>
             <th>Años en los que participó</th>
@@ -154,24 +154,26 @@
 				    <li>
 				        <a href="{{ path('usuario') }}">Volver al listado</a>
 				    </li>
-    				<li>
-        				<a href="{{ path('usuario_edit', { 'id': entity.id }) }}">Editar</a>
-    				</li>
-				    {% if entity.enabled %}
-				    <li>
-				         <form action="{{ path('usuario_toggle_lock', { 'id': entity.id }) }}" method="post" 
-				            onsubmit="return confirm('¿Esta seguro que desea {% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %} el usuario?');">
-				            {{ form_widget(lock_form) }}
-				            <button type="submit">{% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %}</button>
-				        </form>
-				    </li>
-				    {% endif %}
-			        <li>
-				        <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el usuario? También se eliminarán todos los correos enviados al usuario')">
-				            {{ form_widget(delete_form) }}
-				            <button type="submit">Eliminar</button>
-				        </form>
-			    	</li>
+				    {% if jym.puedeEditar(entity) %}
+	    				<li>
+	        				<a href="{{ path('usuario_edit', { 'id': entity.id }) }}">Editar</a>
+	    				</li>
+					    {% if entity.enabled %}
+					    <li>
+					         <form action="{{ path('usuario_toggle_lock', { 'id': entity.id }) }}" method="post" 
+					            onsubmit="return confirm('¿Esta seguro que desea {% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %} el usuario?');">
+					            {{ form_widget(lock_form) }}
+					            <button type="submit">{% if entity.locked %}Desbloquear{% else %}Bloquear{% endif %}</button>
+					        </form>
+					    </li>
+					    {% endif %}
+				        <li>
+					        <form action="{{ path('usuario_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el usuario? También se eliminarán todos los correos enviados al usuario')">
+					            {{ form_widget(delete_form) }}
+					            <button type="submit">Eliminar</button>
+					        </form>
+				    	</li>
+			    	{% endif %}
 				</ul>
 				
 	<div class="correos_usuario">

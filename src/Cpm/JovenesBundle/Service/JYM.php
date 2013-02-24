@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 class JYM  {
+	
+	private $config;
 	private $etapasPorNombre;
 	private $etapas;
 	private $ciclo;
@@ -19,12 +21,11 @@ class JYM  {
 	private $doctrine;
 	private $logger;
 	private $perfil_dinamico;
-
 	public function __construct($doctrine, $logger, ContainerInterface $container){
 		$this->doctrine=$doctrine;
 		$this->logger=$logger;
 		$this->container=$container;
-		
+		$this->config = $container->getParameter("cpm_jovenes");
 		$this->setEtapas(StaticConfig::getEtapas());
 		$this->ciclo=null;
 		$this->lastInit();
@@ -222,4 +223,158 @@ class JYM  {
 		);
 		return $variables;
 	}		
+	
+	
+	/* *********** Recuperacion de settings ********************* */
+	function getParametroConfiguracion($paramName, $defaultValue = null){
+		if(isset($this->config[$paramName])) 
+			return $this->config[$paramName];
+		else
+			return $defaultValue;
+	}
+	
+	public function isBloquearCiclosViejos(){
+		return $this->getParametroConfiguracion('bloquear_ciclos_viejos');
+	}
+	
+	/* *********** Autorizacion de modificacion ********************* */
+	
+	public function puedeEditar($targetObject, $throwException = false){
+		
+		if (is_null($targetObject))
+			throw new \InvalidArgumentException("El targetObject no puede ser null");
+		
+		$user = $this->getLoggedInUser();
+ 
+        $bloquearCiclosViejos = $this->isBloquearCiclosViejos();
+		
+		
+				
+		//CICLO, CORREO
+		if(
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Ciclo || 
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Correo
+			){
+			if ($user->isSuperAdmin())//FIXME Super
+				return true;
+			$cause = "Necesita permisos de supervaca.";
+		}
+		
+		//Varios
+		elseif(
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Distrito || 
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Eje || 
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Localidad ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Produccion ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Tema ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\TipoEscuela ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\TipoInstitucion || 
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Plantilla 
+			){
+			if ($user->isAdmin())
+				return true;
+			$cause = "Necesita permisos de administrador para modificar este elemento.";
+		}
+		
+		//COMENTARIO
+		if($targetObject instanceof \Cpm\JovenesBundle\Entity\Comentario){
+			if ($user->isAdmin())//FIXME validar como corresponde
+				return true;
+			$cause = "Necesita permisos de admin para modificar un comentario.";
+		}
+		
+		//EVENTO, INSTANCIA EVENTO
+		elseif(
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Evento ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\InstanciaEvento
+		){
+			if($targetObject instanceof \Cpm\JovenesBundle\Entity\InstanciaEvento)
+				$targetObject = $targetObject->getEvento();
+			//var_dump($bloquearCiclosViejos);die();
+			if (
+				(!$bloquearCiclosViejos || $targetObject->getCiclo()->getActivo()) //validacion de ciclo
+				&&
+				$user->isAdmin() 
+			)
+			return true;
+		}
+		
+		//INVITACION
+		elseif($targetObject instanceof \Cpm\JovenesBundle\Entity\Invitacion){
+			if ($user->isAdmin() || $user->equals($invitacion->getProyecto()->getCoordinador()))
+				return true;
+			$cause = "Solo el coordinador del proyecto puede aceptar o rechazar sus invitaciones";
+		}
+		
+		//PROYECTO
+		elseif(
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Proyecto ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Escuela
+		){
+			if($targetObject instanceof \Cpm\JovenesBundle\Entity\Escuela)
+				$targetObject = $targetObject->getProyecto();
+			//var_dump($bloquearCiclosViejos);die();
+			if (
+				(!$bloquearCiclosViejos || $targetObject->getCiclo()->getActivo()) //validacion de ciclo
+				&&
+				($user->isAdmin() || $targetObject->getCoordinador()->equals($user)) 
+			)
+			return true;
+		}
+
+		//USUARIO
+		elseif($targetObject instanceof \Cpm\JovenesBundle\Entity\Usuario){
+			if ($user->isSuperAdmin() || $targetObject->equals($user) || 
+				($user->isAdmin() && !$targetObject->isSuperAdmin()))
+				return true;
+		}
+			
+		//FIXME falta configurar  EstadoProyecto Evento InstanciaEvento 
+		
+		if ($throwException){ 
+			if (empty($cause))
+				$cause = "No está habilitado para modificar este elemento (".get_class($targetObject). ")";
+			throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($cause);
+		}
+		
+		return false;
+	}
+	
+	public function getLoggedInUser($failFast = true){
+		$sec = $this->container->get('security.context');
+		if (!$sec->getToken())
+			$cause = "No posee una sesión iniciada";
+		elseif (!$sec->getToken()->isAuthenticated())
+			$cause = "No posee una sesión iniciada";
+		else{ 
+			$user = $sec->getToken()->getUser();
+			if (!$user) 
+				$cause="Su sesión es inválida. Ingrese nuevamente";
+			else {
+				$repo = $this->doctrine->getEntityManager()->getRepository("CpmJovenesBundle:Usuario");
+				return $repo->findOneByEmail($user->getUsername());
+			}
+		}
+		if($failFast)
+			throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($cause);
+		else
+			return null; 
+	}
+	
+	protected function isUserGranted($role, $failFast = false) { 
+		$user = $this->getLoggedInUser($failFast);
+		if (!$user) 
+			$cause="Su sesión es inválida. Ingrese nuevamente. ";
+		elseif (!$user->hasRole($role))
+			$message = "No posee los permisos necesarios para realizar esta operación";
+		else
+			return true;
+		
+		if ($failFast)
+			throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($message);
+		else
+			return false;
+	}
+	
+	
 }

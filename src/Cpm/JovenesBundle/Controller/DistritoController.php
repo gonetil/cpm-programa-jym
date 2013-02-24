@@ -24,10 +24,7 @@ class DistritoController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Distrito')->findAllQuery();
-
+        $entities = $this->getRepository('CpmJovenesBundle:Distrito')->findAllQuery();
         return $this->paginate($entities);
     }
 
@@ -39,13 +36,7 @@ class DistritoController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Distrito')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Distrito entity.');
-        }
+        $entity = $this->getEntity('CpmJovenesBundle:Distrito',$id);
 
         $deleteForm = $this->createDeleteForm($id);
 
@@ -108,14 +99,7 @@ class DistritoController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Distrito')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Distrito entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Distrito',$id);
         $editForm = $this->createForm(new DistritoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -136,13 +120,7 @@ class DistritoController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Distrito')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Distrito entity.');
-        }
-
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Distrito',$id, $em);
         $editForm   = $this->createForm(new DistritoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -179,13 +157,8 @@ class DistritoController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Distrito')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Distrito entity.');
-            }
-
-            $em->remove($entity);
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:Distrito',$id, $em);
+        	$em->remove($entity);
             $em->flush();
         }
 

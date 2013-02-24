@@ -28,13 +28,13 @@
             Volver al listado
         </a>
     </li>
-    <li>
-        <form action="{{ path('plantilla_delete', { 'id': entity.id }) }}" method="post"
-            onsubmit="return confirm('¿Está seguro que desea eliminar la plantilla?');">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
+<!--     <li> -->
+<!--         <form action="{{ path('plantilla_delete', { 'id': entity.id }) }}" method="post" -->
+<!--             onsubmit="return confirm('¿Está seguro que desea eliminar la plantilla?');"> -->
+<!--             {{ form_widget(delete_form) }} -->
+<!--             <button type="submit">Eliminar</button> -->
+<!--         </form> -->
+<!--     </li> -->
 </ul>
 
 {% endblock %}

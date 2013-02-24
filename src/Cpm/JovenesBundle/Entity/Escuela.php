@@ -111,7 +111,11 @@ class Escuela
     */
     private $localidad;
     
-    
+     /**
+     * @ORM\OneToOne(targetEntity="Proyecto", mappedBy="escuela")
+     */
+    private $proyecto;
+     
      /**
      * Get id
      *
@@ -429,5 +433,23 @@ class Escuela
         return $this->numero;
     }
     
+    /**
+     * Set proyecto
+     *
+     * @param Cpm\JovenesBundle\Entity\Proyecto $proyecto
+     */
+    public function setProyecto(\Cpm\JovenesBundle\Entity\Proyecto $proyecto)
+    {
+        $this->proyecto = $proyecto;
+    }
 
+    /**
+     * Get proyecto
+     *
+     * @return Cpm\JovenesBundle\Entity\Proyecto
+     */
+    public function getProyecto()
+    {
+        return $this->proyecto;
+    }
 }

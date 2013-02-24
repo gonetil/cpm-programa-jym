@@ -10,12 +10,13 @@ use Cpm\JovenesBundle\Entity\Eje;
 use Cpm\JovenesBundle\Form\EjeType;
 use Symfony\Component\HttpFoundation\Response;
 use Cpm\JovenesBundle\Controller\BaseController;
+
 /**
  * Eje controller.
  *
  * @Route("/eje")
  */
-class EjeController extends Controller
+class EjeController extends BaseController
 {
     /**
      * Lists all Eje entities.
@@ -25,10 +26,7 @@ class EjeController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Eje')->findAll();
-
+        $entities = $this->getRepository('CpmJovenesBundle:Eje')->findAll();
         return array('entities' => $entities);
     }
 
@@ -40,14 +38,7 @@ class EjeController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Eje')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Eje entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Eje', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -109,14 +100,7 @@ class EjeController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Eje')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Eje entity.');
-        }
-
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Eje', $id);
         $editForm = $this->createForm(new EjeType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -137,12 +121,7 @@ class EjeController extends Controller
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Eje')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Eje entity.');
-        }
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Eje', $id, $em);
 
         $editForm   = $this->createForm(new EjeType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -180,13 +159,8 @@ class EjeController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Eje')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Eje entity.');
-            }
-
-            $em->remove($entity);
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:Eje', $id, $em);
+			$em->remove($entity);
             $em->flush();
         }
 
@@ -210,10 +184,9 @@ class EjeController extends Controller
      * @Route("/fetch_eje", name="eje_fetch")
      * @Method("post")
      */
-      public function crearComentarioBase() {
-    	$em = $this->getDoctrine()->getEntityManager();
+      public function fetchEjeAction() {
     	$eje_id = $this->getRequest()->get('eje_id');
- 		$eje = $em->getRepository('CpmJovenesBundle:Eje')->find($eje_id);
+ 		$eje = $this->getRepository('CpmJovenesBundle:Eje')->find($eje_id);
  		
  		$json = array();
 		if ($eje) { 

@@ -31,11 +31,10 @@ class UsuarioController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
         $searchValues = new UsuarioSearch();
         $searchForm = $this->createForm(new UsuarioSearchType(),$searchValues);
         $request = $this->getRequest();
-        $repository = $em->getRepository('CpmJovenesBundle:Usuario');
+        $repository = $this->getRepository('CpmJovenesBundle:Usuario');
         
         if (is_array($request->get("cpm_jovenesbundle_usuariosearchtype"))) 
         {
@@ -60,12 +59,7 @@ class UsuarioController extends BaseController
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
-        }
+		$entity = $this->getEntity('CpmJovenesBundle:Usuario', $id);
 		$ciclos = $em->getRepository('CpmJovenesBundle:Ciclo')->findBy(array(),array('id'=>'desc'));
         $deleteForm = $this->createDeleteForm($id);
         $lockForm = $this->createDeleteForm($id);
@@ -143,14 +137,7 @@ class UsuarioController extends BaseController
      */
     public function editAction($id)
     {	
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Usuario no encontrado');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Usuario', $id);
         $editForm = $this->createForm(new UsuarioType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -172,11 +159,7 @@ class UsuarioController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $user = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
-        if (!$user) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
-        }
-
+		$user = $this->getEntityForUpdate('CpmJovenesBundle:Usuario', $id, $em);
         $editForm   = $this->createForm(new UsuarioType(), $user);
         $deleteForm = $this->createDeleteForm($id);
         $request = $this->getRequest();
@@ -220,21 +203,16 @@ class UsuarioController extends BaseController
     {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
-
-        $form->bindRequest($request);
+		$loggedUser = $this->getJYM()->getLoggedInUser();
+	
+	    $form->bindRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Usuario entity.');
-            }
-
-			if ($entity->hasRole('ROLE_ADMIN') || $entity->hasRole('ROLE_SUPER_ADMIN')){
-				$this->setErrorMessage("No se puede eliminar al usuario dado que tiene  rol ADMIN. ");
-				
-			}else{
+			$entity = $this->getEntityForDelete('CpmJovenesBundle:Usuario', $id, $em);
+			if ($loggedUser->equals($entity))
+				$this->setErrorMessage("No se puede eliminar a si mismo. Pida ayuda.");
+			else {
 				$proyectos = $entity->getProyectosCoordinados();
 				if (count($proyectos) > 0 )
 					$this->setErrorMessage("No se puede eliminar al usuario dado que tiene proyectos asociados como coordinador");
@@ -280,15 +258,14 @@ class UsuarioController extends BaseController
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $user = $em->getRepository('CpmJovenesBundle:Usuario')->find($id);
+            $user = $this->getEntityForUpdate('CpmJovenesBundle:Usuario', $id);
             
             if (!$user->isEnabled()){
             	$this->setErrorMessage('No tiene sentido bloquear un usuario que no esta habilitado para loguearse en el sistema.');
             }else{
-            	if (!$user->isLocked() && ($user->hasRole('ROLE_ADMIN') || $user->isSuperAdmin())){
-					$this->setErrorMessage("No se puede bloquear un usuario Administrador. ");
-            	}else{
+				if ($user->equals($this->getJYM()->getLoggedInUser()))
+					$this->setErrorMessage("No se puede bloquear a si mismo. Pida ayuda.");
+				else{
 		            $user->setLocked(!$user->isLocked());
 		            $this->getUserManager()->updateUser($user);
 					$this->setSuccessMessage('El usuario '.$user->getEmail().' ha sido '. (($user->isLocked())?'bloqueado.':'desbloqueado.'));

@@ -58,7 +58,6 @@ class InvitacionController extends BaseController
      */
     public function invitarProyectosBatchSubmitAction()
     {
-
         $invitacionBatch = new InvitacionBatch();
 		$editForm = $this->createForm(new InvitacionBatchType(), $invitacionBatch);
         $request = $this->getRequest();
@@ -66,7 +65,7 @@ class InvitacionController extends BaseController
 		$ev_mgr= $this->getEventosManager();
         if ($editForm->isValid()) {
         	try{
-        		$repetidas = $ev_mgr->invitarProyectos($this->getLoggedInUser(), $invitacionBatch);
+        		$repetidas = $ev_mgr->invitarProyectos($invitacionBatch);
         		if (count($repetidas) > 0) { 
         			$coordinadores = "";
         			foreach ( $repetidas as $proyecto) {
@@ -99,19 +98,13 @@ class InvitacionController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invitacion entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
+		$entity = $this->getEntity('CpmJovenesBundle:Invitacion', $id);
+		$deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),);
+            'delete_form' => $deleteForm->createView(),
+            );
     }
 
   
@@ -123,14 +116,7 @@ class InvitacionController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invitacion entity.');
-        }
-
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id);
         $editForm = $this->createForm(new InvitacionType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -152,13 +138,7 @@ class InvitacionController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invitacion entity.');
-        }
-
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id, $em);
         $editForm   = $this->createForm(new InvitacionType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -195,12 +175,7 @@ class InvitacionController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Invitacion entity.');
-            }
-
+			$entity = $this->getEntityForDelete('CpmJovenesBundle:Invitacion', $id, $em);
             $em->remove($entity);
             $em->flush();
         }
@@ -222,22 +197,17 @@ class InvitacionController extends BaseController
     * @Route("/{id}/set_single_asistencia", name="invitaciones_set_single_asistencia")
     * @Method("get")
     */
-    public function set_single_asistencia($id) {
-    	    	
+    public function set_single_asistencia($id) 
+    {
     	$asistio = ($this->get('request')->query->get('asistencia') == 'true');
-
     	$em = $this->getDoctrine()->getEntityManager();
-    	$entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id, $em);
     	
-    	if ($entity) {
-    		$entity->setAsistio($asistio);
-    		$em->persist($entity);
-    		$em->flush();
-    		return new Response("success");
-    	}
-    	else new Response("error");
+    	$entity->setAsistio($asistio);
+    	$em->persist($entity);
+    	$em->flush();
+		return new Response("success");
     }
-    
     
     /**
      * Reenvia una invitación previamente existente
@@ -245,16 +215,10 @@ class InvitacionController extends BaseController
      * @Method("get")
      */
     public function reenviarInvitacion($id) { 
-    	
-    	$em = $this->getDoctrine()->getEntityManager();
-        $invitacion = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
-
-        if (!$invitacion) {
-            throw $this->createNotFoundException('No se encontró la invitación '.$id);
-            return new Response("error");
-        }
+    	$invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id);
 		$eventosManager = $this->getEventosManager();    	
     	$eventosManager->enviarInvitacionAProyecto($invitacion, false,false); //no se envía cc a los colaboradores ni a la escuela 
+    	//catch algo? 
     	return new Response("success");
     }
     
@@ -265,13 +229,8 @@ class InvitacionController extends BaseController
     * @Template("CpmJovenesBundle:Invitacion:invitados_excel.xls.twig")
     */    
     public function exportInvitadosToExcelAction($id) {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $entity = $em->getRepository('CpmJovenesBundle:Invitacion')->find($id);
+    	$entity = $this->getEntity('CpmJovenesBundle:Invitacion', $id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('No se encontró la Invitación');
-        }
-        
 		$filename = "Invitados - {$entity->getProyecto()->getEscuela()})";
 		
 		$invitados = $entity->getInvitados();
@@ -286,7 +245,6 @@ class InvitacionController extends BaseController
         $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
         $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
     	return $response; 
-    	 
     }
     
      /**
@@ -296,23 +254,14 @@ class InvitacionController extends BaseController
      */
     public function cambiarInvitacionDeInstancia($invitacion_id,$instancia_id) {
     	$em = $this->getDoctrine()->getEntityManager();
-        $invitacion = $em->getRepository('CpmJovenesBundle:Invitacion')->find($invitacion_id);
+        $invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $invitacion_id, $em);
+    	$instancia = $this->getEntityForUpdate('CpmJovenesBundle:InstanciaEvento', $instancia_id, $em);
 
-        if (!$invitacion) {
-            throw $this->createNotFoundException('No se encontró la Invitación');
-        }
-    	
-    	$instancia = $em->getRepository('CpmJovenesBundle:InstanciaEvento')->find($instancia_id);
-    	if (!$instancia) {
-    		throw $this->createNotFoundException('No se encontró la Instancia');
-    	}
-    	
     	$invitacion->setInstanciaEvento($instancia);
     	
     	$em->persist($invitacion);
     	$em->flush();
+    	//catch algo?
     	return new Response("success");
-    	
-    	
     }
 }

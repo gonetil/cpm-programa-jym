@@ -39,18 +39,21 @@
             Volver al listado
         </a>
     </li>
-    <li>
-        <a href="{{ path('ciclo_edit', { 'id': entity.id }) }}">
-            Modificar
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('ciclo_delete', { 'id': entity.id }) }}" method="post"
-             onsubmit="return confirm('¿Está seguro que desea eliminar el ciclo?');">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
+    {% if jym.puedeEditar(entity) %}
+		<li>
+	    	<a href="{{ path('ciclo_edit', { 'id': entity.id }) }}">
+	            Modificar
+	        </a>
+	    </li>
+	    <li>
+	        <form action="{{ path('ciclo_delete', { 'id': entity.id }) }}" method="post"
+	             onsubmit="return confirm('¿Está seguro que desea eliminar el ciclo?');">
+	            {{ form_widget(delete_form) }}
+	            <button type="submit">Eliminar</button>
+	        </form>
+	    </li>
+    {% endif %}
+        
 </ul>
 
 {% endblock %}

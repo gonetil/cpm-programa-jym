@@ -26,9 +26,11 @@
                     <li>
                         <a href="{{ path('plantilla_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
+				    {% if jym.puedeEditar(entity) %}
                     <li>
                         <a href="{{ path('plantilla_edit', { 'id': entity.id }) }}">Modificar</a>
                     </li>
+                    {% endif %}
                 </ul>
             </td>
         </tr>

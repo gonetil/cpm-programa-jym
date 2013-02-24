@@ -207,13 +207,13 @@ class Correo
     }
     
  	
- 	public function clonar($full = true){
+ 	public function clonar($isFullClone){
  		$copia = new Correo();
  		$copia->asunto=$this->asunto;
 	    $copia->cuerpo=$this->cuerpo;
-	    $copia->emisor=$this->emisor;
-		if ($full){
-		    $copia->fecha=$this->fecha;
+	    if ($isFullClone){
+		//$copia->emisor=$this->emisor; el emisor depende de la sesión
+		   // $copia->fecha=$this->fecha;
 		    $copia->email=$this->email;
 		    $copia->destinatario=$this->destinatario;
 			$copia->proyecto=$this->proyecto;

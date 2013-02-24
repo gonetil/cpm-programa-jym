@@ -39,14 +39,7 @@ class PlantillaController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Plantilla')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Plantilla entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Plantilla', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -91,12 +84,12 @@ class PlantillaController extends BaseController
         	$valid = $mailer->isValidTemplate($entity->getCuerpo());
 		}
 		catch( Exception $e ) {
-			$this->setErrorMessage("Error al procesar la plantilla");
+			$this->setErrorMessage("Error al procesar la plantilla. ".$e->getMessage());
 		}
         
         //FIXME
         $entity->setCodigo($this->slug($entity->getAsunto()));
-        if ($form->isValid() && ($valid)) {
+        if ($form->isValid() && $valid) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
@@ -115,10 +108,10 @@ class PlantillaController extends BaseController
     
     protected function slug($str)
     {
-    $str = strtolower(trim($str));
-    $str = preg_replace('/[^a-z0-9-]/', '-', $str);
-    $str = preg_replace('/-+/', "-", $str);
-    return $str;
+	    $str = strtolower(trim($str));
+	    $str = preg_replace('/[^a-z0-9-]/', '-', $str);
+	    $str = preg_replace('/-+/', "-", $str);
+	    return $str;
     }
 
     /**
@@ -129,15 +122,8 @@ class PlantillaController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Plantilla')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Plantilla entity.');
-        }
-
-        $editForm = $this->createForm(new PlantillaType(), $entity);
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Plantilla', $id);
+		$editForm = $this->createForm(new PlantillaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -157,14 +143,8 @@ class PlantillaController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Plantilla')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Plantilla entity.');
-        }
-
-        $editForm   = $this->createForm(new PlantillaType(), $entity);
+		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Plantilla', $id, $em);
+		$editForm   = $this->createForm(new PlantillaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
@@ -187,10 +167,10 @@ class PlantillaController extends BaseController
             'delete_form' => $deleteForm->createView(),
         );
         
-        if ($parsed != "success") $retorno['template_error'] = "Error en la plantilla ($parsed)";
+        if ($parsed != "success") 
+        	$retorno['template_error'] = "Error en la plantilla ($parsed)";
         	
         return $retorno;
-         
     }
 
     /**
@@ -208,12 +188,8 @@ class PlantillaController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Plantilla')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Plantilla entity.');
-            }
-            if (!$entity->getPuedeBorrarse())
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:Plantilla', $id, $em);
+			if (!$entity->getPuedeBorrarse())
 				$this->setErrorMessage("No se pueden borrar las plantillas del sistema");
 			else{
 				$this->setSuccessMessage("La plantilla ha sido borrada");
@@ -239,23 +215,12 @@ class PlantillaController extends BaseController
     *
     * @Route("/plantilla/find_by_id", name="plantilla_find_by_id")
     */
-    
-    public function findByIdAction() { 
-
+    public function findByIdAction() 
+    { 
     	$plantilla_id = $this->get('request')->query->get('plantilla_id');
-    	
-    	$em = $this->getDoctrine()->getEntityManager();
-    	if ($plantilla_id > 0)
-    		$plantillas= $em->getRepository('CpmJovenesBundle:Plantilla')->findById($plantilla_id);
-
-    	$json = array();
-    	foreach ($plantillas as $plantilla) {
-    		$json[] = array("asunto"=>$plantilla->getAsunto(), "cuerpo" => $plantilla->getCuerpo());
-    	}
-    	$response = new Response(json_encode($json));
-    	 
-    	$response->headers->set('Content-Type', 'application/json');
-    	return $response;
-    	 
+    	$plantilla= $this->getEntity('CpmJovenesBundle:Plantilla', $plantilla_id);
+    	$plantilla_light = array("asunto"=>$plantilla->getAsunto(), "cuerpo" => $plantilla->getCuerpo());
+    	return $this->createJsonResponse(array($plantilla_light));
     }
+    
 }
