@@ -2871,3 +2871,5 @@ h4.info_header:hover { background-color: #FFF; }
 	padding-top: 2px; 
 	font-size: 10pt;
 }
+
+#widgetAnios input { margin-left: 15px;  }

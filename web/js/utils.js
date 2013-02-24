@@ -517,7 +517,7 @@ function cargarAnios(inputAnios) {
 	
 	if (anios == null) anios = new Object();
 	for(i=2002;i<current_year;i++) { 
-		newInput = i + '<input type="checkbox" onclick=updateAnios("'+elem_id+'") ' + ( ( anios[i] ) ? 'checked' : ' ' ) + ' value="'+i+'" >';
+		newInput = '<input type="checkbox" onclick=updateAnios("'+elem_id+'") ' + ( ( anios[i] ) ? 'checked' : ' ' ) + ' value="'+i+'" >' + i;
 		$("#widgetAnios").append(newInput); 
 	}
 }
