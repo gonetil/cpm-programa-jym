@@ -95,11 +95,12 @@ fos_user:
     profile:
         form:
             type: cpm_jovenesbundle_perfilusuariotype
-            
+
 services:
-        
+    
 cpm_jovenes:
-    etapas:
+    bloquear_ciclos_viejos: true
+    etapas:   
 #        etapaX:
 #            nombre: "Etapa X - XX XX XX"
 #            accionesUsuario:
