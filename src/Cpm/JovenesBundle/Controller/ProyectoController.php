@@ -404,7 +404,7 @@ class ProyectoController extends BaseController
     
     private function crearComentarioBase($id_proyecto, $tipo) {
     	$em = $this->getDoctrine()->getEntityManager();
-        $proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto', $id_proyecto, $em);
+        $proyecto = $this->getEntity('CpmJovenesBundle:Proyecto', $id_proyecto, $em);
         
     	$asunto = $this->getRequest()->get('asunto');
  		$cuerpo = $this->getRequest()->get('cuerpo');
