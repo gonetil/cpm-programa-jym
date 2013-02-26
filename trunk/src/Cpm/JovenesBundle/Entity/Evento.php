@@ -133,6 +133,11 @@ class Evento
 		$this->ofrecerHospedaje = false;
 		$this->ofrecerViaje = false;
 		$this->permitirObservaciones = false;
+		$this->numeroMaximoInvitados = 0;
+		$this->solicitarDuracionPresentacion = false;
+		$this->solicitarListaInvitados = false;
+		$this->permitirModificarLaInvitacion = false;
+		$this->preguntarSolicitaTren = false;
 		
 		$this->instancias = new \Doctrine\Common\Collections\ArrayCollection();
 	}
