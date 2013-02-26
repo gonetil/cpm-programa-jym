@@ -13,10 +13,6 @@
     </ul>
     {% endif%}
 <div class="proyectos_usuario">
-
-	{% if entity.proyectosCoordinados | length > 0 %}
-	<h2> Coordinador de... </h2>
-	
 	<ul id="ciclo_selector">
 	
 	{% for ciclo in ciclos %}
@@ -25,6 +21,10 @@
 		</li>
 	{% endfor %}
 	</ul>
+
+	{% if entity.proyectosCoordinados | length > 0 %}
+	<h2> Coordinador de... </h2>
+	
 	
 	<ul id="proyectos_usuario">
 	
