@@ -26,7 +26,7 @@ class EventoType extends AbstractType
             ->add('permitirModificarLaInvitacion','choice',array('label' => '¿Permitir modificar la invitación una vez aceptada o confirmada?', 'expanded'=>true, 'choices' => array(1=>"si",0=>"no"), 'attr'=>array('class'=>'inline')))
             ->add('action','choice',array('label' => 'Acción a ejecutar una vez confirmada la invitación',
             	  'choices' => array('ConfirmacionCamposChapa'=>"Confirmación de datos del proyecto para Chapadmalal"), 
-				  'expanded'=>false, 'empty_value' => "Ninguna",'attr'=>array('class'=>'inline')))
+				  'expanded'=>false, 'empty_value' => "Ninguna",'attr'=>array('class'=>'inline'), 'required' => false))
             
         ;
     }
