@@ -232,9 +232,13 @@ class JYM  {
 		else
 			return $defaultValue;
 	}
-	
+
 	public function isBloquearCiclosViejos(){
-		return $this->getParametroConfiguracion('bloquear_ciclos_viejos');
+		return $this->getParametroConfiguracion('bloquear_ciclos_viejos', true);
+	}
+	
+	public function isRegistroUsuariosAbierto(){
+		return !$this->getParametroConfiguracion('bloquear_registro_usuarios', false);
 	}
 	
 	/* *********** Autorizacion de modificacion ********************* */
@@ -329,8 +333,6 @@ class JYM  {
 				return true;
 		}
 			
-		//FIXME falta configurar  EstadoProyecto Evento InstanciaEvento 
-		
 		if ($throwException){ 
 			if (empty($cause))
 				$cause = "No está habilitado para modificar este elemento (".get_class($targetObject). ")";

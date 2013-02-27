@@ -100,6 +100,7 @@ services:
     
 cpm_jovenes:
     bloquear_ciclos_viejos: true
+    bloquear_registro_usuarios: false
     etapas:   
 #        etapaX:
 #            nombre: "Etapa X - XX XX XX"

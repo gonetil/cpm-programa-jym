@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
 		$rootNode
 			->children()
 				->booleanNode('bloquear_ciclos_viejos')->end()
+				->booleanNode('bloquear_registro_usuarios')->end()
 				->arrayNode('etapas')
                 	->prototype('array')
 	                	->children()
