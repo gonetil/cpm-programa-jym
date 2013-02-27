@@ -4,6 +4,8 @@
 
 {% block fos_user_content %}
 
+{% if jym.isRegistroUsuariosAbierto() %}
+
 <script src="{{ asset('js/jquery.tooltip.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/utils.js') }}" type="text/javascript"></script>
 
@@ -27,5 +29,11 @@
     </div>
 </form>
 
-
+{% else %}
+	<h3 style="line-height: 32px; margin: 20px;">
+		El registro de usuarios a la plataforma del Programa Jovenes y memoria no está abierto aún. 
+		Para mayor información puede acceder a <a href="http://jovenesymemoria.comisionporlamemoria.net/">http://jovenesymemoria.comisionporlamemoria.net/</a> 
+		o escribirnos por mail a jovenesymemoria<b>@</b>comisionporlamemoria.org 
+	</h3>
+{% endif %}
 {% endblock fos_user_content %}
