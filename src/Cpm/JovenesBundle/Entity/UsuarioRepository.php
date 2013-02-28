@@ -31,15 +31,20 @@ class UsuarioRepository extends EntityRepository
 		->add('from','CpmJovenesBundle:Usuario u');
 		
 		$ciclo = ($data->getCiclo()) ? $data->getCiclo() : $ciclo_activo;
+		 				
 		
 		if ($data->getCoordinadores()) 
 		{  //si solo queria coordinarores, ya estaba el join con proyectos, solo agrego
 				$qb->innerJoin('u.proyectosCoordinados','p');
 				$qb->innerJoin('p.ciclo','ciclo')->andWhere('ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+				$qb = $this->incluirAdministradores($qb); //se incluyen los administradores
+		
 		}
 		else 
 		{  	
 			$qb = $this->incluirCoordinadoresYColaboradores($qb,$ciclo);
+			$qb = $this->incluirAdministradores($qb); //se incluyen los administradores
+		
 		}  
 		
 		if ($data->getApellido()) 
@@ -78,12 +83,22 @@ class UsuarioRepository extends EntityRepository
 						 	->innerJoin('proyecto2.coordinador','coordinadores')
 						 	->innerJoin('proyecto2.ciclo','ciclo2')->andWhere('ciclo2 = :ciclo');
 				
-			 	
 			 	$qb->orWhere($qb->expr()->in('u',$qb_coordinadores->getDQL()))->setParameter('ciclo',$ciclo);
 			 	$qb->orWhere($qb->expr()->in('u',$qb_colaboradores->getDQL()));
 			 	//NOTA: GUARDA CON PONER UN ANDWHERE despues de estos, porque se puede romper el query
 			 	
 			 	return $qb;
+	}
+	
+	/**
+	 * Recibe un QueryBuilder conla entidad Usuario u, y lo amplía para que se incluyan siempre los usuarios administradores
+	 */
+	private function incluirAdministradores($qb) 
+	{ 
+		$qb_admin = $this->getEntityManager()->createQueryBuilder();
+		$qb_admin->add('select','admins')->add('from','CpmJovenesBundle:Usuario admins')->where('admins.roles like :roleadmin');
+		$qb->orWhere($qb->expr()->in('u',$qb_admin->getDQL()))->setParameter('roleadmin','%ROLE_ADMIN%');
+		return $qb;	
 	}
 	
 }

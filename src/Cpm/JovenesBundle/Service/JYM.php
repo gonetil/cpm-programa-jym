@@ -180,7 +180,7 @@ class JYM  {
 	public function getAccionesUsuario(){
 		
 		$usuario = $this->container->get('security.context')->getToken()->getUser();
-		return $this->perfil_dinamico->accionesDeUsuario($usuario,$this->etapas[$this->numeroEtapaActual]);
+		return $this->perfil_dinamico->accionesDeUsuario($usuario,$this->etapas[$this->numeroEtapaActual], $this->getCicloActivo());
 	}
 	
 	public function getAccionesProjecto(Proyecto $proyecto){

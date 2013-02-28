@@ -14,13 +14,13 @@ class PerfilDinamico {
        return $resultado;
 		
 	}
-	public function accionesDeUsuario($usuario,$etapa_actual) { 
+	public function accionesDeUsuario($usuario,$etapa_actual,$ciclo = null) { 
 		$acciones = array();
-		$acciones['cargar_proyecto'] = function() use ($usuario,$etapa_actual ) {
+		$acciones['cargar_proyecto'] = function() use ($usuario,$etapa_actual,$ciclo ) {
 								if ($etapa_actual['numero'] == 2) 
 									return array(	'path' => 'proyecto_wizzard', 
 													'label'=>'Inscribir escuela',
-													'validation'=>  (count( $usuario->getProyectosCoordinados()) > 0 ) ? " Usted ya inscribió una escuela ¿Está seguro que desea inscribir otra?" : false 
+													'validation'=>  (count( $usuario->getProyectosCoordinados($ciclo)) > 0 ) ? " Usted ya inscribió una escuela ¿Está seguro que desea inscribir otra?" : false 
 												); 
 								else 
 									return null;
