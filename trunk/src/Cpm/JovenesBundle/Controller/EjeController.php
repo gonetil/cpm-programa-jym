@@ -181,7 +181,7 @@ class EjeController extends BaseController
      /**
      * Fetch one eje entity.
      *
-     * @Route("/fetch_eje", name="eje_fetch")
+     * @Route("/fetch_eje")
      * @Method("post")
      */
       public function fetchEjeAction() {
