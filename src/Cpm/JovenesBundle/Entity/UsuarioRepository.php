@@ -16,7 +16,8 @@ class UsuarioRepository extends EntityRepository
 		$qb = $this->getEntityManager()->createQueryBuilder()
 			->add('select','u')
 			->add('from','CpmJovenesBundle:Usuario u');
-		
+			
+		$qb = $this->incluirAdministradores($qb); //se incluyen los administradores
 		$qb = $this->incluirCoordinadoresYColaboradores($qb,$ciclo_activo);
 		 
     return  $qb->getQuery();
