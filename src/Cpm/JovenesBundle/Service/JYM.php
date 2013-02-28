@@ -342,13 +342,15 @@ class JYM  {
 	}
 	
 	public function getLoggedInUser($failFast = true){
-		$sec = $this->container->get('security.context');
-		if (!$sec->getToken())
+		$token = $this->container->get('security.context')->getToken();
+		if (!$token)
 			$cause = "No posee una sesión iniciada";
-		elseif (!$sec->getToken()->isAuthenticated())
+		elseif (!$token->isAuthenticated())
 			$cause = "No posee una sesión iniciada";
+		elseif ($token instanceof \Symfony\Component\Security\Core\Authentication\Token\AnonymousToken)
+			$cause = "Sesión anónima";
 		else{ 
-			$user = $sec->getToken()->getUser();
+			$user = $token->getUser();
 			if (!$user) 
 				$cause="Su sesión es inválida. Ingrese nuevamente";
 			else {

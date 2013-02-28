@@ -16,6 +16,8 @@ use Cpm\JovenesBundle\Exception\Mailer\MailCannotBeSentException;
  */
 class TwigSwiftMailer implements MailerInterface
 {
+	const _EMISOR_ANONIMO = "EMISOR_ANONIMO";
+	
 	protected $jym;
 	protected $mailer;
     protected $router;
@@ -91,7 +93,7 @@ class TwigSwiftMailer implements MailerInterface
 		$correo->setDestinatario($usuario);
 
         $url = $this->router->generate('fos_user_registration_confirm', array('token' => $usuario->getConfirmationToken()), true);
-        $context = array(Plantilla::_URL => $url);
+        $context = array(Plantilla::_URL => $url, self::_EMISOR_ANONIMO => true);
         //FIXME debo capturar las exceptions d eenviar correo?
         return $this->enviarCorreo($correo, $context);
     }
@@ -102,7 +104,7 @@ class TwigSwiftMailer implements MailerInterface
 		$correo->setDestinatario($usuario);
 
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $usuario->getConfirmationToken()), true);
-        $context = array(Plantilla::_URL => $url);
+        $context = array(Plantilla::_URL => $url, self::_EMISOR_ANONIMO => true);
         
         return $this->enviarCorreo($correo, $context);
     }
@@ -243,9 +245,13 @@ class TwigSwiftMailer implements MailerInterface
 		if (!empty($context[Plantilla::_USUARIO]) && ($context[Plantilla::_USUARIO] instanceof Usuario)){
     		$correo->setDestinatario($context[Plantilla::_USUARIO]);
     	}
-		if (!empty($context[Plantilla::_EMISOR]) && ($context[Plantilla::_EMISOR] instanceof Usuario)){
-    		$correo->setEmisor($context[Plantilla::_EMISOR]);
-    	}else{
+		if (!empty($context[Plantilla::_EMISOR])){
+			if ($context[Plantilla::_EMISOR] instanceof Usuario)
+	    		$correo->setEmisor($context[Plantilla::_EMISOR]);
+   			else{
+   				//no es un emisor persistible
+   			}
+    	}elseif (empty($context[self::_EMISOR_ANONIMO])){
     		$emisor = $this->jym->getLoggedInUser();
     		$correo->setEmisor($emisor);
     	}
