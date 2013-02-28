@@ -294,7 +294,6 @@ class JYM  {
 		){
 			if($targetObject instanceof \Cpm\JovenesBundle\Entity\InstanciaEvento)
 				$targetObject = $targetObject->getEvento();
-			//var_dump($bloquearCiclosViejos);die();
 			if (
 				(!$bloquearCiclosViejos || $targetObject->getCiclo()->getActivo()) //validacion de ciclo
 				&&

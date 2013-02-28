@@ -1,11 +1,4 @@
 <?php
-/*
- * Created on 16/02/2013
- * @author gonetil
- * project jym
- * Copyleft 2013
- * 
- */
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

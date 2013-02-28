@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Convocatoria 2012</title>
+<title>Programa Jovenes y Memoria - Convocatoria </title>
 <link rel="stylesheet" href="{{ asset('css/convoca.css') }}" />
 
 </head>
@@ -13,10 +13,12 @@
   	<img src="{{ asset('images/login/logo.png')}}" alt="Jóvenes y Memoria, Recordamos para el futuro" border="0" height="109" width="260">
   </div>
 	<div id="contenido">
-				<img src="{{ asset('images/inicio/bienve.png') }}" alt="Bienvenidos!" border="0" height="351" width="282">
+				<img src="{{ asset('images/inicio/bienve.png') }}" alt="Bienvenidos!" border="0" height="319" width="282">
+				
 				<a href="{{path('fos_user_security_login')}}"><img src="{{ asset('images/inicio/si.png') }}" alt="Ya estoy registrado!" class="imgspace" border="0" height="319" width="219"></a>
 				<a href="{{path('fos_user_registration_register')}}"><img src="{{ asset('images/inicio/no.png') }}" alt="No estoy registrado!" class="imgspace" border="0" height="319" width="219"></a>
 				<a href="/files/instructivo.doc"><img src="{{ asset('images/inicio/instructivo.png') }}" alt="Instructivo para usuarios" border="0" height="319" width="181"></a>
+				<span style="font-family: arial;margin: 11px;float: left;">Convocatoria <span style="color:red">{{ "now"|date("Y") }} </span> </span>
 	</div>
 		<div id="footer">
 	Desarrollado por 2230 Sistemas &copy; <span id="spanYear">{{ "now"|date("Y") }}</span> <a href="">contacto@2230.com.ar</a>. Todos los derechos reservados.</div>
