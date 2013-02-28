@@ -478,5 +478,17 @@ class PerfilController extends BaseController
     	);
     }
     
+
+
     
+    
+     /**
+     * Fetch one eje entity.
+     *
+     * @Route("/json/fetch_eje", name="eje_fetch")
+     * @Method("post")
+     */
+      public function fetchEjeAction() {
+      	return $this->forward("CpmJovenesBundle:Eje:fetchEje");
+      }    
 }
