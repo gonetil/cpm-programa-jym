@@ -18,8 +18,9 @@
 
 	<ul id="user-actions" class="record_actions" style="float:right">
 	    {% for accionUsuario in jym.getAccionesUsuario() %}
-	    <li>							<a 
-							{% if accionUsuario['validation'] %}
+	    <li>	
+	    						<a 
+	    					{% if accionUsuario['validation'] %}
 								href="#" onclick="return confirmAndRelocate('{{accionUsuario['validation']}}','{{ path(accionUsuario['path']) }}');"
 							{% else %}
 								href="{{ path(accionUsuario['path']) }}"								

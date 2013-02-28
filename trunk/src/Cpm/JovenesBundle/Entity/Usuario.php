@@ -354,9 +354,20 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getProyectosCoordinados()
+    public function getProyectosCoordinados($ciclo = null)
     {
-        return $this->proyectosCoordinados;
+    	if ($ciclo == null)
+	        return $this->proyectosCoordinados;
+	    else
+	    {
+	    	$proyectos = array();
+	    	foreach ( $this->proyectosCoordinados  as $p ) 
+	    	{
+	    		if ($p->getCiclo() == $ciclo )
+	    			$proyectos[] = $p;
+	    	}
+	    	return $proyectos;
+	    }    
     }
     
     public function getDistrito() {

@@ -25,8 +25,17 @@
 	});
 	</script>
 	
-<h4>{% if proyectos|length == 0 %} No posee ninguna escuela inscripta {% else %} Usted posee {{ proyectos|length }} {% if
-	proyectos|length > 1 %} escuelas inscriptas {% else %} escuela inscripta {% endif %} {% endif %}</h4>
+<h4>{% if proyectos|length == 0 %} 
+		No posee ninguna escuela inscripta
+	 {% else %} 
+	 	Usted posee {{ proyectos|length }} 
+	 	{% if proyectos|length > 1 %} 
+	 		escuelas inscriptas 
+	 	{% else %} 
+	 		escuela inscripta 
+	 	{% endif %} 
+	 {% endif %}
+</h4>
 <div id="listado-proyectos">
 <ul id="tabs-proyectos">
 	{% for proyecto in proyectos %}
@@ -64,9 +73,11 @@
 		    {% endif %}	
 		    
 		    <ul id="project-actions" class="record_actions">
+		   
 				{% for accion in jym.getAccionesProjecto(proyecto) %}
 						<li>
 							<a 
+							
 							{% if accion['validation'] %}
 								href="#" onclick="return confirmAndRelocate('{{accion['validation']}}','{{ path(accion['path'], {'id':proyecto.id}) }}');"
 							{% else %}
