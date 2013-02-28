@@ -93,7 +93,9 @@ class PerfilDinamico {
 											}
 
 											if ($con_archivo == 0) {
-												return array('info-message' => 'Estimado/a '.$usuario->getNombre().', no ha cargado el proyecto de investigación en la fecha establecida por lo que su escuela ya no participa en la Convocatoria 2012. El año que viene podrá inscribirse nuevamente con su mismo usuario. Los esperamos en la Convocatoria 2013.');
+												return array('info-message' => 'Estimado/a '.$usuario->getNombre().', no ha cargado el proyecto de investigación en la ' .
+														'fecha establecida por lo que su escuela ya no participa en la Convocatoria de este año. ' .
+														'El año que viene podrá inscribirse nuevamente con su mismo usuario. Los esperamos en la próxima Convocatoria.');
 											} else return null;								
 										 };													
 		$mensajes['invitaciones_pendientes'] = function() use ($usuario) {

@@ -101,8 +101,8 @@ class PerfilController extends BaseController
     
     	$proyecto->setCoordinador($coordinador);
     	$proyecto->setEstado(Proyecto::__ESTADO_INICIADO);
-    	$jym = $this->getJYM();
-        $proyecto->setCiclo($jym->getCicloActivo());
+    	$cicloActivo = $this->getJYM()->getCicloActivo();
+        $proyecto->setCiclo($cicloActivo);
         
     	$form = $this->createForm(new ProyectoType(), $proyecto);
     	$form->remove('coordinador');
@@ -116,7 +116,7 @@ class PerfilController extends BaseController
     		
     		$this->getMailer()->sendConfirmacionAltaProyecto($proyecto);
     		$this->setSuccessMessage("Los datos fueron registrados satifactoriamente");
-    		$this->setInfoMessage("Usted se ha inscripto al Programa Jóvenes y Memoria, Convocatoria 2012");
+    		$this->setInfoMessage("Usted se ha inscripto al Programa Jóvenes y Memoria, Convocatoria ".$cicloActivo->getTitulo());
     		
     		return $this->redirect($this->generateUrl('home_usuario'));
     	}
