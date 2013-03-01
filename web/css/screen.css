@@ -1810,15 +1810,17 @@ form[name="wizzard_form"] .record_actions { float: right; }
 .wizzard_stage #cpm_jovenesbundle_proyectotype_titulo { width: 378px; } /* mismo width que los textareas */
 .wizzard_stage #cpm_jovenesbundle_proyectotype_nroAlumnos { min-width: 183px; width: 183px; }
 
-.wizzard_stage #descripcion_eje { 
+.input_hint { 
 	width: 400px;
 	clear: right; 
 	display: inline-block;
 	vertical-align: top;
-	min-height: 50px; 
+	min-height: 25px; 
 	border: 1px solid #DEDEDE;
 	background-color: #EEFFFF;
-	padding:10px 20px 10px 20px;
+	padding:3px 5px 4px 5px;
+	margin-top: 4px;
+	margin-bottom: 4px;
 }
 .wizzard_stage #eje_row .inline-loading {; }
 

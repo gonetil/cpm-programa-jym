@@ -405,6 +405,10 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
 	public function getAniosParticipo() {
 		return $this->aniosParticipo;
 	}    
+
+	public function getAniosParticipoArray() {
+		return json_decode($this->aniosParticipo);
+	}    
     
     public function setAniosParticipo($anios) { 
     	$this->aniosParticipo = $anios;

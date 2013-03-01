@@ -42,7 +42,9 @@
             <td>{{ entity.id }}</td>
             <td style="{{ entity.enabled?'':'text-decoration:line-through;' }}">
             	<a href="{{ path('usuario_show', { 'id': entity.id }) }}">{{ entity.apellido }}, {{ entity.nombre }}</a> 
-            	<b>{{ entity.isSuperAdmin()?'[SUPERADMIN]':entity.isAdmin()?'[ADMIN]':'' }}</b>
+            	<b>{{ entity.isSuperAdmin()?'[SUPERADMIN]':entity.isAdmin()?'[ADMIN]':'' }}
+            	<br/>{% if entity.aniosParticipo %}<i>[{{ entity.aniosParticipoArray|join(',') }}]</i>{% endif %}
+            	</b>
             </td>
             <td>{{ entity.email }}</td>
             <td>{{ entity.dni }}</td>
