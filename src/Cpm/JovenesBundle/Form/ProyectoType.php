@@ -48,6 +48,20 @@ class ProyectoType extends AbstractType
     				'expanded' => true,
     				 'attr'=>array('class'=>'radios-en-linea'),
     		))
+    		->add('cuentanConNetbook', 'choice',	array(
+            		'label' => '¿Los alumnos que participan en el proyecto cuentan con netbooks del Plan Conectar Igualdad?', 
+            		'required'=>false,
+    				'choices' => array(1=>"si",0=>"no"),
+    				'expanded' => true,
+    				 'attr'=>array('class'=>'radios-en-linea'),
+    		))
+    		->add('cuentanConPlataformaVirtual', 'choice',	array(
+            		'label' => '¿Cuentan con la plataforma virtual?', 
+            		'required'=>false,
+    				'choices' => array(1=>"si",0=>"no"),
+    				'expanded' => true,
+    				 'attr'=>array('class'=>'radios-en-linea'),
+    		))
             ->add('colaboradores','collection',array('allow_add'=>true, 'allow_delete'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
             ->add('eje','entity',
             					array('label' => 'Eje',

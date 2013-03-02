@@ -45,6 +45,9 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 			{{ form_row(form.esPrimeraVezEscuela) }}
 			{{ form_row(form.esPrimeraVezAlumnos) }}
 			{{ form_row(form.nroAlumnos) }}
+			{{ form_row(form.cuentanConNetbook) }}
+			{{ form_row(form.cuentanConPlataformaVirtual) }}
+			
 			<div id="eje_row">
 			{{ form_label(form.eje) }}
 			{{ form_widget(form.eje) }}

@@ -200,6 +200,19 @@ class Proyecto
     
     private $observaciones;
     
+   /**
+     * @var boolean $cuentanConNetebook
+     * @ORM\Column(name="cuentanConNetbook", type="boolean")
+     * indica si cuentan con las netbook del plan conectar igualdad
+     */        
+    private $cuentanConNetbook = false;
+    
+   /**
+     * @var boolean $cuentanConPlataformaVirtual
+     * @ORM\Column(name="cuentanConPlataformaVirtual", type="boolean")
+     * indica si cuentan con la plataforma virtual
+     */           
+    private $cuentanConPlataformaVirtual = false;
     
 
     public function getRecibioCapacitacion()
@@ -665,4 +678,21 @@ class Proyecto
 	public function setTransporte($transporte) {
 		$this->transporte = $transporte;
 	}
+	
+	public function setCuentanConPlataformaVirtual($bool) {
+		$this->cuentanConPlataformaVirtual = $bool;
+	}
+	
+	public function getCuentanConPlataformaVirtual() {
+		return $this->cuentanConPlataformaVirtual;
+	} 
+	
+	public function setCuentanConNetbook($bool) {
+		$this->cuentanConNetbook = $bool;
+	}
+	
+	public function getCuentanConNetbook() {
+		return $this->cuentanConNetbook ;
+	}
+	
 }
