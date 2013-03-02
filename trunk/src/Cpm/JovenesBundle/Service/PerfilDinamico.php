@@ -40,7 +40,7 @@ class PerfilDinamico {
 								 };
 
 		$acciones['presentar_proyecto'] = function() use ($proyecto,$etapa_actual) {
-								if ($etapa_actual['numero'] == 3) 
+								if ($etapa_actual['numero'] == 4) 
 									return array(	'path' => 'proyecto_presentar', 
 													'label'=>'Enviar proyecto',
 													'validation'=> ($proyecto->hasArchivo() ) ? "Este proyecto ya fue enviado. ¿está seguro que desea enviarlo nuevamente?" : false
@@ -50,7 +50,7 @@ class PerfilDinamico {
 								 };
 										 
 		$acciones['modificar_colaboradores'] = function() use ($proyecto,$etapa_actual) {
-								if (($etapa_actual['numero'] >= 3) && ($etapa_actual['numero'] <= 5)) 
+								if (($etapa_actual['numero'] >= 4) && ($etapa_actual['numero'] <= 5)) 
 									return array(	'path' => 'proyecto_edit_colaboradores', 
 													'label'=>'Agregar o elminar colaboradores',
 													'validation'=>false); 
