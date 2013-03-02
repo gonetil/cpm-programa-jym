@@ -166,7 +166,11 @@
 	<div class="proyecto_right_box">
 	
 	<div class="estados_proyecto_box">
-		<h3 class="info_header">Estado actual: {{ entity.estadoActual }}</h3>
+		<h3 class="info_header">Estado actual: {{ entity.estadoActual }} 
+			<div class="estado_autor">
+			 {{ entity.estadoActual.fecha|date('d-m-Y') }}: por {{ entity.estadoActual.usuario.nombre }} {{ entity.estadoActual.usuario.apellido }}
+			 </div>
+		</h3>
 		<h4 class="info_header">
 			<a style="" href="#" onclick="$('.info_estados').toggle(); return false;" > <img src="{{ asset('images/icons/slidedown.png') }}"> Historial ({{ estados_anteriores | length }})</a> 
 			<a style="float:right;" href="javascript:cambiar_estado();">Cambiar estado</a>								
@@ -187,6 +191,9 @@
 						 </div>	
 						
 						<p><strong>Estado: {{ estado }}  </strong>
+						<div  class="estado_autor"> 
+							Por {{ estado.usuario.nombre }} {{ estado.usuario.apellido }}
+						</div>
 						</p>
 						<ul class="estado_more_info">
 							{% if estado.archivo %} 

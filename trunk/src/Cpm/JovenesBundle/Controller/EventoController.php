@@ -165,7 +165,8 @@ class EventoController extends BaseController
 
 
 			$instancias = $entity->getInstancias();
-			if (!empty($instancias)){
+			
+			if (count($instancias) > 0){
 				$this->setErrorMessage("No se puede eliminar un evento que posee instancias. Debe eliminar primero las instancias");
 			}else{
 	            $this->setSuccessMessage("Evento eliminado satisfactoriamente");
