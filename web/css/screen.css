@@ -2689,6 +2689,7 @@ ul.batch_action_list{
 	min-width: 500px;
 }
 .estado_more_info { padding: 5px 10px;}
+.estado_autor { line-height: 125%; font-size: 9pt; font-style: italic; }
 div.undo_list {float: right; padding: 0px; font-weight: bolder; }
 div.undo_link a {  color: red; }
 div.undo_link a:hover { text-decoration: underline; }
