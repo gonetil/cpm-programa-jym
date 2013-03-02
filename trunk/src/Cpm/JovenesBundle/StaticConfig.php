@@ -21,7 +21,7 @@ class StaticConfig {
 	    'numero' => 3,
 	    'nombre' => 'Etapa 3 - Desarrollo de proyectos',
 	    'descripcion' => 'Durante la tercer etapa, la carga de propuestas por parte de los docentes ya está cerrada. Los administradores pueden ahora revisar cada proyecto, corregir sus datos, y realizar la evaluación de los mismos'
-	  );
+	   );
 	  $etapas[]=array (
 	    'numero' => 4,
 	    'nombre' => 'Etapa 4 - Reenvio de proyectos rehacer',
