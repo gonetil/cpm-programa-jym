@@ -167,10 +167,13 @@
 	<div class="proyecto_right_box">
 	
 	<div class="estados_proyecto_box">
-		<h3 class="info_header">Estado actual: {{ entity.estadoActual }} 
+		<h3 class="info_header">Estado actual: {{ entity.estadoActual }}
+		
+		{% if entity.estadoActual %} 
 			<div class="estado_autor">
 			 {{ entity.estadoActual.fecha|date('d-m-Y') }}: por {{ entity.estadoActual.usuario.nombre }} {{ entity.estadoActual.usuario.apellido }}
 			 </div>
+		{% endif %}	 
 		</h3>
 		<h4 class="info_header">
 			<a style="" href="#" onclick="$('.info_estados').toggle(); return false;" > <img src="{{ asset('images/icons/slidedown.png') }}"> Historial ({{ estados_anteriores | length }})</a> 
