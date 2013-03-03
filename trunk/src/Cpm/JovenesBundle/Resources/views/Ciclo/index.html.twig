@@ -15,8 +15,9 @@
 	</ul>
 
 	<h3>Cambio de etapa</h3><br/>
+	{{ is_granted("ROLE_SUPER_ADMIN") }}
 	<ul id="acciones-sobre-etapas">
-		{% if jym.hasEtapaAnterior() %}
+		{% if jym.hasEtapaAnterior() and is_granted("ROLE_SUPER_ADMIN")  %}
 			<li class="prev-label">
 			<a href="{{path('goto_etapa_anterior')}}">Volver a la etapa anterior</a>
 			</li>
@@ -24,7 +25,7 @@
 		<li class="white-label">
 			{{jym.getNombreEtapaActual()}}
 		</li>
-		{% if jym.hasEtapaSiguiente() %}
+		{% if jym.hasEtapaSiguiente() and is_granted("ROLE_SUPER_ADMIN") %}
 			<li class="next-label">
 			<a href="{{path('goto_siguiente_etapa')}}">Pasar a la siguiente Etapa</a>
 			</li>
