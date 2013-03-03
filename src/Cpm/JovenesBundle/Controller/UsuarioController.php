@@ -274,5 +274,52 @@ class UsuarioController extends BaseController
         }
 		return $this->redirect($this->generateUrl('usuario_show', array('id' => $user->getId())));
     }
+    
+    /**
+     * Para cada usuario del sistema, si participa en algún proyecto en el ciclo activo, 
+     * lo agrega a la lista de años en que participo
+     * @Route("/update_anios_participados", name="update_anios_participados")
+     */
+    public function actualizarAniosParticipados() {
+    	
+    	set_time_limit(0);
+    	$em = $this->getDoctrine()->getEntityManager();
+		$ciclo = $this->getJYM()->getCicloActivo();
+		$proyectos = $em->getRepository('CpmJovenesBundle:Proyecto')->findAllQuery($ciclo)->getResult() ;
+		$anio = $ciclo->getTitulo();
+		$updates = 0;
+		
+    	foreach ( $proyectos as $proyecto) 
+    	{
+       		$user = $proyecto->getCoordinador();
+       		$updates+=$this->actualizarAniosParticipadosDeUsuario($user ,$anio);
+       			
+       		foreach ( $proyecto->getColaboradores() as $user) {
+       			$updates+=$this->actualizarAniosParticipadosDeUsuario($user ,$anio);
+       		}
+       		 
+		}
+		$this->setSuccessMessage("Se actualizaron en total $updates usuarios");
+		return $this->redirect($this->generateUrl('usuario', array()));
+    }
+    
+    private function actualizarAniosParticipadosDeUsuario($usuario,$anio) 
+    {
+    	$updates = 0;
+    	if  (is_null($usuario->getAniosParticipo())) {
+    		$usuario->setAniosParticipo(json_encode(array($anio=>$anio)));
+    		$updates++;
+    	} else {
+    		$anios_usuario = json_decode($usuario->getAniosParticipo(), true);
+    		if (! isset( $anios_usuario[$anio]) ) {
+    			$anios_usuario[$anio] = $anio;
+    			$usuario->setAniosParticipo(json_encode($anios_usuario));
+    			$updates++;
+    		}
+    	}
+    	
+    	if ($updates > 0) $this->getUserManager()->updateUser($usuario);
+    	return $updates; 
+    }
 
 }
