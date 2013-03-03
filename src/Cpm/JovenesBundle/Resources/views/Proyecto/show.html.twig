@@ -4,11 +4,12 @@
 {% block title %} Detalle del proyecto{% endblock %} 
 
 {% block content %}
- 		<div style="clear:both: with:100%">
-	 		<a href="#" onclick='agregarPostit("{{ path('proyecto_crear_postit',{ 'id' : entity.id}) }}");return false;'> Agregar postit </a>
-<!-- 	 		<a href="#" onclick='agregarComentario("{{ path('proyecto_crear_comentario',{ 'id' : entity.id}) }}"); return false; '> Agregar comentario </a> -->
-<!-- 	 		<a href="#" onclick='agregarTarea("{{ path('proyecto_crear_tarea',{ 'id' : entity.id}) }}"); return false;'> Agregar tarea </a> -->
-	 		
+ 		<div class="proyecto_submenu">
+	 		<a href="#" onclick='agregarPostit("{{ path('proyecto_crear_postit',{ 'id' : entity.id}) }}");return false;'> Nuevo Postit </a>
+ 	 {#
+ 	 		<a href="#" onclick='agregarComentario("{{ path('proyecto_crear_comentario',{ 'id' : entity.id}) }}"); return false; '> Comentario </a> 
+ 	 		<a href="#" onclick='agregarTarea("{{ path('proyecto_crear_tarea',{ 'id' : entity.id}) }}"); return false;'> Tarea </a> 
+	 #}		
 	 		<div id="comentario_form">
 	 			<form type="post">
 	 				<label for="asunto" id="asunto_label"></label><input type="text" name="asunto" id="asunto" />
