@@ -137,6 +137,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
         $this->proyectosCoordinados = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyectosColaborados = new \Doctrine\Common\Collections\ArrayCollection();
         $this->resetPassword = false;
+        $this->aniosParticipo = json_encode(array());
     }
     
     public function getNombreComleto(){

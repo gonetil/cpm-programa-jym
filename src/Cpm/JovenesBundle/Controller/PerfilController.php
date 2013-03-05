@@ -36,11 +36,10 @@ class PerfilController extends BaseController
     {
     	$usuario = $this->getJYM()->getLoggedInUser();
     	$estadosManager = $this->getEstadosManager();
-    	if (!$usuario->getDomicilio()) { 
-    		$this->setInfoMessage("Por favor, complete el campo Domicilio");
-			return $this->redirect($this->generateUrl('fos_user_profile_edit'));    			
+    	if ($message = $this->debeActualizarPerfil($usuario)) {
+    		$this->setInfoMessage($message);
+    		return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     	}
-    	
     	
     	$mis_proyectos = $this->getRepository('CpmJovenesBundle:Proyecto')->findBy(
 						    	array('coordinador' => $usuario->getId(), 
@@ -53,6 +52,29 @@ class PerfilController extends BaseController
         );
     }
     
+    /**
+     * Esta función checkea si el usuario debe actualizar su perfil, porque tiene datos incompletos.
+     * 
+     */
+    private function debeActualizarPerfil($usuario) {
+    		$message = "Por favor, verifique y complete (si corresponde) los siguientes campos: ";
+    		$result = false; 
+    		if (!$usuario->getDomicilio()) {   
+    			$message .= "Domicilio; ";
+    			$result = true;
+    		}
+
+    		if (!$usuario->getAniosParticipo()) {   
+    			$message .= "Años en los que participó; ";
+    			$result = true;
+    		}
+
+    		
+    		if ($result)
+	    		return $message;
+	    	else 
+	    		return false;		
+    }
     /**
     * Displays a form to create a new Proyecto entity.
     *

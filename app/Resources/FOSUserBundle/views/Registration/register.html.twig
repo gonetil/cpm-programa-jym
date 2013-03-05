@@ -9,7 +9,7 @@
 <script src="{{ asset('js/jquery.tooltip.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/utils.js') }}" type="text/javascript"></script>
 
-<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register" onsubmit='updateAnios("#fos_user_registration_form_aniosParticipo");'>
 	{% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
 	
 	{{ form_row(form.nombre) }}
