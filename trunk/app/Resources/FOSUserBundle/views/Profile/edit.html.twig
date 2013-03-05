@@ -4,7 +4,7 @@
 
 {% block fos_user_content %}
 
-<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
+<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit" onsubmit='updateAnios("#fos_user_profile_form_user_aniosParticipo");'>
 {{ form_row(form.user) }}
 {{ form_row(form.user.nombre) }}
 {{ form_row(form.user.apellido) }}

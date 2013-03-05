@@ -106,8 +106,11 @@ $(document).ready(function() {
 			<td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
 			<td>{{ filter.select_this(entity) }}</td>
 
-			<td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">{{ entity.coordinador.nombre }} {{ entity.coordinador.apellido
-				}}</td>
+			<td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">
+				<a href="{{ path('usuario_show',{ 'id' : entity.coordinador.id}) }}" > 
+					{{ entity.coordinador.nombre }} {{ entity.coordinador.apellido}}
+				</a>	
+			</td>
 			<td>Tel:{% if entity.coordinador.telefonoCelular == '' %} {{entity.coordinador.telefono}} {% else %} {{
 				entity.coordinador.telefonoCelular }} {% endif %} <br />Email: {{ entity.coordinador.email }}
 			</td>
