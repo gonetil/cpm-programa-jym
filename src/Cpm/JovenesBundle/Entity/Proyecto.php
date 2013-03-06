@@ -41,13 +41,7 @@ class Proyecto
      */
     private $nroAlumnos;
 
-    /**
-     * @var boolean $esPrimeraVezDocente
-     *
-     * @ORM\Column(name="esPrimeraVezDocente", type="boolean")
-     */
-    private $esPrimeraVezDocente=false;
-
+   
     /**
      * @var boolean $esPrimeraVezEscuela
      *
@@ -282,26 +276,11 @@ class Proyecto
         return $this->nroAlumnos;
     }
 
-    /**
-     * Set esPrimeraVezDocente
-     *
-     * @param boolean $esPrimeraVezDocente
-     */
-    public function setEsPrimeraVezDocente($esPrimeraVezDocente)
-    {
-        $this->esPrimeraVezDocente = $esPrimeraVezDocente;
-    }
-
-    /**
-     * Get esPrimeraVezDocente
-     *
-     * @return boolean 
-     */
-    public function getEsPrimeraVezDocente()
-    {
-        return $this->esPrimeraVezDocente;
-    }
-
+	public function esPrimeravezDocente() {
+		 
+		$anios = json_decode( $this->getCoordinador()->getAniosParticipo(), true );
+		return !( (!is_null($anios)) && (count($anios) > 0));
+	}
     /**
      * Set esPrimeraVezEscuela
      *

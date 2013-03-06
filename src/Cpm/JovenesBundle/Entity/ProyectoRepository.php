@@ -41,11 +41,15 @@ class ProyectoRepository extends EntityRepository {
 		} else {
 			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo_activo);
 		}
-		
-		if ($data->getEsPrimeraVezDocente()) {
-			$pv = ($data->getEsPrimeraVezDocente() != 1)?0 : 1;
-			$qb->andWhere('p.esPrimeraVezDocente = :pvd')->setParameter('pvd', $pv);
+
+		$usuarioFilter = $data->getUsuarioFilter();
+		if ($aniosParticipo = $usuarioFilter->getAniosParticipo()) {
+			foreach ( $aniosParticipo as $index => $anio ) {
+				$var = "anio{$index}"; 
+       			$qb->andWhere("coordinador.aniosParticipo like :$var")->setParameter("$var","%$anio%");
+			}	
 		}
+
 		if ($data->getEsPrimeraVezAlumnos()) {
 			$pv = ($data->getEsPrimeraVezAlumnos() != 1)?0 : 1;
 			$qb->andWhere('p.esPrimeraVezAlumnos = :pva')->setParameter('pva', $pv);

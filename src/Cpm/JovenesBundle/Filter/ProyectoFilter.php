@@ -12,6 +12,7 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 	private $estadoFilter;
 	private $instanciaEventoFilter;
 	private $cicloFilter;
+	private $usuarioFilter;
 
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new ProyectoFilterForm($this, $jym);
@@ -72,5 +73,14 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 			$this->cicloFilter = new CicloFilter();
 			
 		return $this->cicloFilter;
+	}
+	
+	public function getUsuarioFilter() {
+		if (!$this->usuarioFilter)
+			$this->usuarioFilter = new UsuarioFilter();
+		return $this->usuarioFilter;
+	}
+	public function setUsuarioFilter($usuarioFilter) {
+		$this->usuarioFilter = $usuarioFilter;
 	}
 }

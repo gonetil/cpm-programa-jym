@@ -26,7 +26,7 @@ $(document).ready(function() {
 			{{ form_row(form.modelFilter.coordinador) }} 
 			<div class="extra-filters">
 				{{ form_row(form.modelFilter.deQueSeTrata) }}
-				{{ form_row(form.modelFilter.esPrimeraVezDocente) }}
+				{{ form_row(form.modelFilter.usuarioFilter.aniosParticipo) }}
 				{{form_row(form.modelFilter.temaPrincipal) }}
 				{{ form_row(form.modelFilter.eventoFilter.evento) }}
 				{{ form_row(form.modelFilter.eventoFilter.sinInvitacionFlag) }}
@@ -76,7 +76,7 @@ $(document).ready(function() {
 		<h4>Estadísticas del ciclo activo ({{ jym.getCicloActivo() }})</h4>
 		<ul>
 			<li>Cant. de proyectos: {{total_proyectos}}</li> {% if total_proyectos > 0 %}
-			<li>% primera vez del docente: {{ 100 * total_PrimeraVezDocente / total_proyectos }}% ( {{total_PrimeraVezDocente}} )</li>
+			{# <li>% primera vez del docente: {{ 100 * total_PrimeraVezDocente / total_proyectos }}% ( {{total_PrimeraVezDocente}} )</li>  #} 
 			<li>% primera vez de los alumnos: {{ 100 * total_PrimeraVezAlumnos / total_proyectos }}% ({{total_PrimeraVezAlumnos}})</li>
 			<li>% primera vez de la escuela: {{100 * total_PrimeraVezEscuela / total_proyectos }}% ({{total_PrimeraVezEscuela}})</li> {% endif %}
 			<li>Cantidad de coordinadores: {{ total_Coordinadores }}</li>
@@ -106,7 +106,7 @@ $(document).ready(function() {
 			<td><a href="{{ path('proyecto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
 			<td>{{ filter.select_this(entity) }}</td>
 
-			<td class="{% if entity.esPrimeraVezDocente %}primera_vez{% endif %}">
+			<td class="{% if entity.esPrimeraVezDocente() %}primera_vez{% endif %}">
 				<a href="{{ path('usuario_show',{ 'id' : entity.coordinador.id}) }}" > 
 					{{ entity.coordinador.nombre }} {{ entity.coordinador.apellido}}
 				</a>	

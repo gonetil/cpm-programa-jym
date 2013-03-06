@@ -13,12 +13,7 @@
     {{ form_row(form.apellido) }}
     {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
 
-	<div id="widgetAnios">
-	{{ form_label(form.aniosParticipo) }}
-	{{ form_widget(form.aniosParticipo) }}
-	<script>
-	cargarAnios($("#cpm_jovenesbundle_usuariotype_aniosParticipo"));
-	</script>
+	{{ common.aniosParticipo('#cpm_jovenesbundle_usuariotype_aniosParticipo', form) }}
 
     {{ form_widget(form) }}
     <p>

@@ -66,7 +66,22 @@
 	        	<p>Teléfono {{ entity.coordinador.telefono }}</p>
 				<p>Teléfono celular {{ entity.coordinador.telefonoCelular }}</p>
 				<p>Domicilio {{ entity.coordinador.domicilio }}</p>
-	        	<p>Código postal {{ entity.coordinador.codigoPostal }}</p>     	
+	        	<p>Código postal {{ entity.coordinador.codigoPostal }}</p>
+				<p>Años en los que participó el coordinador: 
+			    		{% if entity.coordinador.aniosParticipo | length > 0 %}
+            				<div id="widgetAnios">
+            					<input type="hidden" id="anios" value="{{entity.coordinador.aniosParticipo}}" />
+            				 </div>
+            					<script> 
+           				 			cargarAnios($("#anios"));  
+           				 			$("#widgetAnios input").click(function(event){
+            							event.preventDefault();
+            						});	
+            					</script>
+            			{% else %}
+            					sin cargar
+            			{% endif %}
+            	</p>	        	     	
 			</div>	<!-- info_coordinador -->
 
 			{% if entity.colaboradores | length > 0 %}
@@ -90,7 +105,6 @@
 			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_proyecto').toggle(); return false;">Acerca del proyecto (tema, alumnos, impacto...) </a></h4>
 			<div class="info_proyecto hidden extra_info">
 				<ul>	
-			    	<li>Primera vez del docente: {{ common.show_bool(entity.esPrimeraVezDocente) }}</li>
 			    	<li>Recibió capacitación en años anteriores: {{ common.show_bool(entity.recibioCapacitacion) }}</li>
 			    	<li>Primera vez de la escuela: {{ common.show_bool(entity.esPrimeraVezEscuela) }}</li>
 			    	<li>Primera vez de los alumnos: {{ common.show_bool(entity.esPrimeraVezAlumnos) }}</li>

@@ -83,11 +83,7 @@ class ProyectoController extends BaseController
     	$stats['total_proyectos'] = $qb->select($qb->expr()->count('p'))
     									->where('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
     									->getQuery()->getSingleScalarResult();
-
-    	$stats['total_PrimeraVezDocente'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezDocente = 1')
-    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
-    																			->getQuery()->getSingleScalarResult();
-    																			
+ 																			
     	$stats['total_PrimeraVezAlumnos'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezAlumnos = 1')
     																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
     																			->getQuery()->getSingleScalarResult();
