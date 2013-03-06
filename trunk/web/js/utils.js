@@ -520,4 +520,31 @@ function cargarAnios(inputAnios) {
 		newInput = '<input type="checkbox" onclick=updateAnios("'+elem_id+'") ' + ( ( anios[i] ) ? 'checked' : ' ' ) + ' value="'+i+'" >' + i;
 		$("#widgetAnios").append(newInput); 
 	}
+	
+	if ( $("#widgetAnios input:checked").length > 0 ) { 
+		$("#widgetAnios").show();
+		$("#participo").attr('checked',true);
+	}
+	else {  
+		$("#widgetAnios").hide();
+		$("#no_participo").attr('checked',true);
+	}	
+}
+
+/**
+ * 
+ * */
+function chequearAnios(input) {
+	if  ( $("#participo").is(":checked"))  { 
+		if ($("#widgetAnios input:checked").length == 0) { //dijo q participo pero no marco ningun anio
+			alert("Seleccione al menos un año en que participó del programa");
+			return false;
+		}
+	} else { 
+		$("#widgetAnios input:checked").attr("checked", false);
+		updateAnios(input);
+	}
+	
+	return true;
+	
 }

@@ -1,20 +1,18 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+{% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
+
 {% block title %}Editar mi perfil{% endblock %}
 
 {% block fos_user_content %}
 
-<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit" onsubmit='updateAnios("#fos_user_profile_form_user_aniosParticipo");'>
+<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit" onsubmit='return chequearAnios("#fos_user_profile_form_user_aniosParticipo");'>
 {{ form_row(form.user) }}
 {{ form_row(form.user.nombre) }}
 {{ form_row(form.user.apellido) }}
-<div id="widgetAnios">
-{{ form_label(form.user.aniosParticipo) }}
-{{ form_widget(form.user.aniosParticipo) }}
-<script>
-cargarAnios($("#fos_user_profile_form_user_aniosParticipo"));
-</script>
-</div>
+
+{{ common.aniosParticipo('#fos_user_profile_form_user_aniosParticipo', form.user) }}
+
 {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
     {{ form_widget(form) }}
     <div>
