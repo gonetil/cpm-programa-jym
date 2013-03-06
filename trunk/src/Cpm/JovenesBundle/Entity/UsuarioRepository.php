@@ -2,6 +2,8 @@
 
 namespace Cpm\JovenesBundle\Entity;
 
+
+use Cpm \ JovenesBundle \ Filter \ UsuarioFilter;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -24,29 +26,38 @@ class UsuarioRepository extends EntityRepository
   
 	}
 	
-	function findBySearchCriteriaQuery($data,$ciclo_activo) {
+	public function filterQuery(UsuarioFilter $data, $ciclo_activo,$sort_field = null, $sort_order) {
+	//function findBySearchCriteriaQuery($data,$ciclo_activo) {
 	
 		$qb = $this->getEntityManager()->createQueryBuilder();
 	
 		$qb->add('select','u')
 		->add('from','CpmJovenesBundle:Usuario u');
 		
-		$ciclo = ($data->getCiclo()) ? $data->getCiclo() : $ciclo_activo;
-		 				
-		
-		if ($data->getCoordinadores()) 
-		{  //si solo queria coordinarores, ya estaba el join con proyectos, solo agrego
-				$qb->innerJoin('u.proyectosCoordinados','p');
-				$qb->innerJoin('p.ciclo','ciclo')->andWhere('ciclo = :ciclo')->setParameter('ciclo',$ciclo);
-				$qb = $this->incluirAdministradores($qb); //se incluyen los administradores
-		
+
+		if ($ciclo = $data->getCiclo()) { 
+
+			if ($data->getSoloCoordinadores()) 
+			{  //si solo queria coordinarores, ya estaba el join con proyectos, solo agrego
+					$qb->innerJoin('u.proyectosCoordinados','p');
+					$qb->innerJoin('p.ciclo','ciclo')->andWhere('ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+			
+			}
+			else 
+			{  	
+				$qb = $this->incluirCoordinadoresYColaboradores($qb,$ciclo);
+			
+			}  
+		// los administradores no dependen de los ciclos, con lo cual esto ya no tiene sentido
+		// $qb = $this->incluirAdministradores($qb); //se incluyen los administradores
+					
+		} else { 
+			if ($data->getSoloCoordinadores()) 
+			{  //si solo queria coordinarores, ya estaba el join con proyectos, solo agrego
+					$qb->innerJoin('u.proyectosCoordinados','p');
+			
+			}
 		}
-		else 
-		{  	
-			$qb = $this->incluirCoordinadoresYColaboradores($qb,$ciclo);
-			$qb = $this->incluirAdministradores($qb); //se incluyen los administradores
-		
-		}  
 		
 		if ($data->getApellido()) 
 				$qb->andWhere('u.apellido like :apellido')
@@ -62,7 +73,7 @@ class UsuarioRepository extends EntityRepository
 				$qb->andWhere('u.enabled <> 1');
 		}
 		
-		return $qb->getQuery();
+		return $qb;
 		
 	}
 	

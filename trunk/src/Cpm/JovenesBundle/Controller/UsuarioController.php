@@ -10,9 +10,11 @@ use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Form\UsuarioType;
 use FOS\UserBundle\Form\Handler\RegistrationFormHandler;
 
-use Cpm\JovenesBundle\EntityDummy\UsuarioSearch;
-use Cpm\JovenesBundle\Form\UsuarioSearchType;
+//use Cpm\JovenesBundle\EntityDummy\UsuarioSearch;
+//use Cpm\JovenesBundle\Form\UsuarioSearchType;
 
+use Cpm\JovenesBundle\Filter\UsuarioFilter;
+use Cpm\JovenesBundle\Filter\UsuarioFilterForm;
 
 /**
  * Usuario controller.
@@ -31,23 +33,8 @@ class UsuarioController extends BaseController
      */
     public function indexAction()
     {
-        $searchValues = new UsuarioSearch();
-        $searchForm = $this->createForm(new UsuarioSearchType(),$searchValues);
-        $request = $this->getRequest();
-        $repository = $this->getRepository('CpmJovenesBundle:Usuario');
-        
-        if (is_array($request->get("cpm_jovenesbundle_usuariosearchtype"))) 
-        {
-        	$usuarios = null;
-        	$searchForm->bindRequest($request);
-        	if ($searchForm->isValid()) {
-        		$usuarios=$repository ->findBySearchCriteriaQuery($searchForm->getData(),$this->getJYM()->getCicloActivo());
-        	}
-        } else {
-        	$usuarios = $repository->findAllQuery($this->getJYM()->getCicloActivo());
-        }
-        
-        return $this->paginate($usuarios,array('form'=>$searchForm->createView()));
+         return $this->filterAction(new UsuarioFilter(), 'escuela');
+     
     }
 
     /**

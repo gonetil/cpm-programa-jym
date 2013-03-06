@@ -6,15 +6,20 @@
 <div id="before_list">
 <form action="{{ path('usuario') }}">
 
-<div class="filters" style="border:none">
+<div class="filters label-width-auto" style="border:none">
 	<div class="left">
-		{{ form_row(form.apellido) }}
-		{{ form_row(form.email) }}
+		<div>
+			{{ form_label(form.modelFilter.apellido) }}
+			{{ form_widget(form.modelFilter.apellido) }}
+		</div>	
+		{{ form_row(form.modelFilter.habilitados) }}
+		{{ form_row(form.modelFilter.soloCoordinadores) }}
+	
 	</div>
 	<div class="right">
-		{{ form_row(form.habilitados) }}
-		{{ form_row(form.ciclo) }}
-		{{ form_row(form.coordinadores) }}
+		{{ form_row(form.modelFilter.email) }}
+		
+		{{ form_row(form.modelFilter.ciclo) }}
 	</div>
 	<div class="double">
 		{{ form_rest(form) }}
