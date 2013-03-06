@@ -10,13 +10,7 @@ class ProyectoFilterForm extends ModelFilterForm
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('esPrimeraVezDocente', 'choice' ,array('label' => '¿primera vez del docente?',
-            											'choices' => array(1=>"si",2=>"no"),
-            											'preferred_choices' => array("Todos"),
-        												'empty_value' => "Todos",
-        												'expanded'=>false,
-        												'required'=>false
-            										))
+    
             ->add('esPrimeraVezEscuela', 'choice' ,array('label' => '¿primera vez de la escuela?', 
             											'choices' => array(1=>"si",2=>"no"),
             											'preferred_choices' => array("Todos"),
@@ -90,7 +84,10 @@ class ProyectoFilterForm extends ModelFilterForm
                 										;
 			$escuela = new EscuelaFilter();	
             $builder->add('escuelaFilter', $escuela->createForm($this->getJYM()) ,array('label' => 'Escuela'));
-            
+
+            $usuario= new UsuarioFilter();	
+            $builder->add('usuarioFilter', $usuario->createForm($this->getJYM()) ,array('label' => 'UsuarioFilter'));
+                        
             $evento = new EventoFilter();
             $builder->add('eventoFilter',$evento->createForm($this->getJYM()),array('label'=>'Evento'));
             

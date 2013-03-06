@@ -14,7 +14,7 @@ class UsuarioFilter extends Usuario implements ModelFilter {
 	private $aniosParticipo;
 	
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
-		return new UsuarioFilterForm($this, $jym);
+		return new UsuarioFilterForm($this, $jym,'_usuario');
 	}
 
 	public function getTargetEntity() {
