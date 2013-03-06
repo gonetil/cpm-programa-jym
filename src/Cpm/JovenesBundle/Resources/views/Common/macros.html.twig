@@ -81,3 +81,28 @@
 	  		{% endfor %}
 	  	</select>
 {% endmacro %}
+
+
+
+
+{% macro aniosParticipo(target, form) %}
+	<div>
+		<label onclick='chequearAnios("{{target}}")';>
+			¿partició antes en el Programa Jóvenes y Memoria?
+		</label>
+		<br/>
+		<label for="participo">Si</label>
+		<input type="radio" name="participo" id="participo" required="required"  onclick="$('#widgetAnios').show(); " value="true">
+		<label for="participo">No</label>
+		<input type="radio" name="participo" id="no_participo" required="required" onclick="$('#widgetAnios').hide();"  value="false">
+	</div>
+
+	<div id="widgetAnios" class="hidden">
+		{{ form_label(form.aniosParticipo) }}
+		<br/>
+		{{ form_widget(form.aniosParticipo) }}
+		<script>
+			cargarAnios($("{{target}}"));
+		</script>
+	</div>
+{% endmacro %}

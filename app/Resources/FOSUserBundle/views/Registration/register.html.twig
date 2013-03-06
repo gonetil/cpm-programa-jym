@@ -1,5 +1,7 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+{% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
+
 {% block title %}Registro de Usuarios{% endblock %}
 
 {% block fos_user_content %}
@@ -9,19 +11,13 @@
 <script src="{{ asset('js/jquery.tooltip.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/utils.js') }}" type="text/javascript"></script>
 
-<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register" onsubmit='updateAnios("#fos_user_registration_form_aniosParticipo");'>
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register" onsubmit='return chequearAnios("#fos_user_registration_form_aniosParticipo");'>
 	{% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
 	
 	{{ form_row(form.nombre) }}
 	{{ form_row(form.apellido) }}
-	<div id="widgetAnios">
-		{{ form_label(form.aniosParticipo) }}
-		{{ form_widget(form.aniosParticipo) }}
-		<script>
-		cargarAnios($("#fos_user_registration_form_aniosParticipo"));
-		</script>
-	</div>
-	
+
+	{{ common.aniosParticipo('#fos_user_registration_form_aniosParticipo', form) }}
 	
     {{ form_widget(form) }}
     <div>
