@@ -777,9 +777,19 @@ label.error, .error {
 }
 
  div.radios-en-linea{
-	display:inline-block;
+	display:inline;
 	padding:10px;  
 }
+ div.radios-en-linea input[type=radio] { 
+ 	display: inline;
+ 	width: auto;
+ 	min-width: auto;
+ 	padding: 0px;
+ 	margin: 0px;
+ }
+ .filters div.radios-en-linea label {
+ 	width: auto; 
+ }
 
 input[type=radio],input[type=checkbox]{
 	min-width: 10px;
@@ -1938,6 +1948,15 @@ ul.mis_proyectos .proyecto_box a { color : #000;  }
 .filters input { height:16px; min-height: 16px; width:120px; min-width:120px}
 
 .filters .double input { min-height: 30px; }
+.filters .double input[type='radio'] { 
+		min-height: auto;
+		width: auto;
+		min-width: auto;
+	 }
+.label-width-auto label { 
+	width: auto !important;
+	min-width: auto !important;
+} 
 .filters select.input-narrow, .filters input.input-narrow  { min-width: 33px; width: 33px }
 .primera_vez_checkboxes select.input-narrow { min-width: 60px; width: 60px }
 
