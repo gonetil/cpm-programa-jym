@@ -10,11 +10,7 @@ class UsuarioFilterForm extends ModelFilterForm
     public function buildForm(FormBuilder $builder, array $options)
     {
     	
-    $choices = array();
-    for($i=2002;$i<2013;$i++) { 
-    	$choices[$i]=$i; 
-    }
-    	
+     $anios=  $this->getJYM()->getRangoDeAnios();
      $builder
             ->add('apellido',null,array('label'=>'Apellido', 'required'=>false))
             ->add('email',null,array('label'=>'Email', 'required'=>false))
@@ -40,7 +36,7 @@ class UsuarioFilterForm extends ModelFilterForm
 		    					))
 		    ->add('aniosParticipo','choice',array('label'=>'Años en los que indicó que participó', 
 		    								  'required' => false,
-		    								  'choices' => $choices,
+		    								  'choices' => $anios,
 		    								  'expanded' => true,
 		    								  'multiple' => true,
 		    								  'required' => false,

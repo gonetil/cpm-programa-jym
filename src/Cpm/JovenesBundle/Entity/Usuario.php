@@ -18,7 +18,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
 {
 	const ROL_USUARIO = 'ROLE_USER';
 	const ROL_ADMIN = 'ROLE_ADMIN';
-	
+
     /**
      * @var integer $id
      *

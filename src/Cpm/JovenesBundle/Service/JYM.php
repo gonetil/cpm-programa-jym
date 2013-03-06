@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 class JYM  {
+	const _PRIMER_ANIO = 2002;
 	
 	private $config;
 	private $etapasPorNombre;
@@ -379,5 +380,16 @@ class JYM  {
 			return false;
 	}
 	
+	/**
+	 * Devuelve un array con todos los años en los que podría haber participado un usuario (checkboxes aniosParticipo y usuarioFilter)
+	 */
+	public function getRangoDeAnios() {
+		$anios = array();
+		
+		for($i=JYM::_PRIMER_ANIO;$i<date('Y');$i++) {
+			$anios[$i] = $i;
+		}
+		return $anios;
+	}
 	
 }
