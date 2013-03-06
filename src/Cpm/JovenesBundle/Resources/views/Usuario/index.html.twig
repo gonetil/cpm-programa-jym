@@ -12,16 +12,18 @@
 			{{ form_label(form.modelFilter.apellido) }}
 			{{ form_widget(form.modelFilter.apellido) }}
 		</div>	
-		{{ form_row(form.modelFilter.habilitados) }}
 		{{ form_row(form.modelFilter.soloCoordinadores) }}
-	
+		{{ form_row(form.modelFilter.habilitados) }}	
 	</div>
 	<div class="right">
 		{{ form_row(form.modelFilter.email) }}
-		
 		{{ form_row(form.modelFilter.ciclo) }}
 	</div>
 	<div class="double">
+		
+		{{ form_label(form.modelFilter.aniosParticipo) }}
+		<br/>
+		{{ form_widget(form.modelFilter.aniosParticipo) }}
 		{{ form_rest(form) }}
 		<input type='submit' style="min-height:auto; height:auto;"/>
 	</div>

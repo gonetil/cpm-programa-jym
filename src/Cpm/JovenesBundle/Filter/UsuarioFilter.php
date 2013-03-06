@@ -9,8 +9,9 @@ class UsuarioFilter extends Usuario implements ModelFilter {
 	protected $email;
 	private $habilitados;
 	private $soloCoordinadores;	
-	private $cicloFilter;
+
 	private $ciclo;
+	private $aniosParticipo;
 	
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new UsuarioFilterForm($this, $jym);
@@ -45,7 +46,7 @@ class UsuarioFilter extends Usuario implements ModelFilter {
 	public function setHabilitados($habilitados) {
 		$this->habilitados = $habilitados;
 	}
-	
+		private $cicloFilter;
 	public function getSoloCoordinadores() {
 		return $this->soloCoordinadores;
 	}
@@ -59,7 +60,16 @@ class UsuarioFilter extends Usuario implements ModelFilter {
 	public function setCiclo($ciclo) {
 		$this->ciclo = $ciclo;
 	}
+	public function getAniosParticipo() {
+		return $this->aniosParticipo;
+	}
+	public function setAniosParticipo($anios) {
+		$this->aniosParticipo = $anios;
+	}
 	
+	
+/*	el principio el usuarioFilter ya no usa más el cicloFilter
+ * private $cicloFilter;
 	public function getCicloFilter()
 	{ 
 		if (!$this->cicloFilter)
@@ -72,5 +82,5 @@ class UsuarioFilter extends Usuario implements ModelFilter {
 	{
 		$this->cicloFilter = $ciclo;
 	}
-	
+	*/
 }

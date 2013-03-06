@@ -34,7 +34,6 @@ class UsuarioRepository extends EntityRepository
 		$qb->add('select','u')
 		->add('from','CpmJovenesBundle:Usuario u');
 		
-
 		if ($ciclo = $data->getCiclo()) { 
 
 			if ($data->getSoloCoordinadores()) 
@@ -73,6 +72,12 @@ class UsuarioRepository extends EntityRepository
 				$qb->andWhere('u.enabled <> 1');
 		}
 		
+		if ( $anios = $data->getAniosParticipo() ) {
+			foreach ( $anios as $index => $anio ) {
+				$var = "anio{$index}"; 
+       			$qb->andWhere("u.aniosParticipo like :$var")->setParameter("$var","%$anio%");
+			}	
+		}
 		return $qb;
 		
 	}
