@@ -179,49 +179,31 @@
 	<div class="correos_usuario">
 	<h2> Correos enviados </h2>
 	<script>
-		function buscar_correo(id) {
-						$loading = $("#correo_"+id+" .loading");
-						$loading.show();
-						$.getJSON("{{ path('correo_find_by_id') }}", 
-									{ correo_id : id} , 
-									function(data) {
-								   		if (data) {
-								   			$cuerpo = $("#correo_"+id+" .usuario_correo_cuerpo");
-								   			$loading.hide()
-								   			link = "<div class='correo_link'><a target='_blank' href='"+data.path+"'>Abrir</a></div>";
-									   		$cuerpo.append(data.cuerpo + link).slideDown();
-									   		$("#correo_"+id).unbind('click').click(function(event) { $cuerpo.toggle(); });
-									   	}
-									} //function
-								); //getJSON
-				return false; 				
-		} //buscar_correo
-		
-		
+	
 		$(document).ready(function() {
-			$('.correo_usuario').click(function(event) {
-				event.preventDefault();
-				$item = $(event.target);
-				id = $item.attr('target');
-				console.log(id);
-				if (id != 0) {
-					$item.attr('target',0);
-					return buscar_correo(id);
-				}
-			 });
+			$('.correo_usuario').click( function(event) {
+												buscar_correo($(event.target).attr('target'),"{{ path('correo_find_by_id') }}");
+				 						});
 			 
-			 $('.correo_usuario').click(function(event) { $(event.target).children('a').click(); });
+			 $('.usuario_correo_cuerpo').click(function(event) { $(event.target).slideToggle(); });
 		});
 	</script>
 	<ul>
+	
 	{% for correo in entity.correosRecibidos | reverse%}
-		<li id="correo_{{correo.id}}" class="correo_usuario" target="{{correo.id}}">
-				{{ correo.fecha |date('d-m-Y H:i:s') }} {{ correo.asunto }}
+		{%  set current = (correo.fecha |date('Y')) %}
+		<li id="correo_{{correo.id}}" class="{{ current }}">
+				<a href="#" onclick="return false;" class="correo_usuario" target="{{correo.id}}">
+					{{ correo.fecha |date('d-m-Y H:i:s') }} {{ correo.asunto }}
+				</a>
 			<div class="loading inline-loading"></div>
 			<div class="usuario_correo_cuerpo">
 			</div>
 		</li>
+	{% else %}
+		Este usuario no posee correos
 	{% endfor %}
+	
 	</ul>
 	<div>			
 

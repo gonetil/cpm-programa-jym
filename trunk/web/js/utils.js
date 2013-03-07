@@ -532,8 +532,10 @@ function cargarAnios(inputAnios) {
 }
 
 /**
+ * Controla que el usuario marque al menos un año si indicó que sí participó
  * 
- * */
+ * 
+ */
 function chequearAnios(input) {
 	if  ( $("#participo").is(":checked"))  { 
 		if ($("#widgetAnios input:checked").length == 0) { //dijo q participo pero no marco ningun anio
@@ -546,5 +548,31 @@ function chequearAnios(input) {
 	}
 	
 	return true;
-	
 }
+
+function fetchCorreo(path,id,callback) {
+	retorno = null;
+	$.getJSON(
+			path, 
+			{ correo_id : id} , 
+			  function(data) { retorno = callback(data,id); }
+		); //getJSON
+	return retorno;
+}
+
+function buscar_correo(id, path) {
+				$loading = $("#correo_"+id+" .loading");
+				$loading.show();
+				correo =  fetchCorreo(path,id,mostrarCorreo);
+				$loading.hide();
+				return correo; 				
+} //buscar_correo
+
+function mostrarCorreo (data,id) {
+		if (data) {
+			$cuerpo = $("#correo_"+id + " .usuario_correo_cuerpo");
+			link = "<div class='correo_link'><a target='_blank' href='"+data.path+"'>Abrir</a></div>";
+			$cuerpo.html(data.cuerpo + link).slideDown();
+//	   		$("#correo_"+id).unbind('click').click(function(event) { $cuerpo.toggle(); });
+		}
+} //mostrarCorreo
