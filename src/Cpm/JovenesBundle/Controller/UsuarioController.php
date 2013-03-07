@@ -351,7 +351,7 @@ class UsuarioController extends BaseController
 		echo "<hr>Se actualizaron en total $updates usuarios de $cant";
 		die;
 		
-		$this->setSuccessMessage("Se actualizaron en total $updates usuarios de $cant");
+		$this->setSuccessMessage("Se actualizaron en total $updates usuarios de $cant proyectos");
 		return $this->redirect($this->generateUrl('usuario', array()));
 		
 	}
