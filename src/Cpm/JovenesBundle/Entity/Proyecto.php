@@ -155,7 +155,7 @@ class Proyecto
     
     /**
      *    
-    *  @ORM\OneToOne(targetEntity="EstadoProyecto",cascade={"persist"})
+    *  @ORM\OneToOne(targetEntity="EstadoProyecto",cascade={"persist", "remove"})
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="estadoActual_id", referencedColumnName="id", nullable=true, onDelete="SET NULL", onUpdate="SET NULL")
     * })
