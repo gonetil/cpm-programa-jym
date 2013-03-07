@@ -265,7 +265,7 @@ class UsuarioController extends BaseController
     /**
      * Para cada usuario del sistema, si participa en algún proyecto en el ciclo activo, 
      * lo agrega a la lista de años en que participo
-     * @Route("/update_anios_participados", name="update_anios_participados")
+     * @Route("/update_anios_participados_old", name="update_anios_participados_old")
      */
     public function actualizarAniosParticipados() {
     	
@@ -305,8 +305,54 @@ class UsuarioController extends BaseController
     		}
     	}
     	
-    	if ($updates > 0) $this->getUserManager()->updateUser($usuario);
+    	//$this->getUserManager()->updateUser($usuario);
     	return $updates; 
     }
 
+    /**
+     * Para cada usuario del sistema, si participa en algún proyecto en el ciclo activo, 
+     * lo agrega a la lista de años en que participo
+     * @Route("/update_anios_participados", name="update_anios_participados")
+     */
+     function actualizarAniosParticipadosBatch() {
+
+		 $memoInit = memory_get_usage();
+		 
+      	$em = $this->getEntityManager(); //group_concat
+		$proyectos = $em->getRepository('CpmJovenesBundle:Proyecto')->findAll();
+        
+    	set_time_limit(60+3*count($proyectos));
+    	$i = $updates = 0;
+   
+		$batchSize = 20;
+		$cache = array();
+    	foreach ($proyectos as $proyecto) {
+   	    	$anio = $proyecto->getCiclo()->getTitulo();
+   	    	
+   	    	$user_id = $proyecto->getCoordinador()->getId();
+   	    	$user = $proyecto->getCoordinador();
+
+			$updates+=$this->actualizarAniosParticipadosDeUsuario($user,$anio);
+			$this->getEntityManager()->persist($user);
+			foreach ( $proyecto->getColaboradores() as $colab) {
+					$user_id = $colab->getId();
+		   			$updates+=$this->actualizarAniosParticipadosDeUsuario($colab ,$anio);
+		   			$this->getEntityManager()->persist($colab);
+       		}
+    		
+		}
+
+	    	$this->getEntityManager()->flush();
+	    	$this->getEntityManager()->clear();
+   
+   		echo "finalizo con ".(memory_get_usage() - $memoInit);
+   
+		$cant = count($proyectos);
+		echo "<hr>Se actualizaron en total $updates usuarios de $cant";
+		die;
+		
+		$this->setSuccessMessage("Se actualizaron en total $updates usuarios de $cant");
+		return $this->redirect($this->generateUrl('usuario', array()));
+		
+	}
 }
