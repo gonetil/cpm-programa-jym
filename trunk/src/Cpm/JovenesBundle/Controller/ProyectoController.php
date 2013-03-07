@@ -261,9 +261,12 @@ class ProyectoController extends BaseController
 			try{
 				$em->remove($entity);
 				$em->flush();
+				//FIXME eliminar archivos del proyecto
 				$this->setSuccessMessage("Proyecto eliminado satisfactoriamente");
 			}catch(\PDOException $e){
-			    $this->setErrorMessage("No se puede eliminar al proyecto, es muy probable que tenga muchos elementos relacionados. Contactese con el equipo de desarrollo.");
+			    $this->setErrorMessage("No se puede eliminar al proyecto, es muy probable que tenga muchos elementos relacionados. Contactese con el equipo de desarrollo. ({$e->getMessage()})");
+			    return $this->redirect($this->generateUrl('proyecto_show', array('id' => $entity->getId())));
+			    
 			}
 	    }
         return $this->redirect($this->generateUrl('proyecto'));
