@@ -15,8 +15,8 @@
 	 				<label for="asunto" id="asunto_label"></label><input type="text" name="asunto" id="asunto" />
 	 				<label for="cuerpo" id="cuerpo_label"></label><textarea name="cuerpo" id="cuerpo"></textarea>
 	 				<input type='hidden' id='tipo_comentario' value=''>
-	 				<a href="#"  style="float:left;" title="Cerrar" onclick="$('#comentario_form').hide(); return false;";> <img src="/images/icons/error.png"> </a>
-	 				<a href="#" style='float:right;' title="Guardar nota" onclick="enviarComentarioAjax()"> <img src="/images/icons/success.png"> </a>
+	 				<a href="#"  style="float:left;" title="Cerrar" onclick="$('#comentario_form').hide(); return false;";> <img src="{{ asset('images/icons/error.png') }}"> </a>
+	 				<a href="#" style='float:right;' title="Guardar nota" onclick="enviarComentarioAjax()"> <img src="{{asset('images/icons/success.png') }}"> </a>
 	 			</form>
 	 		</div>
  		</div>
@@ -348,11 +348,11 @@
 			</div>
 			<div class="options_bar">
 				<a href="#" title="Borrar" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
-					<img src="/images/icons/delete.png">
+					<img src="{{ asset('images/icons/delete.png') }}">
 				 </a>
 				<a href="#" title="Marcar como {% if p.estado %} no {% endif %} leido" 
 							onclick="marcarLeidoComentarioAjax('{{ path('proyecto_cambiar_estado_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
-						<img src="/images/icons/success.png">
+						<img src="{{ asset('images/icons/success.png') }}">
 				</a>
 			</div>
 			
