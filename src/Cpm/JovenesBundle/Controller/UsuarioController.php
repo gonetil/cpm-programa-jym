@@ -345,13 +345,10 @@ class UsuarioController extends BaseController
 	    	$this->getEntityManager()->flush();
 	    	$this->getEntityManager()->clear();
    
-   		echo "finalizo con ".(memory_get_usage() - $memoInit);
-   
+   		
+   		$mem = round(((memory_get_usage() - $memoInit) / (pow(1024,2) )),2);
 		$cant = count($proyectos);
-		echo "<hr>Se actualizaron en total $updates usuarios de $cant";
-		die;
-		
-		$this->setSuccessMessage("Se actualizaron en total $updates usuarios de $cant proyectos");
+		$this->setSuccessMessage("Se actualizaron en total $updates usuarios de $cant proyectos. Se utilizaron en total $mem MB");
 		return $this->redirect($this->generateUrl('usuario', array()));
 		
 	}
