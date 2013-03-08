@@ -15,17 +15,39 @@ class CorreoRepository extends EntityRepository
 {
 	static $sort_criteria = array("id" => "c.id" , "Fecha envio" => "c.fecha");
 	
-	public function findAllQuery($user_id = null) {
+	public function findAllQuery($ciclo, $user_id = null) {
+		$emConfig = $this->getEntityManager()->getConfiguration();
+	    $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
 		$qb = $this->getEntityManager()->createQueryBuilder()
 		->add('select','c')
 		->add('from','CpmJovenesBundle:Correo c')
 		->orderBy('c.fecha', 'DESC');
 	
-		if ($user_id != null)
+		if (!empty($user_id))
 			$qb->andWhere('c.destinatario = :destinatario')
 				->setParameter('destinatario',$user_id);
-		
+		$qb->andWhere('YEAR(c.fecha)= :ciclo')
+				->setParameter('ciclo',$ciclo->getTitulo());
 		return  $qb->getQuery();
+	}
+	
+	public function getCantidadCorreosPorCiclo($user_id = null) {
+		
+//		$emConfig = $this->getEntityManager()->getConfiguration();
+//	    $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
+// 	 	$emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
+//    	$emConfig->addCustomDatetimeFunction('DAY', 'DoctrineExtensions\Query\Mysql\Day');
+    
+		$where="";
+		if (!empty($user_id))
+			$where.='AND correo.destinatario_id = '.$user_id;
+		$rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+		$rsm->addEntityResult('CpmJovenesBundle:Ciclo', 'ciclo','ciclo');
+		$rsm->addFieldResult('ciclo', 'id', 'id');
+		$rsm->addFieldResult('ciclo', 'titulo', 'titulo');
+		$rsm->addScalarResult('cant', 'cant');
+		$query = $this->getEntityManager()->createNativeQuery('SELECT ciclo.id, ciclo.titulo, count(correo.fecha) as cant FROM Ciclo ciclo LEFT JOIN Correo correo ON ciclo.titulo=YEAR(correo.fecha) '.$where.' GROUP BY ciclo.titulo ORDER BY ciclo.titulo DESC', $rsm);
+		return $query->getResult();
 	}
 	
 	public function filterQuery(CorreoFilter $filter,$ciclo_activo,$sort_field = null, $sort_order) {

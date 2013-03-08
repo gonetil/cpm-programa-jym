@@ -235,9 +235,20 @@ class PerfilController extends BaseController
     	
     public function misCorreosAction() 
     {
-    	$usuario = $this->getJYM()->getLoggedInUser();
-    	$query = $this->getRepository('CpmJovenesBundle:Correo')->findAllQuery($usuario->getId());
-    	return $this->paginate($query);
+    	
+		$id_ciclo = $this->getRequest()->get('ciclo');
+		
+		if (empty($id_ciclo))
+	    	$ciclo = $this->getJYM()->getCicloActivo();
+		else
+			$ciclo = $this->getEntity('CpmJovenesBundle:Ciclo', $id_ciclo);
+	 	$usuario = $this->getJYM()->getLoggedInUser();
+	 
+	 	$cantCorreosPorCiclo = $this->getRepository('CpmJovenesBundle:Correo')->getCantidadCorreosPorCiclo($usuario->getId());
+    	
+    	$query =$this->getRepository('CpmJovenesBundle:Correo')->findAllQuery($ciclo,$usuario->getId());
+    	//var_dump($cantCorreosPorCiclo);exit;
+    	return $this->paginate($query,array('ciclo'=> $ciclo, 'cantCorreosPorCiclo' => $cantCorreosPorCiclo));
 
     }
 
