@@ -6,7 +6,7 @@
 
 {% block content %}
 <ul id="user-messages"> 
-{% for mensajes in jym.mensajesDeUsuario() %}
+{% for mensajes in jym.getPerfil().getMensajesDeUsuario() %}
 	{% for key,m in mensajes %} {# cada mensaje de usuario puede estar compuesto de varios mensajes #}
 		<li class="{{key}}"> {{ m }} </li>
 	{% endfor %}
@@ -17,7 +17,7 @@
 	
 
 	<ul id="user-actions" class="record_actions" style="float:right">
-	    {% for accionUsuario in jym.getAccionesUsuario() %}
+	    {% for accionUsuario in jym.getPerfil().getAccionesDeUsuario() %}
 	    <li>	
 	    						<a 
 	    					{% if accionUsuario['validation'] %}

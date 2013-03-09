@@ -1,0 +1,60 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Etapa{% endblock %}
+
+{% block content %}
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Nombre</th>
+            <td>{{ entity.nombre }}</td>
+        </tr>
+        <tr>
+            <th>Descripcion</th>
+            <td>{{ entity.descripcion }}</td>
+        </tr>
+        <tr>
+            <th>Numero</th>
+            <td>{{ entity.numero }}</td>
+        </tr>
+        <tr>
+            <th>Proyectos Vigentes Action</th>
+            <td>{{ entity.proyectosVigentesAction }}</td>
+        </tr>
+        <tr>
+            <th>Acciones de usuario</th>
+            <td>{{ entity.accionesDeUsuario | join(', ')}}</td>
+        </tr>
+        <tr>
+            <th>Acciones de proyecto</th>
+            <td>{{ entity.accionesDeProyecto | join(', ') }}</td>
+        </tr>
+        <tr>
+            <th>En desuso? </th>
+            <td>{{ entity.deprecated }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('etapa') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('etapa_edit', { 'id': entity.id }) }}">
+            Editar
+        </a>
+    </li>
+    <!-- <li>
+        <form action="{{ path('etapa_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+    -->
+</ul>
+
+{% endblock %}

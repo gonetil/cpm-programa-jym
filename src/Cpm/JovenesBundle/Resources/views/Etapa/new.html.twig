@@ -1,0 +1,25 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Nueva Etapa{% endblock %}
+
+{% block content %}
+<form action="{{ path('etapa_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+	{{ form_row(form.nombre) }}
+	{{ form_row(form.descripcion) }}
+	{{ form_row(form.proyectosVigentesAction) }}
+
+{{ form_widget(form._token) }}
+<ul class="record_actions">
+    <li>
+        <button type="submit">Crear Etapa</button>
+    </li>
+    <li>
+        <a href="{{ path('etapa') }}">
+            Cancelar y volver al listado 
+        </a>
+    </li>
+</ul>
+
+</form>
+{% endblock %}
