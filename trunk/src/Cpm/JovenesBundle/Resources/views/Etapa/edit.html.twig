@@ -1,0 +1,112 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Modificar Etapa{% endblock %}
+
+{% block content %}
+
+<style>
+.dynamic-form-list{
+	background-color: #F1F1F1;
+	padding: 10px;
+}
+.dynamic-form-list div{
+	display: inline;	
+}
+</style>
+<form action="{{ path('etapa_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+	{{ form_row(edit_form.nombre) }}
+	{{ form_row(edit_form.numero) }}
+	{{ form_row(edit_form.descripcion) }}
+
+    <p>{{ form_label(edit_form.accionesDeUsuario) }} (<a href="#" id="add-another-accionesDeUsuario">Agregar</a>)</p>
+     <ul id="accionesDeUsuario" data-prototype="{{ form_widget(edit_form.accionesDeUsuario.vars.prototype)|e }}" class="dynamic-form-list">
+        {% for acc in edit_form.accionesDeUsuario %}
+            <li>{{ form_widget(acc) }}</li>
+        {% endfor %}
+    </ul>
+	{{ form_widget(edit_form.accionesDeUsuario) }}
+	
+	 <p>{{ form_label(edit_form.accionesDeProyecto) }} (<a href="#" id="add-another-accionesDeProyecto">Agregar</a>)</p>
+     <ul id="accionesDeProyecto" data-prototype="{{ form_widget(edit_form.accionesDeProyecto.vars.prototype)|e }}"  class="dynamic-form-list">
+        {% for acc in edit_form.accionesDeProyecto %}
+            <li>{{ form_widget(acc) }}</li>
+        {% endfor %}
+    </ul>
+	{{ form_widget(edit_form.accionesDeProyecto) }}
+    
+
+    {{ form_rest(edit_form) }}
+
+<ul class="record_actions">
+    <li>
+   <button type="submit">Guardar</button>
+   
+    </li>
+    <li>
+        <a href="{{ path('etapa') }}">
+            Volver al listado
+        </a>
+    </li>
+    <!-- 
+    <li>
+        <form action="{{ path('etapa_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Eliminar</button>
+        </form>
+    </li>
+    -->
+</ul>
+</form>
+
+
+<script type="text/javascript">
+
+	var itemsCount = new Array;
+	
+	function registrar_allow_add(addButtomSelector, widgetListSelector, cantidadItemsIniciales){
+		 var itemList = jQuery(widgetListSelector);
+		 itemsCount[widgetListSelector]=cantidadItemsIniciales;
+		 jQuery(addButtomSelector).click(function() {
+             // replace the "__name__" used in the id and name of the prototype
+            // with a number that's unique to your emails
+            // end name attribute looks like name="contact[emails][2]"
+            var newWidget = itemList.attr('data-prototype').replace(/\$\$name\$\$/g, itemsCount[widgetListSelector]);
+            itemsCount[widgetListSelector]++;
+
+            // create a new list element and add it to the list
+            var li = jQuery('<li></li>');
+            li.html(newWidget).appendTo(itemList);
+            registrar_allow_delete(li);
+            return false;
+        });
+		 
+		 // add a delete link to all of the existing tag form li elements
+		    itemList.find('li').each(function() {
+		    	registrar_allow_delete($(this));
+		    })
+	} 
+
+
+	function registrar_allow_delete($tagFormLi) {
+	    var $removeFormA = $('<a href="#">Quitar</a>');
+	    $tagFormLi.append($removeFormA);
+
+	    $removeFormA.on('click', function(e) {
+	        // prevent the link from creating a "#" on the URL
+	        e.preventDefault();
+
+	        // remove the li for the tag form
+	        $tagFormLi.remove();
+	    });
+	}
+	
+	
+    jQuery(document).ready(function() {
+    	registrar_allow_add('#add-another-accionesDeUsuario', '#accionesDeUsuario','{{ edit_form.accionesDeUsuario | length }}');
+    	
+    	registrar_allow_add('#add-another-accionesDeProyecto', '#accionesDeProyecto','{{ edit_form.accionesDeProyecto | length }}');
+    })
+</script>
+
+
+{% endblock %}

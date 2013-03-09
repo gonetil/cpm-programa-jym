@@ -16,9 +16,9 @@
 					<li><a href="{{path('home')}}">Mis proyectos</a></li>
 					<li><a href="{{path('correos_usuario')}}">Mis Correos</a></li>
 			
-				    {% for accionUsuario in jym.getAccionesUsuario() %}
+				    {% for accionUsuario in jym.getPerfil().getAccionesDeUsuario() %}
 					<li>
-							<li><a href="{{path(accionUsuario['path'])}}">{{accionUsuario['label']}}</a></li>
+							<li><a href="{{url(accionUsuario['path'])}}">{{accionUsuario['label']}}</a></li>
 					</li>
 					{% endfor %}
 					{% if app.user.proyectosCoordinados|length > 0 %}
@@ -31,7 +31,7 @@
 					
 				{% else %}
 				
-					<li><a href="{{path(jym.getProyectoActualFilterEtapaActual())}}">Proyectos vigentes</a></li>
+					<li><a href="{{path(jym.getEtapaActual().getProyectosVigentesAction())}}">Proyectos vigentes</a></li>
 					<li><a href="{{path('proyecto')}}">Todos los Proyectos</a></li>
 					<li><a href="{{path('usuario')}}">Usuarios</a></li>
 					<li><a href="{{path('instancia')}}">Instancias de Eventos</a></li>
@@ -110,6 +110,7 @@
 					<div class="select_sub show">
 						<ul class="sub">
 							<li><a href="{{path('ciclo')}}">Ciclo</a></li>
+							<li><a href="{{path('etapa')}}">Etapas</a></li>
 							
 						</ul>
 					</div>

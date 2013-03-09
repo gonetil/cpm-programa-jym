@@ -8,7 +8,7 @@
 <div id="div-etapas">
 	<h3>Etapas disponibles</h3><br/>
 	<ul id="listado_etapas">
-		{% for etapa in jym.getNombresEtapas() %}
+		{% for etapa in jym.getEtapas() %}
 			<li title="{{ etapa.descripcion }}">{{etapa.nombre}}
 			</li>
 		{% endfor %}
@@ -17,15 +17,15 @@
 	<h3>Cambio de etapa</h3><br/>
 	{{ is_granted("ROLE_SUPER_ADMIN") }}
 	<ul id="acciones-sobre-etapas">
-		{% if jym.hasEtapaAnterior() and is_granted("ROLE_SUPER_ADMIN")  %}
+		{% if jym.getEtapaAnterior() and is_granted("ROLE_SUPER_ADMIN")  %}
 			<li class="prev-label">
 			<a href="{{path('goto_etapa_anterior')}}">Volver a la etapa anterior</a>
 			</li>
 		{% endif %}
 		<li class="white-label">
-			{{jym.getNombreEtapaActual()}}
+			{{jym.getEtapaActual().getNombre()}}
 		</li>
-		{% if jym.hasEtapaSiguiente() and is_granted("ROLE_SUPER_ADMIN") %}
+		{% if jym.getEtapaSiguiente() and is_granted("ROLE_SUPER_ADMIN") %}
 			<li class="next-label">
 			<a href="{{path('goto_siguiente_etapa')}}">Pasar a la siguiente Etapa</a>
 			</li>
@@ -33,7 +33,7 @@
 	</ul>
 	
 	<div class="descripcion-etapa">
-			{{jym.getDescripcionEtapaActual()}}
+			{{jym.getEtapaActual().getDescripcion()}}
 	</div>
 	
 </div>

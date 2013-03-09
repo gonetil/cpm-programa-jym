@@ -279,7 +279,6 @@ abstract class BaseController extends Controller
 				 	->createQueryBuilder('e')
 				 	->andWhere('e.id in (:entities)')->setParameter('entities',array_values($queryForm['selectedEntities']))
 				 	->getQuery()->getResult();
-//				var_dump($queryForm['selectedEntities']);exit;
 				 	
 				$filter->setSelectedEntities($selectedEntities);
 			}

@@ -3,7 +3,6 @@
 namespace Cpm\JovenesBundle\Service;
 
 
-use Cpm\JovenesBundle\StaticConfig;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Proyecto;
 use Cpm\JovenesBundle\Entity\Ciclo;
@@ -14,193 +13,141 @@ class JYM  {
 	const _PRIMER_ANIO = 2002;
 	
 	private $config;
-	private $etapasPorNombre;
-	private $etapas;
-	private $ciclo;
-	private $numeroEtapaActual;
+	private $ciclo=null;
 	private $container;
 	private $doctrine;
 	private $logger;
 	private $perfil_dinamico;
+	
 	public function __construct($doctrine, $logger, ContainerInterface $container){
 		$this->doctrine=$doctrine;
 		$this->logger=$logger;
 		$this->container=$container;
 		$this->config = $container->getParameter("cpm_jovenes");
-		$this->setEtapas(StaticConfig::getEtapas());
-		$this->ciclo=null;
-		$this->lastInit();
-		$this->perfil_dinamico = new PerfilDinamico();
+		$this->perfil_dinamico = new PerfilDinamico($this);
+		
+/*		$em = $this->doctrine->getEntityManager();
+		$es = $this->getRepository('CpmJovenesBundle:Etapa')->findAll();
+		foreach( $es as $e ) {
+       		$e->setAccionesDeUsuario(array('alo'));
+       		$e->setAccionesDeProyecto(array('alo'));
+       		$em->persist($e); $em->flush();
+		}  
+		exit; Doctrine\DBAL\Types\Type::getType().
+		*/
+		
 	} 
 	
-	private function setEtapas($etapas){
-		$this->etapasPorNombre = array();
-		$this->etapas = $etapas;
-		foreach ( $this->etapas as $numEtapa => $sarassaasa) {
-			$this->etapasPorNombre[$this->etapas[$numEtapa]['nombre']]=$numEtapa;
-			
-			if (empty($this->etapas[$numEtapa]['accionesUsuario']))
-				$this->etapas[$numEtapa]['accionesUsuario']=array();
-
-			if (empty($this->etapas[$numEtapa]['accionesProyectos']))
-				$this->etapas[$numEtapa]['accionesProyectos']=array();
-		}
-	}
-	
 	public function getCicloActivo(){
+		if (empty($this->ciclo)){
+			//Calcula la primer etapa y que el ciclo activo exista 
+			
+			$repo = $this->doctrine->getEntityManager()->getRepository("CpmJovenesBundle:Ciclo");
+			$this->ciclo = $repo->getCicloActivo(false);
+			if (empty($this->ciclo )){
+				//No hay ciclo activo ==> creo uno
+				$this->ciclo = new Ciclo();
+				$this->ciclo->setTitulo(date('Y'));
+				$this->ciclo->setActivo(true);
+				$this->this->logger->err("No habia ningun ciclo creado, se crea uno y se activa");
+				
+				//guardo el ciclo nuevo
+				$em = $this->doctrine->getEntityManager();
+				$em->persist($this->ciclo);
+		        $em->flush();
+						
+			}
+			$this->checkEtapaActiva();
+			
+			$this->logger->info("Se incializa El CICLO ".$this->ciclo->getTitulo());
+		}
 		return $this->ciclo;
 	}
 	
-	/**
-	 * Calcula la primer etapa y que el ciclo activo exista 
-	 */
-	private function lastInit(){
-		$repo = $this->doctrine->getEntityManager()->getRepository("CpmJovenesBundle:Ciclo");
-		
-		$this->ciclo = $repo->getCicloActivo(false);
-		if (empty($this->ciclo )){
-			$this->logger->err("No habia ningun ciclo creado, se crea uno y se activa");
-			$this->ciclo = new Ciclo();
-			$this->ciclo->setTitulo('Ciclo 1 (Creado automaticamente)');
-			$this->ciclo->setActivo(true);
-			$this->gotoEtapa(0);
-		}
-		$nombreEtapaActual=$this->ciclo->getEtapaActual();
-		if (!isset($this->etapasPorNombre[$nombreEtapaActual]))
-			$this->numeroEtapaActual = false;
-		else 
-			$this->numeroEtapaActual = $this->etapasPorNombre[$nombreEtapaActual];
-		//echo "busco la etapa ".$this->etapasPorNombre[$nombreEtapaActual];
-		if (($this->numeroEtapaActual === false) || !$this->hasEtapa($this->numeroEtapaActual)){
-			$this->gotoEtapa(0);
-		}
-		
-		$this->logger->info("Se incializa JYM");
-			
-	}
 	
-	public function setCicloActivo(Ciclo $ciclo){
-		if ($this->ciclo->getId() == $ciclo->getId())
+	public function setCicloActivo(Ciclo $cicloNuevo){
+		$cicloViejo = $this->getCicloActivo();
+		if ($cicloViejo->getId() == $cicloNuevo->getId())
 			return;
 
-		$this->ciclo->setActivo(false);
-		$ciclo->setActivo(true);
+		$cicloViejo->setActivo(false);
+		$cicloNuevo->setActivo(true);
 		
 		$em = $this->doctrine->getEntityManager();
-		$em->persist($this->ciclo);
-		$em->persist($ciclo);
+		$em->persist($cicloViejo);
+		$em->persist($cicloNuevo);
         $em->flush();
         
-        $this->logger->info("Se desactiva el ciclo ".$this->ciclo->getId(). " y se activa el ciclo ".$ciclo->getId());
-		$this->ciclo = $ciclo;
-		$this->gotoEtapa(0);
+        $this->logger->info("Se desactiva el ciclo ".$cicloViejo->getId(). " y se activa el ciclo ".$cicloNuevo->getId());
+		$this->ciclo = $cicloNuevo;
+		
+		$this->checkEtapaActiva();
 	}
 	
-	private function flush(){
-		$em = $this->doctrine->getEntityManager();
-		$em->persist($this->ciclo);
-        $em->flush();
+	protected function checkEtapaActiva(){
+		$etapaActual=$this->getEtapaActual();
+		if (empty($etapaActual))
+			throw new \Exception("Se ha producido un error: no hay etapa activa asociada al ciclo ".$this->ciclo->getTitulo());
 	}
 	
-	public function gotoEtapaSiguiente(){
-		$this->gotoEtapa($this->numeroEtapaActual+1);
+	
+	public function getEtapas(){
+		return $this->getRepository('CpmJovenesBundle:Etapa')->findAll();
 	}
-
+	
+	function getEtapaInicial(){
+		return $this->getRepository('CpmJovenesBundle:Etapa')->findPrimerEtapa();
+	}
+	
 	public function gotoEtapaAnterior(){
-		$this->gotoEtapa($this->numeroEtapaActual-1);
+		$ea = $this->getEtapaAnterior();
+		if (empty($ea))
+			throw new \OutOfRangeException("No existe una etapa posterior a la actual");
+		$this->setEtapaActual($ea);
 	}
 
-	public function hasEtapaSiguiente(){
-		return $this->hasEtapa($this->numeroEtapaActual+1);
+	public function gotoEtapaSiguiente(){
+		$ea = $this->getEtapaSiguiente();
+		if (empty($ea))
+			throw new \OutOfRangeException("No existe una etapa posterior a la actual");
+		
+		$this->setEtapaActual($ea);
+			
 	}
 
-	public function hasEtapaAnterior(){
-		return $this->hasEtapa($this->numeroEtapaActual-1);
+	public function getEtapaAnterior(){
+		return $this->getRepository('CpmJovenesBundle:Etapa')->findEtapaAnteriorA($this->getEtapaActual());	
 	}
 
-	protected function hasEtapa($numeroEtapa){
-		return !empty($this->etapas[$numeroEtapa]);
+	public function getEtapaSiguiente(){
+		return $this->getRepository('CpmJovenesBundle:Etapa')->findEtapaSiguienteA($this->getEtapaActual());
 	}
 	
-	protected function gotoEtapa($numeroEtapa){
-		if (!$this->hasEtapa($numeroEtapa)){
-			$this->logger->err("No existe la etapa ".$numeroEtapa);
-			throw new \OutOfRangeException("No existe la etapa ".$numeroEtapa);
+	protected function setEtapaActual(\Cpm\JovenesBundle\Entity\Etapa $nuevaEtapa){
+		$c = $this->getCicloActivo();
+		
+		$etapaActual = $c->getEtapaActual();
+		if (!empty($etapaActual)){
+			//se chequean los permisos de usuario para cambiar la etapa
+			//si no esta definida la etapa actual, no se validan los permisos porque 
+			//es una autocorreccion del sistema
+			$this->puedeEditar($c, true);
 		}
 		
-		$this->numeroEtapaActual=$numeroEtapa;
+		$c->setEtapaActual($nuevaEtapa);
 		
-		$nombreEtapaActual=$this->etapas[$this->numeroEtapaActual]['nombre'];
-		$this->ciclo->setEtapaActual($nombreEtapaActual);
-		$this->flush();
-	}
-	public function getNombreEtapaActual(){
-		return $this->getNombreEtapa($this->numeroEtapaActual);
-	}
-	
-	public function getNombreEtapa($numeroEtapa){
-		if (!$this->hasEtapa($numeroEtapa)){
-			throw new \OutOfRangeException("No existe la etapa ".$numeroEtapa);
-		}
-		return $this->etapas[$numeroEtapa]['nombre'];
-	}	
-	
-	public function getDescripcionEtapa($numeroEtapa) { 
-		if (!$this->hasEtapa($numeroEtapa)){
-			throw new \OutOfRangeException("No existe la etapa ".$numeroEtapa);
-		}
-		return $this->etapas[$numeroEtapa]['descripcion'];
-	}	
-	
-	public function getDescripcionEtapaActual(){
-		return $this->getDescripcionEtapa($this->numeroEtapaActual);
-	}
-
-	public function getProyectoActualFilterEtapaActual() { 
-		return $this->getProyectoActualFilterEtapa($this->numeroEtapaActual);
-	}
-	
-	public function getProyectoActualFilterEtapa($numeroEtapa) {
-		if (!$this->hasEtapa($numeroEtapa)){
-			throw new \OutOfRangeException("No existe la etapa ".$numeroEtapa);
-		}
-		
-		for($i = $numeroEtapa; $i >=0; $i-- ) {  //busco hacia atrás la primer etapa que defina el filtro
-			if (isset( $this->etapas[$i]['proyectos_activos_filter']))
-				return $this->etapas[$i]['proyectos_activos_filter'];		
-		}	
-		return '';		
+		$em = $this->doctrine->getEntityManager();
+		$em->persist($c);
+        $em->flush();
 	}
 	
 	public function getEtapaActual(){
-		if (empty($this->etapas[$this->numeroEtapaActual]))
-			$this->gotoEtapa(0);
-		return $this->etapas[$this->numeroEtapaActual];
-	}
-	
-	public function getAccionesUsuario(){
-		
-		$usuario = $this->container->get('security.context')->getToken()->getUser();
-		return $this->perfil_dinamico->accionesDeUsuario($usuario,$this->etapas[$this->numeroEtapaActual], $this->getCicloActivo());
-	}
-	
-	public function getAccionesProjecto(Proyecto $proyecto){
-	
-		$usuario = $this->container->get('security.context')->getToken()->getUser();
-		return $this->perfil_dinamico->accionesDeProyecto($proyecto,$usuario,$this->etapas[$this->numeroEtapaActual]);
-	}
-	
-	public function mensajesDeUsuario() {
-		$usuario = $this->container->get('security.context')->getToken()->getUser();
-		return $this->perfil_dinamico->mensajesDeUsuario($usuario,$this->etapas[$this->numeroEtapaActual]);
-	}
-	public function mensajesDeProyecto(Proyecto $proyecto) {
-		$usuario = $this->container->get('security.context')->getToken()->getUser();
-		return $this->perfil_dinamico->mensajesDeProyecto($proyecto,$usuario,$this->etapas[$this->numeroEtapaActual]);
-	}
-	
-	public function getNombresEtapas(){
-		return $this->etapas;
+		$etapaActual = $this->getCicloActivo()->getEtapaActual();
+		if (empty($etapaActual)){
+			$etapaActual=$this->getEtapaInicial();
+			$this->setEtapaActual($etapaActual);
+		}
+		return $etapaActual;
 	}
 	
 	public function getEventosManager(){
@@ -225,7 +172,7 @@ class JYM  {
 		return $variables;
 	}		
 	
-	
+	 
 	/* *********** Recuperacion de settings ********************* */
 	function getParametroConfiguracion($paramName, $defaultValue = null){
 		if(isset($this->config[$paramName])) 
@@ -258,9 +205,10 @@ class JYM  {
 		//CICLO, CORREO
 		if(
 			$targetObject instanceof \Cpm\JovenesBundle\Entity\Ciclo || 
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Etapa || 
 			$targetObject instanceof \Cpm\JovenesBundle\Entity\Correo
 			){
-			if ($user->isSuperAdmin())//FIXME Super
+			if ($user->isSuperAdmin())
 				return true;
 			$cause = "Necesita permisos de supervaca.";
 		}
@@ -283,7 +231,7 @@ class JYM  {
 		
 		//COMENTARIO
 		if($targetObject instanceof \Cpm\JovenesBundle\Entity\Comentario){
-			if ($user->isAdmin())//FIXME validar como corresponde
+			if ($user->isAdmin())
 				return true;
 			$cause = "Necesita permisos de admin para modificar un comentario.";
 		}
@@ -317,7 +265,6 @@ class JYM  {
 		){
 			if($targetObject instanceof \Cpm\JovenesBundle\Entity\Escuela)
 				$targetObject = $targetObject->getProyecto();
-			//var_dump($bloquearCiclosViejos);die();
 			if (
 				(!$bloquearCiclosViejos || $targetObject->getCiclo()->getActivo()) //validacion de ciclo
 				&&
@@ -365,7 +312,7 @@ class JYM  {
 			return null; 
 	}
 	
-	protected function isUserGranted($role, $failFast = false) { 
+	public function isUserGranted($role, $failFast = false) { 
 		$user = $this->getLoggedInUser($failFast);
 		if (!$user) 
 			$cause="Su sesión es inválida. Ingrese nuevamente. ";
@@ -391,5 +338,14 @@ class JYM  {
 		}
 		return $anios;
 	}
-	
+
+	protected function getRepository($fqcn){
+		return $this->doctrine->getEntityManager()->getRepository($fqcn);
+	} 
+
+
+	public function getPerfil(){
+		return $this->perfil_dinamico;
+	}
+		
 }

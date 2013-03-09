@@ -1,0 +1,52 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %} Etapas{% endblock %}
+
+{% block content %}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Numero</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Acciones de usuario</th>
+            <th>Acciones de proyecto</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr style="{{ not entity.deprecated?'':'text-decoration:line-through;' }}">
+            <td>{{ entity.numero }}</td>
+            <td><a href="{{ path('etapa_show', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+            <td>{{ entity.descripcion }}</td>
+            <td>{{ entity.accionesDeUsuario | join(', ') }}</td>
+            <td>{{ entity.accionesDeProyecto | join(', ') }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('etapa_show', { 'id': entity.id }) }}">Ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('etapa_mover', { 'id': entity.id, 'accion': 'subir' }) }}">Subir</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('etapa_mover', { 'id': entity.id, 'accion': 'bajar' }) }}">Bajar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('etapa_new') }}">
+            Crear nueva etapa
+        </a>
+    </li>
+</ul>
+
+{% endblock %}

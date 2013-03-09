@@ -247,7 +247,7 @@ class PerfilController extends BaseController
 	 	$cantCorreosPorCiclo = $this->getRepository('CpmJovenesBundle:Correo')->getCantidadCorreosPorCiclo($usuario->getId());
     	
     	$query =$this->getRepository('CpmJovenesBundle:Correo')->findAllQuery($ciclo,$usuario->getId());
-    	//var_dump($cantCorreosPorCiclo);exit;
+
     	return $this->paginate($query,array('ciclo'=> $ciclo, 'cantCorreosPorCiclo' => $cantCorreosPorCiclo));
 
     }

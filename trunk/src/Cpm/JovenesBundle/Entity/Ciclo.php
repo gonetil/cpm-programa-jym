@@ -36,11 +36,15 @@ class Ciclo
     private $activo;
 
     /**
-     * @var string $etapaActual
+     * @var Etapa $etapaActual
      *
-     * @ORM\Column(name="etapa_actual", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Etapa")
      */
     private $etapaActual;
+    
+    /**
+     */
+    private $ciclo;
 
     /**
      * @var array $historial
@@ -118,13 +122,13 @@ class Ciclo
     /**
      * Set etapaActual
      *
-     * @param string $etapaActual
+     * @param Cpm\JovenesBundle\Entity\Etapa $etapaActual
      */
-    public function setEtapaActual($etapaActual)
+    public function setEtapaActual(\Cpm\JovenesBundle\Entity\Etapa $etapaActual)
     {
-    	if ($this->etapaActual == $etapaActual) 
+    	if (!empty($this->etapaActual) && ($etapaActual->equals($this->etapaActual))) 
     		return;
-    	$desc = "Se pasa a la siguiente etapa, antes era [".$this->etapaActual."], ahora es [".$etapaActual."]";
+    	$desc = "Se pasa a la siguiente etapa [".$etapaActual->getNombre()."]";
         $this->etapaActual = $etapaActual;
         $this->add2Historial($desc);
     }
@@ -132,7 +136,7 @@ class Ciclo
     /**
      * Get etapaActual
      *
-     * @return string 
+     * @return Cpm\JovenesBundle\Entity\Etapa 
      */
     public function getEtapaActual()
     {

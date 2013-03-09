@@ -4,123 +4,193 @@ namespace Cpm\JovenesBundle\Service;
 
 class PerfilDinamico {
 	
+	private $jym;
 	
-	private function evaluar_funciones($funciones) {
-		$resultado = array();
-		foreach ( $funciones as $fn ) {
-       		$val = call_user_func($fn);
-       		if ($val) $resultado[] = $val;
-		}						 
-       return $resultado;
-		
+	private static $_acciones_usuario;
+	private static $_acciones_proyecto;	
+	private static $_mensajes_usuario;	
+	private static $_mensajes_proyecto;	
+	
+	public function __construct($jym)
+	{
+		$this->jym=$jym;
 	}
-	public function accionesDeUsuario($usuario,$etapa_actual,$ciclo = null) { 
-		$acciones = array();
-		$acciones['cargar_proyecto'] = function() use ($usuario,$etapa_actual,$ciclo ) {
-								if ($etapa_actual['numero'] == 2) 
-									return array(	'path' => 'proyecto_wizzard', 
-													'label'=>'Inscribir escuela',
-													'validation'=>  (count( $usuario->getProyectosCoordinados($ciclo)) > 0 ) ? " Usted ya inscribió una escuela ¿Está seguro que desea inscribir otra?" : false 
-												); 
-								else 
-									return null;
-								 };
-								 
-		return $this->evaluar_funciones($acciones);						 
+	
+	public function getAccionesDeUsuario() { 
+		if (!isset(self::$_acciones_usuario))
+			self::$_acciones_usuario=self::_loadAccionesUsuario();
+			
+		return $this->evaluar_funciones_usuario(self::$_acciones_usuario);						 
 	}								 
 						
 									 								 
-	public function accionesDeProyecto($proyecto,$usuario,$etapa_actual) {
-		$acciones = array();
-		$acciones['editar_proyecto'] = function() use ($etapa_actual) {
-								if ($etapa_actual['numero'] == 2) 
-									return array('path' => 'proyecto_edit_wizzard', 'label'=>'Modificar inscripción','validation'=>false); 
-								else 
-									return null;
-								 };
-
-		$acciones['presentar_proyecto'] = function() use ($proyecto,$etapa_actual) {
-								if ($etapa_actual['numero'] == 4) 
-									return array(	'path' => 'proyecto_presentar', 
-													'label'=>'Enviar proyecto',
-													'validation'=> ($proyecto->hasArchivo() ) ? "Este proyecto ya fue enviado. ¿está seguro que desea enviarlo nuevamente?" : false
-													); 
-								else 
-									return null;
-								 };
-										 
-		$acciones['modificar_colaboradores'] = function() use ($proyecto,$etapa_actual) {
-								if (($etapa_actual['numero'] >= 4) && ($etapa_actual['numero'] <= 5)) 
-									return array(	'path' => 'proyecto_edit_colaboradores', 
-													'label'=>'Agregar o elminar colaboradores',
-													'validation'=>false); 
-								else 
-									return null;
-								 };
-		$acciones['representar_proyecto'] = function() use ($proyecto,$etapa_actual) { 
-													if ( ($etapa_actual['numero'] == 4) && ($proyecto->getEstadoActual()) &&  
-														  ($proyecto->getEstadoActual()->getEstado() == ESTADO_REHACER || $proyecto->getEstadoActual()->getEstado() == ESTADO_PRESENTADO ) 
-														)
-													return array(	'path' => 'proyecto_presentar', 
-																	'label'=>'Reenviar proyecto',
-																	'validation'=> false); 
-												else 
-													return null;
-												};
-												
-		return $this->evaluar_funciones($acciones);										
+	public function getAccionesDeProyecto($proyecto) {
+		if (!isset(self::$_acciones_proyecto))
+			self::$_acciones_proyecto=self::_loadAccionesProyecto();
 			
+		return $this->evaluar_funciones_proyecto(self::$_acciones_proyecto,$proyecto);
 	}
 	
-	public function mensajesDeUsuario($usuario,$etapa_actual) {
-		$mensajes = array();
+	public function getMensajesDeUsuario() {
+		if (!isset(self::$_mensajes_usuario))
+			self::$_mensajes_usuario=self::_loadMensajesUsuario();
+			
+		return $this->evaluar_funciones_usuario(self::$_mensajes_usuario);
+	}
+	
+	public function getMensajesDeProyecto($proyecto) {
+		if (!isset(self::$_mensajes_proyecto))
+			self::$_mensajes_proyecto=self::_loadMensajesProyecto();
+			
+		return $this->evaluar_funciones_proyecto(self::$_mensajes_usuario,$proyecto);
+	}
+	
+	/* ********************************************************************* */
+	/* ********************************************************************* */
+	/* ********************************************************************* */
+	
+	private function evaluar_funciones_usuario($funciones) {
+		$accionesDeEstaEtapa = $this->jym->getEtapaActual()->getAccionesDeUsuario();
 		
-		$mensajes['conserve_usuario_y_clave'] = function() use ($etapa_actual) { 
-														if ($etapa_actual['numero']  <=2) { 
-															return array('info-message' => 'Por favor, conserve su nombre de usuario y contraseña. Trabajaremos juntos todo el año, y está página será nuestro canal de comunicación principal.' );
-														}
-														else  return null;	
-													};
-													
-		$mensajes['sera_la_proxima'] = function() use ($etapa_actual, $usuario) {
-											if ($etapa_actual['numero'] < 4) //este mensaje tiene sentido recien a partir de la etapa 4
-												return null;
-										
-											$proyectos = $usuario->getProyectosCoordinados();
-											$con_archivo = 0;
-											foreach ( $proyectos as $proyecto) {
-       											$con_archivo += ($proyecto->hasArchivo())?1:0;
-											}
+		$resultado = array();
+		foreach ( $funciones as $accion => $fn ) {
+			if (in_array($accion, $accionesDeEstaEtapa)){
+				$val = call_user_func($fn, $this->jym);
+	       		if ($val) $resultado[] = $val;
+			}						 
+		}
+       return $resultado;
+	}
+	
+	private function evaluar_funciones_proyecto($funciones, $proyecto) {
+		$resultado = array();
+		
+		$accionesDeEstaEtapa = $this->jym->getEtapaActual()->getAccionesDeProyecto();
+		foreach ( $funciones as $accion =>$fn ) {
+			if (in_array($accion, $accionesDeEstaEtapa)){
+				$val = call_user_func($fn, $this->jym, $proyecto);
+       			if ($val) $resultado[] = $val;
+			}
+		}						 
+       return $resultado;
+	}
+	/* ********************************************************************* */
+	/* ********************************************************************* */
+	/* ********************************************************************* */
+	
+	public static function _loadAccionesUsuario()
+	{
+		$acciones=array();
+		
+		//etapa 2
+		$acciones['cargar_proyecto'] = function($jym){
+			$ciclo = $jym->getCicloActivo();
+			$usuario = $jym->getLoggedInUser();
+			
+			return array(
+				'path' => 'proyecto_wizzard', 
+				'label'=>'Inscribir escuela',
+				'validation'=>  (count( $usuario->getProyectosCoordinados($ciclo)) > 0 ) ? 
+					" Usted ya inscribió una escuela ¿Está seguro que desea inscribir otra?" : false 
+			); 
+		};
+		return $acciones;
+	}
+	
+	public static function _loadAccionesProyecto()
+	{
+		$acciones=array();
+		//etapa 2
+		$acciones['editar_proyecto'] = function($jym, $proyecto)  {
+			if (!$jym->puedeEditar($proyecto))
+				return null;
+			return array('path' => 'proyecto_edit_wizzard', 'label'=>'Modificar inscripción','validation'=>false); 
+		};
 
-											if ($con_archivo == 0) {
-												return array('info-message' => 'Estimado/a '.$usuario->getNombre().', no ha cargado el proyecto de investigación en la ' .
-														'fecha establecida por lo que su escuela ya no participa en la Convocatoria de este año. ' .
-														'El año que viene podrá inscribirse nuevamente con su mismo usuario. Los esperamos en la próxima Convocatoria.');
-											} else return null;								
-										 };													
-		$mensajes['invitaciones_pendientes'] = function() use ($usuario) {
-													$proyectos = $usuario->getProyectosCoordinados();
-													$pendientes = 0;
-													foreach ( $proyectos as $proyecto) {
-       													$pendientes += count($proyecto->getInvitacionesPendientes()); 
-													} 
-													if ($pendientes == 1)
-														return array('warning-message' => 'Posee una invitación pendiente de confirmación en alguno de sus proyectos');
-													elseif ($pendientes > 1)
-														return array('warning-message' => 'Posee '.$pendientes.' invitaciones pendientes de confirmación en sus proyectos');
-													else		
-													return null;
-												};												
+		//etapa4
+		$acciones['presentar_proyecto'] = function($jym, $proyecto) {
+			if (!$jym->puedeEditar($proyecto))
+				return null;
+			return array(
+				'path' => 'proyecto_presentar', 
+				'label'=>'Enviar proyecto',
+				'validation'=> ($proyecto->hasArchivo() ) ? "Este proyecto ya fue enviado. ¿está seguro que desea enviarlo nuevamente?" : false
+			); 
+		};
+										 
+		//etapa 4 y 5
+		$acciones['modificar_colaboradores'] = function($jym, $proyecto) {
+			if (!$jym->puedeEditar($proyecto))
+				return null;
+			return array(	
+				'path' => 'proyecto_edit_colaboradores', 
+				'label'=>'Agregar o elminar colaboradores',
+				'validation'=>false
+			); 
+		};
 		
-		return $this->evaluar_funciones($mensajes);
+		//etapa 4
+		$acciones['representar_proyecto'] = function($jym, $proyecto) { 
+			if (!$jym->puedeEditar($proyecto))
+				return null;
+			if ($proyecto->estaEnEstadoActual(ESTADO_REHACER) || $proyecto->estaEnEstadoActual(ESTADO_PRESENTADO) ) 
+				return array(
+					'path' => 'proyecto_presentar', 
+					'label'=>'Reenviar proyecto',
+					'validation'=> false
+				); 
+			else 
+				return null;
+		};
 		
+		return $acciones;
 	}
 	
-	public function mensajesDeProyecto($proyecto,$usuario,$etapa_actual) {
-		$mensajes = array();
-		return $this->evaluar_funciones($mensajes);
+	public static function _loadMensajesUsuario()
+	{
+		$mensajes=array();
+		
+		//etapa1 y 2
+		$mensajes['conserve_usuario_y_clave'] = function($jym) { 
+			return array('info-message' => 'Por favor, conserve su nombre de usuario y contraseña. Trabajaremos juntos todo el año, y está página será nuestro canal de comunicación principal.' );
+		};
+							
+		//etapa 5,6
+		$mensajes['sera_la_proxima'] = function($jym) {
+			$usuario = $jym->getLoggedInUser();
+			foreach ( $usuario->getProyectosCoordinados() as $proyecto) {
+       			if ($proyecto->hasArchivo()) return null;
+			}
+
+			return array('info-message' => 'Estimado/a '.$usuario->getNombre().', no ha cargado el proyecto de investigación en la ' .
+				'fecha establecida por lo que su escuela ya no participa en la Convocatoria de este año. ' .
+				'El año que viene podrá inscribirse nuevamente con su mismo usuario. Los esperamos en la próxima Convocatoria.'
+			);
+		};
+													
+		$mensajes['invitaciones_pendientes'] = function($jym) {
+			$usuario = $jym->getLoggedInUser();
+			$proyectos = $usuario->getProyectosCoordinados();
+			$pendientes = 0;
+			foreach ( $proyectos as $proyecto) {
+       			$pendientes += count($proyecto->getInvitacionesPendientes()); 
+			} 
+			if ($pendientes == 1)
+				return array('warning-message' => 'Posee una invitación pendiente de confirmación en alguno de sus proyectos');
+			elseif ($pendientes > 1)
+				return array('warning-message' => 'Posee '.$pendientes.' invitaciones pendientes de confirmación en sus proyectos');
+			else		
+				return null;
+		};
+		
+		return $mensajes;
+	}
+	
+	public static function _loadMensajesProyecto()
+	{
+		$mensajes=array();
+		return $mensajes;
 	}
 	
 }
 
-?>
