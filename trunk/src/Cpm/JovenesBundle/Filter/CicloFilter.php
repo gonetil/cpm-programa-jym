@@ -19,7 +19,7 @@ class CicloFilter extends Ciclo implements ModelFilter
 	}
 
 	public function getSortFields() {
-		return array(); //"c.id" => "Id","c.titulo" => "Titulo"
+		return array(); 
 	}
 	
 	public function getCiclo(){

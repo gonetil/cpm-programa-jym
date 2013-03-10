@@ -22,11 +22,11 @@ class Ciclo
     private $id;
 
     /**
-     * @var string $titulo
+     * @var string $anio
      *
-     * @ORM\Column(name="titulo", type="string", length=255)
+     * @ORM\Column(name="anio", type="integer", unique=true, nullable=false)
      */
-    private $titulo;
+    private $anio;
 
     /**
      * @var boolean $activo
@@ -70,23 +70,23 @@ class Ciclo
     }
 
     /**
-     * Set titulo
+     * Set anio
      *
-     * @param string $titulo
+     * @param string $anio
      */
-    public function setTitulo($titulo)
+    public function setAnio($anio)
     {
-        $this->titulo = $titulo;
+        $this->anio = $anio;
     }
 
     /**
-     * Get titulo
+     * Get anio
      *
      * @return string 
      */
-    public function getTitulo()
+    public function getAnio()
     {
-        return $this->titulo;
+        return $this->anio;
     }
 
     /**
@@ -171,6 +171,6 @@ class Ciclo
     
     public function __toString()
     {
-        return $this->titulo;
+        return (string)$this->anio;
     }
 }

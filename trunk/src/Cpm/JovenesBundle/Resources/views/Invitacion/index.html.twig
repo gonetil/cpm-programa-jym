@@ -26,7 +26,7 @@
 	        <td><a href="{{ path('invitaciones_show',{id:entity.id}) }}">{{ entity.id }}</a></td>
             <td>{{ filter.select_this(entity) }}</td>
             <td><a href="{{ path('instancia_show', { 'id': entity.instanciaEvento.id }) }}">{{ entity.instanciaEvento.titulo }}</a></td>
-        	<td><a href="{{ path('proyecto_show', { 'id': entity.proyecto.id }) }}">{{ entity.proyecto.titulo | slice(0,50) }}</a></td>
+        	<td><a href="{{ path('proyecto_show', { 'id': entity.proyecto.getId() }) }}">{{ entity.proyecto.titulo | slice(0,50) }}</a></td>
         	<td><a href="{{ path('usuario_show', { 'id': entity.proyecto.coordinador.id }) }}">{{ entity.proyecto.coordinador.apellido }}, {{ entity.proyecto.coordinador.nombre }}</a></td>
         	
             <td>

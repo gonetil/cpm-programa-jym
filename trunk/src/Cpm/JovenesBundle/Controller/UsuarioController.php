@@ -273,7 +273,7 @@ class UsuarioController extends BaseController
     	$em = $this->getDoctrine()->getEntityManager();
 		$ciclo = $this->getJYM()->getCicloActivo();
 		$proyectos = $em->getRepository('CpmJovenesBundle:Proyecto')->findAllQuery($ciclo)->getResult() ;
-		$anio = $ciclo->getTitulo();
+		$anio = $ciclo->getAnio();
 		$updates = 0;
 		
     	foreach ( $proyectos as $proyecto) 
@@ -327,7 +327,7 @@ class UsuarioController extends BaseController
 		$batchSize = 20;
 		$cache = array();
     	foreach ($proyectos as $proyecto) {
-   	    	$anio = $proyecto->getCiclo()->getTitulo();
+   	    	$anio = $proyecto->getCiclo()->getAnio();
    	    	
    	    	$user_id = $proyecto->getCoordinador()->getId();
    	    	$user = $proyecto->getCoordinador();

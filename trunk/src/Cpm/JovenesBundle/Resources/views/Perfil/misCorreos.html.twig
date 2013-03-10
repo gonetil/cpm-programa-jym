@@ -1,7 +1,7 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
 
-{% block title %}Visualizando correos recibidos durante {{ciclo.titulo}}{% endblock %}
+{% block title %}Visualizando correos recibidos durante {{ciclo.anio}}{% endblock %}
 
 {% block content %}
 <script>
@@ -30,7 +30,7 @@
 
 <ul class="">
     {% for cantEnCiclo in cantCorreosPorCiclo %}
-    	<li>Correos de <a href="{{path('correos_usuario', {'ciclo': cantEnCiclo.0.id})}}">{{cantEnCiclo.0.titulo}} ({{cantEnCiclo.cant}})</a><li>
+    	<li>Correos de <a href="{{path('correos_usuario', {'ciclo': cantEnCiclo.0.id})}}">{{cantEnCiclo.0.anio}} ({{cantEnCiclo.cant}})</a><li>
     {% endfor %}
 </ul>
 

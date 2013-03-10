@@ -64,7 +64,7 @@ class Comentario
     
     /**
     *  @ORM\ManyToOne(targetEntity="Proyecto" )
-    *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="false")
+    *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
     */
     private $proyecto;
     

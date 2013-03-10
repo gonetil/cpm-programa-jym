@@ -46,7 +46,7 @@ class UsuarioFilter extends Usuario implements ModelFilter {
 	public function setHabilitados($habilitados) {
 		$this->habilitados = $habilitados;
 	}
-		private $cicloFilter;
+		
 	public function getSoloCoordinadores() {
 		return $this->soloCoordinadores;
 	}

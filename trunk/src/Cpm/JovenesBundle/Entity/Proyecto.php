@@ -24,9 +24,7 @@ class Proyecto
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     public $id;
-	public function setId($id) {
-		$this->id = $id;
-	}
+    
     /**
      * @var string $titulo
      *
@@ -64,7 +62,7 @@ class Proyecto
     private $recibioCapacitacion=false;     
     
     /**
-     * @ORM\OneToOne(targetEntity="Escuela", inversedBy="proyecto",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Escuela", inversedBy="proyecto",cascade={"all"})
      * @ORM\JoinColumn(name="escuela_id", referencedColumnName="id")
      */
     private $escuela;
@@ -149,13 +147,13 @@ class Proyecto
     private $archivo;
     
 	/**
-     * @ORM\OneToMany(targetEntity="Invitacion", mappedBy="proyecto", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Invitacion", mappedBy="proyecto", cascade={"all"})
      **/
     private $invitaciones;
     
     /**
      *    
-    *  @ORM\OneToOne(targetEntity="EstadoProyecto",cascade={"persist", "remove"})
+    *  @ORM\OneToOne(targetEntity="EstadoProyecto",cascade={"all"})
     *  @ORM\JoinColumns({
     *   @ORM\JoinColumn(name="estadoActual_id", referencedColumnName="id", nullable=true, onDelete="SET NULL", onUpdate="SET NULL")
     * })
@@ -236,6 +234,16 @@ class Proyecto
         return $this->id;
     }
 
+
+	/**
+     * Set id
+     *
+     * @param integer $id
+     */
+    public function setId($id) {
+		$this->id = $id;
+	}
+	
     /**
      * Set titulo
      *
