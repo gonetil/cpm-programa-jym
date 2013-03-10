@@ -11,7 +11,7 @@ class ProyectoFilterForm extends ModelFilterForm
     {
         $builder
     
-            ->add('esPrimeraVezEscuela', 'choice' ,array('label' => '¿primera vez de la escuela?', 
+            ->add('esPrimeraVezEscuela', 'choice' ,array('label' => '¿primera vez de la institución?', 
             											'choices' => array(1=>"si",2=>"no"),
             											'preferred_choices' => array("Todos"),
         												'empty_value' => "Todos",
@@ -47,7 +47,7 @@ class ProyectoFilterForm extends ModelFilterForm
 		    														},
         												'required'=>false
         								))
-		  ->add('coordinador', null,array( 'label' => 'Docente coordinador',
+		  ->add('coordinador', null,array( 'label' => 'Coordinador',
 		    										'required' => false ))
             ->add('archivo', 'choice' ,array('label' => 'Archivo cargado' , 
             											'choices' => array(1=>"Con archivo",2=>"Sin archivo"),
@@ -83,7 +83,7 @@ class ProyectoFilterForm extends ModelFilterForm
     				      										
                 										;
 			$escuela = new EscuelaFilter();	
-            $builder->add('escuelaFilter', $escuela->createForm($this->getJYM()) ,array('label' => 'Escuela'));
+            $builder->add('escuelaFilter', $escuela->createForm($this->getJYM()) ,array('label' => 'Institución'));
 
             $usuario= new UsuarioFilter();	
             $builder->add('usuarioFilter', $usuario->createForm($this->getJYM()) ,array('label' => 'UsuarioFilter'));
