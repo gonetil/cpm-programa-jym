@@ -263,7 +263,7 @@ class InstanciaEventoController extends BaseController
     	return $this->createFormBuilder(array('id' => $id))
     	->add('id', 'hidden')
     	->add('ccColaboradores','checkbox',array('label'=>'Enviar copia del mensaje a los colaboradores', 'required'=>false))
-    	->add('ccEscuela','checkbox',array('label'=>'Enviar copia del mensaje a la escuela', 'required'=>false))
+    	->add('ccEscuela','checkbox',array('label'=>'Enviar copia del mensaje a la institucion', 'required'=>false))
     	->getForm()
     	;
     }

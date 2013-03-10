@@ -80,7 +80,7 @@ class EscuelaController extends BaseController
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-            $this->setSuccessMessage("Escuela modificada satisfactoriamente");
+            $this->setSuccessMessage("Institucion modificada satisfactoriamente");
             return $this->redirect($this->generateUrl('escuela_edit', array('id' => $id)));
         }
 

@@ -209,7 +209,9 @@ class Etapa
      */
     public function getAccionesDeUsuario()
     {
-        return $this->accionesDeUsuario;
+    	if (is_null($this->accionesDeUsuario))
+    		$this->accionesDeUsuario= array();
+    	return $this->accionesDeUsuario;
     }
 
     /**
@@ -219,7 +221,7 @@ class Etapa
      */
     public function setAccionesDeProyecto($accionesDeProyecto)
     {
-        $this->accionesDeProyecto = $accionesDeProyecto;
+       $this->accionesDeProyecto = $accionesDeProyecto;
     }
 
     /**
@@ -229,7 +231,9 @@ class Etapa
      */
     public function getAccionesDeProyecto()
     {
-        return $this->accionesDeProyecto;
+    	if (is_null($this->accionesDeProyecto))
+    		$this->accionesDeProyecto= array();
+    	return $this->accionesDeProyecto;
     }
     
     public function equals($other)

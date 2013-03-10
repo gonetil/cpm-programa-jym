@@ -160,8 +160,8 @@ class JYM  {
 	
 	public function getVariablesCorreo() {
 		$variables = array(
-		'{{ usuario.apellido }}, {{ usuario.nombre }}' => "Apellido, Nombre del docente destinatario",
-		'{{ usuario.email }}' => "Dirección de correo del docente destinatario", 
+		'{{ usuario.apellido }}, {{ usuario.nombre }}' => "Apellido, Nombre del destinatario",
+		'{{ usuario.email }}' => "Dirección de correo destinatario", 
 		'{{ url_sitio }}' => "Dirección web (URL) de este sitio", 
 		'{{ proyecto.escuela }}' => "Escuela del proyecto seleccionado", 
 		'{{ proyecto.titulo}}' => "Título del proyecto seleccionado",

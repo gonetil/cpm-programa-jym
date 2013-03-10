@@ -21,7 +21,7 @@ class ProyectoType extends AbstractType
             ->add('titulo')
             ->add('nroAlumnos','integer',array('label'  => 'Número de alumnos', 'attr'=>array('class'=>'number')))
     		 ->add('recibioCapacitacion', 'choice',	array(
-            		'label' => '¿recibió capacitación docente del programa Jóvenes y Memoria en años anteriores?', 
+            		'label' => '¿recibió capacitación del programa Jóvenes y Memoria en años anteriores?', 
             		'required'=>false,
     				'choices' => array(1=>"si",0=>"no"),
     				'expanded' => true,
@@ -96,7 +96,7 @@ class ProyectoType extends AbstractType
     				'preferred_choices' => array("")
     				))
 			->add('observaciones',null,array('label'=>'Observaciones'))
-        // ->add('coordinador',new UsuarioType(),array('label' => 'Docente Coordinador'))
+        // ->add('coordinador',new UsuarioType(),array('label' => 'Coordinador'))
         
         ;
     }    
