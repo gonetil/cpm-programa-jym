@@ -26,7 +26,10 @@ class CicloController extends BaseController
         $em = $this->getDoctrine()->getEntityManager();
 
         $entities = $em->getRepository('CpmJovenesBundle:Ciclo')->findAll();
-
+        
+        if(!$this->getJYM()->isUserGranted("ROLE_SUPER_ADMIN")){
+			$this->setInfoMessage('No tiene permisos suficientes para modificar los ciclos y etapas');
+        }
         return array('entities' => $entities);
     }
 
@@ -78,11 +81,14 @@ class CicloController extends BaseController
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('ciclo_show', array('id' => $entity->getId())));
+            try{
+            	$em = $this->getDoctrine()->getEntityManager();
+            	$em->persist($entity);
+            	$em->flush();
+				return $this->redirect($this->generateUrl('ciclo_show', array('id' => $entity->getId())));
+			}catch(\PDOException $e){
+			    $this->setErrorMessage("No se pudo crear el ciclo, compruebe que no exista un ciclo del mismo Año  ({$e->getMessage()})");
+			}
         }
 
         return array(
@@ -131,10 +137,13 @@ class CicloController extends BaseController
         $editForm->bindRequest($request);
 
         if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('ciclo_show', array('id' => $id)));
+			try{
+	            $em->persist($entity);
+	            $em->flush();
+	            return $this->redirect($this->generateUrl('ciclo_show', array('id' => $id)));
+			}catch(\PDOException $e){
+			    $this->setErrorMessage("No se pudo modificar el ciclo, compruebe que no exista otro ciclo del mismo Año  ({$e->getMessage()})");
+			}
         }
 
         return array(
@@ -208,11 +217,12 @@ class CicloController extends BaseController
      */
     public function gotoSiguienteEtapaAction()
     {
-    	//TODO hay que validar permisos del usuairo aca?
     	$jym = $this->getJYM();
-    	$jym->gotoEtapaSiguiente();
-		$this->setSuccessMessage("Se paso a la etapa siguiente");
-    	return $this->redirect($this->generateUrl('ciclo'));
+		$nuevaEtapa = $jym->getEtapaSiguiente();
+		if (empty($nuevaEtapa))
+			throw new \OutOfRangeException("No existe una etapa siguiente a la actual");
+
+		return $this->gotoEtapa($nuevaEtapa);
     }
  	
  	/**
@@ -220,12 +230,32 @@ class CicloController extends BaseController
      */
     public function gotoEtapaAnteriorAction()
     {
-    	//TODO hay que validar permisos del usuairo aca?
     	$jym = $this->getJYM();
-    	$jym->gotoEtapaAnterior();
-		$this->setSuccessMessage("Se paso a la etapa anterior");
+		$nuevaEtapa = $jym->getEtapaAnterior();
+		if (empty($nuevaEtapa))
+			throw new \OutOfRangeException("No existe una etapa posterior a la actual");
+
+		return $this->gotoEtapa($nuevaEtapa);
+    }
+    private function gotoEtapa($nuevaEtapa){
+    	$jym = $this->getJYM();
+
+		$c = $jym->getCicloActivo();
+		$jym->puedeEditar($c, true);
+		$c->setEtapaActual($nuevaEtapa);
+		
+		try{
+			$em = $this->getDoctrine()->getEntityManager();
+			$em->persist($c);
+			$em->flush();
+			
+			$this->setSuccessMessage("Se paso a la etapa ".$nuevaEtapa->getNumero());
+		}catch(\Exception $e){
+			$this->setErrorMessage("No se pudo pasar a la etapa ".$nuevaEtapa->getNumero()." se produjo el siguiente error: ".($e->getMessage()));
+		}
     	return $this->redirect($this->generateUrl('ciclo'));
     }
+    
 
 
 }

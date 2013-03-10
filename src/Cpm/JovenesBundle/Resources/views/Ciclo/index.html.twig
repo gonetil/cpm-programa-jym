@@ -15,7 +15,8 @@
 	</ul>
 
 	<h3>Cambio de etapa</h3><br/>
-	{{ is_granted("ROLE_SUPER_ADMIN") }}
+		
+	
 	<ul id="acciones-sobre-etapas">
 		{% if jym.getEtapaAnterior() and is_granted("ROLE_SUPER_ADMIN")  %}
 			<li class="prev-label">
@@ -44,7 +45,7 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Titulo</th>
+            <th>Año</th>
             <th>Activo</th>
             <th>Etapa Actual</th>
             <th>Acciones</th>
@@ -54,7 +55,7 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('ciclo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.titulo }}</td>
+            <td>{{ entity.anio }}</td>
             <td>{{ entity.activo?'Si':'No' }}</td>
             <td>{{ entity.etapaActual }}</td>
             <td>
@@ -80,11 +81,13 @@
 </table>
 
 <ul>
-    <li>
+	{% if is_granted("ROLE_SUPER_ADMIN") %}
+	<li>
         <a href="{{ path('ciclo_new') }}">
             Crear nuevo Ciclo
         </a>
     </li>
+   {% endif %}
 </ul>
 
 {% endblock %}

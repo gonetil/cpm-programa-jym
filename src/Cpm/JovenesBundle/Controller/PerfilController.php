@@ -138,7 +138,7 @@ class PerfilController extends BaseController
     		
     		$this->getMailer()->sendConfirmacionAltaProyecto($proyecto);
     		$this->setSuccessMessage("Los datos fueron registrados satifactoriamente");
-    		$this->setInfoMessage("Usted se ha inscripto al Programa Jóvenes y Memoria, Convocatoria ".$cicloActivo->getTitulo());
+    		$this->setInfoMessage("Usted se ha inscripto al Programa Jóvenes y Memoria, Convocatoria ".$cicloActivo->getAnio());
     		
     		return $this->redirect($this->generateUrl('home_usuario'));
     	}

@@ -49,6 +49,7 @@ class EtapaRepository extends EntityRepository
 	
 	public function findEtapaSiguienteA($etapa){
 		$proxEtapas = $this->findEtapasProximas($etapa, false,1);
+		
 		if (empty($proxEtapas))
 			return null;
 		else			

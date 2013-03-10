@@ -47,7 +47,7 @@ class JYM  {
 			if (empty($this->ciclo )){
 				//No hay ciclo activo ==> creo uno
 				$this->ciclo = new Ciclo();
-				$this->ciclo->setTitulo(date('Y'));
+				$this->ciclo->setAnio(date('Y'));
 				$this->ciclo->setActivo(true);
 				$this->this->logger->err("No habia ningun ciclo creado, se crea uno y se activa");
 				
@@ -59,7 +59,7 @@ class JYM  {
 			}
 			$this->checkEtapaActiva();
 			
-			$this->logger->info("Se incializa El CICLO ".$this->ciclo->getTitulo());
+			$this->logger->info("Se incializa El CICLO ".$this->ciclo->getAnio());
 		}
 		return $this->ciclo;
 	}
@@ -87,7 +87,7 @@ class JYM  {
 	protected function checkEtapaActiva(){
 		$etapaActual=$this->getEtapaActual();
 		if (empty($etapaActual))
-			throw new \Exception("Se ha producido un error: no hay etapa activa asociada al ciclo ".$this->ciclo->getTitulo());
+			throw new \Exception("Se ha producido un error: no hay etapa activa asociada al ciclo ".$this->ciclo->getAnio());
 	}
 	
 	
@@ -98,22 +98,6 @@ class JYM  {
 	function getEtapaInicial(){
 		return $this->getRepository('CpmJovenesBundle:Etapa')->findPrimerEtapa();
 	}
-	
-	public function gotoEtapaAnterior(){
-		$ea = $this->getEtapaAnterior();
-		if (empty($ea))
-			throw new \OutOfRangeException("No existe una etapa posterior a la actual");
-		$this->setEtapaActual($ea);
-	}
-
-	public function gotoEtapaSiguiente(){
-		$ea = $this->getEtapaSiguiente();
-		if (empty($ea))
-			throw new \OutOfRangeException("No existe una etapa posterior a la actual");
-		
-		$this->setEtapaActual($ea);
-			
-	}
 
 	public function getEtapaAnterior(){
 		return $this->getRepository('CpmJovenesBundle:Etapa')->findEtapaAnteriorA($this->getEtapaActual());	
@@ -123,29 +107,18 @@ class JYM  {
 		return $this->getRepository('CpmJovenesBundle:Etapa')->findEtapaSiguienteA($this->getEtapaActual());
 	}
 	
-	protected function setEtapaActual(\Cpm\JovenesBundle\Entity\Etapa $nuevaEtapa){
-		$c = $this->getCicloActivo();
-		
-		$etapaActual = $c->getEtapaActual();
-		if (!empty($etapaActual)){
-			//se chequean los permisos de usuario para cambiar la etapa
-			//si no esta definida la etapa actual, no se validan los permisos porque 
-			//es una autocorreccion del sistema
-			$this->puedeEditar($c, true);
-		}
-		
-		$c->setEtapaActual($nuevaEtapa);
-		
-		$em = $this->doctrine->getEntityManager();
-		$em->persist($c);
-        $em->flush();
-	}
 	
 	public function getEtapaActual(){
-		$etapaActual = $this->getCicloActivo()->getEtapaActual();
+		$c = $this->getCicloActivo();
+		$etapaActual = $c->getEtapaActual();
 		if (empty($etapaActual)){
 			$etapaActual=$this->getEtapaInicial();
-			$this->setEtapaActual($etapaActual);
+			
+			$c->setEtapaActual($etapaActual);
+			
+			$em = $this->doctrine->getEntityManager();
+			$em->persist($c);
+	        $em->flush();
 		}
 		return $etapaActual;
 	}

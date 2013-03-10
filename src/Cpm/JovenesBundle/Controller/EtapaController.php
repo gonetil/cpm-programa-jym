@@ -37,7 +37,10 @@ class EtapaController extends BaseController
 				$etapa2 = $repo->findEtapaAnteriorA($etapa1);
 			else		
 				$etapa2 = $repo->findEtapaSiguienteA($etapa1);
-				
+			
+			if (empty($etapa2))
+				throw new \OutOfRangeException();
+			
 			$old_num=$etapa2->getNumero();
 			$etapa2->setNumero($etapa1->getNumero());
 			$etapa1->setNumero($old_num);

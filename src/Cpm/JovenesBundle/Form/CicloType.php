@@ -10,7 +10,7 @@ class CicloType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('titulo')
+            ->add('anio')
             //->add('activo')
             //->add('etapaActual')
             //->add('historial')

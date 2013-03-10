@@ -27,7 +27,7 @@ class CorreoRepository extends EntityRepository
 			$qb->andWhere('c.destinatario = :destinatario')
 				->setParameter('destinatario',$user_id);
 		$qb->andWhere('YEAR(c.fecha)= :ciclo')
-				->setParameter('ciclo',$ciclo->getTitulo());
+				->setParameter('ciclo',$ciclo->getAnio());
 		return  $qb->getQuery();
 	}
 	
@@ -44,9 +44,9 @@ class CorreoRepository extends EntityRepository
 		$rsm = new \Doctrine\ORM\Query\ResultSetMapping();
 		$rsm->addEntityResult('CpmJovenesBundle:Ciclo', 'ciclo','ciclo');
 		$rsm->addFieldResult('ciclo', 'id', 'id');
-		$rsm->addFieldResult('ciclo', 'titulo', 'titulo');
+		$rsm->addFieldResult('ciclo', 'anio', 'anio');
 		$rsm->addScalarResult('cant', 'cant');
-		$query = $this->getEntityManager()->createNativeQuery('SELECT ciclo.id, ciclo.titulo, count(correo.fecha) as cant FROM Ciclo ciclo LEFT JOIN Correo correo ON ciclo.titulo=YEAR(correo.fecha) '.$where.' GROUP BY ciclo.titulo ORDER BY ciclo.titulo DESC', $rsm);
+		$query = $this->getEntityManager()->createNativeQuery('SELECT ciclo.id, ciclo.anio, count(correo.fecha) as cant FROM Ciclo ciclo LEFT JOIN Correo correo ON ciclo.anio=YEAR(correo.fecha) '.$where.' GROUP BY ciclo.anio ORDER BY ciclo.anio DESC', $rsm);
 		return $query->getResult();
 	}
 	
