@@ -392,7 +392,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     }
     
     public function isAdmin(){
-    	return $this->hasRole(self::ROL_ADMIN);
+    	return ( $this->hasRole(self::ROL_ADMIN) || $this->isSuperAdmin() );
     }
     
 	public function getDomicilio() {
