@@ -45,11 +45,13 @@ class EstadoProyecto
 
 		/**
 	     * @ORM\ManyToOne(targetEntity="Usuario")
+     	 *  @ORM\JoinColumn(name="usuario_id", referencedColumnName="id", onDelete="SET NULL")
 	     */
 		private $usuario; 
 
 		/**
 	     * @ORM\ManyToOne(targetEntity="Proyecto")
+     	 *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", onDelete="CASCADE")
 	     */
 		private $proyecto;
 		

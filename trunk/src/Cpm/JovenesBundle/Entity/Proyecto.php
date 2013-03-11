@@ -85,6 +85,7 @@ class Proyecto
     * })
     */
     private $temaPrincipal;
+    
     /**
     *  @ORM\ManyToOne(targetEntity="Produccion")
     *  @ORM\JoinColumns({
