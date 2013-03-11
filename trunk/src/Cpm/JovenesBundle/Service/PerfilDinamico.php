@@ -89,9 +89,9 @@ class PerfilDinamico {
 			
 			return array(
 				'path' => 'proyecto_wizzard', 
-				'label'=>'Inscribir escuela',
+				'label'=>'Nueva inscripción',
 				'validation'=>  (count( $usuario->getProyectosCoordinados($ciclo)) > 0 ) ? 
-					" Usted ya inscribió una escuela ¿Está seguro que desea inscribir otra?" : false 
+					" Usted ya inscribió una institución ¿Está seguro que desea inscribir otra?" : false 
 			); 
 		};
 		return $acciones;
