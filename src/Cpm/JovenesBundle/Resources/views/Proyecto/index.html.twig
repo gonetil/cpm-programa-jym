@@ -27,12 +27,12 @@ $(document).ready(function() {
 			<div class="extra-filters">
 				{{ form_row(form.modelFilter.deQueSeTrata) }}
 				{{ form_row(form.modelFilter.usuarioFilter.aniosParticipo) }}
+				{{form_row(form.modelFilter.eje) }}
 				{{form_row(form.modelFilter.temaPrincipal) }}
-				{{ form_row(form.modelFilter.eventoFilter.evento) }}
-				{{ form_row(form.modelFilter.eventoFilter.sinInvitacionFlag) }}
-				{{ form_row(form.modelFilter.instanciaEventoFilter.instanciaEvento) }}
 	            {{ form_row(form.modelFilter.produccionFinal) }} 
 	            {{ form_row(form.modelFilter.esPrimeraVezAlumnos) }}
+	            {{ form_row(form.modelFilter.cuentanConNetbook) }}
+	            {{ form_row(form.modelFilter.cuentanConPlataformaVirtual) }}
 	            {{ form_row(form.modelFilter.estadoFilter.conArchivo) }} 
 	            {{ form_row(form.modelFilter.estadoFilter.yaEvaluado) }}
 	            {{ form_row(form.modelFilter.estadoFilter.nota) }}
@@ -57,6 +57,11 @@ $(document).ready(function() {
 				{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
 				{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }}
 				{{form_row(form.modelFilter.esPrimeraVezEscuela) }}
+				
+				{{ form_row(form.modelFilter.eventoFilter.evento) }}
+				{{ form_row(form.modelFilter.eventoFilter.sinInvitacionFlag) }}
+				{{ form_row(form.modelFilter.instanciaEventoFilter.instanciaEvento) }}
+				
 				{{ form_row(form.modelFilter.requerimientosDeEdicion) }} 
 				{{form_row(form.modelFilter.color) }}
 				{{form_row(form.modelFilter.transporte ) }}

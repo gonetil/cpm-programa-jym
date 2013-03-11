@@ -77,11 +77,34 @@ class ProyectoFilterForm extends ModelFilterForm
             		'preferred_choices' => array("Todos"),
         			'empty_value' => "Todos",
     				))         
- 			  ->add('deQueSeTrata', null,array( 'label' => 'Descripción',
+ 				->add('deQueSeTrata', null,array( 'label' => 'Descripción',
 		    										'required' => false ))
-    				      							
-    				      										
-                										;
+	            ->add('eje','entity',array('label' => 'Eje',
+		            									'class' => 'CpmJovenesBundle:Eje',
+		    								    		'empty_value' => "Todos",
+		    								            'preferred_choices' => array("Todos"),
+		            									'query_builder' => function($er) {
+																	        return $er->createQueryBuilder('p')
+															            ->orderBy('p.nombre', 'ASC');
+		    														},
+        												'required'=>false
+        								))
+			   ->add('cuentanConNetbook', 'choice' ,array('label' => 'Cuentan con notebook?' , 
+            											'choices' => array(1=>"Si",2=>"No"),
+            											'preferred_choices' => array("Todos"),
+        												'empty_value' => "Todos",
+        												'expanded'=>false,
+        												'required'=>false
+                										))	
+			   ->add('cuentanConPlataformaVirtual', 'choice' ,array('label' => 'Cuentan con plataforma virtual?' , 
+            											'choices' => array(1=>"Si",2=>"No"),
+            											'preferred_choices' => array("Todos"),
+        												'empty_value' => "Todos",
+        												'expanded'=>false,
+        												'required'=>false
+                										))				
+                			;
+	
 			$escuela = new EscuelaFilter();	
             $builder->add('escuelaFilter', $escuela->createForm($this->getJYM()) ,array('label' => 'Institución'));
 

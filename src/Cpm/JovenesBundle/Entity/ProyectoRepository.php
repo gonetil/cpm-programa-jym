@@ -50,6 +50,18 @@ class ProyectoRepository extends EntityRepository {
 			}	
 		}
 
+		if ($data->getCuentanConNetbook()) {
+			$pv = ($data->getCuentanConNetbook() != 1)?0 : 1;
+			$qb->andWhere('p.cuentanConNetbook = :ccn')->setParameter('ccn', $pv);
+		}
+		
+		if ($data->getCuentanConPlataformaVirtual()) {
+			$pv = ($data->getCuentanConPlataformaVirtual() != 1)?0 : 1;
+			$qb->andWhere('p.cuentanConPlataformaVirtual = :ccpv')->setParameter('ccpv', $pv);
+		}
+		
+
+
 		if ($data->getEsPrimeraVezAlumnos()) {
 			$pv = ($data->getEsPrimeraVezAlumnos() != 1)?0 : 1;
 			$qb->andWhere('p.esPrimeraVezAlumnos = :pva')->setParameter('pva', $pv);
@@ -60,6 +72,10 @@ class ProyectoRepository extends EntityRepository {
 			$qb->andWhere('p.esPrimeraVezEscuela = :pve')->setParameter('pve', $pv);
 		}
 		
+		if ($data->getEje())
+			$qb->andWhere('p.eje = :eje')->setParameter('eje', $data->getEje());
+			
+			
 		if ($data->getProduccionFinal())
 			$qb->andWhere('p.produccionFinal = :pf')->setParameter('pf', $data->getProduccionFinal());
 
