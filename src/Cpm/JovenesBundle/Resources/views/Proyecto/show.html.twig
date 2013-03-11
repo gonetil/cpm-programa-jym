@@ -186,7 +186,10 @@
 		
 		{% if entity.estadoActual %} 
 			<div class="estado_autor">
-			 {{ entity.estadoActual.fecha|date('d-m-Y') }}: por {{ entity.estadoActual.usuario.nombre }} {{ entity.estadoActual.usuario.apellido }}
+			 {{ entity.estadoActual.fecha|date('d-m-Y') }}: 
+			 {% if entity.estadoActual.usuario %}
+				 por {{ entity.estadoActual.usuario.nombre }} {{ entity.estadoActual.usuario.apellido }}
+			 {% endif %}	 
 			 </div>
 		{% endif %}	 
 		</h3>
@@ -211,7 +214,9 @@
 						
 						<p><strong>Estado: {{ estado }}  </strong>
 						<div  class="estado_autor"> 
-							Por {{ estado.usuario.nombre }} {{ estado.usuario.apellido }}
+							{% if estado.usuario %}
+								Por {{ estado.usuario.nombre }} {{ estado.usuario.apellido }}
+							{% endif %}	
 						</div>
 						</p>
 						<ul class="estado_more_info">
