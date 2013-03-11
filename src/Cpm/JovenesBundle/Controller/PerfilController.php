@@ -122,7 +122,6 @@ class PerfilController extends BaseController
     	$coordinador = $this->getJYM()->getLoggedInUser();
     
     	$proyecto->setCoordinador($coordinador);
-    	$proyecto->setEstado(Proyecto::__ESTADO_INICIADO);
     	$cicloActivo = $this->getJYM()->getCicloActivo();
         $proyecto->setCiclo($cicloActivo);
         

@@ -13,8 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Proyecto
 {
-    const __ESTADO_INICIADO = 'Iniciado';
-    const __ESTADO_RECHAZADO = 'Rechazado';
 
     /**
      * @var integer $id
@@ -125,15 +123,8 @@ class Proyecto
      *
      * @ORM\Column(name="impacto_buscado", type="text")
      */
-    
     private $impactoBuscado;
-    
-    /**
-    * @var string $estado
-    *
-    * @ORM\Column(name="estado", type="string")
-    */
-    private $estado;
+
     
     /**
      *  @ORM\ManyToOne(targetEntity="Ciclo")
@@ -219,7 +210,6 @@ class Proyecto
     
     public function __construct()
     {
-    	$this->estado = Proyecto::__ESTADO_INICIADO;
         $this->colaboradores = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -513,16 +503,6 @@ class Proyecto
     public function getImpactoBuscado()
     {
     	return $this->impactoBuscado;
-    }
-
-    public function getEstado()
-    {
-    	return $this->estado;
-    }
-    
-    public function setEstado($estado)
-    {
-    	$this->estado = $estado;
     }
 
     /**
