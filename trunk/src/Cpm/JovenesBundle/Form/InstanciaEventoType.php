@@ -7,7 +7,13 @@ use Symfony \ Component \ Form \ FormBuilder;
 class InstanciaEventoType extends AbstractType {
 	public function buildForm(FormBuilder $builder, array $options) {
 		$builder->add('evento', null, array (
-			'label' => '			Evento'
+			'label' => 'Evento',
+			'query_builder' => function($er) {		return $er->createQueryBuilder('e')
+																->innerJoin('e.ciclo','ciclo')
+																->andWhere('ciclo.activo = 1')
+													            ;
+    														}
+    								    
 		))->add('descripcion', null, array (
 			'label' => 'Descripción',
 			'required' => false
