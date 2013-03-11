@@ -202,22 +202,17 @@ class UsuarioController extends BaseController
 			else {
 				$proyectos = $entity->getProyectosCoordinados();
 				if (count($proyectos) > 0 )
-					$this->setErrorMessage("No se puede eliminar al usuario dado que tiene proyectos asociados como coordinador");
+					$this->setErrorMessage("No se puede eliminar al usuario dado que tiene ".count($proyectos)." proyectos asociados como coordinador");
 				else{
-					$proyectos = $entity->getProyectosColaborados();
-					if (count($proyectos) > 0)
-						$this->setErrorMessage("No se puede eliminar al usuario dado que tiene proyectos asociados como colaborador");
-					else {
-						try{
-			            	$em->remove($entity);
-							$em->flush();
-							$this->setSuccessMessage("Usuario eliminado satisfactoriamente");
-							return $this->redirect($this->generateUrl('usuario'));
-			            }catch(\PDOException $e){
-			            	$this->setErrorMessage("No se puede eliminar al usuario , revise que no tenga proyectos relacionados");
-			            }
-	            	}
-				}
+					try{
+			        	$em->remove($entity);
+						$em->flush();
+						$this->setSuccessMessage("Usuario eliminado satisfactoriamente");
+						return $this->redirect($this->generateUrl('usuario'));
+			        }catch(\PDOException $e){
+			            $this->setErrorMessage("No se puede eliminar al usuario , revise que no tenga proyectos relacionados");
+			    	}
+	            }
 			}
         }
         return $this->redirect($this->generateUrl('usuario_show', array('id' => $id)));
