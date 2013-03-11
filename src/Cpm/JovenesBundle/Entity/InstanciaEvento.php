@@ -81,7 +81,7 @@ class InstanciaEvento
     /**
      * @var Cpm\JovenesBundle\Entity\Invitacion $invitaciones
      *
-     * @ORM\OneToMany(targetEntity="Invitacion", mappedBy="instanciaEvento")
+     * @ORM\OneToMany(targetEntity="Invitacion", mappedBy="instanciaEvento", orphanRemoval=true)
      */
     private $invitaciones;
 

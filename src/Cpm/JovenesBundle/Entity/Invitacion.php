@@ -85,7 +85,7 @@ class Invitacion
      * @var Cpm\JovenesBundle\Entity\Proyecto $proyecto
      * 
      * @ORM\ManyToOne(targetEntity="Proyecto")
-     * @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="false")
+     * @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     private $proyecto;
 
@@ -93,7 +93,7 @@ class Invitacion
      * @var Cpm\JovenesBundle\Entity\InstanciaEvento $instanciaEvento
      * 
      * @ORM\ManyToOne(targetEntity="InstanciaEvento", inversedBy="invitaciones")
-     * @ORM\JoinColumn(name="instancia_evento_id", referencedColumnName="id", nullable="false")
+     * @ORM\JoinColumn(name="instancia_evento_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
      */
     private $instanciaEvento;
 
