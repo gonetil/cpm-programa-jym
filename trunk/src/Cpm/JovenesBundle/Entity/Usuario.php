@@ -364,7 +364,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
 	    	$proyectos = array();
 	    	foreach ( $this->proyectosCoordinados  as $p ) 
 	    	{
-	    		if ($p->getCiclo() == $ciclo )
+	    		if ($p->getCiclo()->equals($ciclo))
 	    			$proyectos[] = $p;
 	    	}
 	    	return $proyectos;

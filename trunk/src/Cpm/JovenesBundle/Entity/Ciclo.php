@@ -173,4 +173,13 @@ class Ciclo
     {
         return (string)$this->anio;
     }
+    
+   public function equals($other)
+    {
+    	if ($other instanceof Ciclo)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
+    }
+    
 }

@@ -9,40 +9,6 @@ instancia_reinvitar = function() {
 								});
 	}
 
-aviso_coordinador_inscripcion_realizada = function(path) {
-	
-  $(document).ready(function() {
-	$('body').append('<div id="dialog-confirm" title="Escuela ya inscripta" style="display:none"> \
-					   <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>\
-						Usted ya inscribió a una escuela <strong> ¿está seguro que quiere inscribir otra?</strong>\
-						</p>'
-	 );
-	javascript:
-	
-	$("a[href='"+path+"']").click(function(event) { 
-		
-		event.preventDefault();  
-		href = $(this).attr('href');
-		$( "#dialog-confirm" ).dialog({ resizable: false, width:650, height:200, modal: true,
-					buttons: {
-						"Sí, quiero inscribir otra escuela": function() {
-								$( this ).dialog( "close" );
-							   window.location = href;
-						},
-						"No, gracias": function() {
-							$( this ).dialog( "close" );
-						}
-					}
-				});
-	});
-  });
-	
-}
-
-
-
-
-
 hacer_listados_selectables = function (){
 //	$('.records_list tbody').selectable({ filter: "tr", cancel: "a" });
 }

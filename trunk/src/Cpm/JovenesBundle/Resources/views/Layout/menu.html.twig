@@ -21,9 +21,6 @@
 							<li><a href="{{url(accionUsuario['path'])}}">{{accionUsuario['label']}}</a></li>
 					</li>
 					{% endfor %}
-					{% if app.user.proyectosCoordinados|length > 0 %}
-							<script> aviso_coordinador_inscripcion_realizada('{{path('proyecto_wizzard')}}'); </script>
-					{% endif %}	
 					
 					
 					
