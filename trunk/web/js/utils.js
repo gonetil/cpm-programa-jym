@@ -487,7 +487,8 @@ function cargarAnios(inputAnios) {
 		$("#widgetAnios").append(newInput); 
 	}
 	
-	if ( $("#widgetAnios input:checked").length > 0 ) { 
+	if ( $("#widgetAnios input:checked").length > 0 ) 
+	{ 
 		$("#widgetAnios").show();
 		$("#participo").attr('checked',true);
 	}
