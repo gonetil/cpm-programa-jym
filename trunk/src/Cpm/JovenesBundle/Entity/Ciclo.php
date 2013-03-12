@@ -56,7 +56,6 @@ class Ciclo
 
 	public function __construct(){
 		$this->activo = false;
-		$this->etapaActual = '';
 	}
 
     /**

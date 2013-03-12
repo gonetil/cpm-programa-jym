@@ -113,6 +113,8 @@ class JYM  {
 		$etapaActual = $c->getEtapaActual();
 		if (empty($etapaActual)){
 			$etapaActual=$this->getEtapaInicial();
+			$e = new \Exception();
+			$this->logger->info("Algo raro pasa, se modifca la etapa del ciclo ".$e->getTraceAsString());
 			
 			$c->setEtapaActual($etapaActual);
 			
