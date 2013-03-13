@@ -41,7 +41,12 @@ class InstanciaEventoType extends AbstractType {
 			'date_widget' => 'single_text',
 			'time_widget' => 'single_text',
 			'date_format' => \AppKernel::DATE_FORMAT
-		));
+		))
+		->add('preview','checkbox',array('property_path' => false, 
+										 'label' => 'Previsualizar correo',
+										 'required'=>false ))
+		
+		;
 	}
 
 	public function getName() {

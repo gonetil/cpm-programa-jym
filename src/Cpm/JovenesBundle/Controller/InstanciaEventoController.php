@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\InstanciaEvento;
+use Cpm\JovenesBundle\Entity\Invitacion;
+use Cpm\JovenesBundle\Entity\Plantilla;
 use Cpm\JovenesBundle\Form\InstanciaEventoType;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -65,10 +67,10 @@ class InstanciaEventoController extends BaseController
     		$entity->setEvento($this->getRepository('CpmJovenesBundle:Evento')->find($eventoid));
     		
         $form   = $this->createForm(new InstanciaEventoType(), $entity);
-
+		$form['preview']->setData(true);
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form'   => $form->createView(),
         );
     }
 
@@ -83,10 +85,20 @@ class InstanciaEventoController extends BaseController
     {
         $entity  = new InstanciaEvento();
         $request = $this->getRequest();
+                
         $form    = $this->createForm(new InstanciaEventoType(), $entity);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
+            if ($form['preview']->getData()) {
+            	$form['preview']->setData( false ); 
+        	    return array(
+		            		'entity' => $entity,
+		            		'form'   => $form->createView(),
+		            		'preview_invitacion' => $this->getFakeEmail($entity)
+		       		 		);
+	      }
+        	
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
@@ -114,6 +126,8 @@ class InstanciaEventoController extends BaseController
 		$editForm = $this->createForm(new InstanciaEventoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
+		$editForm['preview']->setData(true);
+		
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -140,6 +154,16 @@ class InstanciaEventoController extends BaseController
         $editForm->bindRequest($request);
 
         if ($editForm->isValid()) {
+        	if ($editForm['preview']->getData()) {
+            	$editForm['preview']->setData( false ); 
+        	    return array(
+		            		'entity' => $entity,
+		            		'edit_form'   => $editForm->createView(),
+				            'delete_form' => $deleteForm->createView(),		            		
+		            		'preview_invitacion' => $this->getFakeEmail($entity)
+		       		 		);
+	      	}
+	      	
             $em->persist($entity);
             $em->flush();
             $this->setSuccessMessage("Instancia de evento modificada satisfactoriamente");
@@ -266,6 +290,33 @@ class InstanciaEventoController extends BaseController
     	->add('ccEscuela','checkbox',array('label'=>'Enviar copia del mensaje a la institucion', 'required'=>false))
     	->getForm()
     	;
+    }
+    
+    private function getFakeEmail($instancia) { 
+  
+    	$proyectos = $this->getRepository('CpmJovenesBundle:Proyecto')->findBy( array() , array(), 1, 1);
+    	$proyecto = $proyectos[0];
+ 
+    	$invitacion = new Invitacion();
+		$invitacion->setInstanciaEvento($instancia);
+		$invitacion->setProyecto($proyecto);
+		
+		$template = $this->getEntityManager()->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo(Plantilla::INVITACION_A_EVENTO); 
+		
+    	$context=array(Plantilla::_INVITACION => $invitacion);
+    	$context[Plantilla::_USUARIO ] = $proyecto->getCoordinador(); 
+    	$context[Plantilla::_URL] = $this->getMailer()->resolveUrlParameter('abrir_invitacion', array('id'=>-1, 'accion'=>'aceptar'));
+		$context[Plantilla::_URL_SITIO] = $this->getJYM()->getParametroConfiguracion("jym_url_sitio");		
+		
+		try { 
+			$texto = $this->getMailer()->renderTemplate($template->getCuerpo(),$context);
+	 	}catch(\Twig_Error_Syntax $e){
+			$this->addErrorMessage("Error al procesar la plantilla de correos: error de sintaxis");
+		}catch(\Twig_Error $e){
+			$this->addErrorMessage("Error al procesar la plantilla de correos");
+		}
+    	return $texto;
+
     }
     
 }

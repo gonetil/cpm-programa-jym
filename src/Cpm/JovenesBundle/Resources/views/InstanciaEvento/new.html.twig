@@ -16,11 +16,19 @@
 
 <form action="{{ path('instancia_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
+
+{% if preview_invitacion is defined %}
+
+	<div class="preview_invitacion">
+		<h4> Ejemplo de correo </h4>
+		{{ preview_invitacion | raw}}
+	</div>
+{% endif %}
+
     <p>
         <button type="submit">Crear</button>
     </p>
 </form>
-
 <ul class="record_actions">
     <li>
         <a href="{{ path('instancia') }}">
