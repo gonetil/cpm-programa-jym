@@ -16,6 +16,14 @@
 
 <form action="{{ path('instancia_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
+    
+    {% if preview_invitacion is defined %}
+	<div class="preview_invitacion">
+		<h4> Ejemplo de correo </h4>
+		{{ preview_invitacion | raw}}
+	</div>
+	{% endif %}
+    
     <p>
         <button type="submit">Editar</button>
     </p>

@@ -40,6 +40,10 @@ class TwigSwiftMailer implements MailerInterface
         	$mailer->getTransport()->setLocalDomain('127.0.0.1');
         
     }
+    
+    public function getTwig() {
+    	return $this->twig;
+    }
 	
 	public function getCorreoFromPlantilla($codigo_plantilla){
 		$plantilla=$this->doctrine->getEntityManager()->getRepository('CpmJovenesBundle:Plantilla')->findOneByCodigo($codigo_plantilla);

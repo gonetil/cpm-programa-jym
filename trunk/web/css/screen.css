@@ -2912,4 +2912,14 @@ h4.info_header:hover { background-color: #FFF; }
 }
 .proyecto_submenu a:hover {
 		color: #000;
-}		
+}
+
+.preview_invitacion { 
+	width: 80%;
+	text-align: justify;
+	line-height: 160%;
+	border: 1px solid #ECECEC;
+	padding: 0px 15px 15px 15px; 
+	margin: 10px;  
+	border-radius: 10px; 
+}
