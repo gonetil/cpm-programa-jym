@@ -82,8 +82,8 @@ $(document).ready(function() {
 		<ul>
 			<li>Cant. de proyectos: {{total_proyectos}}</li> {% if total_proyectos > 0 %}
 			{# <li>% primera vez del coordinador: {{ 100 * total_PrimeraVezDocente / total_proyectos }}% ( {{total_PrimeraVezDocente}} )</li>  #} 
-			<li>% primera vez de los alumnos: {{ 100 * total_PrimeraVezAlumnos / total_proyectos }}% ({{total_PrimeraVezAlumnos}})</li>
-			<li>% primera vez de la escuela: {{100 * total_PrimeraVezEscuela / total_proyectos }}% ({{total_PrimeraVezEscuela}})</li> {% endif %}
+			<li>% primera vez de los alumnos: {{ (100 * total_PrimeraVezAlumnos / total_proyectos) | number_format(2) }}% ({{total_PrimeraVezAlumnos}}/{{total_proyectos}})</li>
+			<li>% primera vez de la escuela: {{ (100 * total_PrimeraVezEscuela / total_proyectos) | number_format(2)}}% ({{total_PrimeraVezEscuela}}/{{total_proyectos}})</li> {% endif %}
 			<li>Cantidad de coordinadores: {{ total_Coordinadores }}</li>
 		</ul>
 	</div>
