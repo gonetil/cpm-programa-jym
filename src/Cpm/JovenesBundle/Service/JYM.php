@@ -26,16 +26,6 @@ class JYM  {
 		$this->config = $container->getParameter("cpm_jovenes");
 		$this->perfil_dinamico = new PerfilDinamico($this);
 		
-/*		$em = $this->doctrine->getEntityManager();
-		$es = $this->getRepository('CpmJovenesBundle:Etapa')->findAll();
-		foreach( $es as $e ) {
-       		$e->setAccionesDeUsuario(array('alo'));
-       		$e->setAccionesDeProyecto(array('alo'));
-       		$em->persist($e); $em->flush();
-		}  
-		exit; Doctrine\DBAL\Types\Type::getType().
-		*/
-		
 	} 
 	
 	public function getCicloActivo(){
@@ -46,20 +36,21 @@ class JYM  {
 			$this->ciclo = $repo->getCicloActivo(false);
 			if (empty($this->ciclo )){
 				//No hay ciclo activo ==> creo uno
-				$this->ciclo = new Ciclo();
-				$this->ciclo->setAnio(date('Y'));
-				$this->ciclo->setActivo(true);
-				$this->this->logger->err("No habia ningun ciclo creado, se crea uno y se activa");
+				$c = new Ciclo();
+				$c->setAnio(date('Y'));
+				$c->setActivo(true);
+				$c->setEtapaActual($this->getEtapaInicial());
+				$this->this->logger->err("No habia ningun ciclo creado, se crea uno y se activa en la etapa inicial");
 				
 				//guardo el ciclo nuevo
 				$em = $this->doctrine->getEntityManager();
-				$em->persist($this->ciclo);
+				$em->persist($c);
 		        $em->flush();
-						
+					
+				$this->ciclo=$c;
 			}
 			$this->checkEtapaActiva();
 			
-			$this->logger->info("Se incializa El CICLO ".$this->ciclo->getAnio());
 		}
 		return $this->ciclo;
 	}
@@ -86,8 +77,19 @@ class JYM  {
 	
 	protected function checkEtapaActiva(){
 		$etapaActual=$this->getEtapaActual();
-		if (empty($etapaActual))
-			throw new \Exception("Se ha producido un error: no hay etapa activa asociada al ciclo ".$this->ciclo->getAnio());
+		
+		if (empty($etapaActual)){
+			$e = new \Exception();
+			$this->logger->warn("Algo raro pasa, se modifca la etapa del ciclo ".$e->getTraceAsString());
+		
+			$c = $this->getCicloActivo();
+			$c->setEtapaActual($this->getEtapaInicial());
+		
+			$em = $this->doctrine->getEntityManager();
+			$em->persist($c);
+	        $em->flush();
+		}
+
 	}
 	
 	
@@ -109,20 +111,7 @@ class JYM  {
 	
 	
 	public function getEtapaActual(){
-		$c = $this->getCicloActivo();
-		$etapaActual = $c->getEtapaActual();
-		if (empty($etapaActual)){
-			$etapaActual=$this->getEtapaInicial();
-			$e = new \Exception();
-			$this->logger->info("Algo raro pasa, se modifca la etapa del ciclo ".$e->getTraceAsString());
-			
-			$c->setEtapaActual($etapaActual);
-			
-			$em = $this->doctrine->getEntityManager();
-			$em->persist($c);
-	        $em->flush();
-		}
-		return $etapaActual;
+		return $this->getCicloActivo()->getEtapaActual();
 	}
 	
 	public function getEventosManager(){

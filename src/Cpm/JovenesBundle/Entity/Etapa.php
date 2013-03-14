@@ -167,11 +167,6 @@ class Etapa
     }
 
     
-    public function __toString()
-    {
-        return $this->nombre;
-    }
-
     /**
      * Set proyectosVigentesAction
      *
@@ -244,5 +239,9 @@ class Etapa
         	return false;
     }
     
-    
+
+    public function __toString()
+    {
+        return (string) $this->nombre.' ('.$this->numero.')';
+    }    
 }
