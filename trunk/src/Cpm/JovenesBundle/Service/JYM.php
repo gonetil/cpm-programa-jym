@@ -25,9 +25,6 @@ class JYM  {
 		$this->container=$container;
 		$this->config = $container->getParameter("cpm_jovenes");
 		$this->perfil_dinamico = new PerfilDinamico($this);
-			$e = new \Exception();
-$this->logger->warn("Algo raro pasa, se modifca la etapa del ciclo ".$e->getTraceAsString());
-				
 	} 
 	
 	public function getCicloActivo(){
