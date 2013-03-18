@@ -40,7 +40,7 @@ class JYM  {
 				$c->setAnio(date('Y'));
 				$c->setActivo(true);
 				$c->setEtapaActual($this->getEtapaInicial());
-				$this->this->logger->err("No habia ningun ciclo creado, se crea uno y se activa en la etapa inicial");
+				$this->logger->err("No habia ningun ciclo creado, se crea uno y se activa en la etapa inicial");
 				
 				//guardo el ciclo nuevo
 				$em = $this->doctrine->getEntityManager();
