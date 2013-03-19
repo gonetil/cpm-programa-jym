@@ -245,6 +245,9 @@ class CicloController extends BaseController
 		$c->setEtapaActual($nuevaEtapa);
 		
 		try{
+			$e = new \Exception();
+			$this->logger->warn("Algo raro pasa, se modifca la etapa del ciclo: ".$e->getTraceAsString());
+			
 			$em = $this->getDoctrine()->getEntityManager();
 			$em->persist($c);
 			$em->flush();
