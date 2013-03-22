@@ -102,7 +102,7 @@ class ProyectoFilterForm extends ModelFilterForm
         												'empty_value' => "Todos",
         												'expanded'=>false,
         												'required'=>false
-                										))				
+                										))		
                 			;
 	
 			$escuela = new EscuelaFilter();	

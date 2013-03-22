@@ -13,6 +13,8 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 	private $instanciaEventoFilter;
 	private $cicloFilter;
 	private $usuarioFilter;
+	
+	
 
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new ProyectoFilterForm($this, $jym);

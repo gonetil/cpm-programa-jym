@@ -10,6 +10,7 @@ class UsuarioFilter extends Usuario implements ModelFilter {
 	private $habilitados;
 	private $soloCoordinadores;
 	private $primeraVezQueParticipa; //o sea, aniosParticio = NULL o {}	
+	private $sinProyectosEsteCiclo;
 
 	private $ciclo;
 	private $aniosParticipo;
@@ -74,6 +75,14 @@ class UsuarioFilter extends Usuario implements ModelFilter {
 	
 	public function setPrimeraVezQueParticipa($aBool) {
 		$this->primeraVezQueParticipa = $aBool;
+	}
+	
+	public function getSinProyectosEsteCiclo() {
+		return $this->sinProyectosEsteCiclo;
+	}
+	
+	public function setSinProyectosEsteCiclo($aBool) {
+		$this->sinProyectosEsteCiclo = $aBool;
 	}
 	
 	

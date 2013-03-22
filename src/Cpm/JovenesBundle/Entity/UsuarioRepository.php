@@ -78,6 +78,20 @@ class UsuarioRepository extends EntityRepository
        			$qb->andWhere("u.aniosParticipo like :$var")->setParameter("$var","%$anio%");
 			}	
 		}
+		
+		if ($sinProyectosEsteCiclo = $data->getSinProyectosEsteCiclo()) {
+			
+			$this->getEntityManager()->getConfiguration()->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
+
+				$qb->andWhere('YEAR(u.lastLogin) = :anio')->setParameter('anio',$ciclo_activo->getAnio())		
+					->andWhere( 'u not IN ('.
+											' SELECT usuario FROM CpmJovenesBundle:Proyecto proy' .
+											' INNER JOIN proy.coordinador usuario ' .
+											' INNER JOIN proy.ciclo ciclo' .
+											' WHERE ciclo =:ciclo)')->setParameter('ciclo',$ciclo_activo)
+					;
+		}
+		
 		return $qb;
 		
 	}
