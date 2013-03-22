@@ -18,14 +18,17 @@
 	<div class="right">
 		{{ form_row(form.modelFilter.email) }}
 		{{ form_row(form.modelFilter.ciclo) }}
+		{{ form_row(form.modelFilter.sinProyectosEsteCiclo) }}
 	</div>
 	<div class="double">
 		
 		{{ form_label(form.modelFilter.aniosParticipo) }}
 		<br/>
 		{{ form_widget(form.modelFilter.aniosParticipo) }}
-		{{ form_rest(form) }}
-		<input type='submit' style="min-height:auto; height:auto;"/>
+		{{ form_widget(form._token) }}
+		<div style="text-align:center; margin-left: 200px; ">
+			{{ filter.form_buttons(form) }}
+		</div>
 	</div>
 </div>
 </form>
