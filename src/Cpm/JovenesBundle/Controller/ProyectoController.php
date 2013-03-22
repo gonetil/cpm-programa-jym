@@ -83,6 +83,11 @@ class ProyectoController extends BaseController
     									->where('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
     									->getQuery()->getSingleScalarResult();
  																			
+    	$stats['total_PrimeraVezDocente'] = $qb->select($qb->expr()->count('p'))->innerJoin('p.coordinador','coordinador')
+    																			->where('( coordinador.aniosParticipo like \'{}\' or coordinador.aniosParticipo is NULL )')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getSingleScalarResult();
+ 																			
     	$stats['total_PrimeraVezAlumnos'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezAlumnos = 1')
     																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
     																			->getQuery()->getSingleScalarResult();
