@@ -34,7 +34,6 @@ class ProyectoRepository extends EntityRepository {
 			$qb->orderBy($field,$sort_order);
 		}
 		
-		
 		$cicloFilter = $data->getCicloFilter();
 		if  ($ciclo = $cicloFilter->getCiclo()) { 
 			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
@@ -49,6 +48,15 @@ class ProyectoRepository extends EntityRepository {
        			$qb->andWhere("coordinador.aniosParticipo like :$var")->setParameter("$var","%$anio%");
 			}	
 		}
+
+		if ($primeraVezQueParticipa = $usuarioFilter->getPrimeraVezQueParticipa()) {
+				if ($primeraVezQueParticipa == 1)
+	       			$qb->andWhere(" ( coordinador.aniosParticipo like '{}' or coordinador.aniosParticipo is NULL )");
+	       		else	
+		       		$qb->andWhere(" not ( coordinador.aniosParticipo like '{}' or coordinador.aniosParticipo is NULL )");
+		}
+		
+		
 
 		if ($data->getCuentanConNetbook()) {
 			$pv = ($data->getCuentanConNetbook() != 1)?0 : 1;

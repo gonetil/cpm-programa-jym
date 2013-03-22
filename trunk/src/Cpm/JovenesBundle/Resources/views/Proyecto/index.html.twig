@@ -25,7 +25,8 @@ $(document).ready(function() {
 			<h4>Filtros sobre el proyecto</h4>
 			{{ form_row(form.modelFilter.coordinador) }} 
 			<div class="extra-filters">
-				{{ form_row(form.modelFilter.deQueSeTrata) }}
+				{{ form_row(form.modelFilter.deQueSeTrata) }}			
+				{{ form_row(form.modelFilter.usuarioFilter.primeraVezQueParticipa) }}			
 				{{ form_row(form.modelFilter.usuarioFilter.aniosParticipo) }}
 				{{form_row(form.modelFilter.eje) }}
 				{{form_row(form.modelFilter.temaPrincipal) }}

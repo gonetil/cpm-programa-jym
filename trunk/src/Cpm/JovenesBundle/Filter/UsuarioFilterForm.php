@@ -24,6 +24,13 @@ class UsuarioFilterForm extends ModelFilterForm
 				))
         	->add('soloCoordinadores','checkbox',array('label'=>'Sólo coordinadores', 'required'=>false))
 
+             ->add('primeraVezQueParticipa', 'choice' ,array('label' => '¿Primera vez que participa el docente?', 
+            											'choices' => array(1=>"si",2=>"no"),
+            											'preferred_choices' => array("Todos"),
+        												'empty_value' => "Todos",
+        												'expanded'=>false,
+        												'required'=>false
+        											))
         	->add('ciclo','entity',array('label' => 'Vinculados a proyectos en el ciclo',
 		    							'class' => 'CpmJovenesBundle:Ciclo',
 		    							'query_builder' => function($er) {
