@@ -71,8 +71,12 @@
 {% endmacro %}
 
 
-{% macro SelectVariablesDePlantillas(target) %}
-		{% set variables = jym.getVariablesCorreo %}
+{% macro SelectVariablesDePlantillas(target,scope) %}
+		{% if scope=='usuarios' %}
+			{% set variables = jym.getVariablesCorreoUsuarios %}
+		{%  elseif (scope == 'proyectos') %} 
+			{% set variables = jym.getVariablesCorreo %}
+		{%  endif %}	
 		<h2> Variables predefinidas </h2>
 		<p> Doble clic para insertarlas en el texto del correo </p>
 	  	<select size="{{ variables | length }}" class="lista_variable" target="{{target}}">

@@ -134,7 +134,14 @@ class JYM  {
 		);
 		return $variables;
 	}		
-	
+	public function getVariablesCorreoUsuarios() {
+		$variables = array(
+		'{{ usuario.apellido }}, {{ usuario.nombre }}' => "Apellido, Nombre del destinatario",
+		'{{ usuario.email }}' => "Dirección de correo destinatario", 
+		'{{ url_sitio }}' => "Dirección web (URL) de este sitio"
+		);
+		return $variables;
+	}			
 	 
 	/* *********** Recuperacion de settings ********************* */
 	function getParametroConfiguracion($paramName, $defaultValue = null){

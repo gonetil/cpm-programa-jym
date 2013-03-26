@@ -47,7 +47,7 @@
 			$('.the_actions a').click(function(event){
 				event.preventDefault();
 				a= $(event.target);	
-				
+				console.log(event.target);	
 				if (a.attr('confirm') && a.attr('confirm')){
 					if (!confirm("Esta seguro que desea ejecutar esta acción?"))
 						return;

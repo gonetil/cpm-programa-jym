@@ -33,7 +33,7 @@ class UsuarioController extends BaseController
      */
     public function indexAction()
     {
-         return $this->filterAction(new UsuarioFilter(), 'escuela');
+         return $this->filterAction(new UsuarioFilter(), 'usuario');
      
     }
 

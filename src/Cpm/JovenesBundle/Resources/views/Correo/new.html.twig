@@ -4,7 +4,7 @@
 
 {% block content %}
 	<div class="proyecto_right_box">
-		{{ common.SelectVariablesDePlantillas("#cpm_jovenesbundle_correotype_cuerpo") }}
+		{{ common.SelectVariablesDePlantillas("#cpm_jovenesbundle_correotype_cuerpo","proyectos") }}
 	</div>
 
 <form action="{{ path('correo_create') }}" method="post" {{ form_enctype(form) }}>
