@@ -15,6 +15,8 @@ use Cpm\JovenesBundle\Filter\Filter;
 use Cpm\JovenesBundle\Filter\ModelFilterForm;
 use Cpm\JovenesBundle\Filter\ModelFilter; 
 
+use Symfony\Component\HttpFoundation\Response;
+
 abstract class BaseController extends Controller
 {
 
@@ -227,7 +229,7 @@ abstract class BaseController extends Controller
     {
      	list($form, $batch_filter, $entitiesQuery) = $this->getFilterForm($modelfilter);
      	
-    	if ($batch_filter->hasBatchAction()){
+    	if ($batch_filter->hasBatchAction()){	
 			if ($batch_filter->isBatchActionTypeTodos()){
 				
 				$entities = $entitiesQuery->getResult();
@@ -254,7 +256,6 @@ abstract class BaseController extends Controller
 			//TODO ver si le paso $extra_args al forward
 			return $this->forward($batch_filter->getBatchAction(),array('entitiesQuery'=>$entitiesQuery));				
     	} 
-    	
     	return $this->getFilterResults($form, $batch_filter,$entitiesQuery,$extra_args);        
     }
 

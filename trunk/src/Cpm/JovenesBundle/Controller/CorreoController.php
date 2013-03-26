@@ -14,6 +14,10 @@ use Cpm\JovenesBundle\Form\CorreoType;
 use Cpm\JovenesBundle\EntityDummy\CorreoBatch;
 use Cpm\JovenesBundle\Form\CorreoBatchType;
 
+use Cpm\JovenesBundle\EntityDummy\CorreoUsuarioBatch;
+use Cpm\JovenesBundle\Form\CorreoUsuarioBatchType;
+
+
 use Cpm\JovenesBundle\Entity\Plantilla;
 use Cpm\JovenesBundle\Exception\Mailer\InvalidTemplateException;
 use Cpm\JovenesBundle\Exception\Mailer\MailCannotBeSentException;
@@ -243,7 +247,6 @@ class CorreoController extends BaseController
 				
 			}else{
 				//LO mando
-
 					
 				$cant = 0;
 				set_time_limit(60+3*count($proyectos));
@@ -288,6 +291,96 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 		
 		
 		
+	/**
+	 * 
+	 * Permite enviar un correo a un conjunto de Usuarios
+	 * @Template("CpmJovenesBundle:Correo:show_correo_a_usuario_batch_form.html.twig")
+	 */
+	public function showCorreoUsuarioBatchFormAction($entitiesQuery) {
+
+		$correoBatch = new CorreoUsuarioBatch();
+		
+		$usuarios = $entitiesQuery->getResult();
+		$correoBatch->setUsuarios(new \ Doctrine \ Common \ Collections \ ArrayCollection($usuarios));
+
+		$correoBatchForm = $this->createForm(new CorreoUsuarioBatchType(), $correoBatch);
+		return array (
+			'form' => $correoBatchForm->createView(),
+			'usuarios' => $usuarios,
+		);
+
+	}
+		
+			/**
+	*
+	* Envia un correo masivo a muchos usuarios
+	* @Route("/correo_usuario_batch_submit", name="correo_usuario_batch_submit")
+	* @Template("CpmJovenesBundle:Correo:show_correo_a_usuario_batch_form.html.twig")
+	*/
+	public function correoUsuarioBatchSubmitAction() {
+		$request = $this->getRequest();
+		$correoBatch = new CorreoUsuarioBatch();
+
+		$correoBatchForm = $this->createForm(new CorreoUsuarioBatchType(), $correoBatch);
+		$correoBatchForm->bindRequest($request);
+		$usuarios = $correoBatch->getUsuarios();
+		$mailer = $this->getMailer();
+
+		if ($correoBatchForm->isValid() && count($usuarios)) {
+			
+			$correoMaestro = new Correo();
+			$correoMaestro->setAsunto($correoBatch->getAsunto());
+			$correoMaestro->setCuerpo($correoBatch->getCuerpo());
+				
+			if ($correoBatch->getPreview()) //aun no deben mandarse los emails, sino que hay que previsualizarlos 
+			{
+				$exampleCorreo = $correoMaestro->clonar(false);
+				$exampleCorreo->setDestinatario($usuarios[0]);
+				try {
+					$exampleCorreo= $mailer->enviarCorreo($exampleCorreo, array(), true);
+					$correoBatch->setPreviewText($exampleCorreo->getCuerpo()); 
+					$correoBatch->setPreview(false);
+					$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
+				}catch(InvalidTemplateException $e){
+						$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+				}
+				
+			}else{
+				//LO mando
+				$cant = 0;
+				set_time_limit(60+3*count($usuarios));
+				try{
+					foreach ($usuarios as $usuario) {
+						$correo=$correoMaestro->clonar(false);
+						$correo->setDestinatario($usuario);
+						$correo->setEmail($usuario->getEmail());
+						$mailer->enviarCorreo($correo);
+						$cant++;
+				
+					}
+					$this->setSuccessMessage("Se enviaron $cant correos satisfactoriamente");
+					return $this->redirect($this->generateUrl('usuario'));
+				}catch(InvalidTemplateException $e){
+						$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
+				}catch(MailCannotBeSentException $e){
+						$this->setErrorMessage("Se produjo un error al tratar de enviar los correos. Espere unos minutos e intente nuevamente. Si el problema persiste, contáctese con los administradores.".($cant?"Sin embargo, se enviaron $cant correos satisfactoriamente":""));
+				}	
+				
+			}
+				  	
+		} // form->isValid
+
+		$correoBatchForm=$this->createForm(new CorreoUsuarioBatchType(), $correoBatch);
+			return array (
+					'form' => $correoBatchForm->createView(),
+					'usuarios' => $correoBatch->getUsuarios()
+			);
+	}
+		
+	
+	
+	
+	
 		
 		
 	/**

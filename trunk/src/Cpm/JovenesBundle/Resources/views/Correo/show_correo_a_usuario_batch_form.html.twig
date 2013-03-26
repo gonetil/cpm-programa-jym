@@ -1,6 +1,6 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block title %}Enviar mensaje{% endblock %}
+{% block title %}Enviar Correo{% endblock %}
 
 {% block content %}
 <script>
@@ -12,9 +12,12 @@
 					  {
 					  $("select.select-plantilla")
 					  	.change(function(event) {
+						 
 					  		$(".preview").val("1"); //si cambio, debera volver a chequearse
 					  		id_plantilla = $(event.target).val();
+					  		
 					  		if (id_plantilla == "") return;
+
 							$.getJSON("{{ path('plantilla_find_by_id') }}", { plantilla_id : id_plantilla} ,
 							 function(data) {
 											if (data.length > 0) {
@@ -53,20 +56,22 @@
 	</div>
 {% endif %}
  
- <form method="post" action="{{ path('correo_batch_submit') }}" id="mailer_form">
+ <form method="post" action="{{ path('correo_usuario_batch_submit') }}" id="mailer_form">
  
  <div class="checklist" style="float:right">
-	 <strong> Escuelas </strong>
-	 <select name="cpm_jovenesbundle_correobatchtype[proyectos][]" id="cpm_jovenesbundle_correobatchtype_proyectos" multiple="yes">
-		{% for p in proyectos %}
-			<option value="{{p.id}}" selected> {{p}} </option>
-		{% endfor %} 
+	 <strong> Destinatarios </strong>
+	 <select name="cpm_jovenesbundle_correousuariobatchtype[usuarios][]" id="cpm_jovenesbundle_correousuariobatchtype_usuarios" multiple="yes">
+		{%  if usuarios is defined %}
+			{% for u in usuarios %}
+				<option value="{{u.id}}" selected> {{u.email}} </option>
+			{% endfor %}
+		{%  endif %}	 
 	 </select>
 
- <a href="#" onclick="$('#cpm_jovenesbundle_correobatchtype_proyectos option').prop('selected',true);" > Seleccionar todo </a>
+ <a href="#" onclick="$('#cpm_jovenesbundle_correousuariobatchtype_usuarios option').prop('selected',true);" > Seleccionar todo </a>
 
  <div class="proyecto_right_box">
- {{ common.SelectVariablesDePlantillas("#cpm_jovenesbundle_correobatchtype_cuerpo","proyectos") }}
+ {{ common.SelectVariablesDePlantillas("#cpm_jovenesbundle_correousuariobatchtype_cuerpo","usuarios") }}
  </div>
 
  </div>
@@ -78,9 +83,6 @@
  	{{ form_row(form.asunto) }}
  	{{ form_row(form.cuerpo) }}
  </span>	
- 	{{ form_row(form.ccCoordinadores) }}
- 	{{ form_row(form.ccEscuelas) }}
- 	{{ form_row(form.ccColaboradores) }}
  	{{ form_row(form.preview) }}
    {{ form_row(form._token) }}
  <input type="submit" value="Enviar correo"/>
