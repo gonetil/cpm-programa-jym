@@ -12,8 +12,20 @@ $(document).ready(function() {
 		options = "{% for l in localidades %}<option value='{{l.id}}' {% if (form.vars.value.localidad is defined) and ( form.vars.value.localidad == l.id ) %} selected='selected'{% endif %}>{{l.nombre}}</option>{% endfor %}";
 		$('select.localidad-selector').append(options);
 	{% endif %}
+
+
+
+	//hook para que al seleccionar un ciclo que muestren eventos e instancias de ese ciclo
+	$("#cpm_jovenesbundle_filter_modelFilter_cicloFilter_ciclo").change(function(event) { 
+		ciclo = $(event.target).val();
+		url = '{{ path('find_all_by_ciclo') }}';
+		$target_eventos= $("#cpm_jovenesbundle_filter_modelFilter_eventoFilter_evento");
+		$target_instancias = $("#cpm_jovenesbundle_filter_modelFilter_instanciaEventoFilter_instanciaEvento");
+		filtrarEventosPorCiclo(url,ciclo,$target_eventos,$target_instancias);
+	});
+
 });
-			
+
 </script>
 
 {{ filter.form_head(form) }}

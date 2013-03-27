@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Evento;
 use Cpm\JovenesBundle\Form\EventoType;
-
+use Symfony\Component\HttpFoundation\Response;
 
 use Cpm\JovenesBundle\Filter\EventoFilter;
 use Cpm\JovenesBundle\Filter\EventoFilterForm;
@@ -184,5 +184,42 @@ class EventoController extends BaseController
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+    
+    
+        /**
+    * Busca todos los eventos y todas las instancias del ciclo ciclo_id
+    *
+    * @Route("/eventos/find_all_by_ciclo", name="find_all_by_ciclo")
+    */
+    public function findEventosByCiclo() 
+    { 
+    		$ciclo_id = $this->get('request')->query->get('ciclo_id');
+			$instancias = $eventos = array();
+			    		 
+    		if ($ciclo_id  > 0) 
+    		{ 
+    			$ciclo = $this->getEntity('CpmJovenesBundle:Ciclo', $ciclo_id); 
+				$instancias =  $this->getRepository('CpmJovenesBundle:InstanciaEvento')->createQueryBuilder('ie')
+    				 			->innerJoin('ie.evento','e')->innerJoin('e.ciclo','c')->andWhere('c = :ciclo')->setParameter('ciclo',$ciclo)
+				 				->getQuery()->getResult();
+				 	
+    			$eventos = $this->getRepository('CpmJovenesBundle:Evento')->findByCiclo($ciclo_id);
+    		} 
+    		$json_instancias = array();
+    		foreach ($instancias as $instancia) {
+    			$json_instancias[] = array("nombre"=>$instancia->__toString(), "id" => $instancia->getId());
+    		}
+    		
+    		$json_eventos = array();
+    		foreach ( $eventos as $evento) {
+       			$json_eventos[] = array("nombre" => $evento->__toString(), "id" => $evento->getId());
+			}
+    		
+    		
+    		$response = new Response(json_encode(array('instancias' => $json_instancias, 'eventos' => $json_eventos )));
+    	
+    		$response->headers->set('Content-Type', 'application/json');
+    		return $response;
     }
 }

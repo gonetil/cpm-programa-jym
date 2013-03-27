@@ -3,6 +3,19 @@
 {% block title %}Instancias de eventos{% endblock %}
 
 {% block content %}
+<script>
+$(document).ready(function() { 
+			//hook para que al seleccionar un ciclo que muestren eventos e instancias de ese ciclo
+			$("#cpm_jovenesbundle_filter_modelFilter_cicloFilter_ciclo").change(function(event) { 
+				ciclo = $(event.target).val();
+				url = '{{ path('find_all_by_ciclo') }}';
+				$target_eventos= $("#cpm_jovenesbundle_filter_modelFilter_eventoFilter_evento");
+				filtrarEventosPorCiclo(url,ciclo,$target_eventos,null);
+			});
+});
+
+</script>
+
 
 		{{ filter.form_head(form) }}
 	    <label> Evento </label>{{form_widget(form.modelFilter.eventoFilter.evento ) }}
