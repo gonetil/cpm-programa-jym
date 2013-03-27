@@ -34,7 +34,9 @@ class EstadoFilterForm extends ModelFilterForm
         												'required'=>false
                 										))
 			->add('nota','choice',array('label' => 'Nota' ,
-										  'choices' => EstadosManager::getEstadosEvaluados() + array(ESTADO_APROBADO_Y_APROBADO_C => "Aprobados y Aprobados C"),
+										  'choices' => EstadosManager::getEstadosEvaluados() + array(
+										  													ESTADO_APROBADO_Y_APROBADO_C => "Aprobados y Aprobados C",
+										  													ESTADO_ANULADO => "Anulados"),
 										  'empty_value'=>'Todas',
 										  'expanded'=>false,
 										  'required' => false
