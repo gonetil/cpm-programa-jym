@@ -543,3 +543,33 @@ function mostrarCorreo (data,id) {
 //	   		$("#correo_"+id).unbind('click').click(function(event) { $cuerpo.toggle(); });
 		}
 } //mostrarCorreo
+
+
+
+
+//pide a la url $url todos los eventos y las instancias del ciclo $ciclo, y los carga en los selects $target_*
+function filtrarEventosPorCiclo(url, ciclo,$target_eventos,$target_instancias) {
+	$.getJSON(
+			url, 
+			{ ciclo_id : ciclo} , 
+			  function(data) {
+				  if ($target_eventos) { 
+					  $target_eventos.find("option").remove();
+					  $target_eventos.append("<option value=''>Todos</option>");
+					  for (var i=0; i<data.eventos.length; i++) { 
+					   			$target_eventos.append("<option value="+data.eventos[i].id+">"+data.eventos[i].nombre+"</option>");
+					   }
+				  }
+				  
+				  if ($target_instancias) {
+					  $target_instancias.find("option").remove();
+					  $target_instancias.append("<option value=''>Todas</option>");
+					  for (var i=0; i<data.instancias.length; i++) { 
+				   			$target_instancias.append("<option value="+data.instancias[i].id+">"+data.instancias[i].nombre+"</option>");
+					  }
+				  }
+				  
+
+			  }
+		); //getJSON
+}
