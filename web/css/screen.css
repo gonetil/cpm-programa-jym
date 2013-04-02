@@ -2923,3 +2923,6 @@ h4.info_header:hover { background-color: #FFF; }
 	margin: 10px;  
 	border-radius: 10px; 
 }
+
+.ui-autocomplete.ui-widget li { font-size: 0.6em; }
+.ui-autocomplete.ui-widget li a { line-height: 1.2em; }

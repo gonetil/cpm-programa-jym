@@ -36,7 +36,14 @@ class InvitacionFilterForm extends ModelFilterForm
 			},
 			'empty_value' => "Todas",
 			'required' => false
-		))->add('proyecto', 'entity', array (
+		))
+		->add('proyecto', 'jquery_entity_autocomplete', array(
+																	'label'=> 'Proyecto',
+																	'class' => 'CpmJovenesBundle:Proyecto',
+																	'property' => 'id',
+																	'url' => 'proyecto_online_search',
+															))	
+/*		->add('proyecto', 'entity', array (
 			'label' => 'Proyecto',
 			'class' => 'CpmJovenesBundle:Proyecto',
 			'query_builder' => function($er) { 
@@ -47,7 +54,7 @@ class InvitacionFilterForm extends ModelFilterForm
 			},
 			'empty_value' => "Todos",
 			'required' => false
-		))
+		)) */
 		->add('solicitaHospedaje', 'choice' ,array('label' => 'Solicita Hospedaje?',
             											'choices' => array(1=>"si",2=>"no"),
             											'preferred_choices' => array("Todos"),

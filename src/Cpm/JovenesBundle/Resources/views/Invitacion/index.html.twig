@@ -6,6 +6,11 @@
 
 {{ filter.form_init(form) }}
 
+	<script>
+			$("#cpm_jovenesbundle_filter_modelFilter_proyecto_text").val('{{ app.request.get('proyecto_text') }}');
+	</script>
+
+
 <table class="records_list">
     <thead>
         <tr>

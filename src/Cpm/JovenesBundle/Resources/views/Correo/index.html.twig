@@ -13,7 +13,11 @@
 </ul>
 
 <div class="clear">&nbsp;</div>
-{{ filter.form_init(form) }}
+	{{filter.form_init(form) }}
+	<script>
+			$("#cpm_jovenesbundle_filter_modelFilter_destinatario_text").val('{{ app.request.get('destinatario_text') }}');
+	</script>
+	
 
 <table class="records_list correos">
     <thead>

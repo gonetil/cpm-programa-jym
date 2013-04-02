@@ -66,15 +66,18 @@
     git=http://github.com/doctrine/data-fixtures.git
 
 [DoctrineFixturesBundle]
-    git=http://github.com/symfony/DoctrineFixturesBundle.git
+	git=https://github.com/doctrine/DoctrineFixturesBundle.git
     target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
+    version=origin/2.0
 
 [gedmo-doctrine-extensions]
     git=http://github.com/l3pp4rd/DoctrineExtensions.git
+    version=v2.3.0
 
 [DoctrineExtensionsBundle]
     git=http://github.com/stof/StofDoctrineExtensionsBundle.git
     target=/bundles/Stof/DoctrineExtensionsBundle
+    version=1.0.2
 
 [DoctrineExtensions]
     git=git://github.com/beberlei/DoctrineExtensions.git
@@ -83,3 +86,7 @@
 [IdeupSimplePaginatorBundle]
     git=git://github.com/javiacei/IdeupSimplePaginatorBundle.git
     target=/bundles/Ideup/SimplePaginatorBundle
+    
+[IoFormBundle]
+    git=git://github.com/ioalessio/IoFormBundle.git
+    target=/bundles/Io/FormBundle

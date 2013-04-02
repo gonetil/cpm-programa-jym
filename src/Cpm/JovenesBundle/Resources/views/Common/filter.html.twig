@@ -15,9 +15,10 @@
 
 {% macro form_init(form) %}
 	{{_self.form_head(form) }}
+	
 	<div class="filter-form-box">
     <h3>Filtrar</h3>
-    {% for f in form %}
+	{% for f in form %}
 	    {% if  not ( ( f.vars.full_name == 'cpm_jovenesbundle_filter[sortField]') or ( f.vars.full_name == 'cpm_jovenesbundle_filter[sortOrder]' )) %}
 	    	{{ form_row(f) }}  
 	    {% endif %}

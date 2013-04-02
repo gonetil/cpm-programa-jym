@@ -264,4 +264,33 @@ class InvitacionController extends BaseController
     	//catch algo?
     	return new Response("success");
     }
+    
+    
+    	/**
+	 * @Route("/search/{search}" , name="usuario_online_search")
+	 * @param $search
+	 */
+    public function searchAction($search)
+    {
+    	$em = $this->getEntityManager();
+    	$qb = $em->getRepository('CpmJovenesBundle:Usuario')->createQueryBuilder('u');
+		$qb->orWhere($qb->expr()->like('u.apellido', ':search'));
+		//$qb->orWhere($qb->expr()->like('u.nombre', ':search'));
+		$qb->setParameter('search', '%'.$search.'%');
+    	$data = $qb->getQuery()->getResult();
+    	
+    	$usuarios = array();
+    	foreach ( $data as $usuario ) {
+            $usuarios[] = array(
+								'label'=>$usuario->getApellido(). ", ". $usuario->getNombre(), 
+								'desc' => $usuario->getApellido(). ", ". $usuario->getNombre(),
+								'id' => $usuario->getId(),
+								'value' => $usuario->getId()
+								
+							   );
+        }
+//        var_dump($usuarios);
+    	
+    	return $this->createJsonResponse($usuarios);
+    }
 }

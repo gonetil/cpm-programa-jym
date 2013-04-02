@@ -24,6 +24,12 @@ twig:
     form:
         resources:
             - 'CpmJovenesBundle:Form:fields.html.twig'
+            - 'IoFormBundle:Form:fields.html.twig'
+io_form:
+            jquery_tinymce:
+              source: /bundles/yourbundle/js/tiny_mce/tiny_mce.js
+              theme:  simple
+                      
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%

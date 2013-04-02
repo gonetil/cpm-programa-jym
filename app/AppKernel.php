@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
         	new Ideup\SimplePaginatorBundle\IdeupSimplePaginatorBundle(),
             new Cpm\JovenesBundle\CpmJovenesBundle(),
+            new Io\FormBundle\IoFormBundle(),
         
         );
 

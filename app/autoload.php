@@ -20,6 +20,7 @@ $loader->registerNamespaces(array(
     'Metadata'         => __DIR__.'/../vendor/metadata/src',
 	'DoctrineExtensions' => __DIR__.'/../vendor/DoctrineExtensions/lib',
 	'Ideup'   => __DIR__.'/../vendor/bundles',
+	'Io' => __DIR__.'/../vendor/bundles',
 
 ));
 $loader->registerPrefixes(array(

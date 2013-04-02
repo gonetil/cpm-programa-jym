@@ -486,4 +486,38 @@ class ProyectoController extends BaseController
 			return new Response($e->getMessage());	
 		}	 		
  	}
+ 	
+ 	
+ 	
+ 	/**
+	 * @Route("/search/{search}" , name="proyecto_online_search")
+	 * @param $search
+	 */
+    public function searchAction($search)
+    {
+    	$em = $this->getEntityManager();
+    	$qb = $em->getRepository('CpmJovenesBundle:Proyecto')->createQueryBuilder('p');
+		$qb->innerJoin('p.escuela','e');
+		$qb->orWhere($qb->expr()->like('e.nombre', ':search'));
+		$qb->orWhere($qb->expr()->like('e.numero', ':search'));
+		$qb->orWhere($qb->expr()->like('p.titulo', ':search'));
+	//	$qb->orWhere($qb->expr()->like('p.deQueSeTrata', ':search'));
+		$qb->setParameter('search', '%'.$search.'%');
+		$qb->innerJoin('p.ciclo','ciclo');
+		$qb->orderBy('ciclo.anio','DESC');
+    	$data = $qb->getQuery()->getResult();
+    	
+    	$proyectos = array();
+    	foreach ( $data as $proyecto) {
+            $proyectos[] = array(
+								'label'=>$proyecto->__toString(), 
+								'desc' => "<b>{$proyecto->getTitulo()}</b> {$proyecto->getEscuela()} (ciclo {$proyecto->getCiclo()})",
+								'id' => $proyecto->getId(),
+								'value' => $proyecto->getId()
+								
+							   );
+        }
+    	
+    	return $this->createJsonResponse($proyectos);
+    }
 }
