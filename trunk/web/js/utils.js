@@ -573,3 +573,11 @@ function filtrarEventosPorCiclo(url, ciclo,$target_eventos,$target_instancias) {
 			  }
 		); //getJSON
 }
+
+
+/**
+ * Callback for jQuery's autocomplete widget
+ */
+function onlineUsuarioSearch(data) {
+	console.log(data);
+}

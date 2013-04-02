@@ -347,4 +347,55 @@ class UsuarioController extends BaseController
 		return $this->redirect($this->generateUrl('usuario', array()));
 		
 	}
+	
+	/**
+	 * @Route("/search/{search}" , name="usuario_online_search")
+	 * @param $search
+	 */
+    public function searchAction($search)
+    {
+    	$keywords = array();
+    	if ($coma = strpos($search,",",2) !== FALSE) {
+    		$keywords = explode(",",$search);
+    	} else {
+    		$keywords = explode(" ",$search);
+    	}
+    	
+    	array_walk($keywords, create_function('&$keyword', '$keyword = trim($keyword);'));
+    	
+    	$em = $this->getEntityManager();
+    	$qb = $em->getRepository('CpmJovenesBundle:Usuario')->createQueryBuilder('u');
+		
+		if ($coma != FALSE) //apellido, nombre
+		{
+			$qb->andWhere($qb->expr()->like('u.apellido', ':apellido'));
+			$qb->andWhere($qb->expr()->like('u.nombre', ':nombre'));
+			$qb->setParameter('apellido', $keywords[0].'%');
+			$qb->setParameter('nombre', $keywords[1].'%');
+		}
+		else { 
+			foreach ( $keywords as $index => $value ) {
+	    		$qb->andWhere($qb->expr()->like('u.apellido', ":search_$index"))->setParameter("search_$index","$value%");   
+			}
+			
+		}
+		
+		//$qb->setParameter('search', '%'.$search.'%');
+    	$data = $qb->getQuery()->getResult();
+    	
+    	$usuarios = array();
+    	foreach ( $data as $usuario ) {
+            $usuarios[] = array(
+								'label'=>$usuario->getApellido(). ", ". $usuario->getNombre(), 
+								'desc' => $usuario->getApellido(). ", ". $usuario->getNombre(),
+								'id' => $usuario->getId(),
+								'value' => $usuario->getId()
+								
+							   );
+        }
+//        var_dump($usuarios);
+    	
+    	return $this->createJsonResponse($usuarios);
+    }
+	
 }

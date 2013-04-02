@@ -10,6 +10,7 @@ class ProyectoType extends AbstractType
  public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
+        
               ->add('coordinador','entity',
             					array('label' => 'Coordinador',
             						  'class' => 'CpmJovenesBundle:Usuario',

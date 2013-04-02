@@ -19,12 +19,22 @@ class CorreoFilterForm extends ModelFilterForm {
 			'required' => false,
 			'attr' => array ('class' => 'datepicker'),
 			'format' => \AppKernel::DATE_FORMAT
-		))->add('destinatario', 'entity', array (
+		))
+		 ->add('destinatario', 'jquery_entity_autocomplete', array(
+																	'required'=>false, 
+																	'empty_value'=>'Todos', 
+																	'label'=> 'Destinatario',
+																	'class' => 'CpmJovenesBundle:Usuario',
+																	'property' => 'id',
+																	'url' => 'usuario_online_search',
+															))
+		/*->add('destinatario', 'entity', array (
 			'label' => 'Destinatario',
 			'class' => 'CpmJovenesBundle:Usuario',
 			'empty_value' => "Todos",
 			'required' => false
-		))->add('email', 'email', array (
+		))*/
+		->add('email', 'email', array (
 			'required' => false
 		))->add('asunto', null, array (
 			'required' => false

@@ -74,8 +74,9 @@ class CorreoRepository extends EntityRepository
 			$qb->andWhere('c.asunto LIKE :asunto')->setParameter('asunto',$filter->getAsunto());
 	    if ($filter->getCuerpo())
 			$qb->andWhere('c.cuerpo LIKE :cuerpo')->setParameter('cuerpo',$filter->getCuerpo());
-	    if ($filter->getDestinatario())
+	    if ($filter->getDestinatario()) { 
 			$qb->andWhere('c.destinatario = :destinatario')->setParameter('destinatario',$filter->getDestinatario());
+	    }
 	    if ($filter->getEmisor())
 			$qb->andWhere('c.emisor = :emisor')->setParameter('emisor',$filter->getEmisor());
 		/*if ($filter->getProyecto())
