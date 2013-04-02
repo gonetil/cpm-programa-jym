@@ -77,7 +77,7 @@
     {% set type = type|default('text') %}
     {% set name = name~'_text' %}
 
-	<input type="{{ type }}" name="{{ name }}"{{ block('widget_attributes') }} value="{{ id }}" />
+	<input type="{{ type }}" name="{{ name }}"{{ block('widget_attributes') }} value="{{ value }}" />
 
     {# block('field_widget') #}  {# render text field #}
     {% spaceless %}
