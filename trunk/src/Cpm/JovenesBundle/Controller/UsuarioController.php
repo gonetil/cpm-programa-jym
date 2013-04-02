@@ -380,6 +380,7 @@ class UsuarioController extends BaseController
 			
 		}
 		
+		$qb->andWhere('u.enabled = 1');
 		//$qb->setParameter('search', '%'.$search.'%');
     	$data = $qb->getQuery()->getResult();
     	

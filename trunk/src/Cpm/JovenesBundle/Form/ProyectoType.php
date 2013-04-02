@@ -10,15 +10,21 @@ class ProyectoType extends AbstractType
  public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-        
-              ->add('coordinador','entity',
+         ->add('coordinador', 'jquery_entity_autocomplete', array(
+																	'required'=>true, 																	 
+																	'label'=> 'Coordinador',
+																	'class' => 'CpmJovenesBundle:Usuario',
+																	'property' => 'id',
+																	'url' => 'usuario_online_search',
+															))
+      /*        ->add('coordinador','entity',
             					array('label' => 'Coordinador',
             						  'class' => 'CpmJovenesBundle:Usuario',
             						  'query_builder' => function($er) {
 													        return $er->createQueryBuilder('u')
 													            ->orderBy('u.apellido', 'ASC');
     														}
-    								    ))
+    								    )) */
             ->add('titulo')
             ->add('nroAlumnos','integer',array('label'  => 'Cantidad de jóvenes que participan', 'attr'=>array('class'=>'number')))
     		 ->add('recibioCapacitacion', 'choice',	array(

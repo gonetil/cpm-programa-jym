@@ -11,7 +11,11 @@
     
     {{ form_row(edit_form.titulo) }}
 	{{ form_row(edit_form.coordinador) }}
-	
+	<script>
+		$(document).ready(function() { 
+				$("#cpm_jovenesbundle_proyectotype_coordinador_text").val('{{ entity.coordinador | raw }}');
+		});
+	</script>
 		<label class=" required">Colaboradores</label>
 	    <a href="#" class="jslink" onclick="addDynamicForm('#cpm_jovenesbundle_proyectotype_colaboradores'); return false;">
             Agregar colaborador
