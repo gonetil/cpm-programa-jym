@@ -223,6 +223,33 @@ abstract class BaseController extends Controller
     }
     
     /**
+      * elimina todos los archivos de todos los estados asociados a un proyecto
+    */
+     public function eliminarArchivosDeProyecto($proyecto) {
+     	$em = $this->getEntityManager();
+     	$estados = $em->getRepository('CpmJovenesBundle:EstadoProyecto')->getEstadosAnteriores($proyecto);
+     	$eliminados = 0;
+     	$total = 0;
+     	foreach ( $estados as $estado) {
+       		if ($archivo = $estado->getArchivo()) {
+       			$total++;
+       			if (@unlink( "{$this->getUploadDir()}{$proyecto->getId()}/{$archivo}" ) === TRUE)
+       				$eliminados++;
+       		}
+		}
+		if ($archivo = $proyecto->getEstadoActual()->getArchivo()) {
+				$total++;
+				if (@unlink( $this->getUploadDir().$proyecto->getId()."/".$archivo ) === TRUE)
+       				$eliminados++;
+		}
+		
+		//ahora borro el directorio tambien
+		
+		@rmdir( $this->getUploadDir().$proyecto->getId());
+		
+		return "Archivos eliminados: $eliminados de $total";
+     }
+    /**
      * 
      */
     public function filterAction(ModelFilter $modelfilter, $index_path, $extra_args=array())

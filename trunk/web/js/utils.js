@@ -367,22 +367,41 @@ function enviarComentarioAjax() {
 			  if (message == 'success') { 
 				  console.log($("#tipo_comentario").val());
 				  if ($("#tipo_comentario").val() == 'postit') { 
-					  new_div = "<div class='postit draggable'>" +
-					  		"			<div class='postit_content'>" +
-					  						"<div class='postit_metadata'>Creado recientemente</div>" +
-					  						"<div class='asunto'>" + asunto + "</div>" +
-					  						"<div class='cuerpo'>" + cuerpo + "</div>" +
-					  					"</div>" +
-					  			"</div>";
-					  $("body").append(new_div);
-					  $(".draggable").draggable();
+					  mostrarPostitOnline(asunto, cuerpo)
+				  } else if ($("#tipo_comentario").val() == 'comentario') {
+					  mostrarComentarioOnline(asunto, cuerpo);
 				  }
+				  
 				  $("#comentario_form form #asunto").val("");
 				  $("#comentario_form form #cuerpo").val("");
 				  $("#comentario_form").slideUp();
 			  }
 		  }
 		});
+}
+
+function mostrarPostitOnline(asunto,cuerpo) { 
+	  new_div = "<div class='postit draggable'>" +
+		"			<div class='postit_content'>" +
+						"<div class='postit_metadata'>Creado recientemente</div>" +
+						"<div class='asunto'>" + asunto + "</div>" +
+						"<div class='cuerpo'>" + cuerpo + "</div>" +
+					"</div>" +
+			"</div>";
+	  $("body").append(new_div);
+	  $(".draggable").draggable();
+	
+}
+
+function mostrarComentarioOnline(asunto, cuerpo) {
+	
+	new_div = '<div class="comentario">' +
+				  '<br/> Título <strong>'+asunto+'</strong>' +
+				  '<br/> '+cuerpo+
+			  '</div>';
+
+	$(".info_comentarios").append(new_div);
+	
 }
 
 function eliminarComentarioAjax(url,elem_id) {
@@ -575,9 +594,9 @@ function filtrarEventosPorCiclo(url, ciclo,$target_eventos,$target_instancias) {
 }
 
 
-/**
- * Callback for jQuery's autocomplete widget
- */
-function onlineUsuarioSearch(data) {
-	console.log(data);
+
+function validarFormUnion() { 
+	alert('falta implementar la validación'); 
+	return false;
+	
 }

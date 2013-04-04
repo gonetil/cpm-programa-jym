@@ -78,8 +78,21 @@ class EstadosManager
     
     public function cambiarEstadoAProyecto($proyecto,$estado_nuevo) {
     	if (($resultado = $this->validarEstado($estado_nuevo)) == "success") {
+    		
+    		$estado_anterior = $proyecto->getEstadoActual();
+    		
     		$proyecto->setEstadoActual($estado_nuevo);
     		$estado_nuevo->setProyecto($proyecto);
+    		
+    		if (
+    			($estado_anterior->getEstado() != ESTADO_ANULADO) //si el proyecto está siendo desanulado, no se envía ningún correo 
+    			&& 
+    			($correo = $this->informarCambioDeEstado($proyecto))
+    		   ) 
+    		{ 
+    			$estado_nuevo->setCorreoEnviado($correo);    			
+    		}
+
     		
     		$em = $this->doctrine->getEntityManager();
 		    $em->persist($proyecto);
@@ -89,18 +102,17 @@ class EstadosManager
     		if ($estado_nuevo->getEstado() == ESTADO_ANULADO) //hay que anular todas las invitaciones a instancias de eventos a futuro
     			$this->anularInvitacionesFuturas($proyecto);
     		
-		    
-		    $this->informarCambioDeEstado($proyecto);
     	}
     	return $resultado; 
     }
+    
     //TODO: completar esta funcion
     public function informarCambioDeEstado($proyecto) { 
     	$template = false;
     	switch ( $proyecto->getEstadoActual()->getEstado() ) {
 			case ESTADO_APROBADO:
 			case ESTADO_APROBADO_CLINICA:
-				if ($proyecto->getEsPrimeraVezDocente())
+				if ($proyecto->esPrimeravezDocente())
 					$template = "proyecto-aprobado";	
 				else
 					$template = "proyecto-aprobado-docentes-reincidentes"; //docentes que ya participaron
@@ -115,8 +127,10 @@ class EstadosManager
 				break;
 		}
 		
-		if ($template)
-			$this->mailer->sendCorreoEvaluacionProyecto($proyecto,$template);
+		if ($template) { 
+			$correo = $this->mailer->sendCorreoEvaluacionProyecto($proyecto,$template);
+			return $correo;
+		} else return false;	
 		
     }
     

@@ -274,7 +274,7 @@ class Proyecto
     {
         return $this->nroAlumnos;
     }
-
+	
 	public function esPrimeravezDocente() {
 		 
 		$anios = json_decode( $this->getCoordinador()->getAniosParticipo(), true );
