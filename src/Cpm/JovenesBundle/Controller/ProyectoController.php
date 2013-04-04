@@ -114,8 +114,8 @@ class ProyectoController extends BaseController
         $entity = $this->getEntity('CpmJovenesBundle:Proyecto', $id, $em);
         
 		$postits = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity->getId(), 'tipo'=> Comentario::POSTIT));
-		$comentarios = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity,'tipo'=>Comentario::COMENTARIO));
-		$tareas = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity,'tipo'=>Comentario::TAREA));
+		$comentarios = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity->getId(),'tipo'=>Comentario::COMENTARIO));
+		$tareas = $em->getRepository('CpmJovenesBundle:Comentario')->findBy(array('proyecto'=>$entity->getId(),'tipo'=>Comentario::TAREA));
 		
         $deleteForm = $this->createDeleteForm($id);
         $nuevoEstado = new EstadoProyecto();
@@ -262,10 +262,12 @@ class ProyectoController extends BaseController
             $entity = $this->getEntityForDelete('CpmJovenesBundle:Proyecto', $id,$em);
 
 			try{
+				$msg_archivos = $this->eliminarArchivosDeProyecto($entity);
+				
 				$em->remove($entity);
 				$em->flush();
 				//FIXME eliminar archivos del proyecto
-				$this->setSuccessMessage("Proyecto eliminado satisfactoriamente");
+				$this->setSuccessMessage("Proyecto eliminado satisfactoriamente". $msg_archivos);
 			}catch(\PDOException $e){
 			    $this->setErrorMessage("No se puede eliminar al proyecto, es muy probable que tenga muchos elementos relacionados. Contactese con el equipo de desarrollo. ({$e->getMessage()})");
 			    return $this->redirect($this->generateUrl('proyecto_show', array('id' => $entity->getId())));

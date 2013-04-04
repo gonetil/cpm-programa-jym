@@ -59,6 +59,13 @@ class EstadoProyecto
 		 * @ORM\Column(name="valoracion",type="string",length="30",nullable=true)
 		 */
 		private $valoracion; //muy bueno, bueno, regular
+		
+		/**
+		 * Algunos cambios de estado generan correos. Se asocia el mensaje enviado con el nuevo estado
+		 * @ORM\ManyToOne(targetEntity="Correo")
+     	 *  @ORM\JoinColumn(name="correo_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+		 */
+		private $correoEnviado;
     /**
      * Get id
      *
@@ -196,7 +203,14 @@ class EstadoProyecto
     public function setValoracion($valoracion) {
     	$this->valoracion = $valoracion;
     }
-    
+ 
+ 	public function setCorreoEnviado($correo) { 
+ 		$this->correoEnviado = $correo;	
+ 	} 
+ 	public function getCorreoEnviado() {
+ 		return $this->correoEnviado;
+ 	}
+ 	   
  	public function __toString() {
  		$estado = "...";
 		
@@ -213,6 +227,6 @@ class EstadoProyecto
 		}
 		
 		return $estado;
- 	}   
+ 	}
 
 }

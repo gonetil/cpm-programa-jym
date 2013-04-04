@@ -1,0 +1,230 @@
+{# muestra el menu para cargar comentarios (postit, comentario y tarea)#}
+{% macro menu_comentarios(proyecto) %}
+ 		<div class="proyecto_submenu">
+	 		<a href="#" onclick='agregarPostit("{{ path('proyecto_crear_postit',{ 'id' : proyecto.id}) }}");return false;'> Nuevo Postit </a>
+ 	 		<a href="#" onclick='agregarComentario("{{ path('proyecto_crear_comentario',{ 'id' : proyecto.id}) }}"); return false; '>Agregar Comentario</a> 
+ 	 		{# <a href="#" onclick='agregarTarea("{{ path('proyecto_crear_tarea',{ 'id' : entity.id}) }}"); return false;'> Tarea </a> #}		
+	 		
+	 		<div id="comentario_form">
+	 			<form type="post">
+	 				<label for="asunto" id="asunto_label"></label><input type="text" name="asunto" id="asunto" />
+	 				<label for="cuerpo" id="cuerpo_label"></label><textarea name="cuerpo" id="cuerpo"></textarea>
+	 				<input type='hidden' id='tipo_comentario' value="" />
+	 				<a href="#"  title="Cerrar" onclick="$('#comentario_form').hide(); return false;";> <img src="{{ asset('images/icons/error.png') }}"> </a>
+	 				<a href="#" style='float:right;' title="Guardar nota" onclick="enviarComentarioAjax()"> <img src="{{asset('images/icons/success.png') }}"> </a>
+	 			</form>
+	 		</div>
+ 		</div>
+{% endmacro %}
+
+{# muestra los postits del proyecto #}
+{%  macro postits_proyecto(postits) %}
+{% if postits | length > 0 %}
+<div id="postits">
+	{% set left = 1200 %}
+	{% set top = 150 %}
+	{% set cant_postits = 1 %}
+	{% for p in postits %}
+	
+		<div class="draggable ui-draggable postit {% if p.estado %} leido {% endif %}" style="left:{{left}}px; top:{{top}}px" id="postit_{{p.id}}">
+			<div class="postit_content">
+				<div class="postit_metadata">
+					Creado: {{ p.getFechaCreado |date('d-m-Y H:i:s') }}
+					{% if p.getFechaCreado != p.getFechaModificado  %}
+						<br/>Modificado {{ p.getFechaModificado |date('d-m-Y  H:i:s') }}
+					{% endif %}
+					<br/>Por: {{ p.autor.nombre }} {{ p.autor.apellido }} 	
+				</div>
+				<div class="asunto">
+					{{p.asunto}}
+				</div>
+				<div class="cuerpo">
+					Mensaje {{ p.cuerpo }}
+				</div>	
+			</div>
+			<div class="options_bar">
+				<a href="#" title="Borrar" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
+					<img src="{{ asset('images/icons/delete.png') }}">
+				 </a>
+				<a href="#" title="Marcar como {% if p.estado %} no {% endif %} leido" 
+							onclick="marcarLeidoComentarioAjax('{{ path('proyecto_cambiar_estado_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
+						<img src="{{ asset('images/icons/success.png') }}">
+				</a>
+			</div>
+			
+		</div>	
+		{% set top = top + 200 %}
+		{% set cant_postits = cant_postits + 1 %}
+		{% if cant_postits > 3 %}
+			{% set left = left - 300 %}
+			{% set top = 150 %}
+			{% set cant_postits = 1 %}
+		{% endif %}
+	{% endfor %}
+</div>
+	
+{% endif %}
+{%  endmacro %}
+
+{# muestra el estado actual del proyecto, los estados anteriores y la opción de cambio de estado #}
+{%  macro estados_proyecto(proyecto,estados_anteriores, estado_form) %}
+
+	<div class="estados_proyecto_box">
+		<h3 class="info_header">Estado actual: {{ proyecto.estadoActual }}
+		
+		{% if proyecto.estadoActual %} 
+			<div class="estado_autor">
+			 {{ proyecto.estadoActual.fecha|date('d-m-Y') }}: 
+			 {% if proyecto.estadoActual.usuario %}
+				 por {{ proyecto.estadoActual.usuario.nombre }} {{ proyecto.estadoActual.usuario.apellido }}
+			 {% endif %}	 
+			 </div>
+		{% endif %}	 
+		</h3>
+		<h4 class="info_header">
+			<a style="" href="#" onclick="$('.info_estados').toggle(); return false;" > <img src="{{ asset('images/icons/slidedown.png') }}"> Historial ({{ estados_anteriores | length }})</a> 
+			<a style="float:right;" href="javascript:cambiar_estado();">Cambiar estado</a>								
+		</h4>
+	 		
+	 		
+	 		<div class="info_estados hidden extra_info">
+				<ul class="estados_list">
+				{% set first = true %}
+				{% for estado in estados_anteriores %}
+					<li> 
+						<div class="undo_list">
+						 	{{ estado.fecha|date('d-m-Y') }}
+							{% if first %} {# solo se muestra el boton de borrar en el primer estado del listado #}
+								<a onclick='confirmAndRelocate("¿Está seguro que desea cancelar este estado? Esta operación no se puede deshacer","{{ path('proyecto_rollback', { 'id': proyecto.id }) }}"); return false;' href="#"> Cancelar </a>
+								{% set first = false %}
+							{% endif %}
+						 </div>	
+						<p><strong>Estado: {{ estado }}  </strong>
+						<div  class="estado_autor"> 
+							{% if estado.usuario %}
+								Por {{ estado.usuario.nombre }} {{ estado.usuario.apellido }}
+							{% endif %}	
+						</div>
+						{% if estado.correoEnviado %}
+						<div class="estado_correoEnviado_link">
+							<a href="#" onclick="$('#correo_{{estado.correoEnviado.id}}').dialog({ resizable: true, width: 500, modal: true, showTitle: false, title:'Para: {{estado.correoEnviado.destinatario.apellido}}, {{estado.correoEnviado.destinatario.nombre}} ' });">
+								<img src="{{ asset('images/shared/one_mail.png') }}" title="Ver correo">
+							</a>	
+							<div id="correo_{{estado.correoEnviado.id}}" class="estado_correoEnviado">
+								<div>Dirección: <strong>{{estado.correoEnviado.email}}</strong></div>
+								<div>Asunto: <strong>{{estado.correoEnviado.asunto}}</strong> </div>
+								<div class="cuerpo">{{estado.correoEnviado.cuerpo | raw}}</div>
+							</div>
+						</div>
+						{% endif %}
+						
+						</p>
+						<ul class="estado_more_info">
+							{% if estado.archivo %} 
+								<li> Archivo adjunto:
+									<a href="{{ path('proyecto_descargar_archivo_viejo', { 'id': estado.id }) }}">
+										 {{ estado.archivo }}
+									</a>
+								</li>
+							 {% endif %}
+							 {% if estado.valoracion %}
+							 	<li> Valoración: <strong> {{estado.valoracion}}</strong></li>
+							 {% endif %}
+							<li>Observaciones: {{ estado.observaciones }} </li>
+						</ul>
+					</li>
+				{% endfor %}
+				</ul> 
+				
+				<div id="estado_proyecto_form">
+					<form id="nuevo_estado_proyecto_form" action="{{ path('proyecto_cambiar_estado', { 'id' : proyecto.id }) }}" method="post" {{ form_enctype(estado_form) }} onsubmit="return validar_form_cambio_estado();">
+						{{ form_row(estado_form.estado) }}
+						<div id="archivo_presentacion">
+							{{ form_row(estado_form.archivo) }}
+						</div>
+						<div id="valoracion">
+							{{ form_row(estado_form.valoracion) }}
+						</div>
+						{{ form_rest(estado_form) }}
+						<script> mostrar_campo_archivo(); </script>
+					</form>
+				</div>
+			</div> <!-- info_estados -->
+		</div> <!-- estados_proyecto_box -->	
+			
+{% endmacro %}
+
+
+{% macro invitaciones_proyecto(proyecto) %}
+	{% if proyecto.invitaciones | length > 0 %}
+		<div class="invitaciones">
+			<div class="minimizer" onclick="$('.invitaciones .listado-items').toggle();"> - </div>
+			<div class="invitacion">	
+			    	<div class="many-pending"></div> Invitaciones a eventos 
+			 </div>   	
+			<ul class="listado-items">
+				{% for invitacion in proyecto.invitaciones %}
+					<li class="actions">
+						<a class="show_instancia_link" href="{{path('instancia_show', {id:invitacion.instanciaEvento.id})}}">{{ invitacion.instanciaEvento.titulo }}</a>
+						
+		
+						<div class="status">
+						{% if not invitacion.instanciaEvento.fue() %}
+							
+							{% if invitacion.estaPendiente %}
+								<span class='pendiente with-operations'>Pendiente
+								{% if invitacion.estaVigente %}
+								<div class="ops">
+									 <ul>
+									  	<li><a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a></li>   
+									 	<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a></li>
+									 	<li><a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a></li>
+									 </ul>
+									 </div>
+								{% endif %}
+								</span>
+								
+							{% else %}
+								{% if invitacion.aceptoInvitacion %}
+								<span class='aceptado with-operations'>Confirmado
+									<div class="ops">
+										<ul>
+									{#	<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a> #}
+										<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Modificar</a></li>
+										<li><a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a></li>
+										{% if invitacion.instanciaEvento.evento.solicitarListaInvitados %}
+											<li><a href="{{ path('invitados_export_to_excel', { 'id': invitacion.id }) }}">Exportar lista de invitados</a></li>
+										{% endif %}								
+										<li> {{ common.SelectCambiarInvitacionDeInstancia(invitacion,true) }} </li>
+										{% if invitacion.solicitaTren %}
+										<li> El coordinador indicó que solicita tren </li>
+										{% endif %}
+									</div>	
+								</span>
+								{% else %}
+									<span class='rechazado with-operations'>Rechazado
+									<div class="ops">
+										<ul>
+										<li><a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a></li>
+										<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a></li>
+										</ul>
+									</div>	
+									</span>
+								{% endif %}
+								
+	    					{% endif %}
+	    					
+	    				{% else %}
+	    					
+	    					<p class="mini-icon {% if invitacion.asistio %} yes" title="Asisitó" {% else %} no" title="No Asistió" {% endif %} style="background-position:right center; padding-right: 20px; height: auto;"> 
+	    						Cerrado	
+	    					</p>  
+	    						
+						{% endif %}
+						</div>
+					</li>
+				{%endfor %}
+				</ul>
+			</div>	<!-- invitaciones -->
+	  {% endif %}	
+{% endmacro %}

@@ -130,7 +130,8 @@ class JYM  {
 		'{{ proyecto.titulo}}' => "Título del proyecto seleccionado",
 		'{{ proyecto.coordinador.apellido }}, {{ proyecto.coordinador.nombre }},' => "Apellido, Nombre del coordinador del proyecto seleccionado",
 		'{{ proyecto.coordinador.email }}' => "Dirección de correo del coordinador del proyecto seleccionado",
-		' {% for c in proyecto.colaboradores %} {{ c.apellido}}, {{ c.nombre}} ( {{ c.email }} ); {% endfor %}' => " Apellido, Nombre y dirección de correo de los colaboradores del proyecto"
+		'{% for c in proyecto.colaboradores %} {{ c.apellido}}, {{ c.nombre}} ( {{ c.email }} ); {% endfor %}' => " Apellido, Nombre y dirección de correo de los colaboradores del proyecto",
+		'{% if proyecto.estadoActual.observaciones | length > 0 %}<div>{{proyecto.estadoActual.observaciones}}</div>{% endif %}' => "Observaciones registradas en el estado del proyecto (aprobado, rehacer, etc.)"
 		);
 		return $variables;
 	}		

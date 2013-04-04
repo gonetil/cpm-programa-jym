@@ -2834,9 +2834,11 @@ h4.info_header:hover { background-color: #FFF; }
 	border: 1px solid #CCC;
 	background-color: #ECECEC;
 	width: 400px;
+	text-align: left;
 	}
-#comentario_form.comentario textarea { width: 380px; }
-
+#comentario_form.comentario textarea { width: 380px; clear: both; }
+#comentario_form.comentario text { display: block; }
+#comentario_form.comentario label { display: block; width: auto; min-width: auto; text-align: left; }
 #comentario_form.tarea { 
 	border: 1px solid green;
 	background-color: #FFFFFF;
@@ -2888,6 +2890,11 @@ h4.info_header:hover { background-color: #FFF; }
 .postit .asunto { font-weight: bold; font-size:10pt;}
 .postit .cuerpo { font-style: italic; }
 
+.comentario { 
+	border: 1px solid #DEDEDE;
+	padding: 10px;
+}
+.comentario .options_bar { float: right; }
 .lista_variable { 
 	width: 500px;
 	font-size: 10pt;
@@ -2926,3 +2933,17 @@ h4.info_header:hover { background-color: #FFF; }
 
 .ui-autocomplete.ui-widget li { font-size: 0.6em; }
 .ui-autocomplete.ui-widget li a { line-height: 1.2em; }
+
+.estado_correoEnviado { 
+	display: none;
+	font-size: 10pt;
+}
+.estado_correoEnviado .cuerpo { 
+	
+	padding: 10px;
+}
+.estado_correoEnviado_link { 
+	float: right;
+	padding: 3px; 
+}
+.estado_correoEnviado_link img { width: 18px; }

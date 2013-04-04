@@ -16,6 +16,9 @@ use FOS\UserBundle\Form\Handler\RegistrationFormHandler;
 use Cpm\JovenesBundle\Filter\UsuarioFilter;
 use Cpm\JovenesBundle\Filter\UsuarioFilterForm;
 
+use Cpm\JovenesBundle\EntityDummy\UnionUsuariosBatch;
+use Cpm\JovenesBundle\Form\UnionUsuariosBatchType;
+
 /**
  * Usuario controller.
  *
@@ -398,5 +401,51 @@ class UsuarioController extends BaseController
     	
     	return $this->createJsonResponse($usuarios);
     }
-	
+
+	/**
+	 * 
+	 * Muestra el form para unir varios usuarios en uno solo
+	 * @Template("CpmJovenesBundle:Usuario:show_union_usuarios_batch_form.html.twig")
+	 */
+
+	public function unionUsuariosBatchFormAction($entitiesQuery) {
+		
+		$unionBatch = new UnionUsuariosBatch();
+		
+		$usuarios = $entitiesQuery->getResult();
+		$unionBatch->setUsuarios(new \ Doctrine \ Common \ Collections \ ArrayCollection($usuarios));
+
+		$unionBatchForm = $this->createForm(new UnionUsuariosBatchType(), $unionBatch);
+		return array (
+			'form' => $unionBatchForm->createView(),
+			'usuarios' => $usuarios,
+		);
+	}
+
+
+
+			
+
+	/**
+	*
+	* Une varios usuarios en uno solo
+	* @Route("/union_usuarios_batch_submit", name="union_usuarios_batch_submit")
+	* @Template("CpmJovenesBundle:Usuario:show_union_usuarios_batch_form.html.twig")
+	*/
+	public function unionUsuariosBatchSubmitAction() {
+		$request = $this->getRequest();
+		$usuarioBatch = new UnionUsuariosBatch();
+
+		$usuariosBatchForm = $this->createForm(new UnionUsuariosBatchType(), $usuarioBatch);
+		$usuariosBatchForm->bindRequest($request);
+		$usuarios = $usuarioBatch->getUsuarios();
+		$usuarioFinal = $usuarioBatch->getUsuarioFinal();
+		
+		echo "Usuario final: {$usuarioFinal}";
+		foreach ( $usuarios as $usuario) {
+       		echo "<br/>$usuario será unido";
+		}
+		die;
+		return array();
+	}
 }

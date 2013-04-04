@@ -1,26 +1,15 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 {% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
 
+{% import "CpmJovenesBundle:Proyecto:proyecto_macros.html.twig" as proyecto_macros %}
+
 {% block title %} Detalle del proyecto{% endblock %} 
 
 {% block content %}
- 		<div class="proyecto_submenu">
-	 		<a href="#" onclick='agregarPostit("{{ path('proyecto_crear_postit',{ 'id' : entity.id}) }}");return false;'> Nuevo Postit </a>
- 	 {#
- 	 		<a href="#" onclick='agregarComentario("{{ path('proyecto_crear_comentario',{ 'id' : entity.id}) }}"); return false; '> Comentario </a> 
- 	 		<a href="#" onclick='agregarTarea("{{ path('proyecto_crear_tarea',{ 'id' : entity.id}) }}"); return false;'> Tarea </a> 
-	 #}		
-	 		<div id="comentario_form">
-	 			<form type="post">
-	 				<label for="asunto" id="asunto_label"></label><input type="text" name="asunto" id="asunto" />
-	 				<label for="cuerpo" id="cuerpo_label"></label><textarea name="cuerpo" id="cuerpo"></textarea>
-	 				<input type='hidden' id='tipo_comentario' value=''>
-	 				<a href="#"  style="float:left;" title="Cerrar" onclick="$('#comentario_form').hide(); return false;";> <img src="{{ asset('images/icons/error.png') }}"> </a>
-	 				<a href="#" style='float:right;' title="Guardar nota" onclick="enviarComentarioAjax()"> <img src="{{asset('images/icons/success.png') }}"> </a>
-	 			</form>
-	 		</div>
- 		</div>
- 		
+
+		{{ proyecto_macros.menu_comentarios(entity) }}
+		{{ proyecto_macros.postits_proyecto(postits) }} 		
+ 	  	
  	  	<div class="proyecto_box_admin">	    
 		  	{% if ( entity.estadoActual) and (entity.estadoActual.estado >= constant('ESTADO_PRESENTADO')) %}
 																	 
@@ -150,6 +139,26 @@
 			</div> <!-- info_transporte -->
 			
 			
+			{% if comentarios | length > 0 %}
+			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_comentarios').toggle(); return false;">Comentarios post chapa ({{comentarios | length}})</a></h4>
+			<div class="info_comentarios hidden extra_info">
+				{% for comentario in comentarios %}
+					<div id="comentario_{{comentario.id}}" class="comentario">
+						<div class="options_bar">
+							<a href="#" title="Borrar" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : comentario.id }) }}', 'comentario_{{comentario.id}}'); return false;"> 
+								<img src="{{ asset('images/icons/delete.png') }}">
+							 </a>
+						</div>
+					
+							Fecha: <strong>{{ comentario.getFechaCreado |date('d-m-Y H:i:s') }}</strong>
+						<br/>Autor: <strong>{{ comentario.autor.nombre }} {{ comentario.autor.apellido }}</strong> 	
+						<br/> Título <strong>{{comentario.asunto}}</strong>
+						<br/>  {{ comentario.cuerpo }} 
+					</div>	 
+				 {% endfor %}
+			</div> <!-- info_comentarios -->
+			{% endif %}
+			
 			
 			
 			
@@ -181,197 +190,10 @@
 	
 	<div class="proyecto_right_box">
 	
-	<div class="estados_proyecto_box">
-		<h3 class="info_header">Estado actual: {{ entity.estadoActual }}
-		
-		{% if entity.estadoActual %} 
-			<div class="estado_autor">
-			 {{ entity.estadoActual.fecha|date('d-m-Y') }}: 
-			 {% if entity.estadoActual.usuario %}
-				 por {{ entity.estadoActual.usuario.nombre }} {{ entity.estadoActual.usuario.apellido }}
-			 {% endif %}	 
-			 </div>
-		{% endif %}	 
-		</h3>
-		<h4 class="info_header">
-			<a style="" href="#" onclick="$('.info_estados').toggle(); return false;" > <img src="{{ asset('images/icons/slidedown.png') }}"> Historial ({{ estados_anteriores | length }})</a> 
-			<a style="float:right;" href="javascript:cambiar_estado();">Cambiar estado</a>								
-		</h4>
-	 		
-	 		
-	 		<div class="info_estados hidden extra_info">
-				<ul class="estados_list">
-				{% set first = true %}
-				{% for estado in estados_anteriores %}
-					<li> 
-						<div class="undo_list">
-						 	{{ estado.fecha|date('d-m-Y') }}
-							{% if first %} {# solo se muestra el boton de borrar en el primer estado del listado #}
-								<a onclick='confirmAndRelocate("¿Está seguro que desea cancelar este estado? Esta operación no se puede deshacer","{{ path('proyecto_rollback', { 'id': entity.id }) }}"); return false;' href="#"> Cancelar </a>
-								{% set first = false %}
-							{% endif %}
-						 </div>	
-						
-						<p><strong>Estado: {{ estado }}  </strong>
-						<div  class="estado_autor"> 
-							{% if estado.usuario %}
-								Por {{ estado.usuario.nombre }} {{ estado.usuario.apellido }}
-							{% endif %}	
-						</div>
-						</p>
-						<ul class="estado_more_info">
-							{% if estado.archivo %} 
-								<li> Archivo adjunto:
-									<a href="{{ path('proyecto_descargar_archivo_viejo', { 'id': estado.id }) }}">
-										 {{ estado.archivo }}
-									</a>
-								</li>
-							 {% endif %}
-							 {% if estado.valoracion %}
-							 	<li> Valoración: <strong> {{estado.valoracion}}</strong></li>
-							 {% endif %}
-							<li>Observaciones: {{ estado.observaciones }} </li>
-						</ul>
-					</li>
-				{% endfor %}
-				</ul> 
-				
-				<div id="estado_proyecto_form">
-					<form id="nuevo_estado_proyecto_form" action="{{ path('proyecto_cambiar_estado', { 'id' : entity.id }) }}" method="post" {{ form_enctype(estado_form) }} onsubmit="return validar_form_cambio_estado();">
-						{{ form_row(estado_form.estado) }}
-						<div id="archivo_presentacion">
-							{{ form_row(estado_form.archivo) }}
-						</div>
-						<div id="valoracion">
-							{{ form_row(estado_form.valoracion) }}
-						</div>
-						{{ form_rest(estado_form) }}
-						<script> mostrar_campo_archivo(); </script>
-					</form>
-				</div>
-			</div> <!-- info_estados -->
-		</div> <!-- estados_proyecto_box -->	
-			
-			{% if entity.invitaciones | length > 0 %}
-	<div class="invitaciones">
-		<div class="minimizer" onclick="$('.invitaciones .listado-items').toggle();"> - </div>
-		<div class="invitacion">	
-		    	<div class="many-pending"></div> Invitaciones a eventos 
-		 </div>   	
-		<ul class="listado-items">
-			{% for invitacion in entity.invitaciones %}
-				<li class="actions">
-					<a class="show_instancia_link" href="{{path('instancia_show', {id:invitacion.instanciaEvento.id})}}">{{ invitacion.instanciaEvento.titulo }}</a>
-					
+		{{ proyecto_macros.estados_proyecto(entity,estados_anteriores,estado_form) }}	
+		{{ proyecto_macros.invitaciones_proyecto(entity) }}
 	
-					<div class="status">
-					{% if not invitacion.instanciaEvento.fue() %}
-						
-						{% if invitacion.estaPendiente %}
-							<span class='pendiente with-operations'>Pendiente
-							{% if invitacion.estaVigente %}
-							<div class="ops">
-								 <ul>
-								  	<li><a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}" class="actions resaltado">Confirmar</a></li>   
-								 	<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a></li>
-								 	<li><a href="{{path('abrir_invitacion', {id:invitacion.id, accion:'rechazar'})}}">Rechazar</a></li>
-								 </ul>
-								 </div>
-							{% endif %}
-							</span>
-							
-						{% else %}
-							{% if invitacion.aceptoInvitacion %}
-							<span class='aceptado with-operations'>Confirmado
-								<div class="ops">
-									<ul>
-								{#	<a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Modificar</a> #}
-									<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Modificar</a></li>
-									<li><a href="{{ path('abrir_invitacion', { 'id': invitacion.id, accion: 'rechazar' }) }}">Cancelar Asistencia</a></li>
-									{% if invitacion.instanciaEvento.evento.solicitarListaInvitados %}
-										<li><a href="{{ path('invitados_export_to_excel', { 'id': invitacion.id }) }}">Exportar lista de invitados</a></li>
-									{% endif %}								
-									<li> {{ common.SelectCambiarInvitacionDeInstancia(invitacion,true) }} </li>
-									{% if invitacion.solicitaTren %}
-									<li> El coordinador indicó que solicita tren </li>
-									{% endif %}
-								</div>	
-							</span>
-							{% else %}
-								<span class='rechazado with-operations'>Rechazado
-								<div class="ops">
-									<ul>
-									<li><a href="{{path('abrir_invitacion', {id:invitacion.id,accion:'aceptar'})}}">Aceptar Invitación</a></li>
-									<li><a href="{{path('invitaciones_edit', {id:invitacion.id })}}">Editar</a></li>
-									</ul>
-								</div>	
-								</span>
-							{% endif %}
-							
-    					{% endif %}
-    					
-    				{% else %}
-    					
-    					<p class="mini-icon {% if invitacion.asistio %} yes" title="Asisitó" {% else %} no" title="No Asistió" {% endif %} style="background-position:right center; padding-right: 20px; height: auto;"> 
-    						Cerrado	
-    					</p>  
-    						
-					{% endif %}
-					</div>
-				</li>
-			{%endfor %}
-			</ul>
-		</div>	<!-- invitaciones -->
-
-	  {% endif %}	
 	
 	</div> <!-- proyecto_right_box -->
 
-
-{% if postits | length > 0 %}
-<div id="postits">
-	{% set left = 1200 %}
-	{% set top = 150 %}
-	{% set cant_postits = 1 %}
-	{% for p in postits %}
-	
-		<div class="draggable ui-draggable postit {% if p.estado %} leido {% endif %}" style="left:{{left}}px; top:{{top}}px" id="postit_{{p.id}}">
-			<div class="postit_content">
-				<div class="postit_metadata">
-					Creado: {{ p.getFechaCreado |date('d-m-Y H:i:s') }}
-					{% if p.getFechaCreado != p.getFechaModificado  %}
-						<br/>Modificado {{ p.getFechaModificado |date('d-m-Y  H:i:s') }}
-					{% endif %}
-					<br/>Por: {{ p.autor.nombre }} {{ p.autor.apellido }} 	
-				</div>
-				<div class="asunto">
-					{{p.asunto}}
-				</div>
-				<div class="cuerpo">
-					Mensaje {{ p.cuerpo }}
-				</div>	
-			</div>
-			<div class="options_bar">
-				<a href="#" title="Borrar" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
-					<img src="{{ asset('images/icons/delete.png') }}">
-				 </a>
-				<a href="#" title="Marcar como {% if p.estado %} no {% endif %} leido" 
-							onclick="marcarLeidoComentarioAjax('{{ path('proyecto_cambiar_estado_comentario', { 'id' : p.id }) }}', 'postit_{{p.id}}'); return false;"> 
-						<img src="{{ asset('images/icons/success.png') }}">
-				</a>
-			</div>
-			
-		</div>	
-		{% set top = top + 200 %}
-		{% set cant_postits = cant_postits + 1 %}
-		{% if cant_postits > 3 %}
-			{% set left = left - 300 %}
-			{% set top = 150 %}
-			{% set cant_postits = 1 %}
-		{% endif %}
-	{% endfor %}
-</div>
-	
-{% endif %}
-
-{% endblock %}
+ {% endblock %}
