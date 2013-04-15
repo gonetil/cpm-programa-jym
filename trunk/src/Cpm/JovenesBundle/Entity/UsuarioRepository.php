@@ -87,8 +87,8 @@ class UsuarioRepository extends EntityRepository
 					->andWhere( 'u not IN ('.
 											' SELECT usuario FROM CpmJovenesBundle:Proyecto proy' .
 											' INNER JOIN proy.coordinador usuario ' .
-											' INNER JOIN proy.ciclo ciclo' .
-											' WHERE ciclo =:ciclo)')->setParameter('ciclo',$ciclo_activo)
+											' INNER JOIN proy.ciclo ciclo3' .
+											' WHERE ciclo3 =:ciclo2)')->setParameter('ciclo2',$ciclo_activo)
 					;
 		}
 		
@@ -108,7 +108,7 @@ class UsuarioRepository extends EntityRepository
 			 	
 			 	$qb_colaboradores->add('select','colaboradores')->add('from','CpmJovenesBundle:Proyecto proyecto')
 						 	->innerJoin('proyecto.colaboradores','colaboradores')
-						 	->innerJoin('proyecto.ciclo','ciclo')->andWhere('ciclo = :ciclo');
+						 	->innerJoin('proyecto.ciclo','ciclo1')->andWhere('ciclo1 = :ciclo');
 				
 				$qb_coordinadores->add('select','coordinadores')->add('from','CpmJovenesBundle:Proyecto proyecto2')
 						 	->innerJoin('proyecto2.coordinador','coordinadores')
