@@ -27,8 +27,6 @@ class UsuarioRepository extends EntityRepository
 	}
 	
 	public function filterQuery(UsuarioFilter $data, $ciclo_activo,$sort_field = null, $sort_order) {
-	//function findBySearchCriteriaQuery($data,$ciclo_activo) {
-	
 		$qb = $this->getEntityManager()->createQueryBuilder();
 	
 		$qb->add('select','u')
@@ -73,10 +71,11 @@ class UsuarioRepository extends EntityRepository
 		}
 		
 		if ( $anios = $data->getAniosParticipo() ) {
+			$ors = $qb->expr()->orX();
 			foreach ( $anios as $index => $anio ) {
-				$var = "anio{$index}"; 
-       			$qb->andWhere("u.aniosParticipo like :$var")->setParameter("$var","%$anio%");
-			}	
+				$ors->add($qb->expr()->like('u.aniosParticipo',"'%$anio%'"));       
+			}
+			$qb->andWhere($ors);
 		}
 		
 		if ($sinProyectosEsteCiclo = $data->getSinProyectosEsteCiclo()) {
