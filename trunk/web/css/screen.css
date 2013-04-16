@@ -2947,3 +2947,11 @@ h4.info_header:hover { background-color: #FFF; }
 	padding: 3px; 
 }
 .estado_correoEnviado_link img { width: 18px; }
+
+.aniosGroup { 
+	background: #EFEFEF;
+	margin: 5px;
+	padding: 10px;
+}
+.smaller { border : 1px solid #CECECE;}
+.smaller label, .smaller input { width: auto !important; min-width: auto !important; padding: 1px 15px; margin: 2px 0px; font-size: 90%;  }
