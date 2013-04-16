@@ -75,6 +75,16 @@ class UsuarioRepository extends EntityRepository
 			foreach ( $anios as $index => $anio ) {
 				$ors->add($qb->expr()->like('u.aniosParticipo',"'%$anio%'"));       
 			}
+			
+			if ($data->getPorPrimeraVez()) {  //me aseguro que no figuren otros años 
+					for($i=2002;$i<date('Y');$i++) {
+						if (!in_array($i,$anios)) { 
+							$qb->andWhere(" u.aniosParticipo not like '%$i%'" );
+						} else { 
+							break; 
+						}
+					}
+			}
 			$qb->andWhere($ors);
 		}
 		

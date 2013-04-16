@@ -39,7 +39,12 @@ $(document).ready(function() {
 			<div class="extra-filters">
 				{{ form_row(form.modelFilter.deQueSeTrata) }}			
 				{{ form_row(form.modelFilter.usuarioFilter.primeraVezQueParticipa) }}			
-				{{ form_row(form.modelFilter.usuarioFilter.aniosParticipo) }}
+				<div class="aniosGroup">
+				{{ form_label(form.modelFilter.usuarioFilter.aniosParticipo) }}
+				<div class="smaller">{{ form_label(form.modelFilter.usuarioFilter.porPrimeraVez) }} {{ form_widget(form.modelFilter.usuarioFilter.porPrimeraVez) }}</div>
+				{{ form_widget(form.modelFilter.usuarioFilter.aniosParticipo) }}
+				
+				</div>
 				{{form_row(form.modelFilter.eje) }}
 				{{form_row(form.modelFilter.temaPrincipal) }}
 	            {{ form_row(form.modelFilter.produccionFinal) }} 

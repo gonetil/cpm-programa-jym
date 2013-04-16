@@ -43,10 +43,26 @@ class ProyectoRepository extends EntityRepository {
 
 		$usuarioFilter = $data->getUsuarioFilter();
 		if ($aniosParticipo = $usuarioFilter->getAniosParticipo()) {
+			$ors = $qb->expr()->orX();
 			foreach ( $aniosParticipo as $index => $anio ) {
+				$ors->add($qb->expr()->like('coordinador.aniosParticipo',"'%$anio%'"));       
+			}
+			$qb->andWhere($ors);
+			
+			if ($usuarioFilter->getPorPrimeraVez()) {  //me aseguro que no figuren otros años, hasta encontrar el menor 
+					for($i=2002;$i<date('Y');$i++) {
+						if (!in_array($i,$aniosParticipo)) { 
+							$qb->andWhere(" coordinador.aniosParticipo not like '%$i%'" );
+						} else { 
+							break; 
+						}
+					}
+			}  
+				
+/*		foreach ( $aniosParticipo as $index => $anio ) {
 				$var = "anio{$index}"; 
        			$qb->andWhere("coordinador.aniosParticipo like :$var")->setParameter("$var","%$anio%");
-			}	
+			}	*/
 		}
 
 		if ($primeraVezQueParticipa = $usuarioFilter->getPrimeraVezQueParticipa()) {

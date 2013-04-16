@@ -48,8 +48,9 @@ class UsuarioFilterForm extends ModelFilterForm
 		    								  'multiple' => true,
 		    								  'required' => false,
 		    								  'attr'=>array('class'=>'radios-en-linea'),
-		    								  ))		
-		     ->add('sinProyectosEsteCiclo', 'checkbox' ,array('label' => 'Sin proyectos en el ciclo activo', 
+		    								  ))
+ 		   ->add('porPrimeraVez','checkbox',array('label'=>'por primera vez','required'=>false)) 								  		
+		    ->add('sinProyectosEsteCiclo', 'checkbox' ,array('label' => 'Sin proyectos en el ciclo activo', 
             											'required'=>false
         												)
         											)

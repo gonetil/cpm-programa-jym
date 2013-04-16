@@ -23,7 +23,7 @@
 	</div>
 	<div class="double">
 		
-		{{ form_label(form.modelFilter.aniosParticipo) }}
+		{{ form_label(form.modelFilter.aniosParticipo) }} ({{ form_widget(form.modelFilter.porPrimeraVez) }}{{ form_label(form.modelFilter.porPrimeraVez) }})
 		<br/>
 		{{ form_widget(form.modelFilter.aniosParticipo) }}
 		{{ form_widget(form._token) }}
