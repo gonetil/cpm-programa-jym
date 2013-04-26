@@ -143,25 +143,25 @@ class ProyectoRepository extends EntityRepository {
 
 			if ($escuela->getOtroTipoInstitucion()) {
 				if (!$tiene_escuela)
-					$qb->innerJoin('p.escuela', 'e');
-				$qb->andWhere('e.tipoInstitucion is NULL');
+					$qb->innerJoin('p.escuela', 'esc');
+				$qb->andWhere('esc.tipoInstitucion is NULL');
 			}
 			elseif ($escuela->getTipoInstitucion()) {
 				if (!$tiene_escuela)
-					$qb->innerJoin('p.escuela', 'e');
+					$qb->innerJoin('p.escuela', 'esc');
 
-				$qb->innerJoin("e.tipoInstitucion", 't')->andWhere('t = :tipoInstitucion')->setParameter('tipoInstitucion', $escuela->getTipoInstitucion());
+				$qb->innerJoin("esc.tipoInstitucion", 't')->andWhere('t = :tipoInstitucion')->setParameter('tipoInstitucion', $escuela->getTipoInstitucion());
 			}
 
 			if (trim($escuela->getNombre()) != "") {
 				$escuelaSel = trim($escuela->getNombre());
 				if (!$tiene_escuela)
-					$qb->innerJoin('p.escuela', 'e');
+					$qb->innerJoin('p.escuela', 'e1');
 
 				if (is_numeric($escuelaSel)) {
-					$qb->andWhere("e.numero = :numero")->setParameter("numero", $escuelaSel);
+					$qb->andWhere("e1.numero = :numero")->setParameter("numero", $escuelaSel);
 				} else {
-					$qb->andWhere("e.nombre like :nombreEscuela")->setParameter("nombreEscuela", "%". $escuelaSel .
+					$qb->andWhere("e1.nombre like :nombreEscuela")->setParameter("nombreEscuela", "%". $escuelaSel .
 					"%");
 				}
 
