@@ -27,7 +27,7 @@ class ProyectoRepository extends EntityRepository {
 
 	public function filterQuery(ProyectoFilter $data, $ciclo_activo, $sort_field = null, $sort_order) {
 		
-		$qb = $this->createQueryBuilder('p')->innerJoin("p.coordinador", "coordinador");
+		$qb = $this->createQueryBuilder('p')->innerJoin("p.coordinador", "coordinador")->innerJoin("p.escuela","e");
 		
 		if ($sort_field) {
 			$field = (isset(ProyectoRepository::$sort_criteria[$sort_field]))?ProyectoRepository::$sort_criteria[$sort_field]:ProyectoRepository::$sort_criteria['id'];
@@ -120,16 +120,16 @@ class ProyectoRepository extends EntityRepository {
 			$tiene_escuela = false;
 			if ($escuela->getLocalidad()) {
 				$tiene_escuela = true;
-				$qb->innerJoin('p.escuela', 'e')->innerJoin("e.localidad", 'l')->andWhere('l = :localidad')->setParameter('localidad', $escuela->getLocalidad());
+				$qb->innerJoin("e.localidad", 'l')->andWhere('l = :localidad')->setParameter('localidad', $escuela->getLocalidad());
 			}
 			elseif ($escuela->getDistrito()) {
 				$tiene_escuela = true;
-				$qb->innerJoin('p.escuela', 'e')->innerJoin("e.localidad", 'l')->innerJoin("l.distrito", 'd')->andWhere('d = :distrito')->setParameter('distrito', $escuela->getDistrito());
+				$qb->innerJoin("e.localidad", 'l')->innerJoin("l.distrito", 'd')->andWhere('d = :distrito')->setParameter('distrito', $escuela->getDistrito());
 			}
 			elseif ($escuela->getRegion() || $escuela->getRegionDesde() || $escuela->getRegionHasta()) //la region solo se considera si no se eligio ni la localidad ni el distrito 
 			{
 				$tiene_escuela = true;
-				$qb->innerJoin('p.escuela', 'e')->innerJoin("e.localidad", 'l')->innerJoin("l.distrito", 'd')->innerJoin("d.region", 'r');
+				$qb->innerJoin("e.localidad", 'l')->innerJoin("l.distrito", 'd')->innerJoin("d.region", 'r');
 
 				if ($escuela->getRegion())
 					$qb->andWhere('r = :region')->setParameter('region', $escuela->getRegion());
@@ -142,26 +142,19 @@ class ProyectoRepository extends EntityRepository {
 			}
 
 			if ($escuela->getOtroTipoInstitucion()) {
-				if (!$tiene_escuela)
-					$qb->innerJoin('p.escuela', 'esc');
-				$qb->andWhere('esc.tipoInstitucion is NULL');
+				$qb->andWhere('e.tipoInstitucion is NULL');
 			}
 			elseif ($escuela->getTipoInstitucion()) {
-				if (!$tiene_escuela)
-					$qb->innerJoin('p.escuela', 'esc');
-
-				$qb->innerJoin("esc.tipoInstitucion", 't')->andWhere('t = :tipoInstitucion')->setParameter('tipoInstitucion', $escuela->getTipoInstitucion());
+				$qb->innerJoin("e.tipoInstitucion", 't')->andWhere('t = :tipoInstitucion')->setParameter('tipoInstitucion', $escuela->getTipoInstitucion());
 			}
 
 			if (trim($escuela->getNombre()) != "") {
 				$escuelaSel = trim($escuela->getNombre());
-				if (!$tiene_escuela)
-					$qb->innerJoin('p.escuela', 'e1');
 
 				if (is_numeric($escuelaSel)) {
-					$qb->andWhere("e1.numero = :numero")->setParameter("numero", $escuelaSel);
+					$qb->andWhere("e.numero = :numero")->setParameter("numero", $escuelaSel);
 				} else {
-					$qb->andWhere("e1.nombre like :nombreEscuela")->setParameter("nombreEscuela", "%". $escuelaSel .
+					$qb->andWhere("e.nombre like :nombreEscuela")->setParameter("nombreEscuela", "%". $escuelaSel .
 					"%");
 				}
 
