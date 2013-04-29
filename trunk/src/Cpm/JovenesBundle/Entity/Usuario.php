@@ -414,7 +414,6 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     public function setAniosParticipo($anios) { 
     	$this->aniosParticipo = $anios;
     }
-
-
-
+    
+    
 }

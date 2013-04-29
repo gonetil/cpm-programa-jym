@@ -73,6 +73,15 @@
 	<h4>Resumen:</h4>
 	<ul class='listado-items' id="resumen">
 	</ul>
+	
+	<div>
+	<h4>Voluntarios</h4>
+		<ul class='listado-items'>
+			{% for voluntario in entity.voluntarios %}
+				<li>{{ voluntario }}</li>
+			{% endfor %}
+		</ul>
+	</div>
 </div>
 
 <div style="clear:both">

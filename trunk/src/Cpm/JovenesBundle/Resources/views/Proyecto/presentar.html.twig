@@ -3,6 +3,7 @@
 {% block title %} Enviar proyecto "{{proyecto.titulo}}" {% endblock %}
 
 {% block content %}
+<script src="{{ asset('js/wizzard_form.js') }}" type="text/javascript"></script>
 
 		    	{% if proyecto.archivo %}
 		    	<div class="download_link icon" style="float:none">
@@ -16,13 +17,35 @@
 deberá verificar algunos datos de la propuesta que envió en la primera instancia.</strong></p>
 
 <div class="wizzard_stage presentar_proyecto">
-<form action="{{ path('proyecto_recibir_presentacion', { 'id': proyecto.id }) }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('proyecto_recibir_presentacion', { 'id': proyecto.id }) }}" method="post" {{ form_enctype(form) }} name="wizzard_form">
 <div class="file_upload">
 {{ form_row(form.archivo) }}
 <p> La extensión del archivo debe ser una de las siguientes: {{ valid_extensions }} </p>
 </div>
 <br/>
-<h4> Verifique y complete (de ser necesario) los siguientes datos de su presentación </h4> 
+<h4> Verifique y complete (de ser necesario) los siguientes datos de su presentación </h4>
+
+{{ form_row(form.titulo) }}
+
+		<div id="eje_row">
+			{{ form_label(form.eje) }}
+			{{ form_widget(form.eje) }}
+				<span class="loading inline-loading"></span>
+				<div id="descripcion_eje" class="input_hint" target="{{ path('eje_fetch') }}">
+				</div>
+				<script>
+				   	$("#cpm_jovenesbundle_presentacionproyectotype_eje").change(function(event) {
+			  	   		mostrarDescripcionEje($("#cpm_jovenesbundle_presentacionproyectotype_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"));
+			  	   	}).change();
+		   		</script>
+		</div>
+
+{{ form_row(form.temaPrincipal) }}
+{{ form_row(form.produccionFinal) }}
+{{ form_row(form.deQueSeTrata) }}
+<hr />
+<h4> Datos de la escuela </h4>
+		
 {{ form_rest(form) }}
 <input type="submit" class="submit" value="Enviar">
 </form>

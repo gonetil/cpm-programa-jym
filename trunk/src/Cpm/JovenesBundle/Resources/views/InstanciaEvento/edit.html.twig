@@ -3,6 +3,7 @@
 {% block title %}Modificar Instancia de Evento{% endblock %}
 
 {% block content %}
+<script src="{{ asset('js/dynamic_forms.js') }}" type="text/javascript"></script>
 <script>
 
 	$(function() {
@@ -15,7 +16,8 @@
 	</script>
 
 <form action="{{ path('instancia_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-    {{ form_widget(edit_form) }}
+
+	{{ form_widget(edit_form) }}
     
     {% if preview_invitacion is defined %}
 	<div class="preview_invitacion">

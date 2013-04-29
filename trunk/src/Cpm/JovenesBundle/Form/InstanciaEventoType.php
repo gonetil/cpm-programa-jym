@@ -45,7 +45,15 @@ class InstanciaEventoType extends AbstractType {
 		->add('preview','checkbox',array('property_path' => false, 
 										 'label' => 'Previsualizar correo',
 										 'required'=>false ))
-		
+/*		->add('voluntarios','collection',array('label'=>'Voluntarios',
+												'allow_add'=>true, 'allow_delete'=>true, 'by_reference'=>false,
+												'type' => new VoluntarioSearchType())) */
+		->add('voluntarios',null,array('label'=>'Voluntarios',
+											'multiple'=>true,
+											'expanded' => false,
+											'query_builder' => function($er) {		
+																return $er->createQueryBuilder('v')->orderBy('v.apellido','ASC');
+													          }))
 		;
 	}
 
