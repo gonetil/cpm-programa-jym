@@ -64,7 +64,7 @@ class ProyectoType extends AbstractType
     		))
             ->add('colaboradores','collection',array('allow_add'=>true, 'allow_delete'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
             ->add('eje','entity',
-            					array('label' => 'Eje',
+            					array('label' => 'Área de referencia',
             						  	'empty_value' => "Seleccione ...",
             						  	'required'=>true,
 									    'preferred_choices' => array("Seleccione ..."),
@@ -72,7 +72,7 @@ class ProyectoType extends AbstractType
             						  'query_builder' => function($er) { return $er->createQueryBuilder('e')->where('e.anulado = 0');}
     								    ))
             ->add('temaPrincipal','entity',
-            					array('label' => 'Tema Principal',
+            					array('label' => 'Eje temático',
             						  'class' => 'CpmJovenesBundle:Tema',
             						  'query_builder' => function($er) { return $er->createQueryBuilder('t')->where('t.anulado = 0');}
     								    ))

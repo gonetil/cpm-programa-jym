@@ -85,9 +85,17 @@ class InstanciaEvento
      */
     private $invitaciones;
 
+    /**
+     * @var Cpm\JovenesBundle\Entity\Voluntario $voluntarios
+     * @ORM\ManyToMany(targetEntity="Voluntario",inversedBy="voluntarioEn",cascade={"persist"})
+     * 
+    */
+    private $voluntarios;
+
 	public function __construct(){
 		$this->cerrarInscripcion = false;
 		$this->invitaciones = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->voluntarios = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->fechaInicio = new \Datetime();
 		$this->fechaFin = new \Datetime();
 		$this->fechaCierreInscripcion = new \Datetime();
@@ -353,6 +361,14 @@ class InstanciaEvento
     		return false;
     	else
     		return true;
+    }
+    
+    public function getVoluntarios() {
+    	return $this->voluntarios;
+    }
+    
+    public function setVoluntarios($list) {
+    	$this->voluntarios = $list;
     }
  
 }

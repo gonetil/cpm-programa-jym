@@ -12,7 +12,7 @@ class PresentacionProyectoType extends AbstractType
     {
         $builder
             ->add('titulo')
-     	    ->add('temaPrincipal','entity', array('label' => 'Tema Principal',
+     	    ->add('temaPrincipal','entity', array('label' => 'Eje temático',
                     						  'class' => 'CpmJovenesBundle:Tema',
                     						  'query_builder' => function($er) { 
         															return $er->createQueryBuilder('t')->where('t.anulado = 0');
@@ -26,6 +26,15 @@ class PresentacionProyectoType extends AbstractType
         		))
 	        ->add('deQueSeTrata',null,array('label'=>'Breve descripción'))
 	        ->add('archivo','file',array('label' => 'Archivo con el proyecto'))
+	        ->add('eje','entity',
+            					array('label' => 'Área de referencia',
+            						  	'empty_value' => "Seleccione ...",
+            						  	'required'=>true,
+									    'preferred_choices' => array("Seleccione ..."),
+    	        						'class' => 'CpmJovenesBundle:Eje',
+            						  	'query_builder' => function($er) { return $er->createQueryBuilder('e')->where('e.anulado = 0');}
+    								  ))
+			->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))    								  
        ;
     }
     
