@@ -16,18 +16,22 @@
 		{%  endif %}	 
 	 </select>
 	 <a href="#" onclick="$('#cpm_jovenesbundle_unionusuariosbatchtype_usuarios option').prop('selected',true);" > Seleccionar todo </a>
-	 
 	 	<div>
 	 			 <label>Usuario que permanecerá</label>
 	 				{%  if usuarios is defined %}
 						{% for u in usuarios %}
-					 	 <br/><input type="radio" selected="selected" name="cpm_jovenesbundle_unionusuariosbatchtype[usuarioFinal]" id= "cpm_jovenesbundle_unionusuariosbatchtype_usuarioFinal" value="{{u.id}}"> {{ u }}
+						 	 <br/>
+						 	 
+						 	 <input type="radio" selected="selected" name="cpm_jovenesbundle_unionusuariosbatchtype[usuarioFinal]" id= "cpm_jovenesbundle_unionusuariosbatchtype_usuarioFinal" value="{{u.id}}"> 
+						 	 {{ u }} 
+						 	 {% if (not u.enabled) %}
+						 	 	<strong>(no habilitado)</strong>
+						 	 {% endif %}
 						{% endfor %}
 					{%  endif %}
 				<br/>	
-	 
-   
-   {{ form_row(form._token) }}
+
+				{{ form_row(form._token) }}
 	<input type="submit" value="Unir usuarios"/>
  	<input type="button" value="Cancelar" onclick="window.history.back();"; />
 </form>

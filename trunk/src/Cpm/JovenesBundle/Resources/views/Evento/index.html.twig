@@ -13,6 +13,7 @@
 <table class="records_list">
     <thead>
         <tr>
+	        <th>{{ filter.select_all() }}</th>
             <th>Ciclo</th>
             <th>Título</th>
             <th>Descripción</th>
@@ -22,6 +23,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
+	        <td>{{ filter.select_this(entity) }}</td>
             <td>{{ entity.ciclo }}</td>
             <td>{{ entity.titulo }}</td>
             <td>{{ entity.descripcion }}</td>
@@ -50,4 +52,15 @@
         </a>
     </li>
 </ul>
+
+
+{{ form_row(form.batch_action) }} 
+{{ form_row(form.batch_action_type) }}
+ {{ form_row(form._token) }}
+{{ filter.batch_actions([ 
+	 {action:'CpmJovenesBundle:Evento:exportarEventosExcel', label: 'Exportar a Excel', confirm: false},
+	 
+	]) }}
+	
+{{ filter.form_end(form) }}
 {% endblock %}

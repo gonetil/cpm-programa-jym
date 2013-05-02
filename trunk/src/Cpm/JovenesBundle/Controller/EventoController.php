@@ -222,4 +222,11 @@ class EventoController extends BaseController
     		$response->headers->set('Content-Type', 'application/json');
     		return $response;
     }
+
+    
+    public function exportarEventosExcelAction($entitiesQuery) {
+		$entities = $entitiesQuery->getResult();
+		$template = 'CpmJovenesBundle:Evento:export_to_excel.xls.twig';
+		return $this->makeExcel(array('entities' => $entities),$template,'Eventos');
+    }
 }

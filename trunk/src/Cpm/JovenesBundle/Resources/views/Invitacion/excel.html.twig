@@ -1,0 +1,34 @@
+{% macro print_header() %}
+	<header><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></header>
+	{% import "CpmJovenesBundle:Usuario:excel.html.twig" as usuario_export %}
+		<td>Instancia de Evento</td>
+    	<td>Escuela</td>
+        <td>Coordinador</td>			
+    	<td>Proyecto</td>
+        <td>Fecha de invitacion</td>
+        <td>Aceptada</td>
+        <td>Nro. de Asistentes</td>
+        <td>Solicita Viaje?</td> 
+        <td>Solicita Hospedaje?</td>
+        <td>Observaciones</td>
+        <td>Suplente</td>
+        <td>Asistio</td>
+        {{ usuario_export.print_header(true,'Coordinador') }}
+{% endmacro %}      
+
+{% macro print_entity(entity) %}
+	{% import "CpmJovenesBundle:Usuario:excel.html.twig" as usuario_export %}
+    			<td> {{ entity.instanciaEvento | raw}} </td> 
+				<td> {{ entity.proyecto.escuela }} </td>		
+		    	<td> {{ entity.proyecto.coordinador }} </td> 		
+    			<td> {{ entity.proyecto.titulo }} </td> 		
+    		    <td>{{ entity.fechaCreacion|date('d-m-Y H:i:s') }}</td>
+                <td>{% if not entity.aceptoInvitacion is defined %}Sin responder{% else %}{% if entity.aceptoInvitacion %}Si{% else %}No{% endif %}{% endif %}</td>
+ 				<td>{{ entity.numeroAsistentes }}</td>
+	            <td>{% if not entity.solicitaViaje is defined %}sin responder{% else %}{% if entity.solicitaViaje %}Si{% else %}No{% endif %}{% endif %}</td>
+            	<td>{% if not entity.solicitaHospedaje is defined %}sin responder{% else %}{% if entity.solicitaHospedaje %}Si{% else %}No{% endif %}{% endif %}</td>            
+	            <td>{{ entity.observaciones }}</td>
+            	<td>{% if entity.suplente %} {{ entity.suplente }} {% else %}-{% endif %}</td>
+            	<td>{% if not entity.asistio is defined %}? (Aún no cargado){% else %}{% if entity.asistio %}Si{% else %}No{% endif %}{% endif %}</td>
+            	{{ usuario_export.print_entity(entity.proyecto.coordinador) }}
+{% endmacro %}

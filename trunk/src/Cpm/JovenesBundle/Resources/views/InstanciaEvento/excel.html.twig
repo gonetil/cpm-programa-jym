@@ -1,0 +1,64 @@
+{% macro print_header() %}
+	<header><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></header>
+
+	        <td>Evento</td>
+	        <td>Url</td>
+	        <td>Lugar</td>
+	        <td>Inicio</td>
+	        <td>Fin</td>
+	        <td>Invitaciones enviadas</td>
+	        <td>Aceptadas</td>
+	        <td>Rechazadas</td>
+	        <td>Pendientes</td>
+	        <td>Num. invitados</td>
+	        <td>Num. asistentes</td>
+	        {% for i in 1..10 %}
+	        	<td>Voluntario {{ i }}</td>
+	        {% endfor %}
+{% endmacro %}    
+
+{% macro print_entity(entity) %}
+
+	        <td>{{ entity.evento.titulo }}</td>
+	        <td>{{ entity.url }}</td>
+	        <td>{{ entity.lugar }}</td>
+	        <td>{{ entity.fechaInicio|date('d-m-Y H:i:s') }}</td>
+	        <td>{{ entity.fechaFin|date('d-m-Y H:i:s') }}</td>
+	        
+	        {% set aceptaciones = 0 %}
+			{% set asistentes = 0 %}
+			{% set pendientes = 0 %}
+			{% set rechazadas = 0 %}
+			{% set invitados = 0 %}
+	        {% for inv in entity.invitaciones %}
+
+	    		{% if not inv.sinResponder %}
+				      {% if inv.aceptoInvitacion %}
+				            {% set aceptaciones = aceptaciones + 1 %}
+				            {% if entity.evento.pedirNumeroAsistentes %}
+				            	{% set asistentes = asistentes + inv.numeroAsistentes %}
+					        {% else %}
+					            	{% set asistentes = asistentes + 1 %}	
+					        {% endif %}
+					        	
+					        {% if entity.evento.solicitarListaInvitados %}
+					        	{% set misInvitados = inv.countInvitados %}
+					        	{% set invitados = invitados + misInvitados %}  
+					        {% endif %}
+					  {% else %}
+					        {% set rechazadas= rechazadas+1 %}	
+					  {% endif %}     
+				{% else %}
+					  {% set pendientes=pendientes+1 %} 
+				{% endif %}      
+			{% endfor %}
+			<td>{{ entity.invitaciones | length }}</td>
+	        <td>{{ aceptaciones }}</td>
+	        <td>{{ rechazadas }}</td>
+	        <td>{{ pendientes }}</td>
+	        <td>{{ invitados }}</td>
+	        <td>{{ asistentes }}</td>
+			{% for v in entity.voluntarios %}
+				<td>{{ v.apellido }}, {{ v.nombre }} ({{ v.email }})<td> 
+			{% endfor %}
+{% endmacro %}

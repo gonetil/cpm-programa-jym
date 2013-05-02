@@ -378,4 +378,17 @@ abstract class BaseController extends Controller
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }
+    
+    protected function makeExcel($data,$template,$filename="") {
+    	
+    	$date = date('d-M-Y');
+		$filename = "$filename $date";
+        $response = $this->render($template,$data);
+        $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
+        $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
+    	return $response; 
+    	
+    	
+    }
+    
 }
