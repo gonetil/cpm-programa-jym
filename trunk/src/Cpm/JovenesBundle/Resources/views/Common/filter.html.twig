@@ -48,15 +48,21 @@
 			$('.the_actions a').click(function(event){
 				event.preventDefault();
 				a= $(event.target);	
-				console.log(event.target);	
+				
 				if (a.attr('confirm') && a.attr('confirm')){
 					if (!confirm("Esta seguro que desea ejecutar esta acción?"))
 						return;
 				}
+
+				var old_action = $("#cpm_jovenesbundle_filter_batch_action").val();
+				var old_action_type = $("#cpm_jovenesbundle_filter_batch_action_type").val();
 				$("#cpm_jovenesbundle_filter_batch_action").val(a.attr('action'));
 				$("#cpm_jovenesbundle_filter_batch_action_type").val(a.attr('type'));
 				
 				$("#filter-form").submit();
+				$("#cpm_jovenesbundle_filter_batch_action").val(old_action);
+				$("#cpm_jovenesbundle_filter_batch_action_type").val(old_action_type);
+				
 			});
 
 			
