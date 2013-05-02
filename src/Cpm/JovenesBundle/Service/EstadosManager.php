@@ -85,6 +85,8 @@ class EstadosManager
     		$estado_nuevo->setProyecto($proyecto);
     		
     		if (
+    			($estado_anterior) // existe el estado anterior?
+    			&&
     			($estado_anterior->getEstado() != ESTADO_ANULADO) //si el proyecto está siendo desanulado, no se envía ningún correo 
     			&& 
     			($correo = $this->informarCambioDeEstado($proyecto))
