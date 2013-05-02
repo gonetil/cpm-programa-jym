@@ -522,4 +522,12 @@ class ProyectoController extends BaseController
     	
     	return $this->createJsonResponse($proyectos);
     }
+    
+    
+    public function exportarProyectosExcelAction($entitiesQuery) {
+		$entities = $entitiesQuery->getResult();
+		$template = 'CpmJovenesBundle:Proyecto:export_to_excel.xls.twig';
+		return $this->makeExcel(array('entities' => $entities),$template, 'Proyectos');
+		 
+    }
 }

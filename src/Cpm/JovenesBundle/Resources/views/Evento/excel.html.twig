@@ -1,0 +1,26 @@
+{% macro print_header() %}
+	<header><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></header>
+			<td>Título</td>
+			<td>Cant. Instancias</td>
+            <td>Solicitar número de asistentes</td>
+            <td>Permitir suplentes</td>
+            <td>Ofrecer Hospedaje</td>
+            <td>Ofrecer viaje</td>
+            <td>Permitir observaciones</td>
+            <td>Preguntar si solicita tren</td>
+            <td>Solicitar que se cargue la lista de invitados</td>
+            <td>Limitar la lista de invitados a</td>
+{% endmacro %}    
+
+{% macro print_entity(entity) %}
+			<td>{{ entity.titulo }}</td>
+			<td>{{ entity.instancias | length }}</td>
+            <td>{% if entity.pedirNumeroAsistentes %} Sí {% else %} No {% endif %}</td>
+            <td>{% if entity.permitirSuplente %} Sí {% else %} No {% endif %}</td>
+            <td>{% if entity.ofrecerHospedaje %} Sí {% else %} No {% endif %}</td>
+            <td>{% if entity.ofrecerViaje %} Sí {% else %} No {% endif %}</td>
+            <td>{% if entity.permitirObservaciones %} Sí {% else %} No {% endif %}</td>
+            <td>{% if entity.preguntarSolicitaTren %} Sí {% else %} No {% endif %}</td>
+            <td>{% if entity.solicitarListaInvitados %} Sí {% else %} No {% endif %}</td>
+            <td>{{ entity.numeroMaximoInvitados }}</td>
+{% endmacro %}

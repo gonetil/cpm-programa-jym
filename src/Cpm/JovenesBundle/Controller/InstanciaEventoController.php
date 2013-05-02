@@ -319,4 +319,13 @@ class InstanciaEventoController extends BaseController
 
     }
     
+    public function exportarInstanciasEventosExcelAction($entitiesQuery) {
+		$entities = $entitiesQuery->getResult();
+		$template = 'CpmJovenesBundle:InstanciaEvento:export_to_excel.xls.twig';
+		
+		return $this->makeExcel(array('entities' => $entities),$template,'Instancias de Eventos');
+    }
+    
+    
+    
 }

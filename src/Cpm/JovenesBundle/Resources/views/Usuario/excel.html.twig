@@ -1,0 +1,28 @@
+{% macro print_header(print_full_data,role) %}
+<header><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></header>
+	<td>Apellido {{ role }}</td>
+	<td>Nombres {{ role }}</td>
+	<td>Email {{ role }}</td>
+	{% if print_full_data %}
+		<td>DNI {{ role }}</td>
+		<td>Tel. {{ role }}</td>
+		<td>Celular {{ role }}</td>
+		<td>Domicilio {{ role }}</td>
+		<td>CP {{ role }}</td>
+	{%  endif %}
+{% endmacro %}
+
+{% macro print_entity(user,print_full_data) %}
+	
+	<td>{{ user.apellido }}</td>
+	<td>{{ user.nombre }}</td>
+	<td>{{ user.email }}</td>
+	{%  if print_full_data %}</td>
+			<td>{{ user.dni }}</td>
+	        <td>{{ user.telefono }}</td>
+			<td>{{ user.telefonoCelular }}</td>
+			<td>{{ user.domicilio }}</td>
+	        <td>{{ user.codigoPostal }}</td>
+	{% endif %}
+
+{% endmacro %}

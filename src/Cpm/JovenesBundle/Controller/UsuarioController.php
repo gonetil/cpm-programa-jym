@@ -439,13 +439,78 @@ class UsuarioController extends BaseController
 		$usuariosBatchForm = $this->createForm(new UnionUsuariosBatchType(), $usuarioBatch);
 		$usuariosBatchForm->bindRequest($request);
 		$usuarios = $usuarioBatch->getUsuarios();
-		$usuarioFinal = $usuarioBatch->getUsuarioFinal();
-		
-		echo "Usuario final: {$usuarioFinal}";
-		foreach ( $usuarios as $usuario) {
-       		echo "<br/>$usuario será unido";
+		$usuarioFinal_id = $usuarioBatch->getUsuarioFinal();
+		if (!$usuarioFinal_id) {
+				$this->setErrorMessage("Debe seleccionar un usuario que permanecerá en el sistema");
+				return array (
+					'form' => $usuariosBatchForm->createView(),
+					'usuarios' => $usuarios,
+				);
 		}
-		die;
-		return array();
-	}
+		$usuarioFinal = $this->getEntity('CpmJovenesBundle:Usuario', $usuarioFinal_id);
+	
+		$strings = array();
+		foreach ( $usuarios as $usuario) {
+       		$strings[] = $usuario->__toString();
+		}
+		
+		try {
+			$this->unirUsuarios($usuarioFinal,$usuarios);	
+			$this->setSuccessMessage("Usuario $usuarioFinal unido satisfactoriamente con {join(';',$strings)}");
+		} catch(\PDOException $e){
+			$this->setErrorMessage("Error al unir el usuario $e");
+		}
+			
+		return array (
+				'form' => $usuariosBatchForm->createView(),
+				'usuarios' => $usuarios,
+			);
+	 }
+	 
+	 
+	 /**
+     * Combina los datos del $usuarioFinal con todos los $usuarios
+     */
+     
+	 private function unirUsuarios($usuarioFinal, $usuarios) {
+	 
+     	$em = $this->getEntityManager();
+    	foreach ( $usuarios as $usuario) {
+	    	foreach ( $usuario->getProyectosCoordinados() as $proyecto) {
+	       		$usuario->getProyectosCoordinados()->removeElement($proyecto);
+	       		$usuarioFinal->getProyectosCoordinados()->add($proyecto);
+	       		$proyecto->setCoordinador($usuarioFinal);
+	       		$em->persist($proyecto);
+			}
+			$em->flush();
+			echo 1;	
+			foreach ( $usuario->getProyectosColaborados() as $proyecto) {
+	       		$usuario->getProyectosColaborados()->removeElement($proyecto);
+	       		$usuarioFinal->addProyecto($proyecto);
+	       		$proyecto->addUsuario($usuarioFinal);
+	       		$em->persist($proyecto);
+			}
+			$em->flush();
+			echo 2;
+			foreach ( $usuario->getCorreosRecibidos() as $correo ) {
+	       			$usuario->getCorreosRecibidos()->removeElement($correo);
+	       			$usuarioFinal->addCorreo($correo);
+	       			$correo->setDestinatario($usuarioFinal);
+	       			$em->persist($correo);
+			}
+			$em->flush();
+			echo 3;
+			$this->getUserManager()->deleteUser($usuario);
+    	}
+    	$this->getUserManager()->updateUser($usuarioFinal);	
+    	
+	 	
+	 }
+	 
+	 public function exportarUsuariosExcelAction($entitiesQuery) {
+		$entities = $entitiesQuery->getResult();
+		$template = 'CpmJovenesBundle:Usuario:export_to_excel.xls.twig';
+		return $this->makeExcel(array('entities' => $entities),$template,'Usuarios');
+		 
+    }
 }

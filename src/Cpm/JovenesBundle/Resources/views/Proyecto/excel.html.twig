@@ -1,0 +1,69 @@
+{% macro print_header() %}
+	{% import "CpmJovenesBundle:Usuario:excel.html.twig" as usuario_export %}
+	<header><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></header>
+	<td>Titulo</td>
+	<td>Estado</td>
+	<td>Recibio capacitacion</td>
+	<td>Primera vez de la escuela</td>
+	<td>Primera vez de los alumnos</td>
+	<td>Cuentan con netbook</td>
+	<td>Cuentan con plataforma virtual</td>
+	<td>Nro. de alumnos</td>
+	<td>Area de referencia</td>
+	<td>Eje tematico</td>
+	<td>Produccion final</td>
+	<td>Req. edicion</td>
+	<td>Transporte</td>
+	<td>Color</td>
+	<td>Escuela</td>
+	<td>Direccion</td>
+	<td>CP</td>
+	<td>Localidad</td>
+	<td>Distrito</td>
+	<td>Region</td>
+	<td>Tel.</td>
+	<td>Email</td>
+	<td>Direccion</td>
+	{{ usuario_export.print_header(true,'Coordinador') }}
+	{% for i in 0..2 %}
+		{{ usuario_export.print_header(false,'Colaborador '~ i) }}
+	{% endfor %}
+{% endmacro %}
+
+{% macro print_entity(entity) %}
+
+	{% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
+	{% import "CpmJovenesBundle:Usuario:excel.html.twig" as usuario_export %}
+	
+		<td>{{ entity.titulo }}</td>
+		<td>{{ entity.estadoActual }}</td>
+		<td>{{ common.show_bool(entity.recibioCapacitacion) }}</td>
+		<td>{{ common.show_bool(entity.esPrimeraVezEscuela) }}</td>
+		<td>{{ common.show_bool(entity.esPrimeraVezAlumnos) }}</td>
+		<td>{{ common.show_bool(entity.cuentanConNetbook) }}</td>
+		<td>{{ common.show_bool(entity.cuentanConPlataformaVirtual) }}</td>    	
+		<td>{{ entity.nroAlumnos }}</td>
+		<td>{{ entity.eje }}</td>
+		<td>{{ entity.temaPrincipal }}</td>
+		<td>{{ entity.produccionFinal }}</td>
+		<td>{{ entity.requerimientosDeEdicion }}</td>
+		<td>{{ entity.transporte }}</td>
+		<td>{{ entity.color }}</td>
+				
+		{% set escuela = entity.escuela %}
+		<td>{{ common.nombreEscuela(entity.escuela) }}</td>
+		<td>{{ escuela.domicilio }}</td> 
+		<td>{{ escuela.codigoPostal }}</td> 
+		<td>{{ escuela.localidad.nombre }}</td> 
+		<td>{{ escuela.localidad.distrito }}</td>
+		<td>{{ entity.escuela.localidad.distrito.region }}</td>
+		<td>{{ escuela.telefono }}</td> 
+		<td>{{ escuela.email }}</td>
+		<td>{{ escuela.director }}</td>
+		
+		{{ usuario_export.print_entity(entity.coordinador,true) }}
+		{% for colaborador in entity.colaboradores %}
+			{{ usuario_export.print_entity(colaborador,false) }}
+		{% endfor %}
+	
+{% endmacro %}

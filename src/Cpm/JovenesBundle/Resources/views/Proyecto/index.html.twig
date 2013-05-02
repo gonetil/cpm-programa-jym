@@ -188,7 +188,8 @@ $(document).ready(function() {
 
 {{ filter.batch_actions([ 
 	{action:'CpmJovenesBundle:Invitacion:invitarProyectosBatch', label: 'Enviar invitacion' },
-	 {action:'CpmJovenesBundle:Correo:showCorreoBatchForm', label: 'Enviar mensaje', confirm: true}, 
+	{action:'CpmJovenesBundle:Correo:showCorreoBatchForm', label: 'Enviar mensaje', confirm: true},
+	{action:'CpmJovenesBundle:Proyecto:exportarProyectosExcel', label: 'Exportar a excel'}, 
 	 
 ]) }}
 {{ filter.form_end(form) }}

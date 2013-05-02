@@ -71,10 +71,14 @@
 </table>
 
 
-{# filter.batch_actions([
-	{action:'CpmJovenesBundle:Correo:reenviarBatch', label: 'Reenviar correos', confirm: true},
-	])
-#}
+{{ form_row(form.batch_action) }} 
+{{ form_row(form.batch_action_type) }}
+ {{ form_row(form._token) }}
+{{ filter.batch_actions([ 
+	 {action:'CpmJovenesBundle:Invitacion:exportarInvitacionesExcel', label: 'Exportar a Excel', confirm: false},
+	 
+	]) }}
+
 {{ filter.form_end(form) }}
 
 

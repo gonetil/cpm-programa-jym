@@ -1,0 +1,7 @@
+{% import "CpmJovenesBundle:InstanciaEvento:excel.html.twig" as exporter %}
+	<table>
+		<tr> {{ exporter.print_header() }}</tr>
+		{% for entity in entities %}
+			<tr>{{ exporter.print_entity(entity) }}</tr>
+		{% endfor %}
+	</table>

@@ -293,4 +293,11 @@ class InvitacionController extends BaseController
     	
     	return $this->createJsonResponse($usuarios);
     }
+    
+   public function exportarInvitacionesExcelAction($entitiesQuery) {
+		$entities = $entitiesQuery->getResult();
+		$template = 'CpmJovenesBundle:Invitacion:export_to_excel.xls.twig';
+		return $this->makeExcel(array('entities'=>$entities),$template,'invitaciones');
+		 
+    }
 }
