@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\ArchivoRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Archivo
 {
@@ -41,6 +42,14 @@ class Archivo
      * @ORM\Column(name="path", type="string")
      */
 	private $path;
+	
+   /**
+     * @var datetime $fecha_creado
+     *
+     * @ORM\Column(name="fecha_creado", type="datetime", nullable="true")
+     */
+    private $fecha_creado;
+
 
     /**
      * Get id
@@ -107,4 +116,33 @@ class Archivo
     	$this->correo = $correo;
     }
     
+    
+     /**
+     * Set fecha_creado
+     *
+     * @param datetime $fecha_creado
+     */
+    public function setFechaCreado(\datetime $fecha)
+    {
+        $this->fecha_creado = $fecha;
+    }
+
+    /**
+     * Get fecha_creado
+     *
+     * @return datetime 
+     */
+    public function getFechaCreado()
+    {
+        return $this->fecha_creado;
+    }
+    	 /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+            $this->setFechaCreado(new \DateTime(date('Y-m-d H:i:s')));
+    }
 }

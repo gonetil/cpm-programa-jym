@@ -24,11 +24,10 @@ class VoluntarioController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Voluntario')->findAll();
-
-        return array('entities' => $entities);
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+        $entities = $em->getRepository('CpmJovenesBundle:Voluntario')->findAllQuery();
+        return $this->paginate($entities);
     }
 
     /**
