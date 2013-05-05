@@ -68,6 +68,16 @@ class Correo
     *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="true", onDelete="SET NULL")
     */
     private $proyecto;
+ 
+
+
+	/**
+	 * @var Cpm\JovenesBundle\Entity\Archivo $archivos
+	 * @ORM\OneToMany(targetEntity="Archivo", mappedBy="correo",cascade={"persist"})
+	 */
+     private $archivos;
+    
+
     
     /**
      * Get id
@@ -213,6 +223,7 @@ class Correo
  		$copia = new Correo();
  		$copia->asunto=$this->asunto;
 	    $copia->cuerpo=$this->cuerpo;
+	    $copia->archivos = $this->archivos;
 	    if ($isFullClone){
 		//$copia->emisor=$this->emisor; el emisor depende de la sesión
 		   // $copia->fecha=$this->fecha;
@@ -231,5 +242,17 @@ class Correo
 
     public function __toString2(){
     	return "{$this->fecha} Destinatario {$this->email} Asunto {$this->asunto}";
+    }
+    
+    public function getArchivos() {
+    	return $this->archivos;
+    }
+    
+    public function setArchivos($archivos) {
+    	$this->archivos = $archivos;
+    }
+    
+    public function addArchivo(\Cpm\JovenesBundle\Entity\Archivo $archivo) {
+    	$this->archivos[] = $archivo;
     }
 }

@@ -25,6 +25,8 @@ use Cpm\JovenesBundle\Exception\Mailer\MailCannotBeSentException;
 use Cpm\JovenesBundle\Filter\CorreoFilterForm;
 use Cpm\JovenesBundle\Filter\CorreoFilter;
 
+use Cpm\JovenesBundle\Entity\Archivo;
+
 /**
  * Correo controller.
  *
@@ -165,11 +167,15 @@ class CorreoController extends BaseController
 		$request = $this->getRequest();
 		$form = $this->createForm(new CorreoType(), $correo);
 		$form->bindRequest($request);
+		$em = $this->getDoctrine()->getEntityManager();
 
 		if ($form->isValid()) {
-			$mailer = $this->getMailer();
+				$mailer = $this->getMailer();
 			try{
+				$adjuntos = $mailer->procesarAdjuntos($correo);	
+				$correo->setArchivos($adjuntos);
 				$correo = $mailer->enviarCorreo($correo);
+
 				$this->setSuccessMessage('El correo ha sido enviado con éxito a ' .$correo->getEmail());
 				return $this->redirect($this->generateUrl('correo_show', array (
 					'id' => $correo->getId()
@@ -230,16 +236,22 @@ class CorreoController extends BaseController
 			$correoMaestro = new Correo();
 			$correoMaestro->setAsunto($correoBatch->getAsunto());
 			$correoMaestro->setCuerpo($correoBatch->getCuerpo());
+			$correoMaestro->setArchivos($correoBatch->getArchivos());
+			$mailer->procesarAdjuntos($correoMaestro);
+			
 				
 			if ($correoBatch->getPreview()) //aun no deben mandarse los emails, sino que hay que previsualizarlos 
 			{
 				$exampleCorreo = $correoMaestro->clonar(false);
 				$exampleCorreo->setDestinatario($proyectos[0]->getCoordinador());
 				$exampleCorreo->setProyecto($proyectos[0]);
+				
+				
 				try {
 					$exampleCorreo= $mailer->enviarCorreo($exampleCorreo, array(), true);
 					$correoBatch->setPreviewText($exampleCorreo->getCuerpo()); 
 					$correoBatch->setPreview(false);
+					$correoBatch->setCuerpo($exampleCorreo->getCuerpo());
 					$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
 				}catch(InvalidTemplateException $e){
 						$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
@@ -247,7 +259,8 @@ class CorreoController extends BaseController
 				
 			}else{
 				//LO mando
-					
+				
+//				$correoMaestro->setArchivos($adjuntos);	
 				$cant = 0;
 				set_time_limit(60+3*count($proyectos));
 				try{
@@ -331,11 +344,15 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 			$correoMaestro = new Correo();
 			$correoMaestro->setAsunto($correoBatch->getAsunto());
 			$correoMaestro->setCuerpo($correoBatch->getCuerpo());
-				
+			$correoMaestro->setArchivos($correoBatch->getArchivos());
+			$correoBatch->setCuerpo($correoMaestro->getCuerpo());
+			$mailer->procesarAdjuntos($correoMaestro);
+					
 			if ($correoBatch->getPreview()) //aun no deben mandarse los emails, sino que hay que previsualizarlos 
 			{
 				$exampleCorreo = $correoMaestro->clonar(false);
 				$exampleCorreo->setDestinatario($usuarios[0]);
+				
 				try {
 					$exampleCorreo= $mailer->enviarCorreo($exampleCorreo, array(), true);
 					$correoBatch->setPreviewText($exampleCorreo->getCuerpo()); 
@@ -346,6 +363,7 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 				}
 				
 			}else{
+				
 				//LO mando
 				$cant = 0;
 				set_time_limit(60+3*count($usuarios));

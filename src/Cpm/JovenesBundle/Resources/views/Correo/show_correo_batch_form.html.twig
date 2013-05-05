@@ -42,7 +42,7 @@
 	 		Asunto: <strong> {{form.asunto.vars.value}}</strong> 
 		</div>
 		<div>
-			Cuerpo: {{form.vars.value.previewText}}
+			Cuerpo: {{form.vars.value.previewText | raw}}
 		</div>
 		<a href="#" onclick="$('#mail_body').show();">Modificar</a>
 		<script>
@@ -53,7 +53,7 @@
 	</div>
 {% endif %}
  
- <form method="post" action="{{ path('correo_batch_submit') }}" id="mailer_form">
+ <form method="post" action="{{ path('correo_batch_submit') }}" id="mailer_form" {{ form_enctype(form) }}>
  
  <div class="checklist" style="float:right">
 	 <strong> Escuelas </strong>
@@ -77,6 +77,12 @@
  	{{ form_row(form.plantilla) }}
  	{{ form_row(form.asunto) }}
  	{{ form_row(form.cuerpo) }}
+ 	 <div>
+	 	{{ form_row(form.archivos) }}
+	 	 <a href="#" class="jslink" onclick="addDynamicForm('#cpm_jovenesbundle_correobatchtype_archivos'); return false;">
+	     Agregar archivo
+		</a>
+ 	</div>
  </span>	
  	{{ form_row(form.ccCoordinadores) }}
  	{{ form_row(form.ccEscuelas) }}

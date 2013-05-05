@@ -390,7 +390,7 @@ class UsuarioController extends BaseController
     	$usuarios = array();
     	foreach ( $data as $usuario ) {
             $usuarios[] = array(
-								'label'=>$usuario->getApellido(). ", ". $usuario->getNombre(), 
+								'label'=>$usuario->getApellido(). ", ". $usuario->getNombre() . " <{$usuario->getEmail()}>", 
 								'desc' => $usuario->getApellido(). ", ". $usuario->getNombre(),
 								'id' => $usuario->getId(),
 								'value' => $usuario->getId()

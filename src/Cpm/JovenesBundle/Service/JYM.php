@@ -318,5 +318,13 @@ class JYM  {
 	public function getPerfil(){
 		return $this->perfil_dinamico;
 	}
+	
+	public function getUploadDir() 
+    {
+    	$dir = $this->container->getParameter('upload_dir');
+    	if (substr($dir,strlen($dir)-1,1) != "/")
+    		$dir .= "/";
+    	return $dir;
+    }
 		
 }
