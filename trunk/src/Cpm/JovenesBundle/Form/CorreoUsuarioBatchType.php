@@ -34,7 +34,8 @@ class CorreoUsuarioBatchType extends UsuarioBatchType
 																				        },
 																'required'=>false,
 																'attr' => array('class'=>'select-plantilla')
-        ))
+        		))
+	        ->add('archivos','collection',array('allow_add'=>true, 'allow_delete'=>true, 'by_reference'=>false, 'type'=>new ArchivoType()))		
         ;
     }
 

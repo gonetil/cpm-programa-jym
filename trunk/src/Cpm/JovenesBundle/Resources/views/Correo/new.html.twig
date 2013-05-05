@@ -9,17 +9,30 @@
 
 <form action="{{ path('correo_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
+    <a href="#" class="jslink" onclick="addDynamicForm('#cpm_jovenesbundle_correotype_archivos'); return false;">
+            Agregar archivo
+    </a>
     <p>
         <button type="submit">Enviar</button>
     </p>
 </form>
 
 <script>
+
 	$(function(){
 		$('#cpm_jovenesbundle_correotype_destinatario').change(function (){
 			var label = this.options[this.selectedIndex].label;
 			var i = label.substring(label.lastIndexOf("<") + 1, label.lastIndexOf(">"));
 			$('#cpm_jovenesbundle_correotype_email').val(i);
+		});
+		
+		
+		$('#cpm_jovenesbundle_correotype_destinatario_text').change(function() {
+			var label = this.value;
+			var i = label.substring(label.lastIndexOf("<") + 1, label.lastIndexOf(">"));
+			this.value = label.substring(0,label.lastIndexOf("<"));
+			$('#cpm_jovenesbundle_correotype_email').val(i);
+		
 		});
 	});
 </script>

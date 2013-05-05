@@ -32,6 +32,7 @@ class CorreoBatchType extends ProyectoBatchType
 																'required'=>false,
 																'attr' => array('class'=>'select-plantilla')
         ))
+         ->add('archivos','collection',array('allow_add'=>true, 'allow_delete'=>true, 'by_reference'=>false, 'type'=>new ArchivoType()))
         ;
     }
 

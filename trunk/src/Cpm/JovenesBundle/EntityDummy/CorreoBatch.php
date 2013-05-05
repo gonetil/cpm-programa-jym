@@ -17,6 +17,7 @@ class CorreoBatch extends ProyectoBatch{
 	public $plantilla;
 	public $preview;
 	public $previewText;
+	public $archivos;
 	
 	public function __construct() {
 		parent::__construct();
@@ -84,5 +85,11 @@ class CorreoBatch extends ProyectoBatch{
 	}
 	public function setPreviewText($previewText) {
 		$this->previewText = $previewText;
+	}
+	public function getArchivos() {
+		return $this->archivos;
+	}
+	public function setArchivos($archivos) {
+		$this->archivos = $archivos;
 	}
 }

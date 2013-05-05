@@ -56,7 +56,7 @@
 	</div>
 {% endif %}
  
- <form method="post" action="{{ path('correo_usuario_batch_submit') }}" id="mailer_form">
+ <form method="post" action="{{ path('correo_usuario_batch_submit') }}" id="mailer_form" {{ form_enctype(form) }}>
  
  <div class="checklist" style="float:right">
 	 <strong> Destinatarios </strong>
@@ -84,6 +84,13 @@
  	{{ form_row(form.cuerpo) }}
  </span>	
  	{{ form_row(form.preview) }}
+ 	
+	 <div>
+	 	{{ form_row(form.archivos) }}
+	 	 <a href="#" class="jslink" onclick="addDynamicForm('#cpm_jovenesbundle_correousuariobatchtype_archivos'); return false;">
+	     Agregar archivo
+		</a>
+ 	</div>
    {{ form_row(form._token) }}
  <input type="submit" value="Enviar correo"/>
  <input type="button" value="Cancelar" onclick="window.history.back();"; />

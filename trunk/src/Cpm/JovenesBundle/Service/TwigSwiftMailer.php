@@ -6,6 +6,8 @@ use Cpm\JovenesBundle\Entity\Plantilla;
 use FOS\UserBundle\Model\UserInterface;
 use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Correo;
+use Cpm\JovenesBundle\Entity\Archivo;
+
 use FOS\UserBundle\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -174,6 +176,7 @@ class TwigSwiftMailer implements MailerInterface
 	 * @throws InvalidTemplateException
 	 */
 	public function enviarCorreo(Correo $correo, $context=array(), $dryrun=false){
+		
 		//TODO ver si hay que validar los permisos del sender
 		$context[Plantilla::_USUARIO] = $correo->getDestinatario();
 		$context[Plantilla::_EMISOR] = $correo->getEmisor();
@@ -186,7 +189,8 @@ class TwigSwiftMailer implements MailerInterface
 		$email = $correo->getEmail();
 		if (empty($email) && !empty($context[Plantilla::_USUARIO]))
 			$email = $correo->getDestinatario()->getEmail();
-			
+		
+		
 		//se asume que la plantilla tiene texto twig nomas, nada de HTML
 		list($message,$sent) = $this->sendMessage($email, $correo->getAsunto(),$correo->getCuerpo(), null, $context );
 		if ($sent)
@@ -196,6 +200,53 @@ class TwigSwiftMailer implements MailerInterface
 		
 	}
 	
+	/**
+	 * genera todos los objetos Archivo, con nombre, hash y path.
+	 * Inserta los enlaces de descarga en el cuerpo del correo
+	 * @return array adjuntos arreglo con entidades Archivo
+	 */
+	public function procesarAdjuntos($correo) {
+		$archivos = $correo->getArchivos();
+		
+		if (count($archivos) < 1 ) 
+			return $correo;
+
+		$enlaces = " \r\n \r\n <div style='background-color:#EFEFEF;'> <h4>Archivos adjuntos</h4> <ul>";		
+		$adjuntos = array();
+		
+		foreach ( $archivos as $archivo) {
+       			if ($archivo_entity = $this->generarArchivo($archivo['nombre'])) { 
+		    		$link = $this->router->generate('archivo_download', array('hash' => $archivo_entity->getHash()), true);		
+		    		$enlaces .= "<li style='padding: 5px 0px'><a href='{$link}'>{$archivo_entity->getNombre()}</a></li>";
+		    		$adjuntos[] = $archivo_entity;
+	       		}
+		}
+		$enlaces .= "</ul></div>";
+		$correo->setCuerpo($correo->getCuerpo().$enlaces);
+		$this->doctrine->getEntityManager()->flush();
+		return $adjuntos;
+	}
+	
+	
+	/**
+	 * Sube un archivo al directorio de uploads, y construye un objeto Archivo con toda la información desde el archivo subido
+	 * 
+	 * $uploaded_file archivo subido desde el formulario
+	 * @return $archivo_entity : entidad archivo
+	 */
+	public function generarArchivo($uploaded_file) {
+				
+				if (empty($uploaded_file)) 
+					return null; 
+				$archivo = new Archivo();
+				$archivo->setNombre($uploaded_file->getClientOriginalName());
+				$archivo->setPath($this->jym->getUploadDir());
+				$archivo->setHash( md5($uploaded_file->getClientOriginalName().date('dmYsu')));
+	    		$uploaded_file->move($this->jym->getUploadDir(),$archivo->getHash());
+	    		$this->doctrine->getEntityManager()->persist($archivo);
+	    		return $archivo;
+	}
+
     private function sendMessage($to, $subject, $twig_text, $twig_html, $context)
     {
     	try{
@@ -269,6 +320,7 @@ class TwigSwiftMailer implements MailerInterface
 		$correo->setCuerpo($message->getBody());
 		$em=$this->doctrine->getEntityManager();
 		$em->persist($correo);
+		
 		if  (!$this->isDryRun($context) && (empty($context[Plantilla::_USUARIO]) || ($context[Plantilla::_USUARIO]->getId() != 0)))
 			$em->flush();
 		return $correo;
