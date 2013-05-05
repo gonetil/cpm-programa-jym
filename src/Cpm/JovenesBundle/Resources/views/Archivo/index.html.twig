@@ -1,0 +1,36 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Archivos almacenados{% endblock %}
+ 
+{% block content %}
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fecha de subida</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('archivo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{% if entity.fechaCreado %}{{ entity.fechaCreado|date('d-m-Y H:i:s') }}{% endif%}</td>
+            <td>{{ entity.nombre }}</td>
+            <td> 
+                <ul>
+                	<li> <a href="{{ path('archivo_download', {'hash' : entity.hash } ) }}">Descargar</a></li>
+                    <li>
+                        <a href="{{ path('archivo_show', { 'id': entity.id }) }}">Ver</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    {% include "CpmJovenesBundle:Default:pagination.html.twig" %}
+    
+    </tbody>
+</table>
+
+{% endblock %}
