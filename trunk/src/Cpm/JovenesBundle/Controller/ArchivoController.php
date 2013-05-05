@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/archivo")
  */
-class ArchivoController extends Controller
+class ArchivoController extends BaseController
 {
     /**
      * Lists all Archivo entities.
@@ -25,11 +25,9 @@ class ArchivoController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Archivo')->findAll();
-
-        return array('entities' => $entities);
+    	$em = $this->getDoctrine()->getEntityManager();
+        $entities = $em->getRepository('CpmJovenesBundle:Archivo')->findAllQuery();
+        return $this->paginate($entities);    
     }
 
     /**
@@ -87,6 +85,9 @@ class ArchivoController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
+        		
+        	
+        	
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
@@ -201,30 +202,5 @@ class ArchivoController extends Controller
         ;
     }
     
-    /**
-     * Downloads an Archivo entity
-     *
-     * @Route("/{hash}/download", name="archivo_download")
-     * @Method("get")
-     */
-    public function descargarAdjuntoAction($hash) {
-        $em = $this->getDoctrine()->getEntityManager();
 
-        $archivo = $em->getRepository('CpmJovenesBundle:Archivo')->findBy(array('hash'=>$hash));
-
-        if (!$archivo) {
-            throw $this->createNotFoundException('Archivo no encontrado.');
-        }
-   		
-    	$archivo = $archivo[0];
-    	$file = $archivo->getPath().$archivo->getHash();
-
-		$response = new Response();
-		$response->headers->set('Content-Type', 'application/msword');
-		$response->headers->set("Content-Disposition", 'Attachment;filename="'.$archivo->getNombre().'"');
-		$response->send();
-		readfile($file);
-		return $response;        
-    	
-    }
 }

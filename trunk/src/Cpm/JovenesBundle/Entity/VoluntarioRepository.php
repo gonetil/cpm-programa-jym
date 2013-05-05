@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class VoluntarioRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+			->add('select','v')
+			->add('from','CpmJovenesBundle:Voluntario v');
+		 
+    return  $qb->getQuery();
+  
+	}
 }

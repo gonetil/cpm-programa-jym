@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class ArchivoRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+			->add('select','a')
+			->add('from','CpmJovenesBundle:Archivo a')
+			->add('orderBy','a.fecha_creado DESC');
+		 
+    	return  $qb->getQuery();
+  
+	}
 }
