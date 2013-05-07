@@ -26,13 +26,19 @@
 			$('#cpm_jovenesbundle_correotype_email').val(i);
 		});
 		
-		
-		$('#cpm_jovenesbundle_correotype_destinatario_text').change(function() {
+		    
+		$('#cpm_jovenesbundle_correotype_destinatario_text').blur(function() {
+			console.log(this.value);
 			var label = this.value;
 			var i = label.substring(label.lastIndexOf("<") + 1, label.lastIndexOf(">"));
 			this.value = label.substring(0,label.lastIndexOf("<"));
+			
 			$('#cpm_jovenesbundle_correotype_email').val(i);
-		
+		}).keypress(function(event){
+				 var code = (event.keyCode ? event.keyCode : event.which);
+				 if(code == 13) { //Enter
+				   $(this).blur();
+				 }
 		});
 	});
 </script>
