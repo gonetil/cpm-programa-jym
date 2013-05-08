@@ -31,6 +31,9 @@ class EstadoProyectoType extends AbstractType
 												'expanded' => false,
 												'label' => 'Valoración',
 												))
+			->add('enviar_email','checkbox',array( 'required' => false,
+												   'label' => 'Enviar correo',
+												   'property_path' => false ))									
 
         ;
     }

@@ -156,6 +156,7 @@
 
 
 {% macro invitaciones_proyecto(proyecto) %}
+{% import "CpmJovenesBundle:Common:macros.html.twig" as common %}
 	{% if proyecto.invitaciones | length > 0 %}
 		<div class="invitaciones">
 			<div class="minimizer" onclick="$('.invitaciones .listado-items').toggle();"> - </div>
