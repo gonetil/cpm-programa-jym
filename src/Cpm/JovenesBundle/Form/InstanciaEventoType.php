@@ -51,6 +51,7 @@ class InstanciaEventoType extends AbstractType {
 		->add('voluntarios',null,array('label'=>'Voluntarios',
 											'multiple'=>true,
 											'expanded' => false,
+											'required'=>false,
 											'query_builder' => function($er) {		
 																return $er->createQueryBuilder('v')->orderBy('v.apellido','ASC');
 													          }))
