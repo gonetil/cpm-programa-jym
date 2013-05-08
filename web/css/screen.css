@@ -2998,7 +2998,7 @@ h4.info_header:hover { background-color: #FFF; }
 #dashboard .stats-block tr td:nth-child(odd) { background-color: #DEDEDE; }
 #dashboard .stats-block tr { border-bottom: 1px solid #898989; text-align:center; }
 
-#dashboard .stats-block ul li:HOVER, #dashboard .stats-block tr:hover td:FIRST-CHILD {
+#dashboard .stats-block ul li:HOVER {
 	background-color: #444444;
 	color: #FFF;
 }
