@@ -64,11 +64,14 @@ class DashboardController extends BaseController
      */
     private function getUsuariosStats($ciclo) {
     	$em = $this->getDoctrine()->getEntityManager();
+    	$em->getConfiguration()->addCustomDatetimeFunction('DATEDIFF', 'DoctrineExtensions\Query\Mysql\DateDiff');
+    	
     	$coordinadores = count( $em->createQuery('SELECT DISTINCT u.id FROM CpmJovenesBundle:Proyecto p JOIN p.coordinador u JOIN p.ciclo c Where c = :ciclo')->setParameter('ciclo',$ciclo)->getResult());
     	$colaboradores = $em->createQuery('SELECT count(u.id) FROM CpmJovenesBundle:Proyecto p JOIN p.colaboradores u JOIN p.ciclo c Where c = :ciclo')->setParameter('ciclo',$ciclo)->getSingleScalarResult();
     	$alumnos = $em->createQuery('SELECT SUM(p.nroAlumnos) FROM CpmJovenesBundle:Proyecto p JOIN p.ciclo c Where c = :ciclo')->setParameter('ciclo',$ciclo)->getSingleScalarResult();
-    	 	
-    	return array( 'coordinadores' => $coordinadores, 'colaboradores' => $colaboradores, 'alumnos'=>$alumnos );
+    	$usuarios = $em->createQuery('SELECT count(u.id) FROM CpmJovenesBundle:Usuario u where u.enabled = 1')->getSingleScalarResult();
+    	$usuarios_activos = $em->createQuery('SELECT count(u.id) FROM CpmJovenesBundle:Usuario u where u.enabled = 1 and DATEDIFF(:now,u.lastLogin) <= 30')->setParameter('now',new \Datetime())->getSingleScalarResult(); 	
+    	return array( 'coordinadores' => $coordinadores, 'colaboradores' => $colaboradores, 'alumnos'=>$alumnos, 'usuarios'=>$usuarios, 'usuarios_activos' => $usuarios_activos );
     }
     
     /**
@@ -96,7 +99,7 @@ class DashboardController extends BaseController
     
     private function getUltimosCorreos() {
     	$qb=$this->getRepository('CpmJovenesBundle:Correo')->createQueryBuilder('co');
-		$qb->orderBy('co.fecha','DESC')->setMaxResults(10);
+		$qb->orderBy('co.fecha','DESC')->setMaxResults(5);
 		return $qb->getQuery()->getResult();
     }
     

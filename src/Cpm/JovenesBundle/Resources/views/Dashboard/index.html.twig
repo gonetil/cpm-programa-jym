@@ -21,32 +21,70 @@
 	</div>
 	
 	<div class="left-stats-panel">
-		<div class="stats-block instancias">
-			<a href=" {{ path('instancia') }}"><h3>Próximas instancias de eventos</h3></a>
-			<table>
-				<tr><th>Fecha</th><th>Evento</th><th>Lugar</th><th>Confirmados</th></tr>
-					
-				{% for instancia in instancias['instancias'] %}
-					<tr> 
-						<td><a href="{{ path('instancia_show', { 'id' : instancia.id}) }}">{{ instancia.fechaInicio |date('d-m-Y H:i:s')}}</a></td>
-						<td>{{ instancia.evento }}</td>
-						<td>{{ instancia.lugar }}</td>
-						<td> {% if (instancias['confirmaciones'][instancia.id] is defined) %} {{ instancias['confirmaciones'][instancia.id] }} {% else %} 0 {% endif %}
-								 / {{ instancia.invitaciones | length }}
-						</td>					
-					</tr>
-				{%  endfor %}
-			</table>
-		</div>
-		
+	
 		<div class="stats-block usuarios">
 				<a href=" {{ path('usuario') }}"><h3>Cantidad de participantes en el programa</h3></a>	
 				<ul>
 					<li>Coordinadores <div class="num-result">{{ usuarios['coordinadores'] }}</div></li>
 					<li>Colaboradores <div class="num-result">{{ usuarios['colaboradores'] }}</div></li>
 					<li>Alumnos <div class="num-result">{{ usuarios['alumnos'] }}</div></li>
+					<li>Usuarios habilitados del sistema<div class="num-result">{{ usuarios['usuarios'] }}</div></li>
+					<li>Usuarios activos el último mes <div class="num-result">{{ usuarios['usuarios_activos'] }}</div></li>
 				</ul>
-			</div>
+		</div>
+			
+			
+		<div class="stats-block instancias">
+			<a href=" {{ path('instancia') }}"><h3>Próximas instancias de eventos</h3></a>
+			
+			<div id="instancias_chart"></div>
+			<br/>
+			<table>
+				<tr><th>Fecha</th><th>Evento</th><th>Lugar</th><th>Confirmados</th></tr>
+				<script>
+					var inscritos_data = new Array();
+					var confirmados_data = new Array();
+					var instancias_labels = new Array();
+				</script>	
+				{% for instancia in instancias['instancias'] %}
+					<tr> 
+						<td><a href="{{ path('instancia_show', { 'id' : instancia.id}) }}">{{ instancia.fechaInicio |date('d-m H:i')}}</a></td>
+						<td>{{ instancia.evento }}</td>
+						<td>{{ instancia.lugar }}</td>
+						<td> 
+							{% if (instancias['confirmaciones'][instancia.id] is defined) %} 
+								{% set confirmaciones = instancias['confirmaciones'][instancia.id] %} 
+							 {% else %} 
+							 	{% set confirmaciones = 0 %}
+							 {% endif %}
+								 {{ confirmaciones }}/ {{ instancia.invitaciones | length }}
+						</td>					
+					</tr>
+					<script>
+						inscritos_data.push([{{ instancia.id }},{{ instancia.invitaciones | length }}]);
+						confirmados_data.push([{{ instancia.id }},{{ confirmaciones }}]);
+						instancias_labels.push([ {{  instancia.id }} , '{{ instancia.fechaInicio | date('d/m H:i') }}']);
+					</script>
+				{%  endfor %}
+			</table>
+			<script>
+					var instancias_data = [
+					                       { label: "Inscriptos", data : inscritos_data},
+					                       { label: "Confirmados", data : confirmados_data}
+						   					];
+   				console.log(instancias_data);	
+					$.plot($("#instancias_chart"), 
+							instancias_data, 
+							{ 
+								series: {
+									        lines: { show: true, fill: true },
+									        points: { show: false},
+				  					    },
+				  				xaxis : { ticks: instancias_labels }
+							 });
+			</script>
+		</div>
+		
 		<div class="stats-block correos">
 				<a href="{{ path('correo') }}"><h3>Últimos correos enviados</h3></a>
 					<table>
@@ -104,7 +142,7 @@
 				</div>
 				<ul>
 					{% if total_proyectos > 0 %}
-					<li>Coordinarores: <div class="num-result"> {{ (100 * total_PrimeraVezDocente / total_proyectos) | number_format(2)}}% ({{total_PrimeraVezDocente}})</div></li>  
+					<li>Coordinadores: <div class="num-result"> {{ (100 * total_PrimeraVezDocente / total_proyectos) | number_format(2)}}% ({{total_PrimeraVezDocente}})</div></li>  
 					<li>Alumnos: <div class="num-result"> {{ (100 * total_PrimeraVezAlumnos / total_proyectos) | number_format(2) }}% ({{total_PrimeraVezAlumnos}})</div></li>
 					<li>Escuelas: <div class="num-result"> {{ (100 * total_PrimeraVezEscuela / total_proyectos) | number_format(2)}}% ({{total_PrimeraVezEscuela}})</div></li> 
 					{% endif %}
