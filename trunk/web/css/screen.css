@@ -3046,7 +3046,7 @@ h4.info_header:hover { background-color: #FFF; }
 	display: block;
 	float: left;
 }
-#proyectos_chart,#principiantes_chart { 
+#proyectos_chart,#principiantes_chart, #instancias_chart { 
 	width: 400px;
 	height: 200px;
 }
