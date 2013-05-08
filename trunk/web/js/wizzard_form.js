@@ -1,46 +1,51 @@
    /**
    * esta variable guarda el handler de validacion del formulario. La dejo global para no tener que buscarla siempre 
    */
-   var $form_handler ;
+   var form_handler ;
    function setup_validation() {
  
     var custom_messages = {};
     var custom_rules = {};
  
-     custom_messages['cpm_jovenesbundle_proyectotype[escuela][localidad]'] = {
+/*     custom_messages['cpm_jovenesbundle_proyectotype[escuela][localidad]'] = {  
        required: "Debe seleccionar una localidad (recuerde seleccionar un distrito primero)",
      };
-     
+  */   
+     custom_messages['cpm_jovenesbundle_presentacionproyectotype[escuela][localidad]'] = {  
+       required: "Debe seleccionar una localidad (recuerde seleccionar un distrito primero)",
+     };
+    
      
    	form_handler = $("form[name='wizzard_form']").validate( { messages : custom_messages });
+   	$("form[name='wizzard_form']").removeAttr("novalidate");
+
    }
    
    
   function setup_selects() { 
-  	   	$("#cpm_jovenesbundle_proyectotype_escuela_tipoInstitucion").change(function(event) {
-  	   	
-  	   	$numero_escuela = $("#cpm_jovenesbundle_proyectotype_esds");
-  	   	
- 		if( $(this).val() == "") //selecciono otra institucion
- 		{  
- 			$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr('disabled').addClass('required').attr("required","required"); 
- 			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").attr('disabled','disabled').removeAttr("required").removeClass('required');
- 			
- 		} else {
- 			$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr('disabled','disabled').removeClass('required').removeAttr("required"); 
- 			$("#cpm_jovenesbundle_proyectotype_escuela_tipoEscuela").removeAttr('disabled').addClass('required').attr("required","required");
- 			
- 			
- 		}
- 	});
-  	   	
-  	   	
-  	   	$("#cpm_jovenesbundle_proyectotype_eje").change(function(event) {
-  	   		mostrarDescripcionEje($("#cpm_jovenesbundle_proyectotype_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"));
-  	   	});
-		   			
+  	   	setup_selects_for_form("#cpm_jovenesbundle_proyectotype");
+  	    setup_selects_for_form("#cpm_jovenesbundle_presentacionproyectotype"); 
   }
-   
+
+  function setup_selects_for_form(formName) {
+	  $(formName+"_escuela_tipoInstitucion").change(function(event) {
+	   		$numero_escuela = $(formName+"esds");
+	   	
+	 		if( $(this).val() == "") //selecciono otra institucion
+	 		{  
+	 			$(formName+"_escuela_otroTipoInstitucion").removeAttr('disabled').addClass('required').attr("required","required"); 
+	 			$(formName+"_escuela_tipoEscuela").attr('disabled','disabled').removeAttr("required").removeClass('required');
+	 			
+	 		} else {
+	 			$(formName+"_escuela_otroTipoInstitucion").attr('disabled','disabled').removeClass('required').removeAttr("required"); 
+	 			$(formName+"_escuela_tipoEscuela").removeAttr('disabled').addClass('required').attr("required","required");
+	 		}
+	   	}).change();
+	   	
+	   	$(formName+"_eje").change(function(event) {
+	   		mostrarDescripcionEje($(formName+"_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"));
+	   	});
+  }
    
    
    function move_stage(from,to,must_validate) {
@@ -101,6 +106,7 @@
    $(document).ready(function() {
    					
 	   				$("#cpm_jovenesbundle_proyectotype_eje").change();
+	   				$("#cpm_jovenesbundle_presentacionproyectotype_eje").change();
 					setup_validation();
 					setup_selects();
 					enter_to_tab();

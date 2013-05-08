@@ -592,11 +592,3 @@ function filtrarEventosPorCiclo(url, ciclo,$target_eventos,$target_instancias) {
 			  }
 		); //getJSON
 }
-
-
-
-function validarFormUnion() { 
-	alert('falta implementar la validación'); 
-	return false;
-	
-}

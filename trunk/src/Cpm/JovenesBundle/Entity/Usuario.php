@@ -13,6 +13,7 @@ use FOS\UserBundle\Entity\User as BaseUser;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\UsuarioRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
 {
@@ -129,6 +130,12 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      */    
     private $aniosParticipo;
     
+    /**
+     * @var datetime $fecha_alta
+     *
+     * @ORM\Column(name="fecha_alta", type="datetime", nullable="true")
+     */
+    private $fecha_alta;
     
     public function __construct()
     {
@@ -415,5 +422,33 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     	$this->aniosParticipo = $anios;
     }
     
-    
+        
+     /**
+     * Set fecha_alta
+     *
+     * @param datetime $fecha_alta
+     */
+    public function setFechaAlta(\datetime $fecha)
+    {
+        $this->fecha_alta = $fecha;
+    }
+
+    /**
+     * Get fecha_alta
+     *
+     * @return datetime 
+     */
+    public function getFechaAlta()
+    {
+        return $this->fecha_alta;
+    }
+   	
+   	/**
+     *
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+            $this->setFechaAlta(new \DateTime(date('Y-m-d H:i:s')));
+    }
 }

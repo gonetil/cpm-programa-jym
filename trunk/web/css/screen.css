@@ -2955,3 +2955,98 @@ h4.info_header:hover { background-color: #FFF; }
 }
 .smaller { border : 1px solid #CECECE;}
 .smaller label, .smaller input { width: auto !important; min-width: auto !important; padding: 1px 15px; margin: 2px 0px; font-size: 90%;  }
+
+#cpm_jovenesbundle_instanciaeventotype_voluntarios { min-height: 250px; }
+
+
+
+
+
+#dashboard { 
+		width: 100%; 
+		background-color: #FEFEFE;
+		min-height: 600px;
+		}
+#dashboard .stats-block {
+	min-width: 50px;
+	width: auto;
+	display: block;
+	float: left;
+	background: #FFF;
+	border: 1px solid #DEDEDE;
+	border-radius: 5px; 
+	padding: 10px 20px;
+	margin: 10px;
+	
+}
+#dashboard a { color: inherit;}
+#dashboard .stats-block h1 { text-align: center; line-height: 16px; }
+
+#dashboard .stats-block ul { border: 1px solid #efefef; padding: 5px; }
+#dashboard .stats-block ul li { 
+	line-height: 230%;
+	padding: 0px 10px;
+}
+
+#dashboard .stats-block ul li .num-result {
+	float: right;
+	font-weight: bold;
+	font-size: 120%;
+	padding: 0px 0px 0px 25px;
+}
+#dashboard .stats-block ul li:nth-child(odd) , 
+#dashboard .stats-block tr td:nth-child(odd) { background-color: #DEDEDE; }
+#dashboard .stats-block tr { border-bottom: 1px solid #898989; text-align:center; }
+
+#dashboard .stats-block ul li:HOVER, #dashboard .stats-block tr:hover td:FIRST-CHILD {
+	background-color: #444444;
+	color: #FFF;
+}
+
+#dashboard .stats-block.etapas { 
+					clear: both;
+					width: 95%;
+				}
+				
+#dashboard .etapas .etapas-banner {
+	margin-left: 150px ;
+ 	width: 100%;
+ }				
+ 
+#dashboard .etapa-sig , #dashboard .etapa-ant, #dashboard .etapa-act {
+	border-color: #888888;
+	border-style: solid;
+	border-width: 1px;
+	float: left; 	
+	padding: 20px 5px;
+	text-align: center;
+}
+
+#dashboard .etapa-sig, #dashboard .etapa-ant {
+	height: 20px;
+	margin-top: 10px;
+	font-size: 11pt;
+	background-color: #EDEDED;
+
+}
+
+#dashboard .etapa-sig { border-left: none; border-radius: 0px 5px 5px 0px; }
+#dashboard .etapa-ant { border-right: none; border-radius: 5px 0px 0px 5px;  }
+
+#dashboard .etapa-act {
+	height: 70px;
+	padding: 0px 10px 10px 10px;
+	font-size: 14pt;
+	border-radius: 5px; 
+	
+	
+}
+#dashboard .right-stats-panel , #dashboard .left-stats-panel {
+	width: 580px;
+	display: block;
+	float: left;
+}
+#proyectos_chart,#principiantes_chart { 
+	width: 400px;
+	height: 200px;
+}

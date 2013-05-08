@@ -390,5 +390,31 @@ abstract class BaseController extends Controller
     	
     	
     }
-    
+    protected function getSystemStats() {
+    	$stats = array(); 
+    	$repo = $this->getRepository('CpmJovenesBundle:Proyecto');
+    	
+    	$ciclo = $this->getJYM()->getCicloActivo();
+    	$qb = $repo->createQueryBuilder('p');
+    	$stats['total_proyectos'] = $qb->select($qb->expr()->count('p'))
+    									->where('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    									->getQuery()->getSingleScalarResult();
+ 																			
+    	$stats['total_PrimeraVezDocente'] = $qb->select($qb->expr()->count('p'))->innerJoin('p.coordinador','coordinador')
+    																			->where('( coordinador.aniosParticipo like \'{}\' or coordinador.aniosParticipo is NULL )')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getSingleScalarResult();
+ 																			
+    	$stats['total_PrimeraVezAlumnos'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezAlumnos = 1')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getSingleScalarResult();
+    	$stats['total_PrimeraVezEscuela'] = $qb->select($qb->expr()->count('p'))->where('p.esPrimeraVezEscuela = 1')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getSingleScalarResult();
+    	 
+    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')
+    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
+    																			->getQuery()->getResult());    	
+    	return $stats;
+    }   
 }
