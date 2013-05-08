@@ -77,8 +77,9 @@
 							instancias_data, 
 							{ 
 								series: {
-									        lines: { show: true, fill: true },
+									        lines: { show: false, fill: false },
 									        points: { show: false},
+									        bars: {show: true, barWidth: 0.3, align: 'center',},
 				  					    },
 				  				xaxis : { ticks: instancias_labels }
 							 });
@@ -105,7 +106,7 @@
 		<div class="stats-block proyectos">
 			{% set total_proyectos = primera_vez ['total_proyectos'] %}
 			<div class="estados stats-block">
-				<h3>Proyectos</h3>
+				<a href=" {{ path('proyecto') }}"><h3>Proyectos</h3></a>
 				<div id="proyectos_chart">
 				</div>
 				
