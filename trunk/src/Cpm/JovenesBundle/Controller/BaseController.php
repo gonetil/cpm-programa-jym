@@ -412,9 +412,8 @@ abstract class BaseController extends Controller
     																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
     																			->getQuery()->getSingleScalarResult();
     	 
-    	$stats['total_Coordinadores'] = count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')
-    																			->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)
-    																			->getQuery()->getResult());    	
+    	$stats['total_Coordinadores'] = $coordinadores = count( $this->getEntityManager()->createQuery('SELECT DISTINCT u.id FROM CpmJovenesBundle:Proyecto p JOIN p.coordinador u JOIN p.ciclo c Where c = :ciclo')->setParameter('ciclo',$ciclo)->getResult());
+    									//count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)->getQuery()->getResult());    	
     	return $stats;
     }   
 }
