@@ -328,12 +328,13 @@ class ProyectoController extends BaseController
         
         if ($estadoForm->isValid()) {
         	$file = $estadoForm['archivo']->getData();
-        	
+        	$enviar_email = $estadoForm['enviar_email']->getData();
+        		
 	        if ($file) {
 				$new_filename = $this->subir_archivo($file,$proyecto);
 				$nuevoEstado->setArchivo($new_filename);
 	        }
-	        $result = $this->getEstadosManager()->cambiarEstadoAProyecto($proyecto,$nuevoEstado);
+	        $result = $this->getEstadosManager()->cambiarEstadoAProyecto($proyecto,$nuevoEstado, $enviar_email);
 	        
 	        //TODO: enviar email si el estado es aprobado, rehacer, desaprobado o aprobado C        
 	        if ($result == "success") { 

@@ -236,25 +236,36 @@ mostrar_campo_archivo = function() {
 			$("#valoracion").show();
 		}
 		$("#archivo_presentacion .error").remove();
-	});
+		
+		
+		var sin_email = ['1','22','23']; //estados por los que no se debe mandar email automáticamente		
+		if ( sin_email.indexOf(val) != -1) { 
+			$("#cpm_jovenesbundle_estadoproyectotype_enviar_email").attr('checked', false);
+
+		} else
+			$("#cpm_jovenesbundle_estadoproyectotype_enviar_email").attr('checked', true);
+		
+		return false;
+	}).change();
 }
 
 validar_form_cambio_estado = function() {
-	archivo = $("#cpm_jovenesbundle_estadoproyectotype_archivo");
+	var archivo = $("#cpm_jovenesbundle_estadoproyectotype_archivo");
 	if  ( (archivo.is(":visible")) && (archivo.val() == "") ) {
 		parent = $("#archivo_presentacion"); 
 		parent.children(".error").remove();
 		parent.append("<p class='error'>Debe seleccionar un archivo para subir</p>");
 		return false;
 	}
+	
+	
 	return true;
-		
 }
 
 cambiar_estado = function() { 
 	$("#estado_proyecto_form").dialog({
 		 title: "Nuevo estado del proyecto",
-		 resizable: false, width:650, height:350, modal: true,
+		 resizable: false, width:650, height:400, modal: true,
 		 buttons : { 
 			 		 "Aceptar" : function() { $("#nuevo_estado_proyecto_form").submit(); } ,
 			 		 "Cancelar" : function() { $(this).dialog('close'); }

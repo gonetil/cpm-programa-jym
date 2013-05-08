@@ -76,7 +76,7 @@ class EstadosManager
 		return "success";	
     }
     
-    public function cambiarEstadoAProyecto($proyecto,$estado_nuevo) {
+    public function cambiarEstadoAProyecto($proyecto,$estado_nuevo, $enviar_email = false) {
     	if (($resultado = $this->validarEstado($estado_nuevo)) == "success") {
     		
     		$estado_anterior = $proyecto->getEstadoActual();
@@ -84,14 +84,15 @@ class EstadosManager
     		$proyecto->setEstadoActual($estado_nuevo);
     		$estado_nuevo->setProyecto($proyecto);
     		
+    		
     		if (
-    			($estado_anterior) // existe el estado anterior?
-    			&&
-    			($estado_anterior->getEstado() != ESTADO_ANULADO) //si el proyecto está siendo desanulado, no se envía ningún correo 
-    			&& 
-    			($correo = $this->informarCambioDeEstado($proyecto))
+    			($enviar_email) 
+    			&& ($estado_anterior) // existe el estado anterior?
+    			&& ($estado_anterior->getEstado() != ESTADO_ANULADO) //si el proyecto está siendo desanulado, no se envía ningún correo 
+    			&& ($correo = $this->informarCambioDeEstado($proyecto))
     		   ) 
-    		{ 
+    		{
+    			 
     			$estado_nuevo->setCorreoEnviado($correo);    			
     		}
 
