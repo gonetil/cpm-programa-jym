@@ -49,15 +49,15 @@
 				{% for instancia in instancias['instancias'] %}
 					<tr> 
 						<td><a href="{{ path('instancia_show', { 'id' : instancia.id}) }}">{{ instancia.fechaInicio |date('d-m H:i')}}</a></td>
-						<td>{{ instancia.evento }}</td>
-						<td>{{ instancia.lugar }}</td>
+						<td><a href="{{ path('instancia_show', { 'id' : instancia.id}) }}">{{ instancia.evento }}</a></td>
+						<td><a href="{{ path('instancia_show', { 'id' : instancia.id}) }}">{{ instancia.lugar }}</a></td>
 						<td> 
 							{% if (instancias['confirmaciones'][instancia.id] is defined) %} 
 								{% set confirmaciones = instancias['confirmaciones'][instancia.id] %} 
 							 {% else %} 
 							 	{% set confirmaciones = 0 %}
 							 {% endif %}
-								 {{ confirmaciones }}/ {{ instancia.invitaciones | length }}
+							<a href="{{ path('instancia_show', { 'id' : instancia.id}) }}">{{ confirmaciones }}/ {{ instancia.invitaciones | length }}</a>
 						</td>					
 					</tr>
 					<script>
@@ -72,7 +72,7 @@
 					                       { label: "Inscriptos", data : inscritos_data},
 					                       { label: "Confirmados", data : confirmados_data}
 						   					];
-   				console.log(instancias_labels);	
+   				
 					$.plot($("#instancias_chart"), 
 							instancias_data, 
 							{ 
