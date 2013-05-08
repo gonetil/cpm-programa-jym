@@ -456,7 +456,8 @@ class UsuarioController extends BaseController
 		
 		try {
 			$this->unirUsuarios($usuarioFinal,$usuarios);	
-			$this->setSuccessMessage("Usuario $usuarioFinal unido satisfactoriamente con {join(';',$strings)}");
+			$str = join(';',$strings);
+			$this->setSuccessMessage("Usuario $usuarioFinal unido satisfactoriamente con $str");
 		} catch(\PDOException $e){
 			$this->setErrorMessage("Error al unir el usuario $e");
 		}
@@ -475,32 +476,27 @@ class UsuarioController extends BaseController
 	 private function unirUsuarios($usuarioFinal, $usuarios) {
 	 
      	$em = $this->getEntityManager();
+    	$cnn = $this->getDoctrine()->getConnection();
+    	$query_coordinadores = $em->createQuery('UPDATE CpmJovenesBundle:Proyecto p ' .
+    											'SET p.coordinador = :nuevo_coordinador ' .
+    											'WHERE p.coordinador = :viejo_coordinador');
+    	
+    	$query_correos = $em->createQuery( 'UPDATE CpmJovenesBundle:Correo c ' .
+    										'SET c.destinatario = :nuevo_usuario ' .
+    										'WHERE c.destinatario = :viejo_usuario ');
     	foreach ( $usuarios as $usuario) {
-	    	foreach ( $usuario->getProyectosCoordinados() as $proyecto) {
-	       		$usuario->getProyectosCoordinados()->removeElement($proyecto);
-	       		$usuarioFinal->getProyectosCoordinados()->add($proyecto);
-	       		$proyecto->setCoordinador($usuarioFinal);
-	       		$em->persist($proyecto);
-			}
-			$em->flush();
-			echo 1;	
-			foreach ( $usuario->getProyectosColaborados() as $proyecto) {
-	       		$usuario->getProyectosColaborados()->removeElement($proyecto);
-	       		$usuarioFinal->addProyecto($proyecto);
-	       		$proyecto->addUsuario($usuarioFinal);
-	       		$em->persist($proyecto);
-			}
-			$em->flush();
-			echo 2;
-			foreach ( $usuario->getCorreosRecibidos() as $correo ) {
-	       			$usuario->getCorreosRecibidos()->removeElement($correo);
-	       			$usuarioFinal->addCorreo($correo);
-	       			$correo->setDestinatario($usuarioFinal);
-	       			$em->persist($correo);
-			}
-			$em->flush();
-			echo 3;
+    		if ($usuario->getId() == $usuarioFinal->getId())
+    			continue;
+    		$cnn->prepare(" UPDATE Proyecto SET coordinador_id = {$usuarioFinal->getId()} WHERE coordinador_id = {$usuario->getId()}")->execute();	
+    		$em->flush();
+    		$cnn->prepare(" UPDATE ColaboradorProyecto SET usuario_id = {$usuarioFinal->getId()} WHERE usuario_id = {$usuario->getId()}")->execute();			
+	    	$em->flush();
+	    	$query_correos->setParameter('nuevo_usuario',$usuarioFinal)->setParameter('viejo_usuario',$usuario)->execute();
+	    	$em->flush();
+
 			$this->getUserManager()->deleteUser($usuario);
+			$em->flush();
+			
     	}
     	$this->getUserManager()->updateUser($usuarioFinal);	
     	
