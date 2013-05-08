@@ -27,7 +27,7 @@ class DefaultController extends BaseController
     	if (!$usuario) 
     		return $this->forward("CpmJovenesBundle:Default:_login");	
     	elseif ($usuario->isAdmin()) 
-    		return $this->redirect($this->generateUrl('proyecto')); 
+    		return $this->redirect($this->generateUrl('dashboard')); 
     	else
     		return $this->forward("CpmJovenesBundle:Perfil:index");
     }
