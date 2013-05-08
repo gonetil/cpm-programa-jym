@@ -29,7 +29,8 @@ class DashboardController extends BaseController
     				'primera_vez' => $this->getSystemStats(), //primera vez coordinador/colaborador/alumnos
     				'usuarios' => $this->getUsuariosStats($ciclo),
     				'estados' => $this->getProyectoStats($ciclo),
-    				'instancias' => $this->getInstanciasStats($ciclo)
+    				'instancias' => $this->getInstanciasStats($ciclo),
+    				'correos' => $this->getUltimosCorreos()
     				);
     				
 	  //  echo "<pre>";var_dump($data); die;
@@ -91,6 +92,12 @@ class DashboardController extends BaseController
 		}
 	
 		return array( 'instancias' => $qb->getQuery()->getResult(), 'confirmaciones' => $confirmaciones);
+    }
+    
+    private function getUltimosCorreos() {
+    	$qb=$this->getRepository('CpmJovenesBundle:Correo')->createQueryBuilder('co');
+		$qb->orderBy('co.fecha','DESC')->setMaxResults(10);
+		return $qb->getQuery()->getResult();
     }
     
 }

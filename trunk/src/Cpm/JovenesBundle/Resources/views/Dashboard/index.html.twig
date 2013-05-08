@@ -46,9 +46,21 @@
 					<li>Colaboradores <div class="num-result">{{ usuarios['colaboradores'] }}</div></li>
 					<li>Alumnos <div class="num-result">{{ usuarios['alumnos'] }}</div></li>
 				</ul>
-		
 			</div>
-	
+		<div class="stats-block correos">
+				<a href="{{ path('correo') }}"><h3>Últimos correos enviados</h3></a>
+					<table>
+						<tr><th>Fecha</th><th>Asunto</th><th>Usuario</th></tr>
+						{% for correo in correos %}
+							<tr>
+								<td> {{ correo.fecha |date('d-m-Y H:i:s')  }} </td>
+								<td> <a href="{{path('correo_show', { 'id' : correo.id }) }}">{{ correo.asunto }}</a></td>
+								<td> {{ correo.destinatario}}</td>
+							</tr>	
+						{% endfor %}
+					</table>	
+		
+		</div>	
 	
 	</div>	
 	<div class="right-stats-panel">
