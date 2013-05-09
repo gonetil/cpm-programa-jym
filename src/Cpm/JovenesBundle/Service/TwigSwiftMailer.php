@@ -192,7 +192,7 @@ class TwigSwiftMailer implements MailerInterface
 		
 		
 		//se asume que la plantilla tiene texto twig nomas, nada de HTML
-		list($message,$sent) = $this->sendMessage($email, $correo->getAsunto(),$correo->getCuerpo(), null, $context );
+		list($message,$sent) = $this->sendMessage($email, $correo->getAsunto(),$correo->getCuerpo(), $correo->getCuerpo(), $context );
 		if ($sent)
 	        return $this->guardarCorreo($message, $context);
 	    else
