@@ -484,21 +484,32 @@ class UsuarioController extends BaseController
     	$query_correos = $em->createQuery( 'UPDATE CpmJovenesBundle:Correo c ' .
     										'SET c.destinatario = :nuevo_usuario ' .
     										'WHERE c.destinatario = :viejo_usuario ');
-    	foreach ( $usuarios as $usuario) {
-    		if ($usuario->getId() == $usuarioFinal->getId())
-    			continue;
-    		$cnn->prepare(" UPDATE Proyecto SET coordinador_id = {$usuarioFinal->getId()} WHERE coordinador_id = {$usuario->getId()}")->execute();	
-    		$em->flush();
-    		$cnn->prepare(" UPDATE ColaboradorProyecto SET usuario_id = {$usuarioFinal->getId()} WHERE usuario_id = {$usuario->getId()}")->execute();			
-	    	$em->flush();
-	    	$query_correos->setParameter('nuevo_usuario',$usuarioFinal)->setParameter('viejo_usuario',$usuario)->execute();
-	    	$em->flush();
-
-			$this->getUserManager()->deleteUser($usuario);
+		$cnn->beginTransaction();
+		try { 
+	    	foreach ( $usuarios as $usuario) {
+	    		if ($usuario->getId() == $usuarioFinal->getId())
+	    			continue;
+	    		
+	    		$cnn->prepare(" UPDATE Proyecto SET coordinador_id = {$usuarioFinal->getId()} WHERE coordinador_id = {$usuario->getId()}")->execute();	
+	    		//$em->flush();
+	    		$cnn->prepare(" UPDATE ColaboradorProyecto SET usuario_id = {$usuarioFinal->getId()} WHERE usuario_id = {$usuario->getId()}")->execute();			
+		    	//$em->flush();
+		    	$query_correos->setParameter('nuevo_usuario',$usuarioFinal)->setParameter('viejo_usuario',$usuario)->execute();
+		    	//$em->flush();
+	
+				$this->getUserManager()->deleteUser($usuario);
+				//$em->flush();
+				
+	    	}
+	    	$this->getUserManager()->updateUser($usuarioFinal);	
+			$cnn->commit();
 			$em->flush();
-			
-    	}
-    	$this->getUserManager()->updateUser($usuarioFinal);	
+		} catch (\Exception $e) {
+			$cnn->rollback();
+			$em->close();
+			throw $e;
+		}
+    	
     	
 	 	
 	 }
