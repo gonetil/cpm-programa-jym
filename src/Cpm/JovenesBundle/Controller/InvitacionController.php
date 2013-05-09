@@ -267,7 +267,7 @@ class InvitacionController extends BaseController
     
     
     	/**
-	 * @Route("/search/{search}" , name="usuario_online_search")
+	 * @Route("/search/{search}" , name="usuario_invitacion_online_search")
 	 * @param $search
 	 */
     public function searchAction($search)
