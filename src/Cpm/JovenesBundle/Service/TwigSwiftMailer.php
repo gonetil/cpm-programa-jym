@@ -76,6 +76,8 @@ class TwigSwiftMailer implements MailerInterface
 		$cc["$email"] = "$nombre";
 		
 		$context['cc'] = $cc;
+		if ($proyecto->getEstadoActual()->getEstado() == ESTADO_REHACER)
+			$context['observaciones'] = $proyecto->getEstadoActual()->getObservaciones();
 		return $this->enviarCorreo($correo,$context);
 	}
 	
