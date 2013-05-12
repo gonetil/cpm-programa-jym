@@ -49,10 +49,14 @@ class DashboardController extends BaseController
     	$estados_array = EstadosManager::getEstados();
     	
     	foreach ( $proyectos_estados as $index=>$pe ) {
-       		if ($pe['estado'] != NULL)
-	       		$proyectos_estados[$index]['estado'] = $estados_array[$pe['estado']];
-	       	else
-	       		$proyectos_estados[$index]['estado'] = 'Iniciados';
+       		if ($pe['estado'] != NULL) { 
+	       		$proyectos_estados[$index]['estado_text'] = $estados_array[$pe['estado']];
+	       		//$proyectos_estados[$index]['estado_id'] = 
+       		}
+	       	else { 
+	       		$proyectos_estados[$index]['estado_text'] = 'Iniciados';
+	       		$proyectos_estados[$index]['estado'] = -1;
+	       	}
 		}
 		
     	return $proyectos_estados;
