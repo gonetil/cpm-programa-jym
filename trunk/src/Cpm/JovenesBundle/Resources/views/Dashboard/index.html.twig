@@ -113,7 +113,7 @@
 				<ul>
 					<a href=" {{ path('proyecto') }}"><li>Cantidad total de proyectos<div class="num-result">{{total_proyectos}}</div></li></a>
 				{% for estado in estados %}
-					<li>{{ estado['estado'] }} <div class="num-result"> {{ estado['1'] }}</div></li>
+					<li><a href=" {{ path('proyecto_en_estado', {'id_estado' : estado['estado']}) }}">{{ estado['estado_text'] }} <div class="num-result"> {{ estado['1'] }}</div></a></li>
 				{% endfor %}
 				</ul>
 				<script>
