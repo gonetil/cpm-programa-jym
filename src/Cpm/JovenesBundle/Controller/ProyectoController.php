@@ -75,7 +75,7 @@ class ProyectoController extends BaseController
   /**
      * Finds and displays a Proyecto entity.
      *
-     * @Route("/{id_estado}/show", name="proyecto_en_estado")
+     * @Route("/{id_estado}/show_estado", name="proyecto_en_estado")
      * @Template("CpmJovenesBundle:Proyecto:index.html.twig")
      */
     public function proyectosEnEstadoAction($id_estado) { 
