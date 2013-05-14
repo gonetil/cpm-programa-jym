@@ -119,7 +119,7 @@
 				<script>
 						var data = new Array();
 						{% for estado in estados %}
-							data.push({ label: '{{ estado['estado'] }}', data : {{ estado['1'] }} }); 
+							data.push({ label: '{{ estado['estado_text'] }}', data : {{ estado['1'] }} }); 
 						{% endfor %}
 							
 						$.plot($("#proyectos_chart"), data,{
