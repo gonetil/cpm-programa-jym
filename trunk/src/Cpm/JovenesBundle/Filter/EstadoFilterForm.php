@@ -40,7 +40,14 @@ class EstadoFilterForm extends ModelFilterForm
 										  'empty_value'=>'Todas',
 										  'expanded'=>false,
 										  'required' => false
-										  ))    
+										  ))  
+			 ->add('correoEnviado', 'choice' ,array('label' => 'Con correo enviado' , 
+            											'choices' => array(1=>"Si",2=>"No"),
+														'preferred_choices' => array("Todos"),
+        												'empty_value' => "Todos",
+        												'expanded'=>false,
+        												'required'=>false
+                										))							    
 								              										
                 										;     
     }          	

@@ -12,6 +12,8 @@
 	<td>Area de referencia</td>
 	<td>Eje tematico</td>
 	<td>Produccion final</td>
+	<td>Valoración</td>
+	<td>Observaciones</td>
 	<td>Req. edicion</td>
 	<td>Transporte</td>
 	<td>Color</td>
@@ -46,6 +48,13 @@
 		<td>{{ entity.eje }}</td>
 		<td>{{ entity.temaPrincipal }}</td>
 		<td>{{ entity.produccionFinal }}</td>
+		{% if entity.estadoActual %} 
+		<td>{{ entity.estadoActual }} {{ entity.estadoActual.valoracion }}</td>
+		<td>{{ entity.estadoActual.observaciones }} </td>
+		{% else %}
+		<td> Iniciado </td>
+		<td> - </td>
+		{% endif %}
 		<td>{{ entity.requerimientosDeEdicion }}</td>
 		<td>{{ entity.transporte }}</td>
 		<td>{{ entity.color }}</td>
