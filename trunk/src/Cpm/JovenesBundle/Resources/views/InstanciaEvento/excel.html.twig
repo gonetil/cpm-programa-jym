@@ -12,9 +12,10 @@
 	        <td>Pendientes</td>
 	        <td>Num. invitados</td>
 	        <td>Num. asistentes</td>
-	        {% for i in 1..10 %}
-	        	<td>Voluntario {{ i }}</td>
-	        {% endfor %}
+	        <td>Voluntario </td>
+	        <td>Email</td>
+	        <td>Teléfono</td>
+	        <td>Domicilio</td>
 {% endmacro %}    
 
 {% macro print_entity(entity) %}
@@ -58,7 +59,17 @@
 	        <td>{{ pendientes }}</td>
 	        <td>{{ invitados }}</td>
 	        <td>{{ asistentes }}</td>
+	        <td colspan="4"></td>
+	        
 			{% for v in entity.voluntarios %}
-				<td>{{ v.apellido }}, {{ v.nombre }} ({{ v.email }})<td> 
+			      </tr> 
+			      <tr>
+		        	<td colspan="11"></td>
+			        <td>{{ v.apellido }}, {{ v.nombre }}</td>
+			        <td>{{ v.email }}<td>
+			        <td>{{  v.telefono }}</td>
+			        <td>{{  v.domicilio }}</td>
 			{% endfor %}
+			</tr> 
+			<tr><td colspan="15" bgcolor="#EFEFEF"></td>
 {% endmacro %}
