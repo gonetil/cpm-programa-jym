@@ -169,4 +169,32 @@ class DefaultController extends BaseController
     	return $response;
     }
     
+       
+    /**
+     * Downloads an Archivo entity
+     *
+     * @Route("/download/{hash}", name="archivo_download")
+     * @Method("get")
+     */
+    public function descargarAdjuntoAction($hash) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $archivo = $em->getRepository('CpmJovenesBundle:Archivo')->findBy(array('hash'=>$hash));
+
+        if (!$archivo) {
+            throw $this->createNotFoundException('Archivo no encontrado.');
+        }
+   		
+    	$archivo = $archivo[0];
+    	$file = $archivo->getPath().$archivo->getHash();
+
+		$response = new Response();
+		$response->headers->set('Content-Type', 'application/msword');
+		$response->headers->set("Content-Disposition", 'Attachment;filename="'.$archivo->getNombre().'"');
+		$response->send();
+		readfile($file);
+		return $response;        
+    	
+    }
+    
 }
