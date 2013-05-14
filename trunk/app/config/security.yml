@@ -26,6 +26,7 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/instructivo_usuarios, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/choose, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/download/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
