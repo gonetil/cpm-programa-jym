@@ -75,14 +75,14 @@ class ProyectoController extends BaseController
   /**
      * Finds and displays a Proyecto entity.
      *
-     * @Route("/{id_estado}/show_estado", name="proyecto_en_estado")
+     * @Route("/show_estado", name="proyecto_en_estado")
      * @Template("CpmJovenesBundle:Proyecto:index.html.twig")
      */
-    public function proyectosEnEstadoAction($id_estado) { 
+    public function proyectosEnEstadoAction() { 
     	$stats = $this->getSystemStats();
     	$estadosManager = $this->getEstadosManager(); //agrego esto para que las constantes aparezcan en el twig
     	$filter = new ProyectoFilter();
-    	
+    	$id_estado = $this->getRequest()->get('id_estado');
     	if ($id_estado == -1) {
     		$filter->setEstadoActual(null);
     	}
