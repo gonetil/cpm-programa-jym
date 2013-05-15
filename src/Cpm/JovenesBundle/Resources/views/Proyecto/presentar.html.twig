@@ -42,7 +42,16 @@ deberá verificar algunos datos de la propuesta que envió en la primera instanc
 
 {{ form_row(form.temaPrincipal) }}
 {{ form_row(form.produccionFinal) }}
-{{ form_row(form.deQueSeTrata) }}
+
+<div>
+		{{ form_label(form.deQueSeTrata) }} 
+		{{ form_widget(form.deQueSeTrata) }} 
+				<div class="input_hint">
+					Indicar, en caso que sea pertinente,  nombres propios de la investigación que se planea. 
+					Algunos ejemplos: nombre de desaparecidos o víctimas de gatillo fácil; nombres de empresas o fábricas; 
+					clubes; organizaciones políticas; cooperativas o asociaciones vecinales; centros clandestinos de detención, etc.
+				</div>
+			</div>
 <hr />
 <h4> Datos de la escuela </h4>
 		
