@@ -219,17 +219,20 @@ class ProyectoRepository extends EntityRepository {
 						else 
 							$qb->andWhere("est.estado >= :estado")->setParameter('estado', ESTADO_PRESENTADO);
 					}
-					if ($yev= $estado->getYaEvaluado() && (! $estado->getAprobado())) {
+					if (( $yev= $estado->getYaEvaluado()) && (! $estado->getAprobado())) {
+
 						$estados_evaluados = array(ESTADO_APROBADO,ESTADO_APROBADO_CLINICA,ESTADO_DESAPROBADO,ESTADO_REHACER, ESTADO_FINALIZADO);
-						$estados_sin_evaluar = array(ESTADO_INICIADO); //ESTADO_ANULADO
+						$estados_sin_evaluar = array(ESTADO_INICIADO, ESTADO_PRESENTADO); //ESTADO_ANULADO
 						
-						if ($yev == 1)
+						if ($yev == 1) { 
 							$qb->andWhere("est.estado between :estado_aprobado AND :estado_finalizado")
 											->setParameter('estado_aprobado', ESTADO_APROBADO)
 											->setParameter('estado_finalizado', ESTADO_FINALIZADO);						
-						else
+						}
+						else { 
 							$qb->andWhere("( (est.estado = :estado_presentado) or (est.estado = :estado_iniciado) or (p.estadoActual is null) )")
 								->setParameter('estado_presentado', ESTADO_PRESENTADO)->setParameter('estado_iniciado', ESTADO_INICIADO);
+						}
 					}
 					
 					if ($correoEnviado = $estado->getCorreoEnviado()) {
