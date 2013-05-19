@@ -143,6 +143,17 @@ class PerfilDinamico {
 				return null;
 		};
 		
+				//etapa4
+		$acciones['proyecto_confirmar_prechapa'] = function($jym, $proyecto) {
+			if (!$jym->puedeEditar($proyecto))
+				return null;
+			return array(
+				'path' => 'proyecto_confirmar_prechapa', 
+				'label'=>'Confirmar datos',
+				'validation'=> false
+			); 
+		};
+		
 		return $acciones;
 	}
 	
