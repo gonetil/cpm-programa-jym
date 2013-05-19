@@ -10,6 +10,9 @@ use Cpm\JovenesBundle\Entity\Archivo;
 use Cpm\JovenesBundle\Form\ArchivoType;
 use Symfony\Component\HttpFoundation\Response;
 
+use Cpm\JovenesBundle\Filter\ArchivoFilterForm;
+use Cpm\JovenesBundle\Filter\ArchivoFilter;
+
 /**
  * Archivo controller.
  *
@@ -25,9 +28,7 @@ class ArchivoController extends BaseController
      */
     public function indexAction()
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $entities = $em->getRepository('CpmJovenesBundle:Archivo')->findAllQuery();
-        return $this->paginate($entities);    
+    	return $this->filterAction(new ArchivoFilter(), 'archivo');
     }
 
     /**
@@ -187,6 +188,10 @@ class ArchivoController extends BaseController
                 throw $this->createNotFoundException('Unable to find Archivo entity.');
             }
 
+	    	$file = $entity->getPath().$entity->getHash();
+			if (!unlink($file)) {
+		            throw $this->createNotFoundException('Error al eliminar el archivo '.$file);
+			}
             $em->remove($entity);
             $em->flush();
         }

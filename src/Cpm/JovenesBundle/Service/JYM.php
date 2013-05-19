@@ -326,5 +326,11 @@ class JYM  {
     		$dir .= "/";
     	return $dir;
     }
+    
+    public function getURLSitio($removeBackSlash=true) {
+    	$url = $this->container->getParameter('jym_url_sitio');
+    	return ($removeBackSlash) ? substr($url,0,strlen($url)-1) : $url;
+    	 
+    }
 		
 }

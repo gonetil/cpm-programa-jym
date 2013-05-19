@@ -23,9 +23,7 @@ class ConfirmacionCamposChapa {
 		if ($invitacion) 
 		{ 
 			$this->proyecto = $invitacion->getProyecto();
-			//$this->titulo = ($this->proyecto->getTitulo());
-			//$this->temaPrincipal = ($this->proyecto->getTemaPrincipal());
-			//$this->produccionFinal = ($this->proyecto->getProduccionFinal());
+	
 		} 
 	}
 	public function setTitulo($titulo)
@@ -46,7 +44,6 @@ class ConfirmacionCamposChapa {
 	
 	public function setTemaPrincipal(\Cpm\JovenesBundle\Entity\Tema $temaPrincipal)
     {
-        //$this->temaPrincipal = $temaPrincipal;
         if ($this->proyecto != null)  
  	       $this->proyecto->setTemaPrincipal($temaPrincipal);
  	     
@@ -61,7 +58,6 @@ class ConfirmacionCamposChapa {
 
     public function setProduccionFinal(\Cpm\JovenesBundle\Entity\Produccion $produccionFinal)
     {
-//        $this->produccionFinal = $produccionFinal;
         if ($this->proyecto != null) { 
  	       $this->proyecto->setProduccionFinal($produccionFinal);
  	     } 
