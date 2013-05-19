@@ -610,7 +610,7 @@ class Proyecto
  	}
 
 	public function estaEnEstadoActual($estado){
-		return (!empty($proyecto->estadoActual) && ($proyecto->getEstadoActual()->getEstado() == $estado));
+		return (!empty($this->estadoActual) && ($this->getEstadoActual()->getEstado() == $estado));
 	}
 
     public function hasArchivo() {
