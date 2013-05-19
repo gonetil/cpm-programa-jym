@@ -145,4 +145,8 @@ class Archivo
     {
             $this->setFechaCreado(new \DateTime(date('Y-m-d H:i:s')));
     }
+    
+    public function __toString() {
+    	return $this->getNombre();
+    }
 }

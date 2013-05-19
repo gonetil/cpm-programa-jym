@@ -36,6 +36,7 @@ class PresentacionProyectoType extends AbstractType
     								  ))
 			->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))    								  
        ;
+       
     }
     
     public function getName()

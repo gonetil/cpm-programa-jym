@@ -22,6 +22,10 @@
             <th>Hash</th>
             <td>{{ entity.hash }}</td>
         </tr>
+        <tr>  
+          <th>Código de descarga</th>
+          
+          <td><textarea cols="30" rows="4" style="width:auto; height:auto;">&lt;a href='{{ jym.getUrlSitio() }}{{ path('archivo_download', {'hash' : entity.hash } ) }}'&gt;{{ entity.nombre }}&lt;/a&gt;</textarea> </td>
     </tbody>
 </table>
 
@@ -32,10 +36,13 @@
         </a>
     </li>
     <li>
-        <form action="{{ path('archivo_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('archivo_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('¿Está seguro que desea eliminar el archivo? Esta accion no se puede deshacer');" >
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>
     </li>
+    <li>
+		<a href="{{ path('archivo_download', {'hash' : entity.hash } ) }}">Descargar</a>
+	</li>
 </ul>
 {% endblock %}

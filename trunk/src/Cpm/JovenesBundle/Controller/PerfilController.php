@@ -15,11 +15,12 @@ use Cpm\JovenesBundle\Entity\Usuario;
 use Cpm\JovenesBundle\Entity\Plantilla;
 use Cpm\JovenesBundle\Form\InvitacionUsuarioType;
 use Cpm\JovenesBundle\Form\PresentacionProyectoType;
+use Cpm\JovenesBundle\Form\ConfirmacionCamposChapaType;
+
 use Symfony\Component\HttpFoundation\Response;
 use Cpm\JovenesBundle\Entity\EstadoProyecto;
 
-use Cpm\JovenesBundle\Form\ConfirmacionCamposChapaType;
-use Cpm\JovenesBundle\EntityDummy\ConfirmarCamposChapa;
+//use Cpm\JovenesBundle\EntityDummy\ConfirmarCamposChapa;
 
 /**
  * Perfil controller.
@@ -412,12 +413,62 @@ class PerfilController extends BaseController
     	else
     	{
 	    	return array(
-	    	                'proyecto'      => $proyecto,
-	    	                'form'   => $form->createView(),
+	    	        'proyecto'      => $proyecto,
+	    	        'form'   => $form->createView(),
 	                'valid_extensions' => implode(", ",$this->getValidExtensions())
 	    	);
     	}
     }
+    
+      
+    /**
+    * Muestra el formulario de confirmacion de datos antes de Chapa
+    *
+    * @Route("/{id}/confirmarDatosProyecto", name="proyecto_confirmar_prechapa")
+    * @Template("CpmJovenesBundle:Proyecto:confirmarPreChapa.html.twig")
+    */
+    public function confirmarPreChapaAction($id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+		$proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto',$id, $em);
+    	$form = $this->createForm(new ConfirmacionCamposChapaType(), $proyecto);
+
+    	return array(
+                'proyecto'      => $proyecto,
+                'form'   => $form->createView()
+    	);
+    }
+    
+    
+   /**
+    * Procesa el formulario de confirmacion de datos del proyectos
+    *
+    * @Route("/{id}/recibirConfirmacionDatosProyecto", name="proyecto_recibir_confirmacion_prechapa")
+    * @Template("CpmJovenesBundle:Proyecto:confirmarPreChapar.html.twig")
+    */
+    
+    public function recibirConfirmacionPreChapa($id) { 
+    	$em = $this->getDoctrine()->getEntityManager();
+		$proyecto = $this->getEntityForUpdate('CpmJovenesBundle:Proyecto',$id, $em);
+    	$form = $this->createForm(new ConfirmacionCamposChapaType(), $proyecto);
+    	$form->bindRequest($this->getRequest());
+    	
+    	if ($form->isValid()) {
+    		$em->persist($proyecto);	 
+    		$em->flush();
+        	$this->setSuccessMessage("El archivo fue cargado satisfactoriamente");
+     		return $this->redirect($this->generateUrl('home_usuario'));
+    	}
+    	else
+    	{
+	    	return array(
+	    	        'proyecto'      => $proyecto,
+	    	        'form'   => $form->createView()
+	    	);
+    	}
+    }
+    
+    
    
     	
     /**

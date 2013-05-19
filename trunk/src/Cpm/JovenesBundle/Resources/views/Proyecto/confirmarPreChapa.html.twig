@@ -1,0 +1,45 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %} Enviar proyecto "{{proyecto.titulo}}" {% endblock %}
+
+{% block content %}
+<script src="{{ asset('js/wizzard_form.js') }}" type="text/javascript"></script>
+
+<form action="{{ path('proyecto_recibir_confirmacion_prechapa', { 'id': proyecto.id }) }}" method="post" {{ form_enctype(form) }} name="wizzard_form">
+
+<h4> Verifique los siguientes datos de su presentación </h4>
+
+{{ form_row(form.titulo) }}
+
+		<div id="eje_row">
+			{{ form_label(form.eje) }}
+			{{ form_widget(form.eje) }}
+				<span class="loading inline-loading"></span>
+				<div id="descripcion_eje" class="input_hint" target="{{ path('eje_fetch') }}">
+				</div>
+				<script>
+				   	$("#cpm_jovenesbundle_presentacionproyectotype_eje").change(function(event) {
+			  	   		mostrarDescripcionEje($("#cpm_jovenesbundle_presentacionproyectotype_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"));
+			  	   	}).change();
+		   		</script>
+		</div>
+
+{{ form_row(form.temaPrincipal) }}
+{{ form_row(form.produccionFinal) }}
+
+<div>
+		{{ form_label(form.deQueSeTrata) }} 
+		{{ form_widget(form.deQueSeTrata) }} 
+				<div class="input_hint">
+					Indicar, en caso que sea pertinente,  nombres propios de la investigación que se planea. 
+					Algunos ejemplos: nombre de desaparecidos o víctimas de gatillo fácil; nombres de empresas o fábricas; 
+					clubes; organizaciones políticas; cooperativas o asociaciones vecinales; centros clandestinos de detención, etc.
+				</div>
+			</div>
+<hr />
+<h4> Datos de la escuela </h4>
+		
+{{ form_rest(form) }}
+<input type="submit" class="submit" value="Enviar">
+</form>
+ {% endblock %}

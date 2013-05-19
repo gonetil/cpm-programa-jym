@@ -2,6 +2,7 @@
 
 namespace Cpm\JovenesBundle\Entity;
 
+use Cpm\JovenesBundle\Filter\ArchivoFilter;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -21,4 +22,16 @@ class ArchivoRepository extends EntityRepository
     	return  $qb->getQuery();
   
 	}
+	
+	public function filterQuery(ArchivoFilter $filter,$ciclo_activo,$sort_field = null, $sort_order) {
+		
+		$qb = $this->createQueryBuilder('a')->orderBy('a.fecha_creado', 'DESC');
+
+	 	if ($filter->getNombre())
+			$qb->andWhere('a.nombre like :nombre')->setParameter('nombre',"%".$filter->getNombre()."%");
+	
+		return $qb;
+	
+		}
+		
 }
