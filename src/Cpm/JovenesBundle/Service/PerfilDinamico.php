@@ -129,16 +129,19 @@ class PerfilDinamico {
 			); 
 		};
 		
-		//etapa 4
+		//etapa 6
 		$acciones['representar_proyecto'] = function($jym, $proyecto) { 
+			
 			if (!$jym->puedeEditar($proyecto))
 				return null;
-			if ($proyecto->estaEnEstadoActual(ESTADO_REHACER) || $proyecto->estaEnEstadoActual(ESTADO_PRESENTADO) ) 
+			
+			if  ( ($proyecto->estaEnEstadoActual(ESTADO_REHACER)) || ($proyecto->estaEnEstadoActual(ESTADO_PRESENTADO) ) ) {  
 				return array(
 					'path' => 'proyecto_presentar', 
 					'label'=>'Reenviar proyecto',
 					'validation'=> false
 				); 
+			}
 			else 
 				return null;
 		};
