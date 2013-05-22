@@ -89,15 +89,15 @@ class DashboardController extends BaseController
 		$qb->orderBy('ie.fechaInicio','ASC')->orderBy('ie.fechaFin','ASC')->setMaxResults(10);
 	
 		$em = $this->getDoctrine()->getEntityManager();
-    	$invitaciones_confirmadas = $em->createQuery( 'SELECT ie.id Instancia, count(inv.id) Confirmaciones' .
+    	$invitaciones_confirmadas = $em->createQuery( 'SELECT ie.id Instancia, count(inv.id) Confirmaciones ' .
     									' FROM CpmJovenesBundle:InstanciaEvento ie JOIN ie.evento e JOIN e.ciclo c JOIN ie.invitaciones inv' .
     									' WHERE inv.aceptoInvitacion = 1' .
-    									' and c = :ciclo ')->setParameter('ciclo',$ciclo)->getResult();
+    									' and c = :ciclo  GROUP BY ie.id')->setParameter('ciclo',$ciclo)->getResult();
 		$confirmaciones = array();
+		
 		foreach ( $invitaciones_confirmadas as $inv ) {
        		$confirmaciones[$inv['Instancia']] = $inv['Confirmaciones'];
 		}
-	
 		return array( 'instancias' => $qb->getQuery()->getResult(), 'confirmaciones' => $confirmaciones);
     }
     
