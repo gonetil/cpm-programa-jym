@@ -69,6 +69,28 @@ class ConfirmacionCamposChapa {
 	    else
 	    	return null;    
     }
+    
+    public function getEscuela() { 
+    	return $this->proyecto->getEscuela();
+    }
+
+    public function setEscuela($esc) { 
+    	$this->proyecto->setEscuela($esc);
+    }
 	
+	public function getDeQueSeTrata() {
+		return $this->proyecto->getDeQueSeTrata();
+	}
+	
+	public function setDeQueSeTrata($dqst) {
+		$this->proyecto->setDeQueSeTrata($dqst);
+	}
+	
+	public function getEje() { 
+		return $this->proyecto->getEje();
+	}
+	public function setEje($eje) {
+		$this->proyecto->setEje($eje);
+	}
 	
 }
