@@ -195,19 +195,17 @@ abstract class BaseController extends Controller
      * guarda un archivo de un proyecto con el nombre correcto y en el dir. correcto
      */
        public function subir_archivo($file,$proyecto) {
-    	    $ext =  $file->guessExtension();
-    		$valid = $this->getValidExtensions();
-
-    		if (!$ext) 
-    			$ext = $file->getExtension();
-    	
-    		if (!$ext)
+    		$ext = $file->getExtension();
+    		if (empty($ext))
     		{
 	    		$pos = strrpos($file->getClientOriginalName(), '.');
 	    		if($pos!==false) 
 	    			$ext = substr($file->getClientOriginalName(), $pos+1);
     		}
-    		
+    		if (empty($ext))
+	   		$ext =  $file->guessExtension();
+
+    		$valid = $this->getValidExtensions();
     		if (in_array($ext,$valid))
     		{
     			$id = $proyecto->getId();
