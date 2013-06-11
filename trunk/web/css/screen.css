@@ -2450,7 +2450,7 @@ ul.listado-items li:nth-child(odd) {
 .invitaciones .invitacion { border: none; }
 .invitaciones .listado-items { }
 
-#resumen-box { float: left; display: block;  padding-top:5px; padding-left: 20px;}
+#resumen-box { float: right; display: block;  padding-top:5px; padding-left: 20px;}
 
 .invitaciones h2  { text-align: right; margin-right:200px; padding-top:10px; }
 .invitaciones #invitaciones , .invitaciones .listado-items .status { float: none; text-align: right;  }
