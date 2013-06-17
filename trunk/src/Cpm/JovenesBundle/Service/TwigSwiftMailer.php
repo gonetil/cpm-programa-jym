@@ -258,6 +258,7 @@ class TwigSwiftMailer implements MailerInterface
 			if($twig_html){
 				$html_template= $this->twig->loadTemplate($twig_html);
 	        	$htmlBody = $html_template->render($context);
+	        	$htmlBody = nl2br($htmlBody); //transformo los saltos de línea en BRs
 			}
 		}catch(\Twig_Error_Syntax $e){
 			throw new InvalidTemplateException("Template Invalido",0,$e);
