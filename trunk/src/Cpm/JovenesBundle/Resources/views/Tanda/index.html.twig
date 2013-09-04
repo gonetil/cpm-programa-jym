@@ -1,0 +1,61 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Listado de tandas{% endblock %}
+
+{% block content %}
+{% if entities | length < 1 %}
+<h2> No se han definido tandas aún </h2>
+<h3>
+
+	<form method="post" action="{{ path('tanda_init') }}">
+		<label for="evento">A continuación, seleccione el evento que represente al encuentro en Chapadmalal:</label>
+		<select name="evento_chapa" id="evento_chapa">
+		{% for evento in eventos %}
+			<option value="{{ evento.id }}">{{ evento.titulo }}</option>
+		{% endfor %}
+		</select>
+		<input type="submit" value="Generar tandas">
+	</form>
+</h3>
+
+{% endif %}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Número</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha de fin</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.numero }}</td>
+            <td>{% if entity.fechaInicio %}{{ entity.fechaInicio|date('d-m-Y') }}{% endif%}</td>
+            <td>{% if entity.fechaFin %}{{ entity.fechaFin|date('d-m-Y') }}{% endif%}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('tanda_show', { 'id': entity.id }) }}">ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('tanda_edit', { 'id': entity.id }) }}">editar</a>
+                    </li>
+                    
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('tanda_new') }}">
+            Agregar otra tanda
+        </a>
+    </li>
+</ul>
+{% endblock %}

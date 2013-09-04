@@ -1,0 +1,75 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Tanda{% endblock %}
+
+{% block content %}
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Numero</th>
+            <td>{{ entity.numero }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de inicio</th>
+            <td>{{ entity.fechaInicio|date('d-m-Y') }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de fin</th>
+            <td>{{ entity.fechaFin|date('d-m-Y') }}</td>
+        </tr>
+        {% if entity.dias | length > 0 %}
+        <tr>
+            <td colspan="2"><br><br>Días incluídos en la tanda</td>
+        </tr>
+	        {% for dia in entity.dias %}
+	        	<tr><td colspan="2"><hr></td></tr> {# linea de separación #}
+	        
+		        <tr>
+		            <th><a href="{{ path('dia_show', { 'id': dia.id }) }}">Día {{ dia.numero }}</a></th>
+		            <td>
+		            	<ul>
+		            	{% for auditorioDia in dia.auditoriosDias %}
+		            		<li> {{ auditorioDia.auditorio }} </li>
+		            		{% if auditorioDia.bloques | length > 0 %}
+		            		<ol>
+		            			<li><hr></li>	
+			            		{% for bloque in auditorioDia.bloques %}
+			            			<li><a href="{{ path('bloque_show', { 'id': bloque.id }) }}">{{ bloque }} </a>(Inicio: {{ bloque.horaInicio | date("H:i")}} hs, {{ bloque.duracion }} mintos </li>
+		    	        		{% endfor %}
+		    	        		<li><hr></li>	
+		            		</ol>
+		            		{% endif %}
+		            	{% endfor %}
+		            	</ul>
+		            </td>
+		        </tr>
+	        
+	        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('tanda') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('tanda_edit', { 'id': entity.id }) }}">
+            Editar
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Crear día{% endblock %}
+
+{% block content %}
+
+<form action="{{ path('dia_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Crear</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('dia') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>
+{% endblock %}

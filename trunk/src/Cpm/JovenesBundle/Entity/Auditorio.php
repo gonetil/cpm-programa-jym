@@ -5,12 +5,12 @@ namespace Cpm\JovenesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cpm\JovenesBundle\Entity\Produccion
+ * Cpm\JovenesBundle\Entity\Auditorio
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\ProduccionRepository")
+ * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\AuditorioRepository")
  */
-class Produccion
+class Auditorio
 {
     /**
      * @var integer $id
@@ -28,21 +28,13 @@ class Produccion
      */
     private $nombre;
 
-
     /**
      * @var boolean $anulado
      *
-     * @ORM\Column(name="anulado", type="boolean")
+     * @ORM\Column(name="anulado", type="boolean", nullable="true")
      */
     private $anulado;
 
-    /**
-     * @var string $tipoPresentacion
-     *
-     * @ORM\Column(name="tipoPresentacion", type="string",nullable="true")
-     */
-
-	private $tipoPresentacion; //slug o nombre corto
 
     /**
      * Get id
@@ -94,17 +86,7 @@ class Produccion
         return $this->anulado;
     }
     
- 
-	public function getTipoPresentacion() {
-		return $this->tipoPresentacion;
-	}
-	
-	public function setTipoPresentacion($tp) {
-		$this->tipoPresentacion = $tp;
-	}
-    
-    public function __toString()
-    {
-    	return $this->nombre . ( ( is_null($this->tipoPresentacion) ) ? "" : " (".$this->tipoPresentacion.")"  );
+    public function __toString() {
+    	return $this->getNombre(). ( $this->anulado ? " (ANULADO)" : "");
     }
 }

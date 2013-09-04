@@ -83,6 +83,9 @@ abstract class BaseController extends Controller
 		return $this->get('cpm_jovenes_bundle.estados_manager');
 	}
 	
+	protected function getChapaManager(){
+		return $this->get('cpm_jovenes_bundle.chapa_manager');
+	}
 	protected function paginate($query, $extra_params = array() ){ 
 		
 		

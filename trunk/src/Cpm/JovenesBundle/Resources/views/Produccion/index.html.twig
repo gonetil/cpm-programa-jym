@@ -9,6 +9,7 @@
         <tr>
             <th>Id</th>
             <th>Nombre</th>
+            <th>Tipo de presentación</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -17,6 +18,7 @@
         <tr>
             <td><a href="{{ path('produccion_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.nombre }}</td>
+            <td>{{ entity.tipoPresentacion }}</td>
             <td>
                 <ul>
                     <li>
