@@ -1,0 +1,50 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Listado de bloques{% endblock %}
+
+{% block content %}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Posicion</th>
+            <th>Hora de inicio</th>
+            <th>Duración</th>
+            <th>Tipo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('bloque_show', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+            <td>{{ entity.posicion }}</td>
+            <td>{% if entity.horaInicio %}{{ entity.horaInicio|date('H:i') }}{% endif%}</td>
+            <td>{{ entity.duracion }}</td>
+            <td>{% if entity.tienePresentaciones %} Bloque de presentaciones {% else %} Bloque simple {% endif %}</td>
+        	</tr>
+        
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('bloque_show', { 'id': entity.id }) }}">ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('bloque_edit', { 'id': entity.id }) }}">editar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('bloque_new') }}">
+            Agregar bloques
+        </a>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Auditorio en día {% endblock %}
+ 
+{% block content %}
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Auditorio</th>
+            <td>{{ entity.auditorio }}</td>
+        </tr>
+        <tr>
+            <th>Día</th>
+            <td>{{ entity.dia}}</td>
+        </tr>
+        
+        
+        </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('auditoriodia') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('auditoriodia_edit', { 'id': entity.id }) }}">
+            Editar
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('auditoriodia_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

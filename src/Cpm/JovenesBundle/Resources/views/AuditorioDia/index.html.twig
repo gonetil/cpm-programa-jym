@@ -1,0 +1,44 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Listado de dias y auditorios{% endblock %}
+ 
+{% block content %}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Día</th>
+            <th>Auditorio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('auditoriodia_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.dia }}</td>
+            <td>{{ entity.auditorio }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('auditoriodia_show', { 'id': entity.id }) }}">Ver</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('auditoriodia_edit', { 'id': entity.id }) }}">Editar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('auditoriodia_new') }}">
+            Crear nuevo
+        </a>
+    </li>
+</ul>
+{% endblock %}

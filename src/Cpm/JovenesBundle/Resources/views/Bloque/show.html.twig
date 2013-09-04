@@ -1,0 +1,59 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Bloque{% endblock %}
+
+{% block content %}
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Nombre</th>
+            <td>{{ entity.nombre }}</td>
+        </tr>
+        <tr>
+            <th>Posicion</th>
+            <td>{{ entity.posicion }}</td>
+        </tr>
+        <tr>
+            <th>Hora de inicio</th>
+            <td>{{ entity.horaInicio|date('H:i') }}</td>
+        </tr>
+        <tr>
+            <th>Duración</th>
+            <td>{{ entity.duracion }}</td>
+        </tr>
+        <tr>
+            <th>Día</th>
+            <td>{{ entity.auditorioDia.dia.numero}}</td>
+        </tr>
+        <tr>
+            <th>Auditorio</th>
+            <td>{{ entity.auditorioDia.auditorio.nombre }}</td>
+        </tr>
+        <tr>
+        <th>Tipo</th>
+            <td>{% if entity.tienePresentaciones %} Bloque de presentaciones {% else %} Bloque simple {% endif %}</td>
+        </tr>
+        
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('bloque') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('bloque_edit', { 'id': entity.id }) }}">
+            Editar
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('bloque_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

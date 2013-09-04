@@ -1,7 +1,7 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block title%}Tipo de Producción{% endblock %}
-
+{% block title %}Mostrar auditorio{% endblock %}
+ 
 {% block content %}
 
 <table class="record_properties">
@@ -15,29 +15,27 @@
             <td>{{ entity.nombre }}</td>
         </tr>
         <tr>
-            <th>Tipo de presentación</th>
-            <td>{{ entity.tipoPresentacion }}</td>
+            <th>Anulado</th>
+            <td>{% if  entity.anulado %} Sí {% else %} No {% endif %}</td>
         </tr>
-        
     </tbody>
 </table>
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('produccion') }}">
+        <a href="{{ path('auditorio') }}">
             Volver al listado
         </a>
     </li>
     <li>
-        <a href="{{ path('produccion_edit', { 'id': entity.id }) }}">
-            Modificar
+        <a href="{{ path('auditorio_edit', { 'id': entity.id }) }}">
+            Editar
         </a>
     </li>
     <li>
-        <form action="{{ path('produccion_delete', { 'id': entity.id }) }}" method="post"
-            onsubmit="return confirm('¿Está seguro que desea eliminar la produción?');">
+        <form action="{{ path('auditorio_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Eliminar</button>
+            <button type="submit">Borrar</button>
         </form>
     </li>
 </ul>
