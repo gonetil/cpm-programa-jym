@@ -63,6 +63,12 @@ class Bloque
 
 
 
+    /**
+     * @ORM\OneToMany(targetEntity="Presentacion", mappedBy="bloque")
+     */
+	private $presentaciones;
+
+
 
     /**
      * Get id
@@ -170,6 +176,13 @@ class Bloque
  		$this->tienePresentaciones = $lasTiene;
  	}
  	   
+ 	public function getPresentaciones() {
+ 		return $this->presentaciones;
+ 	}
+ 	
+ 	public function setPresentaciones($p) {
+ 		$this->presentaciones = $p;
+ 	}
     
     public function __toString() {
     	return "Bloque ".$this->posicion.": ".$this->nombre;

@@ -14,7 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Cpm\JovenesBundle\Entity\Presentacion
  *
- * @ORM\Table()
+ * @ORM\MappedSuperclass
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({"interna" = "PresentacionInterna", "externa" = "PresentacionExterna"})
+ * 
  * @ORM\Entity(repositoryClass="Cpm\JovenesBundle\Entity\PresentacionRepository")
  */
 abstract class Presentacion
@@ -60,8 +64,19 @@ abstract class Presentacion
     */
     private $tipoPresentacion;
 
-
-
+	
+    /**
+     * @ORM\ManyToOne(targetEntity="Bloque", inversedBy="presentaciones")
+     * @ORM\JoinColumn(name="bloque_id", referencedColumnName="id", nullable=true)
+     */
+	private $bloque;
+	
+    /**
+     * @ORM\ManyToOne(targetEntity="Tanda", inversedBy="presentaciones")
+     * @ORM\JoinColumn(name="tanda_id", referencedColumnName="id", nullable=false)
+     */
+    private $tanda;
+	
     /**
      * Get id
      *
@@ -150,5 +165,22 @@ abstract class Presentacion
     public function getTipoPresentacion()
     {
         return $this->tipoPresentacion;
+    }
+    
+    public function getBloque() {
+    	return $this->bloque;
+    }
+    
+    public function setBloque($b) {
+    	$this->bloque = $b;
+    }
+    
+        
+    public function getTanda() {
+    	return $this->tanda;
+    }
+    
+    public function setTanda($t) {
+    	$this->tanda = $t;
     }
 }

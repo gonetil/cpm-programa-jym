@@ -53,6 +53,12 @@ class Tanda
      **/
     private $dias;
     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Presentacion", mappedBy="tanda", cascade={"all"})
+     */
+	private $presentaciones;
+    
     /**
      * Get id
      *
@@ -146,6 +152,18 @@ class Tanda
     public function __toString() {
     	return $this->getNumero()." (".$this->getFechaInicio()->format('d/m/Y').")";
     }
+ 
+ 	public function getPresentaciones() {
+ 		return $this->presentaciones;
+ 	}
+ 	
+ 	public function setPresentaciones($pp) {
+ 		$this->presentaciones = $pp;
+ 	}
+ 	
+ 	public function addPresentacion($p) {
+ 		$this->presentaciones[] = $p;
+ 	}
     
 	static function createFromInstancia($instancia, $numero = 0) {
 		$tanda = new Tanda();

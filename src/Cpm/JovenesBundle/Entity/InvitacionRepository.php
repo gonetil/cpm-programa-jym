@@ -80,6 +80,16 @@ class InvitacionRepository extends EntityRepository
 				
 	}
 
+	public function getInvitacionesAceptadas($instancia) { 
+		$qb = $this->getEntityManager()->createQueryBuilder()
+				->add('select','i')
+				->add('from','CpmJovenesBundle:Invitacion i')
+				->andWhere('i.instanciaEvento = :instancia')->setParameter('instancia',$instancia)
+				->andWhere('i.aceptoInvitacion = true');
+			return $qb->getQuery()->iterate();//->getResult(); 
+				
+	}
+
 	
 	public function filterQuery(InvitacionFilter $filter, $ciclo_activo, $sort_field = null, $sort_order) {
 		$qb = $this->createQueryBuilder('c');
