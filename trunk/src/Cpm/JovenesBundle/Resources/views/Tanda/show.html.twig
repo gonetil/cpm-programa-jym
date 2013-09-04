@@ -22,6 +22,12 @@
             <th>Fecha de fin</th>
             <td>{{ entity.fechaFin|date('d-m-Y') }}</td>
         </tr>
+
+        <tr>
+            <th>Presentaciones</th>
+            <td>{{ entity.presentaciones|length }}</td>
+        </tr>
+        
         {% if entity.dias | length > 0 %}
         <tr>
             <td colspan="2"><br><br>Días incluídos en la tanda</td>
@@ -39,7 +45,10 @@
 		            		<ol>
 		            			<li><hr></li>	
 			            		{% for bloque in auditorioDia.bloques %}
-			            			<li><a href="{{ path('bloque_show', { 'id': bloque.id }) }}">{{ bloque }} </a>(Inicio: {{ bloque.horaInicio | date("H:i")}} hs, {{ bloque.duracion }} mintos </li>
+			            			<li>
+			            				<a href="{{ path('bloque_show', { 'id': bloque.id }) }}">{{ bloque }} </a>(Inicio: {{ bloque.horaInicio | date("H:i")}} hs, {{ bloque.duracion }} minutos)
+			            				{% if bloque.presentaciones | length > 0 %} (<strong> {{ bloque.presentaciones | length}} presentaciones asignadas</strong>) {% endif %} 
+			            			</li>
 		    	        		{% endfor %}
 		    	        		<li><hr></li>	
 		            		</ol>

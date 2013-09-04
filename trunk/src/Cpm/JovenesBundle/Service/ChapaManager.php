@@ -14,6 +14,10 @@ use Cpm\JovenesBundle\Entity\Dia;
 use Cpm\JovenesBundle\Entity\AuditorioDia;
 use Cpm\JovenesBundle\Entity\Bloque;
 use Cpm\JovenesBundle\Entity\Auditorio;
+use Cpm\JovenesBundle\Entity\Presentacion;
+use Cpm\JovenesBundle\Entity\PresentacionInterna;
+use Cpm\JovenesBundle\Entity\PresentacionExterna;
+
 
 
 class ChapaManager {
@@ -31,7 +35,10 @@ class ChapaManager {
 
 	public function resetBloque($bloque) {
 		if ($bloque->getTienePresentaciones()) {
-			//eliminar presentaciones
+			foreach ( $bloque->getPresentaciones() as $presentacion ) {
+				$presentacion->setBloque(null);       
+			}
+			//TODO faltaria eliminar la presentacion de la lista de presentaciones del bloque
 		}
 		return $bloque;
 	}
@@ -45,16 +52,28 @@ class ChapaManager {
 		$dia->setAuditoriosDias( array_map( array($this,'resetAuditorioDia') , $dia->getAuditoriosDias()) );
 	    return $dia;
 	}
-
+	
 	public function crearDiasParaTanda($tanda,$num_dias,$auditorios) {
 	    //creo los dias para la tanda
-	    for($dia=1;$dia<=$dias;$dia++) {
-			$tandaDia = $this->agregarDiaATanda($tanda,$dia);	       	
+	    for($dia=1;$dia<=$num_dias;$dia++) {
+			$tandaDia = Dia::createDia($tanda,$dia);	       	
 			//cargo los auditorios para cada dia
 	       	foreach ( $auditorios as $auditorio)
 	       		$this->doctrine->getEntityManager()->persist(new AuditorioDia($auditorio,$tandaDia));
 			
 	     }
+	}
+	
+	
+	public function crearPresentacionesParaTanda($tanda) {
+		$em = $this->doctrine->getEntityManager();
+		
+		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento());
+		foreach ( $invitaciones as $invitacion ) {
+       		$presentacion = PresentacionInterna::createFromProyecto($invitacion[0]->getProyecto());
+       		$presentacion->setTanda($tanda);
+       		$tanda->addPresentacion($presentacion);
+		}
 	}
 	
 	public function inicializarUnaTanda($instancia,$numero=0,$auditorios = null) {
@@ -69,10 +88,10 @@ class ChapaManager {
 	    $dias = $diff->days + 1; //se consideran los dias entre las fechas mas el primer dia
 	    
 	    $this->crearDiasParaTanda($tanda,$dias,$auditorios);
+	    $this->crearPresentacionesParaTanda($tanda);
 	       		
 	    return $tanda; 
 	}
-	
 	
 	public function inicializarTandas($evento) {
 		$em = $this->doctrine->getEntityManager();

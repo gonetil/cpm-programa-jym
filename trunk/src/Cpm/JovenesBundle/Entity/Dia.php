@@ -41,10 +41,12 @@ class Dia
     
     
     
-    static function createDia($tanda,$numero=0) {
+    static function createDia($tanda,$numero=0,$auditoriosDias=null) {
     	$tandaDia = new Dia();
 	    $tandaDia->setTanda($tanda);
 	    $tandaDia->setNumero($numero);
+	    if ($auditoriosDias != null )
+	    	$tandaDia->setAuditoriosDias($auditoriosDias);
 	    return $tandaDia;
     }
     /**
