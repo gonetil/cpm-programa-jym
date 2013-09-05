@@ -25,9 +25,27 @@ php app/console generate:doctrine:crud --entity=CpmJovenesBundle:Eje --format=an
 php app/console generate:doctrine:crud --entity=CpmJovenesBundle:Etapa --format=annotation --with-write --no-interaction
 
 
+
+
 php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Voluntario" --fields="nombre:string apellido:string telefono:string email:string domicilio:string observaciones:text" --no-interaction --with-repository --format=annotation
 
 php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Archivo" --fields="nombre:string hash:string" --no-interaction --with-repository --format=annotation
 php app/console doctrine:generate:entity --entity="CpmJovenesBundle:DescargaArchivo" --fields="fecha:datetime ip:string" --no-interaction --with-repository --format=annotation
 php app/console generate:doctrine:crud --entity=CpmJovenesBundle:Archivo --format=annotation --with-write --no-interaction
 php app/console generate:doctrine:crud --entity=CpmJovenesBundle:DescargaArchivo --format=annotation --with-write --no-interaction
+
+
+
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Auditorio" --fields="nombre:string anulado:boolean" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Tanda" --fields="numero:integer fechaInicio:datetime fechaFin:datetime" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Dia" --fields="numero:integer" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:AuditorioDia" --no-interaction --with-repository --format=annotation
+php app/console doctrine:generate:entity --entity="CpmJovenesBundle:Bloque" --fields="posicion:integer horaInicio:datetime duracion:integer" --no-interaction --with-repository --format=annotation
+
+php app/console generate:doctrine:crud --entity=CpmJovenesBundle:Auditorio --format=annotation --with-write --no-interaction
+php app/console generate:doctrine:crud --entity=CpmJovenesBundle:Tanda --format=annotation --with-write --no-interaction
+php app/console generate:doctrine:crud --entity=CpmJovenesBundle:Dia --format=annotation --with-write --no-interaction
+php app/console generate:doctrine:crud --entity=CpmJovenesBundle:AuditorioDia --format=annotation --with-write --no-interaction
+php app/console generate:doctrine:crud --entity=CpmJovenesBundle:Bloque --format=annotation --with-write --no-interaction
+
+

@@ -35,22 +35,122 @@ class ChapaManager {
 
 	public function resetBloque($bloque) {
 		if ($bloque->getTienePresentaciones()) {
+			
 			foreach ( $bloque->getPresentaciones() as $presentacion ) {
 				$presentacion->setBloque(null);       
 			}
-			//TODO faltaria eliminar la presentacion de la lista de presentaciones del bloque
+
+			$bloque->setPresentaciones(array());
+
 		}
 		return $bloque;
 	}
 	
 	public function resetAuditorioDia($auditorioDia) {
-		$auditorioDia->setBloques( array_map( array($this,'resetBloque') , $auditorioDia->getBloques()));
+		$auditorioDia->setBloques( array_map( array($this,'resetBloque') , $auditorioDia->getBloques()->toArray() ));
 		return $auditorioDia;	
 	}
 
 	public function resetDia($dia) {
-		$dia->setAuditoriosDias( array_map( array($this,'resetAuditorioDia') , $dia->getAuditoriosDias()) );
+		$dia->setAuditoriosDias( array_map( array($this,'resetAuditorioDia') , $dia->getAuditoriosDias()->toArray() ) );
 	    return $dia;
+	}
+	
+	public function resetTanda($tanda) {
+		
+        $tanda->setDias( array_map( array($this,'resetDia') , $tanda->getDias()->toArray() )  );
+        
+		$em = $this->doctrine->getEntityManager();
+		$em->getConnection()->beginTransaction();
+    	try { 
+	        $em->persist($tanda);
+	        $em->flush();		
+			$em->getConnection()->commit();
+    	} catch (\Exception $e) {
+    		$em->getConnection()->rollback();
+			$em->close();
+            throw $e;
+    	}
+		
+	}
+	/**
+	 * retorna un bloque igual a $bloque pero sin presentaciones
+	 */
+	public function clonarBloque($bloque,$auditorioDia=null) {
+		$nuevo_bloque = new Bloque();
+		$nuevo_bloque->setDuracion($bloque->getDuracion());
+		$nuevo_bloque->setHoraInicio($bloque->getHoraInicio());
+		$nuevo_bloque->setPosicion($bloque->getPosicion());
+		$nuevo_bloque->setNombre($bloque->getNombre());
+		$nuevo_bloque->setTienePresentaciones($bloque->getTienePresentaciones());
+		if ($auditorioDia != null)
+			$nuevo_bloque->setAuditorioDia($auditorioDia);
+		
+		return $nuevo_bloque;
+	}
+	
+	public function clonarAuditorioDia($auditorioDia,$new_dia) {
+		$newAuditorioDia = new AuditorioDia($auditorioDia->getAuditorio(),$new_dia);
+		foreach ( $auditorioDia->getBloques() as $bloque )
+       		$newAuditorioDia->addBloque($this->clonarBloque($bloque,$newAuditorioDia));
+		
+		return $newAuditorioDia;		
+	}
+	
+	/**
+	 * genera un nuevo dia, con la misma cantidad de auditorioDia (mismos auditorios), y los mismos bloques para cada auditorioDia
+	 */
+	public function clonarDia($dia,$tanda) {
+		$new_dia = new Dia();	
+		$new_dia->setTanda($tanda);
+		$new_dia->setNumero($dia->getNumero());
+		
+		foreach ( $dia->getAuditoriosDias() as $auditorioDia )
+       		$new_dia->addAuditorioDia($this->clonarAuditorioDia($auditorioDia,$new_dia));
+		
+//		echo "dia clonado: ".(count($new_dia->getAuditoriosDias()))." de ".(count($dia->getAuditoriosDias()))." auditorios dias";
+		return $new_dia;
+	}
+	
+	
+	private function getNextTandaNumber($tanda) {
+		$evento = $tanda->getInstanciaEvento()->getEvento();
+		
+		$tandas = $this->doctrine->getEntityManager()->getRepository('CpmJovenesBundle:Tanda')->getTandasDeEvento($evento);
+		$max = 0;
+		foreach ( $tandas as $t) {
+       		$max =  ( $t->getNumero() >= $max ) ? $t->getNumero() : $max; 
+		}
+		return $max+1;
+		
+	}
+	/**
+	 * genera una nueva tanda con los mismos dias, auditoriosDias y bloques de $tanda, y la asigna a la instanciaEvento $instancia
+	 */
+	public function clonarTanda($tanda,$instancia) {
+		
+		$new_tanda = Tanda::createFromInstancia($instancia);
+		
+		$new_tanda->setNumero($this->getNextTandaNumber($tanda));
+//		$new_tanda->setNumero( $tanda->getNumero() + 1 );
+		foreach ( $tanda->getDias() as $dia ) 
+       		$new_tanda->addDia($this->clonarDia($dia,$new_tanda));
+		
+	
+		$em = $this->doctrine->getEntityManager();
+		$em->getConnection()->beginTransaction();
+    	try { 
+	        $em->persist($new_tanda);
+	        $em->flush();		
+			$em->getConnection()->commit();
+    	} catch (\Exception $e) {
+    		$em->getConnection()->rollback();
+			$em->close();
+            throw $e;
+    	}
+    	return $new_tanda;
+		
+    	
 	}
 	
 	public function crearDiasParaTanda($tanda,$num_dias,$auditorios) {

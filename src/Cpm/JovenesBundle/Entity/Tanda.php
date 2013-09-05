@@ -149,6 +149,10 @@ class Tanda
     	$this->dias = $d;
     }
     
+    public function addDia($d) {
+    	$this->dias[] = $d;
+    }
+    
     public function __toString() {
     	return $this->getNumero()." (".$this->getFechaInicio()->format('d/m/Y').")";
     }

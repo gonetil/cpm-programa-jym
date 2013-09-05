@@ -60,6 +60,11 @@ class AuditorioDia
 	public function setBloques($b) {
 		$this->bloques = $b;
 	}
+	
+	public function addBloque($b) {
+		$this->bloques[] = $b;
+	}
+	
 	public function getDia() {
 		return $this->dia;
 	}

@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class TandaRepository extends EntityRepository
 {
+
+	public function getTandasDeEvento($evento) {
+		
+		$qb = $this->createQueryBuilder('t');
+		
+		$qb	->innerJoin('t.instanciaEvento','ie')
+			->andWhere("ie.evento = :evento")->setParameter("evento",$evento);
+		return $qb->getQuery()->getResult(); 	
+	}
 }

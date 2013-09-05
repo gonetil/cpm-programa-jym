@@ -86,6 +86,10 @@ class Dia
     public function setAuditoriosDias($ad) {
     	$this->auditoriosDias = $ad;
     }
+    public function addAuditorioDia($ad) {
+    	$this->auditoriosDias[] = $ad;
+    }
+    
     public function getTanda() {
     	return $this->tanda;
     }
