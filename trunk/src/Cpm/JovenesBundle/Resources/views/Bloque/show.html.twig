@@ -35,6 +35,18 @@
             <td>{% if entity.tienePresentaciones %} Bloque de presentaciones {% else %} Bloque simple {% endif %}</td>
         </tr>
         
+        {% if entity.tienePresentaciones and (entity.presentaciones | length > 0) %}
+				<tr> 
+					<th>Presentaciones</th>
+					<td> 
+							<ul>
+							{% for p in entity.presentaciones %}
+								<li> {{ p.escuela }}</li>
+							{% endfor %}
+							</ul>
+					</td>
+				</tr>        	
+        {% endif %} 
     </tbody>
 </table>
 

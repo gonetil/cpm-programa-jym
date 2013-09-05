@@ -15,6 +15,10 @@
             <td>{{ entity.numero }}</td>
         </tr>
         <tr>
+        	<th>Instancia de evento</th>
+        	<td> <a href="{{  path('instancia_show',{'id': entity.instanciaEvento.id}) }}">{{ entity.instanciaEvento }}</a></td>
+        </tr>
+        <tr>
             <th>Fecha de inicio</th>
             <td>{{ entity.fechaInicio|date('d-m-Y') }}</td>
         </tr>
@@ -74,11 +78,38 @@
             Editar
         </a>
     </li>
+
     <li>
         <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>
     </li>
-</ul>
+    <li>
+        <a href="#" onclick="$('#clonarForm').toggle(); return false;">
+            Clonar
+        </a>
+    </li>
+   <li>
+        <a href="#" onclick="return confirmAndRelocate('Esta operacion quitará todas las presentaciones de los bloques. ¿desea continuar?','{{ path('tanda_reset',{'id': entity.id}) }}')">
+            Resetear
+        </a>
+    </li>
+    
+    </ul>
+    <br/>
+  <div id="clonarForm" style="display:none">
+            <form method="get" action="{{ path('tanda_clonar') }}">
+            	<label for="instancia_id">Seleccione la instancia de Chapadmalal para la nueva tanda</label>
+	            <select name="instancia_id">
+	            {% for instancia  in entity.instanciaEvento.evento.instancias %}
+	            	<option value="{{ instancia.id }}"> {{ instancia }} </option>
+	            {% endfor %}
+	            </select>
+	            <input type="hidden" name="tanda_id" value="{{ entity.id }}" />
+	            <button type="submit">Clonar</button>
+            </form>
+    </div>
+  
+
 {% endblock %}

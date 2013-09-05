@@ -237,5 +237,64 @@ class TandaController extends BaseController
 		return $this->redirect($this->generateUrl('tanda'));
     }
     
-    
+    /**
+     * Clona la tanda con id $id_tanda y la setea a la instanciaEvento $instancia_id
+     *
+     * @Route("clonar_tanda", name="tanda_clonar")
+     * 
+     */
+     public function clonarTanda() {
+     	$instancia_id = $this->getRequest()->get('instancia_id');
+     	$tanda_id = $this->getRequest()->get('tanda_id');
+     	
+     	$instanciaEvento = $this->getEntity('CpmJovenesBundle:InstanciaEvento', $instancia_id);
+    	if (!$instanciaEvento) {
+    		throw $this->createNotFoundException('InstanciaEvento no encontrada');
+    	}
+
+     	$tanda = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+    	if (!$tanda) {
+    		throw $this->createNotFoundException('Tanda no encontrada');
+    	}
+     	
+     	
+     	$chapaManager = $this->getChapaManager();
+    	try {
+    		$chapaManager->clonarTanda($tanda,$instanciaEvento);
+    		$this->setSuccessMessage("Tanda clonada satisfactoriamente");
+    	} catch (\Exception $e) {
+    		$this->setErrorMessage('Error al clonar la tanda seleccioanda. Verifique que la Instancia de evento seleccionada no tenga ya una tanda asignada. \nMensaje de error: '.$e);
+            throw $e;
+    	}	
+    	
+		return $this->redirect($this->generateUrl('tanda'));
+     	
+     	
+     }
+     
+
+   /**
+     * Displays a form to edit an existing Tanda entity.
+     *
+     * @Route("/{id}/reset", name="tanda_reset")
+     * @Template()
+     */
+    public function resetAction($id) { 
+         
+        $tanda = $this->getEntity('CpmJovenesBundle:Tanda', $id);
+        if (!$tanda) {
+    		throw $this->createNotFoundException('Tanda no encontrada');
+    	}
+    	
+      	$chapaManager = $this->getChapaManager();
+    	try {
+    		$chapaManager->resetTanda($tanda);
+    		$this->setSuccessMessage("Tanda reseteada satisfactoriamente");
+    	} catch (\Exception $e) {
+    		$this->setErrorMessage('Error al resetear la tanda seleccioanda. \nMensaje de error: '.$e);
+            throw $e;
+    	}	
+         
+      return $this->redirect($this->generateUrl('tanda_show', array('id' => $tanda->getId() )));
+    }
 }

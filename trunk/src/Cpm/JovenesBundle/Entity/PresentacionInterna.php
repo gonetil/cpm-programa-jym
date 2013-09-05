@@ -112,4 +112,34 @@ class PresentacionInterna extends Presentacion
     }
     
     
+    public function getEscuela() {
+    	
+    	$ignore_list = array('de','sin','no','del','el','la','los','las');
+    	
+    	$escuela = $this->proyecto->getEscuela();
+    	$nombre = "";
+    	$tipo_inst =  ( ( $escuela->getTipoInstitucion() != null ) ? $escuela->getTipoInstitucion()->getId() : 0 );
+    	switch ($tipo_inst) {
+    		case 1 : //escuela publica
+					 $palabras = preg_split("/ /",$escuela->getTipoEscuela()->getNombre() );
+					 if (count($palabras) > 1) 
+						 foreach ( $palabras as $pal) {
+	       						if (!in_array($pal,$ignore_list))
+	       							$nombre .= strtoupper(substr($pal,0,1));
+							}
+					else $nombre = $palabras[0];		
+						
+					$nombre .= " No. ".$escuela->getNumero();	
+					break;	
+					    			
+    		case 2 : //escuela privada
+    				$nombre = $escuela->getNombre();
+    				break;
+    		default : //otra, en realidad NULL
+    				$nombre = $escuela->getOtroTipoInstitucion() . " " . $escuela->getNombre();
+
+    	}
+    	return $nombre;
+    }
+    
 }
