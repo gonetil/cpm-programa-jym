@@ -142,4 +142,31 @@ class PresentacionInterna extends Presentacion
     	return $nombre;
     }
     
+
+    /**
+     * Get apellido_coordinador
+     *
+     * @return string 
+     */
+    public function getApellidoCoordinador()
+    {
+        return $this->getProyecto()->getCoordinador()->getApellido();
+    }
+
+
+    /**
+     * Get nombre_coordinador
+     *
+     * @return string 
+     */
+    public function getNombreCoordinador()
+    {
+        return $this->getProyecto()->getCoordinador()->getNombre();
+    }
+    
+    
+    public function getPersonasConfirmadas() {
+    	return 999; //deberia recuperar la invitacion de este proyecto
+    }
+    
 }

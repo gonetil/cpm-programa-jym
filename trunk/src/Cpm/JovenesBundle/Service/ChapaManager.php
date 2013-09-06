@@ -33,6 +33,8 @@ class ChapaManager {
 	    $this->logger = $logger;
     }
 
+
+/*** FUNCIONES DE RESET **********/
 	public function resetBloque($bloque) {
 		if ($bloque->getTienePresentaciones()) {
 			
@@ -73,6 +75,13 @@ class ChapaManager {
     	}
 		
 	}
+	
+	/*** FIN FUNCIONES DE RESET **********/
+
+
+
+	/*** FUNCIONES DE CLONACION **********/
+
 	/**
 	 * retorna un bloque igual a $bloque pero sin presentaciones
 	 */
@@ -152,7 +161,11 @@ class ChapaManager {
 		
     	
 	}
+	/*** FIN FUNCIONES DE CLONACION **********/
 	
+	
+	
+	/*** FUNCIONES DE INICIALIZACION AUTOMATICA **********/
 	public function crearDiasParaTanda($tanda,$num_dias,$auditorios) {
 	    //creo los dias para la tanda
 	    for($dia=1;$dia<=$num_dias;$dia++) {
@@ -160,8 +173,7 @@ class ChapaManager {
 			//cargo los auditorios para cada dia
 	       	foreach ( $auditorios as $auditorio)
 	       		$this->doctrine->getEntityManager()->persist(new AuditorioDia($auditorio,$tandaDia));
-			
-	     }
+		 }
 	}
 	
 	
@@ -222,6 +234,8 @@ class ChapaManager {
             throw $e;
     	}  	
 	}
+	
+	/*** FIN FUNCIONES DE INICIALIZACION AUTOMATICA **********/
 	
 
 }
