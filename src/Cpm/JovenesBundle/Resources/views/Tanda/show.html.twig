@@ -90,6 +90,12 @@
             Clonar
         </a>
     </li>
+    <li>
+        <a href="#" onclick="$('#exportExcelForm').toggle(); return false;">
+            Exportar a Excel
+        </a>
+    </li>
+    
    <li>
         <a href="#" onclick="return confirmAndRelocate('Esta operacion quitará todas las presentaciones de los bloques. ¿desea continuar?','{{ path('tanda_reset',{'id': entity.id}) }}')">
             Resetear
@@ -111,5 +117,16 @@
             </form>
     </div>
   
-
+	  <div id="exportExcelForm" style="display:none">
+	            <form method="get" action="{{ path('tanda_export_excel') }}">
+	            	<label for="sort_fn">Orden</label>
+		            <select name="sort_fn">
+		            	<option value="sortByCoordinadorApellido"> Por apellido del coordinador</option>
+		            	<option value="sortByDiaBloque"> Por dia y bloque</option>
+		            </select>
+		            <input type="hidden" name="tanda_id" value="{{ entity.id }}" />
+		            <button type="submit">Exportar</button>
+	            </form>
+	    </div>
+	    
 {% endblock %}

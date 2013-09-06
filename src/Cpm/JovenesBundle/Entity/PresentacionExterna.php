@@ -40,6 +40,28 @@ class PresentacionExterna extends Presentacion
      */
     private $localidad;
 
+
+    /**
+     * @var string $apellido_coordinador
+     *
+     * @ORM\Column(name="apellido_coordinador", type="string", length=255)
+     */
+    private $apellido_coordinador;	
+
+    /**
+     * @var string $nombre_coordinador
+     *
+     * @ORM\Column(name="nombre_coordinador", type="string", length=255)
+     */
+    private $nombre_coordinador;
+
+    /**
+     * @var integer $personas_confirmadas;
+     *
+     * @ORM\Column(name="personas_confirmadas", type="integer")
+     */
+    private $personas_confirmadas;
+
     /**
      * Set escuela
      *
@@ -79,7 +101,10 @@ class PresentacionExterna extends Presentacion
     {
         return $this->provincia;
     }
-
+	
+	public function getDistrito() {
+		return $this->getProvincia();
+	}
     /**
      * Set localidad
      *
@@ -98,5 +123,54 @@ class PresentacionExterna extends Presentacion
     public function getLocalidad()
     {
         return $this->localidad;
+    }
+
+    /**
+     * Set apellido_coordinador
+     *
+     * @param string $apellidoCoordinador
+     */
+    public function setApellidoCoordinador($apellidoCoordinador)
+    {
+        $this->apellido_coordinador = $apellidoCoordinador;
+    }
+
+    /**
+     * Get apellido_coordinador
+     *
+     * @return string 
+     */
+    public function getApellidoCoordinador()
+    {
+        return $this->apellido_coordinador;
+    }
+
+    /**
+     * Set nombre_coordinador
+     *
+     * @param string $nombreCoordinador
+     */
+    public function setNombreCoordinador($nombreCoordinador)
+    {
+        $this->nombre_coordinador = $nombreCoordinador;
+    }
+
+    /**
+     * Get nombre_coordinador
+     *
+     * @return string 
+     */
+    public function getNombreCoordinador()
+    {
+        return $this->nombre_coordinador;
+    }
+    
+    
+    public function getPersonasConfirmadas() {
+    	return $this->personas_confirmadas;
+    }
+    
+    public function setPersonasConfirmadas($pc) {
+    	$this->personas_confirmadas = $pc;
     }
 }

@@ -8,6 +8,8 @@
             <th>Escuela</th>
             <th>Provincia</th>
             <th>Localidad</th>
+            <th>Coordinador</th>
+            <th>Personas confirmadas</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -19,6 +21,8 @@
             <td>{{ entity.escuela }}</td>
             <td>{{ entity.provincia }}</td>
             <td>{{ entity.localidad }}</td>
+            <td>{{ entity.getApellidoCoordinador() }}, {{ entity.getNombreCoordinador() }}</td>
+            <td> {{ entity.personasConfirmadas }} </td>
             <td>
                 <ul>
                     <li>

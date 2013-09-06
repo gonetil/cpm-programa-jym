@@ -19,7 +19,9 @@ class PresentacionExternaType extends AbstractType
             ->add('tipoPresentacion')
             ->add('bloque',null,array('required'=>false))
             ->add('tanda')
-            
+            ->add('apellido_coordinador')
+            ->add('nombre_coordinador')
+            ->add('personas_confirmadas')
         ;
     }
 

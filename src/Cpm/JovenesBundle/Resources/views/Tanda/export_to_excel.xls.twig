@@ -1,0 +1,31 @@
+<header><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></header>
+<table>
+<tr>
+	<td>Coordinador</td>
+	<td>Distrito</td>
+	<td>Localidad</td>
+	<td>Escuela</td>
+	<td>Personas confirmadas</td>
+	<td>Auditorio</td>
+	<td>Dia</td>
+	<td>Bloque</td>
+	<td>Hora de inicio</td>
+</tr>
+{% for presentacion in presentaciones %}
+<tr>
+	<td>{{ presentacion.getApellidoCoordinador() }}, {{ presentacion.getNombreCoordinador() }}</td>
+	<td>{{ presentacion.distrito }}</td>
+	<td>{{ presentacion.localidad }}</td>
+	<td>{{ presentacion.escuela }}</td>
+	<td>{{ presentacion.getPersonasConfirmadas() }}</td>
+	{% if presentacion.bloque  %}
+		<td>{{ presentacion.bloque.auditorioDia.auditorio.nombre }}</td>
+		<td>{{ presentacion.bloque.auditorioDia.dia.numero }}</td>
+		<td>{{ presentacion.bloque.nombre }} </td>
+		<td>{{ presentacion.bloque.horaInicio | date('H:i')}} </td>
+	{% else %}
+	<td colspan="4"> Sin asignar </td>
+	{% endif %}
+</tr>
+{% endfor %}
+</table>

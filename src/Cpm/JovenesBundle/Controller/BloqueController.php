@@ -151,9 +151,25 @@ class BloqueController extends Controller
         $editForm->bindRequest($request);
 
         if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
+        	
+        	$em->getConnection()->beginTransaction();
+	    	try { 
+	        	if (!$entity->getTienePresentaciones()) //al no ser un bloque de presentaciones, me aseguro que no tenga ninguna presentacion asignada 
+					foreach ( $entity->getPresentaciones() as $index => $presentacion ) {
+						$presentacion->setBloque(null);
+						$em->persist($presentacion);
+		 				$entity->getPresentaciones()->remove($index);
+					}	
+		        	
+	            $em->persist($entity);
+	            $em->flush();
+				$em->getConnection()->commit();
+	    	} catch (\Exception $e) {
+	    		$em->getConnection()->rollback();
+				$em->close();
+	            throw $e;
+	    	}
+    
             return $this->redirect($this->generateUrl('bloque_edit', array('id' => $id)));
         }
 

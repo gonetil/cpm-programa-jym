@@ -297,4 +297,62 @@ class TandaController extends BaseController
          
       return $this->redirect($this->generateUrl('tanda_show', array('id' => $tanda->getId() )));
     }
+    
+    
+    private function sortByCoordinadorApellido($presentacion1,$presentacion2) {
+    	return strcasecmp(	$presentacion1->getApellidoCoordinador() , $presentacion2->getApellidoCoordinador() );
+    }
+    
+    private function sortByDiaBloque($presentacion1,$presentacion2) {
+    	$bloque1 = $presentacion1->getBloque();
+    	$bloque2 = $presentacion2->getBloque();
+    	
+    	//verifico por si la presentacion aun no tiene un bloque asignado
+    	if (!isset($bloque2))
+    		return -1;
+    	else if (!isset($bloque1))
+    		return 1;	
+    	
+    	
+    	$dia1 = $bloque1->getAuditorioDia()->getDia();
+    	$dia2 = $bloque2->getAuditorioDia()->getDia();
+    	
+    	 if ( $dia1->getNumero() < $dia2->getNumero() ) 
+    	 	return -1;
+    	 else if ( $dia1->getNumero() > $dia2->getNumero() )
+    	 	return 1;
+    	 else //caen en el mismo dia 
+	    	 if ($bloque1->getHoraInicio() < $bloque2->getHoraInicio() )
+	    	 	return -1;
+	    	 else		
+    			return 1;
+    }
+    
+    /**
+     * Exporta una tanda a Excel
+     *
+     * @Route("export_excel", name="tanda_export_excel")
+     **/
+    
+    public function exportarProyectosExcelAction() {
+     	$sort_fn = $this->getRequest()->get('sort_fn');
+     	if (!isset($sort_fn))
+     		$sort_fn = 'sortByCoordinadorApellido';
+
+     	$tanda_id = $this->getRequest()->get('tanda_id');
+		$tanda = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+        if (!$tanda) 
+    		throw $this->createNotFoundException('Tanda no encontrada');
+    	
+    	$presentaciones = array();
+    	foreach ( $tanda->getPresentaciones() as $presentacion )
+       		$presentaciones[] = $presentacion;
+
+		
+		if (method_exists($this,$sort_fn))
+			usort($presentaciones,array($this,$sort_fn));
+
+		$template = 'CpmJovenesBundle:Tanda:export_to_excel.xls.twig';
+		return $this->makeExcel(array('presentaciones' => $presentaciones, 'tanda' => $tanda),$template, 'Tanda '.$tanda->getNumero());
+    }
 }

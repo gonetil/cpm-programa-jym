@@ -183,4 +183,7 @@ abstract class Presentacion
     public function setTanda($t) {
     	$this->tanda = $t;
     }
+    
+    abstract function getApellidoCoordinador();
+    abstract function getNombreCoordinador();
 }
