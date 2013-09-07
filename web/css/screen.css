@@ -3050,3 +3050,14 @@ h4.info_header:hover { background-color: #FFF; }
 	width: 400px;
 	height: 200px;
 }
+
+.hiddenForms {
+	float:right;
+	clear:both;
+	max-width:470px; 
+	background:#DEDEDE; 
+	border: 1px solid #AAAAAA;
+	padding: 2px;
+}
+
+.hiddenForms .hiddenForm { clear: both; display:none;}
