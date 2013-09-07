@@ -36,13 +36,15 @@ class PresentacionInterna extends Presentacion
     private $localidad;
     
 
-	static function createFromProyecto($proyecto) {
+	static function createFromInvitacion($invitacion) {
+		$proyecto = $invitacion->getProyecto();
 		$presentacion = new PresentacionInterna();
 		$presentacion->setProyecto($proyecto);
 		$presentacion->setLocalidad( $proyecto->getEscuela()->getLocalidad() );
 		$presentacion->setDistrito( $proyecto->getEscuela()->getLocalidad()->getDistrito() );
 		$presentacion->setTitulo($proyecto->getTitulo());
 		$presentacion->setEjeTematico($proyecto->getTemaPrincipal());
+		$presentacion->setPersonasConfirmadas($invitacion->countInvitados());
 		
 		$presentacion->setAreaReferencia($proyecto->getEje());
 		
@@ -164,9 +166,5 @@ class PresentacionInterna extends Presentacion
         return $this->getProyecto()->getCoordinador()->getNombre();
     }
     
-    
-    public function getPersonasConfirmadas() {
-    	return 999; //deberia recuperar la invitacion de este proyecto
-    }
     
 }

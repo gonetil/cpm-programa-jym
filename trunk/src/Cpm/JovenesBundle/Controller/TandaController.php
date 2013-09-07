@@ -322,10 +322,12 @@ class TandaController extends BaseController
     	 else if ( $dia1->getNumero() > $dia2->getNumero() )
     	 	return 1;
     	 else //caen en el mismo dia 
-	    	 if ($bloque1->getHoraInicio() < $bloque2->getHoraInicio() )
+	    	 if ($bloque1->getPosicion() < $bloque2->getPosicion() )
 	    	 	return -1;
-	    	 else		
+	    	 else if ($bloque1->getPosicion() > $bloque2->getPosicion() )		
     			return 1;
+    			else 
+    				return 0;
     }
     
     /**
@@ -352,7 +354,7 @@ class TandaController extends BaseController
 		if (method_exists($this,$sort_fn))
 			usort($presentaciones,array($this,$sort_fn));
 
-		$template = 'CpmJovenesBundle:Tanda:export_to_excel.xls.twig';
+		$template = 'CpmJovenesBundle:Tanda:export_to_csv.xls.twig';
 		return $this->makeExcel(array('presentaciones' => $presentaciones, 'tanda' => $tanda),$template, 'Tanda '.$tanda->getNumero());
     }
 }
