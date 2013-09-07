@@ -3,6 +3,71 @@
 {% block title %}Tanda{% endblock %}
 
 {% block content %}
+<ul class="record_actions" style="float:right">
+    <li>
+        <a href="{{ path('tanda') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('tanda_edit', { 'id': entity.id }) }}">
+            Editar
+        </a>
+    </li>
+
+    <li>
+        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar la tanda completa?');">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar</button>
+        </form>
+    </li>
+    <li>
+        <a href="#" onclick="$('.hiddenForm').hide(); $('#clonarForm').toggle(); return false;">
+            Clonar
+        </a>
+    </li>
+    <li>
+        <a href="#" onclick="$('.hiddenForm').hide(); $('#exportExcelForm').toggle(); return false;">
+            Exportar a Excel
+        </a>
+    </li>
+    
+   <li>
+        <a href="#" onclick="return confirmAndRelocate('Esta operacion quitará todas las presentaciones de los bloques. ¿desea continuar?','{{ path('tanda_reset',{'id': entity.id}) }}')">
+            Resetear
+        </a>
+    </li>
+    
+    </ul>
+  <div class="hiddenForms">
+	
+	  <div class="hiddenForm" id="exportExcelForm">
+	            <form method="get" action="{{ path('tanda_export_excel') }}">
+	            	<label for="sort_fn">Orden</label>
+		            <select name="sort_fn">
+		            	<option value="sortByCoordinadorApellido"> Por apellido del coordinador</option>
+		            	<option value="sortByDiaBloque"> Por dia y bloque</option>
+		            </select>
+		            <input type="hidden" name="tanda_id" value="{{ entity.id }}" />
+		            <button type="submit">Exportar</button>
+	            </form>
+	    </div>
+	    
+	  <div class="hiddenForm" id="clonarForm">
+	            <form method="get" action="{{ path('tanda_clonar') }}">
+	            	<label for="instancia_id">Seleccione la instancia de Chapadmalal para la nueva tanda</label>
+		            <select name="instancia_id">
+		            {% for instancia  in entity.instanciaEvento.evento.instancias %}
+		            	<option value="{{ instancia.id }}"> {{ instancia }} </option>
+		            {% endfor %}
+		            </select>
+		            <input type="hidden" name="tanda_id" value="{{ entity.id }}" />
+		            <button type="submit">Clonar</button>
+	            </form>
+	    </div>
+  
+</div>
+
 
 <table class="record_properties">
     <tbody>
@@ -77,66 +142,6 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('tanda') }}">
-            Volver al listado
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('tanda_edit', { 'id': entity.id }) }}">
-            Editar
-        </a>
-    </li>
 
-    <li>
-        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar la tanda completa?');">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Borrar</button>
-        </form>
-    </li>
-    <li>
-        <a href="#" onclick="$('#clonarForm').toggle(); return false;">
-            Clonar
-        </a>
-    </li>
-    <li>
-        <a href="#" onclick="$('#exportExcelForm').toggle(); return false;">
-            Exportar a Excel
-        </a>
-    </li>
-    
-   <li>
-        <a href="#" onclick="return confirmAndRelocate('Esta operacion quitará todas las presentaciones de los bloques. ¿desea continuar?','{{ path('tanda_reset',{'id': entity.id}) }}')">
-            Resetear
-        </a>
-    </li>
-    
-    </ul>
-    <br/>
-  <div id="clonarForm" style="display:none">
-            <form method="get" action="{{ path('tanda_clonar') }}">
-            	<label for="instancia_id">Seleccione la instancia de Chapadmalal para la nueva tanda</label>
-	            <select name="instancia_id">
-	            {% for instancia  in entity.instanciaEvento.evento.instancias %}
-	            	<option value="{{ instancia.id }}"> {{ instancia }} </option>
-	            {% endfor %}
-	            </select>
-	            <input type="hidden" name="tanda_id" value="{{ entity.id }}" />
-	            <button type="submit">Clonar</button>
-            </form>
-    </div>
-  
-	  <div id="exportExcelForm" style="display:none">
-	            <form method="get" action="{{ path('tanda_export_excel') }}">
-	            	<label for="sort_fn">Orden</label>
-		            <select name="sort_fn">
-		            	<option value="sortByCoordinadorApellido"> Por apellido del coordinador</option>
-		            	<option value="sortByDiaBloque"> Por dia y bloque</option>
-		            </select>
-		            <input type="hidden" name="tanda_id" value="{{ entity.id }}" />
-		            <button type="submit">Exportar</button>
-	            </form>
-	    </div>
 	    
 {% endblock %}
