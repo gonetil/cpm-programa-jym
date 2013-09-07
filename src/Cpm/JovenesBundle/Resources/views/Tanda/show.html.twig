@@ -7,10 +7,6 @@
 <table class="record_properties">
     <tbody>
         <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
             <th>Numero</th>
             <td>{{ entity.numero }}</td>
         </tr>
@@ -50,8 +46,22 @@
 		            			<li><hr></li>	
 			            		{% for bloque in auditorioDia.bloques %}
 			            			<li>
-			            				<a href="{{ path('bloque_show', { 'id': bloque.id }) }}">{{ bloque }} </a>(Inicio: {{ bloque.horaInicio | date("H:i")}} hs, {{ bloque.duracion }} minutos)
-			            				{% if bloque.presentaciones | length > 0 %} (<strong> {{ bloque.presentaciones | length}} presentaciones asignadas</strong>) {% endif %} 
+			            				<a href="{{ path('bloque_show', { 'id': bloque.id }) }}">{{ bloque }} </a>
+			            				<ul class='info_bloque'>
+			            						<li>Inicio: {{ bloque.horaInicio | date("H:i")}} hs, duración: {{ bloque.duracion }} minutos</li>
+			            				{% if bloque.presentaciones | length > 0 %} 
+			            						
+			            						<li>
+			            						<strong> {{ bloque.presentaciones | length}} presentaciones asignadas. </strong>
+			            						{% set duracion = 0 %}
+			            						{% for presentacion in bloque.presentaciones  %}
+			            							{% set duracion = duracion + presentacion.tipoPresentacion.duracionEstimada %}
+			            						{% endfor %}		
+			            						Duración estimada: <strong {% if duracion > bloque.duracion %}style="color:#FF0000"{% endif %}>{{ duracion }} minutos</strong>.
+			            						</li>
+			            				 {% endif %} 
+			            				</ul>
+			            				<br/> 
 			            			</li>
 		    	        		{% endfor %}
 		    	        		<li><hr></li>	
@@ -80,7 +90,7 @@
     </li>
 
     <li>
-        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar la tanda completa?');">
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>

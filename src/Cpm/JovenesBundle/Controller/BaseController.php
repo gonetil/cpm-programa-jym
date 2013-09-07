@@ -386,7 +386,7 @@ abstract class BaseController extends Controller
 		$filename = "$filename $date";
         $response = $this->render($template,$data);
         $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
-        $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xlsx"');
+        $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
     	return $response; 
     	
     	

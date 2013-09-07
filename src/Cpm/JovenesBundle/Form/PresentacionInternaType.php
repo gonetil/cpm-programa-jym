@@ -17,7 +17,10 @@ class PresentacionInternaType extends AbstractType
             ->add('proyecto')
             ->add('distrito')
             ->add('localidad')
-            ->add('bloque',null,array('required'=>false))
+            ->add('bloque',null,array(	'required'=>false,
+            							'query_builder' => function ($bl) {
+											return $bl->createQueryBuilder('bc')->where('bc.tienePresentaciones = true');
+			}))
             ->add('tanda')
             
         ;

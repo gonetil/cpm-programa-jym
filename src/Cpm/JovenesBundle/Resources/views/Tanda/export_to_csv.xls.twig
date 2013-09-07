@@ -1,26 +1,6 @@
-	"Coordinador",
-	"Distrito",
-	"Localidad",
-	"Escuela",
-	"Personas confirmadas",
-	"Auditorio",
-	"Dia",
-	"Bloque",
-	"Hora de inicio",
-\n
+{% spaceless %}
+Coordinador,Distrito,Localidad,Escuela,Participantes confirmados,Auditorio,Dia,Bloque,Hora de inicio del bloque
 {% for presentacion in presentaciones %}
-	"{{ presentacion.getApellidoCoordinador() }} {{ presentacion.getNombreCoordinador() }}",
-	"{{ presentacion.distrito }}",
-	"{{ presentacion.localidad }}",
-	"{{ presentacion.escuela }}",
-	"{{ presentacion.getPersonasConfirmadas() }}",
-	{% if presentacion.bloque  %}
-		"{{ presentacion.bloque.auditorioDia.auditorio.nombre }}",
-		"{{ presentacion.bloque.auditorioDia.dia.numero }}",
-		"{{ presentacion.bloque.nombre }}",
-		"{{ presentacion.bloque.horaInicio | date('H:i')}}"
-	{% else %}
-	"Sin asignar"
-	{% endif %}
-{{ ' \n\r'|raw }}
+{{ presentacion.getApellidoCoordinador() }} {{ presentacion.getNombreCoordinador() }},"{{ presentacion.distrito }}","{{ presentacion.localidad }}","{{ presentacion.escuela }}","{{ presentacion.getPersonasConfirmadas() }}",{% if presentacion.bloque  %}"{{ presentacion.bloque.auditorioDia.auditorio.nombre }}","{{ presentacion.bloque.auditorioDia.dia.numero }}","{{ presentacion.bloque.nombre }}","{{ presentacion.bloque.horaInicio | date('H:i')}}"{% else %}"Sin asignar"{% endif %}{{ '\r'|raw }}
 {% endfor %}
+{% endspaceless %}

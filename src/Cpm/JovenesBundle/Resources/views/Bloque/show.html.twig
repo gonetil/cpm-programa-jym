@@ -41,7 +41,10 @@
 					<td> 
 							<ul>
 							{% for p in entity.presentaciones %}
-								<li> {{ p.escuela }}</li>
+								<li> {{ p.escuela }} ({{ p.tipoPresentacion.tipoPresentacion }}) 
+										{% if p.proyecto %}
+											<a href="{{ path('proyecto_show',{'id' : p.proyecto.id }) }}">Ver proyecto</a></li>
+										{% endif %}	
 							{% endfor %}
 							</ul>
 					</td>

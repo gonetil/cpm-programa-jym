@@ -45,6 +45,12 @@ class Produccion
 	private $tipoPresentacion; //slug o nombre corto
 
     /**
+     * @var string $duracionEstimada
+     *
+     * @ORM\Column(name="duracionEstimada", type="integer",options={"default" = 0})
+     */
+	private $duracionEstimada=0;
+    /**
      * Get id
      *
      * @return integer 
@@ -103,6 +109,13 @@ class Produccion
 		$this->tipoPresentacion = $tp;
 	}
     
+    public function getDuracionEstimada() {
+    	return $this->duracionEstimada;
+    }
+    
+    public function setDuracionEstimada($d) {
+    	$this->duracionEstimada = $d;
+    }
     public function __toString()
     {
     	return $this->nombre . ( ( is_null($this->tipoPresentacion) ) ? "" : " (".$this->tipoPresentacion.")"  );

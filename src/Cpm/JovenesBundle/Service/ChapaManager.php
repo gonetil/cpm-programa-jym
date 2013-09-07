@@ -182,7 +182,7 @@ class ChapaManager {
 		
 		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento());
 		foreach ( $invitaciones as $invitacion ) {
-       		$presentacion = PresentacionInterna::createFromProyecto($invitacion[0]->getProyecto());
+       		$presentacion = PresentacionInterna::createFromInvitacion($invitacion[0]);
        		$presentacion->setTanda($tanda);
        		$tanda->addPresentacion($presentacion);
 		}

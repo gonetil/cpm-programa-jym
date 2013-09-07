@@ -76,6 +76,13 @@ abstract class Presentacion
      * @ORM\JoinColumn(name="tanda_id", referencedColumnName="id", nullable=false)
      */
     private $tanda;
+    
+   /**
+     * @var integer $personas_confirmadas;
+     *
+     * @ORM\Column(name="personas_confirmadas", type="integer")
+     */
+    private $personas_confirmadas;
 	
     /**
      * Get id
@@ -186,4 +193,13 @@ abstract class Presentacion
     
     abstract function getApellidoCoordinador();
     abstract function getNombreCoordinador();
+    
+        
+    public function getPersonasConfirmadas() {
+    	return $this->personas_confirmadas;
+    }
+    
+    public function setPersonasConfirmadas($pc) {
+    	$this->personas_confirmadas = $pc;
+    }
 }

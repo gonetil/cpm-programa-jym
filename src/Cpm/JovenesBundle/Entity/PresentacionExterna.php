@@ -56,13 +56,6 @@ class PresentacionExterna extends Presentacion
     private $nombre_coordinador;
 
     /**
-     * @var integer $personas_confirmadas;
-     *
-     * @ORM\Column(name="personas_confirmadas", type="integer")
-     */
-    private $personas_confirmadas;
-
-    /**
      * Set escuela
      *
      * @param string $escuela
@@ -165,12 +158,5 @@ class PresentacionExterna extends Presentacion
         return $this->nombre_coordinador;
     }
     
-    
-    public function getPersonasConfirmadas() {
-    	return $this->personas_confirmadas;
-    }
-    
-    public function setPersonasConfirmadas($pc) {
-    	$this->personas_confirmadas = $pc;
-    }
+
 }
