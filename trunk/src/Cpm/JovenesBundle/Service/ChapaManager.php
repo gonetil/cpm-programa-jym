@@ -215,17 +215,25 @@ class ChapaManager {
     	$iterator = $instancias->getIterator();
     	$iterator->uasort(function($inst1,$inst2) { return ($inst1->getFechaInicio() < $inst2->getFechaInicio()) ? -1 : 1 ; });
     	$index = 1;
-  
+  		$created = 0;
 	  	$auditorios = $em->getRepository('CpmJovenesBundle:Auditorio')->findBy(array('anulado'=>false));
 	  	
 	  	$em->getConnection()->beginTransaction();
     	try { 
 	    	foreach ( $instancias as $instancia ) {
-	    		$tanda = $this->inicializarUnaTanda($instancia,$index,$auditorios);
-	            $em->persist($tanda);
-	            $em->flush();
+
+				//echo "buscando tanda para instanciaEvento ".$instancia->getId();
+	    		$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->findBy(array('instanciaEvento'=>$instancia->getId()));
+	    		//echo "===>se encontraron ".count($tanda)." tandas <br/>";
+				if (count($tanda) == 0) {
+		    		$tanda = $this->inicializarUnaTanda($instancia,$index,$auditorios);
+	            	$em->persist($tanda);
+	            	$em->flush();
+	            	$created++;
+				} 
 	            $index++;
 			}
+			$index--;
 			$em->getConnection()->commit();
 			
     	} catch (\Exception $e) {
@@ -233,6 +241,8 @@ class ChapaManager {
 			$em->close();
             throw $e;
     	}  	
+    	
+    	return "$index instancias analizadas, $created tandas creadas";
 	}
 	
 	/*** FIN FUNCIONES DE INICIALIZACION AUTOMATICA **********/
