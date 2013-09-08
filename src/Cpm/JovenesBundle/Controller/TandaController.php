@@ -35,6 +35,9 @@ class TandaController extends BaseController
 		$eventos = $qb->getQuery()->getResult();
 
         $entities = $em->getRepository('CpmJovenesBundle:Tanda')->findAll();
+        usort($entities, function($t1,$t2) {  
+        							return ( ( $t1->getNumero() < $t2->getNumero() )
+        									  ? -1 : 1 );  });
 
         return array('entities' => $entities, 'eventos'=>$eventos);
     }
@@ -227,8 +230,8 @@ class TandaController extends BaseController
     	
     	$chapaManager = $this->getChapaManager();
     	try {
-    		$chapaManager->inicializarTandas($evento);
-    		$this->setSuccessMessage("Se crearon todas tandas, con sus dias y auditorios");
+    		$msg = $chapaManager->inicializarTandas($evento);
+    		$this->setSuccessMessage("Inicialización de tandas completada. $msg");
     	} catch (\Exception $e) {
     		$this->setErrorMessage('Error al inicializar las tandas de Chapadmalal. Mensaje: '.$e);
             throw $e;
@@ -298,11 +301,16 @@ class TandaController extends BaseController
       return $this->redirect($this->generateUrl('tanda_show', array('id' => $tanda->getId() )));
     }
     
-    
+    /**
+	* ordena dos presentaciones a partir del apellido del docence
+	*/
     private function sortByCoordinadorApellido($presentacion1,$presentacion2) {
     	return strcasecmp(	$presentacion1->getApellidoCoordinador() , $presentacion2->getApellidoCoordinador() );
     }
-    
+
+    /**
+	* ordena dos presentaciones a partir del dia y bloque en que se presentan
+	*/
     private function sortByDiaBloque($presentacion1,$presentacion2) {
     	$bloque1 = $presentacion1->getBloque();
     	$bloque2 = $presentacion2->getBloque();

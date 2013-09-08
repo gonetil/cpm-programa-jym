@@ -3,22 +3,6 @@
 {% block title %}Listado de tandas{% endblock %}
 
 {% block content %}
-{% if entities | length < 1 %}
-<h2> No se han definido tandas aún </h2>
-<h3>
-
-	<form method="post" action="{{ path('tanda_init') }}">
-		<label for="evento">A continuación, seleccione el evento que represente al encuentro en Chapadmalal:</label>
-		<select name="evento_chapa" id="evento_chapa">
-		{% for evento in eventos %}
-			<option value="{{ evento.id }}">{{ evento.titulo }}</option>
-		{% endfor %}
-		</select>
-		<input type="submit" value="Generar tandas">
-	</form>
-</h3>
-
-{% endif %}
 
 <table class="records_list">
     <thead>
@@ -51,11 +35,29 @@
     </tbody>
 </table>
 
-<ul>
+<ul class="record_actions">
     <li>
         <a href="{{ path('tanda_new') }}">
             Agregar otra tanda
         </a>
-    </li>
+     </li>
+     <li>    
+        <a href="#" onclick="$('#inicializarTandasForm').toggle(); return false;">
+            Recrear tandas faltantes
+        </a>
+	 </li>
 </ul>
+
+	        <div id="inicializarTandasForm" class="hiddenForms" style="display:none; clear:both;float:left;">
+	        	<form method="post" action="{{ path('tanda_init') }}">
+					<label for="evento">A continuación, seleccione el evento que corresponde al encuentro en Chapadmalal:</label>
+					<select name="evento_chapa" id="evento_chapa">
+					{% for evento in eventos %}
+						<option value="{{ evento.id }}">{{ evento.titulo }}</option>
+					{% endfor %}
+					</select>
+					<input type="submit" value="Generar tandas">
+				</form>
+			</div>
+
 {% endblock %}
