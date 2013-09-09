@@ -185,6 +185,6 @@ class Bloque
  	}
     
     public function __toString() {
-    	return "Bloque ".$this->posicion.": ".$this->nombre;
+    	return "Bloque ".$this->posicion.": ".$this->nombre."; Tanda ".$this->getAuditorioDia()->getDia()->getTanda()."";
     }
 }

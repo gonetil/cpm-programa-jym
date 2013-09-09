@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\BloqueType;
  *
  * @Route("/bloque")
  */
-class BloqueController extends Controller
+class BloqueController extends BaseController
 {
     /**
      * Lists all Bloque entities.
@@ -196,16 +196,27 @@ class BloqueController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
             $entity = $em->getRepository('CpmJovenesBundle:Bloque')->find($id);
-
+            
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Bloque entity.');
             }
 
-            $em->remove($entity);
-            $em->flush();
-        }
+	    	try {
+				foreach ( $entity->getPresentaciones() as $index => $presentacion ) {
+	       			$presentacion->setBloque(null);
+	       			$entity->getPresentaciones()->remove($index);
+	       			$em->persist($presentacion);
+				}
+	            $em->remove($entity);
+	            $em->flush();
+	    	} catch (\Exception $e) {
+	    		$this->setErrorMessage('Error al inicializar las tandas de Chapadmalal. Mensaje: '.$e);
+	            throw $e;
+	    	}	
 
-        return $this->redirect($this->generateUrl('bloque'));
+        }
+	return $this->redirect($this->generateUrl('bloque'));
+        
     }
 
     private function createDeleteForm($id)

@@ -1,5 +1,5 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
-
+{% import "CpmJovenesBundle:Common:macros.html.twig" as macros %}
 {% block title %}Tanda{% endblock %}
 
 {% block content %}
@@ -93,52 +93,8 @@
             <td>{{ entity.presentaciones|length }}</td>
         </tr>
         
-        {% if entity.dias | length > 0 %}
-        <tr>
-            <td colspan="2"><br><br>Días incluídos en la tanda</td>
-        </tr>
-	        {% for dia in entity.dias %}
-	        	<tr><td colspan="2"><hr></td></tr> {# linea de separación #}
-	        
-		        <tr>
-		            <th><a href="{{ path('dia_show', { 'id': dia.id }) }}">Día {{ dia.numero }}</a></th>
-		            <td>
-		            	<ul>
-		            	{% for auditorioDia in dia.auditoriosDias %}
-		            		<li> {{ auditorioDia.auditorio }} </li>
-		            		{% if auditorioDia.bloques | length > 0 %}
-		            		<ol>
-		            			<li><hr></li>	
-			            		{% for bloque in auditorioDia.bloques %}
-			            			<li>
-			            				<a href="{{ path('bloque_show', { 'id': bloque.id }) }}">{{ bloque }} </a>
-			            				<ul class='info_bloque'>
-			            						<li>Inicio: {{ bloque.horaInicio | date("H:i")}} hs, duración: {{ bloque.duracion }} minutos</li>
-			            				{% if bloque.presentaciones | length > 0 %} 
-			            						
-			            						<li>
-			            						<strong> {{ bloque.presentaciones | length}} presentaciones asignadas. </strong>
-			            						{% set duracion = 0 %}
-			            						{% for presentacion in bloque.presentaciones  %}
-			            							{% set duracion = duracion + presentacion.tipoPresentacion.duracionEstimada %}
-			            						{% endfor %}		
-			            						Duración estimada: <strong {% if duracion > bloque.duracion %}style="color:#FF0000"{% endif %}>{{ duracion }} minutos</strong>.
-			            						</li>
-			            				 {% endif %} 
-			            				</ul>
-			            				<br/> 
-			            			</li>
-		    	        		{% endfor %}
-		    	        		<li><hr></li>	
-		            		</ol>
-		            		{% endif %}
-		            	{% endfor %}
-		            	</ul>
-		            </td>
-		        </tr>
-	        
-	        {% endfor %}
-        {% endif %}
+        {{ macros.diasDeTanda(entity) }}
+
     </tbody>
 </table>
 

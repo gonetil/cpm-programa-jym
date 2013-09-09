@@ -1,6 +1,6 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
-
-{% block title %}Listado de días{% endblock %}
+{% import "CpmJovenesBundle:Common:macros.html.twig" as macros %}
+{% block title %}Detalle de día{% endblock %}
 
 {% block content %}
 
@@ -14,6 +14,18 @@
             <th>Número</th>
             <td>{{ entity.numero }}</td>
         </tr>
+        <tr>
+        	<th>Tanda</th>
+        	<td> {{ entity.tanda }}</td>
+        </tr>	
+         <tr>
+		        <th>Detalle</th>
+		            <td>
+		            	<ul>
+		            	{{ macros.auditodiosDiaDeDia(entity) }}
+		            	</ul>
+		            </td>
+		        </tr>
     </tbody>
 </table>
 
