@@ -156,15 +156,15 @@
 
 {% macro auditodiosDiaDeDia(dia) %}
 	{% for auditorioDia in dia.auditoriosDias %}
-		            		<li> {{ auditorioDia.auditorio }} </li>
-		            		{% if auditorioDia.bloques | length > 0 %}
-		            		<ol>
-		            			<li><hr></li>	
-			            		   {{  _self.bloquesDeAuditorioDia(auditorioDia)  }}
-		    	        		<li><hr></li>	
-		            		</ol>
-		            		{% endif %}
-		            	{% endfor %}
+		 <li> {{ auditorioDia.auditorio }} </li>
+		  {% if auditorioDia.bloques | length > 0 %}
+		       <ol>
+		            <li><hr></li>	
+			       		{{  _self.bloquesDeAuditorioDia(auditorioDia)  }}
+		    	   <li><hr></li>	
+		       </ol>
+		 {% endif %}
+	{% endfor %}
 {% endmacro %}		
 
 {% macro diasDeTanda(tanda) %}

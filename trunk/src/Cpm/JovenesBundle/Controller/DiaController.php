@@ -185,6 +185,7 @@ class DiaController extends Controller
                 throw $this->createNotFoundException('Unable to find Dia entity.');
             }
 
+			$entity->setTanda(null);
             $em->remove($entity);
             $em->flush();
         }
