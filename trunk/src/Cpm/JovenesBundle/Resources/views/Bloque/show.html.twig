@@ -1,4 +1,5 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+{% import "CpmJovenesBundle:Common:macros.html.twig" as macros %}
 
 {% block title %}Bloque{% endblock %}
 
@@ -39,14 +40,7 @@
 				<tr> 
 					<th>Presentaciones</th>
 					<td> 
-							<ul>
-							{% for p in entity.presentaciones %}
-								<li> {{ p.escuela }} ({{ p.tipoPresentacion.tipoPresentacion }}) 
-										{% if p.proyecto %}
-											<a href="{{ path('proyecto_show',{'id' : p.proyecto.id }) }}">Ver proyecto</a></li>
-										{% endif %}	
-							{% endfor %}
-							</ul>
+						{{ macros.presentacionesDeBloque(entity) }}
 					</td>
 				</tr>        	
         {% endif %} 
@@ -65,7 +59,7 @@
         </a>
     </li>
     <li>
-        <form action="{{ path('bloque_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('bloque_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar el bloque?');">
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>

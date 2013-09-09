@@ -54,8 +54,14 @@ class AuditorioDia
         return $this->id;
     }
 
-	public function getBloques() {
-		return $this->bloques;
+	public function getBloques($sorted = false) {
+		if ($sorted) {
+			$iterator = $this->bloques->getIterator(); 
+			$iterator->uasort(function($b1,$b2) { return ($b1->getPosicion() <= $b2->getPosicion() ) ? -1 : 1 ;});
+			return $iterator;
+		}
+		else
+			return $this->bloques;
 	}
 	public function setBloques($b) {
 		$this->bloques = $b;

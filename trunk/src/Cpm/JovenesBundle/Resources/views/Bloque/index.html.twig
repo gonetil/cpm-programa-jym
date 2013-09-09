@@ -12,6 +12,7 @@
             <th>Hora de inicio</th>
             <th>Duración</th>
             <th>Tipo</th>
+            <th>Dia y tanda</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -23,6 +24,7 @@
             <td>{% if entity.horaInicio %}{{ entity.horaInicio|date('H:i') }}{% endif%}</td>
             <td>{{ entity.duracion }}</td>
             <td>{% if entity.tienePresentaciones %} Bloque de presentaciones ({{ entity.presentaciones | length }} asignadas){% else %} Bloque simple {% endif %} </td>
+            <td> {{ entity.auditorioDia.dia }} </td>
             <td>
                 <ul>
                     <li>
