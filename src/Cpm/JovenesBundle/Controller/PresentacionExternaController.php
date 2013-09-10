@@ -48,9 +48,15 @@ class PresentacionExternaController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-
+		
+		$tandas= $em->getRepository('CpmJovenesBundle:Tanda')->findAll();
+        usort($tandas, function($t1,$t2) {  
+        							return ( ( $t1->getNumero() < $t2->getNumero() )
+        									  ? -1 : 1 );  });
+        									  
         return array(
             'entity'      => $entity,
+            'tandas' => $tandas,
             'delete_form' => $deleteForm->createView(),        );
     }
 

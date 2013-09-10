@@ -94,7 +94,7 @@ class PresentacionInterna extends Presentacion
      */
     public function getDistrito()
     {
-        return $this->getProyecto()->getDistrito();
+        return $this->getProyecto()->getEscuela()->getDistrito();
     }
 
     /**
@@ -114,7 +114,7 @@ class PresentacionInterna extends Presentacion
      */
     public function getLocalidad()
     {
-        return $this->getProyecto()->getDistrito()->getLocalidad();
+        return $this->getProyecto()->getEscuela()->getLocalidad();
     }
     
     

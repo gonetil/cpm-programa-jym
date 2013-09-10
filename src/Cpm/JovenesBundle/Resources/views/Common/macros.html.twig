@@ -113,7 +113,14 @@
 
 
 {% macro showPresentacion(p) %}
-			<li> {{ p.escuela }} ({{ p.tipoPresentacion.tipoPresentacion }}) 
+			<li> 
+				{% if p.proyecto is defined %}
+					{% set mypath = 'presentacioninterna_show' %}
+				{% else %}	
+					{% set mypath = 'presentacionexterna_show' %}
+				{% endif %}
+				
+				<a href='{{ path(mypath,{'id': p.id}) }}'>{{ p.escuela }} ({{ p.tipoPresentacion.tipoPresentacion }})</a> 
 				{% if p.proyecto is defined %}
 					<a href="{{ path('proyecto_show',{'id' : p.proyecto.id }) }}">Ver proyecto</a></li>
 				{% endif %}	

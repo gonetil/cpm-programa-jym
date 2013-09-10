@@ -252,8 +252,6 @@ class ChapaManager {
 	public function cambiarDeTanda($presentacion,$tanda) {
 		$invitacion = $presentacion->getInvitacion();
 		$instancia = $tanda->getInstanciaEvento();
-		if ($instancia)
-			$invitacion->setInstanciaEvento($instancia);
 		
 		$presentacion->setBloque(null);
 		$presentacion->setTanda($tanda);
@@ -262,9 +260,14 @@ class ChapaManager {
     	$em = $this->doctrine->getEntityManager();
     	$em->getConnection()->beginTransaction();		
 		try {   		
+			if (($instancia) && (isset($invitacion))) //solo las presentaciones internas tienen invitacion e instancia 
+			{
+				$invitacion->setInstanciaEvento($instancia);
+				$em->persist($invitacion);
+			}	
 			$em->persist($tanda);
     		$em->persist($presentacion);
-			$em->persist($invitacion);
+			
 			$em->flush();
 			$em->getConnection()->commit();
     		return "Tanda cambiada satisfactoriamente";
