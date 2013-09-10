@@ -18,27 +18,58 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PresentacionExterna extends Presentacion
 {
+    /**
+     * @var string $titulo
+     *
+     * @ORM\Column(name="titulo", type="string", length=255)
+     */
+    public $titulo;
+ /**
+    *  @ORM\ManyToOne(targetEntity="Tema")
+     *  @ORM\JoinColumns({
+    *   @ORM\JoinColumn(name="tema_id", referencedColumnName="id")
+    * })
+    */
+    public  $ejeTematico;
+    
+    /**
+    *  @ORM\ManyToOne(targetEntity="Eje")
+    *  @ORM\JoinColumns({
+    *   @ORM\JoinColumn(name="eje_id", referencedColumnName="id")
+    * })
+    */
+    public  $areaReferencia;
 
+    /**
+    *  @ORM\ManyToOne(targetEntity="Produccion")
+    *  @ORM\JoinColumns({
+    *   @ORM\JoinColumn(name="produccion_id", referencedColumnName="id")
+    * })
+    */
+    public  $tipoPresentacion;
+
+	
+   
     /**
      * @var string $escuela
      *
      * @ORM\Column(name="escuela", type="string", length=255)
      */
-    private $escuela;	
+    public  $escuela;	
     
         /**
      * @var string $provincia
      *
      * @ORM\Column(name="provincia", type="string", length=255)
      */
-    private $provincia;
+    public  $provincia;
     
     /**
      * @var string $localidad
      *
      * @ORM\Column(name="localidad", type="string", length=255)
      */
-    private $localidad;
+    public  $localidad;
 
 
     /**
@@ -46,14 +77,23 @@ class PresentacionExterna extends Presentacion
      *
      * @ORM\Column(name="apellido_coordinador", type="string", length=255)
      */
-    private $apellido_coordinador;	
+    public  $apellido_coordinador;	
 
     /**
      * @var string $nombre_coordinador
      *
      * @ORM\Column(name="nombre_coordinador", type="string", length=255)
      */
-    private $nombre_coordinador;
+    public  $nombre_coordinador;
+
+
+   	/**
+     * @var integer $personas_confirmadas;
+     *
+     * @ORM\Column(name="personas_confirmadas", type="integer")
+     */
+    public  $personas_confirmadas;
+
 
     /**
      * Set escuela

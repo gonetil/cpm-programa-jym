@@ -32,43 +32,12 @@ abstract class Presentacion
      */
     private $id;
 
-    /**
-     * @var string $titulo
-     *
-     * @ORM\Column(name="titulo", type="string", length=255)
-     */
-    private $titulo;
-
 
    /**
-    *  @ORM\ManyToOne(targetEntity="Tema")
-     *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="tema_id", referencedColumnName="id")
-    * })
-    */
-    private $ejeTematico;
-    
-    /**
-    *  @ORM\ManyToOne(targetEntity="Eje")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="eje_id", referencedColumnName="id")
-    * })
-    */
-    private $areaReferencia;
-
-    /**
-    *  @ORM\ManyToOne(targetEntity="Produccion")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="produccion_id", referencedColumnName="id")
-    * })
-    */
-    private $tipoPresentacion;
-
-	
-    /**
      * @ORM\ManyToOne(targetEntity="Bloque", inversedBy="presentaciones")
      * @ORM\JoinColumn(name="bloque_id", referencedColumnName="id", nullable=true)
      */
+     
 	private $bloque;
 	
     /**
@@ -77,12 +46,6 @@ abstract class Presentacion
      */
     private $tanda;
     
-   /**
-     * @var integer $personas_confirmadas;
-     *
-     * @ORM\Column(name="personas_confirmadas", type="integer")
-     */
-    private $personas_confirmadas;
 	
     /**
      * Get id
@@ -201,5 +164,9 @@ abstract class Presentacion
     
     public function setPersonasConfirmadas($pc) {
     	$this->personas_confirmadas = $pc;
+    }
+    
+    public function getInvitacion() {
+    	return null; //las presentaciones no tienen invitaciones, salvo las presentaciones internas
     }
 }
