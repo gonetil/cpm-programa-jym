@@ -1,4 +1,9 @@
-<h1>PresentacionInterna</h1>
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Presentacion interna{% endblock %}
+
+{% block content %}
+
 
 <table class="record_properties">
     <tbody>
@@ -24,11 +29,11 @@
         </tr>
         <tr>
             <th>Bloque</th>
-            <td>{{ entity.bloque}}</td>
+            <td>{%if entity.bloque %} <a href="{{ path('bloque_show',{'id':entity.bloque.id}) }}">{{ entity.bloque}}</a>{% else %} SIN ASIGNAR {% endif %}</td>
         </tr>
         <tr>
             <th>Tanda</th>
-            <td>{{ entity.tanda }}</td>
+            <td><a href="{{ path('tanda_show',{'id':entity.tanda.id}) }}">{{ entity.tanda }}</a></td>
         </tr>
         <tr>
             <th>Cant. de confirmados</th>
@@ -37,7 +42,7 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
+<ul class="record_actions" style='clear:both'>
     <li>
         <a href="{{ path('presentacioninterna') }}">
             Back to the list
@@ -49,9 +54,26 @@
         </a>
     </li>
     <li>
+    	<a href="#" onclick="$('#formNewTanda').toggle(); return false;"> Cambiar de tanda </a>
+    </li>
+    <li>
         <form action="{{ path('presentacioninterna_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit">Delete</button>
         </form>
     </li>
+    
 </ul>
+    	<div id="formNewTanda" class='hiddenForms' style='display:none; float:left'>
+    	<form method="post" action="{{ path('presentacion_cambiar_tanda') }}">
+    		<label for="tanda_id">Nueva tanda</label>
+    		<select name='tanda_id'>
+    		{% for tanda in tandas %}
+    		 <option value="{{ tanda.id }}">{{ tanda }}</option>
+    		{% endfor %} %}
+    		</select>
+    		<input type='hidden' name='presentacion_id' value='{{ entity.id }}' />
+    		<button type="submit">Cambiar</button>
+    	</form>
+    	</div>
+{% endblock %}

@@ -27,29 +27,33 @@ class PresentacionInterna extends Presentacion
     
     /**
     * @ORM\ManyToOne(targetEntity="Distrito")
-    */
+ 
     private $distrito;
-
+   */
     /**
     * @ORM\ManyToOne(targetEntity="Localidad")
-    */
-    private $localidad;
     
+    private $localidad;
+	*/
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="Invitacion")
+    */
+	private $invitacion;
 
 	static function createFromInvitacion($invitacion) {
 		$proyecto = $invitacion->getProyecto();
 		$presentacion = new PresentacionInterna();
+		$presentacion->setInvitacion($invitacion);
 		$presentacion->setProyecto($proyecto);
-		$presentacion->setLocalidad( $proyecto->getEscuela()->getLocalidad() );
+	/*	$presentacion->setLocalidad( $proyecto->getEscuela()->getLocalidad() );
 		$presentacion->setDistrito( $proyecto->getEscuela()->getLocalidad()->getDistrito() );
 		$presentacion->setTitulo($proyecto->getTitulo());
 		$presentacion->setEjeTematico($proyecto->getTemaPrincipal());
 		$presentacion->setPersonasConfirmadas($invitacion->countInvitados());
-		
 		$presentacion->setAreaReferencia($proyecto->getEje());
-		
 		$presentacion->setTipoPresentacion($proyecto->getProduccionFinal());
-		
+		*/
 		return $presentacion;
 		
 	}
@@ -90,7 +94,7 @@ class PresentacionInterna extends Presentacion
      */
     public function getDistrito()
     {
-        return $this->distrito;
+        return $this->getProyecto()->getDistrito();
     }
 
     /**
@@ -110,7 +114,7 @@ class PresentacionInterna extends Presentacion
      */
     public function getLocalidad()
     {
-        return $this->localidad;
+        return $this->getProyecto()->getDistrito()->getLocalidad();
     }
     
     
@@ -166,5 +170,17 @@ class PresentacionInterna extends Presentacion
         return $this->getProyecto()->getCoordinador()->getNombre();
     }
     
+    public function getInvitacion() {
+    	return $this->invitacion;
+    }
+    public function setInvitacion($inv) {
+    	$this->invitacion = $inv;
+    }
     
+    public function getTitulo() { return $this->proyecto->getTitulo(); }
+    public function getEjeTematico() { return $this->proyecto->getTemaPrincipal(); }
+    public function getAreaReferencia() { return $this->proyecto->getEje(); }
+    public function getTipoPresentacion() { return $this->proyecto->getProduccionFinal(); }
+    public function getPersonasConfirmadas() { return $this->invitacion->countInvitados(); }
+    	
 }

@@ -247,5 +247,34 @@ class ChapaManager {
 	
 	/*** FIN FUNCIONES DE INICIALIZACION AUTOMATICA **********/
 	
+	
+	//TODO falta probar
+	public function cambiarDeTanda($presentacion,$tanda) {
+		$invitacion = $presentacion->getInvitacion();
+		$instancia = $tanda->getInstanciaEvento();
+		if ($instancia)
+			$invitacion->setInstanciaEvento($instancia);
+		
+		$presentacion->setBloque(null);
+		$presentacion->setTanda($tanda);
+		$tanda->addPresentacion($presentacion);
+		
+    	$em = $this->doctrine->getEntityManager();
+    	$em->getConnection()->beginTransaction();		
+		try {   		
+			$em->persist($tanda);
+    		$em->persist($presentacion);
+			$em->persist($invitacion);
+			$em->flush();
+			$em->getConnection()->commit();
+    		return "Tanda cambiada satisfactoriamente";
+    	} catch (\Exception $e) {
+    		$em->getConnection()->rollback();
+			$em->close();
+            throw $e;
+    	}
 
+		
+		
+	}
 }

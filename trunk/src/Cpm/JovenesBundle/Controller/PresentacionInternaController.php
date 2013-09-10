@@ -47,10 +47,16 @@ class PresentacionInternaController extends Controller
             throw $this->createNotFoundException('Unable to find PresentacionInterna entity.');
         }
 
+        $tandas= $em->getRepository('CpmJovenesBundle:Tanda')->findAll();
+        usort($tandas, function($t1,$t2) {  
+        							return ( ( $t1->getNumero() < $t2->getNumero() )
+        									  ? -1 : 1 );  });
+        									  
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
+            'tandas' => $tandas,
             'delete_form' => $deleteForm->createView(),        );
     }
 

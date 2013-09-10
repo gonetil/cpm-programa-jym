@@ -1,4 +1,8 @@
-<h1>PresentacionInterna list</h1>
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Presentaciones internas{% endblock %}
+
+{% block content %}
 
 <table class="records_list">
     <thead>
@@ -19,7 +23,7 @@
             <td>{{ entity.titulo }}</td>
             <td>{{ entity.escuela }}</td>
             <td>{{ entity.getPersonasConfirmadas}}</td>
-            <td><td>{% if entity.bloque %} {{ entity.bloque }} {% else %} SIN DEFINIR {%  endif %}</td>
+            <td>{% if entity.bloque %} {{ entity.bloque }} {% else %} SIN DEFINIR {%  endif %}</td>
             <td>{{ entity.tanda }}</td>            
             <td>
                 <ul>
@@ -43,3 +47,4 @@
         </a>
     </li>
 </ul>
+{% endblock %}

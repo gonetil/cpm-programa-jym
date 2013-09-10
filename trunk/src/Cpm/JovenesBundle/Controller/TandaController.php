@@ -365,4 +365,35 @@ class TandaController extends BaseController
 		$template = 'CpmJovenesBundle:Tanda:export_to_csv.xls.twig';
 		return $this->makeExcel(array('presentaciones' => $presentaciones, 'tanda' => $tanda),$template, 'Tanda '.$tanda->getNumero());
     }
+    
+    
+        
+    /**
+     * Exporta una tanda a Excel
+     *
+     * @Route("presentacion_cambiar_tanda", name="presentacion_cambiar_tanda")
+     **/
+    public function moverPresentacionAOtraTanda() {
+     	$presentacion_id = $this->getRequest()->get('presentacion_id');
+     	$tanda_id = $this->getRequest()->get('tanda_id');
+    	
+    	$tanda = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+        if (!$tanda) 
+    		throw $this->createNotFoundException('Tanda no encontrada');
+    		
+    	$presentacion = $this->getEntity('CpmJovenesBundle:Presentacion',$presentacion_id);	
+    	if (!$presentacion) 
+    		throw $this->createNotFoundException('Presentacion no encontrada');
+    	
+    	$chapaManager = $this->getChapaManager();
+    	try {
+    		$msg = $chapaManager->cambiarDeTanda($presentacion,$tanda);
+    		$this->setSuccessMessage($msg);
+    	} catch (\Exception $e) {
+    		$this->setErrorMessage('Error al resetear la tanda seleccioanda. \nMensaje de error: '.$e);
+            throw $e;
+    	}
+    	
+    	return $this->redirect($this->generateUrl('presentacioninterna_show', array('id' => $presentacion->getId() )));
+    }
 }
