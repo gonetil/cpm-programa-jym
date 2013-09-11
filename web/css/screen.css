@@ -3061,3 +3061,29 @@ h4.info_header:hover { background-color: #FFF; }
 }
 
 .hiddenForms .hiddenForm { clear: both; display:none;}
+
+
+
+.info_bloque > li {
+	padding:2px;
+	background-color: #EFEFEF;
+	border: 1px solid #CCC;
+}
+
+
+.dia_tanda,.auditorio_dia,.bloque {
+	font-weight: bold;
+	text-transform: uppercase;
+	color:#000;
+}
+.presentacion_header {
+	font-weight:bold;
+	text-transform: none;
+	color:#000;
+}
+.presentacion-info {
+	font-weight: normal;
+	text-transform: none;
+	color:#000;
+	padding: 0px 0px 2px 5px;
+}

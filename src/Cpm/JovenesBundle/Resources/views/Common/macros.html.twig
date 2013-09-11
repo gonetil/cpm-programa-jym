@@ -120,10 +120,16 @@
 					{% set mypath = 'presentacionexterna_show' %}
 				{% endif %}
 				
-				<a href='{{ path(mypath,{'id': p.id}) }}'>{{ p.escuela }} ({{ p.tipoPresentacion.tipoPresentacion }})</a> 
-				{% if p.proyecto is defined %}
-					<a href="{{ path('proyecto_show',{'id' : p.proyecto.id }) }}">Ver proyecto</a></li>
-				{% endif %}	
+				<a href='{{ path(mypath,{'id': p.id}) }}' class="presentacion_header">
+					{{ p.getTitulo() }}
+				    ({{ p.tipoPresentacion.tipoPresentacion }})
+				</a> 
+				<div class="presentacion-info">
+					{{ p.escuela }} - {{ p.localidad }} - {{ p.distrito }}
+					{% if p.proyecto is defined %}
+						<a href="{{ path('proyecto_show',{'id' : p.proyecto.id }) }}">Ver proyecto</a></li>
+					{% endif %}	
+			    </div>	
 {% endmacro %}
 
 {% macro presentacionesDeBloque(bloque) %}
@@ -137,23 +143,24 @@
 {% macro bloquesDeAuditorioDia(auditorioDia,fullview) %}
 							{% for bloque in auditorioDia.getBloques(true) %}
 			            			<li>
-			            				<a href="{{ path('bloque_show', { 'id': bloque.id }) }}">{{ bloque }} </a>
+			            				<a href="{{ path('bloque_show', { 'id': bloque.id }) }}" class="bloque">{{ bloque.horaInicio | date("H:i")}} hs. {{ bloque }} </a>
 			            				<ul class='info_bloque'>
-			            						<li>Inicio: {{ bloque.horaInicio | date("H:i")}} hs, duración: {{ bloque.duracion }} minutos</li>
+			            						<li>Duración: {{ bloque.duracion }} minutos
 						            				{% if bloque.presentaciones | length > 0 %} 
 						            						
-						            						<li>
-						            						<strong> {{ bloque.presentaciones | length}} presentaciones asignadas. </strong>
+						            						| {{ bloque.presentaciones | length}} presentaciones asignadas.
 						            						{% set duracion = 0 %}
 						            						{% for presentacion in bloque.presentaciones  %}
 						            							{% set duracion = duracion + presentacion.tipoPresentacion.duracionEstimada %}
 						            						{% endfor %}		
-						            						Duración estimada: <strong {% if duracion > bloque.duracion %}style="color:#FF0000"{% endif %}>{{ duracion }} minutos</strong>.
-						            						{% if fullview %}
-						            							{{ _self.presentacionesDeBloque(bloque) }}
-						            						{% endif %}
-						            						</li>
+						            						| Duración calculada: <strong {% if duracion > bloque.duracion %}style="color:#FF0000"{% endif %}>{{ duracion }} minutos</strong>.
+						            					
 						            				 {% endif %} 
+						            				</li>
+						            				{% if fullview %}
+						            							{{ _self.presentacionesDeBloque(bloque) }}
+						            				{% endif %}
+						            					 
 			            				</ul>
 			            				<br/> 
 			            			</li>
@@ -162,7 +169,7 @@
 
 {% macro auditodiosDiaDeDia(dia) %}
 	{% for auditorioDia in dia.auditoriosDias %}
-		 <li> <a href="{{ path('auditoriodia_show',{'id':auditorioDia.id}) }}">{{ auditorioDia.auditorio }}</a> </li>
+		 <li> <a href="{{ path('auditoriodia_show',{'id':auditorioDia.id}) }}" class="auditorio_dia">{{ auditorioDia.auditorio }}</a> </li>
 		  {% if auditorioDia.bloques | length > 0 %}
 		       <ol>
 		            <li><hr></li>	
@@ -182,7 +189,7 @@
 			        	<tr><td colspan="2"><hr></td></tr> {# linea de separación #}
 			        
 				        <tr>
-				            <th><a href="{{ path('dia_show', { 'id': dia.id }) }}">Día {{ dia.numero }}</a></th>
+				            <th class="dia_tanda"><a href="{{ path('dia_show', { 'id': dia.id }) }}">Día {{ dia.numero }}</a></th>
 				            <td>
 				            	<ul>
 									{{ _self.auditodiosDiaDeDia(dia) }}
