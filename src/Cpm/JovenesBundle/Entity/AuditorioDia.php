@@ -86,7 +86,7 @@ class AuditorioDia
 	}
 	
 	public function __toString() {
-		return "Día ".$this->getDia()->getNumero() . " - ".$this->getAuditorio()->getNombre();
+		return "Día ".$this->getDia()->getNumero() . " - ".$this->getAuditorio()->getNombre() . ". Tanda ".$this->getDia()->getTanda();
 	}
 
 }

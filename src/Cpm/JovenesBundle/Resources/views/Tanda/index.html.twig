@@ -50,12 +50,16 @@
 
 	        <div id="inicializarTandasForm" class="hiddenForms" style="display:none; clear:both;float:left;">
 	        	<form method="post" action="{{ path('tanda_init') }}">
-					<label for="evento">A continuación, seleccione el evento que corresponde al encuentro en Chapadmalal:</label>
+					<label for="evento">Indique el evento de Chapadmalal:</label>
 					<select name="evento_chapa" id="evento_chapa">
 					{% for evento in eventos %}
 						<option value="{{ evento.id }}">{{ evento.titulo }}</option>
 					{% endfor %}
 					</select>
+					<br/>
+					<label for="incluir_no_confirmadas">Incluir también las presentaciones aún sin confirmar</label>
+					<input type="checkbox" name="incluir_no_confirmadas">
+					</br>
 					<input type="submit" value="Generar tandas">
 				</form>
 			</div>

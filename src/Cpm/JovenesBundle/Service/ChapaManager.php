@@ -177,10 +177,10 @@ class ChapaManager {
 	}
 	
 	
-	public function crearPresentacionesParaTanda($tanda) {
+	public function crearPresentacionesParaTanda($tanda,$incluir_no_confirmadas) {
 		$em = $this->doctrine->getEntityManager();
 		
-		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento());
+		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento(),$incluir_no_confirmadas);
 		foreach ( $invitaciones as $invitacion ) {
        		$presentacion = PresentacionInterna::createFromInvitacion($invitacion[0]);
        		$presentacion->setTanda($tanda);
@@ -188,7 +188,7 @@ class ChapaManager {
 		}
 	}
 	
-	public function inicializarUnaTanda($instancia,$numero=0,$auditorios = null) {
+	public function inicializarUnaTanda($instancia,$incluir_no_confirmadas,$numero=0,$auditorios = null) {
 
 		$em = $this->doctrine->getEntityManager();
 		$tanda = Tanda::createFromInstancia($instancia,$numero);
@@ -200,12 +200,12 @@ class ChapaManager {
 	    $dias = $diff->days + 1; //se consideran los dias entre las fechas mas el primer dia
 	    
 	    $this->crearDiasParaTanda($tanda,$dias,$auditorios);
-	    $this->crearPresentacionesParaTanda($tanda);
+	    $this->crearPresentacionesParaTanda($tanda,$incluir_no_confirmadas);
 	       		
 	    return $tanda; 
 	}
 	
-	public function inicializarTandas($evento) {
+	public function inicializarTandas($evento,$incluir_no_confirmadas) {
 		$em = $this->doctrine->getEntityManager();
 		
 		$instancias = $evento->getInstancias();
@@ -226,7 +226,7 @@ class ChapaManager {
 	    		$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->findBy(array('instanciaEvento'=>$instancia->getId()));
 	    		//echo "===>se encontraron ".count($tanda)." tandas <br/>";
 				if (count($tanda) == 0) {
-		    		$tanda = $this->inicializarUnaTanda($instancia,$index,$auditorios);
+		    		$tanda = $this->inicializarUnaTanda($instancia,$incluir_no_confirmadas,$index,$auditorios);
 	            	$em->persist($tanda);
 	            	$em->flush();
 	            	$created++;
