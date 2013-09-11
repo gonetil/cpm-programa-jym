@@ -80,12 +80,18 @@ class InvitacionRepository extends EntityRepository
 				
 	}
 
-	public function getInvitacionesAceptadas($instancia) { 
+	public function getInvitacionesAceptadas($instancia,$incluir_no_confirmadas) { 
 		$qb = $this->getEntityManager()->createQueryBuilder()
 				->add('select','i')
 				->add('from','CpmJovenesBundle:Invitacion i')
-				->andWhere('i.instanciaEvento = :instancia')->setParameter('instancia',$instancia)
-				->andWhere('i.aceptoInvitacion = true');
+				->innerJoin('i.instanciaEvento','instancia')
+				->andWhere('instancia = :instancia')->setParameter('instancia',$instancia);
+				
+			if ($incluir_no_confirmadas)	
+				$qb->andWhere('(i.aceptoInvitacion is NULL OR i.aceptoInvitacion = true)'); //o confirmadas o null
+			else
+				$qb->andWhere('i.aceptoInvitacion = true');	
+			
 			return $qb->getQuery()->iterate();//->getResult(); 
 				
 	}
