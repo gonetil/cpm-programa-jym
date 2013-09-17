@@ -39,11 +39,6 @@ class AuditorioDia
      private $auditorio;
      
      
-     public function __construct($auditorio,$dia) {
-     	$this->dia = $dia;
-     	$this->auditorio = $auditorio;
-		return $this;
-     }
     /**
      * Get id
      *
