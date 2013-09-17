@@ -26,7 +26,7 @@ class CronogramaController extends BaseController
 	/**
      * Creates a new Bloque entity.
      *
-     * @Route("/bloque", name="bloque_create")
+     * @Route("/bloque", name="crear_bloque")
      * @Method("post")
      */
 	public function crearBloqueAction() {
@@ -36,10 +36,10 @@ class CronogramaController extends BaseController
 	/**
      * Modifies a Bloque entity.
      *
-     * @Route("/bloque/{id}", name="bloque_update")
+     * @Route("/bloque/{id}", name="modificar_bloque")
      * @Method("post")
      */
-	public function crearBloqueAction($id) {
+	public function modificarBloqueAction($id) {
 		$entity  = new Bloque();
         $request = $this->getRequest();
 		
