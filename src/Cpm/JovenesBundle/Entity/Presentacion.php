@@ -169,4 +169,23 @@ abstract class Presentacion
     public function getInvitacion() {
     	return null; //las presentaciones no tienen invitaciones, salvo las presentaciones internas
     }
+    
+    public function toArray($recursive,$parent_recursive) {
+    	$sin_bloque = empty($this->bloque);
+    	$invitacion = -1;
+    	if ($this->getInvitacion() )
+    		$invitacion = $this->getInvitacion()->getId();
+    		
+    	return array(
+			    	'id' => $this->id ,
+			    	'invitacion' => $invitacion ,
+			    	'tanda' => $this->tanda->getId(),
+			    	'areaReferencia' => $this->getAreaReferencia()->__toString(),
+			    	'ejeTematico' => $this->getEjeTematico()->__toString(),
+			    	'bloque' => ( $sin_bloque ) ? '' :    
+			    											   ($parent_recursive ? 
+			    																$this->bloque->toArray(0, $parent_recursive) :  
+			    																$this->bloque->getId() )
+			    	);
+    }
 }

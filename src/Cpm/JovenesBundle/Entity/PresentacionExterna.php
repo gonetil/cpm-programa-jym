@@ -198,5 +198,10 @@ class PresentacionExterna extends Presentacion
         return $this->nombre_coordinador;
     }
     
+    public function toArray($recursive,$parent_recursive) {
+    	$array = parent::toArray($recursive,$parent_recursive);
+    	$array['tipo'] = 'externa';
+    	return $array;
+    }	
 
 }

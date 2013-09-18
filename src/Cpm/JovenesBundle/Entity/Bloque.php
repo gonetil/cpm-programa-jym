@@ -187,4 +187,22 @@ class Bloque
     public function __toString() {
     	return "Bloque ".$this->posicion.": ".$this->nombre."; Tanda ".$this->getAuditorioDia()->getDia()->getTanda()."";
     }
+    
+    public function toArray($recursive_depth,$parent_recursive) {
+ 			
+		$presentaciones = array();
+    	foreach ( $this->presentaciones as $p )
+       		$presentaciones[] = $p->toArray($recursive_depth-1,false);
+ 			
+ 			$bloque = array( 'id' => $this->id , 
+ 							 'posicion' => $this->posicion,
+ 							 'tienePresentaciones' => $this->tienePresentaciones,
+ 							 'duracion' => $this->duracion,
+ 							 'horaInicio' => $this->horaInicio,
+ 							 'auditorioDia' => ($parent_recursive) ? $this->auditorioDia->toArray($recursive_depth,$parent_recursive) : $this->auditorioDia->getId(),
+ 							 'presentaciones' => $presentaciones
+ 							 
+ 							 ) ;
+ 			return $bloque;				 
+    }
 }

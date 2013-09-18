@@ -99,7 +99,9 @@ class ChapaManager {
 	}
 	
 	public function clonarAuditorioDia($auditorioDia,$new_dia) {
-		$newAuditorioDia = new AuditorioDia($auditorioDia->getAuditorio(),$new_dia);
+		$newAuditorioDia = new AuditorioDia();
+		$newAuditorioDia->setAuditorio($auditorioDia->getAuditorio());
+		$newAuditorioDia->setDia($new_dia);
 		foreach ( $auditorioDia->getBloques() as $bloque )
        		$newAuditorioDia->addBloque($this->clonarBloque($bloque,$newAuditorioDia));
 		
@@ -171,8 +173,13 @@ class ChapaManager {
 	    for($dia=1;$dia<=$num_dias;$dia++) {
 			$tandaDia = Dia::createDia($tanda,$dia);	       	
 			//cargo los auditorios para cada dia
-	       	foreach ( $auditorios as $auditorio)
-	       		$this->doctrine->getEntityManager()->persist(new AuditorioDia($auditorio,$tandaDia));
+	       	foreach ( $auditorios as $auditorio) { 
+	       		$newAuditorioDia = new AuditorioDia();
+				$newAuditorioDia->setAuditorio($auditorio);
+				$newAuditorioDia->setDia($tandaDia);
+				$this->doctrine->getEntityManager()->persist($newAuditorioDia);
+	       	}
+	       		
 		 }
 	}
 	
