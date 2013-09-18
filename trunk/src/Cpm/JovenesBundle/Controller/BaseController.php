@@ -380,6 +380,15 @@ abstract class BaseController extends Controller
     	return $response;
     }
     
+    protected function createSimpleResponse($status_code,$content="") {
+    	$response = new Response();
+
+		$response->setContent($content);
+		$response->setStatusCode($status_code);
+		$response->headers->set('Content-Type', 'text/html');
+		return $response;
+    }
+    
     protected function makeExcel($data,$template,$filename="") {
     	
     	$date = date('d-M-Y');

@@ -100,5 +100,21 @@ class Dia
     public function __toString() {
     	return "Día ".$this->getNumero().", tanda ".$this->getTanda();
     }
+    
+    public function toArray($recursive,$parent_recursive) {
+    	
+    	$auditoriosDias = array();
+    	
+    	foreach ( $this->auditoriosDias as $ad )
+       		$auditoriosDias[] = ( ($recursive) ? $ad->toArray(true,false) : $ad->getId() );
+		
+    	$dia = array(
+					'id' => $this->id , 
+ 					'tanda' => ( ($parent_recursive) ? $this->tanda->toArray($recursive,$parent_recursive) : $this->tanda->getId() ),
+ 					'numero' => $this->numero ,
+ 					'auditoriosDias' => $auditoriosDias
+ 					);
+ 		return $dia;
+    }
 
 }

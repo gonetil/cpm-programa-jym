@@ -177,4 +177,29 @@ class Tanda
 	    $tanda->setNumero($numero);
 	    return $tanda;
 	}
+	
+	 public function toArray($recursive_depth,$parent_recursive) {
+    	
+    	$dias = array();
+    	
+    	foreach ( $this->dias as $d )
+       		$dias[] = $d->toArray($recursive_depth-1,false);
+
+		$presentaciones = array();
+    	foreach ( $this->presentaciones as $p ) {
+    		$sin_bloque = ($p->getBloque());
+		    if (!$sin_bloque)
+	       	    $presentaciones[] = $p->toArray($recursive_depth-1,false);
+    	}
+    	$dia = array(
+					'id' => $this->id ,
+					'numero' => $this->numero ,
+					'fechaInicio' => $this->fechaInicio ,
+					'fechaFin' => $this->fechaFin,
+					'instanciaEvento' => $this->instanciaEvento->getId(),					 
+ 					'dias' => $dias,
+ 					'presentaciones' => $presentaciones,
+ 					);
+ 		return $dia;
+    }
 }

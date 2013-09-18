@@ -89,4 +89,11 @@ class Auditorio
     public function __toString() {
     	return $this->getNombre(). ( $this->anulado ? " (ANULADO)" : "");
     }
+    
+    public function toArray($recursive,$parent_recursive) {
+    	return array('id' => $this->id ,
+    				 'nombre' => $this->nombre, 
+    				 'anulado' => $this->anulado 
+    				);
+    }
 }
