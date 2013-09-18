@@ -93,6 +93,41 @@ class CronogramaController extends BaseController
 			$this->answerError($e);
 		}
 	}	
+	
+
+    /**
+     * Removes a Bloque entity
+     * @Route("/bloque/{id}", name="borrar_bloque")
+     * @Method("delete")
+     */
+     public function borrarBloqueAction($id) {
+     	$chapaManager = $this->getChapaManager();
+     	
+     	try {
+	     	$bloque  = $this->getEntity('CpmJovenesBundle:Bloque', $id);
+	     	$chapaManager->borrarBloque($bloque);
+			return $this->answerOk("Bloque eliminado satisfactoriamente");			
+		}
+		catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+     }
+
+    /**
+     * Gets a Bloque entity
+     * @Route("/bloque/{id}", name="mostrar_bloque")
+     * @Method("get")
+     */
+     public function mostrarBloqueAction($id) {
+     	try {
+	     	$bloque  = $this->getEntity('CpmJovenesBundle:Bloque', $id);
+			return $this->createJsonResponse($bloque->toArray(2,false));			
+		}
+		catch (\Exception $e) {
+			$this->answerError($e);
+		}
+     }
+
 
 	/**
      * 	Lista los bloques desde un AuditorioDia
@@ -127,14 +162,8 @@ class CronogramaController extends BaseController
 		
 		try { 
 			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+			return $this->createJsonResponse($tanda->toArray(5,false));
 		} catch (\Exception $e) {
-			$this->answerError($e);
-		}
-		
-		try {
-			return $this->createJsonResponse($tanda->toArray(5,false));			
-		}
-		catch (\Exception $e) {
 			$this->answerError($e);
 		}
 		

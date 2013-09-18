@@ -201,7 +201,18 @@ class BloqueController extends BaseController
                 throw $this->createNotFoundException('Unable to find Bloque entity.');
             }
 
-	    	try {
+	     	$chapaManager = $this->getChapaManager();
+	     	
+	     	try {
+		     	$bloque  = $this->getEntity('CpmJovenesBundle:Bloque', $id,$em);
+		     	$chapaManager->borrarBloque($bloque);
+				return $this->answerOk("Bloque eliminado satisfactoriamente");			
+		    } catch (\Exception $e) {
+		    		$this->setErrorMessage('Error al inicializar las tandas de Chapadmalal. Mensaje: '.$e);
+		            throw $e;
+		    }	
+	 
+	    /*	try {
 				foreach ( $entity->getPresentaciones() as $index => $presentacion ) {
 	       			$presentacion->setBloque(null);
 	       			$entity->getPresentaciones()->remove($index);
@@ -212,7 +223,8 @@ class BloqueController extends BaseController
 	    	} catch (\Exception $e) {
 	    		$this->setErrorMessage('Error al inicializar las tandas de Chapadmalal. Mensaje: '.$e);
 	            throw $e;
-	    	}	
+	    	}
+	    	*/	
 
         }
 	return $this->redirect($this->generateUrl('bloque'));
