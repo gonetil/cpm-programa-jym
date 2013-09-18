@@ -283,8 +283,30 @@ class ChapaManager {
 			$em->close();
             throw $e;
     	}
-
 		
+	}
+	
+	/**
+	 * Elimina un bloque. Antes de hacerlo, desasocia todas las presentaciones del mismo (quedarán asociadas a la tanda)
+	 */
+	public function borrarBloque($bloque) {
 		
+    	$em = $this->doctrine->getEntityManager();
+    	$em->getConnection()->beginTransaction();		
+		try {
+			foreach ( $bloque->getPresentaciones() as $index => $presentacion ) {
+		       	$presentacion->setBloque(null);
+		       	$bloque->getPresentaciones()->remove($index);
+		       	$em->persist($presentacion);
+			}
+		    $em->remove($bloque);
+		    $em->flush();
+		    $em->getConnection()->commit();
+	    	return "Bloque eliminado satisfactoriamente";
+    	} catch (\Exception $e) {
+    		$em->getConnection()->rollback();
+			$em->close();
+            throw $e;
+    	}
 	}
 }
