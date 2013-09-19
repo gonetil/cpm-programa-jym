@@ -66,7 +66,7 @@ class Bloque
     /**
      * @ORM\OneToMany(targetEntity="Presentacion", mappedBy="bloque")
      */
-	private $presentaciones;
+	private $presentaciones = array();
 
 
 

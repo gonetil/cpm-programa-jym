@@ -40,15 +40,15 @@ class CronogramaController extends BaseController
 	public function crearBloqueAction() {
 		$bloque  = new Bloque();
         $request = $this->getRequest();
-		$bloque = $this->populateBloqueFromRequest($bloque,$request);
-		
+		$this->populateBloqueFromRequest($bloque,$request);
 		try { 
+			
 			$em = $this->getDoctrine()->getEntityManager();
 			$em->persist($bloque);
 	        $em->flush();
-	        $this->answerOk($bloque->getId());
+	        return $this->answerOk($bloque->getId());
 		} catch (\Exception $e) {
-			$this->answerError($e);
+			return $this->answerError($e);
 		}
 	}
 	
@@ -61,7 +61,7 @@ class CronogramaController extends BaseController
 	public function modificarBloqueAction($id) {
 		$bloque  = $this->getEntityForUpdate('CpmJovenesBundle:Bloque', $id);
         $request = $this->getRequest();
-        $bloque = $this->populateBloqueFromRequest($bloque,$request);
+        $this->populateBloqueFromRequest($bloque,$request);
         try { 
 			$em = $this->getDoctrine()->getEntityManager();
 			$em->persist($bloque);
@@ -231,11 +231,7 @@ class CronogramaController extends BaseController
     	   	$em->getConnection()->rollback();
 			$em->close();
             return $this->answerError($e);
-    	
     	}
-    	
-		 
-		
     	
 	}
 	
@@ -246,31 +242,49 @@ class CronogramaController extends BaseController
 	 * Agrego estos dos helpers answerOk y answerError para concentrar los tipos de respuesta, por si cambiamos de JSON a http_code y vice versa
 	 */
 	private function answerOk($message="") {
-		//return $this->createJsonResponse(array('status' => 'success', 'message' => $message);
-		$response = $this->createSimpleResponse(200,$message);
+		return $this->createJsonResponse(array('status' => 'success', 'message' => $message));
+		//$response = $this->createSimpleResponse(200,$message);
 		return $response->send();		
 	}
 	
 	private function answerError($message="") {
-		//return $this->createJsonResponse(array('status' => 'error', 'message' => $message);
-		$response = $this->createSimpleResponse(500,$message);
+		return $this->createJsonResponse(array('status' => 'error 500', 'message' => $message));
+		//$response = $this->createSimpleResponse(500,$message);
 		return $response->send();
 	}
 	
 	private function populateBloqueFromRequest($bloque,$request) {
+		$request = $this->getVarsFromJSON($request);
 		
-		$bloque->setPosicion( $request->get('posicion') );
-		$bloque->setHoraInicio( $request->get('horaInicio') );
-		$bloque->setDuracion( $request->get('duracion') );
-		$bloque->setAuditorioDia( $request->get('auditorioDia') );
-		$bloque->setNombre( $request->get('nombre') );
-		$bloque->setTienePresentaciones( $request->get('tienePresentaciones') );
+		$auditorioDia = $this->getEntity('CpmJovenesBundle:AuditorioDia', $this->getVar($request,'auditorioDia') );
+
+		$horaInicio = date_create_from_format ('h:i', $this->getVar($request,'horaInicio') );
+		$bloque->setHoraInicio( $horaInicio );
 		
-		$p = $request->get('presentaciones');
+		$bloque->setPosicion( $this->getVar($request,'posicion') );
+		$bloque->setDuracion( $this->getVar($request,'duracion') );
+		$bloque->setAuditorioDia( $auditorioDia );
+		$bloque->setNombre( $this->getVar($request,'nombre') );
+		$bloque->setTienePresentaciones( $this->getVar($request,'tienePresentaciones') );
+		
+		$p = $this->getVar($request,'presentaciones');
 		if ( !empty($p))
 			$bloque->setPresentaciones ( $p ) ;
+			
 		return $bloque;
 	}
 	
+	private function getVar($array,$key) {
+		return ( array_key_exists($key,$array) ? $array[$key] : '' );
+	}
+	
+	private function getVarsFromJSON($request) {
+		$content = $request->getContent();
+		if (!empty($content))
+	    {
+	        $params = json_decode($content,true); // 2nd param to get as array
+	    }
+	    return $params;
+	}
 
 }
