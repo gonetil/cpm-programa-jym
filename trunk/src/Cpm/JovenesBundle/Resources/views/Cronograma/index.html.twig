@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>CPM - Programa Jóvenes y Memoria - Diagramación de tanda</title>
+	<link rel="stylesheet" href="{{ asset('css/screen.css') }}" />
+	<link rel="stylesheet" href="{{ asset('css/jquery-ui/jquery-ui-1.8.18.custom.css') }}" />
+	<link rel="stylesheet" href="{{ asset('bootstrap-2.3.2/css/bootstrap.css') }}" />
+<!-- 	<link rel="stylesheet" href="{{ asset('css/jquery.tooltip.css') }}" /> -->
+	<script src="{{ asset('js/jquery-1.7.1.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('js/jquery-ui-1.8.18.custom.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bootstrap-2.3.2/js/bootstrap.min.js') }}" type="text/javascript"></script>
+	 <script>var BASE_PATH="{{app.request.getBasePath()}}";</script>
+	<script src="{{ asset('js/angular-1.1.5.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('js/angular.resource-1.1.5.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('js/angular-dragdrop-1.0.3.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('ng/cronograma/ng-cronograma-app.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('ng/cronograma/ng-cronograma-controller.js') }}" type="text/javascript"></script>
+<!-- 	<script src="{{ asset('js/jquery.tooltip.min.js') }}" type="text/javascript"></script> -->
+<!-- 	<script src="{{ asset('js/jquery.validate.min.js') }}" type="text/javascript"></script> -->
+<!-- 	<script src="{{ asset('js/validation_messages_es.js') }}" type="text/javascript"></script> -->
+	<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+	
+	<div id="page-top-top">
+		<div id="page-top-top-title" class="row-fluid">
+			<span class="span10" >
+			<a href="http://www.comisionporlamemoria.org/">Comisión provincial por la memoria</a> - 
+			<a href="http://jovenesymemoria.comisionporlamemoria.net">Programa Jóvenes y memoria</a>
+			</span>
+			<span class="span2" >
+			<a href="javascript:history.back();" >Atras</a>
+			 - 
+			<a href="{{path('dashboard')}}" >Volver al Inicio</a>
+			</span>
+		</div>
+
+	</div>
+	<div class="clear"></div>
+
+	{#% include 'CpmJovenesBundle:Layout:menu.html.twig' %#}
+	<div class="clear"></div>
+
+	<div class="container-fluid" ng-app="cronograma">
+		<div class='ng-cloak '>
+			<div  id="cronograma-view"  ng-view >
+			
+			</div>
+		</div>
+<!-- 		<div class='row-fluid '> -->
+<!-- 			<div class="span8 offset2" ng-show="debug_console">{% raw %}{{debug_console}}{% endraw %}</div> -->
+<!-- 		</div> -->
+		
+		
+		
+	</div>
+	<div class="clear"></div>
+	{% include 'CpmJovenesBundle:Layout:footer.html.twig' %}
+</body>
+</html>

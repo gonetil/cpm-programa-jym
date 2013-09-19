@@ -1,0 +1,111 @@
+<!--     TITULO -->
+  <div class="row-fluid">
+      <h1 style="text-align: center">Cronograma de <span ng-show="!tanda.nombre">Tanda sin título (id:{{tanda.id}})</span>{{tanda.nombre}}</h1>
+<!--       <a class="btn" ng-click="resetear_cronograma()">Resetear Cronograma</a> -->
+  </div>
+  
+  <div class="row-fluid ">
+      <!-- PRESENTACIONES LIBRES-->
+      <div class="span2 caja ">		<div class="header-caja">
+	      	<div class="titulo">Libres</div>
+	      	</div> 
+          <div ng-model="tanda.presentaciones_libres" 
+          	class=" caja-bloque-presentaciones" style="{{css_dias_height()}}"
+          	data-drop="true" jqyoui-droppable="{multiple:true,placeholder:false}" data-jqyoui-options="{accept:'.badge-presentacion'}">
+	      
+             <div ng-repeat="p in tanda.presentaciones_libres" ng-model="tanda.presentaciones_libres" class="badge badge-presentacion" style="height:{{p.duracion}}px;" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-drag="true" data-jqyoui-options="jquoui_drag_options" > 
+	          	{{p.titulo}}
+	          </div>
+	      </div>
+      </div>
+
+        <!-- CRONOGRAMA-->
+      <div class="span10">
+          <div ng-repeat="dia in tanda.dias" class="row caja-dia"  >
+            <div class="caja caja-auditorio-dia span{{12/dia.auditorios_dia.length-1}}" style="{{css_dia_height()}};" ng-repeat="auditorio_dia in dia.auditorios_dia">
+              <div class="header-caja">
+              <div class="titulo">{{auditorio_dia.titulo}}</div>
+				<div class="operaciones btn-group ">
+					<button class="btn btn-large btn-primary dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></button>
+					<ul class="dropdown-menu " >
+				      <li><a href="#/auditorio/{{auditorio_dia.id}}/bloque/new">Crear Bloque</a></li>
+				      <li class="divider"></li>
+				    </ul>
+  				</div>
+              </div>
+              <!-- begin BLOQUES -->
+              <div class="row-fluid">
+                <!-- IZQUIERDA -->
+              	<div class="span6">
+	                <div class="caja-bloque" ng-repeat="bloque in auditorio_dia.bloques" ng-show="$index < 2">
+	                  <h6>{{bloque.hora_inicio}}HS {{bloque.titulo}}</h6>
+	                  
+	                  <div ng-model="bloque.presentaciones" ng-show="bloque_tiene_presentaciones(bloque)"
+	                  	class="caja-bloque-presentaciones" style="{{css_bloque_height(bloque)}};" 
+	                  	data-drop="true" jqyoui-droppable="{multiple:true,placeholder:false}" data-jqyoui-options="bloque_drop_options" data-drag="false"> 
+	                  	
+	                    <!-- PRESENTACION -->
+	                    <div ng-repeat="p in bloque.presentaciones" ng-model="bloque.presentaciones" 
+	                    	class="badge badge-presentacion" style="height:{{p.duracion}}px;" 
+	                    	data-drag="true" jqyoui-draggable="{index:{{$index}}, animate:true, placeholder:false}" data-jqyoui-options="jquoui_drag_options">
+	                      {{p.titulo}}
+	                    </div>
+	                  </div>
+                    </div>
+                </div>
+                <!-- DERECHA (se duplica la columna izquierda)-->
+              	<div class="span6">
+	                <div class="caja-bloque" ng-repeat="bloque in auditorio_dia.bloques" ng-show="$index >= 2">
+	                  <h6>{{bloque.hora_inicio}}HS {{bloque.titulo}}</h6>
+	                  
+	                  <div ng-model="bloque.presentaciones" ng-show="bloque_tiene_presentaciones(bloque)"
+	                  	class="caja-bloque-presentaciones" style="{{css_bloque_height(bloque)}};" 
+	                  	data-drop="true" jqyoui-droppable="{multiple:true,placeholder:false}" data-jqyoui-options="bloque_drop_options" data-drag="false"> 
+	                  	
+	                    <!-- PRESENTACION -->
+	                    <div ng-repeat="p in bloque.presentaciones" ng-model="bloque.presentaciones" 
+	                    	class="badge badge-presentacion" style="height:{{p.duracion}}px;" 
+	                    	data-drag="true" jqyoui-draggable="{index:{{$index}}, animate:true, placeholder:false}" data-jqyoui-options="jquoui_drag_options">
+	                      {{p.titulo}}
+	                    </div>
+	                  </div>
+	                          
+	                </div>
+	             </div>
+               </div>
+              <!--end BLOQUES -->
+              
+              
+            </div><!-- end auditorio-->
+            <div class="span1">
+				<div class="btn-group btn-group-vertical">
+					<button type="button" class="btn">Dia {{dia.numero}}</button>
+					<button type="button" class="btn"><i class="icon-search"></i></button>
+					<button type="button" class="btn"><i class="icon-plus"></i></button>
+					<button type="button" class="btn"><i class="icon-repeat"></i></button>
+					
+				</div>
+			</div>
+          </div><!-- end dia-->
+      </div>
+    </div>
+    
+    
+    <!--  DEBUG -->
+    
+    <div ng-show="printDebug" class="row-fluid">
+	<div class="span2">
+		Presentaciones Libres <br/>
+        <span ng-repeat="p in tanda.presentaciones_libres" >{{p.titulo}}, </span> 
+	</div>
+    <div class="span2" ng-repeat="dia in tanda.dias">
+    	Dia {{dia.numero}}: 
+        <div ng-repeat="ad in dia.auditorios_dia">
+			{{ad.titulo}}
+			<div ng-repeat="b in ad.bloques" ng-show="bloque_tiene_presentaciones(b)">
+				{{b.titulo}}({{b.id}}) <span ng-repeat="p in b.presentaciones">{{p.titulo}} ({{p.id}}), </span>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

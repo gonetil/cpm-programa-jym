@@ -1,11 +1,4 @@
 <?php
-/*
- * Created on 17/09/2013
- * @author gonetil
- * project jym
- * Copyleft 2013
- * 
- */
 
 namespace Cpm\JovenesBundle\Controller;
 
@@ -14,6 +7,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+
+
+use Cpm\JovenesBundle\Entity\Bloque;
+use Cpm\JovenesBundle\Entity\Tanda;
+use Cpm\JovenesBundle\Entity\Auditorio;
 
 /**
  * Bloque controller.
@@ -24,35 +22,15 @@ class CronogramaController extends BaseController
 {
 	
 	/**
-	 * Agrego estos dos helpers answerOk y answerError para concentrar los tipos de respuesta, por si cambiamos de JSON a http_code y vice versa
-	 */
-	private function answerOk($message="") {
-		//return $this->createJsonResponse(array('status' => 'success', 'message' => $message);
-		$response = $this->createSimpleResponse(200,$message);
-		return $response->send();		
+     * 
+     * @Route("/", name="index_cronograma")
+     * @Template("CpmJovenesBundle:Cronograma:index.html.twig")
+     * @Method("get")
+     */
+	public function indexAction()
+    {
+        return array();
 	}
-	
-	private function answerError($message="") {
-		//return $this->createJsonResponse(array('status' => 'error', 'message' => $message);
-		$response = $this->createSimpleResponse(500,$message);
-		return $response->send();
-	}
-	
-	private function populateBloqueFromRequest($bloque,$request) {
-		
-		$bloque->setPosicion( $request->get('posicion') );
-		$bloque->setHoraInicio( $request->get('horaInicio') );
-		$bloque->setDuracion( $request->get('duracion') );
-		$bloque->setAuditorioDia( $request->get('auditorioDia') );
-		$bloque->setNombre( $request->get('nombre') );
-		$bloque->setTienePresentaciones( $request->get('tienePresentaciones') );
-		
-		$p = $request->get('presentaciones');
-		if ( !empty($p))
-			$bloque->setPresentaciones ( $p ) ;
-		return $bloque;
-	}
-	
 	/**
      * Creates a new Bloque entity.
      *
@@ -168,5 +146,43 @@ class CronogramaController extends BaseController
 		}
 		
 	}	
+	
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////INTERNAL ////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	
+	/**
+	 * Agrego estos dos helpers answerOk y answerError para concentrar los tipos de respuesta, por si cambiamos de JSON a http_code y vice versa
+	 */
+	private function answerOk($message="") {
+		//return $this->createJsonResponse(array('status' => 'success', 'message' => $message);
+		$response = $this->createSimpleResponse(200,$message);
+		return $response->send();		
+	}
+	
+	private function answerError($message="") {
+		//return $this->createJsonResponse(array('status' => 'error', 'message' => $message);
+		$response = $this->createSimpleResponse(500,$message);
+		return $response->send();
+	}
+	
+	private function populateBloqueFromRequest($bloque,$request) {
+		
+		$bloque->setPosicion( $request->get('posicion') );
+		$bloque->setHoraInicio( $request->get('horaInicio') );
+		$bloque->setDuracion( $request->get('duracion') );
+		$bloque->setAuditorioDia( $request->get('auditorioDia') );
+		$bloque->setNombre( $request->get('nombre') );
+		$bloque->setTienePresentaciones( $request->get('tienePresentaciones') );
+		
+		$p = $request->get('presentaciones');
+		if ( !empty($p))
+			$bloque->setPresentaciones ( $p ) ;
+		return $bloque;
+	}
+	
 	
 }
