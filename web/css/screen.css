@@ -9,15 +9,14 @@ html,body {
  height: 100%;
 }
 
-body {
-    background-image: url("../images/login/bg_top.png");
-    background-position: center top;
-    background-repeat: repeat-x;
-
- color: #393939;
- font-family: Arial;
-/*  font-size: 0px; */
-/*  line-height: 0; */
+body  {
+	background-image: url("../images/login/bg_top.png");
+	background-position: center top;
+	background-repeat: repeat-x;
+	margin-top: 10px !important;
+	margin: 0;
+	color: #393939;
+	font-family: Arial;
 }
 
 #page-top-top{
@@ -3062,28 +3061,105 @@ h4.info_header:hover { background-color: #FFF; }
 
 .hiddenForms .hiddenForm { clear: both; display:none;}
 
-
-
-.info_bloque > li {
-	padding:2px;
-	background-color: #EFEFEF;
-	border: 1px solid #CCC;
-}
-
-
-.dia_tanda,.auditorio_dia,.bloque {
+/*******************************************/
+/***********ESTILOS DEL CRONOGRAMA**********/
+/*******************************************/
+.header-caja{
+	margin: 0;
+	padding: 14px 19px;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+	
+	border-radius:4px;
+	position: relative;
+	min-height:20px;
+}    
+.header-caja > .titulo {
+	text-align: center;
 	font-weight: bold;
-	text-transform: uppercase;
-	color:#000;
+		
 }
-.presentacion_header {
-	font-weight:bold;
-	text-transform: none;
-	color:#000;
+.header-caja > .operaciones {
+/* 	display:none; */
+	position:absolute;
+	right:2px;
+	top:2px;
 }
-.presentacion-info {
-	font-weight: normal;
-	text-transform: none;
-	color:#000;
-	padding: 0px 0px 2px 5px;
+.header-caja:hover > div.operaciones { 
+	display:block;
 }
+
+.caja {
+	background-color: #dceaf4;
+	border: 1px solid #ddd;
+ 	margin:0px; 
+	padding: 0px;
+	border-radius: 5px;
+	
+}
+
+.caja-dia {
+	clear: both;
+	border: 1px solid #ddd;
+	margin: 0px;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+
+.caja-bloque-presentaciones {
+	background-color: white;
+	padding: 5px 10px;
+	
+}
+
+.caja-auditorio-dia {
+
+/* 	margin: 0px 10px 5px 10px; */
+}
+
+.badge-presentacion {
+	background-color: #3a87ad;
+	margin-top: 10px;
+	vertical-align: middle;
+	cursor: move;
+}
+
+.titulo-corner-left {
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: bold;
+	background-color: #f5f5f5;
+	border: 1px solid #ddd;
+	color: #9da0a4;
+	border-radius: 4px 0 4px 0;
+}
+
+.badge-presentacion-hover {
+	opacity: 0.5;
+}
+
+
+#cronograma-view {
+/* 	position: relative; */
+	margin: 15px 0;
+	padding: 39px 19px 14px;
+	background-color: #F9F9F9;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+#cronograma-view > form {
+	background-color: #fff;
+	padding: 15px 50px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	display: table;
+	margin: auto auto;
+}
+/*******************************************/
+/*******FIN ESTILOS DEL CRONOGRAMA**********/
+/*******************************************/
+
+

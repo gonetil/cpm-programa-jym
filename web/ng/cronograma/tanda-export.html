@@ -1,0 +1,13 @@
+<div 2ng-show="printDebug" class="row-fluid">
+	<div class="span2">
+		Presentaciones Libres <br /> <span ng-repeat="p in tanda.presentaciones_libres">{{p.titulo}}, </span>
+	</div>
+	<div class="span2" ng-repeat="dia in tanda.dias">
+		Dia {{dia.numero}}:
+		<div ng-repeat="ad in dia.auditorios_dia">
+			{{ad.titulo}}
+			<div ng-repeat="b in ad.bloques" ng-show="bloque_tiene_presentaciones(b)">
+				{{b.titulo}}({{b.id}}) <span ng-repeat="p in b.presentaciones">{{p.titulo}} ({{p.id}}), </span>
+			</div>
+		</div>
+</div>
