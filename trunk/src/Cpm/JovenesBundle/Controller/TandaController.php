@@ -381,13 +381,10 @@ class TandaController extends BaseController
     	$tanda = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
         if (!$tanda) 
     		throw $this->createNotFoundException('Tanda no encontrada');
-    		
-    	$path = 'presentaciointerna_show';
-    	
+    		    	
     	try { 
     		$presentacion = $this->getEntity('CpmJovenesBundle:PresentacionInterna',$presentacion_id);
     	} catch (\Exception $e) {
-    		$path = 'presentacionexterna_show';
     		$presentacion = $this->getEntity('CpmJovenesBundle:PresentacionExterna',$presentacion_id);    		
     	}
 
@@ -400,6 +397,6 @@ class TandaController extends BaseController
             throw $e;
     	}
     	
-    	return $this->redirect($this->generateUrl($path, array('id' => $presentacion->getId() )));
+    	return $this->redirect($this->generateUrl('presentacion_show', array('id' => $presentacion->getId() )));
     }
 }

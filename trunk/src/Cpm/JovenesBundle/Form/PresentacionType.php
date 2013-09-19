@@ -11,10 +11,20 @@ class PresentacionType extends AbstractType
     {
         $builder
             ->add('titulo')
+            ->add('escuela')
+            ->add('provincia')
+            ->add('localidad')
             ->add('ejeTematico')
             ->add('areaReferencia')
             ->add('tipoPresentacion')
-            ->add('bloque')
+            ->add('bloque',null,array(	'required'=>false,
+            							'query_builder' => function ($bl) {
+											return $bl->createQueryBuilder('bc')->where('bc.tienePresentaciones = true');
+			}))
+            ->add('tanda')
+            ->add('apellido_coordinador')
+            ->add('nombre_coordinador')
+            ->add('personas_confirmadas')
         ;
     }
 

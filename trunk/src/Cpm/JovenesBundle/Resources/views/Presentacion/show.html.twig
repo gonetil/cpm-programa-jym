@@ -1,4 +1,9 @@
-<h1>Presentacion</h1>
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %}Presentacion {% if entity.esExterna() %} externa {% else %} interna {% endif %} {% endblock %}
+
+{% block content %}
+
 
 <table class="record_properties">
     <tbody>
@@ -10,8 +15,19 @@
             <th>Titulo</th>
             <td>{{ entity.titulo }}</td>
         </tr>
-        
+     	<tr>
+            <th>Escuela</th>
+            <td>{{ entity.escuela }}</td>
+        </tr>
         <tr>
+            <th>Distrito</th>
+            <td>{{ entity.distrito }}</td>
+        </tr>
+        <tr>
+            <th>Localidad</th>
+            <td>{{ entity.localidad }}</td>
+        </tr>        
+  		<tr>
             <th>Eje tematico</th>
             <td>{{ entity.ejeTematico}}</td>
         </tr>
@@ -25,29 +41,34 @@
         </tr>
         <tr>
             <th>Bloque</th>
-            <td>{{ entity.bloque}}</td>
+            <td>{%if entity.bloque %} <a href="{{ path('bloque_show',{'id':entity.bloque.id}) }}">{{ entity.bloque}}</a>{% else %} SIN ASIGNAR {% endif %}</td>
         </tr>
         <tr>
             <th>Tanda</th>
-            <td>{{ entity.tanda }}</td>
+            <td><a href="{{ path('tanda_show',{'id':entity.tanda.id}) }}">{{ entity.tanda }}</a></td>
         </tr>
         <tr>
             <th>Cant. de confirmados</th>
-            <td>{{ entity.personas_confirmadas }}</td>
-        </tr>
-      </tbody>
+            <td>{{ entity.getPersonasConfirmadas }}</td>
+        </tr>        
+    </tbody>
 </table>
 
-<ul class="record_actions">
+<ul class="record_actions" style='clear:both'>
     <li>
         <a href="{{ path('presentacion') }}">
-            Back to the list
+            Volver al listado
         </a>
     </li>
+    {% if entity.esExterna() %}
     <li>
         <a href="{{ path('presentacion_edit', { 'id': entity.id }) }}">
-            Edit
+            Editar
         </a>
+    </li>
+    {% endif %}
+    <li>
+    	<a href="#" onclick="$('#formNewTanda').toggle(); return false;"> Cambiar de tanda </a>
     </li>
     <li>
         <form action="{{ path('presentacion_delete', { 'id': entity.id }) }}" method="post">
@@ -55,4 +76,18 @@
             <button type="submit">Delete</button>
         </form>
     </li>
+    
 </ul>
+    	<div id="formNewTanda" class='hiddenForms' style='display:none; float:left'>
+    	<form method="post" action="{{ path('cambiar_de_tanda') }}">
+    		<label for="tanda_id">Nueva tanda</label>
+    		<select name='tanda_id'>
+    		{% for tanda in tandas %}
+    		 <option value="{{ tanda.id }}">{{ tanda }}</option>
+    		{% endfor %} %}
+    		</select>
+    		<input type='hidden' name='presentacion_id' value='{{ entity.id }}' />
+    		<button type="submit">Cambiar</button>
+    	</form>
+    	</div>
+{% endblock %}
