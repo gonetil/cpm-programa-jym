@@ -309,4 +309,20 @@ class ChapaManager {
             throw $e;
     	}
 	}
+	
+	
+	/**
+	 * elimina todos los auditoriosDias y sus bloques de un determinado dia
+	 */
+	public function vaciarDia($dia) {
+		$em = $this->doctrine->getEntityManager();
+		$this->resetDia($dia); //saco todas las presentaciones
+					
+		foreach ( $dia->getAuditoriosDias() as $index => $ad ) { //volamos todos los auditorios_dias del dia
+		       	$dia->getAuditoriosDias()->remove($index);
+		       	$em->remove($ad);
+		}
+		$em->flush();
+		return $dia;
+	}
 }

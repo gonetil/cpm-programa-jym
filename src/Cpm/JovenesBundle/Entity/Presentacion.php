@@ -46,6 +46,7 @@ abstract class Presentacion
      */
     private $tanda;
     
+    public function esExterna() { return false; }
 	
     /**
      * Get id

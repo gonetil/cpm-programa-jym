@@ -94,7 +94,7 @@ class PresentacionExterna extends Presentacion
      */
     public  $personas_confirmadas;
 
-
+	public function esExterna() { return true; }
     /**
      * Set escuela
      *
