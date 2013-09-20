@@ -100,13 +100,13 @@ class CronogramaController extends BaseController
      public function mostrarBloqueAction($id) {
      	try {
 	     	$bloque  = $this->getEntity('CpmJovenesBundle:Bloque', $id);
-			return $this->createJsonResponse($bloque->toArray(2,false));			
+			return $this->createJsonResponse($bloque->toArray(2));			
 		}
 		catch (\Exception $e) {
 			$this->answerError($e);
 		}
      }
-
+	
 
 	/**
      * 	Lista los bloques desde un AuditorioDia
@@ -118,17 +118,31 @@ class CronogramaController extends BaseController
 		
 		try { 
 			$auditorioDia  = $this->getEntity('CpmJovenesBundle:AuditorioDia', $auditodiodia_id);
-		} catch (\Exception $e) {
-			$this->answerError($e);
-		}
-		
-		try {
-			return $this->createJsonResponse($auditorioDia->toArray(2,false));			
+			return $this->createJsonResponse($auditorioDia->toArray(2));			
 		}
 		catch (\Exception $e) {
 			$this->answerError($e);
 		}
 		
+	}
+
+	/**
+     * @Route("/tanda/{tandaId}/dia")
+     * @Method("post")
+     */
+	public function crearDiaAction($tandaId) {
+		$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tandaId);
+		$dia = $tanda->agregarDia(-1);
+		
+		try { 
+			$em = $this->getDoctrine()->getEntityManager();
+			$em->persist($dia);
+			$em->persist($tanda);
+	        $em->flush();
+			return $this->createJsonResponse($dia->toArray(2));			
+		} catch (\Exception $e) {
+			$this->answerError($e);
+		}
 	}
 	
 	/**
@@ -137,14 +151,47 @@ class CronogramaController extends BaseController
      * @Route("/tanda/{tanda_id}", name="get_tanda")
      * @Method("get")
      */
-	public function getTandaJSONAction($tanda_id) {
+	public function getTandaAction($tanda_id) {
 		try { 
 			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
-			return $this->createJsonResponse($tanda->toArray(5,false));
+			$tandaArray = $tanda->toArray(20);
+			$tandaArray['presentaciones_libres']=array();
+			foreach($tanda->getPresentaciones() as $p){
+				if (!$p->hasBloque())
+					$tandaArray['presentaciones_libres'][]=$p->toArray(1);
+			}		
+			return $this->createJsonResponse($tandaArray);
 		} catch (\Exception $e) {
 			$this->answerError($e);
 		}
-	}	
+	}
+	
+	
+	/**
+     * 	Lista las tandas
+     *
+     * @Route("/tanda/")
+     * @Method("get")
+     * TODO ver si no debería recibir un event_id o algo así que permita filtrar las tandas
+     * s
+     */
+	public function listarTandasAction() 
+	{
+		try { 
+			$em = $this->getDoctrine()->getEntityManager();
+			//FIXME retornar solo tandas del ciclo activo 
+	        $tandas = $em->getRepository('CpmJovenesBundle:Tanda')->findAll();
+    		$tandasArrayadas=array();
+    		foreach($tandas as $t ){
+    			$tandasArrayadas[]=$t->toArray(1);
+    		}
+    		return $this->createJsonResponse($tandasArrayadas);			
+		} catch (\Exception $e) {
+			//TODO aca no habría que hacer un retirn de answerError???
+			$this->answerError($e);
+		}
+		
+	}
 
 	/**
      * 	Obtiene una lista con todos los tipos de presentaciones

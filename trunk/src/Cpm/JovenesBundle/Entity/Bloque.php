@@ -189,20 +189,21 @@ class Bloque
     }
     
     public function toArray($recursive_depth,$parent_recursive) {
- 			
+ 		if ($recursive_depth == 0)
+    		return $this->getId();
+    	
 		$presentaciones = array();
-    	foreach ( $this->presentaciones as $p )
-       		$presentaciones[] = $p->toArray($recursive_depth-1,false);
- 			
- 			$bloque = array( 'id' => $this->id , 
+    	foreach ( $this->getPresentaciones() as $p )
+       		$presentaciones[] = $p->toArray($recursive_depth-1);
+
+		return array(
+							'id' => $this->id , 
  							 'posicion' => $this->posicion,
  							 'tienePresentaciones' => $this->tienePresentaciones,
  							 'duracion' => $this->duracion,
  							 'horaInicio' => $this->horaInicio,
- 							 'auditorioDia' => ($parent_recursive) ? $this->auditorioDia->toArray($recursive_depth,$parent_recursive) : $this->auditorioDia->getId(),
+ 							 'auditorioDia' => $this->auditorioDia->getId(),
  							 'presentaciones' => $presentaciones
- 							 
- 							 ) ;
- 			return $bloque;				 
+ 		);				 
     }
 }

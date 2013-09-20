@@ -39,7 +39,9 @@ class Dia
      */
     private $tanda;
     
-    
+    public function __construct(){
+		$this->auditoriosDias = new \Doctrine\Common\Collections\ArrayCollection();
+	}
     
     static function createDia($tanda,$numero=0,$auditoriosDias=null) {
     	$tandaDia = new Dia();
@@ -101,20 +103,20 @@ class Dia
     	return "Día ".$this->getNumero().", tanda ".$this->getTanda();
     }
     
-    public function toArray($recursive,$parent_recursive) {
+    public function toArray($recursive_depth) {
+    	if ($recursive_depth == 0)
+    		return $this->getId();
     	
     	$auditoriosDias = array();
-    	
-    	foreach ( $this->auditoriosDias as $ad )
-       		$auditoriosDias[] = ( ($recursive) ? $ad->toArray(true,false) : $ad->getId() );
+    	foreach ($this->getAuditoriosDias() as $ad )
+       		$auditoriosDias[] = $ad->toArray($recursive_depth-1);
 		
-    	$dia = array(
+    	return array(
 					'id' => $this->id , 
- 					'tanda' => ( ($parent_recursive) ? $this->tanda->toArray($recursive,$parent_recursive) : $this->tanda->getId() ),
+ 					'tanda' => $this->getTanda()->getId(),
  					'numero' => $this->numero ,
  					'auditoriosDias' => $auditoriosDias
  					);
- 		return $dia;
     }
 
 }

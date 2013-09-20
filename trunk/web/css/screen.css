@@ -3122,6 +3122,8 @@ h4.info_header:hover { background-color: #FFF; }
 	margin-top: 10px;
 	vertical-align: middle;
 	cursor: move;
+	max-width: 170px;
+	overflow: hidden;
 }
 
 .titulo-corner-left {

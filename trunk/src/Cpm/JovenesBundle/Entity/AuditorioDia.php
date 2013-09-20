@@ -84,19 +84,21 @@ class AuditorioDia
 		return "Día ".$this->getDia()->getNumero() . " - ".$this->getAuditorio()->getNombre() . ". Tanda ".$this->getDia()->getTanda();
 	}
 	
-	public function toArray($recursive_depth,$parent_recursive) {
+	public function toArray($recursive_depth) 
+	{
+		if ($recursive_depth == 0)
+    		return $this->getId();
+    	
 		$bloques = array();
-		foreach ( $this->bloques as $bloque ) 
-			$bloques[] = ( ($recursive_depth > 0) ? $bloque->toArray($recursive_depth-1,false) : $bloque->getId() );
-       		 
-		
- 			$auditorioDia = array( 'id' => $this->id , 
- 							 'bloques' => $bloques,
- 							 'dia' => ( ($parent_recursive) ? $this->getDia()->toArray(0,$parent_recursive) : $this->getDia()->getId() ),
- 							 'auditorio' => ($recursive_depth > 0) ? $this->getAuditorio()->toArray($recursive_depth-1,$parent_recursive) : $this->getAuditorio()->getId()
- 							 ) ;
- 							 
- 			return $auditorioDia;				 
+		foreach ( $this->getBloques() as $bloque ) 
+			$bloques[] = $bloque->toArray($recursive_depth-1);
+       		
+		return array( 
+				'id' => $this->id , 
+ 				'bloques' => $bloques,
+ 				'dia' => $this->getDia()->getId(),
+ 				'auditorio' => $this->getAuditorio()->toArray($recursive_depth-1)
+ 			) ;
     }
 
 }

@@ -4,17 +4,22 @@ var app = angular.module("cronograma", ['ngDragDrop', 'ngResource']);
 
 app.factory('Bloque', function($resource){
 	Bloque = $resource('bloque/:bloqueId', {}, {
-		//query: {method:'GET', params:{bloqueId:'phones'}, isArray:true}
+		//
 	});
 	//TODO reemplazar hola por getAuditorioDia o algo así 
 	Bloque.prototype.hola=function(){alert('hole Bloque'+this.auditorio_dia_id);}; 
 	return Bloque;
 });
+app.factory('Dia', function($resource){
+	Dia= $resource('tanda/:tandaId/dia/:diaId', {}, {
+		//save: {method:'POST', params:{tandaId:'6'}, isArray:false}
+	});
+	return Dia;
+});
 app.factory('Tanda', function($resource){
 	Tanda = $resource('tanda/:tandaId', {}, {
 		//query: {method:'GET', params:{bloqueId:'phones'}, isArray:true}
 	});
-	Tanda.prototype.hola=function(){alert('hole');};
 	return Tanda;
 });
 
@@ -27,9 +32,11 @@ app.run(function ($rootScope) {
 app.config(['$routeProvider', function($routeProvider, $rootScope) {
 	$routeProvider.
 		when('/', {templateUrl: asset('tanda-list.html'), controller: TandaListCtrl}).
-		when('/tanda/show/:tandaId', {templateUrl: asset('tanda-show.html'), controller: TandaShowCtrl}).
+		when('/tanda/:tandaId/show', {templateUrl: asset('tanda-show.html'), controller: TandaShowCtrl}).
 		when('/auditorio/:auditorioDiaId/bloque/new', {templateUrl: asset('bloque-new.html'), controller: BloqueNewCtrl}).
 		when('/auditorio/:auditorioDiaId/bloque/edit/:bloqueId', {templateUrl: asset('bloque-edit.html'), controller: BloqueEditCtrl}).
+		when('/tanda/:tandaId/dia/new', {templateUrl: asset('dia-new.html'), controller: DiaNewCtrl}).
+		when('/dia/:diaId/remove', {templateUrl: asset('dia-remove.html'), controller: DiaRemoveCtrl}).
 		otherwise({template: function (){
 	    	console.log('Se realiza una redirección a / desde '+location.hash);
 	    	return 'Se realiza una redirección a / porque se recibio un path desconocido '+location.hash;
