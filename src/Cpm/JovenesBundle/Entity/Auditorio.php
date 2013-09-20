@@ -90,10 +90,13 @@ class Auditorio
     	return $this->getNombre(). ( $this->anulado ? " (ANULADO)" : "");
     }
     
-    public function toArray($recursive,$parent_recursive) {
+    public function toArray($recursive) {
+    	if ($recursive_depth == 0)
+    		return $this->getId();
+    	
     	return array('id' => $this->id ,
-    				 'nombre' => $this->nombre, 
-    				 'anulado' => $this->anulado 
-    				);
+    		'nombre' => $this->nombre, 
+    		'anulado' => $this->anulado 
+    	);
     }
 }

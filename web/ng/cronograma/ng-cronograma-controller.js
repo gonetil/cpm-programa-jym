@@ -1,7 +1,7 @@
 function TandaShowCtrl($scope, $routeParams, Tanda) {
 	$scope.debug_console="Mostrando tanda";
-	$scope.tanda=get_tanda_demo();
-//	$scope.tanda = Tanda.get({tandaId: $routeParams.tandaId});
+	//$scope.tanda=get_tanda_demo();
+	$scope.tanda = Tanda.get({tandaId: $routeParams.tandaId});
 	
 	$scope.css_cronograma_height=screen.height-150;
     $scope.css_dia_height=function(){
@@ -37,8 +37,30 @@ function TandaShowCtrl($scope, $routeParams, Tanda) {
 }
 
 function TandaListCtrl($scope, Tanda) {
-	$scope.tandas=[{nombre:'tanda 1', id:1},{nombre:'tanda 2', id:2},{nombre:'tanda 3', id:3}];
-//	$scope.tanda = Tanda.get({tandaId: $routeParams.tandaId});
+	//$scope.tandas=[{nombre:'tanda 1', id:1},{nombre:'tanda 2', id:2},{nombre:'tanda 3', id:3}];
+	$scope.tandas = Tanda.query();
+}
+
+
+function DiaNewCtrl($scope, $routeParams, $location, Dia){
+//	$scope.textButton = "Crear";
+	
+	$scope.dia = new Dia();
+	$scope.dia.$save({tandaId:$routeParams.tandaId});
+	//$scope.tanda.dias.push($scope.dia);
+	console.log("Se creó el dia numero "+$scope.dia.numero);
+	//$location.url("/");
+}
+function DiaRemoveCtrl($scope, $routeParams, $location, Dia){
+//	$scope.textButton = "Crear";
+	$scope.dia = new Dia({diaId:$routeParams.diaId});
+	$scope.removeDia = function(){
+		$scope.dia.$remove();
+		alert("Saco el dia de $scope.tanda.dias");
+		//FIXME $scope.tanda.dias.push($scope.dia);
+		console.log("Se eliminó el dia numero "+$scope.dia.numero);
+		//$location.url("/");
+	}
 }
 
 function BloqueNewCtrl($scope, $routeParams, $location, Bloque){

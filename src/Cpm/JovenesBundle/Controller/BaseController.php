@@ -375,6 +375,7 @@ abstract class BaseController extends Controller
 	}
 	
 	protected function createJsonResponse($json_array){
+		//die (json_encode($json_array))
     	$response = new Response(json_encode($json_array));
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;

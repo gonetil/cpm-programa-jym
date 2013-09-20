@@ -118,4 +118,16 @@ class Eje
     {
     	return $this->nombre;
     }
+    
+    public function toArray($recursive_depth) 
+    {
+		if ($recursive_depth == 0)
+    		return $this->getId();
+    	
+    	return array(
+			 		'id' => $this->id ,
+			    	'nombre' => $this->nombre,
+			    	'descripcion' => $this->descripcion,
+			  );
+    }
 }

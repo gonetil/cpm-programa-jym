@@ -41,6 +41,8 @@ class PresentacionInterna extends Presentacion
     */
 	private $invitacion;
 
+	public function getTipo() { return 'interna'; }
+
 	static function createFromInvitacion($invitacion) {
 		$proyecto = $invitacion->getProyecto();
 		$presentacion = new PresentacionInterna();
@@ -183,10 +185,5 @@ class PresentacionInterna extends Presentacion
     public function getTipoPresentacion() { return $this->proyecto->getProduccionFinal(); }
     public function getPersonasConfirmadas() { return $this->invitacion->countInvitados(); }
     public function getPersonas_confirmadas() { return $this->getPersonasConfirmadas(); }	
-    	
-    public function toArray($recursive,$parent_recursive) {
-    	$array = parent::toArray($recursive,$parent_recursive);
-    	$array['tipo'] = 'interna';
-    	return $array;
-    }	
+
 }

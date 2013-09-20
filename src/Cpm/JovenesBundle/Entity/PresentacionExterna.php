@@ -94,7 +94,8 @@ class PresentacionExterna extends Presentacion
      */
     public  $personas_confirmadas;
 
-	public function esExterna() { return true; }
+	public function getTipo() { return 'externa'; }
+
     /**
      * Set escuela
      *
@@ -198,10 +199,5 @@ class PresentacionExterna extends Presentacion
         return $this->nombre_coordinador;
     }
     
-    public function toArray($recursive,$parent_recursive) {
-    	$array = parent::toArray($recursive,$parent_recursive);
-    	$array['tipo'] = 'externa';
-    	return $array;
-    }	
 
 }

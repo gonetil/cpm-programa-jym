@@ -3,11 +3,6 @@
 </div>
 <div class="row-fluid">
 	<div class="span4 offset4" ng-repeat="tanda in tandas">
-		<a href="#/tanda/show/{{tanda.id}}">Abrir {{tanda.nombre}}</a>
+		<a href="#/tanda/{{tanda.id}}/show">Abrir Tanda {{tanda.numero}}</a>
 	</div>
 </div>
-
-<!-- 	<a href="#" -->
-<!-- 		onclick="return confirmAndRelocate('Esta operacion quitará todas las presentaciones de los bloques. ¿desea continuar?','{{ path('tanda_reset',{'id': tanda.id}) }}')"> -->
-<!-- 		Resetear </a> -->
-<!-- 

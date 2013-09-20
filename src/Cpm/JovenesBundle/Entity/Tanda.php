@@ -178,28 +178,51 @@ class Tanda
 	    return $tanda;
 	}
 	
-	 public function toArray($recursive_depth,$parent_recursive) {
+	function agregarDia($posicion){
+		$countDias = count($this->getDias());
+		if (($posicion < 0) || ($posicion >=$countDias))
+			$posicion=$countDias;
+		
+		for($viejoI=$countDias; $viejoI>$posicion; $viejoI--){
+			$d=$this->getDiaEnPosicion($viejoI);
+			if ($d == null) throw new \Exception("Se pidio un dia en una posicion inválida, parece que los días del la tanda "+$this->id+ " estan desordenados ...");
+			$d->setNumero($viejoI+1);
+		}
+		
+		$dia = new Dia();
+		$dia->setNumero($posicion);
+		$dia->setTanda($this);
+		return $dia;
+	}
+	
+	function getDiaEnPosicion($posicion){
+		foreach($this->getDias() as $dia){
+			if ($d->getNumero($posicion)) return $dia;
+		}
+		return null;
+	}
+		
+		
+	 public function toArray($recursive_depth) {
+    	if ($recursive_depth == 0)
+    		return $this->getId();
     	
     	$dias = array();
-    	
-    	foreach ( $this->dias as $d )
-       		$dias[] = $d->toArray($recursive_depth-1,false);
+    	foreach ( $this->getDias() as $dia )
+       		$dias[] = $dia->toArray($recursive_depth-1);
 
 		$presentaciones = array();
-    	foreach ( $this->presentaciones as $p ) {
-    		$sin_bloque = ($p->getBloque());
-		    if (!$sin_bloque)
-	       	    $presentaciones[] = $p->toArray($recursive_depth-1,false);
-    	}
-    	$dia = array(
+    	foreach ( $this->getPresentaciones() as $p ) 
+			$presentaciones[] = $p->toArray($recursive_depth-1);
+    	
+    	return array(
 					'id' => $this->id ,
 					'numero' => $this->numero ,
 					'fechaInicio' => $this->fechaInicio ,
 					'fechaFin' => $this->fechaFin,
-					'instanciaEvento' => $this->instanciaEvento->getId(),					 
+					//'instanciaEvento' => $this->getInstanciaEvento->getId(),					 
  					'dias' => $dias,
  					'presentaciones' => $presentaciones,
- 					);
- 		return $dia;
+ 		);
     }
 }
