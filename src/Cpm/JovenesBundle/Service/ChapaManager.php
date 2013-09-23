@@ -49,6 +49,7 @@ class ChapaManager {
 	}
 	
 	public function resetAuditorioDia($auditorioDia) {
+		 
 		$auditorioDia->setBloques( array_map( array($this,'resetBloque') , $auditorioDia->getBloques()->toArray() ));
 		return $auditorioDia;	
 	}
@@ -111,11 +112,13 @@ class ChapaManager {
 	/**
 	 * genera un nuevo dia, con la misma cantidad de auditorioDia (mismos auditorios), y los mismos bloques para cada auditorioDia
 	 */
-	public function clonarDia($dia,$tanda,$numero_dia = null) {
-		$new_dia = new Dia();	
-		$new_dia->setTanda($tanda);
-		$new_dia->setNumero( ($numero_dia == null) ? $this->getNextDiaNumber($tanda) : $numero_dia );
-		$tanda->addDia($new_dia);
+	public function clonarDia($dia,$tanda,$numero_dia = null,$new_dia = null) {
+		if ($new_dia == null) { 
+			$new_dia = new Dia();
+			$new_dia->setTanda($tanda);
+			$new_dia->setNumero( ($numero_dia == null) ? $this->getNextDiaNumber($tanda) : $numero_dia );
+			$tanda->addDia($new_dia);
+		}
 		
 		foreach ( $dia->getAuditoriosDias() as $auditorioDia )
        	 	$new_dia->addAuditorioDia($this->clonarAuditorioDia($auditorioDia,$new_dia));
@@ -327,7 +330,7 @@ class ChapaManager {
 		$this->resetDia($dia); //saco todas las presentaciones
 					
 		foreach ( $dia->getAuditoriosDias() as $index => $ad ) { //volamos todos los auditorios_dias del dia
-		       	$dia->getAuditoriosDias()->remove($index);
+		       	//$dia->getAuditoriosDias()->remove($index);
 		       	$em->remove($ad);
 		}
 		$em->flush();
