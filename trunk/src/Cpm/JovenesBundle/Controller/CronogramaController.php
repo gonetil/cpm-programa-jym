@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Cpm\JovenesBundle\Entity\Bloque;
 use Cpm\JovenesBundle\Entity\Tanda;
 use Cpm\JovenesBundle\Entity\Auditorio;
+use Cpm\JovenesBundle\Entity\Dia;
+use Cpm\JovenesBundle\Entity\AuditorioDia;
+
 
 /**
  * Bloque controller.
@@ -127,7 +130,7 @@ class CronogramaController extends BaseController
 	}
 
 	/**
-     * @Route("/tanda/{tandaId}/dia")
+     * @Route("/tanda/{tandaId}/dia",name="tanda_crear_dia") 
      * @Method("post")
      */
 	public function crearDiaAction($tandaId) {
@@ -246,14 +249,17 @@ class CronogramaController extends BaseController
      * @Method("post")
      */	
 	public function duplicarDiaAction() {
-		$dia_origen_id = $this->getRequest()->get('dia_origen');
-		$dia_destino_id = $this->getRequest()->get('dia_destino');
+		$vars = $this->getVarsFromJSON($this->getRequest());
+
+		$dia_origen_id = $this->getVar($vars,'dia_origen');
+		$dia_destino_id = $this->getVar($vars,'dia_destino');
+		//$dia_destino_id = $this->getRequest()->get('dia_destino');
 		
 		try {
 			$dia_origen = $this->getEntity('CpmJovenesBundle:Dia', $dia_origen_id);
 		}
 		catch (\Exception $e) {
-    		    return $this->answerError($e); //dia origen tiene que existir si o si		
+    		    return $this->answerError("Dia $dia_origen_id no encontrado"); //dia origen tiene que existir si o si		
     	}
     	
     	
@@ -261,24 +267,38 @@ class CronogramaController extends BaseController
     	$em = $this->getDoctrine()->getEntityManager();
     	
     	$em->getConnection()->beginTransaction();
+    	
     	try { 
 	    		$dia_destino = null;
-	    		try {
-					$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $dia_destino_id);
-					$chapaManager->vaciarDia($dia_destino);
-				}
-				catch (\Exception $e) {
-		    		$dia_destino = new Dia();	//si el dia no existia, simplemente lo creo	
-		    	}
-		    	$dia_destino = $chapaManager->clonarDia($dia_origen,$dia_origen->getTanda());
-    			$em->persist($dia_destino);
+	    		
+	    		$numero_dia = null; //el numero del nuevo dia , si es la misma tanda debera calcularse a (max_dia + 1)
+	    		
+	    		if (!empty($dia_destino_id))
+		    		try {
+						$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $dia_destino_id);
+						$chapaManager->vaciarDia($dia_destino); //saca los auditoriosDias y sus bloques, si los hubiera
+						$numero_dia = $dia_destino->getNumero(); //el numero de dia ya venia con el dia
+						$tanda = $tanda = $dia_destino->getTanda();
+					}
+					catch (\Exception $e) {
+						$tanda = $dia_origen->getTanda();		
+					}
+		    	else
+		    		$tanda = $dia_origen->getTanda();
+		    	
+		    	$dia_destino = $chapaManager->clonarDia($dia_origen,$tanda,$numero_dia);
+   				$em->persist($dia_destino);
     			$em->flush();
-		    	return $this->createJsonResponse($dia_destino->toArray(3,false));
+    			$em->getConnection()->commit();
     	} catch (\Exception $e) {
     	   	$em->getConnection()->rollback();
 			$em->close();
+			throw $e; die;
             return $this->answerError($e);
     	}
+
+    			
+		return $this->createJsonResponse($dia_destino->toArray(3,false));
     	
 	}
 	

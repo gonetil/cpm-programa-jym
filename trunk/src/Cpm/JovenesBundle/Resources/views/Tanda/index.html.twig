@@ -67,4 +67,33 @@
 				</form>
 			</div>
 
+			
+			
+			<hr/> <h1> zona de pruebas </h1>
+			<script>
+			function testCrearBloque() { 
+					data = '{ "posicion" : "1", "horaInicio" : "10:00", "duracion":"20", "auditorioDia" : "991", "nombre" : "test from json", "tienePresentaciones" : "true"}';
+					$.post( "{{ path('crear_bloque') }}" ,
+							   data ,function(res) { console.log(res); },'json');
+						
+			}
+
+			function testCrearDia() {
+					data = '{"tandaId" : "144"}';
+					$.post( "{{ path('tanda_crear_dia', {'tandaId' : 144}) }}" ,
+							   data ,function(res) { console.log(res); },'json');
+						
+			}
+
+			function testDuplicarDia() {
+				data = '{"dia_origen" : "376"}';
+				$.post( "{{ path('duplicar_dia') }}" ,
+						   data ,function(res) { console.log(res); },'json');
+					
+			}
+			
+			</script>
+			<br/><a href="#" onclick="testCrearBloque(); return false;"> Crear bloque para el auditorio dia 991</a>
+			<br/><a href="#" onclick="testCrearDia(); return false;"> Crear bloque para la tanda 144</a>
+			<br/><a href="#" onclick="testDuplicarDia(); return false;"> Duplicar el dia 376</a>
 {% endblock %}

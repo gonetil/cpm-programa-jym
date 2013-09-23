@@ -38,6 +38,9 @@ class AuditorioDia
      */
      private $auditorio;
      
+     public function __construct(){
+		$this->bloques = new \Doctrine\Common\Collections\ArrayCollection();
+	}
      
     /**
      * Get id
@@ -90,9 +93,9 @@ class AuditorioDia
     		return $this->getId();
     	
 		$bloques = array();
-		foreach ( $this->getBloques() as $bloque ) 
+		foreach ( $this->bloques as $bloque )
 			$bloques[] = $bloque->toArray($recursive_depth-1);
-       		
+		
 		return array( 
 				'id' => $this->id , 
  				'bloques' => $bloques,
