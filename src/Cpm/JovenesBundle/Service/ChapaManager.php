@@ -111,15 +111,15 @@ class ChapaManager {
 	/**
 	 * genera un nuevo dia, con la misma cantidad de auditorioDia (mismos auditorios), y los mismos bloques para cada auditorioDia
 	 */
-	public function clonarDia($dia,$tanda) {
+	public function clonarDia($dia,$tanda,$numero_dia = null) {
 		$new_dia = new Dia();	
 		$new_dia->setTanda($tanda);
-		$new_dia->setNumero($dia->getNumero());
+		$new_dia->setNumero( ($numero_dia == null) ? $this->getNextDiaNumber($tanda) : $numero_dia );
+		$tanda->addDia($new_dia);
 		
 		foreach ( $dia->getAuditoriosDias() as $auditorioDia )
-       		$new_dia->addAuditorioDia($this->clonarAuditorioDia($auditorioDia,$new_dia));
-		
-//		echo "dia clonado: ".(count($new_dia->getAuditoriosDias()))." de ".(count($dia->getAuditoriosDias()))." auditorios dias";
+       	 	$new_dia->addAuditorioDia($this->clonarAuditorioDia($auditorioDia,$new_dia));
+	
 		return $new_dia;
 	}
 	
@@ -133,8 +133,16 @@ class ChapaManager {
        		$max =  ( $t->getNumero() >= $max ) ? $t->getNumero() : $max; 
 		}
 		return $max+1;
-		
 	}
+	
+	private function getNextDiaNumber($tanda) {
+		$max = 0;
+		foreach ( $tanda->getDias() as $dia) {
+       		$max = ($dia->getNumero() > $max ) ? $dia->getNumero() : $max;
+		}
+		return $max+1;
+	}
+	
 	/**
 	 * genera una nueva tanda con los mismos dias, auditoriosDias y bloques de $tanda, y la asigna a la instanciaEvento $instancia
 	 */

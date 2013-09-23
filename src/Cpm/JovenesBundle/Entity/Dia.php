@@ -35,7 +35,7 @@ class Dia
 
     
     /**
-     *  @ORM\ManyToOne(targetEntity="Tanda", cascade={"all"})
+     *  @ORM\ManyToOne(targetEntity="Tanda")
      */
     private $tanda;
     

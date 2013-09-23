@@ -188,7 +188,7 @@ class Bloque
     	return "Bloque ".$this->posicion.": ".$this->nombre."; Tanda ".$this->getAuditorioDia()->getDia()->getTanda()."";
     }
     
-    public function toArray($recursive_depth,$parent_recursive) {
+    public function toArray($recursive_depth) {
  		if ($recursive_depth == 0)
     		return $this->getId();
     	
