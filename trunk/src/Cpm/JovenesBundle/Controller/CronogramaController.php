@@ -275,6 +275,7 @@ class CronogramaController extends BaseController
 	    		
 	    		if (!empty($dia_destino_id))
 		    		try {
+		    			
 						$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $dia_destino_id);
 						$chapaManager->vaciarDia($dia_destino); //saca los auditoriosDias y sus bloques, si los hubiera
 						$numero_dia = $dia_destino->getNumero(); //el numero de dia ya venia con el dia
@@ -286,19 +287,17 @@ class CronogramaController extends BaseController
 		    	else
 		    		$tanda = $dia_origen->getTanda();
 		    	
-		    	$dia_destino = $chapaManager->clonarDia($dia_origen,$tanda,$numero_dia);
+		    	$dia_destino = $chapaManager->clonarDia($dia_origen,$tanda,$numero_dia,$dia_destino);
    				$em->persist($dia_destino);
     			$em->flush();
     			$em->getConnection()->commit();
     	} catch (\Exception $e) {
     	   	$em->getConnection()->rollback();
 			$em->close();
-			throw $e; die;
             return $this->answerError($e);
     	}
-
     			
-		return $this->createJsonResponse($dia_destino->toArray(3,false));
+		return $this->createJsonResponse($dia_destino->toArray(3));
     	
 	}
 	

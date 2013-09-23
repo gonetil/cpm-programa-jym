@@ -92,8 +92,17 @@
 					
 			}
 			
+
+			function testDuplicarDiaSobreOtro() {
+				data = '{"dia_origen" : "376", "dia_destino" : "402"}';
+				$.post( "{{ path('duplicar_dia') }}" ,
+						   data ,function(res) { console.log(res); },'json');
+					
+			}
+			
 			</script>
 			<br/><a href="#" onclick="testCrearBloque(); return false;"> Crear bloque para el auditorio dia 991</a>
 			<br/><a href="#" onclick="testCrearDia(); return false;"> Crear bloque para la tanda 144</a>
 			<br/><a href="#" onclick="testDuplicarDia(); return false;"> Duplicar el dia 376</a>
+			<br/><a href="#" onclick="testDuplicarDiaSobreOtro(); return false;"> Duplicar el dia 376 en el dia 402</a>
 {% endblock %}

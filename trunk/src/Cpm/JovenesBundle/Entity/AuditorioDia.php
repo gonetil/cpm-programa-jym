@@ -28,7 +28,7 @@ class AuditorioDia
     
         
     /**
-     *  @ORM\ManyToOne(targetEntity="Dia", cascade={"all"})
+     *  @ORM\ManyToOne(targetEntity="Dia")
      */
     private $dia;
     
