@@ -95,8 +95,8 @@ class Auditorio
     		return $this->getId();
     	
     	return array('id' => $this->id ,
-    		'nombre' => $this->nombre, 
-    		'anulado' => $this->anulado 
+    		'nombre' => "{$this->nombre}", 
+    		'anulado' => "{$this->anulado}" 
     	);
     }
 }

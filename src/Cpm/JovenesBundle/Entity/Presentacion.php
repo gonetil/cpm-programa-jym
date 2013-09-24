@@ -181,14 +181,13 @@ abstract class Presentacion
     		return $this->getId();
     	
     	return array(
-			 		'id' => $this->id ,
+			 		'id' => "{$this->id}",
 			    	'titulo' => $this->getTitulo(),
-			    	'tanda_id' => $this->getTanda()->getId(),
+			    	'tanda_id' => "{$this->getTanda()->getId()}",
 			    	'areaReferencia' => (!$this->getAreaReferencia())?'' : $this->getAreaReferencia()->toArray($recursive_depth-1),
 			    	'ejeTematico' => (!$this->getEjeTematico())?'': $this->getEjeTematico()->toArray($recursive_depth-1),
 			    	'tipo' => $this->getTipo(),
-			    	'tipo' => $this->getTipo(),
-			    	'bloque' => (!$this->bloque)?'' : $this->bloque->getId(),
+			    	'bloque' => (!$this->bloque)?'' : "{$this->bloque->getId()}",
 			  );
     }
 }
