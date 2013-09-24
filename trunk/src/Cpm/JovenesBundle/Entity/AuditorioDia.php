@@ -97,9 +97,9 @@ class AuditorioDia
 			$bloques[] = $bloque->toArray($recursive_depth-1);
 		
 		return array( 
-				'id' => $this->id , 
+				'id' => "{$this->id}" , 
  				'bloques' => $bloques,
- 				'dia' => $this->getDia()->getId(),
+ 				'dia' => "{$this->getDia()->getId()}",
  				'auditorio' => $this->getAuditorio()->toArray($recursive_depth-1)
  			) ;
     }

@@ -216,10 +216,10 @@ class Tanda
 			$presentaciones[] = $p->toArray($recursive_depth-1);
     	
     	return array(
-					'id' => $this->id ,
-					'numero' => $this->numero ,
-					'fechaInicio' => $this->fechaInicio ,
-					'fechaFin' => $this->fechaFin,
+					'id' => "{$this->id}" ,
+					'numero' => "{$this->numero}" ,
+					'fechaInicio' => date_format($this->fechaInicio,"d-m-y") ,
+					'fechaFin' => date_format($this->fechaFin,"d-m-y"),
 					//'instanciaEvento' => $this->getInstanciaEvento->getId(),					 
  					'dias' => $dias,
  					'presentaciones' => $presentaciones,

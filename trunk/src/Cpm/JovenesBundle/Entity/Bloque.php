@@ -197,12 +197,12 @@ class Bloque
        		$presentaciones[] = $p->toArray($recursive_depth-1);
 
 		return array(
-							'id' => $this->id , 
- 							 'posicion' => $this->posicion,
- 							 'tienePresentaciones' => $this->tienePresentaciones,
- 							 'duracion' => $this->duracion,
- 							 'horaInicio' => $this->horaInicio,
- 							 'auditorioDia' => $this->auditorioDia->getId(),
+							'id' => "{$this->id}" , 
+ 							 'posicion' => "{$this->posicion}",
+ 							 'tienePresentaciones' => "{$this->tienePresentaciones}",
+ 							 'duracion' => "{$this->duracion}",
+ 							 'horaInicio' => date_format($this->horaInicio,"d-m-y"),
+ 							 'auditorioDia' => "{$this->auditorioDia->getId()}",
  							 'presentaciones' => $presentaciones
  		);				 
     }

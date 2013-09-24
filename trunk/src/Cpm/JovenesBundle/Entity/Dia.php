@@ -112,9 +112,9 @@ class Dia
        		$auditoriosDias[] = $ad->toArray($recursive_depth-1);
 		
     	return array(
-					'id' => $this->id , 
- 					'tanda' => $this->getTanda()->getId(),
- 					'numero' => $this->numero ,
+					'id' => "{$this->id}" , 
+ 					'tanda' => "{$this->getTanda()->getId()}",
+ 					'numero' => "{$this->numero}" ,
  					'auditoriosDias' => $auditoriosDias
  					);
     }
