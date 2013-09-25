@@ -150,6 +150,8 @@ abstract class Presentacion
     	$this->bloque = $b;
     }
     
+    public function esExterna() { return ($this->getTipo() == 'externa'); }
+    
         
     public function getTanda() {
     	return $this->tanda;
@@ -175,6 +177,19 @@ abstract class Presentacion
     	return null; //las presentaciones no tienen invitaciones, salvo las presentaciones internas
     }
     
+    public function makeItSafe($str) {
+    	
+    	return (
+    				stripslashes
+    					(
+    						str_ireplace(
+    							array('\"',"\'",'"',"“","”"), 
+    							"'", 
+    							$str 
+    						 ) 
+    					)
+    			);
+    }
     public function toArray($recursive_depth) 
     {
 		if ($recursive_depth == 0)
@@ -182,7 +197,7 @@ abstract class Presentacion
     	
     	return array(
 			 		'id' => "{$this->id}",
-			    	'titulo' => $this->getTitulo(),
+			    	'titulo' => $this->makeItSafe($this->getTitulo()),
 			    	'tanda_id' => "{$this->getTanda()->getId()}",
 			    	'areaReferencia' => (!$this->getAreaReferencia())?'' : $this->getAreaReferencia()->toArray($recursive_depth-1),
 			    	'ejeTematico' => (!$this->getEjeTematico())?'': $this->getEjeTematico()->toArray($recursive_depth-1),

@@ -169,6 +169,30 @@ class CronogramaController extends BaseController
 		}
 	}
 	
+
+	/**
+     * 	Recibe un super JSON con toda una tanda y lo almacena en la BD
+     *
+     * @Route("/tanda/{tanda_id}", name="guardar_tanda")
+     * @Method("post")
+    */
+	public function guardarTandaAction($tanda_id) {
+		
+		try { 
+			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+		} catch (\Exception $e) {
+			$this->answerError("Tanda $tanda_id no pudo encontrarse");
+		}
+		
+		$vars = $this->getVarsFromJSON($this->getRequest());
+		$tanda_json = $this->getVar($vars,'tanda');
+		
+		$tanda = json_decode($tanda_json,true);
+		var_dump($tanda); die;
+		
+	}
+
+
 	
 	/**
      * 	Lista las tandas
@@ -288,7 +312,8 @@ class CronogramaController extends BaseController
 		    		$tanda = $dia_origen->getTanda();
 		    	
 		    	$dia_destino = $chapaManager->clonarDia($dia_origen,$tanda,$numero_dia,$dia_destino);
-   				$em->persist($dia_destino);
+		    	$tanda->addDia($dia_destino);
+   				$em->persist($tanda);
     			$em->flush();
     			$em->getConnection()->commit();
     	} catch (\Exception $e) {
@@ -345,11 +370,43 @@ class CronogramaController extends BaseController
 	}
 	
 	private function getVarsFromJSON($request) {
+		
 		$content = $request->getContent();
+		
+		
+		$content = str_ireplace('"\\',"'",$content);
+		$content = str_ireplace('\"',"'",$content);
+		$content = stripslashes($content);
+		
 		if (!empty($content))
 	    {
-	        $params = json_decode($content,true); // 2nd param to get as array
+	    	$params = json_decode($content,true); // 2nd param to get as array
+	        
+	         switch(json_last_error()) {
+		        case JSON_ERROR_NONE:
+		            echo ' - Sin errores';
+		        break;
+		        case JSON_ERROR_DEPTH:
+		            echo ' - Excedido tamaño máximo de la pila';
+		        break;
+		        case JSON_ERROR_STATE_MISMATCH:
+		            echo ' - Desbordamiento de buffer o los modos no coinciden';
+		        break;
+		        case JSON_ERROR_CTRL_CHAR:
+		            echo ' - Encontrado carácter de control no esperado';
+		        break;
+		        case JSON_ERROR_SYNTAX:
+		            echo ' - Error de sintaxis, JSON mal formado';
+		        break;
+		        case JSON_ERROR_UTF8:
+		            echo ' - Caracteres UTF-8 malformados, posiblemente están mal codificados';
+		        break;
+		        default:
+		            echo ' - Error desconocido';
+		        break;
+    		}
 	    }
+	    var_dump($params);
 	    return $params;
 	}
 
