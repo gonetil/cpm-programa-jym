@@ -120,4 +120,8 @@ class Produccion
     {
     	return $this->nombre . ( ( is_null($this->tipoPresentacion) ) ? "" : " (".$this->tipoPresentacion.")"  );
     }
+    
+    public function toArray() {
+    	return array('id'=>"{$this->id}", 'nombre'=>$this->nombre,'slug'=>"{$this->tipoPresentacion}");	
+    }
 }
