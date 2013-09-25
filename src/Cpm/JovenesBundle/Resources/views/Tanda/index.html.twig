@@ -96,6 +96,15 @@
 			function testDuplicarDiaSobreOtro() {
 				data = '{"dia_origen" : "376", "dia_destino" : "402"}';
 				$.post( "{{ path('duplicar_dia') }}" ,
+						   data ,function(res) { console.log(res); },'json');		
+			}
+
+			function testGuardarTanda(id) {
+				{% set mitanda = entities[1] %}
+
+				
+				data = '{{ mitanda.toArray(2)|json_encode(5)|raw }}';
+				$.post( "{{ path('guardar_tanda', {'tanda_id' : mitanda.id }) }}" ,
 						   data ,function(res) { console.log(res); },'json');
 					
 			}
@@ -105,4 +114,5 @@
 			<br/><a href="#" onclick="testCrearDia(); return false;"> Crear bloque para la tanda 144</a>
 			<br/><a href="#" onclick="testDuplicarDia(); return false;"> Duplicar el dia 376</a>
 			<br/><a href="#" onclick="testDuplicarDiaSobreOtro(); return false;"> Duplicar el dia 376 en el dia 402</a>
+			<br/><a href="#" onclick="testGuardarTanda(147); return false;"> Guardar la tanda 147</a>
 {% endblock %}

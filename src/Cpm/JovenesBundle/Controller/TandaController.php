@@ -60,6 +60,7 @@ class TandaController extends BaseController
 
         $deleteForm = $this->createDeleteForm($id);
 
+				
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),        );
