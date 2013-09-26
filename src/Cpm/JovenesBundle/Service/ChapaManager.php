@@ -55,7 +55,7 @@ class ChapaManager {
 	}
 
 	public function resetDia($dia) {
-		$dia->setAuditoriosDias( array_map( array($this,'resetAuditorioDia') , $dia->getAuditoriosDias()->toArray() ) );
+		$dia->setAuditoriosDia( array_map( array($this,'resetAuditorioDia') , $dia->getAuditoriosDia()->toArray() ) );
 	    return $dia;
 	}
 	
@@ -120,7 +120,7 @@ class ChapaManager {
 			$tanda->addDia($new_dia);
 		}
 		
-		foreach ( $dia->getAuditoriosDias() as $auditorioDia )
+		foreach ( $dia->getAuditoriosDia() as $auditorioDia )
        	 	$new_dia->addAuditorioDia($this->clonarAuditorioDia($auditorioDia,$new_dia));
 	
 		return $new_dia;
@@ -147,7 +147,7 @@ class ChapaManager {
 	}
 	
 	/**
-	 * genera una nueva tanda con los mismos dias, auditoriosDias y bloques de $tanda, y la asigna a la instanciaEvento $instancia
+	 * genera una nueva tanda con los mismos dias, auditoriosDia y bloques de $tanda, y la asigna a la instanciaEvento $instancia
 	 */
 	public function clonarTanda($tanda,$instancia) {
 		
@@ -299,8 +299,9 @@ class ChapaManager {
 	
 	/**
 	 * Elimina un bloque. Antes de hacerlo, desasocia todas las presentaciones del mismo (quedarán asociadas a la tanda)
+	 * FIMXE alguien usa esta funcion?
 	 */
-	public function borrarBloque($bloque) {
+	private function borrarBloque($bloque) {
 		
     	$em = $this->doctrine->getEntityManager();
     	$em->getConnection()->beginTransaction();		
@@ -323,14 +324,14 @@ class ChapaManager {
 	
 	
 	/**
-	 * elimina todos los auditoriosDias y sus bloques de un determinado dia
+	 * elimina todos los auditoriosDia y sus bloques de un determinado dia
 	 */
 	public function vaciarDia($dia) {
 		$em = $this->doctrine->getEntityManager();
 		$this->resetDia($dia); //saco todas las presentaciones
 					
-		foreach ( $dia->getAuditoriosDias() as $index => $ad ) { //volamos todos los auditorios_dias del dia
-		       	//$dia->getAuditoriosDias()->remove($index);
+		foreach ( $dia->getAuditoriosDia() as $index => $ad ) { //volamos todos los auditorios_dias del dia
+		       	//$dia->getAuditoriosDia()->remove($index);
 		       	$em->remove($ad);
 		}
 		$em->flush();

@@ -34,66 +34,6 @@ class CronogramaController extends BaseController
     {
         return array();
 	}
-	/**
-     * Creates a new Bloque entity.
-     *
-     * @Route("/bloque", name="crear_bloque")
-     * @Method("post")
-     */
-	public function crearBloqueAction() {
-		$bloque  = new Bloque();
-        $request = $this->getRequest();
-		$this->populateBloqueFromRequest($bloque,$request);
-		try { 
-			
-			$em = $this->getDoctrine()->getEntityManager();
-			$em->persist($bloque);
-	        $em->flush();
-	        return $this->answerOk($bloque->getId());
-		} catch (\Exception $e) {
-			return $this->answerError($e);
-		}
-	}
-	
-	/**
-     * Modifies a Bloque entity.
-     *
-     * @Route("/bloque/{id}", name="modificar_bloque")
-     * @Method("post")
-     */
-	public function modificarBloqueAction($id) {
-		$bloque  = $this->getEntityForUpdate('CpmJovenesBundle:Bloque', $id);
-        $request = $this->getRequest();
-        $this->populateBloqueFromRequest($bloque,$request);
-        try { 
-			$em = $this->getDoctrine()->getEntityManager();
-			$em->persist($bloque);
-	        $em->flush();
-	        return $this->createJsonResponse($bloque->toArray(2,false));		
-	        //return $this->answerOk($bloque->getId()); //Ariel me pidio JSON
-		} catch (\Exception $e) {
-			return $this->answerError($e);
-		}
-	}	
-	
-
-    /**
-     * Removes a Bloque entity
-     * @Route("/bloque/{id}", name="borrar_bloque")
-     * @Method("delete")
-     */
-     public function borrarBloqueAction($id) {
-     	$chapaManager = $this->getChapaManager();
-     	
-     	try {
-	     	$bloque  = $this->getEntity('CpmJovenesBundle:Bloque', $id);
-	     	$chapaManager->borrarBloque($bloque);
-			return $this->answerOk("Bloque eliminado satisfactoriamente");			
-		}
-		catch (\Exception $e) {
-			return $this->answerError($e);
-		}
-     }
 
     /**
      * Gets a Bloque entity
@@ -106,10 +46,9 @@ class CronogramaController extends BaseController
 			return $this->createJsonResponse($bloque->toArray(2));			
 		}
 		catch (\Exception $e) {
-			$this->answerError($e);
+			return $this->answerError($e);
 		}
      }
-	
 
 	/**
      * 	Lista los bloques desde un AuditorioDia
@@ -124,27 +63,175 @@ class CronogramaController extends BaseController
 			return $this->createJsonResponse($auditorioDia->toArray(2));			
 		}
 		catch (\Exception $e) {
-			$this->answerError($e);
+			return $this->answerError($e);
 		}
 		
 	}
 
 	/**
-     * @Route("/tanda/{tandaId}/dia",name="tanda_crear_dia") 
+     * @Route("/dia") 
      * @Method("post")
      */
-	public function crearDiaAction($tandaId) {
+	public function crearDiaAction() {
+		
+		$tandaId=$this->getRequest()->query->get('tandaId');
 		$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tandaId);
 		$dia = $tanda->agregarDia(-1);
 		
 		try { 
 			$em = $this->getDoctrine()->getEntityManager();
-			$em->persist($dia);
+			$em->persist($dia);	
 			$em->persist($tanda);
 	        $em->flush();
-			return $this->createJsonResponse($dia->toArray(2));			
+			return $this->createJsonResponse($dia->toArray(2));
 		} catch (\Exception $e) {
-			$this->answerError($e);
+			return $this->answerError($e);
+		}
+	}
+	
+	/**
+     * @Route("/dia/{diaId}")
+     * @Method("DELETE")
+     */
+	public function eliminarDiaAction($diaId) {
+		try { 
+			$dia = $this->getEntity('CpmJovenesBundle:Dia', $diaId);
+			$tanda=$dia->getTanda();
+			$em = $this->getDoctrine()->getEntityManager();
+			$tanda->eliminarDia($dia);
+			$em->remove($dia);
+	        $em->persist($tanda);
+	        $em->flush();
+			return $this->answerOk("Se eliminó con éxito el dia $diaId");			
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+	}
+	
+	
+	/**
+     * @Route("/tanda/{tandaId}/dia/{diaId}/auditorioDia") 
+     * @Method("post")
+     */
+	public function crearAuditorioDiaAction($tandaId, $diaId) {
+		$dia  = $this->getEntity('CpmJovenesBundle:Dia', $diaId);
+		//FIXME conseguir el auditorioID
+		$auditorioId = 1;
+		$auditorio = $this->getEntity('CpmJovenesBundle:Auditorio', $auditorioId);
+
+		$ad = new AuditorioDia();
+		$ad->setAuditorio($auditorio);
+		$ad->setDia($dia);
+		$dia->addAuditorioDia($ad);
+		
+		try { 
+			$em = $this->getDoctrine()->getEntityManager();
+			$em->persist($ad);
+			$em->persist($dia);	
+	        $em->flush();
+			return $this->createJsonResponse($ad->toArray(-1));
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+	}
+	
+	/**
+     * @Route("/tanda/{tandaId}/dia/{diaId}/auditorioDia/{auditorioDiaId}")
+     * @Method("DELETE")
+     */
+	public function eliminarAuditorioDiaAction($tandaId, $diaId, $auditorioDiaId) {
+		try { 
+			$ad = $this->getEntity('CpmJovenesBundle:AuditorioDia', $auditorioDiaId);
+			$dia=$ad->getDia();
+			$dia->removeAuditorioDia($ad);
+			
+			$em = $this->getDoctrine()->getEntityManager();
+			$em->remove($ad);
+	        $em->persist($dia);
+	        $em->flush();
+			return $this->answerOk("Se eliminó con éxito el Auditorio del dia número {$dia->getNumero()}");			
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+	}
+	
+	
+	/**
+     * Creates a new Bloque entity.
+     *
+     * @Route("/bloque")
+     * @Method("post")
+     */
+	public function crearBloqueAction() {
+		return $this->forward("CpmJovenesBundle:Cronograma:modificarBloque", array('id'=>-1));
+	}
+	
+	/**
+     * Modifies a Bloque entity.
+     *
+     * @Route("/bloque/{id}")
+     * @Method("post")
+     */
+	public function modificarBloqueAction($id) {
+		
+		try { 
+			if ($id == -1)
+				$bloque  = new Bloque();
+			else
+				$bloque  = $this->getEntityForUpdate('CpmJovenesBundle:Bloque', $id);
+	    
+	        $args = $this->getVarsFromJSON();
+	        
+	        if (!empty($args['auditorioDia']))
+	        	$bloque->setAuditorioDia( $this->getEntity('CpmJovenesBundle:AuditorioDia', $args['auditorioDia'] ) );
+	        
+	        if (!empty($args['horaInicio']))
+				$bloque->setHoraInicio( date_create_from_format ('h:i', $args['horaInicio']));
+			
+			//FIXME corregir posicion del bloque
+	        if (!empty($args['posicion']))
+				$bloque->setPosicion( $args['posicion'] );
+
+	        if (!empty($args['duracion']))
+				$bloque->setDuracion( $args['duracion'] );
+
+	        if (isset($args['nombre']))
+				$bloque->setNombre( $args['nombre'] );
+
+	        if (isset($args['tienePresentaciones']))
+				$bloque->setTienePresentaciones( $args['tienePresentaciones'] );
+			
+/*			No toco las presentaciones del bloque. Para eso esta la interface loca
+ *         if (isset($args['presentaciones'])){
+				$bloque->setPresentaciones ( $p ) ;
+	        }
+ */	
+ 			$em = $this->getDoctrine()->getEntityManager();
+			$em->persist($bloque);
+	        $em->flush();
+	        return $this->createJsonResponse($bloque->toArray(2,false));		
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+	}
+     
+  	/**
+     * @Route("/bloque/{bloqueId}")
+     * @Method("DELETE")
+     */
+	public function eliminarBloqueAction($bloqueId) {
+		try { 
+			$bloque = $this->getEntity('CpmJovenesBundle:Bloque', $bloqueId);
+			$ad=$bloque->getAuditorioDia();
+			$ad->removeBloque($bloque);
+			
+			$em = $this->getDoctrine()->getEntityManager();
+			$em->remove($bloque);
+	        $em->persist($ad);
+	        $em->flush();
+			return $this->answerOk("Se eliminó con éxito el Bloque del dia número {$ad->getDia()->getNumero()} del Auditorio {$ad->getAuditorio()->getNombre()}");			
+		} catch (\Exception $e) {
+			return $this->answerError($e);
 		}
 	}
 	
@@ -168,7 +255,6 @@ class CronogramaController extends BaseController
 			$this->answerError($e);
 		}
 	}
-	
 
 	/**
      * 	Recibe un super JSON con toda una tanda y lo almacena en la BD
@@ -193,14 +279,13 @@ class CronogramaController extends BaseController
 	}
 
 
-	
 	/**
      * 	Lista las tandas
      *
      * @Route("/tanda/")
      * @Method("get")
      * TODO ver si no debería recibir un event_id o algo así que permita filtrar las tandas
-     * s
+     * 
      */
 	public function listarTandasAction() 
 	{
@@ -217,7 +302,6 @@ class CronogramaController extends BaseController
 			//TODO aca no habría que hacer un retirn de answerError???
 			$this->answerError($e);
 		}
-		
 	}
 
 	/**
@@ -257,7 +341,7 @@ class CronogramaController extends BaseController
     		$msg = $chapaManager->cambiarDeTanda($presentacion,$tanda);
     		return $this->answerOk($msg);
     	} catch (\Exception $e) {
-    		    return $this->answerError($e);		
+    		return $this->answerError($e);		
     	}
 
 	}
@@ -301,7 +385,7 @@ class CronogramaController extends BaseController
 		    		try {
 		    			
 						$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $dia_destino_id);
-						$chapaManager->vaciarDia($dia_destino); //saca los auditoriosDias y sus bloques, si los hubiera
+						$chapaManager->vaciarDia($dia_destino); //saca los auditoriosDia y sus bloques, si los hubiera
 						$numero_dia = $dia_destino->getNumero(); //el numero de dia ya venia con el dia
 						$tanda = $tanda = $dia_destino->getTanda();
 					}
@@ -338,42 +422,24 @@ class CronogramaController extends BaseController
 		return $response->send();		
 	}
 	
-	private function answerError($message="") {
+	private function answerError($message) {
+		if ($message instanceof \Exception)
+			$message=$message->getMessage();
 		return $this->createJsonResponse(array('status' => 'error 500', 'message' => $message));
 		//$response = $this->createSimpleResponse(500,$message);
-		return $response->send();
+		//return $response->send();
 	}
 	
-	private function populateBloqueFromRequest($bloque,$request) {
-		$request = $this->getVarsFromJSON($request);
-		
-		$auditorioDia = $this->getEntity('CpmJovenesBundle:AuditorioDia', $this->getVar($request,'auditorioDia') );
-
-		$horaInicio = date_create_from_format ('h:i', $this->getVar($request,'horaInicio') );
-		$bloque->setHoraInicio( $horaInicio );
-		
-		$bloque->setPosicion( $this->getVar($request,'posicion') );
-		$bloque->setDuracion( $this->getVar($request,'duracion') );
-		$bloque->setAuditorioDia( $auditorioDia );
-		$bloque->setNombre( $this->getVar($request,'nombre') );
-		$bloque->setTienePresentaciones( $this->getVar($request,'tienePresentaciones') );
-		
-		$p = $this->getVar($request,'presentaciones');
-		if ( !empty($p))
-			$bloque->setPresentaciones ( $p ) ;
-			
-		return $bloque;
-	}
 	
 	private function getVar($array,$key) {
 		return ( array_key_exists($key,$array) ? $array[$key] : '' );
 	}
 	
-	private function getVarsFromJSON($request) {
-		
-		$content = $request->getContent();
-		
-		
+
+	private function getVarsFromJSON() {
+		//en teoría el request tiene content-type application/json
+		$content = $this->getRequest()->getContent();
+	
 		$content = str_ireplace('"\\',"'",$content);
 		$content = str_ireplace('\"',"'",$content);
 		$content = stripslashes($content);
@@ -405,8 +471,9 @@ class CronogramaController extends BaseController
 		            echo ' - Error desconocido';
 		        break;
     		}
-	    }
-	    var_dump($params);
+	    }else
+	    	return array();
+	   // var_dump($params);
 	    return $params;
 	}
 

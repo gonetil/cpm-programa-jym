@@ -168,7 +168,7 @@
 {% endmacro %}
 
 {% macro auditodiosDiaDeDia(dia) %}
-	{% for auditorioDia in dia.auditoriosDias %}
+	{% for auditorioDia in dia.auditoriosDia %}
 		 <li> <a href="{{ path('auditoriodia_show',{'id':auditorioDia.id}) }}" class="auditorio_dia">{{ auditorioDia.auditorio }}</a> </li>
 		  {% if auditorioDia.bloques | length > 0 %}
 		       <ol>

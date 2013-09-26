@@ -1,12 +1,12 @@
 function TandaShowCtrl($scope, $routeParams, Tanda) {
-	$scope.debug_console="Mostrando tanda";
+
 	//$scope.tanda=get_tanda_demo();
 	$scope.tanda = Tanda.get({tandaId: $routeParams.tandaId});
 	
 	$scope.css_cronograma_height=screen.height-150;
     $scope.css_dia_height=function(){
         var alto_dia=$scope.css_cronograma_height / $scope.tanda.dias.length;
-        return "height:"+alto_dia+"px";
+        return "min-height:"+alto_dia+"px";
     }; 
     $scope.css_dias_height=function(){
         return "height:"+($scope.css_cronograma_height)+"px";
@@ -37,53 +37,66 @@ function TandaShowCtrl($scope, $routeParams, Tanda) {
 }
 
 function TandaListCtrl($scope, Tanda) {
-	//$scope.tandas=[{nombre:'tanda 1', id:1},{nombre:'tanda 2', id:2},{nombre:'tanda 3', id:3}];
 	$scope.tandas = Tanda.query();
 }
 
-
-function DiaNewCtrl($scope, $routeParams, $location, Dia){
-//	$scope.textButton = "Crear";
-	
-	$scope.dia = new Dia();
-	$scope.dia.$save({tandaId:$routeParams.tandaId});
-	//$scope.tanda.dias.push($scope.dia);
-	console.log("Se creó el dia numero "+$scope.dia.numero);
-	//$location.url("/");
+//DIA
+function DiaNewCtrl($scope, $routeParams, $location, Dia, Logger){
+	$scope.dia = new Dia({tanda:$routeParams.tandaId});
+	$scope.dia.$save(function(){Logger.log("Se creó satisfactoriamente el dia numero "+$scope.dia.numero)},Logger.error);
+	$location.url("/tanda/"+$routeParams.tandaId);
 }
-function DiaRemoveCtrl($scope, $routeParams, $location, Dia){
-//	$scope.textButton = "Crear";
-	$scope.dia = new Dia({diaId:$routeParams.diaId});
-	$scope.removeDia = function(){
-		$scope.dia.$remove();
-		alert("Saco el dia de $scope.tanda.dias");
-		//FIXME $scope.tanda.dias.push($scope.dia);
-		console.log("Se eliminó el dia numero "+$scope.dia.numero);
-		//$location.url("/");
+function DiaRemoveCtrl($scope, $routeParams, $location, Dia, Logger){
+	$scope.confirmMessage = "Esta seguro que desea eliminar el día "+$routeParams.diaId;
+	$scope.dia = new Dia({id:$routeParams.diaId});
+	$scope.confirmOk= function(){
+		$scope.dia.$remove(Logger.log, Logger.error);
+		history.back();
+	}
+}
+//AUDITORIO_DIA
+function AuditorioDiaNewCtrl($scope, $routeParams, $location, AuditorioDia, Logger){
+	$scope.auditorioDia = new AuditorioDia({tanda:$routeParams.tandaId,dia:$routeParams.diaId});
+	$scope.newAuditorioDia=function(){
+		$scope.auditorioDia.$save(function(){Logger.log("Se creó satisfactoriamente el auditorio del dia ")},Logger.error);
+		$location.url("/tanda/"+$routeParams.tandaId);
+	}
+}
+function AuditorioDiaRemoveCtrl($scope, $routeParams, $location, AuditorioDia, Logger){
+	$scope.confirmMessage = "Esta seguro que desea eliminar el auditorio día?";
+	$scope.auditorioDia = new AuditorioDia({tanda:$routeParams.tandaId, dia:$routeParams.diaId, id:$routeParams.auditorioDiaId});
+	$scope.confirmOk= function(){
+		$scope.auditorioDia.$remove(Logger.log, Logger.error);
+		$location.url("/tanda/"+$routeParams.tandaId);
 	}
 }
 
-function BloqueNewCtrl($scope, $routeParams, $location, Bloque){
+//BLOQUE
+function BloqueNewCtrl($scope, $routeParams, $location, Bloque, Logger){
+	$scope.bloque = new Bloque({auditorioDia:$routeParams.auditorioDiaId, duracion:15, posicion:-1});
 	$scope.textButton = "Crear";
-	$scope.bloque = new Bloque({auditorio_dia_id:$routeParams.auditorioDiaId, tipo:true});
-	$scope.bloque.hola();
-	$scope.newBloque = function(){
-		$scope.bloque.$save();
-	    //TODO agregar al auditorio_dia?
-		console.log("Se creó el bloque con id="+$scope.bloque.id);
-	     //   $location.url("/");
+	$scope.newBloque=function(){
+		$scope.bloque.$save(function(){Logger.log("Se creó satisfactoriamente el bloque")},Logger.error);
+		history.back();
 	}
 }
 
-function BloqueEditCtrl($scope, $routeParams,$location, Bloque){
+function BloqueEditCtrl($scope, $routeParams, $location, Bloque, Logger){
 	$scope.textButton = "Editar";
 	$scope.bloque = Bloque.get({bloqueId:$routeParams.bloqueId});
 	$scope.editBloque = function(){
-		$scope.bloque.$save();
-	    console.log("Se editó el bloque con id="+$scope.bloque.id);
-	    //$location.url("/");
-	    }
-	
+		$scope.bloque.$save(Logger.log,Logger.error);
+		history.back();
+    }
+}
+
+function BloqueRemoveCtrl($scope, $routeParams, $location, Bloque, Logger){
+	$scope.confirmMessage = "Esta seguro que desea eliminar el Bloque?";
+	$scope.bloque = new Bloque({id:$routeParams.bloqueId});
+	$scope.confirmOk= function(){
+		$scope.bloque.$remove(function(){Logger.log("Se eliminó satisfactoriamente el bloque")}, Logger.error);
+		history.back();
+	}
 }
 
 /*

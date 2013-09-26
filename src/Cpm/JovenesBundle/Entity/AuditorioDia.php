@@ -69,6 +69,13 @@ class AuditorioDia
 		$this->bloques[] = $b;
 	}
 	
+    public function removeBloque($b) {
+    	$this->bloques->removeElement($b);
+    }
+    
+    
+    
+	
 	public function getDia() {
 		return $this->dia;
 	}

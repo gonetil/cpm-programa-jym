@@ -50,6 +50,8 @@ class Tanda
 
 	/**
      * @ORM\OneToMany(targetEntity="Dia", mappedBy="tanda", cascade={"all"})
+     * @ORM\OrderBy({"numero" = "ASC"})
+   
      **/
     private $dias;
     
@@ -177,29 +179,44 @@ class Tanda
 	    $tanda->setNumero($numero);
 	    return $tanda;
 	}
-	
-	function agregarDia($posicion){
-		$countDias = count($this->getDias());
-		if (($posicion < 0) || ($posicion >=$countDias))
-			$posicion=$countDias;
-		
-		for($viejoI=$countDias; $viejoI>$posicion; $viejoI--){
-			$d=$this->getDiaEnPosicion($viejoI);
-			if ($d == null) throw new \Exception("Se pidio un dia en una posicion inválida, parece que los días del la tanda "+$this->id+ " estan desordenados ...");
-			$d->setNumero($viejoI+1);
+	function reordenarDias(){
+		$numero = 1;
+		foreach($this->dias as $dia){
+			if ($dia->getNumero() != $numero)
+				$dia->setNumero($numero);
+			$numero++; 
 		}
+	}
+	
+	function agregarDia($numero){
+		if (count($this->dias) == 0)
+			$numero = 1;
+		elseif (($numero < 0) || $numero > count($this->dias))
+			$numero=$this->dias->last()->getNumero()+1;
 		
+		foreach($this->dias as $dia){
+			if ($dia->getNumero() > $numero)
+				$dia->setNumero($dia->getNumero()+1);
+		}
 		$dia = new Dia();
-		$dia->setNumero($posicion);
+		$dia->setNumero($numero);
 		$dia->setTanda($this);
+		$this->dias->add($dia);
+		$this->reordenarDias();
 		return $dia;
 	}
 	
+	function eliminarDia($diaABorrar){
+		$this->dias->removeElement($diaABorrar);
+		$this->reordenarDias();
+	}
+	
 	function getDiaEnPosicion($posicion){
-		foreach($this->getDias() as $dia){
-			if ($d->getNumero($posicion)) return $dia;
+		foreach($this->dias as $dia){
+			if ($dia->getNumero($posicion)) 
+				return $dia;
 		}
-		return null;
+		throw new \InvalidArgumentException("Se pidio un dia en una posicion inválida $posicion de la tanda {$this->id}");
 	}
 		
 		

@@ -7,6 +7,7 @@
 <table class="records_list">
     <thead>
         <tr>
+        <th>Id</th>
             <th>Nombre</th>
             <th>Posicion</th>
             <th>Hora de inicio</th>
@@ -19,6 +20,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
+            <td>{{ entity.id  }}</td>
             <td><a href="{{ path('bloque_show', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
             <td>{{ entity.posicion }}</td>
             <td>{% if entity.horaInicio %}{{ entity.horaInicio|date('H:i') }}{% endif%}</td>

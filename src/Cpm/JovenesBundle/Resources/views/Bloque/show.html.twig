@@ -64,12 +64,7 @@
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>
-        
-       <form action="{{ path('borrar_bloque', { 'id': entity.id }) }}" method="POST" onsubmit="return confirm('Esta seguro que desea eliminar el bloque?');">
-        	<input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Borrar con metodo DELETE</button>
-        </form>
+       
         
     </li>
 </ul>

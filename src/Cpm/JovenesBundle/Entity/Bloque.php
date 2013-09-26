@@ -198,10 +198,11 @@ class Bloque
 
 		return array(
 							'id' => "{$this->id}" , 
+ 							 'nombre' => $this->nombre,
  							 'posicion' => "{$this->posicion}",
  							 'tienePresentaciones' => "{$this->tienePresentaciones}",
  							 'duracion' => "{$this->duracion}",
- 							 'horaInicio' => date_format($this->horaInicio,"d-m-y"),
+ 							 'horaInicio' => date_format($this->horaInicio,"H:i"),
  							 'auditorioDia' => "{$this->auditorioDia->getId()}",
  							 'presentaciones' => $presentaciones
  		);				 

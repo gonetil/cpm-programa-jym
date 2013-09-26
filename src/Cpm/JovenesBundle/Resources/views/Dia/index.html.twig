@@ -8,6 +8,7 @@
     <thead>
         <tr>
             <th>Id</th>
+            <th>Tanda</th>
             <th>Numero</th>
             <th>Acciones</th>
         </tr>
@@ -16,6 +17,7 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('dia_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.tanda }}</td>
             <td>{{ entity.numero }}</td>
             <td>
                 <ul>
