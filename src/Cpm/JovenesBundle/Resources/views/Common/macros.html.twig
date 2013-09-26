@@ -157,6 +157,9 @@
 						            					
 						            				 {% endif %} 
 						            				</li>
+						            				 {% if bloque.ejesTematicos | length > 0 %}<li><strong>Ejes</strong>: {% for eje in bloque.ejesTematicos %} {{ eje.nombre }}; {% endfor %}</li>{% endif %}
+						            				 {% if bloque.areasReferencia| length > 0 %}<li><strong>Areas</strong>: {% for area in bloque.areasReferencia %} {{ area.nombre }}; {% endfor %}</li>{% endif %}
+						            				 
 						            				{% if fullview %}
 						            							{{ _self.presentacionesDeBloque(bloque) }}
 						            				{% endif %}
