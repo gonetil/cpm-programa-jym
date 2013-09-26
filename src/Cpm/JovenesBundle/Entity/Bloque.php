@@ -226,10 +226,7 @@ class Bloque
  		if ($recursive_depth == 0)
     		return $this->getId();
     	
-		$presentaciones = array();
-    	foreach ( $this->getPresentaciones() as $p )
-       		$presentaciones[] = $p->toArray($recursive_depth-1);
-       	
+       	$presentaciones = array_map(function($presentacion) { global $recursive_depth; return $presentacion->toArray($recursive_depth-1); }, $this->getPresentaciones()->toArray());
        	$ejes = array_map(function($eje) {return $eje->toArray(1); }, $this->getEjesTematicos()->toArray());
        	
        	$areas = array_map(function($area) {return $area->toArray(1); }, $this->getAreasReferencia()->toArray());
