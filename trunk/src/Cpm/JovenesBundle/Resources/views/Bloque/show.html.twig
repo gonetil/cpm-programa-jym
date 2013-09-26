@@ -35,6 +35,21 @@
         <th>Tipo</th>
             <td>{% if entity.tienePresentaciones %} Bloque de presentaciones {% else %} Bloque simple {% endif %}</td>
         </tr>
+
+        {% if entity.ejesTematicos | length > 0 %}
+        <tr>	
+        	<th>Ejes temáticos</th>
+            <td>{% for eje in entity.ejesTematicos %} {{ eje.nombre }}<br/>{% endfor %}</td>
+        </tr>
+        {% endif %}
+
+        {% if entity.areasReferencia| length > 0 %}
+        <tr>	
+        	<th>Áreas de referencia</th>
+            <td>{% for area in entity.areasReferencia %} {{ area.nombre }}<br/>{% endfor %}</td>
+        </tr>
+        {% endif %}
+        
         
         {% if entity.tienePresentaciones and (entity.presentaciones | length > 0) %}
 				<tr> 

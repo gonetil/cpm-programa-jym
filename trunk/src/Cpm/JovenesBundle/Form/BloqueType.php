@@ -21,6 +21,12 @@ class BloqueType extends AbstractType
             ->add('duracion')
             ->add('auditorioDia')
             ->add('tienePresentaciones',null,array('label' => 'Es un bloque con presentaciones'))
+            ->add('ejesTematicos',null,array('required'=>false,
+            								 'label' => 'Ejes temáticos'
+            								   ))
+            ->add('areasReferencia',null,array('required'=>false,
+            								   'label' => 'Areas de referencia'
+            								   ))
         ;
     }
 

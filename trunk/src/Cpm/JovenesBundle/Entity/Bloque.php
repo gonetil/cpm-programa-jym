@@ -61,6 +61,18 @@ class Bloque
      */
     private $tienePresentaciones;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Tema", inversedBy="bloques",cascade={"persist"})
+     * @ORM\JoinTable(name="BloqueTema")
+     **/
+    public  $ejesTematicos=array();
+    
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Eje", inversedBy="bloques",cascade={"persist"})
+     * @ORM\JoinTable(name="BloqueEje")
+     **/
+    public  $areasReferencia=array();
 
 
     /**
@@ -184,6 +196,28 @@ class Bloque
  		$this->presentaciones = $p;
  	}
     
+
+    public function setEjesTematicos($ejesTematicos)
+    {
+        $this->ejesTematicos = $ejesTematicos;
+    }
+
+    public function getEjesTematicos()
+    {
+        return $this->ejesTematicos;
+    }
+
+    public function setAreasReferencia($areasReferencia)
+    {
+        $this->areasReferencia = $areasReferencia;
+    }
+
+    public function getAreasReferencia()
+    {
+        return $this->areasReferencia;
+    }
+    
+    
     public function __toString() {
     	return "Bloque ".$this->posicion.": ".$this->nombre."; Tanda ".$this->getAuditorioDia()->getDia()->getTanda()."";
     }
@@ -195,6 +229,10 @@ class Bloque
 		$presentaciones = array();
     	foreach ( $this->getPresentaciones() as $p )
        		$presentaciones[] = $p->toArray($recursive_depth-1);
+       	
+       	$ejes = array_map(function($eje) {return $eje->toArray(1); }, $this->getEjesTematicos()->toArray());
+       	
+       	$areas = array_map(function($area) {return $area->toArray(1); }, $this->getAreasReferencia()->toArray());
 
 		return array(
 							'id' => "{$this->id}" , 
@@ -204,7 +242,9 @@ class Bloque
  							 'duracion' => "{$this->duracion}",
  							 'horaInicio' => date_format($this->horaInicio,"H:i"),
  							 'auditorioDia' => "{$this->auditorioDia->getId()}",
- 							 'presentaciones' => $presentaciones
- 		);				 
+ 							 'presentaciones' => $presentaciones,
+ 							 'ejes' => $ejes,
+ 							 'areas' => $areas
+ 				);				 
     }
 }
