@@ -203,7 +203,9 @@ abstract class Presentacion
 			    	'ejeTematico' => (!$this->getEjeTematico())?'': $this->getEjeTematico()->toArray($recursive_depth-1),
 			    	'tipo' => $this->getTipo(),
 			    	'bloque' => (!$this->bloque)?'' : "{$this->bloque->getId()}",
-			    	'tipoPresentacion' => (!$this->getTipoPresentacion())?'': $this->getTipoPresentacion()->toArray()
+			    	'tipoPresentacion' => (!$this->getTipoPresentacion())?'': $this->getTipoPresentacion()->toArray(),
+			    	'escuela' => $this->getEscuela(),
+			    	'confirmados' => $this->getPersonasConfirmadas()
 			  );
     }
 }

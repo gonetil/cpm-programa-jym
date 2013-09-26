@@ -122,6 +122,6 @@ class Produccion
     }
     
     public function toArray() {
-    	return array('id'=>"{$this->id}", 'nombre'=>$this->nombre,'slug'=>"{$this->tipoPresentacion}");	
+    	return array('id'=>"{$this->id}", 'nombre'=>$this->nombre,'slug'=>"{$this->tipoPresentacion}", 'duracion'=>"{$this->getDuracionEstimada()}");	
     }
 }
