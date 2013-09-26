@@ -223,15 +223,13 @@ class Tanda
 	 public function toArray($recursive_depth) {
     	if ($recursive_depth == 0)
     		return $this->getId();
+  
+    	$dias = array_map(function($dia) { global $recursive_depth; return $dia->toArray($recursive_depth -1); } , $this->getDias()->toArray());
     	
-    	$dias = array();
-    	foreach ( $this->getDias() as $dia )
-       		$dias[] = $dia->toArray($recursive_depth-1);
-
-		$presentaciones = array();
-    	foreach ( $this->getPresentaciones() as $p ) 
-			$presentaciones[] = $p->toArray($recursive_depth-1);
-    	
+    	$presentaciones = array_map( function($presentacion) { global $recursive_depth; 
+    															   return $presentacion->toArray($recursive_depth-1); }, 
+	    									 $this->getPresentaciones()->toArray() );
+    		
     	return array(
 					'id' => "{$this->id}" ,
 					'numero' => "{$this->numero}" ,
