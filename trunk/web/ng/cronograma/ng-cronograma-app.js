@@ -3,24 +3,45 @@ console.log("creamos nuestro modulo llamado cronograma_de_tanda");
 var app = angular.module("cronograma", ['ngDragDrop', 'ngResource']);
 
 app.factory('Bloque', function($resource){
-	Bloque = $resource('bloque/:bloqueId', {}, {
-		//
-	});
-	//TODO reemplazar hola por getAuditorioDia o algo así 
-	Bloque.prototype.hola=function(){alert('hole Bloque'+this.auditorio_dia_id);}; 
+	Bloque = $resource('bloque/:bloqueId', {bloqueId:'@id'}, {	});
 	return Bloque;
 });
+
+app.factory('AuditorioDia', function($resource){
+	AuditorioDia= $resource('tanda/:tandaId/dia/:diaId/auditorioDia/:auditorioDiaId', {tandaId:'@tanda',diaId:'@dia',auditorioDiaId:'@id'}, {});
+	return AuditorioDia;
+});
+
 app.factory('Dia', function($resource){
-	Dia= $resource('tanda/:tandaId/dia/:diaId', {}, {
-		//save: {method:'POST', params:{tandaId:'6'}, isArray:false}
-	});
+	Dia= $resource('dia/:diaId', {tandaId:'@tanda',diaId:'@id',numeroDia:'@numero'}, {});
 	return Dia;
 });
+
 app.factory('Tanda', function($resource){
 	Tanda = $resource('tanda/:tandaId', {}, {
 		//query: {method:'GET', params:{bloqueId:'phones'}, isArray:true}
 	});
 	return Tanda;
+});
+
+app.factory('Logger', function(){
+	Logger= {buffer:''};
+	Logger.log=function(message){
+		if (message.message)
+			message=message.message;
+    	alert(message);
+    };
+
+	Logger.error=function(message){
+		if (message.message)
+			message=message.message;
+    	alert("Errrorrrr"+message);
+    };
+    Logger.debug=function(message){
+		if (false)
+			alert(message);
+    };
+	return Logger;
 });
 
 app.run(function ($rootScope) {
@@ -32,11 +53,14 @@ app.run(function ($rootScope) {
 app.config(['$routeProvider', function($routeProvider, $rootScope) {
 	$routeProvider.
 		when('/', {templateUrl: asset('tanda-list.html'), controller: TandaListCtrl}).
-		when('/tanda/:tandaId/show', {templateUrl: asset('tanda-show.html'), controller: TandaShowCtrl}).
-		when('/auditorio/:auditorioDiaId/bloque/new', {templateUrl: asset('bloque-new.html'), controller: BloqueNewCtrl}).
-		when('/auditorio/:auditorioDiaId/bloque/edit/:bloqueId', {templateUrl: asset('bloque-edit.html'), controller: BloqueEditCtrl}).
-		when('/tanda/:tandaId/dia/new', {templateUrl: asset('dia-new.html'), controller: DiaNewCtrl}).
-		when('/dia/:diaId/remove', {templateUrl: asset('dia-remove.html'), controller: DiaRemoveCtrl}).
+		when('/tanda/:tandaId', {templateUrl: asset('tanda-show.html'), controller: TandaShowCtrl}).
+		when('/dia/new/tanda/:tandaId', {template:'no-template', controller: DiaNewCtrl}).
+		when('/dia/:diaId/remove', {templateUrl: asset('item-remove.html'), controller: DiaRemoveCtrl}).
+		when('/tanda/:tandaId/dia/:diaId/auditorioDia/new', {templateUrl:asset('auditorioDia-new.html'), controller: AuditorioDiaNewCtrl}).
+		when('/tanda/:tandaId/dia/:diaId/auditorioDia/:auditorioDiaId/remove', {templateUrl: asset('item-remove.html'), controller: AuditorioDiaRemoveCtrl}).
+		when('/bloque/new/auditorioDia/:auditorioDiaId', {templateUrl: asset('bloque-new.html'), controller: BloqueNewCtrl}).
+		when('/bloque/:bloqueId/edit', {templateUrl: asset('bloque-edit.html'), controller: BloqueEditCtrl}).
+		when('/bloque/:bloqueId/remove', {templateUrl: asset('item-remove.html'), controller: BloqueRemoveCtrl}).
 		otherwise({template: function (){
 	    	console.log('Se realiza una redirección a / desde '+location.hash);
 	    	return 'Se realiza una redirección a / porque se recibio un path desconocido '+location.hash;

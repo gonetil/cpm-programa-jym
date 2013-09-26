@@ -1,20 +1,25 @@
 <!--     TITULO -->
+<div class="row-fluid" ng-show="console.buffer">
+	{{console.buffer}}
+</div>
 <div class="row-fluid">
 	<h1 class="offset2 span8 text-center" >Cronograma de Tanda <span ng-show="!tanda.numero">sin número (id:{{tanda.id}})</span>{{tanda.numero}}</h1>
 	<div class="btn-group span2 text-right" >
-			<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Acciones <span class="caret"></span></a>
+			<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Acciones de Tanda<span class="caret"></span></a>
 			<ul class="dropdown-menu">
-				<li><a ng-click="newDia()">Resetear Cronograma</a></li>
+				<li><a href="#/tanda/{{tanda.id}}" target="_blank">Abrir Evento (TBD)</a></li>
 				<li class="divider"></li>
-				<li><a href="#/tanda/{{tanda.id}}/dia/new">Crear Dia</a></li>
+				<li><a href="#/dia/new/tanda/{{tanda.id}}"><i class="icon-plus"></i>Crear Dia</a></li>
+				<li class="divider"></li>
+				<li><a href="#"><i class="icon-repeat"></i>Reinicializar la tanda (TBD)</a></li>
 			</ul>
 		</div>
-
-  </div>
+  	</div>
   
   <div class="row-fluid ">
       <!-- PRESENTACIONES LIBRES-->
-      <div class="span2 caja ">		<div class="header-caja">
+		<div class="span2 caja ">
+      	<div class="header-caja">
 	      	<div class="titulo">Libres</div>
 	      	</div> 
           <div ng-model="tanda.presentaciones_libres" 
@@ -29,24 +34,38 @@
 
         <!-- CRONOGRAMA-->
       <div class="span10">
-          <div ng-repeat="dia in tanda.dias" class="row caja-dia"  >
-            <div class="caja caja-auditorio-dia span{{12/dia.auditorios_dia.length-1}}" style="{{css_dia_height()}};" ng-repeat="auditorio_dia in dia.auditorios_dia">
+          <div ng-repeat="dia in tanda.dias" class="row-fluid caja-dia"  >
+          
+            <div class="caja caja-auditorio-dia span{{12/dia.auditoriosDia.length-1}}" style="{{css_dia_height()}};" ng-repeat="auditorioDia in dia.auditoriosDia">
               <div class="header-caja">
-              <div class="titulo">{{auditorio_dia.titulo}}</div>
+              <div class="titulo">{{auditorioDia.auditorio.nombre}}</div>
 				<div class="operaciones btn-group ">
 					<button class="btn btn-large btn-primary dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></button>
 					<ul class="dropdown-menu " >
-				      <li><a href="#/auditorio/{{auditorio_dia.id}}/bloque/new">Crear Bloque</a></li>
+				      <li><a href="#/tanda/{{tanda.id}}/dia/{{dia.id}}/auditorioDia/{{auditorioDia.id}}/remove">Eliminar Auditorio del Dia</a></li>
+				      <li><a href="#/bloque/new/auditorioDia/{{auditorioDia.id}}">Agregar Bloque</a></li>
 				      <li class="divider"></li>
 				    </ul>
   				</div>
               </div>
               <!-- begin BLOQUES -->
+              <div class="row-fluid text-center" ng-show="auditorioDia.bloques.length == 0">Sin bloques</div>
               <div class="row-fluid">
+              	
                 <!-- IZQUIERDA -->
               	<div class="span6">
-	                <div class="caja-bloque" ng-repeat="bloque in auditorio_dia.bloques" ng-show="$index < 2">
-	                  <h6>{{bloque.hora_inicio}}HS {{bloque.titulo}}</h6>
+	                <div class="caja-bloque" ng-repeat="bloque in auditorioDia.bloques" ng-show="$index < 2">
+			        	<div class="header-caja">
+			          	    <div class="titulo">{{bloque.horaInicio}}HS {{bloque.nombre}}</div>
+							<div class="operaciones btn-group ">
+								<button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></button>
+								<ul class="dropdown-menu " >
+							      <li><a href="#/bloque/{{bloque.id}}/edit" title="Editar Bloque">Editar</a></li>
+							      <li><a href="#/bloque/{{bloque.id}}/remove" title="Eliminar Bloque">Eliminar Bloque</a></li>
+							      <li class="divider"></li>
+							    </ul>
+			  				</div>
+                      </div>
 	                  
 	                  <div ng-model="bloque.presentaciones" ng-show="bloque_tiene_presentaciones(bloque)"
 	                  	class="caja-bloque-presentaciones" style="{{css_bloque_height(bloque)}};" 
@@ -63,8 +82,8 @@
                 </div>
                 <!-- DERECHA (se duplica la columna izquierda)-->
               	<div class="span6">
-	                <div class="caja-bloque" ng-repeat="bloque in auditorio_dia.bloques" ng-show="$index >= 2">
-	                  <h6>{{bloque.hora_inicio}}HS {{bloque.titulo}}</h6>
+	                <div class="caja-bloque" ng-repeat="bloque in auditorioDia.bloques" ng-show="$index >= 2">
+	                  <h6>{{bloque.horaInicio}}HS {{bloque.nombre}}</h6>
 	                  
 	                  <div ng-model="bloque.presentaciones" ng-show="bloque_tiene_presentaciones(bloque)"
 	                  	class="caja-bloque-presentaciones" style="{{css_bloque_height(bloque)}};" 
@@ -86,12 +105,15 @@
               
             </div><!-- end auditorio-->
             <div class="span1">
-				<div class="btn-group btn-group-vertical">
-					<button type="button" class="btn">Dia {{dia.numero}}</button>
-					<button type="button" class="btn"><i class="icon-search"></i></button>
-					<button type="button" class="btn"><i class="icon-plus"></i></button>
-					<button type="button" class="btn"><i class="icon-repeat"></i></button>
-					
+            	<p>Dia {{dia.numero}}</p>
+            	<div class="btn-group span2 text-right" >
+					<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Acciones del Día<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#/tanda/{{tanda.id}}/dia/{{dia.id}}/auditorioDia/new"><i class="icon-plus"></i>Crear AuditorioDia</a></li>
+						<li><a href="#/dia/{{dia.id}}/remove"><i class="icon-plus"></i>Eliminar Dia</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Copiar desde otro día (TBD)</a></li>
+					</ul>
 				</div>
 			</div>
           </div><!-- end dia-->
@@ -108,7 +130,7 @@
 	</div>
     <div class="span2" ng-repeat="dia in tanda.dias">
     	Dia {{dia.numero}}: 
-        <div ng-repeat="ad in dia.auditorios_dia">
+        <div ng-repeat="ad in dia.auditoriosDia">
 			{{ad.titulo}}
 			<div ng-repeat="b in ad.bloques" ng-show="bloque_tiene_presentaciones(b)">
 				{{b.titulo}}({{b.id}}) <span ng-repeat="p in b.presentaciones">{{p.titulo}} ({{p.id}}), </span>

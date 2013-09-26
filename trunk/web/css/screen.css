@@ -1799,8 +1799,8 @@ button,.record_actions li a {
     font-weight: bold;
     line-height: 2;
     height:30px;
-padding-left: 5px;
-padding-right: 5px;
+	padding-left: 5px;	
+	padding-right: 5px;
 }
 
 
@@ -3066,18 +3066,19 @@ h4.info_header:hover { background-color: #FFF; }
 /*******************************************/
 .header-caja{
 	margin: 0;
-	padding: 14px 19px;
-	background-color: #fff;
 	border-bottom: 1px solid #ddd;
-	
 	border-radius:4px;
 	position: relative;
 	min-height:20px;
 }    
 .header-caja > .titulo {
 	text-align: center;
+	font-weight: bold;		
+}
+.caja-bloque > .header-caja > .titulo {
+	text-align: left;
 	font-weight: bold;
-		
+	font-size: 12px;		
 }
 .header-caja > .operaciones {
 /* 	display:none; */
@@ -3087,6 +3088,12 @@ h4.info_header:hover { background-color: #FFF; }
 }
 .header-caja:hover > div.operaciones { 
 	display:block;
+}
+
+.caja-auditorio-dia > .header-caja{
+	padding: 14px 19px;
+	
+	background-color: #fff;
 }
 
 .caja {
@@ -3106,12 +3113,19 @@ h4.info_header:hover { background-color: #FFF; }
 	border-radius: 5px;
 }
 
-.caja-bloque-presentaciones {
+div.caja-bloque{
+	margin: 0px 0px 10px 10px;
+}
+div.caja-bloque-presentaciones {
 	background-color: white;
 	padding: 5px 10px;
-	
+	margin: 0px;
+	overflow: hidden;
 }
 
+div.caja-bloque-presentaciones:hover{
+	overflow: visible;
+}
 .caja-auditorio-dia {
 
 /* 	margin: 0px 10px 5px 10px; */
@@ -3124,6 +3138,12 @@ h4.info_header:hover { background-color: #FFF; }
 	cursor: move;
 	max-width: 170px;
 	overflow: hidden;
+}
+.badge-presentacion:hover {
+	max-width: inherit;
+	overflow: visible;
+	z-index: 1;
+	
 }
 
 .titulo-corner-left {
@@ -3164,4 +3184,6 @@ h4.info_header:hover { background-color: #FFF; }
 /*******FIN ESTILOS DEL CRONOGRAMA**********/
 /*******************************************/
 
-
+button.btn{
+	height: auto;
+}

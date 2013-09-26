@@ -1,19 +1,22 @@
 <fieldset>
 	<legend>{{ textButton }} Bloque</legend>
-	<input type="hidden" ng-model="bloque.auditorio_dia" required>
+	<input type="hidden" ng-model="bloque.auditorioDia" required>
 	
 	
 	<label>Nombre</label>
 	<input type="text" placeholder="Nombre" ng-model="bloque.nombre" required>
 		
 	<label>Hora de Inicio</label>
-	<input type="time" placeholder="Hora de Inicio" ng-model="bloque.hora_inicio" required>
+	<input type="time" placeholder="Hora de Inicio" ng-model="bloque.horaInicio" required>
 		
 	<label>Duración</label>
-	<input type="number" placeholder="Duración" ng-model="bloque.duracion" required>
+	<input type="number" value="{{bloque.duracion}}" ng-model="bloque.duracion" required min="1">
+	
+	<label>Posición</label>
+	<input type="number" value="{{bloque.posicion}}" ng-model="bloque.posicion" required min="-1">
 		
-		<label class="checkbox">
-		<input type="checkbox" ng-model="bloque.tipo" >
+	<label class="checkbox">
+		<input type="checkbox" ng-model="bloque.tienePresentaciones" >
 		Es un bloque de presentaciones?
 	</label>
 	<div>

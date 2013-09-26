@@ -31,24 +31,24 @@ class Dia
 	/**
      * @ORM\OneToMany(targetEntity="AuditorioDia", mappedBy="dia", cascade={"all"})
      **/
-    private $auditoriosDias;
+    private $auditoriosDia;
 
     
     /**
-     *  @ORM\ManyToOne(targetEntity="Tanda")
+     *  @ORM\ManyToOne(targetEntity="Tanda", inversedBy="dias")
      */
     private $tanda;
     
     public function __construct(){
-		$this->auditoriosDias = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->auditoriosDia = new \Doctrine\Common\Collections\ArrayCollection();
 	}
     
-    static function createDia($tanda,$numero=0,$auditoriosDias=null) {
+    static function createDia($tanda,$numero=0,$auditoriosDia=null) {
     	$tandaDia = new Dia();
 	    $tandaDia->setTanda($tanda);
 	    $tandaDia->setNumero($numero);
-	    if ($auditoriosDias != null )
-	    	$tandaDia->setAuditoriosDias($auditoriosDias);
+	    if ($auditoriosDia != null )
+	    	$tandaDia->setAuditoriosDia($auditoriosDia);
 	    return $tandaDia;
     }
     /**
@@ -82,15 +82,20 @@ class Dia
     }
     
 
-    public function getAuditoriosDias() {
-    	return $this->auditoriosDias;
+    public function getAuditoriosDia() {
+    	return $this->auditoriosDia;
     }
-    public function setAuditoriosDias($ad) {
-    	$this->auditoriosDias = $ad;
+    public function setAuditoriosDia($ad) {
+    	$this->auditoriosDia = $ad;
     }
     public function addAuditorioDia($ad) {
-    	$this->auditoriosDias[] = $ad;
+    	$this->auditoriosDia[] = $ad;
     }
+    public function removeAuditorioDia($ad) {
+    	$this->auditoriosDia->removeElement($ad);
+    }
+    
+    
     
     public function getTanda() {
     	return $this->tanda;
@@ -107,15 +112,15 @@ class Dia
     	if ($recursive_depth == 0)
     		return $this->getId();
     	
-    	$auditoriosDias = array();
-    	foreach ($this->getAuditoriosDias() as $ad )
-       		$auditoriosDias[] = $ad->toArray($recursive_depth-1);
+    	$auditoriosDia = array();
+    	foreach ($this->getAuditoriosDia() as $ad )
+       		$auditoriosDia[] = $ad->toArray($recursive_depth-1);
 		
     	return array(
 					'id' => "{$this->id}" , 
  					'tanda' => "{$this->getTanda()->getId()}",
  					'numero' => "{$this->numero}" ,
- 					'auditoriosDias' => $auditoriosDias
+ 					'auditoriosDia' => $auditoriosDia
  					);
     }
 

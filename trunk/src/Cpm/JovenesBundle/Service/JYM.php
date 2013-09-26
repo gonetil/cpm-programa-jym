@@ -224,7 +224,7 @@ class JYM  {
 		
 		//INVITACION
 		elseif($targetObject instanceof \Cpm\JovenesBundle\Entity\Invitacion){
-			if ($user->isAdmin() || $user->equals($invitacion->getProyecto()->getCoordinador()))
+			if ($user->isAdmin() || $user->equals($targetObject->getProyecto()->getCoordinador()))
 				return true;
 			$cause = "Solo el coordinador del proyecto puede aceptar o rechazar sus invitaciones";
 		}
@@ -249,6 +249,17 @@ class JYM  {
 			if ($user->isSuperAdmin() || $targetObject->equals($user) || 
 				($user->isAdmin() && !$targetObject->isSuperAdmin()))
 				return true;
+		}
+		
+		elseif($targetObject instanceof \Cpm\JovenesBundle\Entity\Bloque ||
+		$targetObject instanceof \Cpm\JovenesBundle\Entity\AuditorioDia ||
+		$targetObject instanceof \Cpm\JovenesBundle\Entity\Dia ||
+		$targetObject instanceof \Cpm\JovenesBundle\Entity\Tanda ||
+		$targetObject instanceof \Cpm\JovenesBundle\Entity\Presentacion
+		){
+			if ($user->isSuperAdmin() || $user->isAdmin())
+				return true;
+				//FIXME permitir modificaciones solo del ciclo actual
 		}
 			
 		if ($throwException){ 
