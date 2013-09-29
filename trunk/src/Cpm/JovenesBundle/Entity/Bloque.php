@@ -26,7 +26,7 @@ class Bloque
      *
      * @ORM\Column(name="posicion", type="integer")
      */
-    private $posicion;
+    private $posicion=0;
 
     /**
      * @var datetime $horaInicio
@@ -40,7 +40,7 @@ class Bloque
      *
      * @ORM\Column(name="duracion", type="integer")
      */
-    private $duracion;
+    private $duracion=15;
 
  	/**
      *  @ORM\ManyToOne(targetEntity="AuditorioDia")
@@ -59,29 +59,32 @@ class Bloque
      *
      * @ORM\Column(name="tienePresentaciones", type="boolean", nullable=true)
      */
-    private $tienePresentaciones;
+    private $tienePresentaciones=true;
 
     /**
      * @ORM\ManyToMany(targetEntity="Tema", inversedBy="bloques",cascade={"persist"})
      * @ORM\JoinTable(name="BloqueTema")
      **/
-    public  $ejesTematicos=array();
+    public $ejesTematicos;
     
     
     /**
      * @ORM\ManyToMany(targetEntity="Eje", inversedBy="bloques",cascade={"persist"})
      * @ORM\JoinTable(name="BloqueEje")
      **/
-    public  $areasReferencia=array();
+    public  $areasReferencia;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Presentacion", mappedBy="bloque")
      */
-	private $presentaciones = array();
-
-
-
+	private $presentaciones;
+     
+    function __construct(){
+    	$this->ejesTematicos = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->areasReferencia=new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->presentaciones = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     /**
      * Get id
      *
@@ -192,14 +195,18 @@ class Bloque
  		return $this->presentaciones;
  	}
  	
- 	public function setPresentaciones($p) {
- 		$this->presentaciones = $p;
+ 	public function setPresentaciones($presentaciones) {
+ 		$this->presentaciones->clear();
+    	foreach($presentaciones as $p){
+    		$this->presentaciones->add($p);
+    	}
  	}
     
-
+	
     public function setEjesTematicos($ejesTematicos)
     {
-        $this->ejesTematicos = $ejesTematicos;
+    	$this->ejesTematicos=$ejesTematicos;
+    	
     }
 
     public function getEjesTematicos()
@@ -209,7 +216,7 @@ class Bloque
 
     public function setAreasReferencia($areasReferencia)
     {
-        $this->areasReferencia = $areasReferencia;
+    	$this->areasReferencia=$areasReferencia;
     }
 
     public function getAreasReferencia()
@@ -240,8 +247,8 @@ class Bloque
  							 'horaInicio' => date_format($this->horaInicio,"H:i"),
  							 'auditorioDia' => "{$this->auditorioDia->getId()}",
  							 'presentaciones' => $presentaciones,
- 							 'ejes' => $ejes,
- 							 'areas' => $areas
+ 							 'ejesTematicos' => $ejes,
+ 							 'areasReferencia' => $areas
  				);				 
     }
 }

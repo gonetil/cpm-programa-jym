@@ -1,15 +1,16 @@
+<form ng-submit="saveAuditorioDia()" >
 <fieldset>
-	<legend>{{ textButton }} Auditorio del dia</legend>
-	<input type="hidden" ng-model="auditorioDia.dia" required>
 	
+	<legend>{{ textButton }} Auditorio del dia {{auditorioDia.dia}}</legend>
+	<input type="hidden" ng-model="auditorioDia.dia" >
+	<input type="hidden" ng-model="auditorioDia.id" >
 	
 	<label>Auditorio</label>
-	<select" placeholder="Auditorio" ng-model="auditorioDia.auditorio" required>
-		<option>1</option>
-	</select>	
+	<select ng-model="auditorioDia.auditorio" ng-required="true" ng-options="a.nombre for a in auditorios"></select>
 	
 	<div>
-		<button type="submit" class="btn btn-primary">{{ textButton }} Auditorio del Dia</button>
+		<button type="submit" class="btn btn-primary">{{ textButton }}</button>
 		<a href="javascript:history.back()" class="btn btn-danger">Cancelar</a>
 	</div>
 </fieldset>
+</form>

@@ -3069,31 +3069,40 @@ h4.info_header:hover { background-color: #FFF; }
 	border-bottom: 1px solid #ddd;
 	border-radius:4px;
 	position: relative;
-	min-height:20px;
+	min-height:22px;
+	text-align: center;
 }    
 .header-caja > .titulo {
 	text-align: center;
 	font-weight: bold;		
-}
-.caja-bloque > .header-caja > .titulo {
-	text-align: left;
-	font-weight: bold;
-	font-size: 12px;		
-}
-.header-caja > .operaciones {
-/* 	display:none; */
-	position:absolute;
-	right:2px;
-	top:2px;
-}
-.header-caja:hover > div.operaciones { 
-	display:block;
+	
+	display: inline-block;
 }
 
-.caja-auditorio-dia > .header-caja{
-	padding: 14px 19px;
+.header-caja > .operaciones {
+	float:right;
+/* 	display:none; */
+	text-align: left;
+	position:absolute;
+	right:0px;
+	top:0px;
+}
+
+.header-caja > .operaciones > .btn{
+	opacity:0.6;
+}
+.header-caja:hover > .operaciones > .btn{
+	opacity:0.8;
+}
 	
-	background-color: #fff;
+.header-caja > .operaciones > .dropdown-menu {
+/* 	Para que el menu se despliegue hacia la derecha */
+/*     left:auto; */
+/*     right:0; */
+}
+
+.header-caja:hover > div.operaciones { 
+/* 	display:block; */
 }
 
 .caja {
@@ -3104,46 +3113,94 @@ h4.info_header:hover { background-color: #FFF; }
 	border-radius: 5px;
 	
 }
+.caja-cronograma{
+	width:100%;
+	border-spacing: 5px;
+border-collapse: separate;
+}
 
 .caja-dia {
-	clear: both;
 	border: 1px solid #ddd;
-	margin: 0px;
-	padding: 5px 10px;
-	border-radius: 5px;
+	margin: 0px 10px;
+	padding: 0px;
+	border-radius: 10px;
+/* 	clear: both; */
+	width: 100%;
+}
+.caja-dia td{
+	vertical-align: top;
+}
+tr:nth-child(odd).caja-dia{
+	background-color: #EFEFCD;
 }
 
-div.caja-bloque{
+.caja-dia > .header-caja  {
+	padding:5px;
+	vertical-align: top;
+	width: 100px;
+	text-align: left;
+}
+.caja-dia > .header-caja > .titulo {
+	padding:10px;
+}
+
+.caja-bloque{
 	margin: 0px 0px 10px 10px;
 }
+
+.caja-bloque > .header-caja {
+	text-align: left;
+	font-weight: bold;
+	font-size: 12px;
+}
+
 div.caja-bloque-presentaciones {
 	background-color: white;
 	padding: 5px 10px;
 	margin: 0px;
 	overflow: hidden;
+	
+	
+	border-bottom: 1px solid #ddd;
+	border-radius:4px;
 }
 
 div.caja-bloque-presentaciones:hover{
 	overflow: visible;
 }
-.caja-auditorio-dia {
+td.caja-auditorio-dia {
+	width: 400px;
+}
 
-/* 	margin: 0px 10px 5px 10px; */
+.caja-auditorio-dia > .header-caja{
+	padding: 4px 19px;
+	background-color: #fff;
 }
 
 .badge-presentacion {
 	background-color: #3a87ad;
-	margin-top: 10px;
 	vertical-align: middle;
 	cursor: move;
 	max-width: 170px;
 	overflow: hidden;
 }
 .badge-presentacion:hover {
-	max-width: inherit;
-	overflow: visible;
-	z-index: 1;
+/* 	max-width: inherit; */
+/* 	overflow: visible; */
+/* 	z-index: 1; */
 	
+}
+
+.presentaciones_libres{
+	position:fixed;
+	bottom:0px;
+	left:0;
+	width:100%;
+	max-height: 100px;
+	background-color:#dceaf4; 
+	z-index: 100;
+	padding: 5px;
+	border-top: solid 5px white;
 }
 
 .titulo-corner-left {

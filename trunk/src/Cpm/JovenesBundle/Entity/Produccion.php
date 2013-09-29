@@ -121,7 +121,11 @@ class Produccion
     	return $this->nombre . ( ( is_null($this->tipoPresentacion) ) ? "" : " (".$this->tipoPresentacion.")"  );
     }
     
-    public function toArray() {
-    	return array('id'=>"{$this->id}", 'nombre'=>$this->nombre,'slug'=>"{$this->tipoPresentacion}", 'duracion'=>"{$this->getDuracionEstimada()}");	
+    public function toArray($recursive_depth) {
+    	if ($recursive_depth == 0)
+    		return $this->getId();
+  	
+  		return array('id'=>"{$this->id}", 'nombre'=>$this->nombre,'slug'=>"{$this->tipoPresentacion}", 'duracion'=>"{$this->getDuracionEstimada()}");	
     }
+    
 }

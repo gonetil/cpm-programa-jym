@@ -1,3 +1,4 @@
+<form ng-submit="saveBloque()">
 <fieldset>
 	<legend>{{ textButton }} Bloque</legend>
 	<input type="hidden" ng-model="bloque.auditorioDia" required>
@@ -14,13 +15,26 @@
 	
 	<label>Posición</label>
 	<input type="number" value="{{bloque.posicion}}" ng-model="bloque.posicion" required min="-1">
-		
+	
 	<label class="checkbox">
 		<input type="checkbox" ng-model="bloque.tienePresentaciones" >
 		Es un bloque de presentaciones?
 	</label>
+	
+	<div ng-show="bloque.tienePresentaciones">
+		<label>Ejes Temáticos {{bloque.ejesTematicos.length}}Ss</label>
+		<select ng-model="bloque.ejesTematicos" key="id" ng-options="i.nombre for i in ejesTematicos"
+		multiple="multiple"></select>
+		
+		<label>Areas de Referencia {{bloque.areasReferencia.length}}Ss</label>
+		<select ng-model="bloque.areasReferencia" key="id"  ng-options="i.nombre for i in areasReferencia"
+		multiple="multiple"></select>
+	</div>
+	
+	
 	<div>
 		<button type="submit" class="btn btn-primary">{{ textButton }} Bloque</button>
 		<a href="javascript:history.back()" class="btn btn-danger">Cancelar</a>
 	</div>
 </fieldset>
+</form>
