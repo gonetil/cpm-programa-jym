@@ -427,4 +427,5 @@ abstract class BaseController extends Controller
     									//count($qb->select($qb->expr()->count('p'))->groupBy('p.coordinador')->andWhere('p.ciclo = :ciclo')->setParameter('ciclo',$ciclo)->getQuery()->getResult());    	
     	return $stats;
     }   
+
 }

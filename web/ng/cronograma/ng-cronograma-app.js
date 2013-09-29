@@ -1,15 +1,13 @@
 console.log("creamos nuestro modulo llamado cronograma_de_tanda");
 //http://docs.angularjs.org/api/angular.Module
-var app = angular.module("cronograma", ['ngDragDrop', 'ngResource']);
+var app = angular.module("cronograma", ['ngDragDrop', 'ngResource', 'ngynSelectKey']);
 
 app.factory('Bloque', function($resource){
-	Bloque = $resource('bloque/:bloqueId', {bloqueId:'@id'}, {	});
-	return Bloque;
+	return $resource('bloque/:bloqueId', {bloqueId:'@id'}, {});
 });
 
-app.factory('AuditorioDia', function($resource){
-	AuditorioDia= $resource('tanda/:tandaId/dia/:diaId/auditorioDia/:auditorioDiaId', {tandaId:'@tanda',diaId:'@dia',auditorioDiaId:'@id'}, {});
-	return AuditorioDia;
+app.factory('AuditorioDia', function($resource){//
+	return $resource('auditorioDia/:auditorioDiaId', {auditorioDiaId:'@id'}, {});
 });
 
 app.factory('Dia', function($resource){
@@ -24,29 +22,53 @@ app.factory('Tanda', function($resource){
 	return Tanda;
 });
 
+app.factory('TipoPresentacion', function($resource){
+	return $resource('tipoPresentacion/:tpId', {tpId:'@id'}, {});
+});
+app.factory('AreaReferencia', function($resource){
+	return $resource('areaReferencia/:areaId', {areaId:'@id'}, {});
+});
+app.factory('EjeTematico', function($resource){
+	return $resource('ejeTematico/:ejeId', {ejeId:'@id'}, {});
+});
+app.factory('Auditorio', function($resource){
+	return $resource('auditorio/:auditorioId', {auditorioId:'@id'}, {});
+});
+
+
 app.factory('Logger', function(){
-	Logger= {buffer:''};
-	Logger.log=function(message){
+	Logger= {buffer:[], level:'debug', bufferSize:2};
+	Logger.push=function(level, message){
 		if (message.message)
 			message=message.message;
-    	alert(message);
+		var now=new Date(); 
+		now=now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
+		this.buffer.unshift({level:level, message:message, time:now});
+		this.buffer.splice(this.bufferSize,1);
+		//alert(level+": "+message);
+    };
+	Logger.log=function(message){
+		Logger.push('info', message);
     };
 
 	Logger.error=function(message){
-		if (message.message)
-			message=message.message;
-    	alert("Errrorrrr"+message);
-    };
+		Logger.push('error', message);
+	};
+	Logger.success=function(message){
+		Logger.push('success', message);
+	};
     Logger.debug=function(message){
-		if (false)
-			alert(message);
+    	if (this.level != 'debug')
+			return; 
+    	Logger.push('info', message);
     };
 	return Logger;
 });
 
-app.run(function ($rootScope) {
+app.run(function ($rootScope, Logger) {
 	//declaro las variables y funciones globales
     $rootScope.asset = asset;
+    $rootScope.Logger = Logger;
 });
 
 //hacemos el ruteo de nuestra aplicación
@@ -56,10 +78,11 @@ app.config(['$routeProvider', function($routeProvider, $rootScope) {
 		when('/tanda/:tandaId', {templateUrl: asset('tanda-show.html'), controller: TandaShowCtrl}).
 		when('/dia/new/tanda/:tandaId', {template:'no-template', controller: DiaNewCtrl}).
 		when('/dia/:diaId/remove', {templateUrl: asset('item-remove.html'), controller: DiaRemoveCtrl}).
-		when('/tanda/:tandaId/dia/:diaId/auditorioDia/new', {templateUrl:asset('auditorioDia-new.html'), controller: AuditorioDiaNewCtrl}).
-		when('/tanda/:tandaId/dia/:diaId/auditorioDia/:auditorioDiaId/remove', {templateUrl: asset('item-remove.html'), controller: AuditorioDiaRemoveCtrl}).
-		when('/bloque/new/auditorioDia/:auditorioDiaId', {templateUrl: asset('bloque-new.html'), controller: BloqueNewCtrl}).
-		when('/bloque/:bloqueId/edit', {templateUrl: asset('bloque-edit.html'), controller: BloqueEditCtrl}).
+		when('/auditorioDia/new/dia/:diaId', {templateUrl:asset('auditorioDia-form.html'), controller: AuditorioDiaNewCtrl}).
+		when('/auditorioDia/:auditorioDiaId/edit', {templateUrl:asset('auditorioDia-form.html'), controller: AuditorioDiaEditCtrl}).
+		when('/auditorioDia/:auditorioDiaId/remove', {templateUrl: asset('item-remove.html'), controller: AuditorioDiaRemoveCtrl}).
+		when('/bloque/new/auditorioDia/:auditorioDiaId', {templateUrl: asset('bloque-form.html'), controller: BloqueNewCtrl}).
+		when('/bloque/:bloqueId/edit', {templateUrl: asset('bloque-form.html'), controller: BloqueEditCtrl}).
 		when('/bloque/:bloqueId/remove', {templateUrl: asset('item-remove.html'), controller: BloqueRemoveCtrl}).
 		otherwise({template: function (){
 	    	console.log('Se realiza una redirección a / desde '+location.hash);
@@ -74,117 +97,3 @@ function asset(filename){
 	var ng_path=BASE_PATH+"/ng/cronograma/";
 	return ng_path + filename;
 };
-
-get_tanda_demo=function (){
-
-    tanda = {
-    nombre:'Tanda 1',
-    presentaciones: [
-      {
-        id: 1,
-        titulo: "Proyecto 1",
-        escuela: "ENET N4",
-        duracion: 15,
-        ubicacion: "La Plata",
-        area_referencia: "Malvinas Ref",
-        eje: "Malvinas Eje",
-        tipo_produccion: "Audiovisual"
-      },
-      {
-        id: 2,
-        titulo: "Proyecto 2",
-        escuela: "ENET N4x2",
-        duracion: 25,
-        ubicacion: "La Plata",
-        area_referencia: "Malvinas Ref",
-        eje: "Malvinas Eje",
-        tipo_produccion: "Audiovisual"
-      },
-      {
-        id: 3,
-        titulo: "Proyecto 3",
-        escuela: "ENET N44",
-        duracion: 15,
-        ubicacion: "La Matanza",
-        area_referencia: "Malvinas Ref",
-        eje: "Malvinas Eje",
-        tipo_produccion: "Audiovisual"
-      }
-    ],
-    presentaciones_libres: [],
-    dias: [
-      //dia 1
-      {
-        numero:1,
-        auditorios_dia: [
-          //auditorio_dia sala 1
-          {
-        	id: 1,
-            titulo: 'Auditorio 1', 
-            bloques:[
-              {hora_inicio: '09:00', hora_fin: '10:00', duracion: 60, titulo: 'Taller introductorio (Collor Naranja)', descripcion: '', presentaciones:false},
-              {hora_inicio: '10:00', hora_fin: '13:00', duracion: 180, titulo: 'Bloque de presentaciones n 1', descripcion: '', presentaciones:[
-                {
-                  id: 4,
-                  titulo: "Proyecto 4",
-                  escuela: "ENET N44444",
-                  duracion: 15,
-                  ubicacion: "La Matanza",
-                  area_referencia: "Malvinas Ref",
-                  eje: "Malvinas Eje",
-                  tipo_produccion: "Audiovisual"
-                }
-              ]},
-              {hora_inicio: '13:00', hora_fin: '15:00', duracion: 120, titulo: 'Almuerzo libre', descripcion: '', presentaciones:false},
-              {hora_inicio: '15:00', hora_fin: '18:00', duracion: 180, titulo: 'Bloque de presentaciones n 2', descripcion: '', presentaciones:[]}
-            ]
-          },
-          
-          //auditorio_dia sala 2
-          {
-        	  id: 2,
-              titulo: 'Auditorio 2', 
-            bloques:[
-              {hora_inicio: '09:00', hora_fin: '10:00', titulo: 'Taller introductorio (Collor Azul)', descripcion: '', presentaciones:false},
-              {hora_inicio: '10:00', hora_fin: '13:00', titulo: 'Bloque de presentaciones n 3', descripcion: '', presentaciones:[]},
-              {hora_inicio: '13:00', hora_fin: '15:00', titulo: 'Almuerzo libre (Azul)', descripcion: '', presentaciones:false},
-              {hora_inicio: '15:00', hora_fin: '18:00', titulo: 'Bloque de presentaciones n 4', descripcion: '', presentaciones:[]}
-            ]
-          }
-        ]
-      },
-      //dia 2
-      {
-        numero:2,
-        auditorios_dia: [
-          //auditorio_dia sala 1
-          {
-        	id: 3,
-            titulo: 'Auditorio 3', 
-            bloques:[
-              {hora_inicio: '09:00', hora_fin: '10:00', titulo: 'Taller introductorio (Collor Amarillo)', descripcion: '', presentaciones:false},
-              {hora_inicio: '10:00', hora_fin: '13:00', titulo: 'Bloque de presentaciones n 5', descripcion: '', presentaciones:[]},
-              {hora_inicio: '13:00', hora_fin: '15:00', titulo: 'Almuerzo libre', descripcion: '', presentaciones:false},
-              {hora_inicio: '15:00', hora_fin: '18:00', titulo: 'Bloque de presentaciones n 6', descripcion: '', presentaciones:[]}
-            ]
-          },
-          
-          //auditorio_dia sala 2
-          {
-        	id: 4,
-            titulo: 'Auditorio 4', 
-            bloques:[
-              {hora_inicio: '09:00', hora_fin: '10:00', titulo: 'Taller introductorio (Collor Rojo)', descripcion: '', presentaciones:false},
-              {hora_inicio: '10:00', hora_fin: '13:00', titulo: 'Bloque de presentaciones n 7', descripcion: '', presentaciones:[]},
-              {hora_inicio: '13:00', hora_fin: '15:00', titulo: 'Almuerzo libre (Rojo)', descripcion: '', presentaciones:false},
-              {hora_inicio: '15:00', hora_fin: '18:00', titulo: 'Bloque de presentaciones n 8', descripcion: '', presentaciones:[]}
-            ]
-          }
-        ]
-      }
-    ]
-  };
-  
-  tanda.presentaciones_libres=tanda.presentaciones;
-  return tanda;
-}

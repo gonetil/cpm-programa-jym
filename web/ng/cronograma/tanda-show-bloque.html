@@ -1,0 +1,24 @@
+<div class="caja-bloque">
+	<div class="header-caja">
+		<div class="titulo">{{bloque.horaInicio}}HS {{bloque.nombre}}</div>
+		<div class="operaciones btn-group ">
+			<button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
+				<b class="caret"></b>
+			</button>
+			<ul class="dropdown-menu ">
+				<li><a href="#/bloque/{{bloque.id}}/edit" title="Editar Bloque">Editar</a></li>
+				<li><a href="#/bloque/{{bloque.id}}/remove" title="Eliminar Bloque">Eliminar</a></li>
+				<li class="divider"></li>
+			</ul>
+		</div>
+	</div>
+
+	<div ng-model="bloque.presentaciones" ng-show="bloque_tiene_presentaciones(bloque)" class="caja-bloque-presentaciones" class="bloque-dropbox"
+		data-drop="true" jqyoui-droppable="{multiple:true,placeholder:false}" data-jqyoui-options="bloque_drop_options" data-drag="false">
+
+		<!-- PRESENTACION -->
+		<div ng-repeat="p in bloque.presentaciones" ng-model="bloque.presentaciones" class="badge badge-presentacion" style="height: {{p.duracion}}"
+			data-drag="true" jqyoui-draggable="{index:{{$index}}, animate:true, placeholder:false}" data-jqyoui-options="jquoui_drag_options">
+			{{p.escuela}}</div>
+	</div>
+</div>
