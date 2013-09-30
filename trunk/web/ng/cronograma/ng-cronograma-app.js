@@ -34,6 +34,12 @@ app.factory('EjeTematico', function($resource){
 app.factory('Auditorio', function($resource){
 	return $resource('auditorio/:auditorioId', {auditorioId:'@id'}, {});
 });
+app.factory('Presentacion', function($resource){
+	Presentacion = $resource('presentacion/:presentacionId', {presentacionId:'@id'}, {
+		mover: {method:'POST', params:{origen:'', destino:''}, isArray:false}
+	});
+	return Presentacion;
+});
 
 
 app.factory('Logger', function(){
