@@ -12,6 +12,7 @@ class AuditorioType extends AbstractType
         $builder
             ->add('nombre')
             ->add('anulado')
+            ->add('producciones',null,array('label'=>'Tipos de producciones soportadas'))
         ;
     }
 
