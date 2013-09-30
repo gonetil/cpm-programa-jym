@@ -3229,6 +3229,8 @@ td.caja-auditorio-dia {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 }
+
+.records_list .externa td { border: 1px solid yellow; }
 #cronograma-view > form {
 	background-color: #fff;
 	padding: 15px 50px;
