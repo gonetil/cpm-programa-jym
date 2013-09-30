@@ -34,6 +34,17 @@ class Auditorio
      * @ORM\Column(name="anulado", type="boolean", nullable="true")
      */
     private $anulado;
+    
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Produccion", inversedBy="auditorios",cascade={"persist"})
+     * @ORM\JoinTable(name="ProduccionesAuditorio")
+    **/
+    private $producciones; //producciones que soporta el audiorio
+
+    function __construct(){
+    	$this->producciones = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -85,7 +96,15 @@ class Auditorio
     {
         return $this->anulado;
     }
-    
+ 
+ 	public function getProducciones() {
+ 		return $this->producciones;
+ 	}   
+ 	
+ 	public function setProducciones($p) {
+ 		$this->producciones = $p;
+ 	}
+ 	
     public function __toString() {
     	return $this->getNombre(). ( $this->anulado ? " (ANULADO)" : "");
     }
@@ -94,9 +113,11 @@ class Auditorio
     	if ($recursive_depth == 0)
     		return $this->getId();
     	
+    	$producciones = array_map(function($produccion) {return $produccion->toArray(1); }, $this->getProducciones()->toArray());
     	return array('id' => $this->id ,
     		'nombre' => "{$this->nombre}", 
-    		'anulado' => "{$this->anulado}" 
+    		'anulado' => "{$this->anulado}",
+    		'producciones' => $producciones
     	);
     }
 }

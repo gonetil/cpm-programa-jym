@@ -18,6 +18,16 @@
             <th>Anulado</th>
             <td>{% if  entity.anulado %} Sí {% else %} No {% endif %}</td>
         </tr>
+        <tr>
+            <th>Producciones soportadas</th>
+            <td>
+            	<ul>{% for prod in entity.producciones %}
+            		<li>{{ prod.nombre }} ({{ prod.tipoPresentacion }})</li>
+            	{% endfor %} %}
+            	</ul>
+            	</td>
+        </tr>
+        
     </tbody>
 </table>
 
