@@ -2,44 +2,7 @@ console.log("creamos nuestro modulo llamado cronograma_de_tanda");
 //http://docs.angularjs.org/api/angular.Module
 var app = angular.module("cronograma", ['ngDragDrop', 'ngResource', 'ngynSelectKey']);
 
-app.factory('Bloque', function($resource){
-	return $resource('bloque/:bloqueId', {bloqueId:'@id'}, {});
-});
 
-app.factory('AuditorioDia', function($resource){//
-	return $resource('auditorioDia/:auditorioDiaId', {auditorioDiaId:'@id'}, {});
-});
-
-app.factory('Dia', function($resource){
-	Dia= $resource('dia/:diaId', {tandaId:'@tanda',diaId:'@id',numeroDia:'@numero'}, {});
-	return Dia;
-});
-
-app.factory('Tanda', function($resource){
-	Tanda = $resource('tanda/:tandaId', {}, {
-		//query: {method:'GET', params:{bloqueId:'phones'}, isArray:true}
-	});
-	return Tanda;
-});
-
-app.factory('TipoPresentacion', function($resource){
-	return $resource('tipoPresentacion/:tpId', {tpId:'@id'}, {});
-});
-app.factory('AreaReferencia', function($resource){
-	return $resource('areaReferencia/:areaId', {areaId:'@id'}, {});
-});
-app.factory('EjeTematico', function($resource){
-	return $resource('ejeTematico/:ejeId', {ejeId:'@id'}, {});
-});
-app.factory('Auditorio', function($resource){
-	return $resource('auditorio/:auditorioId', {auditorioId:'@id'}, {});
-});
-app.factory('Presentacion', function($resource){
-	Presentacion = $resource('presentacion/:presentacionId', {presentacionId:'@id'}, {
-		mover: {method:'POST', params:{origen:'', destino:''}, isArray:false}
-	});
-	return Presentacion;
-});
 
 
 app.factory('Logger', function(){
