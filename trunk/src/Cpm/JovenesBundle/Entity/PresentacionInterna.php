@@ -186,4 +186,12 @@ class PresentacionInterna extends Presentacion
     public function getPersonasConfirmadas() { return $this->invitacion->countInvitados(); }
     public function getPersonas_confirmadas() { return $this->getPersonasConfirmadas(); }	
 
+	public function getValoracion() {
+		$estado = $this->getProyecto()->getEstadoActual();
+		if (!is_null($estado))
+			return $estado->getValoracion();
+		else
+			return ''; //FIXME... que deberia devolver aca?	
+	}
+	
 }

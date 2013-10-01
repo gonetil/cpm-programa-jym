@@ -7,6 +7,12 @@ use Symfony\Component\Form\FormBuilder;
 
 class PresentacionExternaType extends AbstractType
 {
+	private $estadosManager;
+ 	
+    public function __construct($em){
+		$this->estadosManager = $em;
+	}
+	
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
@@ -25,6 +31,12 @@ class PresentacionExternaType extends AbstractType
             ->add('apellido_coordinador')
             ->add('nombre_coordinador')
             ->add('personas_confirmadas')
+  			->add('valoracion','choice',array(
+												'required'=>false,
+												'choices' => $this->estadosManager->getNotasPosibles(),
+												'expanded' => false,
+												'label' => 'Valoración',
+												))
         ;
     }
 

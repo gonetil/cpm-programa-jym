@@ -93,6 +93,14 @@ class PresentacionExterna extends Presentacion
      * @ORM\Column(name="personas_confirmadas", type="integer")
      */
     public  $personas_confirmadas;
+    
+    
+    /**
+     * @var string $valoracion
+     *
+     * @ORM\Column(name="valoracion", type="string", length=255)
+     */
+    public  $valoracion;
 
 	public function getTipo() { return 'externa'; }
 
@@ -199,5 +207,11 @@ class PresentacionExterna extends Presentacion
         return $this->nombre_coordinador;
     }
     
-
+	public function getValoracion() {
+		return $this->valoracion;
+	}
+	
+	public function setValoracion($v) {
+		$this->valoracion = $v;
+	}
 }

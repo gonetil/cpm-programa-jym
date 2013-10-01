@@ -163,7 +163,7 @@ abstract class Presentacion
     
     abstract function getApellidoCoordinador();
     abstract function getNombreCoordinador();
-    
+    abstract function getValoracion();
         
     public function getPersonasConfirmadas() {
     	return $this->personas_confirmadas;
@@ -205,7 +205,8 @@ abstract class Presentacion
 			    	'bloque' => (!$this->bloque)?'' : "{$this->bloque->getId()}",
 			    	'tipoPresentacion' => (!$this->getTipoPresentacion())?'': $this->getTipoPresentacion()->toArray($recursive_depth-1),
 			    	'escuela' => $this->getEscuela(),
-			    	'confirmados' => $this->getPersonasConfirmadas()
+			    	'confirmados' => $this->getPersonasConfirmadas(),
+			    	'valoracion' => $this->getValoracion()
 			  );
     }
 }
