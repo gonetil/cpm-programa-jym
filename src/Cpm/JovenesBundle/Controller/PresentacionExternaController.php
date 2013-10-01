@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\PresentacionExternaType;
  *
  * @Route("/presentacionexterna")
  */
-class PresentacionExternaController extends Controller
+class PresentacionExternaController extends BaseController
 {
     /**
      * Lists all PresentacionExterna entities.
@@ -69,7 +69,7 @@ class PresentacionExternaController extends Controller
     public function newAction()
     {
         $entity = new PresentacionExterna();
-        $form   = $this->createForm(new PresentacionExternaType(), $entity);
+        $form   = $this->createForm(new PresentacionExternaType($this->getEstadosManager()), $entity);
 
         return array(
             'entity' => $entity,
@@ -88,7 +88,7 @@ class PresentacionExternaController extends Controller
     {
         $entity  = new PresentacionExterna();
         $request = $this->getRequest();
-        $form    = $this->createForm(new PresentacionExternaType(), $entity);
+        $form    = $this->createForm(new PresentacionExternaType($this->getEstadosManager()), $entity);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
@@ -122,7 +122,7 @@ class PresentacionExternaController extends Controller
             throw $this->createNotFoundException('Unable to find PresentacionExterna entity.');
         }
 
-        $editForm = $this->createForm(new PresentacionExternaType(), $entity);
+        $editForm = $this->createForm(new PresentacionExternaType($this->getEstadosManager()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -149,7 +149,7 @@ class PresentacionExternaController extends Controller
             throw $this->createNotFoundException('Unable to find PresentacionExterna entity.');
         }
 
-        $editForm   = $this->createForm(new PresentacionExternaType(), $entity);
+        $editForm   = $this->createForm(new PresentacionExternaType($this->getEstadosManager()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();

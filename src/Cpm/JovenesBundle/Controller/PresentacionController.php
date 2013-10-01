@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\PresentacionType;
  *
  * @Route("/presentacion")
  */
-class PresentacionController extends Controller
+class PresentacionController extends BaseController
 {
     /**
      * Lists all Presentacion entities.
@@ -69,7 +69,7 @@ class PresentacionController extends Controller
     public function newAction()
     {
         $entity = new Presentacion();
-        $form   = $this->createForm(new PresentacionType(), $entity);
+        $form   = $this->createForm(new PresentacionType($this->getEstadosManager()), $entity);
 
         return array(
             'entity' => $entity,
@@ -88,7 +88,7 @@ class PresentacionController extends Controller
     {
         $entity  = new Presentacion();
         $request = $this->getRequest();
-        $form    = $this->createForm(new PresentacionType(), $entity);
+        $form    = $this->createForm(new PresentacionType($this->getEstadosManager()), $entity);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
@@ -122,7 +122,7 @@ class PresentacionController extends Controller
             throw $this->createNotFoundException('Unable to find Presentacion entity.');
         }
 
-        $editForm = $this->createForm(new PresentacionType(), $entity);
+        $editForm = $this->createForm(new PresentacionType($this->getEstadosManager()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -149,7 +149,7 @@ class PresentacionController extends Controller
             throw $this->createNotFoundException('Unable to find Presentacion entity.');
         }
 
-        $editForm   = $this->createForm(new PresentacionType(), $entity);
+        $editForm   = $this->createForm(new PresentacionType($this->getEstadosManager()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
