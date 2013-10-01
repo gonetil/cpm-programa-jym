@@ -156,7 +156,7 @@ function distribuirPresentaciones(tanda, forzar_distribucion) {
 		}	
 		
 		if (mejor_bloque != null) { //TODO agregar presentacion al mejor_bloque y sacarlo de la lista de presentaciones libres de la tanda
-		
+			tanda.moverPresentacion(presentacion,mejor_bloque);
 		}
 			
 	}

@@ -91,7 +91,26 @@ app.factory('Tanda', function($resource){
 				} //endfor k
 			} //endfor j
 		} //endfor i	
-	}
+	};
+	
+	/**
+	 * mueve la presentacion de donde este actualmente al bloque bloque_destino.
+	 * Si no se especifica un bloque destino, la presentacion se quita del bloque en el que se encuentre y se agrega a la lista de presentaciones libres
+	 **/
+	Tanda.prototype.moverPresentacion = function(presentacion,bloque_destino) {
+
+		bloque_actual = presentacion.bloque;
+		if ((bloque_actual != '') && (bloque_actual !== undefined)) {
+			pos = bloque_actual.quitarPresentacion(presentacion);
+			if (pos == -1) 
+				console.error("La presentacion " + presentacion.id + " debia quitarse del bloque " + bloque_actual.id + " pero no estaba alli");		
+
+			if (arguments.length == 2) //no hay bloque_destino
+				bloque_destino.agregarPresentacion(presentacion);
+			else
+				this.presentaciones_libres.push(presentacion);
+		}
+	};
 	
 	return Tanda;
 });
@@ -147,7 +166,31 @@ app.factory('Bloque', function($resource){
 		return count;
 	};
 
+	Bloque.prototype.quitarPresentacion = function(presentacion) {
+		for(var i=0;i<this.presentaciones.length;i++) {
+			if (this.presentaciones[i].id == presentacion.id) {
+				this.presentaciones.splice(i,1);
+				presentacion.liberarBloque();
+				return i;
+			}	
+		}
+		return -1;
+	};
 
+	/**
+	 * Agrega la presentacion al final de la lista de presentaciones del bloque, o a la posicion position si se especifica (desplaza el resto)
+	 * @param presentacion
+	 * optional @param position
+	 */
+	Bloque.prototype.agregarPresentacion = function(presentacion,position) {
+		if (arguments.length == 1)
+			this.presentaciones.push(presentacion);
+		else { 
+			if ((position > this.presentaciones.length + 1) || (position < 0))
+				position = this.presentaciones.length;
+			this.presentaciones.splice(position,0,presentacion);
+		}
+	};
 	return Bloque;
 });
 
@@ -161,5 +204,8 @@ app.factory('Presentacion', function($resource){
 		return this.tipoPresentacion.duracion;
 	};
 	
+	Presentacion.prototype.liberarBloque = function() {
+		this.bloque = '';
+	};
 	return Presentacion;
 });
