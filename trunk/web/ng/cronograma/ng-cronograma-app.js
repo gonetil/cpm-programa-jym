@@ -6,7 +6,7 @@ var app = angular.module("cronograma", ['ngDragDrop', 'ngResource', 'ngynSelectK
 
 
 app.factory('Logger', function(){
-	Logger= {buffer:[], level:'debug', bufferSize:2};
+	Logger= {buffer:[], level:'debug', bufferSize:3};
 	Logger.push=function(level, message){
 		if (message.message)
 			message=message.message;
@@ -66,3 +66,4 @@ function asset(filename){
 	var ng_path=BASE_PATH+"/ng/cronograma/";
 	return ng_path + filename;
 };
+

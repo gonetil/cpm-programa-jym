@@ -67,10 +67,12 @@ class AuditorioDia
 	
 	public function addBloque($b) {
 		$this->bloques[] = $b;
+		$b->setAuditorioDia($this);
 	}
 	
     public function removeBloque($b) {
     	$this->bloques->removeElement($b);
+    	$b->setAuditorioDia(null);
     }
     
     

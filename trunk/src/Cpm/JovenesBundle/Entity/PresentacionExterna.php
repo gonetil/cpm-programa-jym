@@ -47,8 +47,6 @@ class PresentacionExterna extends Presentacion
     * })
     */
     public  $tipoPresentacion;
-
-	
    
     /**
      * @var string $escuela
@@ -70,7 +68,6 @@ class PresentacionExterna extends Presentacion
      * @ORM\Column(name="localidad", type="string", length=255)
      */
     public  $localidad;
-
 
     /**
      * @var string $apellido_coordinador
@@ -207,6 +204,15 @@ class PresentacionExterna extends Presentacion
         return $this->nombre_coordinador;
     }
     
+    public function getPersonasConfirmadas() {
+    	return $this->personas_confirmadas;
+    }
+    
+    public function setPersonasConfirmadas($pc) {
+    	$this->personas_confirmadas = $pc;
+    }
+    
+
 	public function getValoracion() {
 		return $this->valoracion;
 	}
@@ -214,4 +220,85 @@ class PresentacionExterna extends Presentacion
 	public function setValoracion($v) {
 		$this->valoracion = $v;
 	}
+
+    /**
+     * Set ejeTematico
+     *
+     * @param Cpm\JovenesBundle\Entity\Tema $ejeTematico
+     */
+    public function setEjeTematico(\Cpm\JovenesBundle\Entity\Tema $ejeTematico)
+    {
+        $this->ejeTematico = $ejeTematico;
+    }
+
+    /**
+     * Get ejeTematico
+     *
+     * @return Cpm\JovenesBundle\Entity\Tema 
+     */
+    public function getEjeTematico()
+    {
+        return $this->ejeTematico;
+    }
+
+    /**
+     * Set areaReferencia
+     *
+     * @param Cpm\JovenesBundle\Entity\Eje $areaReferencia
+     */
+    public function setAreaReferencia(\Cpm\JovenesBundle\Entity\Eje $areaReferencia)
+    {
+        $this->areaReferencia = $areaReferencia;
+    }
+
+    /**
+     * Get areaReferencia
+     *
+     * @return Cpm\JovenesBundle\Entity\Eje 
+     */
+    public function getAreaReferencia()
+    {
+        return $this->areaReferencia;
+    }
+
+
+
+    /**
+     * Set titulo
+     *
+     * @param string $titulo
+     */
+    public function setTitulo($titulo)
+    {
+        $this->titulo = $titulo;
+    }
+
+    /**
+     * Get titulo
+     *
+     * @return string 
+     */
+    public function getTitulo()
+    {
+        return $this->titulo;
+    }
+    /**
+     * Set tipoPresentacion
+     *
+     * @param Cpm\JovenesBundle\Entity\Produccion $tipoPresentacion
+     */
+    public function setTipoPresentacion(\Cpm\JovenesBundle\Entity\Produccion $tipoPresentacion)
+    {
+        $this->tipoPresentacion = $tipoPresentacion;
+    }
+
+    /**
+     * Get tipoPresentacion
+     *
+     * @return Cpm\JovenesBundle\Entity\Produccion 
+     */
+    public function getTipoPresentacion()
+    {
+        return $this->tipoPresentacion;
+    }
 }

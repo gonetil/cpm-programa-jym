@@ -39,7 +39,8 @@ class Dia
      */
     private $tanda;
     
-    public function __construct(){
+    public function __construct($numero=-1){
+    	$this->numero=$numero;
 		$this->auditoriosDia = new \Doctrine\Common\Collections\ArrayCollection();
 	}
     
@@ -85,14 +86,19 @@ class Dia
     public function getAuditoriosDia() {
     	return $this->auditoriosDia;
     }
-    public function setAuditoriosDia($ad) {
-    	$this->auditoriosDia = $ad;
+    public function setAuditoriosDia(\Doctrine\Common\Collections\Collection $auditoriosDia) {
+//    	if ($auditoriosDia instanceof \Doctrine\Common\Collections\Collection)
+// 			$auditoriosDia = new \Doctrine\Common\Collections\ArrayCollection($auditoriosDia)
+    	$this->auditoriosDia = $auditoriosDia;
     }
     public function addAuditorioDia($ad) {
-    	$this->auditoriosDia[] = $ad;
+    	$this->auditoriosDia->add($ad);
+    	$ad->setDia($this);
+    	
     }
     public function removeAuditorioDia($ad) {
     	$this->auditoriosDia->removeElement($ad);
+    	$ad->setDia(null);
     }
     
     

@@ -83,9 +83,9 @@
     
 </ul>
     	<div id="formNewTanda" class='hiddenForms' style='display:none; float:left'>
-    	<form method="post" action="{{ path('cambiar_de_tanda') }}">
-    		<label for="tanda_id">Nueva tanda</label>
-    		<select name='tanda_id'>
+    	<form method="post" action="{{ path('presentacion_edit_json') }}">
+    		<label for="tanda">Nueva tanda</label>
+    		<select name='tanda'>
     		{% for tanda in tandas %}
     		 <option value="{{ tanda.id }}">{{ tanda }}</option>
     		{% endfor %} %}

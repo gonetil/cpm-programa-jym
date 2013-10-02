@@ -108,7 +108,46 @@ class CronogramaController extends BaseController
 	///////////////////////////// DIA ///////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	     
+	
+	/**
+     * Duplica la estructura de $dia_origen (auditoriosDia y sus bloques) en $dia_destino . 
+     * Asigna $dia_destino a la misma tanda de $dia_origina
+     * Si $dia_destino no existe se crea
+     *
+     * @Route("/duplicarDia", name="duplicar_dia")
+     * @Method("post")
+     */	
+	public function duplicarDiaAction() {
+		try {
+			$vars = $this->getVarsFromJSON();
+
+			$dia_origen_id = $vars['dia_origen'];
+			$dia_origen = $this->getEntity('CpmJovenesBundle:Dia', $dia_origen_id);
+				
+	    	if (!empty($vars['dia_destino'])){
+		   		$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $vars['dia_destino']);
+				$tandaDestino = $dia_destino->getTanda();
+			}else{
+		   		$dia_destino = null;
+		   		$tandaDestino = $dia_origen->getTanda();
+		    }
+		    $em = $this->getDoctrine()->getEntityManager();
+	    	$em->getConnection()->beginTransaction();
+    		$dia_destino = $this->getChapaManager()->clonarDia($dia_origen,$dia_destino);
+		    if(!$tandaDestino->equals($dia_origen->getTanda()))
+		    	$tandaDestino->addDia($dia_destino);
+		    		
+   			$em->persist($tandaDestino);
+    		$em->flush();
+    		$em->getConnection()->commit();
+    			
+    		return $this->newJsonResponse($dia_destino, 3);
+    	} catch (\Exception $e) {
+    	   	$em->getConnection()->rollback();
+			$em->close();
+            return $this->answerError($e);
+    	}
+	}
 	/**
      * @Route("/dia") 
      * @Method("post")
@@ -117,7 +156,7 @@ class CronogramaController extends BaseController
 		try { 
 			$tandaId=$this->getRequest()->query->get('tandaId');
 			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tandaId);
-			$dia = $tanda->agregarDia(-1);
+			$dia = $tanda->addDia(new Dia(-1));
 			
 			$em = $this->getDoctrine()->getEntityManager();
 			$em->persist($dia);	
@@ -138,7 +177,7 @@ class CronogramaController extends BaseController
 			$dia = $this->getEntityForDelete('CpmJovenesBundle:Dia', $diaId);
 			$tanda=$dia->getTanda();
 			$em = $this->getDoctrine()->getEntityManager();
-			$tanda->eliminarDia($dia);
+			$tanda->removeDia($dia);
 			$em->remove($dia);
 	        $em->persist($tanda);
 	        $em->flush();
@@ -405,89 +444,126 @@ class CronogramaController extends BaseController
 	///////////////////////////// PRESENTACIONES ////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	
+	
+	     
 	/**
-     * Cambia la presentacion $presentacion_id a la tanda $tanda_id
      *
-     * @Route("/cambiarDeTanda", name="cambiar_de_tanda")
+     * @Route("/presentacion")
      * @Method("post")
      */
-	public function cambiarPresentacionDeTandaAction() {
-     	$presentacion_id = $this->getRequest()->get('presentacion_id');
-     	$tanda_id = $this->getRequest()->get('tanda_id');
-
-    	try { 
-    		$tanda = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
-    		$presentacion = $this->getEntity('CpmJovenesBundle:Presentacion',$presentacion_id);
-    		$chapaManager = $this->getChapaManager();
-    		$msg = $chapaManager->cambiarDeTanda($presentacion,$tanda);
-    		return $this->answerOk($msg);
-    	} catch (\Exception $e) {
-    		return $this->answerError($e);		
-    	}
-
+	public function crearPresentacionAction() {
+		return $this->forward("CpmJovenesBundle:Cronograma:modificarPresentacion", array('id'=>-1));
 	}
 	
 	/**
-     * Duplica la estructura de $dia_origen (auditoriosDia y sus bloques) en $dia_destino . 
-     * Asigna $dia_destino a la misma tanda de $dia_origina
-     * Si $dia_destino no existe se crea
      *
-     * @Route("/duplicarDia", name="duplicar_dia")
+     * @Route("/presentacion/{id}", name="presentacion_edit_json")
      * @Method("post")
-     */	
-	public function duplicarDiaAction() {
-		$vars = $this->getVarsFromJSON();
-
-		$dia_origen_id = $vars['dia_origen'];
-		$dia_destino_id = $vars['dia_destino'];
-		//TODO validar parametros
+     */
+	public function modificarPresentacionAction($id) {
 		
-		try {
-			$dia_origen = $this->getEntity('CpmJovenesBundle:Dia', $dia_origen_id);
+		try { 
+			if ($id == -1)
+				$presentacion  = new PresentacionExterna();
+			else
+				$presentacion  = $this->getEntityForUpdate('CpmJovenesBundle:Presentacion', $id);
+	   		 $em = $this->getDoctrine()->getEntityManager();
+	
+	        $args = $this->getVarsFromJSON();
+	       	if (isset($args['bloque'])){
+	       		if (!empty($args['bloque']))
+	       			$newBloque=$this->getEntity('CpmJovenesBundle:Bloque', $args['bloque'] );
+	       		else
+		       		$newBloque=null;
+	        	$presentacion->setBloque( $newBloque);
+	       	}
+	       	if (!empty($args['tanda'])){
+	        	$nuevaTanda = $this->getEntity('CpmJovenesBundle:Tanda', $args['tanda']);
+	        	
+    			if($presentacion->getTanda() == null)
+    				$nuevaTanda->addPresentacion($presentacion);
+    			elseif (!$nuevaTanda->equals($presentacion->getTanda()))
+    				$this->getChapaManager()->cambiarDeTanda($presentacion,$nuevaTanda);
+	        }
+	        //FIXME corregir posicion en bloque
+		        //if (isset($args['posicion']))
+				//	$presentacion->setPosicion((int) $args['posicion'] );
+	        $em->persist($presentacion);
+	        $em->flush();
+	        
+	        if($presentacion->esExterna()){
+		        $presentacion  = $this->getEntityForUpdate('CpmJovenesBundle:PresentacionExterna', $id);
+		        
+		        if (!empty($args['titulo']))
+					$presentacion->setTitulo((string)$args['titulo']);
+				
+				if (isset($args['ejeTematico'])){
+		        	$ejeTematico=$this->getEntity('CpmJovenesBundle:Tema', (int)$args['ejeTematico'] );
+			        $presentacion->setEjeTematico( $ejeTematico );
+		        }
+		        
+		        if (isset($args['areaReferencia'])){
+		        	$areaReferencia=$this->getEntity('CpmJovenesBundle:Eje', (int)$args['areaReferencia'] );
+			        $presentacion->setAreaReferencia( $areaReferencia );
+		        }
+		        
+		        if (isset($args['tipoPresentacion'])){
+		        	$tipoPresentacion=$this->getEntity('CpmJovenesBundle:Produccion', (int)$args['tipoPresentacion'] );
+			        $presentacion->setTipoPresentacion( $tipoPresentacion );
+		        }
+		        
+		        if (isset($args['escuela']))
+					$presentacion->setEscuela( (string) $args['escuela'] );
+	
+		        if (isset($args['provincia']))
+					$presentacion->setProvincia( (string) $args['provincia'] );
+	
+		        if (isset($args['localidad']))
+					$presentacion->setLocalidad( (string) $args['localidad'] );
+	
+		        if (isset($args['distrito']))
+					$presentacion->setDistrito( (string) $args['distrito'] );
+	
+		        if (isset($args['personasConfirmadas']))
+					$presentacion->setPersonasConfirmadas((int) $args['personasConfirmadas'] );
+					
+				if (isset($args['apellidoCoordinador']))
+					$presentacion->setApellidoCoordinador((int) $args['apellidoCoordinador'] );
+				if (isset($args['nombreCoordinador']))
+					$presentacion->setNombreCoordinador((int) $args['nombreCoordinador'] );
+					
+				$em->persist($presentacion);
+	     	   	$em->flush();
+	        }
+		
+	        
+ 			
+	        return $this->newJsonResponse($presentacion);		
+		} catch (\Exception $e) {
+			return $this->answerError($e);
 		}
-		catch (\Exception $e) {
-    		    return $this->answerError("Dia $dia_origen_id no encontrado"); //dia origen tiene que existir si o si		
-    	}
-    	
-    	
-    	$chapaManager = $this->getChapaManager();
-    	$em = $this->getDoctrine()->getEntityManager();
-    	
-    	$em->getConnection()->beginTransaction();
-    	
-    	try { 
-	    		$dia_destino = null;
-	    		
-	    		$numero_dia = null; //el numero del nuevo dia , si es la misma tanda debera calcularse a (max_dia + 1)
-	    		
-	    		if (!empty($dia_destino_id))
-		    		try {
-		    			
-						$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $dia_destino_id);
-						$chapaManager->vaciarDia($dia_destino); //saca los auditoriosDia y sus bloques, si los hubiera
-						$numero_dia = $dia_destino->getNumero(); //el numero de dia ya venia con el dia
-						$tanda = $tanda = $dia_destino->getTanda();
-					}
-					catch (\Exception $e) {
-						$tanda = $dia_origen->getTanda();		
-					}
-		    	else
-		    		$tanda = $dia_origen->getTanda();
-		    	
-		    	$dia_destino = $chapaManager->clonarDia($dia_origen,$tanda,$numero_dia,$dia_destino);
-		    	$tanda->addDia($dia_destino);
-   				$em->persist($tanda);
-    			$em->flush();
-    			$em->getConnection()->commit();
-    	} catch (\Exception $e) {
-    	   	$em->getConnection()->rollback();
-			$em->close();
-            return $this->answerError($e);
-    	}
-    			
-		return $this->createJsonResponse($dia_destino->toArray(3));
-    	
 	}
+     
+  	/**
+     * @Route("/presentacion/{id}")
+     * @Method("DELETE")
+     */
+	public function eliminarPresentacionAction($id) {
+		try { 
+			$presentacion = $this->getEntityForDelete('CpmJovenesBundle:PresentacionExterna', $id);
+			$em = $this->getDoctrine()->getEntityManager();
+			$em->remove($presentacion);
+	        $em->flush();
+			return $this->answerOk("Se eliminó con éxito la presentación externa número {$id}");			
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////
+	///////////////////////////// MAS ////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	
 	
 	

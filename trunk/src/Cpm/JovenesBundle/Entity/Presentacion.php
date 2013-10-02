@@ -32,10 +32,9 @@ abstract class Presentacion
      */
     private $id;
 
-
    /**
      * @ORM\ManyToOne(targetEntity="Bloque", inversedBy="presentaciones")
-     * @ORM\JoinColumn(name="bloque_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="bloque_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
      
 	private $bloque;
@@ -46,8 +45,20 @@ abstract class Presentacion
      */
     private $tanda;
     
+    public abstract function getTitulo();
+	public abstract function getEjeTematico();
+    public abstract function getAreaReferencia();
+	public abstract function getTipoPresentacion();
+	public abstract function getEscuela();
+	public abstract function getProvincia();
+	public abstract function getLocalidad();
+	public abstract function getDistrito();
+    public abstract function getApellidoCoordinador();
+    public abstract function getNombreCoordinador();
+    public abstract function getPersonasConfirmadas();
     public abstract function getTipo();
-	
+    public abstract function getValoracion();
+        
     /**
      * Get id
      *
@@ -57,86 +68,7 @@ abstract class Presentacion
     {
         return $this->id;
     }
-
-    /**
-     * Set titulo
-     *
-     * @param string $titulo
-     */
-    public function setTitulo($titulo)
-    {
-        $this->titulo = $titulo;
-    }
-
-    /**
-     * Get titulo
-     *
-     * @return string 
-     */
-    public function getTitulo()
-    {
-        return $this->titulo;
-    }
-
-    /**
-     * Set ejeTematico
-     *
-     * @param Cpm\JovenesBundle\Entity\Tema $ejeTematico
-     */
-    public function setEjeTematico(\Cpm\JovenesBundle\Entity\Tema $ejeTematico)
-    {
-        $this->ejeTematico = $ejeTematico;
-    }
-
-    /**
-     * Get ejeTematico
-     *
-     * @return Cpm\JovenesBundle\Entity\Tema 
-     */
-    public function getEjeTematico()
-    {
-        return $this->ejeTematico;
-    }
-
-    /**
-     * Set areaReferencia
-     *
-     * @param Cpm\JovenesBundle\Entity\Eje $areaReferencia
-     */
-    public function setAreaReferencia(\Cpm\JovenesBundle\Entity\Eje $areaReferencia)
-    {
-        $this->areaReferencia = $areaReferencia;
-    }
-
-    /**
-     * Get areaReferencia
-     *
-     * @return Cpm\JovenesBundle\Entity\Eje 
-     */
-    public function getAreaReferencia()
-    {
-        return $this->areaReferencia;
-    }
-
-    /**
-     * Set tipoPresentacion
-     *
-     * @param Cpm\JovenesBundle\Entity\Produccion $tipoPresentacion
-     */
-    public function setTipoPresentacion(\Cpm\JovenesBundle\Entity\Produccion $tipoPresentacion)
-    {
-        $this->tipoPresentacion = $tipoPresentacion;
-    }
-
-    /**
-     * Get tipoPresentacion
-     *
-     * @return Cpm\JovenesBundle\Entity\Produccion 
-     */
-    public function getTipoPresentacion()
-    {
-        return $this->tipoPresentacion;
-    }
+    
     
     public function hasBloque() {
     	return !empty($this->bloque);
@@ -152,27 +84,18 @@ abstract class Presentacion
     
     public function esExterna() { return ($this->getTipo() == 'externa'); }
     
-        
     public function getTanda() {
     	return $this->tanda;
     }
     
-    public function setTanda($t) {
+    public function setTanda(\Cpm\JovenesBundle\Entity\Tanda $t) {
+    	if (!empty($this->tanda) && $this->tanda->equals($t))
+    		return;//no hago nada,la tanda no cambio
     	$this->tanda = $t;
+    	$this->bloque=null;
     }
     
-    abstract function getApellidoCoordinador();
-    abstract function getNombreCoordinador();
-    abstract function getValoracion();
-        
-    public function getPersonasConfirmadas() {
-    	return $this->personas_confirmadas;
-    }
-    
-    public function setPersonasConfirmadas($pc) {
-    	$this->personas_confirmadas = $pc;
-    }
-    
+  
     public function getInvitacion() {
     	return null; //las presentaciones no tienen invitaciones, salvo las presentaciones internas
     }
@@ -197,16 +120,24 @@ abstract class Presentacion
     	
     	return array(
 			 		'id' => "{$this->id}",
-			    	'titulo' => $this->makeItSafe($this->getTitulo()),
-			    	'tanda_id' => "{$this->getTanda()->getId()}",
-			    	'areaReferencia' => (!$this->getAreaReferencia())?'' : $this->getAreaReferencia()->toArray($recursive_depth-1),
-			    	'ejeTematico' => (!$this->getEjeTematico())?'': $this->getEjeTematico()->toArray($recursive_depth-1),
-			    	'tipo' => $this->getTipo(),
 			    	'bloque' => (!$this->bloque)?'' : "{$this->bloque->getId()}",
+			    	'tanda' => "{$this->getTanda()->getId()}",
+			    	'titulo' => $this->makeItSafe($this->getTitulo()),
+			    	'ejeTematico' => (!$this->getEjeTematico())?'': $this->getEjeTematico()->toArray($recursive_depth-1),
+			    	'areaReferencia' => (!$this->getAreaReferencia())?'' : $this->getAreaReferencia()->toArray($recursive_depth-1),
 			    	'tipoPresentacion' => (!$this->getTipoPresentacion())?'': $this->getTipoPresentacion()->toArray($recursive_depth-1),
 			    	'escuela' => $this->getEscuela(),
-			    	'confirmados' => $this->getPersonasConfirmadas(),
-			    	'valoracion' => $this->getValoracion()
+			    	'provincia' => $this->getProvincia(),
+			    	'localidad' => $this->getLocalidad(),
+			    	'distrito' => $this->getDistrito(),
+			    	'apellidoCoordinador' => $this->getApellidoCoordinador(),
+			    	'nombreCoordinador' => $this->getNombreCoordinador(),
+			    	'personasConfirmadas' => $this->getPersonasConfirmadas(),
+			    	'valoracion' => $this->getValoracion(),
+			    	'tipo' => $this->getTipo()
 			  );
     }
+    
+    
+    
 }
