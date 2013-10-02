@@ -54,7 +54,7 @@ class CronogramaController extends BaseController
 			$tandaArray['presentaciones_libres']=array();
 			foreach($tanda->getPresentaciones() as $p){
 				if (!$p->hasBloque())
-					$tandaArray['presentaciones_libres'][]=$p->toArray(1);
+					$tandaArray['presentaciones_libres'][]=$p->toArray(2);
 			}		
 			return $this->createJsonResponse($tandaArray);
 		} catch (\Exception $e) {
