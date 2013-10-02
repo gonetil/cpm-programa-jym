@@ -33,22 +33,23 @@ app.factory('Bloque', function($resource){
 	
 	Bloque.prototype.tieneEje = function(eje){
 		for(var i=0;i<this.ejesTematicos.length;i++)
-			if (eje == this.ejesTematicos[i].id) {
+			if (eje.id == this.ejesTematicos[i].id) {
 				return true;
 			}
 		return false;
 	};
 	Bloque.prototype.tieneArea = function(area){
 		for(var i=0;i<this.areasReferencia.length;i++)
-			if (area == this.areasReferencia[i].id)
+			if (area.id == this.areasReferencia[i].id)
 				return true;
 		return false;
 	};
 	
 	Bloque.prototype.duracionEstimada = function() { //suma las duraciones de todas las presentaciones
-			count=0;
+			var count=0;
+			
 			for(var i=0;i<this.presentaciones.length;i++) {
-				count += this.presentaciones[i].duracion(); //funcion que retorna la duracion del tipo de produccion de la presentacion 
+				count +=  parseInt(this.presentaciones[i].tipoPresentacion.duracion); //funcion que retorna la duracion del tipo de produccion de la presentacion 
 			}
 			return count;
 	};
@@ -66,7 +67,7 @@ app.factory('Bloque', function($resource){
 		for(var i=0;i<this.presentaciones.length;i++) {
 			if (this.presentaciones[i].id == presentacion.id) {
 				this.presentaciones.splice(i,1);
-				presentacion.liberarBloque();
+				presentacion.bloque = '';
 				return i;
 			}	
 		}
@@ -134,34 +135,55 @@ app.factory('Tanda', function($resource){
 		this.checkInit();
 		return this.bloques;
 	};
-
+	
+	Tanda.prototype.getBloquesArray = function() {
+		result = new Array();
+		for(index in this.bloques) {
+			result.push(this.bloques[index]);
+		}
+		return result;
+	};
+	
 	Tanda.prototype.getAuditorios = function() {
 		this.checkInit();
 		return this.auditorios;
 	};
 
-	Tanda.prototype.initialize = function(Dia,AuditorioDia,Auditorio,Bloque) {
+	Tanda.prototype.initialize = function(Dia,AuditorioDia,Auditorio,Bloque,Presentacion) {
 		
 		this.auditorios = {};
 		this.bloques = {};
 		this.auditoriosDia = {};
-		this.dias2 = {};
+		this.dias2 = {};  //dias indexados
+		this.presentaciones2 = {}; //presentaciones indexadas
+		
+		for(index in this.presentaciones_libres) {
+			var p = new Presentacion(this.presentaciones_libres[index]);
+			
+			p.bloque = ''; //por las dudas :D
+			this.presentaciones2[p.id] = p;
+		//console.log("piso en ",index," con ",p);
+			this.presentaciones_libres[index] = p;
+		}
 		
 		for(var i=0;i<this.dias.length;i++) {
 			dia = new Dia(this.dias[i]);
-			this.dias2[dia.id] = dia;
+			dia.auditoriosDia = {};
+		
+			
 			
 			for(var j=0;j<this.dias[i].auditoriosDia.length;j++) {
 				
 				var auditorioDia = new AuditorioDia(this.dias[i].auditoriosDia[j]);
+				auditorioDia.bloques = {};
 				dia.auditoriosDia[auditorioDia.id] = auditorioDia;
-				auditorioDia.dia = dia;
+				//auditorioDia.dia = dia;
 				
 				var auditorio = null;
 				
-				if ((this.auditorios[this.dias[i].auditoriosDia[j].auditorio.id] === undefined) || (this.auditorios[this.dias[i].auditoriosDia[j].auditorio.id] === null)) { 
+				if (!this.auditorios[this.dias[i].auditoriosDia[j].auditorio.id]) { 
 					auditorio = new Auditorio(this.dias[i].auditoriosDia[j].auditorio);	
-					auditorio.auditorioDia = auditorioDia;
+					//auditorio.auditorioDia = auditorioDia;
 					this.auditorios[auditorio.id] = auditorio;
 				} else {
 					auditorio = this.auditorios[this.dias[i].auditoriosDia[j].auditorio.id];
@@ -174,12 +196,22 @@ app.factory('Tanda', function($resource){
 				
 				for(var k=0;k<bloques.length;k++) {
 					var bloque = new Bloque(bloques[k]);
+					
 					bloque.auditorioDia = auditorioDia;
 					auditorioDia.bloques[bloque.id] = bloque;
-					if ((this.bloques[bloque.id] === undefined) || (this.bloques[bloque.id] === null))
+					if (!this.bloques[bloque.id])
 						this.bloques[bloque.id] = bloque;
+					
+					for(var m=0;m<bloque.presentaciones.length;m++) {
+						var p = new Presentacion(bloque.presentaciones[m]);
+						p.bloque = bloque;
+						bloque.presentaciones[m] = p;
+						this.presentaciones2[p.id] = p;
+					}
 				} //endfor k
 			} //endfor j
+			this.dias2[dia.id] = dia;
+			this.dias[i] = dia;
 		} //endfor i
 		
 		console.log(this);
@@ -191,8 +223,13 @@ app.factory('Tanda', function($resource){
 	 **/
 	Tanda.prototype.moverPresentacion = function(presentacion,bloque_destino) {
 
-		bloque_actual = presentacion.bloque;
+		presentacion = this.presentaciones2[presentacion.id];
+		bloque_destino = this.bloques[bloque_destino.id];
 		
+		
+		//primero me fijo si la presentacion ya tenia un bloque
+		bloque_actual = (presentacion.bloque != '') ? this.bloques[presentacion.bloque.id] : '';
+			
 		if ((bloque_actual != '') && (bloque_actual !== undefined)) { //la presentacion estaba asignada a un bloque
 			pos = bloque_actual.quitarPresentacion(presentacion);
 			if (pos == -1) 
@@ -229,16 +266,18 @@ app.factory('Tanda', function($resource){
 		candidatos = new Array();
 		bloques = this.getBloques();
 		for(index in bloques ){
+			
 			bloque = bloques[index];
 			
 			if (cumpleCondicionesPresentacion(this,bloque,presentacion))
 				candidatos.push(bloque);
+
 		}
 	
 		return candidatos;
-	}
+	};
 	
-	
+
 	/**
 	 * distribuye las presentaciones de la tanda de manera automatica
 	 * @param tanda
@@ -250,31 +289,37 @@ app.factory('Tanda', function($resource){
 		if (arguments.length == 0)
 			forzar_distribucion = false;
 		
-		
-		presentaciones = shuffleArray(this.presentaciones_libres);
-		count = 20; //presentaciones.length;
-		for(var i=0;i<count;i++) { //FIXME usar presentaciones.forEach
-			presentacion = presentaciones[i];
-			bloques_candidatos = this.buscarBloquesCandidatos(presentacion);
-			console.log("Busco el mejor entre los siguientes candidatos"); console.log(bloques_candidatos);
+		var bloques = this.getBloquesArray();
+
+		var libres = shuffleArray(this.presentaciones_libres);
+		for(i in libres) {
+			
+			presentacion = libres[i];
+			var bloques_candidatos = this.buscarBloquesCandidatos(presentacion);
+			
 			mejor_bloque = (bloques_candidatos.length > 0) ? buscarMejorBloque(bloques_candidatos, presentacion) : null;
-			console.log("Este resulto el mejor bloque"); console.log(mejor_bloque);
+			console.log("encontre un mejor bloque ", mejor_bloque, " para ", presentacion, " con ",bloques_candidatos);
 			if ((mejor_bloque == null) && (forzar_distribucion)) { //no encontre un buen bloque pero tengo que ubicar la presentacion en alguno si o si 
+			//	console.log("No hubo mejor bloque, pero estamos forzando la distribucion");
 				if (bloques_candidatos.length == 0) { // no tengo posibles bloques candidatos, manoteo cualquiera que tenga presentaciones
-					bloques_candidatos = this.getBloques();
-					bloques_candidatos.forEach(function(bloque,index,array){
+					
+					bloques_candidatos = bloques.slice(); //copio todos los bloques 
+					
+					for(index in bloques_candidatos) { 
+						bloque = bloques_candidatos[index];
+					
 						if (!bloque.tienePresentaciones)
 							bloques_candidatos.splice(index,1);
-					});
+					};
 				}
 			
 				if (bloques_candidatos.length > 0)
 					mejor_bloque = bloques_candidatos[Math.floor(Math.random() * bloques_candidatos.length)]; //agarro un bloque candidato cualquiera
-			}	
-			
+			} else {
+				console.log("Hubo un buen match!");
+			}
 			if (mejor_bloque != null) { //TODO agregar presentacion al mejor_bloque y sacarlo de la lista de presentaciones libres de la tanda
-				console.log("Muevo la presentacion... "); console.log(presentacion);
-				console.log(" ... al bloque ..."); console.log(mejor_bloque);
+				//console.log("Muevo la presentacion... "); console.log(presentacion);console.log(" ... al bloque ..."); console.log(mejor_bloque);
 				this.moverPresentacion(presentacion,mejor_bloque);
 			}
 				
@@ -296,12 +341,5 @@ app.factory('Presentacion', function($resource){
 		mover: {method:'POST', params:{origen:'', destino:''}, isArray:false}
 	});
 	
-	Presentacion.prototype.duracion = function() {
-		return this.tipoPresentacion.duracion;
-	};
-	
-	Presentacion.prototype.liberarBloque = function() {
-		this.bloque = '';
-	};
 	return Presentacion;
 });

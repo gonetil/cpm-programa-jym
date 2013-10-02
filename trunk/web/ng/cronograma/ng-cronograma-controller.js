@@ -1,7 +1,7 @@
 function TandaShowCtrl($scope, $routeParams, Tanda, Logger, Dia, AuditorioDia, Auditorio, Bloque, Presentacion) {
 
 	$scope.tanda = Tanda.get({tandaId: $routeParams.tandaId},function(tanda){
-			tanda.initialize(Dia,AuditorioDia,Auditorio,Bloque);
+			tanda.initialize(Dia,AuditorioDia,Auditorio,Bloque, Presentacion);
 	});
 
 	$scope.presentacion_droppable={

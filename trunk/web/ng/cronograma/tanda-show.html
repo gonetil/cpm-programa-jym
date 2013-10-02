@@ -13,7 +13,7 @@
 					<li><a href="#/dia/new/tanda/{{tanda.id}}"><i class="icon-plus"></i>Agregar Dia</a></li>
 					<li class="divider"></li>
 					<li><a href="#"><i class="icon-repeat"></i>Reinicializar la tanda (TBD)</a></li>
-					<li><a ng-click="tanda.distribuirPresentaciones()"><i class="icon-random"></i>Distribuir automaticamente</a></li>
+					<li><a ng-click="tanda.distribuirPresentaciones(true)"><i class="icon-random"></i>Distribuir automaticamente</a></li>
 				</ul>
 			</div>
 		</div>
@@ -40,7 +40,7 @@
 				    </ul>
   			</div>
         </th>
-        <td class="caja caja-auditorio-dia" ng-repeat="auditorioDia in dia.auditoriosDia">
+        <td class="caja caja-auditorio-dia" ng-repeat="auditorioDia in dia.auditoriosDia ">
               <div class="header-caja">
               <div class="titulo">{{auditorioDia.auditorio.nombre}}</div>
 				<div class="operaciones btn-group ">
