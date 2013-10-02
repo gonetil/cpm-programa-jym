@@ -3,6 +3,7 @@
  * Using Fisher-Yates shuffle algorithm.
  */
 function shuffleArray(array) {
+	
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var temp = array[i];
@@ -30,11 +31,12 @@ function bloque_countMuyBuenas(bloque) {
 function buscarBloqueConMenosMuyBuenas(bloques) {
 	bloque_min = null;
 	cant_min = 1000;
-	for(var i=bloques.length-1;i>0;i--) {
-		cantMB=bloque_countMuyBuenas(bloques[i]);
+	for(index in bloques) { 
+		bloque = bloques[index];
+		cantMB=bloque_countMuyBuenas(bloque);
 		if (cantMB <= cant_min) {
 			cant_min = cantMB;
-			bloque_min = bloques[i];
+			bloque_min = bloque;
 		}
 	}
 	return bloque_min;
@@ -46,13 +48,14 @@ function buscarBloqueConMenosMuyBuenas(bloques) {
 function buscarBloqueMasLibre(bloques) {
 	bloque_max = null;
 	duracion_max = 0;
-	for(var i=bloques.length-1;i>0;i--) {
-		
-		tiempo_libre = bloques[i].duracion - bloques[i].duracionEstimada(); 
+	console.log(bloques);
+	for(index in bloques) { 
+		bloque = bloques[index];
+		tiempo_libre = bloque.duracion - bloque.duracionEstimada(); 
 		
 		if (tiempo_libre >= duracion_max) {
 			duracion_max = tiempo_libre;
-			bloque_max = bloques[i];
+			bloque_max = bloque;
 		}
 	}
 	return { "bloque": bloque_max, "duracion_estimada" : duracion_max};
@@ -76,35 +79,15 @@ function buscarMejorBloque(bloques,presentacion) {
 	else 
 	{
 		bloque_max = buscarBloqueMasLibre(bloques); //JSON {bloque,duracion}
+		console.log(' el bloque mas libre es'); console.log(bloque_max);
 		
-		if ( bloque_max.duracion_estimada + presentacion.duracion() <= bloque_max.bloque.duracion ) //si la presentacion entra en el bloque, joya
+		if ( bloque_max.duracion_estimada + presentacion.tipoPresentacion.duracion <= bloque_max.bloque.duracion ) //si la presentacion entra en el bloque, joya
 			return bloque_max;
 		else
 			return null; //no encontre un bloque "seguro"
 	}
 }
 
-/**
- * 
- * @param tanda la tanda en la cual esta la presentacion
- * @param presentacion
- * genera una lista de todos los bloques candidatos para ubicar a la presentacion, considerando:
- * - que sea un bloque de presentaciones
- * - que el auditorio del bloque soporte a la presentacion
- * - el area de referencia de la presentacion
- * - el eje tematico de la presentacion
- */
-
-function buscarBloquesCandidatos(tanda,presentacion) 
-{
-	bloques = tanda.getBloques();
-	candidatos = new Array();
-	for(var i=0; i< bloques.length; i++) {
-		if (cumpleCondicionesPresentacion(tanda,bloques[i],presentacion))
-			candidatos.push(bloques[i]);
-	}
-	
-}
 
 /**
  * verifica que una presentacion pueda incluirse en un bloque
@@ -115,49 +98,32 @@ function cumpleCondicionesPresentacion(tanda,bloque,presentacion) {
 		return false; 
 	
 	auditorio = tanda.getAuditorioForBloque(bloque);
-	if (!auditorio.soportaPresentacion(presentacion)) { 
-		console.log("El auditorio "+auditorio.id+" no soporta a la presentacion " + presentacion.id);
+	if (!auditorioSoportaPresentacion(auditorio,presentacion)) { 
 		return false;	//el tipo de produccion no puede realizarse en este auditorio
-	}
+	} 
 	
 	if (!bloque.tieneEje(presentacion.ejeTematico)) {
-		console.log("El bloque "+bloque.id+" no tiene el eje " + presentacion.ejeTematico);
 		return false;
 	}
 		
 	
 	if (!bloque.tieneArea(presentacion.areaReferencia)){
-		console.log("El bloque "+bloque.id+" no tiene el area " + presentacion.areaReferencia);
 		return false;
 	}
+		
 
 	return true;
 }
 
-function distribuirPresentaciones(tanda, forzar_distribucion) {
-	presentaciones = tanda.presentaciones_libres;
+
+
+
+function auditorioSoportaPresentacion(auditorio,presentacion) {
 	
-	for(var i=0;i<presentaciones.length;i++) { //FIXME usar presentaciones.forEach
-		presentacion = presentaciones[i];
-		bloques_candidatos = buscarBloquesCandidatos(tanda,presentacion);
-		mejor_bloque = buscarMejorBloque(bloques_candidatos, presentacion);
-		
-		if ((mejor_bloque == null) && (forzar_distribucion)) { //no encontre un buen bloque pero tengo que ubicar la presentacion en alguno si o si 
-			if (bloques_candidatos.length == 0) { // no tengo posibles bloques candidatos, manoteo cualquiera que tenga presentaciones
-				bloques_candidatos = tanda.getBloques();
-				bloques_candidatos.forEach(function(bloque,index,array){
-					if (!bloque.tienePresentaciones)
-						bloques_candidatos.splice(index,1);
-				});
-			}
-		
-			if (bloques_candidatos.length > 0)
-				mejor_bloque = bloques_candidatos[Math.floor(Math.random() * bloques_candidatos.length)]; //agarro un bloque candidato cualquiera
-		}	
-		
-		if (mejor_bloque != null) { //TODO agregar presentacion al mejor_bloque y sacarlo de la lista de presentaciones libres de la tanda
-			tanda.moverPresentacion(presentacion,mejor_bloque);
-		}
-			
+	for(var i=0;i<auditorio.producciones.length;i++) {	
+		if ((presentacion.tipoPresentacion != '') && (presentacion.tipoPresentacion==auditorio.producciones[i].id))
+			return true;
 	}
+	
+	return false;
 }
