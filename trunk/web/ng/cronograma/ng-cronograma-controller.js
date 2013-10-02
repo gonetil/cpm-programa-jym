@@ -1,7 +1,9 @@
-function TandaShowCtrl($scope, $routeParams, Tanda, Logger) {
+function TandaShowCtrl($scope, $routeParams, Tanda, Logger, Dia, AuditorioDia, Auditorio, Bloque) {
 
 	//$scope.tanda=get_tanda_demo();
-	$scope.tanda = Tanda.get({tandaId: $routeParams.tandaId});
+	$scope.tanda = Tanda.get({tandaId: $routeParams.tandaId},function(tanda){
+			tanda.initialize(Dia,AuditorioDia,Auditorio,Bloque);
+	});
 //	
 //	$scope.css_cronograma_height=screen.height-150;
 //    $scope.css_dia_height=function(){
@@ -45,6 +47,7 @@ function TandaShowCtrl($scope, $routeParams, Tanda, Logger) {
 function TandaListCtrl($scope, Tanda) {
 	$scope.tandas = Tanda.query();
 }
+
 
 //DIA
 function DiaNewCtrl($scope, $routeParams, $location, Dia, Logger){
