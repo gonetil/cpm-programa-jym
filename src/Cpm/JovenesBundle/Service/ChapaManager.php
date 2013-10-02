@@ -88,23 +88,22 @@ class ChapaManager {
 	 */
 	public function clonarBloque($bloque,$auditorioDia=null) {
 		$nuevo_bloque = new Bloque();
+		$nuevo_bloque->setNombre($bloque->getNombre());
+		$nuevo_bloque->setPosicion($bloque->getPosicion());
+		$nuevo_bloque->setTienePresentaciones($bloque->getTienePresentaciones());
 		$nuevo_bloque->setDuracion($bloque->getDuracion());
 		$nuevo_bloque->setHoraInicio($bloque->getHoraInicio());
-		$nuevo_bloque->setPosicion($bloque->getPosicion());
-		$nuevo_bloque->setNombre($bloque->getNombre());
-		$nuevo_bloque->setTienePresentaciones($bloque->getTienePresentaciones());
-		if ($auditorioDia != null)
-			$nuevo_bloque->setAuditorioDia($auditorioDia);
-		
+		$nuevo_bloque->setAuditorioDia($bloque->getAuditorioDia());	
+		$nuevo_bloque->setEjesTematicos($bloque->getEjesTematicos());
+		$nuevo_bloque->setAreasReferencia($bloque->getAreasReferencia());
 		return $nuevo_bloque;
 	}
 	
-	public function clonarAuditorioDia($auditorioDia,$new_dia) {
+	public function clonarAuditorioDia($auditorioDia) {
 		$newAuditorioDia = new AuditorioDia();
 		$newAuditorioDia->setAuditorio($auditorioDia->getAuditorio());
-		$newAuditorioDia->setDia($new_dia);
 		foreach ( $auditorioDia->getBloques() as $bloque )
-       		$newAuditorioDia->addBloque($this->clonarBloque($bloque,$newAuditorioDia));
+       		$newAuditorioDia->addBloque($this->clonarBloque($bloque));
 		
 		return $newAuditorioDia;		
 	}
@@ -112,16 +111,17 @@ class ChapaManager {
 	/**
 	 * genera un nuevo dia, con la misma cantidad de auditorioDia (mismos auditorios), y los mismos bloques para cada auditorioDia
 	 */
-	public function clonarDia($dia,$tanda,$numero_dia = null,$new_dia = null) {
-		if ($new_dia == null) { 
+	public function clonarDia($dia,$new_dia = null) {
+		if ($new_dia == null)  
 			$new_dia = new Dia();
-			$new_dia->setTanda($tanda);
-			$new_dia->setNumero( ($numero_dia == null) ? $this->getNextDiaNumber($tanda) : $numero_dia );
-			$tanda->addDia($new_dia);
-		}
 		
+		//quito los ad viejos
+		foreach ( $new_dia->getAuditoriosDia() as $auditorioDia )
+			$new_dia->removeAuditorioDia($auditorioDia);
+		
+		//clono los ad nuevos
 		foreach ( $dia->getAuditoriosDia() as $auditorioDia )
-       	 	$new_dia->addAuditorioDia($this->clonarAuditorioDia($auditorioDia,$new_dia));
+       	 	$new_dia->addAuditorioDia($this->clonarAuditorioDia($auditorioDia));
 	
 		return $new_dia;
 	}
@@ -138,41 +138,29 @@ class ChapaManager {
 		return $max+1;
 	}
 	
-	private function getNextDiaNumber($tanda) {
-		$max = 0;
-		foreach ( $tanda->getDias() as $dia) {
-       		$max = ($dia->getNumero() > $max ) ? $dia->getNumero() : $max;
-		}
-		return $max+1;
-	}
-	
 	/**
 	 * genera una nueva tanda con los mismos dias, auditoriosDia y bloques de $tanda, y la asigna a la instanciaEvento $instancia
 	 */
 	public function clonarTanda($tanda,$instancia) {
 		
-		$new_tanda = Tanda::createFromInstancia($instancia);
+		$new_tanda = new Tanda($instancia);
 		
 		$new_tanda->setNumero($this->getNextTandaNumber($tanda));
-//		$new_tanda->setNumero( $tanda->getNumero() + 1 );
 		foreach ( $tanda->getDias() as $dia ) 
-       		$new_tanda->addDia($this->clonarDia($dia,$new_tanda));
+       		$new_tanda->addDia($this->clonarDia($dia));
 		
-	
 		$em = $this->doctrine->getEntityManager();
 		$em->getConnection()->beginTransaction();
     	try { 
 	        $em->persist($new_tanda);
 	        $em->flush();		
 			$em->getConnection()->commit();
+			return $new_tanda;
     	} catch (\Exception $e) {
     		$em->getConnection()->rollback();
 			$em->close();
             throw $e;
     	}
-    	return $new_tanda;
-		
-    	
 	}
 	/*** FIN FUNCIONES DE CLONACION **********/
 	
@@ -201,7 +189,6 @@ class ChapaManager {
 		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento(),$incluir_no_confirmadas);
 		foreach ( $invitaciones as $invitacion ) {
        		$presentacion = PresentacionInterna::createFromInvitacion($invitacion[0]);
-       		$presentacion->setTanda($tanda);
        		$tanda->addPresentacion($presentacion);
 		}
 	}
@@ -209,8 +196,8 @@ class ChapaManager {
 	public function inicializarUnaTanda($instancia,$incluir_no_confirmadas,$numero=0,$auditorios = null) {
 
 		$em = $this->doctrine->getEntityManager();
-		$tanda = Tanda::createFromInstancia($instancia,$numero);
-	    
+		$tanda = new Tanda($instancia);
+	    $tanda->setNumero($numero);
 	    if ($auditorios == null)
 	    	$auditorios = $em->getRepository('CpmJovenesBundle:Auditorio')->findBy(array('anulado'=>false));
 	    	   		
@@ -267,34 +254,36 @@ class ChapaManager {
 	
 	
 	//TODO falta probar
-	public function cambiarDeTanda($presentacion,$tanda) {
-		$invitacion = $presentacion->getInvitacion();
-		$instancia = $tanda->getInstanciaEvento();
-		
-		$presentacion->setBloque(null);
-		$presentacion->setTanda($tanda);
-		$tanda->addPresentacion($presentacion);
+	public function cambiarPresentacionDeTanda($presentacion,$tandaNueva) {
+		$tandaVieja = $presentacion->getTanda();
+		if($tandaVieja->equals($tandaNueva)){
+			return ;
+		}
 		
     	$em = $this->doctrine->getEntityManager();
-    	$em->getConnection()->beginTransaction();		
-		try {   		
+    	try {   		
+			$em->getConnection()->beginTransaction();		
+			$tandaVieja->removePresentacion($presentacion);
+			$tandaNueva->addPresentacion($presentacion);
+			
+			$instancia = $tandaNueva->getInstanciaEvento();
+			$invitacion = $presentacion->getInvitacion();
 			if (($instancia) && (isset($invitacion))) //solo las presentaciones internas tienen invitacion e instancia 
 			{
 				$invitacion->setInstanciaEvento($instancia);
 				$em->persist($invitacion);
 			}	
-			$em->persist($tanda);
-    		$em->persist($presentacion);
+			$em->persist($presentacion);
+			$em->persist($tandaNueva);
+    		$em->persist($tandaVieja);
 			
 			$em->flush();
 			$em->getConnection()->commit();
-    		return "Tanda cambiada satisfactoriamente";
     	} catch (\Exception $e) {
     		$em->getConnection()->rollback();
 			$em->close();
             throw $e;
     	}
-		
 	}
 	
 	/**
@@ -305,12 +294,6 @@ class ChapaManager {
 		
     	$em = $this->doctrine->getEntityManager();
     	$em->getConnection()->beginTransaction();		
-		try {
-			foreach ( $bloque->getPresentaciones() as $index => $presentacion ) {
-		       	$presentacion->setBloque(null);
-		       	$bloque->getPresentaciones()->remove($index);
-		       	$em->persist($presentacion);
-			}
 		    $em->remove($bloque);
 		    $em->flush();
 		    $em->getConnection()->commit();
@@ -323,18 +306,5 @@ class ChapaManager {
 	}
 	
 	
-	/**
-	 * elimina todos los auditoriosDia y sus bloques de un determinado dia
-	 */
-	public function vaciarDia($dia) {
-		$em = $this->doctrine->getEntityManager();
-		$this->resetDia($dia); //saco todas las presentaciones
-					
-		foreach ( $dia->getAuditoriosDia() as $index => $ad ) { //volamos todos los auditorios_dias del dia
-		       	//$dia->getAuditoriosDia()->remove($index);
-		       	$em->remove($ad);
-		}
-		$em->flush();
-		return $dia;
-	}
+	
 }

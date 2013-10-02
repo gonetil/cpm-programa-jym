@@ -195,36 +195,15 @@ class BloqueController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Bloque')->find($id);
-            
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Bloque entity.');
-            }
-
-	     	$chapaManager = $this->getChapaManager();
-	     	
-	     	try {
-		     	$bloque  = $this->getEntity('CpmJovenesBundle:Bloque', $id,$em);
-		     	$chapaManager->borrarBloque($bloque);
-				return $this->answerOk("Bloque eliminado satisfactoriamente");			
-		    } catch (\Exception $e) {
-		    		$this->setErrorMessage('Error al inicializar las tandas de Chapadmalal. Mensaje: '.$e);
-		            throw $e;
-		    }	
-	 
-	    /*	try {
-				foreach ( $entity->getPresentaciones() as $index => $presentacion ) {
-	       			$presentacion->setBloque(null);
-	       			$entity->getPresentaciones()->remove($index);
-	       			$em->persist($presentacion);
-				}
+            $entity = $this->getEntityForRemoval('CpmJovenesBundle:Bloque', $id);
+            try{	
 	            $em->remove($entity);
 	            $em->flush();
+	            return $this->answerOk("Bloque eliminado satisfactoriamente");		
 	    	} catch (\Exception $e) {
 	    		$this->setErrorMessage('Error al inicializar las tandas de Chapadmalal. Mensaje: '.$e);
 	            throw $e;
 	    	}
-	    	*/	
 
         }
 	return $this->redirect($this->generateUrl('bloque'));

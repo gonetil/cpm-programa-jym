@@ -26,17 +26,6 @@ class PresentacionInterna extends Presentacion
     private $proyecto;
     
     /**
-    * @ORM\ManyToOne(targetEntity="Distrito")
- 
-    private $distrito;
-   */
-    /**
-    * @ORM\ManyToOne(targetEntity="Localidad")
-    
-    private $localidad;
-	*/
-    
-    /**
     * @ORM\ManyToOne(targetEntity="Invitacion")
     */
 	private $invitacion;
@@ -48,17 +37,10 @@ class PresentacionInterna extends Presentacion
 		$presentacion = new PresentacionInterna();
 		$presentacion->setInvitacion($invitacion);
 		$presentacion->setProyecto($proyecto);
-	/*	$presentacion->setLocalidad( $proyecto->getEscuela()->getLocalidad() );
-		$presentacion->setDistrito( $proyecto->getEscuela()->getLocalidad()->getDistrito() );
-		$presentacion->setTitulo($proyecto->getTitulo());
-		$presentacion->setEjeTematico($proyecto->getTemaPrincipal());
-		$presentacion->setPersonasConfirmadas($invitacion->countInvitados());
-		$presentacion->setAreaReferencia($proyecto->getEje());
-		$presentacion->setTipoPresentacion($proyecto->getProduccionFinal());
-		*/
 		return $presentacion;
 		
 	}
+    
     /**
      * Set proyecto
      *
@@ -79,44 +61,21 @@ class PresentacionInterna extends Presentacion
         return $this->proyecto;
     }
 
-    /**
-     * Set distrito
-     *
-     * @param Cpm\JovenesBundle\Entity\Distrito $distrito
-     */
-    public function setDistrito(\Cpm\JovenesBundle\Entity\Distrito $distrito)
-    {
-        $this->distrito = $distrito;
-    }
-
-    /**
-     * Get distrito
-     *
-     * @return Cpm\JovenesBundle\Entity\Distrito 
-     */
     public function getDistrito()
     {
-        return $this->getProyecto()->getEscuela()->getDistrito();
+        return $this->getProyecto()->getEscuela()->getDistrito()->getNombre();
     }
 
-    /**
-     * Set localidad
-     *
-     * @param Cpm\JovenesBundle\Entity\Localidad $localidad
-     */
-    public function setLocalidad(\Cpm\JovenesBundle\Entity\Localidad $localidad)
-    {
-        $this->localidad = $localidad;
-    }
-
-    /**
-     * Get localidad
-     *
-     * @return Cpm\JovenesBundle\Entity\Localidad 
-     */
     public function getLocalidad()
     {
-        return $this->getProyecto()->getEscuela()->getLocalidad();
+        return $this->getProyecto()->getEscuela()->getLocalidad()->getNombre();
+    }
+    
+    
+	
+	public function getProvincia()
+    {
+        return 'Buenos Aires';
     }
     
     
@@ -191,7 +150,7 @@ class PresentacionInterna extends Presentacion
 		if (!is_null($estado))
 			return $estado->getValoracion();
 		else
-			return ''; //FIXME... que deberia devolver aca?	
+			return null;	
 	}
 	
 }

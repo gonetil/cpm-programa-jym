@@ -1,47 +1,48 @@
-function TandaShowCtrl($scope, $routeParams, Tanda, Logger, Dia, AuditorioDia, Auditorio, Bloque) {
+function TandaShowCtrl($scope, $routeParams, Tanda, Logger, Dia, AuditorioDia, Auditorio, Bloque, Presentacion) {
 
-	//$scope.tanda=get_tanda_demo();
 	$scope.tanda = Tanda.get({tandaId: $routeParams.tandaId},function(tanda){
 			tanda.initialize(Dia,AuditorioDia,Auditorio,Bloque);
 	});
-//	
-//	$scope.css_cronograma_height=screen.height-150;
-//    $scope.css_dia_height=function(){
-//        var alto_dia=$scope.css_cronograma_height / $scope.tanda.dias.length;
-//        return "min-height:"+alto_dia+"px";
-//    }; 
 
-	$scope.css_bloque_height = function(bloque) {
-		return "min-height:" + bloque.duracion + "px";
+	$scope.presentacion_droppable={
+			multiple:true,
+			placeholder:false,
+			onDrop:'presentacionDropped'
 	};
-
-	// Determina si un bloque es de presentaciones o simple
-	$scope.bloque_tiene_presentaciones = function(bloque) {
-		return bloque.tienePresentaciones;
-	};
-  
-    $scope.drop_options={
-    };
-    $scope.bloque_drop_options={
+    $scope.presentacion_droppable_options={
         accept:'.badge-presentacion',
         tolerance:'intersect',
         hoverClass:'badge-presentacion-hover'
     };
-    $scope.jquoui_drag_options= {
+    $scope.presentacion_draggable_options= {
         revert:'invalid',
         cursor: 'move', 
         cursorAt:{left:50, top:10},
         helper:'clone'
     };
     
-    
-    
-    
+
     //////////////////////////////////////////
     
     $scope.presentacionDropped=function(event, ui){
-    	alert('Ddddddropppped');
+    	var presentacionId = ui.draggable.data("presentacion");
+    	var origen = ui.draggable.data("bloque");
+    	var destino = $(event.target).data("bloque");
+    	//?"al bloque "+ origen.data("bloque"):" presentaciones libres"));
+    	var presentacion = new Presentacion({id:presentacionId, bloque:(destino?destino:'')});
+    	presentacion.$save(function(data){
+    		Logger.success("Se movió la presentación "+presentacion.id);
+    		Logger.debug("Saco la presentación "+presentacionId + " de "+ (origen?"al bloque "+origen:"a presentaciones libres") + " y la paso "+ (destino?"al bloque "+destino:"a presentaciones libres"));
+    		Logger.debug(data);
+   		}, Logger.error);
     }
+    
+    //asocia los popovers con los headers de los bloques
+    $scope.initPopovers=function(){
+	    $( ".caja-cronograma").on( "click", ".caja-bloque > .header-caja", function() {
+	    	$( this ).popover({html:true,content:$(this).find('.popover').first().html()});
+	    });
+    };
 }
 
 function TandaListCtrl($scope, Tanda) {
@@ -129,19 +130,3 @@ function BloqueRemoveCtrl($scope, $routeParams, $location, Bloque, Logger){
 		history.back();
 	}
 }
-
-/*
-/*
- $scope.resetear_cronograma=function(){
-    console.log("Se reinicia el cronograma");
-    $scope.tanda.presentaciones_libres=$scope.tanda.presentaciones;
-    $scope.tanda.dias.forEach(function(dia) {
-      dia.auditorios_dia.forEach(function(auditorio_dia) {
-        auditorio_dia.bloques.forEach(function(bloque) {
-          if (bloque.presentaciones !== false)
-            bloque.presentaciones = [];
-        });
-      });
-    });
-  };
-*/

@@ -3246,3 +3246,11 @@ td.caja-auditorio-dia {
 button.btn{
 	height: auto;
 }
+
+
+.hidden-hint{
+	visibility: hidden;	
+}
+*:hover > .hidden-hint{
+	visibility: visible;	
+}

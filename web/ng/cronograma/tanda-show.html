@@ -26,7 +26,7 @@
 </div>
 <hr/>	
 <!-- CRONOGRAMA-->
-<table class="caja-cronograma">
+<table class="caja-cronograma" ng-init="initPopovers()">
 	<tr ng-repeat="dia in tanda.dias" class="caja-dia">
     	<th class="header-caja ">
             Dia {{dia.numero}}
@@ -79,9 +79,11 @@
 		<span ng-show="tanda.presentaciones_libres.length > 1">Quedan <b>{{tanda.presentaciones_libres.length}}</b> presentaciones Libres</span> 
 		<span ng-hide="tanda.presentaciones_libres.length > 1">Todas las presentaciones de la tanda han sido asignadas</span> 
           <div ng-model="tanda.presentaciones_libres" 
-          	data-drop="true" jqyoui-droppable="{multiple:true,placeholder:false,onDrop:'presentacionDropped'}" data-jqyoui-options="{accept:'.badge-presentacion'}">
+          	data-drop="true" jqyoui-droppable="presentacion_droppable" data-jqyoui-options="presentacion_droppable_options">
 	      
-             <div ng-repeat="p in tanda.presentaciones_libres" ng-model="tanda.presentaciones_libres" class="badge badge-presentacion" style="height:{{p.duracion}}px;" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-drag="true" data-jqyoui-options="jquoui_drag_options" > 
+             <div ng-repeat="p in tanda.presentaciones_libres" ng-model="tanda.presentaciones_libres" 
+             	data-presentacion="{{p.id}}" class="badge badge-presentacion" style="height:{{p.duracion}}px;" 
+             	data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options" > 
 	          	{{p.escuela}}
 	          </div>
 	</div>

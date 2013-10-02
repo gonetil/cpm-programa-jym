@@ -61,6 +61,16 @@ class Tanda
      */
 	private $presentaciones;
     
+    function __construct($instancia = null){
+    	if($instancia != null){
+			$this->setFechaInicio($instancia->getFechaInicio());
+		    $this->setFechaFin($instancia->getFechaFin());	
+		    $this->setInstanciaEvento($instancia);
+    	}
+    	$this->setPresentaciones(array());
+    	$this->setDias(array());
+    }
+    
     /**
      * Get id
      *
@@ -140,55 +150,47 @@ class Tanda
     {
     	$this->instanciaEvento = $ie;
     }
-
-    public function getDias()
-    {
-    	return $this->dias;
-    }
-
-    public function setDias($d)
-    {
-    	$this->dias = $d;
-    }
-    
-    public function addDia($d) {
-    	$this->dias[] = $d;
-    }
-    
-    public function __toString() {
-    	return $this->getNumero()." (".$this->getFechaInicio()->format('d/m/Y').")";
-    }
  
  	public function getPresentaciones() {
  		return $this->presentaciones;
  	}
  	
  	public function setPresentaciones($pp) {
+ 		if ($pp instanceof \Doctrine\Common\Collections\Collection)
+ 			$pp = new \Doctrine\Common\Collections\ArrayCollection($pp);
  		$this->presentaciones = $pp;
  	}
  	
- 	public function addPresentacion($p) {
- 		$this->presentaciones[] = $p;
+ 	public function addPresentacion(\Cpm\JovenesBundle\Entity\Presentacion $p) {
+ 		$this->presentaciones->add($p);
+ 		$p->setTanda($this);
  	}
-    
-	static function createFromInstancia($instancia, $numero = 0) {
-		$tanda = new Tanda();
-		$tanda->setFechaInicio($instancia->getFechaInicio());
-	    $tanda->setFechaFin($instancia->getFechaFin());	
-	    $tanda->setInstanciaEvento($instancia);	
-	    $tanda->setNumero($numero);
-	    return $tanda;
-	}
-	function reordenarDias(){
-		$numero = 1;
-		foreach($this->dias as $dia){
-			if ($dia->getNumero() != $numero)
-				$dia->setNumero($numero);
-			$numero++; 
-		}
+ 	
+ 	public function removePresentacion(\Cpm\JovenesBundle\Entity\Presentacion $p) {
+ 		$this->presentaciones->removeElement($p);
+ 		$p->setTanda(null);
+ 	}
+
+    public function getDias()
+    {
+    	return $this->dias;
+    }
+
+    public function setDias($dias)
+    {
+    	if ($dias instanceof \Doctrine\Common\Collections\Collection)
+ 			$dias = new \Doctrine\Common\Collections\ArrayCollection($dias);
+ 		$this->dias = $dias;
+    }
+	
+	function removeDia($diaABorrar){
+		$this->dias->removeElement($diaABorrar);
+		$this->reordenarDias();
 	}
 	
-	function agregarDia($numero){
+	function addDia($nuevoDia){
+		$numero = $nuevoDia->getNumero();
+		
 		if (count($this->dias) == 0)
 			$numero = 1;
 		elseif (($numero < 0) || $numero > count($this->dias))
@@ -198,17 +200,21 @@ class Tanda
 			if ($dia->getNumero() > $numero)
 				$dia->setNumero($dia->getNumero()+1);
 		}
-		$dia = new Dia();
-		$dia->setNumero($numero);
-		$dia->setTanda($this);
-		$this->dias->add($dia);
+		
+		$nuevoDia->setNumero($numero);
+		$this->dias->add($nuevoDia);
+		$nuevoDia->setTanda($this);
 		$this->reordenarDias();
 		return $dia;
 	}
-	
-	function eliminarDia($diaABorrar){
-		$this->dias->removeElement($diaABorrar);
-		$this->reordenarDias();
+    
+	protected function reordenarDias(){
+		$numero = 1;
+		foreach($this->dias as $dia){
+			if ($dia->getNumero() != $numero)
+				$dia->setNumero($numero);
+			$numero++; 
+		}
 	}
 	
 	function getDiaEnPosicion($posicion){
@@ -219,6 +225,10 @@ class Tanda
 		throw new \InvalidArgumentException("Se pidio un dia en una posicion inválida $posicion de la tanda {$this->id}");
 	}
 		
+    
+    public function __toString() {
+    	return $this->getNumero()." (".$this->getFechaInicio()->format('d/m/Y').")";
+    }
 		
 	 public function toArray($recursive_depth) {
     	if ($recursive_depth == 0)
@@ -244,7 +254,7 @@ class Tanda
 					'numero' => "{$this->numero}" ,
 					'fechaInicio' => date_format($this->fechaInicio,"d-m-y") ,
 					'fechaFin' => date_format($this->fechaFin,"d-m-y"),
-					//'instanciaEvento' => $this->getInstanciaEvento->getId(),					 
+					'instanciaEvento' => ($this->instanciaEvento?$this->instanciaEvento->getId():''),					 
  					'dias' => $dias,
  					'presentaciones' => $presentaciones,
  		);
