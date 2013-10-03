@@ -3,8 +3,6 @@ console.log("creamos nuestro modulo llamado cronograma_de_tanda");
 var app = angular.module("cronograma", ['ngDragDrop', 'ngResource', 'ngynSelectKey']);
 
 
-
-
 app.factory('Logger', function(){
 	Logger= {buffer:[], level:'debug', bufferSize:3};
 	Logger.push=function(level, message){
@@ -14,7 +12,6 @@ app.factory('Logger', function(){
 		now=now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
 		this.buffer.unshift({level:level, message:message, time:now});
 		this.buffer.splice(this.bufferSize,1);
-		//alert(level+": "+message);
     };
 	Logger.log=function(message){
 		Logger.push('info', message);

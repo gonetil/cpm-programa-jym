@@ -12,4 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class AuditorioDiaRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','d')
+		->add('from','CpmJovenesBundle:AuditorioDia d');
+	
+		return  $qb->getQuery();
+	}
 }

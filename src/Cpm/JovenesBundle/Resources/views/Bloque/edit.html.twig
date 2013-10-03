@@ -14,14 +14,8 @@
 <ul class="record_actions">
     <li>
         <a href="{{ path('bloque') }}">
-            Volver al listado
+            Cancelar
         </a>
-    </li>
-    <li>
-        <form action="{{ path('bloque_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Borrar</button>
-        </form>
     </li>
 </ul>
 {% endblock %}

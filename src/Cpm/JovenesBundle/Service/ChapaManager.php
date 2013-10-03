@@ -169,16 +169,15 @@ class ChapaManager {
 	/*** FUNCIONES DE INICIALIZACION AUTOMATICA **********/
 	public function crearDiasParaTanda($tanda,$num_dias,$auditorios) {
 	    //creo los dias para la tanda
-	    for($dia=1;$dia<=$num_dias;$dia++) {
-			$tandaDia = Dia::createDia($tanda,$dia);	       	
+	    for($nroDia=1;$nroDia<=$num_dias;$nroDia++) {
+			$tandaDia = new Dia($nroDia);	
+			$tanda->addDia($tandaDia);       	
 			//cargo los auditorios para cada dia
 	       	foreach ( $auditorios as $auditorio) { 
 	       		$newAuditorioDia = new AuditorioDia();
 				$newAuditorioDia->setAuditorio($auditorio);
-				$newAuditorioDia->setDia($tandaDia);
-				$this->doctrine->getEntityManager()->persist($newAuditorioDia);
+				$tandaDia->addAuditorioDia($newAuditorioDia);
 	       	}
-	       		
 		 }
 	}
 	
@@ -188,7 +187,7 @@ class ChapaManager {
 		
 		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento(),$incluir_no_confirmadas);
 		foreach ( $invitaciones as $invitacion ) {
-       		$presentacion = PresentacionInterna::createFromInvitacion($invitacion[0]);
+       		$presentacion = new PresentacionInterna($invitacion[0]);
        		$tanda->addPresentacion($presentacion);
 		}
 	}
@@ -235,7 +234,9 @@ class ChapaManager {
 	            	$em->persist($tanda);
 	            	$em->flush();
 	            	$created++;
-				} 
+				} else{
+					//la tanda ya existe
+				}
 	            $index++;
 			}
 			$index--;
@@ -279,25 +280,6 @@ class ChapaManager {
 			
 			$em->flush();
 			$em->getConnection()->commit();
-    	} catch (\Exception $e) {
-    		$em->getConnection()->rollback();
-			$em->close();
-            throw $e;
-    	}
-	}
-	
-	/**
-	 * Elimina un bloque. Antes de hacerlo, desasocia todas las presentaciones del mismo (quedarán asociadas a la tanda)
-	 * FIMXE alguien usa esta funcion?
-	 */
-	private function borrarBloque($bloque) {
-		
-    	$em = $this->doctrine->getEntityManager();
-    	$em->getConnection()->beginTransaction();		
-		    $em->remove($bloque);
-		    $em->flush();
-		    $em->getConnection()->commit();
-	    	return "Bloque eliminado satisfactoriamente";
     	} catch (\Exception $e) {
     		$em->getConnection()->rollback();
 			$em->close();

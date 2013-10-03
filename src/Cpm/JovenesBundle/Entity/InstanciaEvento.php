@@ -370,5 +370,9 @@ class InstanciaEvento
     public function setVoluntarios($list) {
     	$this->voluntarios = $list;
     }
+    
+    public function getCiclo(){
+    	return $this->evento->getCiclo();
+    }
  
 }

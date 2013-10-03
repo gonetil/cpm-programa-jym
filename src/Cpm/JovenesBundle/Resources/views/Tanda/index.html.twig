@@ -7,15 +7,20 @@
 <table class="records_list">
     <thead>
         <tr>
-            <th>Número</th>
+            <th>Evento</th>
+            <th>Número de tanda</th>
             <th>Fecha de inicio</th>
             <th>Fecha de fin</th>
             <th>Acciones</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
+            
+            <td>{{ entity.instanciaEvento.titulo }}</td>
+<!--             <td>{{ entity.instanciaEvento }}</td> -->
             <td>{{ entity.numero }}</td>
             <td>{% if entity.fechaInicio %}{{ entity.fechaInicio|date('d-m-Y') }}{% endif%}</td>
             <td>{% if entity.fechaFin %}{{ entity.fechaFin|date('d-m-Y') }}{% endif%}</td>
@@ -25,7 +30,7 @@
                         <a href="{{ path('tanda_show', { 'id': entity.id }) }}">ver</a>
                     </li>
                     <li>
-                        <a href="{{ path('index_cronograma') }}">Cronograma</a>
+                        <a href="{{ path('index_cronograma') }}#/tanda/{{entity.id}}">Cronograma</a>
                     </li>
                     <li>
                         <a href="{{ path('tanda_edit', { 'id': entity.id }) }}">editar</a>
@@ -33,6 +38,7 @@
                     
                 </ul>
             </td>
+            <td>id={{ entity.id }}</td>
         </tr>
     {% endfor %}
     </tbody>

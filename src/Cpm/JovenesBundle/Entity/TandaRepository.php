@@ -21,4 +21,13 @@ class TandaRepository extends EntityRepository
 			->andWhere("ie.evento = :evento")->setParameter("evento",$evento);
 		return $qb->getQuery()->getResult(); 	
 	}
+	
+	public function findAllQuery() {
+			
+		$qb = $this->createQueryBuilder('t')
+		->innerJoin('t.instanciaEvento','ie')
+		->addOrderBy('ie.id', 'desc')->addOrderBy('t.numero','ASC');
+	
+		return  $qb->getQuery();
+	}
 }

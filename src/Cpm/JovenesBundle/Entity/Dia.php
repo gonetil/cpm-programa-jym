@@ -46,7 +46,7 @@ class Dia
     
     static function createDia($tanda,$numero=0,$auditoriosDia=null) {
     	$tandaDia = new Dia();
-	    $tandaDia->setTanda($tanda);
+	    
 	    $tandaDia->setNumero($numero);
 	    if ($auditoriosDia != null )
 	    	$tandaDia->setAuditoriosDia($auditoriosDia);
@@ -86,19 +86,20 @@ class Dia
     public function getAuditoriosDia() {
     	return $this->auditoriosDia;
     }
-    public function setAuditoriosDia(\Doctrine\Common\Collections\Collection $auditoriosDia) {
-//    	if ($auditoriosDia instanceof \Doctrine\Common\Collections\Collection)
-// 			$auditoriosDia = new \Doctrine\Common\Collections\ArrayCollection($auditoriosDia)
+    public function setAuditoriosDia($auditoriosDia) {
+    	if (!($auditoriosDia instanceof \Doctrine\Common\Collections\Collection))
+ 			$auditoriosDia = new \Doctrine\Common\Collections\ArrayCollection($auditoriosDia);
     	$this->auditoriosDia = $auditoriosDia;
     }
+    
     public function addAuditorioDia($ad) {
     	$this->auditoriosDia->add($ad);
     	$ad->setDia($this);
-    	
     }
+    
     public function removeAuditorioDia($ad) {
     	$this->auditoriosDia->removeElement($ad);
-    	$ad->setDia(null);
+    	//$ad->setDia(null);
     }
     
     
@@ -108,6 +109,10 @@ class Dia
     }
     public function setTanda($t) {
     	$this->tanda = $t;
+    }
+    
+    public function getCiclo(){
+    	return $this->tanda->getCiclo();
     }
     
     public function __toString() {

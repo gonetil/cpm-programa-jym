@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\AuditorioType;
  *
  * @Route("/auditorio")
  */
-class AuditorioController extends Controller
+class AuditorioController extends BaseController
 {
     /**
      * Lists all Auditorio entities.
@@ -24,11 +24,8 @@ class AuditorioController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Auditorio')->findAll();
-
-        return array('entities' => $entities);
+        $entities = $this->getRepository('CpmJovenesBundle:Auditorio')->findAllQuery();
+        return $this->paginate($entities);
     }
 
     /**
@@ -39,14 +36,7 @@ class AuditorioController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Auditorio')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Auditorio entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Auditorio', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -108,14 +98,7 @@ class AuditorioController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Auditorio')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Auditorio entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Auditorio', $id);
         $editForm = $this->createForm(new AuditorioType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -137,11 +120,7 @@ class AuditorioController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:Auditorio')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Auditorio entity.');
-        }
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Auditorio', $id);
 
         $editForm   = $this->createForm(new AuditorioType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -179,11 +158,7 @@ class AuditorioController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Auditorio')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Auditorio entity.');
-            }
+  			$entity = $this->getEntityForDelete('CpmJovenesBundle:Auditorio', $id);
 
             $em->remove($entity);
             $em->flush();

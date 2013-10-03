@@ -1,23 +1,36 @@
 {% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
 
-{% block title %}Presentacion {% if entity.esExterna() %} externa {% else %} interna {% endif %} {% endblock %}
+{% block title %}Presentacion {{entity.getTipo()}} {{ entity.id }} {% endblock %}
 
 {% block content %}
-
 
 <table class="record_properties">
     <tbody>
         <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
             <th>Titulo</th>
             <td>{{ entity.titulo }}</td>
         </tr>
+        {% if not entity.esExterna()%}
+         <tr>
+            <th>Proyecto</th>
+            <td><a href="{{ path('proyecto_show',{'id':entity.invitacion.proyecto.id}) }}">{{ entity.invitacion.proyecto }}</a></td>
+        </tr>
+        <tr>
+            <th>Invitacion</th>
+            <td><a href="{{ path('invitaciones_show',{'id':entity.invitacion.id}) }}">{{ entity.invitacion }}</a></td>
+        </tr>
+        {% endif %}
      	<tr>
             <th>Escuela</th>
             <td>{{ entity.escuela }}</td>
+        </tr>
+        <tr>
+            <th>Tanda</th>
+            <td><a href="{{ path('tanda_show',{'id':entity.tanda.id}) }}">{{ entity.tanda }}</a></td>
+        </tr>
+        <tr>
+            <th>Provincia</th>
+            <td>{{ entity.provincia }}</td>
         </tr>
         <tr>
             <th>Distrito</th>
@@ -26,7 +39,7 @@
         <tr>
             <th>Localidad</th>
             <td>{{ entity.localidad }}</td>
-        </tr>        
+        </tr>
   		<tr>
             <th>Eje tematico</th>
             <td>{{ entity.ejeTematico}}</td>
@@ -36,16 +49,16 @@
             <td>{{ entity.areaReferencia }}</td>
         </tr>
         <tr>
+            <th>Coordinador</th>
+            <td>{{ entity.getApellidoCoordinador() }},{{ entity.getNombreCoordinador() }}</td>
+        </tr>
+        <tr>
             <th>Tipo de presentacion</th>
             <td>{{ entity.tipoPresentacion }}</td>
         </tr>
         <tr>
             <th>Bloque</th>
             <td>{%if entity.bloque %} <a href="{{ path('bloque_show',{'id':entity.bloque.id}) }}">{{ entity.bloque}}</a>{% else %} SIN ASIGNAR {% endif %}</td>
-        </tr>
-        <tr>
-            <th>Tanda</th>
-            <td><a href="{{ path('tanda_show',{'id':entity.tanda.id}) }}">{{ entity.tanda }}</a></td>
         </tr>
         <tr>
             <th>Cant. de confirmados</th>
@@ -64,34 +77,19 @@
             Volver al listado
         </a>
     </li>
-    {% if entity.esExterna() %}
+
     <li>
         <a href="{{ path('presentacion_edit', { 'id': entity.id }) }}">
             Editar
         </a>
     </li>
-    {% endif %}
-    <li>
-    	<a href="#" onclick="$('#formNewTanda').toggle(); return false;"> Cambiar de tanda </a>
-    </li>
     <li>
         <form action="{{ path('presentacion_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+            <button type="submit">Eliminar</button>
         </form>
     </li>
     
 </ul>
-    	<div id="formNewTanda" class='hiddenForms' style='display:none; float:left'>
-    	<form method="post" action="{{ path('presentacion_edit_json') }}">
-    		<label for="tanda">Nueva tanda</label>
-    		<select name='tanda'>
-    		{% for tanda in tandas %}
-    		 <option value="{{ tanda.id }}">{{ tanda }}</option>
-    		{% endfor %} %}
-    		</select>
-    		<input type='hidden' name='presentacion_id' value='{{ entity.id }}' />
-    		<button type="submit">Cambiar</button>
-    	</form>
-    	</div>
+    	
 {% endblock %}

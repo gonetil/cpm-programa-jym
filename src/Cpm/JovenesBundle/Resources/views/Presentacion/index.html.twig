@@ -46,8 +46,14 @@
 <ul>
     <li>
         <a href="{{ path('presentacionexterna_new') }}">
-            Create a new entry
+            Crear nueva presentacion Externa
         </a>
+        
+		{% if is_granted("ROLE_SUPER_ADMIN")  %}
+        <a href="{{ path('presentacioninterna_new') }}">
+            Crear nueva presentacion Interna
+        </a>
+        {% endif %}
     </li>
 </ul>
 {% endblock %}

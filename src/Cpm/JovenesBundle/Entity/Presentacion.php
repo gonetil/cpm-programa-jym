@@ -79,6 +79,10 @@ abstract class Presentacion
     }
     
     public function setBloque($b) {
+    	if (!empty($b) && !empty($this->tanda) && !$b->getAuditorioDia()->getDia()->getTanda()->equals($this->getTanda())){
+    		throw new \InvalidArgumentException("la tanda el bloque recibida es diferente a la tanda de esta presentacion");
+    	}
+    	
     	$this->bloque = $b;
     }
     
@@ -88,9 +92,14 @@ abstract class Presentacion
     	return $this->tanda;
     }
     
+    public function getCiclo(){
+    	return $this->getTanda()->getCiclo();
+    }
+    
     public function setTanda(\Cpm\JovenesBundle\Entity\Tanda $t) {
     	if (!empty($this->tanda) && $this->tanda->equals($t))
     		return;//no hago nada,la tanda no cambio
+    	
     	$this->tanda = $t;
     	$this->bloque=null;
     }

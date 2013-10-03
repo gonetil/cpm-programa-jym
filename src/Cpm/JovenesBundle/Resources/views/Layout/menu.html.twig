@@ -27,13 +27,7 @@
 							<li><a href="{{url(accionUsuario['path'])}}">{{accionUsuario['label']}}</a></li>
 					</li>
 					{% endfor %}
-					
-					
-					
-			</div>
-					
 				{% else %}
-				
 					<li><a href="{{path(jym.getEtapaActual().getProyectosVigentesAction())}}">Proyectos vigentes</a></li>
 					<li><a href="{{path('proyecto')}}">Todos los Proyectos</a></li>
 					<li><a href="{{path('usuario')}}">Usuarios</a></li>
@@ -68,15 +62,16 @@
 					<li><a href="{{path('proyecto_new')}}">Agregar Proyecto</a></li>
 					<li><a href="{{path('proyecto')}}">Proyectos</a></li>
 					<li><a href="{{path('escuela')}}">Escuelas</a></li>
-					<li><a href="{{path('tema')}}">Temas</a></li>
-					<li><a href="{{path('produccion')}}">Producciones</a></li>
+					<li><a href="{{path('tema')}}">Ejes Temáticos</a></li>
+					<li><a href="{{path('eje')}}">Area de Referencia</a></li>
+					<li><a href="{{path('produccion')}}">Tipo de Produccion</a></li>
 				</ul>
 			</div>
 		</li>
 		</ul>
 		
 		<div class="nav-divider">&nbsp;</div>
-				<ul class="select">
+		<ul class="select">
 					<li><a href="{{path('evento')}}"><b>Eventos</b></a>
 					<div class="select_sub show">
 						<ul class="sub">
@@ -88,11 +83,27 @@
 						</ul>
 					</div>
 				</li>
-				</ul>
-				
+		</ul>
+		
 		<div class="nav-divider">&nbsp;</div>
 		<ul class="select">
-			<li><a href="{{path('proyecto')}}"><b>Mas</b></a>
+			<li><a><b>Chapa</b></a>
+			<div class="select_sub show">
+				<ul class="sub">
+					<li><a href="{{path('tanda')}}">Tandas</a></li>
+					<li><a href="{{path('auditorio')}}">Auditorios</a></li>
+					<li><a href="{{path('dia')}}">Dias</a></li>
+					<li><a href="{{path('auditoriodia')}}">Auditorios Dia</a></li>
+					<li><a href="{{path('bloque')}}">Bloques</a></li>
+					<li><a href="{{path('presentacion')}}">Presentaciones</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+		
+		<div class="nav-divider">&nbsp;</div>
+		<ul class="select">
+			<li><a><b>Mas</b></a>
 			<div class="select_sub show">
 				<ul class="sub">
 					<li><a href="{{path('plantilla')}}">Plantillas</a></li>

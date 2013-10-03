@@ -12,4 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class DiaRepository extends EntityRepository
 {
+	public function findAllQuery() {
+		$qb = $this->getEntityManager()->createQueryBuilder()
+		->add('select','d')
+		->add('from','CpmJovenesBundle:Dia d');
+	
+		return  $qb->getQuery();
+	}
 }

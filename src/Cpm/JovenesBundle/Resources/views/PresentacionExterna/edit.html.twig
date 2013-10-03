@@ -1,22 +1,20 @@
-<h1>PresentacionExterna edit</h1>
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block content %}
+<h1>Editar Presentacion Externa</h1>
 
 <form action="{{ path('presentacionexterna_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
     <p>
-        <button type="submit">Edit</button>
+        <button type="submit">Guardar</button>
     </p>
 </form>
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('presentacionexterna') }}">
-            Back to the list
+        <a href="{{ path('presentacion') }}">
+            Cancelar
         </a>
     </li>
-    <li>
-        <form action="{{ path('presentacionexterna_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
 </ul>
+{% endblock %}
