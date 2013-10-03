@@ -41,7 +41,7 @@ abstract class Presentacion
 	
     /**
      * @ORM\ManyToOne(targetEntity="Tanda", inversedBy="presentaciones")
-     * @ORM\JoinColumn(name="tanda_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="tanda_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $tanda;
     
@@ -128,9 +128,9 @@ abstract class Presentacion
     		return $this->getId();
     	
     	return array(
-			 		'id' => "{$this->id}",
-			    	'bloque' => (!$this->bloque)?'' : "{$this->bloque->getId()}",
-			    	'tanda' => "{$this->getTanda()->getId()}",
+			 		'id' => $this->id,
+			    	'bloque' => (!$this->bloque)?'': $this->bloque->getId(),
+			    	'tanda' => $this->getTanda()->getId(),
 			    	'titulo' => $this->makeItSafe($this->getTitulo()),
 			    	'ejeTematico' => (!$this->getEjeTematico())?'': $this->getEjeTematico()->toArray($recursive_depth-1),
 			    	'areaReferencia' => (!$this->getAreaReferencia())?'' : $this->getAreaReferencia()->toArray($recursive_depth-1),

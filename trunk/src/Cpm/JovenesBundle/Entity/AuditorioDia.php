@@ -28,13 +28,15 @@ class AuditorioDia
     
         
     /**
-     *  @ORM\ManyToOne(targetEntity="Dia")
+     * @ORM\ManyToOne(targetEntity="Dia", inversedBy="auditoriosDia")
+     * @ORM\JoinColumn(name="dia_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     private $dia;
     
     
     /**
      * @ORM\ManyToOne(targetEntity="Auditorio")
+     * @ORM\JoinColumn(name="auditorio_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
      */
      private $auditorio;
      
@@ -96,7 +98,6 @@ class AuditorioDia
     	return $this->dia->getCiclo();
     }
 	
-	
 	public function __toString() {
 		return "Día ".$this->getDia()->getNumero() . " - ".$this->getAuditorio()->getNombre() . ". Tanda ".$this->getDia()->getTanda();
 	}
@@ -111,9 +112,9 @@ class AuditorioDia
 			$bloques[] = $bloque->toArray($recursive_depth-1);
 		
 		return array( 
-				'id' => "{$this->id}" , 
+				'id' => $this->id , 
  				'bloques' => $bloques,
- 				'dia' => "{$this->getDia()->getId()}",
+ 				'dia' => $this->getDia()->getId(),
  				'auditorio' => $this->getAuditorio()->toArray($recursive_depth-1)
  			) ;
     }

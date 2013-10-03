@@ -212,7 +212,7 @@ class CronogramaController extends BaseController
 				$ad = $this->getEntityForUpdate('CpmJovenesBundle:AuditorioDia', $id);
 	    
 	        $args = $this->getVarsFromJSON();
-	       	if (!(empty($args['auditorio']) && isset($args['auditorio']['id'])))
+	       	if (!empty($args['auditorio']) && !empty($args['auditorio']['id']))
 	       		$ad->setAuditorio( $this->getEntity('CpmJovenesBundle:Auditorio', $args['auditorio']['id']));
 	
 	       	if (!empty($args['dia']))

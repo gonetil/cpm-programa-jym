@@ -88,9 +88,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
    /**
     * 
     * @ORM\ManyToOne(targetEntity="Localidad")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="localidad_id", referencedColumnName="id", nullable = "true")
-    * })
+    * @ORM\JoinColumn(name="localidad_id", referencedColumnName="id", nullable=true, onDelete="RESTRICT")
     */
     private $localidad;
         

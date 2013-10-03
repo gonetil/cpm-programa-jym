@@ -43,7 +43,8 @@ class Bloque
     private $duracion=15;
 
  	/**
-     *  @ORM\ManyToOne(targetEntity="AuditorioDia")
+     * @ORM\ManyToOne(targetEntity="AuditorioDia")
+     * @ORM\JoinColumn(name="auditorioDia_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     private $auditorioDia;
     
@@ -201,7 +202,6 @@ class Bloque
     	$this->presentaciones=$presentaciones;
  	}
     
-	
 	public function addPresentacion(\Cpm\JovenesBundle\Entity\Presentacion $p) {
 		$this->presentaciones->add($p);
 		$p->setBloque($this);
@@ -215,7 +215,6 @@ class Bloque
     public function setEjesTematicos($ejesTematicos)
     {
     	$this->ejesTematicos=$ejesTematicos;
-    	
     }
 
     public function getEjesTematicos()
@@ -253,13 +252,13 @@ class Bloque
        	$areas = array_map(function($area) {return $area->toArray(1); }, $this->getAreasReferencia()->toArray());
 
 		return array(
-							'id' => "{$this->id}" , 
+							'id' => $this->id , 
  							 'nombre' => $this->nombre,
- 							 'posicion' => "{$this->posicion}",
+ 							 'posicion' => $this->posicion,
  							 'tienePresentaciones' => "{$this->tienePresentaciones}",
- 							 'duracion' => "{$this->duracion}",
+ 							 'duracion' => $this->duracion,
  							 'horaInicio' => date_format($this->horaInicio,"H:i"),
- 							 'auditorioDia' => "{$this->auditorioDia->getId()}",
+ 							 'auditorioDia' => $this->auditorioDia->getId(),
  							 'presentaciones' => $presentaciones,
  							 'ejesTematicos' => $ejes,
  							 'areasReferencia' => $areas

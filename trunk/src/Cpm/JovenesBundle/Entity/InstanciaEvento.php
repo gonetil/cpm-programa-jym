@@ -75,6 +75,7 @@ class InstanciaEvento
      * @var Cpm\JovenesBundle\Entity\Evento $evento
      * 
      * @ORM\ManyToOne(targetEntity="Evento", inversedBy="instancias")
+     * @ORM\JoinColumn(name="evento_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     private $evento;
 

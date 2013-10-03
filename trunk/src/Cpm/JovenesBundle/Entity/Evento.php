@@ -86,7 +86,8 @@ class Evento
     
                 
     /**
-     *  @ORM\ManyToOne(targetEntity="Ciclo")
+     * @ORM\ManyToOne(targetEntity="Ciclo")
+     * @ORM\JoinColumn(name="ciclo_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
      */
     private $ciclo;
    

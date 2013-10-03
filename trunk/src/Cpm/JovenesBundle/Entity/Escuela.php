@@ -23,10 +23,8 @@ class Escuela
     private $id;
     
     /**
-    *  @ORM\ManyToOne(targetEntity="TipoInstitucion")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="tipoInstitucion_id", referencedColumnName="id", nullable="true")
-    * })
+    * @ORM\ManyToOne(targetEntity="TipoInstitucion")
+    * @ORM\JoinColumn(name="tipoInstitucion_id", referencedColumnName="id", nullable="true", onDelete="RESTRICT")
     */
     private $tipoInstitucion;
 
@@ -41,13 +39,10 @@ class Escuela
     
     
     /**
-    *  @ORM\ManyToOne(targetEntity="TipoEscuela")
-    *  @ORM\JoinColumns({
-    * 	  @ORM\JoinColumn(name="tipoEscuela_id", referencedColumnName="id", nullable="true")
-    *  })
-
+    * @ORM\ManyToOne(targetEntity="TipoEscuela")
+    * @ORM\JoinColumn(name="tipoEscuela_id", referencedColumnName="id", nullable="true", onDelete="RESTRICT")
     */
-        private $tipoEscuela;
+	private $tipoEscuela;
 
         /**
         * @var string $nombre
@@ -105,9 +100,7 @@ class Escuela
     
     /**
     *  @ORM\ManyToOne(targetEntity="Localidad")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="localidad_id", referencedColumnName="id")
-    * })
+    *  @ORM\JoinColumn(name="localidad_id", referencedColumnName="id", nullable=true, onDelete="RESTRICT")
     */
     private $localidad;
     

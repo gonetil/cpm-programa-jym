@@ -39,9 +39,7 @@ class Ciclo
      * @var Etapa $etapaActual
      *
      * @ORM\ManyToOne(targetEntity="Etapa" )
-     *  @ORM\JoinColumns({
-     *    @ORM\JoinColumn(name="etapaActual_id", referencedColumnName="id", nullable=false)
-     * })
+     * @ORM\JoinColumn(name="etapaActual_id", referencedColumnName="id", nullable=false)
      */
     private $etapaActual;
     
