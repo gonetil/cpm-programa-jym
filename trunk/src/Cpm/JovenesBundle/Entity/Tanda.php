@@ -44,7 +44,7 @@ class Tanda
 
 	/**
      * @ORM\OneToOne(targetEntity="InstanciaEvento")
-     * @ORM\JoinColumn(name="instanciaEvento_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="instanciaEvento_id", referencedColumnName="id", nullable=false)
      */
     private $instanciaEvento;
 
@@ -63,12 +63,22 @@ class Tanda
     
     function __construct($instancia = null){
     	if($instancia != null){
-			$this->setFechaInicio($instancia->getFechaInicio());
-		    $this->setFechaFin($instancia->getFechaFin());	
-		    $this->setInstanciaEvento($instancia);
+			$this->fechaInicio=$instancia->getFechaInicio();
+		    $this->fechaFin=$instancia->getFechaFin();	
+		    $this->instanciaEvento=$instancia;
     	}
     	$this->setPresentaciones(array());
     	$this->setDias(array());
+    }
+    
+    /**
+     * Get ciclo
+     *
+     * @return Cpm\JovenesBundle\Entity\Ciclo
+     */
+    public function getCiclo()
+    {
+        return $this->instanciaEvento->getCiclo();
     }
     
     /**
@@ -156,7 +166,7 @@ class Tanda
  	}
  	
  	public function setPresentaciones($pp) {
- 		if ($pp instanceof \Doctrine\Common\Collections\Collection)
+ 		if (!($pp instanceof \Doctrine\Common\Collections\Collection))
  			$pp = new \Doctrine\Common\Collections\ArrayCollection($pp);
  		$this->presentaciones = $pp;
  	}
@@ -168,7 +178,7 @@ class Tanda
  	
  	public function removePresentacion(\Cpm\JovenesBundle\Entity\Presentacion $p) {
  		$this->presentaciones->removeElement($p);
- 		$p->setTanda(null);
+ 		//No se le puede sacar la tanda $p->setTanda(null);
  	}
 
     public function getDias()
@@ -178,7 +188,7 @@ class Tanda
 
     public function setDias($dias)
     {
-    	if ($dias instanceof \Doctrine\Common\Collections\Collection)
+    	if (!($dias instanceof \Doctrine\Common\Collections\Collection))
  			$dias = new \Doctrine\Common\Collections\ArrayCollection($dias);
  		$this->dias = $dias;
     }
@@ -205,7 +215,7 @@ class Tanda
 		$this->dias->add($nuevoDia);
 		$nuevoDia->setTanda($this);
 		$this->reordenarDias();
-		return $dia;
+
 	}
     
 	protected function reordenarDias(){
@@ -258,5 +268,9 @@ class Tanda
  					'dias' => $dias,
  					'presentaciones' => $presentaciones,
  		);
+    }
+    
+    public function equals($other){
+    	return !empty($other) && ($other instanceof Tanda) && ($this->getId() == $other->getId());
     }
 }

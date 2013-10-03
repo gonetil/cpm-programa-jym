@@ -19,37 +19,22 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PresentacionInterna extends Presentacion
 {
-	  
-    /**
-    * @ORM\ManyToOne(targetEntity="Proyecto")
-    */
-    private $proyecto;
-    
+   
     /**
     * @ORM\ManyToOne(targetEntity="Invitacion")
+    * @ORM\JoinColumns({
+    *   @ORM\JoinColumn(name="invitacion_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+    * })
     */
 	private $invitacion;
 
 	public function getTipo() { return 'interna'; }
 
-	static function createFromInvitacion($invitacion) {
-		$proyecto = $invitacion->getProyecto();
-		$presentacion = new PresentacionInterna();
-		$presentacion->setInvitacion($invitacion);
-		$presentacion->setProyecto($proyecto);
-		return $presentacion;
-		
+	function __construct($invitacion= null) {
+		if (!empty($invitacion))
+			$this->setInvitacion($invitacion);
 	}
     
-    /**
-     * Set proyecto
-     *
-     * @param Cpm\JovenesBundle\Entity\Proyecto $proyecto
-     */
-    public function setProyecto(\Cpm\JovenesBundle\Entity\Proyecto $proyecto)
-    {
-        $this->proyecto = $proyecto;
-    }
 
     /**
      * Get proyecto
@@ -58,7 +43,7 @@ class PresentacionInterna extends Presentacion
      */
     public function getProyecto()
     {
-        return $this->proyecto;
+        return $this->invitacion->getProyecto();
     }
 
     public function getDistrito()
@@ -70,8 +55,6 @@ class PresentacionInterna extends Presentacion
     {
         return $this->getProyecto()->getEscuela()->getLocalidad()->getNombre();
     }
-    
-    
 	
 	public function getProvincia()
     {
@@ -83,7 +66,7 @@ class PresentacionInterna extends Presentacion
     	
     	$ignore_list = array('de','sin','no','del','el','la','los','las');
     	
-    	$escuela = $this->proyecto->getEscuela();
+    	$escuela = $this->getProyecto()->getEscuela();
     	$nombre = "";
     	$tipo_inst =  ( ( $escuela->getTipoInstitucion() != null ) ? $escuela->getTipoInstitucion()->getId() : 0 );
     	switch ($tipo_inst) {
@@ -138,11 +121,14 @@ class PresentacionInterna extends Presentacion
     	$this->invitacion = $inv;
     }
     
-    public function getTitulo() { return $this->proyecto->getTitulo(); }
-    public function getEjeTematico() { return $this->proyecto->getTemaPrincipal(); }
-    public function getAreaReferencia() { return $this->proyecto->getEje(); }
-    public function getTipoPresentacion() { return $this->proyecto->getProduccionFinal(); }
-    public function getPersonasConfirmadas() { return $this->invitacion->countInvitados(); }
+    public function getTitulo() { return $this->getProyecto()->getTitulo(); }
+    public function getEjeTematico() { return $this->getProyecto()->getTemaPrincipal(); }
+    public function getAreaReferencia() { return $this->getProyecto()->getEje(); }
+    public function getTipoPresentacion() { return $this->getProyecto()->getProduccionFinal(); }
+    public function getPersonasConfirmadas() {
+    	 
+    	return $this->invitacion->countInvitados(); 
+    }
     public function getPersonas_confirmadas() { return $this->getPersonasConfirmadas(); }	
 
 	public function getValoracion() {

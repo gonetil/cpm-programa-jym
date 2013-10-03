@@ -9,17 +9,13 @@
             Volver al listado
         </a>
     </li>
+	<li>
+    	<a href="{{ path('index_cronograma') }}#/tanda/{{entity.id}}">Cronograma</a>
+    </li>
     <li>
         <a href="{{ path('tanda_edit', { 'id': entity.id }) }}">
             Editar
         </a>
-    </li>
-
-    <li>
-        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post" onsubmit="return confirm('Esta seguro que desea eliminar la tanda completa?');">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Borrar</button>
-        </form>
     </li>
     <li>
         <a href="#" onclick="$('.hiddenForm').hide(); $('#clonarForm').toggle(); return false;">
@@ -36,6 +32,14 @@
         <a href="#" onclick="return confirmAndRelocate('Esta operacion quitará todas las presentaciones de los bloques. ¿desea continuar?','{{ path('tanda_reset',{'id': entity.id}) }}')">
             Resetear
         </a>
+    </li>
+    
+    <li>
+        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post"
+        onsubmit="return confirm('Esta seguro que desea eliminar la Tanda? Guarda que se pierde todo');">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar</button>
+        </form>
     </li>
     
     </ul>

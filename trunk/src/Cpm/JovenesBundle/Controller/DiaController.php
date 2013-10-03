@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\DiaType;
  *
  * @Route("/dia")
  */
-class DiaController extends Controller
+class DiaController extends BaseController
 {
     /**
      * Lists all Dia entities.
@@ -24,11 +24,8 @@ class DiaController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Dia')->findAll();
-
-        return array('entities' => $entities);
+        $entities = $this->getRepository('CpmJovenesBundle:Dia')->findAllQuery();
+        return $this->paginate($entities);
     }
 
     /**
@@ -39,14 +36,7 @@ class DiaController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Dia')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Dia entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Dia', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -108,14 +98,7 @@ class DiaController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Dia')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Dia entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Dia',$id);
         $editForm = $this->createForm(new DiaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -137,12 +120,7 @@ class DiaController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:Dia')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Dia entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Dia',$id);
         $editForm   = $this->createForm(new DiaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -179,14 +157,11 @@ class DiaController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Dia')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Dia entity.');
-            }
-
-			$entity->setTanda(null);
+	        $entity = $this->getEntityForDelete('CpmJovenesBundle:Dia',$id);
+			$tanda =$entity->getTanda();
+			$tanda->removeDia($entity);
             $em->remove($entity);
+            $em->persist($tanda);
             $em->flush();
         }
 

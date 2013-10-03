@@ -83,7 +83,7 @@ class PlantillaController extends BaseController
         try {
         	$valid = $mailer->isValidTemplate($entity->getCuerpo());
 		}
-		catch( Exception $e ) {
+		catch( \Exception $e ) {
 			$this->setErrorMessage("Error al procesar la plantilla. ".$e->getMessage());
 		}
         

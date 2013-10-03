@@ -9,21 +9,19 @@ class PresentacionInternaType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
-        $builder
-         //   ->add('titulo')
-         //    ->add('ejeTematico')
-         //    ->add('areaReferencia')
-         //   ->add('tipoPresentacion')
-         //   ->add('proyecto')
-         //   ->add('distrito')
-         //   ->add('localidad')
-            ->add('bloque',null,array(	'required'=>false,
+    	$presentacion = $options['data'];
+    	$isNew = $presentacion->getId() <1; 
+ 
+        if ($isNew){
+        	$builder->add('tanda');
+			$builder->add('invitacion');
+        }
+        else{
+        	$builder->add('bloque',null,array(	'required'=>false,
             							'query_builder' => function ($bl) {
 											return $bl->createQueryBuilder('bc')->where('bc.tienePresentaciones = true');
-			}))
-            ->add('tanda')
-            
-        ;
+			}));
+        }   
     }
 
     public function getName()

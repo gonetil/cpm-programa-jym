@@ -65,14 +65,14 @@ class AuditorioDia
 		$this->bloques = $b;
 	}
 	
-	public function addBloque($b) {
+	public function addBloque(\Cpm\JovenesBundle\Entity\Bloque $b) {
 		$this->bloques[] = $b;
 		$b->setAuditorioDia($this);
 	}
 	
-    public function removeBloque($b) {
+    public function removeBloque(\Cpm\JovenesBundle\Entity\Bloque $b) {
     	$this->bloques->removeElement($b);
-    	$b->setAuditorioDia(null);
+    	//$b->setAuditorioDia(null);
     }
     
     
@@ -81,16 +81,21 @@ class AuditorioDia
 	public function getDia() {
 		return $this->dia;
 	}
-	public function setDia($d) {
+	public function setDia(\Cpm\JovenesBundle\Entity\Dia $d) {
 		$this->dia = $d;
 	}
 	
 	public function getAuditorio() {
 		return $this->auditorio;
 	}
-	public function setAuditorio($aud) {
+	public function setAuditorio(\Cpm\JovenesBundle\Entity\Auditorio $aud) {
 		$this->auditorio = $aud;
 	}
+	
+	public function getCiclo(){
+    	return $this->dia->getCiclo();
+    }
+	
 	
 	public function __toString() {
 		return "Día ".$this->getDia()->getNumero() . " - ".$this->getAuditorio()->getNombre() . ". Tanda ".$this->getDia()->getTanda();

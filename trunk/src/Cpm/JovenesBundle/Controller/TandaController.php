@@ -30,14 +30,9 @@ class TandaController extends BaseController
         $em = $this->getDoctrine()->getEntityManager();
 		
 		$ciclo = $this->getJYM()->getCicloActivo();
-		$qb = $em->getRepository('CpmJovenesBundle:Evento')->createQueryBuilder('e')->select('e')->where('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
-
-		$eventos = $qb->getQuery()->getResult();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Tanda')->findAll();
-        usort($entities, function($t1,$t2) {  
-        							return ( ( $t1->getNumero() < $t2->getNumero() )
-        									  ? -1 : 1 );  });
+		$eventos = $em->getRepository('CpmJovenesBundle:Evento')->findAllQuery($ciclo)->getResult();
+        $entities = $em->getRepository('CpmJovenesBundle:Tanda')->findAllQuery()->getResult();
+       
 
         return array('entities' => $entities, 'eventos'=>$eventos);
     }
@@ -50,16 +45,8 @@ class TandaController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Tanda')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tanda entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Tanda', $id);
         $deleteForm = $this->createDeleteForm($id);
-
 				
         return array(
             'entity'      => $entity,
@@ -120,14 +107,7 @@ class TandaController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Tanda')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tanda entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Tanda',$id);
         $editForm = $this->createForm(new TandaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -148,12 +128,7 @@ class TandaController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Tanda')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tanda entity.');
-        }
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Tanda',$id);
 
         $editForm   = $this->createForm(new TandaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -191,11 +166,7 @@ class TandaController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:Tanda')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Tanda entity.');
-            }
+	        $entity = $this->getEntityForDelete('CpmJovenesBundle:Tanda',$id);
 
             $em->remove($entity);
             $em->flush();

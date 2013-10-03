@@ -196,12 +196,21 @@ class Bloque
  	}
  	
  	public function setPresentaciones($presentaciones) {
- 		$this->presentaciones->clear();
-    	foreach($presentaciones as $p){
-    		$this->presentaciones->add($p);
-    	}
+    	if (!($presentaciones instanceof \Doctrine\Common\Collections\Collection))
+    		$presentaciones = new \Doctrine\Common\Collections\ArrayCollection($presentaciones);
+    	$this->presentaciones=$presentaciones;
  	}
     
+	
+	public function addPresentacion(\Cpm\JovenesBundle\Entity\Presentacion $p) {
+		$this->presentaciones->add($p);
+		$p->setBloque($this);
+	}
+	
+    public function removePresentacion(\Cpm\JovenesBundle\Entity\Presentacion $p) {
+    	$this->presentaciones->removeElement($p);
+    	$p->setBloque(null);
+    }
 	
     public function setEjesTematicos($ejesTematicos)
     {
@@ -223,6 +232,11 @@ class Bloque
     {
         return $this->areasReferencia;
     }
+    
+    public function getCiclo(){
+    	return $this->auditorioDia->getCiclo();
+    }
+    
     
     
     public function __toString() {

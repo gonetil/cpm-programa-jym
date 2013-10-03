@@ -20,7 +20,7 @@ class ProyectoBatchType extends AbstractType
 
     public function getName()
     {
-     	throw new Exception("se esta pidiendo el name de un ProyectoBatchType, algo no esta bien no?");
+     	throw new \Exception("se esta pidiendo el name de un ProyectoBatchType, algo no esta bien no?");
     }
     
     public function getDefaultOptions(array $options)

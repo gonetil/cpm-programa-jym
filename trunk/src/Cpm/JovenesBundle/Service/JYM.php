@@ -192,7 +192,8 @@ class JYM  {
 			$targetObject instanceof \Cpm\JovenesBundle\Entity\Produccion ||
 			$targetObject instanceof \Cpm\JovenesBundle\Entity\Tema ||
 			$targetObject instanceof \Cpm\JovenesBundle\Entity\TipoEscuela ||
-			$targetObject instanceof \Cpm\JovenesBundle\Entity\TipoInstitucion || 
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\TipoInstitucion ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Auditorio || 
 			$targetObject instanceof \Cpm\JovenesBundle\Entity\Plantilla 
 			){
 			if ($user->isAdmin())
@@ -212,8 +213,6 @@ class JYM  {
 			$targetObject instanceof \Cpm\JovenesBundle\Entity\Evento ||
 			$targetObject instanceof \Cpm\JovenesBundle\Entity\InstanciaEvento
 		){
-			if($targetObject instanceof \Cpm\JovenesBundle\Entity\InstanciaEvento)
-				$targetObject = $targetObject->getEvento();
 			if (
 				(!$bloquearCiclosViejos || $targetObject->getCiclo()->getActivo()) //validacion de ciclo
 				&&
@@ -257,9 +256,9 @@ class JYM  {
 		$targetObject instanceof \Cpm\JovenesBundle\Entity\Tanda ||
 		$targetObject instanceof \Cpm\JovenesBundle\Entity\Presentacion
 		){
-			if ($user->isSuperAdmin() || $user->isAdmin())
+			if ((!$bloquearCiclosViejos || $targetObject->getCiclo()->getActivo())
+				&& $user->isSuperAdmin() || $user->isAdmin())
 				return true;
-				//FIXME permitir modificaciones solo del ciclo actual
 		}
 			
 		if ($throwException){ 

@@ -507,16 +507,6 @@ class Proyecto
     }
 
     /**
-     * Set ciclo
-     *
-     * @param Cpm\JovenesBundle\Entity\Ciclo $ciclo
-     */
-    public function setEmisor(\Cpm\JovenesBundle\Entity\Ciclo $ciclo)
-    {
-        $this->ciclo = $ciclo;
-    }
-
-    /**
      * Get ciclo
      *
      * @return Cpm\JovenesBundle\Entity\Ciclo

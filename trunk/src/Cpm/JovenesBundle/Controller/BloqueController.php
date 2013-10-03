@@ -24,11 +24,8 @@ class BloqueController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:Bloque')->findAll();
-
-        return array('entities' => $entities);
+        $entities = $this->getRepository('CpmJovenesBundle:Bloque')->findAllQuery();
+        return $this->paginate($entities);
     }
 
     /**
@@ -39,14 +36,7 @@ class BloqueController extends BaseController
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Bloque')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Bloque entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:Bloque', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -108,13 +98,7 @@ class BloqueController extends BaseController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Bloque')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Bloque entity.');
-        }
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Bloque', $id);
 
         $editForm = $this->createForm(new BloqueType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -135,32 +119,25 @@ class BloqueController extends BaseController
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:Bloque')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Bloque entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:Bloque', $id);
         $editForm   = $this->createForm(new BloqueType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
-
-        $editForm->bindRequest($request);
+	    $editForm->bindRequest($request);
 
         if ($editForm->isValid()) {
-        	
+	        $em = $this->getDoctrine()->getEntityManager();
         	$em->getConnection()->beginTransaction();
 	    	try { 
-	        	if (!$entity->getTienePresentaciones()) //al no ser un bloque de presentaciones, me aseguro que no tenga ninguna presentacion asignada 
+	        	if (!$entity->getTienePresentaciones()){ 
+	        		//al no ser un bloque de presentaciones, me aseguro que no tenga ninguna presentacion asignada 
 					foreach ( $entity->getPresentaciones() as $index => $presentacion ) {
 						$presentacion->setBloque(null);
 						$em->persist($presentacion);
-		 				$entity->getPresentaciones()->remove($index);
+		 				$entity->removePresentacion($presentacion);
 					}	
-		        	
+	        	}
 	            $em->persist($entity);
 	            $em->flush();
 				$em->getConnection()->commit();
@@ -195,18 +172,22 @@ class BloqueController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $this->getEntityForRemoval('CpmJovenesBundle:Bloque', $id);
+            $entity = $this->getEntityForDelete('CpmJovenesBundle:Bloque', $id);
             try{	
+            	$auditorioDia =$entity->getAuditorioDia();
+				$auditorioDia->removeBloque($entity);
+	            $em->remove($entity);
+	            $em->persist($auditorioDia);
+            
 	            $em->remove($entity);
 	            $em->flush();
-	            return $this->answerOk("Bloque eliminado satisfactoriamente");		
+	            $this->setSuccessMessage("Bloque eliminado satisfactoriamente");
 	    	} catch (\Exception $e) {
-	    		$this->setErrorMessage('Error al inicializar las tandas de Chapadmalal. Mensaje: '.$e);
-	            throw $e;
+	    		$this->setErrorMessage('Se produjo un error al tratar de eliminar el bloque . Mensaje: '.$e);
 	    	}
 
         }
-	return $this->redirect($this->generateUrl('bloque'));
+		return $this->redirect($this->generateUrl('bloque'));
         
     }
 

@@ -38,7 +38,8 @@
         </a>
     </li>
     <li>
-        <form action="{{ path('auditoriodia_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('auditoriodia_delete', { 'id': entity.id }) }}" method="post"
+            onsubmit="return confirm('¿Está seguro que desea eliminar el AuditorioDia?');">
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>

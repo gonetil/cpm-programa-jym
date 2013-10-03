@@ -14,7 +14,7 @@ use Cpm\JovenesBundle\Form\AuditorioDiaType;
  *
  * @Route("/auditoriodia")
  */
-class AuditorioDiaController extends Controller
+class AuditorioDiaController extends BaseController
 {
     /**
      * Lists all AuditorioDia entities.
@@ -24,11 +24,8 @@ class AuditorioDiaController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entities = $em->getRepository('CpmJovenesBundle:AuditorioDia')->findAll();
-
-        return array('entities' => $entities);
+        $entities = $this->getRepository('CpmJovenesBundle:AuditorioDia')->findAllQuery();
+        return $this->paginate($entities);
     }
 
     /**
@@ -39,14 +36,7 @@ class AuditorioDiaController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:AuditorioDia')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AuditorioDia entity.');
-        }
-
+        $entity = $this->getEntity('CpmJovenesBundle:AuditorioDia', $id);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -108,14 +98,7 @@ class AuditorioDiaController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:AuditorioDia')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AuditorioDia entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:AuditorioDia',$id);
         $editForm = $this->createForm(new AuditorioDiaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -137,12 +120,7 @@ class AuditorioDiaController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CpmJovenesBundle:AuditorioDia')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AuditorioDia entity.');
-        }
-
+        $entity = $this->getEntityForUpdate('CpmJovenesBundle:AuditorioDia',$id);
         $editForm   = $this->createForm(new AuditorioDiaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -179,12 +157,14 @@ class AuditorioDiaController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CpmJovenesBundle:AuditorioDia')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find AuditorioDia entity.');
-            }
-
+    	    $entity = $this->getEntityForDelete('CpmJovenesBundle:AuditorioDia',$id);
+	
+			$dia =$entity->getDia();
+			$dia->removeAuditorioDia($entity);
+            $em->remove($entity);
+            $em->persist($dia);
+            
+            
             $em->remove($entity);
             $em->flush();
         }

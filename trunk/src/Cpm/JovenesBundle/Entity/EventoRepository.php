@@ -36,4 +36,12 @@ class EventoRepository extends EntityRepository
 		
 		return $qb;
 	} 
+	
+	public function findAllQuery($ciclo = null) {
+		$qb = $this->createQueryBuilder('e');
+		if ($ciclo)
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		
+		return  $qb->getQuery();
+	}
 }
