@@ -260,8 +260,8 @@ class Tanda
   		
     	
     	return array(
-					'id' => "{$this->id}" ,
-					'numero' => "{$this->numero}" ,
+					'id' => $this->id,
+					'numero' => $this->numero,
 					'fechaInicio' => date_format($this->fechaInicio,"d-m-y") ,
 					'fechaFin' => date_format($this->fechaFin,"d-m-y"),
 					'instanciaEvento' => ($this->instanciaEvento?$this->instanciaEvento->getId():''),					 

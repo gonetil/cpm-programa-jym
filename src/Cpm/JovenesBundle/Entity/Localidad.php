@@ -30,6 +30,7 @@ class Localidad
 
     /**
     *  @ORM\ManyToOne(targetEntity="Distrito")
+     * @ORM\JoinColumn(name="distrito_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
     */
     private $distrito;
     

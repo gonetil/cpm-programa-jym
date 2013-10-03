@@ -66,8 +66,8 @@ class Proyecto
     private $escuela;
     
     /**
-    *  @ORM\ManyToOne(targetEntity="Usuario", inversedBy="proyectosCoordinados")
-    *  
+    * @ORM\ManyToOne(targetEntity="Usuario", inversedBy="proyectosCoordinados")
+    * @ORM\JoinColumn(name="coordinador_id", referencedColumnName="id", nullable="true", onDelete="RESTRICT")
     */    
     private $coordinador;
     
@@ -78,28 +78,23 @@ class Proyecto
     private $colaboradores;
     
     
-    /**
-    *  @ORM\ManyToOne(targetEntity="Tema")
-     *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="tema_id", referencedColumnName="id")
-    * })
+   	/**
+    * @ORM\ManyToOne(targetEntity="Tema")
+    * @ORM\JoinColumn(name="tema_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
     */
     private $temaPrincipal;
     
     /**
-    *  @ORM\ManyToOne(targetEntity="Produccion")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="produccion_id", referencedColumnName="id")
-    * })
+    * @ORM\ManyToOne(targetEntity="Produccion")
+    * @ORM\JoinColumn(name="produccion_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
+    * 
     */
     private $produccionFinal;
 
 
     /**
     *  @ORM\ManyToOne(targetEntity="Eje")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="eje_id", referencedColumnName="id")
-    * })
+    *  @ORM\JoinColumn(name="eje_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
     */
     private $eje;
         
@@ -128,7 +123,8 @@ class Proyecto
 
     
     /**
-     *  @ORM\ManyToOne(targetEntity="Ciclo")
+     * @ORM\ManyToOne(targetEntity="Ciclo")
+     * @ORM\JoinColumn(name="ciclo_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
      */
     private $ciclo;
     

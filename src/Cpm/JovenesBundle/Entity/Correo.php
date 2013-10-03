@@ -52,13 +52,13 @@ class Correo
 
     /**
      *  @ORM\ManyToOne(targetEntity="Usuario" )
-     *  @ORM\JoinColumn(name="destinatario_id", referencedColumnName="id", onDelete="SET NULL")
+     *  @ORM\JoinColumn(name="destinatario_id", referencedColumnName="id", nullable="true", onDelete="SET NULL")
      */
     private $destinatario;
     
     /**
      *  @ORM\ManyToOne(targetEntity="Usuario")
-     *  @ORM\JoinColumn(name="emisor_id", referencedColumnName="id", onDelete="SET NULL")
+     *  @ORM\JoinColumn(name="emisor_id", referencedColumnName="id", nullable="true", onDelete="SET NULL")
      */
     private $emisor;
 

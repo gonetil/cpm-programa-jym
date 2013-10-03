@@ -45,13 +45,13 @@ class EstadoProyecto
 
 		/**
 	     * @ORM\ManyToOne(targetEntity="Usuario")
-     	 *  @ORM\JoinColumn(name="usuario_id", referencedColumnName="id", onDelete="SET NULL")
+     	 *  @ORM\JoinColumn(name="usuario_id", referencedColumnName="id", nullable="true", onDelete="SET NULL")
 	     */
 		private $usuario; 
 
 		/**
 	     * @ORM\ManyToOne(targetEntity="Proyecto")
-     	 *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", onDelete="CASCADE")
+     	 *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
 	     */
 		private $proyecto;
 		
@@ -63,7 +63,7 @@ class EstadoProyecto
 		/**
 		 * Algunos cambios de estado generan correos. Se asocia el mensaje enviado con el nuevo estado
 		 * @ORM\ManyToOne(targetEntity="Correo")
-     	 *  @ORM\JoinColumn(name="correo_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     	 * @ORM\JoinColumn(name="correo_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
 		 */
 		private $correoEnviado;
     /**

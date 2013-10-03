@@ -36,6 +36,7 @@ class Dia
     
     /**
      *  @ORM\ManyToOne(targetEntity="Tanda", inversedBy="dias")
+     * @ORM\JoinColumn(name="tanda_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     private $tanda;
     
@@ -128,9 +129,9 @@ class Dia
        		$auditoriosDia[] = $ad->toArray($recursive_depth-1);
 		
     	return array(
-					'id' => "{$this->id}" , 
- 					'tanda' => "{$this->getTanda()->getId()}",
- 					'numero' => "{$this->numero}" ,
+					'id' => $this->id , 
+ 					'tanda' => $this->getTanda()->getId(),
+ 					'numero' => $this->numero ,
  					'auditoriosDia' => $auditoriosDia
  					);
     }

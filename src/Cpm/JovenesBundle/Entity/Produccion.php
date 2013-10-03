@@ -125,7 +125,12 @@ class Produccion
     	if ($recursive_depth == 0)
     		return $this->getId();
   	
-  		return array('id'=>"{$this->id}", 'nombre'=>$this->nombre,'slug'=>"{$this->tipoPresentacion}", 'duracion'=>"{$this->getDuracionEstimada()}");	
+  		return array(
+			'id'=>$this->id, 
+			'nombre'=>$this->nombre,
+			'slug'=>$this->tipoPresentacion,
+			'duracion'=>$this->getDuracionEstimada()
+		);	
     }
     
 }

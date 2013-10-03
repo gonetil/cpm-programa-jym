@@ -125,9 +125,9 @@ class Eje
     		return $this->getId();
     	
     	return array(
-			 		'id' => "{$this->id}" ,
+			 		'id' => $this->id,
 			    	'nombre' => $this->nombre,
-			//    	'descripcion' => $this->descripcion,
+			    	'descripcion' => $this->descripcion,
 			  );
     }
 }

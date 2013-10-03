@@ -24,27 +24,22 @@ class PresentacionExterna extends Presentacion
      * @ORM\Column(name="titulo", type="string", length=255)
      */
     public $titulo;
- /**
+ 
+ 	/**
     *  @ORM\ManyToOne(targetEntity="Tema")
-     *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="tema_id", referencedColumnName="id")
-    * })
+    *  @ORM\JoinColumn(name="tema_id", referencedColumnName="id", nullable="true", onDelete="RESTRICT")
     */
     public  $ejeTematico;
     
     /**
     *  @ORM\ManyToOne(targetEntity="Eje")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="eje_id", referencedColumnName="id")
-    * })
+    *  @ORM\JoinColumn(name="eje_id", referencedColumnName="id", nullable=true, onDelete="RESTRICT")
     */
     public  $areaReferencia;
 
     /**
     *  @ORM\ManyToOne(targetEntity="Produccion")
-    *  @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="produccion_id", referencedColumnName="id")
-    * })
+    *  @ORM\JoinColumn(name="produccion_id", referencedColumnName="id", nullable=true, onDelete="RESTRICT")
     */
     public  $tipoPresentacion;
    

@@ -22,9 +22,7 @@ class PresentacionInterna extends Presentacion
    
     /**
     * @ORM\ManyToOne(targetEntity="Invitacion")
-    * @ORM\JoinColumns({
-    *   @ORM\JoinColumn(name="invitacion_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-    * })
+    * @ORM\JoinColumn(name="invitacion_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
     */
 	private $invitacion;
 
