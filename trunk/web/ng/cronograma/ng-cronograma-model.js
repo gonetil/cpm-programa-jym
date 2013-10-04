@@ -136,9 +136,9 @@ app.factory('Tanda', function($resource){
 		return this.bloques;
 	};
 	
-	Tanda.prototype.getBloquesArray = function() {
+	Tanda.prototype.getBloquesPresentacionesArray = function() {
 		result = new Array();
-		for(index in this.bloques) {
+		for(index in this.bloquesPresentaciones) {
 			result.push(this.bloques[index]);
 		}
 		return result;
@@ -153,6 +153,7 @@ app.factory('Tanda', function($resource){
 		
 		this.auditorios = {};
 		this.bloques = {};
+		this.bloquesPresentaciones = {};
 		this.auditoriosDia = {};
 		this.dias2 = {};  //dias indexados
 		this.presentaciones2 = {}; //presentaciones indexadas
@@ -199,14 +200,17 @@ app.factory('Tanda', function($resource){
 					
 					bloque.auditorioDia = auditorioDia;
 					auditorioDia.bloques[bloque.id] = bloque;
-					if (!this.bloques[bloque.id])
+					if (!this.bloques[bloque.id]) 
 						this.bloques[bloque.id] = bloque;
 					
-					for(var m=0;m<bloque.presentaciones.length;m++) {
-						var p = new Presentacion(bloque.presentaciones[m]);
-						p.bloque = bloque;
-						bloque.presentaciones[m] = p;
-						this.presentaciones2[p.id] = p;
+					if (bloque.tienePresentaciones == 1) { //indexo las presentaciones del bloque
+						this.bloquesPresentaciones[bloque.id] = bloque;
+						for(var m=0;m<bloque.presentaciones.length;m++) {
+							var p = new Presentacion(bloque.presentaciones[m]);
+							p.bloque = bloque;
+							bloque.presentaciones[m] = p;
+							this.presentaciones2[p.id] = p;
+						}
 					}
 				} //endfor k
 			} //endfor j
@@ -214,7 +218,7 @@ app.factory('Tanda', function($resource){
 			this.dias[i] = dia;
 		} //endfor i
 		
-		console.log(this);
+		console.log("Tanda indexada: ",this);
 	};
 	
 	/**
@@ -243,8 +247,11 @@ app.factory('Tanda', function($resource){
 				}
 		}
 
-		if (arguments.length == 2) //no hay bloque_destino
+		if (arguments.length == 2) { // hay bloque_destino
 			bloque_destino.agregarPresentacion(presentacion);
+			presentacion.setBloque(bloque_destino);
+			
+		}
 		else
 			this.presentaciones_libres.push(presentacion);
 
@@ -263,17 +270,16 @@ app.factory('Tanda', function($resource){
 	Tanda.prototype.buscarBloquesCandidatos = function(presentacion) 
 	{
 		
-		candidatos = new Array();
-		bloques = this.getBloques();
-		for(index in bloques ){
+		var candidatos = new Array();
+		for(index in this.bloquesPresentaciones ){
 			
-			bloque = bloques[index];
+			bloque = this.bloquesPresentaciones[index];
 			
 			if (cumpleCondicionesPresentacion(this,bloque,presentacion))
 				candidatos.push(bloque);
 
 		}
-	
+		console.log("los bloques candidatos para la presentacion ",presentacion," son ",candidatos);
 		return candidatos;
 	};
 	
@@ -289,44 +295,36 @@ app.factory('Tanda', function($resource){
 		if (arguments.length == 0)
 			forzar_distribucion = false;
 		
-		var bloques = this.getBloquesArray();
+		var bloques = this.getBloquesPresentacionesArray();
+		
+		
+		var libres = shuffleArray(this.presentaciones_libres).slice();  //paso 1: barajamos las cartas
+		
+		var cantPresentaciones = libres.length;
+		var i = -1;
+		while (i < cantPresentaciones-1) { 
+			i++;
+			var presentacion = this.presentaciones2[libres[i].id]; //trabajo con la presentacion ya indexada			
+			var mejor_bloque = null;
 
-		var libres = shuffleArray(this.presentaciones_libres);
-		for(i in libres) {
-			
-			presentacion = libres[i];
 			var bloques_candidatos = this.buscarBloquesCandidatos(presentacion);
 			
-			mejor_bloque = (bloques_candidatos.length > 0) ? buscarMejorBloque(bloques_candidatos, presentacion) : null;
-			console.log("encontre un mejor bloque ", mejor_bloque, " para ", presentacion, " con ",bloques_candidatos);
-			if ((mejor_bloque == null) && (forzar_distribucion)) { //no encontre un buen bloque pero tengo que ubicar la presentacion en alguno si o si 
-			//	console.log("No hubo mejor bloque, pero estamos forzando la distribucion");
-				if (bloques_candidatos.length == 0) { // no tengo posibles bloques candidatos, manoteo cualquiera que tenga presentaciones
-					
-					bloques_candidatos = bloques.slice(); //copio todos los bloques 
-					
-					for(index in bloques_candidatos) { 
-						bloque = bloques_candidatos[index];
-					
-						if (!bloque.tienePresentaciones)
-							bloques_candidatos.splice(index,1);
-					};
-				}
-			
-				if (bloques_candidatos.length > 0)
-					mejor_bloque = bloques_candidatos[Math.floor(Math.random() * bloques_candidatos.length)]; //agarro un bloque candidato cualquiera
-			} else {
-				console.log("Hubo un buen match!");
-			}
-			if (mejor_bloque != null) { //TODO agregar presentacion al mejor_bloque y sacarlo de la lista de presentaciones libres de la tanda
-				//console.log("Muevo la presentacion... "); console.log(presentacion);console.log(" ... al bloque ..."); console.log(mejor_bloque);
-				this.moverPresentacion(presentacion,mejor_bloque);
-			}
+			if (bloques_candidatos.length > 0) {
+				mejor_bloque =  buscarMejorBloque(bloques_candidatos, presentacion);
 				
-		} //for i presentaciones
-		
-		console.log("La tanda quedo asi");
-		console.log(this);
+				if (!mejor_bloque) console.log("De la lista de candidatos ",bloques_candidatos," no encontre un mejor_bloque para ",presentacion);
+			}
+			
+			if ((!mejor_bloque) && (forzar_distribucion)) //no encontre un buen bloque pero tengo que ubicar la presentacion en alguno si o si 
+				mejor_bloque = dameUnMejorBloqueIgual(bloques_candidatos,presentacion,bloques);
+			
+			if (mejor_bloque != null) 
+				this.moverPresentacion(presentacion,mejor_bloque);
+			else
+				console.log("NUNCA encontre un bloque para ",presentacion);
+				
+		} //while i presentaciones
+		console.log("La tanda quedo asi",this);
 	};
 	return Tanda;
 });
@@ -341,5 +339,8 @@ app.factory('Presentacion', function($resource){
 		mover: {method:'POST', params:{origen:'', destino:''}, isArray:false}
 	});
 	
+	Presentacion.prototype.setBloque = function(bloque) {
+		this.bloque = bloque;
+	};
 	return Presentacion;
 });

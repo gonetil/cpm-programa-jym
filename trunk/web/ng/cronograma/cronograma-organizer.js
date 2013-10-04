@@ -47,22 +47,22 @@ function buscarBloqueConMenosMuyBuenas(bloques) {
  * */
 function buscarBloqueMasLibre(bloques) {
 	var bloque_max = null;
-	var duracion_max = -10000; //muy negativo, por si algun bloque se pasa del tiempo estimado, retornaremos el "menos pasado"
+	var max_libre = -10000; //muy negativo, por si algun bloque se pasa del tiempo estimado, retornaremos el "menos pasado"
 
 	for(index in bloques) { 
 		var bloque = bloques[index];
 		var tiempo_libre =  parseInt(bloque.duracion) - bloque.duracionEstimada(); 
 
-		if (tiempo_libre >= duracion_max) {
-			duracion_max = tiempo_libre;
+		if (tiempo_libre >= max_libre) {
+			max_libre = tiempo_libre;
 			bloque_max = bloque;
 		}
 	}
-	return { "bloque": bloque_max, "duracion_estimada" : duracion_max};
+	return { "bloque": bloque_max, "tiempo_libre" : max_libre};
 }
 /**
  * 
- * @param bloques array de bloques
+ * @param bloques array de bloques candidatos (ya sabemos que cumple con los requisitos)
  * @param presentacion una presentacion
  * Busca el mejor bloque para la presentacion, asegurandose que 1) entre en en tiempo del bloque
  * y priorizando las presentaciones muy buenas
@@ -81,17 +81,46 @@ function buscarMejorBloque(bloques,presentacion) {
 	} 
 	else 
 	{
-			bloque_max = buscarBloqueMasLibre(bloques); //JSON {bloque,duracion_estimada}
-		    if (bloque_max.bloque == null) 
+			max = buscarBloqueMasLibre(bloques); //JSON {bloque,duracion_estimada}
+		    if (max.bloque == null) {
+		    	console.log('no encontre un bloque mas libre');
 		    	return null;
+		    } else
+		    	console.log("este es el bloque mas libre: ",max);
 		    
-			if ( bloque_max.duracion_estimada + parseInt(presentacion.tipoPresentacion.duracion) <= bloque_max.bloque.duracion ) { //si la presentacion entra en el bloque, joya
-				return bloque_max.bloque;
+		    //max.bloque.duracion 
+			if ( max.tiempo_libre - parseInt(presentacion.tipoPresentacion.duracion) >= 0   ) { //si la presentacion entra en el bloque, joya
+				return max.bloque;
 			}
-			else
+			else { 
+				console.log("Lastima que no entra: ",(max.bloque.duracion - max.tiempo_libre),parseInt(presentacion.tipoPresentacion.duracion) );
 				return null; //no encontre un bloque "seguro"
+			}
 	
 	}
+}
+
+/*
+ * cuando se fuerza la distribucion, se busca si o si un bloque aunque no encaje del todo bien
+ * Retorna el bloque que tenga menos presentaciones
+ * */
+function dameUnMejorBloqueIgual(bloques_candidatos,presentacion,todos_los_bloques) {
+	
+	if (bloques_candidatos.length == 0)  // no tengo posibles bloques candidatos, manoteo cualquiera que tenga presentaciones
+		bloques_candidatos = todos_los_bloques; //copio todos los bloques 
+	
+	min_bloque = null;
+	min_count = 1000;
+	for(index in bloques_candidatos) {
+		bloque = bloques_candidatos[i];
+		if (count(bloque.presentaciones) <= min_count ) {
+			min_count = count(bloque.presentaciones);
+			min_bloque = bloque;
+		}
+	}
+	return bloque;
+//	mejor_bloque = bloques_candidatos[Math.floor(Math.random() * bloques_candidatos.length)]; //agarro un bloque candidato cualquiera
+//	return mejor_bloque;
 }
 
 
