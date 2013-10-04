@@ -23,11 +23,11 @@
 	
 	<div ng-show="bloque.tienePresentaciones">
 		<label>Ejes Temáticos {{bloque.ejesTematicos.length}}Ss</label>
-		<select ng-model="bloque.ejesTematicos" key="id" ng-options="i.nombre for i in ejesTematicos"
+		<select ng-model="bloque.ejesTematicos" ng-options="i.nombre for i in ejesTematicos track by i.id "
 		multiple="multiple"></select>
 		
 		<label>Areas de Referencia {{bloque.areasReferencia.length}}Ss</label>
-		<select ng-model="bloque.areasReferencia" key="id"  ng-options="i.nombre for i in areasReferencia"
+		<select ng-model="bloque.areasReferencia"  ng-options="i.nombre for i in areasReferencia track by i.id "
 		multiple="multiple"></select>
 	</div>
 	

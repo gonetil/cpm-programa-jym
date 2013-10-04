@@ -31,7 +31,7 @@ class Auditorio
     /**
      * @var boolean $anulado
      *
-     * @ORM\Column(name="anulado", type="boolean", nullable="true")
+     * @ORM\Column(name="anulado", type="boolean", nullable=true)
      */
     private $anulado;
     

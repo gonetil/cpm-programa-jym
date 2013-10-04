@@ -39,7 +39,7 @@ class Etapa
     /**
      * @var integer $numero
      * 
-     * @ORM\Column (name="numero", type="integer", nullable="false")
+     * @ORM\Column (name="numero", type="integer", nullable=false)
     */
     private $numero;
 
@@ -53,14 +53,14 @@ class Etapa
     /**
      * @var array $accionesUsuario
      *
-     * @ORM\Column(name="acciones_de_usuario", type="array", nullable="false")
+     * @ORM\Column(name="acciones_de_usuario", type="array", nullable=false)
      */
     private $accionesDeUsuario = array();
 
     /**
      * @var array $accionesProyecto
      *
-     * @ORM\Column(name="acciones_de_proyecto", type="array", nullable="false")
+     * @ORM\Column(name="acciones_de_proyecto", type="array", nullable=false)
      */
     private $accionesDeProyecto = array();
         
@@ -68,7 +68,7 @@ class Etapa
     /**
      * @var boolean $deprecated
      *
-     * @ORM\Column(name="deprecated", type="boolean", nullable="false")
+     * @ORM\Column(name="deprecated", type="boolean", nullable=false)
      */
     private $deprecated = false;
 

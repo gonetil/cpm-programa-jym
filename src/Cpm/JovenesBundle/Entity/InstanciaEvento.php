@@ -28,21 +28,21 @@ class InstanciaEvento
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="text", nullable="true")
+     * @ORM\Column(name="descripcion", type="text", nullable=true)
      */
     private $descripcion;
 
     /**
      * @var string $url
      *
-     * @ORM\Column(name="url", type="string", length=255, nullable="true")
+     * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
 
     /**
      * @var string $lugar
      *
-     * @ORM\Column(name="lugar", type="string", length=255, nullable="true")
+     * @ORM\Column(name="lugar", type="string", length=255, nullable=true)
      */
     private $lugar;
 
@@ -75,7 +75,7 @@ class InstanciaEvento
      * @var Cpm\JovenesBundle\Entity\Evento $evento
      * 
      * @ORM\ManyToOne(targetEntity="Evento", inversedBy="instancias")
-     * @ORM\JoinColumn(name="evento_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="evento_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $evento;
 

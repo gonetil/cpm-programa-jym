@@ -30,14 +30,14 @@ class Comentario
     /**
      * @var datetime $fecha_creado
      *
-     * @ORM\Column(name="fecha_creado", type="datetime", nullable="true")
+     * @ORM\Column(name="fecha_creado", type="datetime", nullable=true)
      */
     private $fecha_creado;
 
     /**
      * @var datetime $fecha_modificado
      *
-     * @ORM\Column(name="fecha_modificado", type="datetime", nullable="true")
+     * @ORM\Column(name="fecha_modificado", type="datetime", nullable=true)
      */
     private $fecha_modificado;
     
@@ -64,7 +64,7 @@ class Comentario
     
     /**
     *  @ORM\ManyToOne(targetEntity="Proyecto" )
-    *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
+    *  @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
     */
     private $proyecto;
     

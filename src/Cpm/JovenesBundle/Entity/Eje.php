@@ -31,14 +31,14 @@ class Eje
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="text", nullable="true")
+     * @ORM\Column(name="descripcion", type="text", nullable=true)
      */
     private $descripcion;
 
     /**
      * @var boolean $anulado
      *
-     * @ORM\Column(name="anulado", type="boolean", nullable="true")
+     * @ORM\Column(name="anulado", type="boolean", nullable=true)
      */
     private $anulado;
 

@@ -24,14 +24,14 @@ class Escuela
     
     /**
     * @ORM\ManyToOne(targetEntity="TipoInstitucion")
-    * @ORM\JoinColumn(name="tipoInstitucion_id", referencedColumnName="id", nullable="true", onDelete="RESTRICT")
+    * @ORM\JoinColumn(name="tipoInstitucion_id", referencedColumnName="id", nullable=true, onDelete="RESTRICT")
     */
     private $tipoInstitucion;
 
     /**
     * @var string $otroTipoInstitucion
     *
-    * @ORM\Column(name="otroTipoInstitucion", type="string", nullable="true")
+    * @ORM\Column(name="otroTipoInstitucion", type="string", nullable=true)
     *  
     */
     private $otroTipoInstitucion;
@@ -40,21 +40,21 @@ class Escuela
     
     /**
     * @ORM\ManyToOne(targetEntity="TipoEscuela")
-    * @ORM\JoinColumn(name="tipoEscuela_id", referencedColumnName="id", nullable="true", onDelete="RESTRICT")
+    * @ORM\JoinColumn(name="tipoEscuela_id", referencedColumnName="id", nullable=true, onDelete="RESTRICT")
     */
 	private $tipoEscuela;
 
         /**
         * @var string $nombre
         *
-        * @ORM\Column(name="nombre", type="string", nullable="true")
+        * @ORM\Column(name="nombre", type="string", nullable=true)
         */
         private $nombre;
         
         /**
          * @var integer $numero
          * 
-         * @ORM\Column (name="numero", type="integer", nullable="true")
+         * @ORM\Column (name="numero", type="integer", nullable=true)
          * @Assert\Regex(pattern="/^[\s0-9]*$/", message="El número de escuela solo puede contener números y espacios")
          */
         private $numero;
@@ -63,14 +63,14 @@ class Escuela
     /**
      * @var string $email
      * @Assert\Email(message = "La dirección de correo de la escuela no es válida.", checkMX = false)
-     * @ORM\Column(name="email", type="string", nullable="true")
+     * @ORM\Column(name="email", type="string", nullable=true)
      */
     private $email;
 
     /**
      * @var string $telefono
      *
-     * @ORM\Column(name="telefono", type="string", nullable="true")
+     * @ORM\Column(name="telefono", type="string", nullable=true)
      * @Assert\Regex(pattern="/^[\s0-9]*$/", message="El telefono solo puede contener números y espacios")
      */
     private $telefono;

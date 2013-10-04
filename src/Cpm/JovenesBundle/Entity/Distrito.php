@@ -30,7 +30,7 @@ class Distrito
 
     /**
     * @ORM\ManyToOne(targetEntity="RegionEducativa")
-    * @ORM\JoinColumn(name="region_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
+    * @ORM\JoinColumn(name="region_id", referencedColumnName="id", nullable=false, onDelete="RESTRICT")
     */
     private $region;
     

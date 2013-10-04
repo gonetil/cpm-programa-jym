@@ -226,14 +226,6 @@ class Tanda
 			$numero++; 
 		}
 	}
-	
-	function getDiaEnPosicion($posicion){
-		foreach($this->dias as $dia){
-			if ($dia->getNumero($posicion)) 
-				return $dia;
-		}
-		throw new \InvalidArgumentException("Se pidio un dia en una posicion inválida $posicion de la tanda {$this->id}");
-	}
 		
     
     public function __toString() {

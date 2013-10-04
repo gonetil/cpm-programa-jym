@@ -35,7 +35,7 @@ class Invitacion
     /**
      * @var boolean $aceptoInvitacion
      *
-     * @ORM\Column(name="acepto_invitacion", type="boolean", nullable="true")
+     * @ORM\Column(name="acepto_invitacion", type="boolean", nullable=true)
      */
     private $aceptoInvitacion;
 
@@ -63,21 +63,21 @@ class Invitacion
     /**
      * @var text $observaciones
      *
-     * @ORM\Column(name="observaciones", type="text", nullable="true")
+     * @ORM\Column(name="observaciones", type="text", nullable=true)
      */
     private $observaciones;
 
     /**
      * @var string $suplente
      *
-     * @ORM\Column(name="suplente", type="string", length=255, nullable="true")
+     * @ORM\Column(name="suplente", type="string", length=255, nullable=true)
      */
     private $suplente;
 
     /**
      * @var boolean $asistio
      *
-     * @ORM\Column(name="asistio", type="boolean", nullable="true")
+     * @ORM\Column(name="asistio", type="boolean", nullable=true)
      */
     private $asistio;
 
@@ -85,7 +85,7 @@ class Invitacion
      * @var Cpm\JovenesBundle\Entity\Proyecto $proyecto
      * 
      * @ORM\ManyToOne(targetEntity="Proyecto")
-     * @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $proyecto;
 
@@ -93,7 +93,7 @@ class Invitacion
      * @var Cpm\JovenesBundle\Entity\InstanciaEvento $instanciaEvento
      * 
      * @ORM\ManyToOne(targetEntity="InstanciaEvento", inversedBy="invitaciones")
-     * @ORM\JoinColumn(name="instancia_evento_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
+     * @ORM\JoinColumn(name="instancia_evento_id", referencedColumnName="id", nullable=false, onDelete="RESTRICT")
      */
     private $instanciaEvento;
 
@@ -101,7 +101,7 @@ class Invitacion
     /**
      * @var boolean $solicitaTren
      *
-     * @ORM\Column(name="solicitaTren", type="boolean", nullable="true")
+     * @ORM\Column(name="solicitaTren", type="boolean", nullable=true)
      */
 
 	private $solicitaTren;
@@ -110,13 +110,13 @@ class Invitacion
     /**
      * @var text $invitados
      *
-     * @ORM\Column(name="invitados", type="text", nullable = true)
+     * @ORM\Column(name="invitados", type="text", nullable=true)
      */
     private $invitados;
     
     /**
      * @var integer $duracion
-     * @ORM\Column(name="duracion", type="integer", nullable = true)
+     * @ORM\Column(name="duracion", type="integer", nullable=true)
      * 
      **/
     private $duracion;

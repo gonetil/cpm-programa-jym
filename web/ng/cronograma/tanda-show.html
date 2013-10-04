@@ -35,6 +35,7 @@
 					<ul class="dropdown-menu " >
 						<li><a href="#/auditorioDia/new/dia/{{dia.id}}"><i class="icon-plus"></i>Crear AuditorioDia</a></li>
 						<li><a href="#/dia/{{dia.id}}/remove"><i class="icon-plus"></i>Eliminar Dia</a></li>
+						<li><a href="#/dia/{{dia.id}}/duplicar"><i class="icon-plus"></i>Duplicar Dia</a></li>
 						<li class="divider"></li>
 						<li><a href="#">Copiar desde otro día (TBD)</a></li>
 				    </ul>
@@ -58,10 +59,10 @@
               
               <div class="row-fluid">
             	<div class="span6">
-			  	  <div ng-repeat="bloque in auditorioDia.bloques" ng-show="$index < 2" ng-include="asset('tanda-show-bloque.html')"></div>
+			  	  <div ng-repeat="bloque in auditorioDia.bloques | toArray | orderBy:'posicion'" ng-show="$index < 2" ng-include="asset('tanda-show-bloque.html')"></div>
 				</div>
     	       	<div class="span6">
-			  	  <div ng-repeat="bloque in auditorioDia.bloques" ng-show="$index >= 2" ng-include="asset('tanda-show-bloque.html')"></div>
+			  	  <div ng-repeat="bloque in auditorioDia.bloques | toArray| orderBy:'posicion'" ng-show="$index >= 2" ng-include="asset('tanda-show-bloque.html')"></div>
 				</div>
               </div>
               
