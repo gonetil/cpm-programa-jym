@@ -131,7 +131,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * @var datetime $fecha_alta
      *
-     * @ORM\Column(name="fecha_alta", type="datetime", nullable="true")
+     * @ORM\Column(name="fecha_alta", type="datetime", nullable=true)
      */
     private $fecha_alta;
     

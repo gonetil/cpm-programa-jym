@@ -64,8 +64,11 @@ function DiaRemoveCtrl($scope, $routeParams, $location, Dia, Logger){
 		history.back();
 	}
 }
-
-	
+function DiaDuplicarCtrl($scope, $routeParams, $location, Dia, Logger){
+	$scope.dia = new Dia({id:$routeParams.diaId});
+	$scope.dia.$duplicar({dia_destino:$routeParams.diaDestino}, function(){Logger.success("Se duplicó el dia "+$scope.dia.id)},Logger.error);
+	history.back();
+}
 //AUDITORIO_DIA
 function AuditorioDiaNewCtrl($scope, $routeParams, $location, Auditorio, AuditorioDia, Logger){
 	$scope.textButton = "Agregar";
@@ -79,8 +82,9 @@ function AuditorioDiaNewCtrl($scope, $routeParams, $location, Auditorio, Auditor
 }
 
 function AuditorioDiaEditCtrl($scope, $routeParams, $location, Auditorio, AuditorioDia, Logger){
+	$scope.auditorioDia = AuditorioDia.get({auditorioDiaId:$routeParams.auditorioDiaId});
 	$scope.textButton = "Modificar";
-	$scope.auditorioDia = new AuditorioDia({id:$routeParams.auditorioDiaId});
+
 	$scope.auditorios=Auditorio.query();
 	$scope.saveAuditorioDia=function(){
 		$scope.auditorioDia.$save(function(ad){Logger.success("Se guardó satistfactoriamente el auditorio del dia"); Logger.debug(ad);},Logger.error);

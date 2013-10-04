@@ -1,17 +1,8 @@
 <div class="caja-bloque" id="bloque-{{bloque.id}}">
 	<div class="header-caja">
-	   
-		<a class="titulo">{{bloque.horaInicio}}HS {{bloque.nombre}}</a>
-<!-- 		<div class=" btn-group "> -->
-<!-- 			<button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"> -->
-<!-- 				<b class="caret"></b> -->
-<!-- 			</button> -->
-<!-- 			<ul class="dropdown-menu "> -->
-<!-- 				<li><a href="#/bloque/{{bloque.id}}/edit" title="Editar Bloque">Editar</a></li> -->
-<!-- 				<li><a href="#/bloque/{{bloque.id}}/remove" title="Eliminar Bloque">Eliminar</a></li> -->
-<!-- 				<li class="divider"></li> -->
-<!-- 			</ul> -->
-<!-- 		</div> -->
+
+		<a class="titulo">{{bloque.horaInicio}}HS {{bloque.nombre}}=	   {{bloque.posicion}}</a>
+
 		<div class=" popover" title="Bloque {{bloque.nombre}}" style="display: none" >
 			 {{bloque.nombre}} [{{bloque.id}}]
 		
@@ -22,12 +13,13 @@
 				<li><a href="#/bloque/{{bloque.id}}/edit" title="Editar Bloque">Editar</a></li>
 				<li><a href="#/bloque/{{bloque.id}}/remove" title="Eliminar Bloque">Eliminar</a></li>
 				<li class="divider"></li>
+				<li><a ng-click="{{bloque.bajar()}}" title="Bajar">Bajar</a></li>
 			</ul>
 		</div>
 	</div>
 
 	<div ng-model="bloque.presentaciones" ng-show="bloque.tienePresentaciones" 
-		class="caja-bloque-presentaciones bloque-dropbox" style="min-height: {{b.duracion}}"
+		class="caja-bloque-presentaciones bloque-dropbox" style="min-height:{{bloque.duracion}}px"
 		data-drop="true" data-drag="false" data-bloque="{{bloque.id}}"
 		jqyoui-droppable="presentacion_droppable" data-jqyoui-options="presentacion_droppable_options">
 

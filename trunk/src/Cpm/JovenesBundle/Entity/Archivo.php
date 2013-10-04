@@ -46,7 +46,7 @@ class Archivo
    /**
      * @var datetime $fecha_creado
      *
-     * @ORM\Column(name="fecha_creado", type="datetime", nullable="true")
+     * @ORM\Column(name="fecha_creado", type="datetime", nullable=true)
      */
     private $fecha_creado;
 

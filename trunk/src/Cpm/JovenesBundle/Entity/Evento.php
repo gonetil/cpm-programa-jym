@@ -31,7 +31,7 @@ class Evento
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="text",nullable="true")
+     * @ORM\Column(name="descripcion", type="text",nullable=true)
      */
     private $descripcion;
 
@@ -80,14 +80,14 @@ class Evento
     /**
      * @var string action
      *
-     * @ORM\Column(name="action", type="string", nullable="true")
+     * @ORM\Column(name="action", type="string", nullable=true)
      */
     private $action;
     
                 
     /**
      * @ORM\ManyToOne(targetEntity="Ciclo")
-     * @ORM\JoinColumn(name="ciclo_id", referencedColumnName="id", nullable="false", onDelete="RESTRICT")
+     * @ORM\JoinColumn(name="ciclo_id", referencedColumnName="id", nullable=false, onDelete="RESTRICT")
      */
     private $ciclo;
    

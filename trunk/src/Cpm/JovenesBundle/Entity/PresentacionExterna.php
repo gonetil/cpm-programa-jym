@@ -27,7 +27,7 @@ class PresentacionExterna extends Presentacion
  
  	/**
     *  @ORM\ManyToOne(targetEntity="Tema")
-    *  @ORM\JoinColumn(name="tema_id", referencedColumnName="id", nullable="true", onDelete="RESTRICT")
+    *  @ORM\JoinColumn(name="tema_id", referencedColumnName="id", nullable=true, onDelete="RESTRICT")
     */
     public  $ejeTematico;
     

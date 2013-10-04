@@ -36,7 +36,7 @@ class Dia
     
     /**
      *  @ORM\ManyToOne(targetEntity="Tanda", inversedBy="dias")
-     * @ORM\JoinColumn(name="tanda_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="tanda_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $tanda;
     

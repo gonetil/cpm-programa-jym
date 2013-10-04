@@ -39,7 +39,7 @@ class Produccion
     /**
      * @var string $tipoPresentacion
      *
-     * @ORM\Column(name="tipoPresentacion", type="string",nullable="true")
+     * @ORM\Column(name="tipoPresentacion", type="string",nullable=true)
      */
 
 	private $tipoPresentacion; //slug o nombre corto

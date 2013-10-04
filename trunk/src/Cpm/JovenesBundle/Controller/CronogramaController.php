@@ -47,7 +47,7 @@ class CronogramaController extends BaseController
      * @Route("/tanda/{tanda_id}", name="get_tanda")
      * @Method("get")
      */
-	public function getTandaAction($tanda_id) {
+	public function mostrarTandaAction($tanda_id) {
 		try { 
 			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
 			$tandaArray = $tanda->toArray(20);
@@ -114,28 +114,30 @@ class CronogramaController extends BaseController
      * Asigna $dia_destino a la misma tanda de $dia_origina
      * Si $dia_destino no existe se crea
      *
-     * @Route("/duplicarDia", name="duplicar_dia")
+     * @Route("/dia/{dia_origen_id}/duplicar")
      * @Method("post")
      */	
-	public function duplicarDiaAction() {
-		try {
-			$vars = $this->getVarsFromJSON();
-
-			$dia_origen_id = $vars['dia_origen'];
+	public function duplicarDiaAction($dia_origen_id) {
+		$em = $this->getDoctrine()->getEntityManager();
+	    	try {
+			//$vars = $this->getVarsFromJSON();
+			$args= $this->getRequest()->query;
+			
+			if (empty($dia_origen_id))
+				throw new \InvalidArgumentException("Falta el id de dia_origen");
 			$dia_origen = $this->getEntity('CpmJovenesBundle:Dia', $dia_origen_id);
-				
-	    	if (!empty($vars['dia_destino'])){
-		   		$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $vars['dia_destino']);
+			
+			$dia_destino_id=$args->get('dia_destino');
+	    	if (!empty($dia_destino_id)){
+		   		$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $dia_destino_id);
 				$tandaDestino = $dia_destino->getTanda();
 			}else{
 		   		$dia_destino = null;
 		   		$tandaDestino = $dia_origen->getTanda();
 		    }
-		    $em = $this->getDoctrine()->getEntityManager();
-	    	$em->getConnection()->beginTransaction();
+		    $em->getConnection()->beginTransaction();
     		$dia_destino = $this->getChapaManager()->clonarDia($dia_origen,$dia_destino);
-		    if(!$tandaDestino->equals($dia_origen->getTanda()))
-		    	$tandaDestino->addDia($dia_destino);
+		    $tandaDestino->addDia($dia_destino);
 		    		
    			$em->persist($tandaDestino);
     		$em->flush();
@@ -143,7 +145,8 @@ class CronogramaController extends BaseController
     			
     		return $this->newJsonResponse($dia_destino, 3);
     	} catch (\Exception $e) {
-    	   	$em->getConnection()->rollback();
+    	   	if ($em->getConnection()->isTransactionActive())
+	    	   	$em->getConnection()->rollback();
 			$em->close();
             return $this->answerError($e);
     	}
@@ -154,12 +157,13 @@ class CronogramaController extends BaseController
      */
 	public function crearDiaAction() {
 		try { 
-			$tandaId=$this->getRequest()->query->get('tandaId');
-			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tandaId);
-			$dia = $tanda->addDia(new Dia(-1));
-			
+			$vars = $this->getVarsFromJSON();
+			if (empty($vars['tanda']))
+				throw new \InvalidArgumentException("Falta el id de tanda");
+			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $vars['tanda']);
+			$dia = new Dia(-1);
+			$tanda->addDia($dia);
 			$em = $this->getDoctrine()->getEntityManager();
-			$em->persist($dia);	
 			$em->persist($tanda);
 	        $em->flush();
 			return $this->newJsonResponse($dia, 2);
@@ -190,7 +194,19 @@ class CronogramaController extends BaseController
 	///////////////////////////// AUDITORIO DIA /////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	
+	/**
+     * @Route("/auditorioDia/{id}")
+     * @Method("get")
+     */
+     public function mostrarAuditorioDiaAction($id) {
+     	try {
+	     	$ad  = $this->getEntity('CpmJovenesBundle:AuditorioDia', $id);
+			return $this->newJsonResponse($ad,2);			
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+     }
+     
 	/**
      * @Route("/auditorioDia") 
      * @Method("post")
@@ -332,6 +348,31 @@ class CronogramaController extends BaseController
 			return $this->answerError($e);
 		}
 	}
+	
+	/**
+     * Mueve un Bloque hacia arriba o abajo tantas posiciones como se indique en el parametro posiciones que vienen por POST.
+     *
+     * @Route("/bloque/{id}/mover")
+     * @Method("post")
+     */
+	public function moverBloqueAction($id) {
+		
+		try { 
+			$em = $this->getDoctrine()->getEntityManager();
+			$bloque = $this->getEntityForUpdate('CpmJovenesBundle:Bloque', $id);
+	   		$ad = $bloque->getAuditorioDia();
+	   		
+	        $args = $this->getVarsFromJSON();
+	       	if (!empty($args['desplazamiento'])){
+	       		$ad->moverBloque($bloque, $args['desplazamiento']);
+	 			$em->persist($ad);
+		        $em->flush();
+	       	}
+	        return $this->newJsonResponse($bloque);		
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+	}
      
   	/**
      * @Route("/bloque/{bloqueId}")
@@ -353,26 +394,7 @@ class CronogramaController extends BaseController
 		}
 	}
 	
-
-	/**
-     * 	Lista los bloques desde un AuditorioDia
-     *
-     * @Route("/bloques/{auditodiodia_id}", name="listar_bloques")
-     * @Method("get")
-     * 
-	public function listarBloquesAction($auditodiodia_id) {
-		
-		try { 
-			$auditorioDia  = $this->getEntity('CpmJovenesBundle:AuditorioDia', $auditodiodia_id);
-			return $this->createJsonResponse($auditorioDia->toArray(2));			
-		}
-		catch (\Exception $e) {
-			return $this->answerError($e);
-		}
-		
-	}
-
-     */
+     
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////// Listados de referencia ////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,7 +420,7 @@ class CronogramaController extends BaseController
      * @Route("/tipoPresentacion", name="get_tipos_presentaciones")
      * @Method("get")
      */
-	public function getTipoPresentacionAction() {
+	public function listarTipoPresentacionAction() {
 		
 		try { 
 			$producciones = $this->getEntityManager()->getRepository('CpmJovenesBundle:Produccion')->findBy(array('anulado' => false));
@@ -560,11 +582,6 @@ class CronogramaController extends BaseController
 			return $this->answerError($e);
 		}
 	}
-	//////////////////////////////////////////////////////////////////////////////
-	///////////////////////////// MAS ////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
 	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -575,14 +592,13 @@ class CronogramaController extends BaseController
 	/**
 	 * Agrego estos dos helpers answerOk y answerError para concentrar los tipos de respuesta, por si cambiamos de JSON a http_code y vice versa
 	 */
-	private function answerOk($message="") {
+	private function answerOk($message="OK") {
 		return $this->createJsonResponse(array('status' => 'success', 'message' => $message));
-		//$response = $this->createSimpleResponse(200,$message);
-		return $response->send();		
 	}
 	
 	private function answerError($message) {
 		if ($message instanceof \Exception)
+		throw $message;
 			$message=$message->getMessage();
 			
 		$response = new Response(json_encode($message), 500);

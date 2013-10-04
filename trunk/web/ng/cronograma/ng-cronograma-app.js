@@ -1,6 +1,6 @@
 console.log("creamos nuestro modulo llamado cronograma_de_tanda");
 //http://docs.angularjs.org/api/angular.Module
-var app = angular.module("cronograma", ['ngDragDrop', 'ngResource', 'ngynSelectKey']);
+var app = angular.module("cronograma", ['ngDragDrop', 'ngResource']);
 
 
 app.factory('Logger', function(){
@@ -44,6 +44,7 @@ app.config(['$routeProvider', function($routeProvider, $rootScope) {
 		when('/tanda/:tandaId', {templateUrl: asset('tanda-show.html'), controller: TandaShowCtrl}).
 		when('/dia/new/tanda/:tandaId', {template:'no-template', controller: DiaNewCtrl}).
 		when('/dia/:diaId/remove', {templateUrl: asset('item-remove.html'), controller: DiaRemoveCtrl}).
+		when('/dia/:diaId/duplicar', {template:'no-template', controller: DiaDuplicarCtrl}).
 		when('/auditorioDia/new/dia/:diaId', {templateUrl:asset('auditorioDia-form.html'), controller: AuditorioDiaNewCtrl}).
 		when('/auditorioDia/:auditorioDiaId/edit', {templateUrl:asset('auditorioDia-form.html'), controller: AuditorioDiaEditCtrl}).
 		when('/auditorioDia/:auditorioDiaId/remove', {templateUrl: asset('item-remove.html'), controller: AuditorioDiaRemoveCtrl}).
@@ -63,4 +64,16 @@ function asset(filename){
 	var ng_path=BASE_PATH+"/ng/cronograma/";
 	return ng_path + filename;
 };
+app.filter('toArray', function () {
+    'use strict';
 
+    return function (obj) {
+        if (!(obj instanceof Object)) {
+            return obj;
+        }
+
+        return Object.keys(obj).map(function (key) {
+            return Object.defineProperty(obj[key], '$key', {__proto__: null, value: key});
+        });
+    }
+});

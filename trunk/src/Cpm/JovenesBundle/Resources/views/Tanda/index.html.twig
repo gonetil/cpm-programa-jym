@@ -19,8 +19,7 @@
     {% for entity in entities %}
         <tr>
             
-            <td>{{ entity.instanciaEvento.titulo }}</td>
-<!--             <td>{{ entity.instanciaEvento }}</td> -->
+            <td> <a href="{{ path('instancia_show', { 'id': entity.instanciaEvento.id }) }}">{{ entity.instanciaEvento.titulo }}</a></td>
             <td>{{ entity.numero }}</td>
             <td>{% if entity.fechaInicio %}{{ entity.fechaInicio|date('d-m-Y') }}{% endif%}</td>
             <td>{% if entity.fechaFin %}{{ entity.fechaFin|date('d-m-Y') }}{% endif%}</td>

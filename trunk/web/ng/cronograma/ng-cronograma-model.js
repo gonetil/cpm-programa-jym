@@ -5,7 +5,9 @@ app.factory('AuditorioDia', function($resource){//
 });
 
 app.factory('Dia', function($resource){
-	Dia= $resource('dia/:diaId', {tandaId:'@tanda',diaId:'@id',numeroDia:'@numero'}, {});
+	Dia= $resource('dia/:diaId', {diaId:'@id'}, {
+		  duplicar: {method:'POST', params:{},url: 'dia/:diaId/duplicar'}
+	});
 	return Dia;
 });
 
@@ -29,8 +31,14 @@ app.factory('Auditorio', function($resource){
 
 
 app.factory('Bloque', function($resource){
-	Bloque = $resource('bloque/:bloqueId', {bloqueId:'@id'}, {});
+	Bloque = $resource('bloque/:bloqueId', {bloqueId:'@id'}, {
+		  mover: {method:'POST', params:{desplazamiento:0}, url: 'bloque/:bloqueId/mover'}
+	});
 	
+	Bloque.prototype.mover = function(desplazamiento){
+		Logger.info("Movemos "+desplazamiento+" posiciones");
+		this.$mover({desplazamiento:desplazamiento}, Logger.success, Logger.error);
+	};
 	Bloque.prototype.tieneEje = function(eje){
 		for(var i=0;i<this.ejesTematicos.length;i++)
 			if (eje.id == this.ejesTematicos[i].id) {

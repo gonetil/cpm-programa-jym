@@ -44,7 +44,7 @@ class Bloque
 
  	/**
      * @ORM\ManyToOne(targetEntity="AuditorioDia")
-     * @ORM\JoinColumn(name="auditorioDia_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="auditorioDia_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $auditorioDia;
     
