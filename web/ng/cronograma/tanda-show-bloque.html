@@ -33,9 +33,11 @@
 
 		<!-- PRESENTACION -->
 		<div ng-repeat="p in bloque.presentaciones" ng-model="bloque.presentaciones" 
-			class="badge badge-presentacion" style="height: {{p.duracion}}"
+			class="badge badge-presentacion {{ (p.valoracion == 'Muy bueno') ? 'presentacion-muy_buena' : '' }}" style="height: {{p.duracion}}"
 			data-presentacion="{{p.id}}" data-bloque="{{bloque.id}}"  
 			data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options">
-			{{p.escuela}}</div>
+			{{p.escuela}} {{ (p.valoracion == "Muy bueno") ? "(MB)" : "" }}
+			 
+		</div>
 	</div>
 </div>

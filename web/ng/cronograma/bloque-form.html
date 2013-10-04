@@ -7,10 +7,10 @@
 	<label>Nombre</label>
 	<input type="text" placeholder="Nombre" ng-model="bloque.nombre" required>
 		
-	<label>Hora de Inicio</label>
+	<label>Hora de Inicio (Formato en mm:ss, ej: 17:00 )</label>
 	<input type="time" placeholder="Hora de Inicio" ng-model="bloque.horaInicio" required>
 		
-	<label>Duración</label>
+	<label>Duración (en minutos)</label>
 	<input type="number" value="{{bloque.duracion}}" ng-model="bloque.duracion" required min="1">
 	
 	<label>Posición</label>
