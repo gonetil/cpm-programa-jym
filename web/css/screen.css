@@ -1076,7 +1076,7 @@ color: white;
 This copyright notice must be untouched at all times. The original version of this stylesheet and the associated (x)html is available at http://www.cssplay.co.uk/menus/pro_dropline.html
 Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and the associated (x)html may be modified in any way to fit your requirements.
 =================================================================== */
-.nav {
+.navi {
  float: left;
  font-family: Tahoma;
  font-size: 13px;
@@ -1093,11 +1093,11 @@ Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and t
  width: 15px;
 }
 
-.nav .table {
+.navi .table {
  display: table;
 }
 
-.nav .select,.nav .current {
+.navi .select,.navi .current {
  display: table-cell;
  float: left;
  list-style: none;
@@ -1106,14 +1106,14 @@ Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and t
  white-space: nowrap;
 }
 
-.nav li {
+.navi li {
  float: left;
  height: auto;
  margin: 0;
  padding: 0;
 }
 
-.nav .select a {
+.navi .select a {
  color: #fff;
  display: block;
  float: left;
@@ -1124,7 +1124,7 @@ Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and t
  white-space: nowrap;
 }
 
-.nav .current a {
+.navi .current a {
  background: url(../images/shared/nav/pro_line_1.gif);
  color: #fff;
  display: block;
@@ -1136,20 +1136,20 @@ Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and t
  white-space: nowrap;
 }
 
-.nav .current a b {
+.navi .current a b {
  background: url(../images/shared/nav/pro_line_1.gif) right top;
  display: block;
  padding: 0 20px 0 10px;
 }
 
-.nav .select a:hover,.nav .select li:hover a {
+.navi .select a:hover,.navi .select li:hover a {
  background: url(../images/shared/nav/pro_line_1.gif);
  color: #fff;
  cursor: pointer;
  padding: 0 0 0 10px;
 }
 
-.nav .select a:hover b,.nav .select li:hover a b {
+.navi .select a:hover b,.navi .select li:hover a b {
  background: url(../images/shared/nav/pro_line_1.gif) right top;
  cursor: pointer;
 /*  display: block; */
@@ -1157,13 +1157,13 @@ Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and t
  padding: 0 20px 0 10px;
 }
 
-.nav .select_sub {	
+.navi .select_sub {	
  display: none;
  margin: 0 0 0 10px;
 }
 
 /* IE6 only */
-.nav table {
+.navi table {
  border-collapse: collapse;
  font-size: 1em;
  height: 0;
@@ -1171,19 +1171,19 @@ Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and t
  width: 0;
 }
 
-.nav .sub {
+.navi .sub {
 /*  display: table; */
  list-style: none;
  /* margin: 0 auto; */
  padding: 0;
 }
 
-.nav .sub_active .current_sub a,.nav .sub_active a:hover {
+.navi .sub_active .current_sub a,.navi .sub_active a:hover {
  background: transparent;
  color: #fff;
 }
-.nav .select .select_sub { display:none;}
-.nav .select :hover .select_sub,.nav .current .show {
+.navi .select .select_sub { display:none;}
+.navi .select :hover .select_sub,.navi .current .show {
  background: url(../images/shared/nav/back_0.gif);
  display: block;
  left: 0;
@@ -1195,11 +1195,11 @@ Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and t
  z-index: 100;
 }
 
-.nav .current .show {
+.navi .current .show {
  z-index: 10;
 }
 
-.nav .select :hover .sub li a,.nav .current .show .sub li a {
+.navi .select :hover .sub li a,.navi .current .show .sub li a {
  background: transparent;
  border: 0;
  color: #fff;
@@ -1212,12 +1212,12 @@ Copyright (c) 2005-2007 Stu Nicholls. All rights reserved. This stylesheet and t
  white-space: nowrap;
 }
 
-.nav .current .sub li.sub_show a {
+.navi .current .sub li.sub_show a {
  color: #94b52c;
  cursor: default;
 }
 
-.nav .select :hover .sub li a:hover,.nav .current .sub li a:hover {
+.navi .select :hover .sub li a:hover,.navi .current .sub li a:hover {
  color: #94b52c;
  visibility: visible;
 }
@@ -2144,15 +2144,15 @@ img#logo {
     height: 64px;
     width: 19px;
 }
-#cat-nav-content ul.nav {
+#cat-nav-content ul.navi {
     float: left;
     margin-left: 18px;
     margin-top: 10px;
 }
-#cat-nav-content ul.nav li {
+#cat-nav-content ul.navi li {
     padding: 0 17px 0 0;
 }
-.nav li {
+.navi li {
     float: left;
     position: relative;
 }
@@ -2161,27 +2161,27 @@ ol, ul {
     list-style: none outside none;
 }
 
-#cat-nav-content ul.nav li a {
+#cat-nav-content ul.navi li a {
     color: #FEFEFE;
     font-weight: bold;
     text-decoration: none;
     text-shadow: -1px -1px 1px #0A0A0A;
 }
-#cat-nav-content ul.nav li a:hover {
+#cat-nav-content ul.navi li a:hover {
     color: #A8D728;
 }
 
-#cat-nav-content ul.nav li a {
+#cat-nav-content ul.navi li a {
     padding: 8px 4px 21px;
 }
 
-ul.nav li a {
+ul.navi li a {
     color: #E3E3E3;
     font-weight: bold;
     padding-left: 17px;
     text-decoration: none;
 }
-.nav a {
+.navi a {
     display: block;
     float: left;
 }
