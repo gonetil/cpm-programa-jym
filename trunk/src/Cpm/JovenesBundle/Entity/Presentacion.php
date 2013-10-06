@@ -147,6 +147,13 @@ abstract class Presentacion
 			  );
     }
     
-    
+
+   public function equals($other)
+    {
+    	if ($other instanceof Presentacion)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
+    }    
     
 }

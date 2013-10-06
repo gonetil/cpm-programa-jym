@@ -14,6 +14,9 @@ use Cpm\JovenesBundle\Entity\Tanda;
 use Cpm\JovenesBundle\Entity\Auditorio;
 use Cpm\JovenesBundle\Entity\Dia;
 use Cpm\JovenesBundle\Entity\AuditorioDia;
+use Cpm\JovenesBundle\Entity\Presentacion;
+use Cpm\JovenesBundle\Entity\PresentacionExterna;
+use Cpm\JovenesBundle\Entity\PresentacionInterna;
 
 
 /**
@@ -63,23 +66,24 @@ class CronogramaController extends BaseController
 	}
 
 	/**
-     * 	Recibe un super JSON con toda una tanda y lo almacena en la BD
+     * 	Recibe un array JSON presentacionId y bloqueID
      *
-     * @Route("/tanda/{tanda_id}", name="guardar_tanda")
+     * @Route("/tanda/{tanda_id}/savePresentaciones")
      * @Method("post")
     */
 	public function guardarTandaAction($tanda_id) {
 		
 		try { 
 			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
-		
 			$vars = $this->getVarsFromJSON();
-			$tanda_json = $vars['tanda'];
 			
-			$tanda = json_decode($tanda_json,true);
-			var_dump($tanda); die;
+			if (empty($vars['presentaciones']) || !is_array($vars['presentaciones']))
+				throw new \InvalidArgumentException("presentaciones no es un array, en cambio tiene el siguiente contenido ".var_export($vars['presentaciones'], true)); 
+			
+			$numCambios = $this->getChapaManager()->guardarRedistribucionDeTanda($tanda,$vars['presentaciones']);
+			return $this->answerOk("Se guardo la tanda, y se efectivizaron $numCambios movimientos de presentaciones");
 		} catch (\Exception $e) {
-			return $this->answerError("Tanda $tanda_id no pudo encontrarse");
+			return $this->answerError($e);
 		}
 		
 	}
@@ -90,8 +94,6 @@ class CronogramaController extends BaseController
      *
      * @Route("/tanda/")
      * @Method("get")
-     * TODO ver si no debería recibir un event_id o algo así que permita filtrar las tandas
-     * 
      */
 	public function listarTandasAction() 
 	{
@@ -306,15 +308,24 @@ class CronogramaController extends BaseController
 	   		 $em = $this->getDoctrine()->getEntityManager();
 			
 	        $args = $this->getVarsFromJSON();
-	       	if (!empty($args['auditorioDia']))
-	        	$bloque->setAuditorioDia( $this->getEntity('CpmJovenesBundle:AuditorioDia', $args['auditorioDia'] ) );
-	        if (!empty($args['horaInicio']))
+	        $auditorioDia = $bloque->getAuditorioDia();
+	       	if (!empty($args['auditorioDia'])){
+	       		$newAD = $this->getEntity('CpmJovenesBundle:AuditorioDia', $args['auditorioDia'] );
+	       		if ($auditorioDia ==null || !$auditorioDia->equals($newAD)){
+		       		$auditorioDia=$newAD;
+		       		$auditorioDia->addBloque($bloque);
+		       		
+		       	}
+	       	}
+	       	
+	       	if (!empty($args['horaInicio']))
 				$bloque->setHoraInicio( date_create_from_format ('H:i', $args['horaInicio']));
 			
-			//FIXME corregir posicion del bloque
-	        if (isset($args['posicion']))
-				$bloque->setPosicion((int) $args['posicion'] );
-
+			
+	        if (isset($args['posicion'])){
+	        	$auditorioDia->moverBloque($bloque, (int)$args['posicion']);
+	        }
+	
 	        if (!empty($args['duracion']))
 				$bloque->setDuracion( (int) $args['duracion'] );
 
@@ -340,39 +351,23 @@ class CronogramaController extends BaseController
 	        	$em->flush();
 	        	$bloque->setAreasReferencia( $areasReferencia );
 	        }
-	        
- 			$em->persist($bloque);
-	        $em->flush();
+	        if ($auditorioDia){
+				foreach($auditorioDia->getBloques() as $bi){
+					$em->persist($bi);
+				}
+			
+		        $em->persist($auditorioDia);
+	        }else{
+			$em->persist($bloque);
+	        	
+	        }
+ 	        $em->flush();
 	        return $this->newJsonResponse($bloque);		
 		} catch (\Exception $e) {
 			return $this->answerError($e);
 		}
 	}
 	
-	/**
-     * Mueve un Bloque hacia arriba o abajo tantas posiciones como se indique en el parametro posiciones que vienen por POST.
-     *
-     * @Route("/bloque/{id}/mover")
-     * @Method("post")
-     */
-	public function moverBloqueAction($id) {
-		
-		try { 
-			$em = $this->getDoctrine()->getEntityManager();
-			$bloque = $this->getEntityForUpdate('CpmJovenesBundle:Bloque', $id);
-	   		$ad = $bloque->getAuditorioDia();
-	   		
-	        $args = $this->getVarsFromJSON();
-	       	if (!empty($args['desplazamiento'])){
-	       		$ad->moverBloque($bloque, $args['desplazamiento']);
-	 			$em->persist($ad);
-		        $em->flush();
-	       	}
-	        return $this->newJsonResponse($bloque);		
-		} catch (\Exception $e) {
-			return $this->answerError($e);
-		}
-	}
      
   	/**
      * @Route("/bloque/{bloqueId}")
@@ -460,6 +455,21 @@ class CronogramaController extends BaseController
 			return $this->answerError($e);
 		}
 	}
+
+	/**
+     * @Route("/produccion")
+     * @Method("get")
+     */
+	public function listarProduccionesAction() {
+		
+		try { 
+			$temas= $this->getEntityManager()->getRepository('CpmJovenesBundle:Produccion')->findBy(array('anulado' => false));
+			return $this->newJsonResponse($temas,2);			
+		}
+		catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+	}
 	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -467,8 +477,6 @@ class CronogramaController extends BaseController
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
-	
-	     
 	/**
      *
      * @Route("/presentacion")
@@ -477,7 +485,7 @@ class CronogramaController extends BaseController
 	public function crearPresentacionAction() {
 		return $this->forward("CpmJovenesBundle:Cronograma:modificarPresentacion", array('id'=>-1));
 	}
-	
+     
 	/**
      *
      * @Route("/presentacion/{id}", name="presentacion_edit_json")
@@ -511,11 +519,9 @@ class CronogramaController extends BaseController
 	        //FIXME corregir posicion en bloque
 		        //if (isset($args['posicion']))
 				//	$presentacion->setPosicion((int) $args['posicion'] );
-	        $em->persist($presentacion);
-	        $em->flush();
 	        
 	        if($presentacion->esExterna()){
-		        $presentacion  = $this->getEntityForUpdate('CpmJovenesBundle:PresentacionExterna', $id);
+		       // $presentacion  = $this->getEntityForUpdate('CpmJovenesBundle:PresentacionExterna', $id);
 		        
 		        if (!empty($args['titulo']))
 					$presentacion->setTitulo((string)$args['titulo']);
@@ -547,7 +553,10 @@ class CronogramaController extends BaseController
 		        if (isset($args['distrito']))
 					$presentacion->setDistrito( (string) $args['distrito'] );
 	
-		        if (isset($args['personasConfirmadas']))
+		        if (isset($args['valoracion']))
+					$presentacion->setValoracion( (string) $args['valoracion'] );
+				
+				if (isset($args['personasConfirmadas']))
 					$presentacion->setPersonasConfirmadas((int) $args['personasConfirmadas'] );
 					
 				if (isset($args['apellidoCoordinador']))
@@ -555,10 +564,10 @@ class CronogramaController extends BaseController
 				if (isset($args['nombreCoordinador']))
 					$presentacion->setNombreCoordinador((int) $args['nombreCoordinador'] );
 					
-				$em->persist($presentacion);
-	     	   	$em->flush();
 	        }
-		
+		$em->persist($presentacion);
+	        $em->flush();
+	        
 	        
  			
 	        return $this->newJsonResponse($presentacion);		
@@ -598,7 +607,6 @@ class CronogramaController extends BaseController
 	
 	private function answerError($message) {
 		if ($message instanceof \Exception)
-		throw $message;
 			$message=$message->getMessage();
 			
 		$response = new Response(json_encode($message), 500);

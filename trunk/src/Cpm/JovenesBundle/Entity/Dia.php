@@ -136,4 +136,12 @@ class Dia
  					);
     }
 
+	
+   public function equals($other)
+    {
+    	if ($other instanceof Dia)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
+    }
 }

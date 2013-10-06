@@ -130,4 +130,13 @@ class Eje
 			    	'descripcion' => $this->descripcion,
 			  );
     }
+    
+    
+   public function equals($other)
+    {
+    	if ($other instanceof Eje)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
+    }
 }
