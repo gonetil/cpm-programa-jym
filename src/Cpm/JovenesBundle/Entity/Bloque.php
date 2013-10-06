@@ -255,7 +255,7 @@ class Bloque
 							'id' => $this->id , 
  							 'nombre' => $this->nombre,
  							 'posicion' => $this->posicion,
- 							 'tienePresentaciones' => "{$this->tienePresentaciones}",
+ 							 'tienePresentaciones' => ($this->tienePresentaciones?true:false),
  							 'duracion' => $this->duracion,
  							 'horaInicio' => date_format($this->horaInicio,"H:i"),
  							 'auditorioDia' => $this->auditorioDia->getId(),
@@ -263,5 +263,13 @@ class Bloque
  							 'ejesTematicos' => $ejes,
  							 'areasReferencia' => $areas
  				);				 
+    }
+    
+   public function equals($other)
+    {
+    	if ($other instanceof Bloque)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
     }
 }

@@ -120,4 +120,12 @@ class Auditorio
     		'producciones' => $producciones
     	);
     }
+    
+   public function equals($other)
+    {
+    	if ($other instanceof Auditorio)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
+    }
 }

@@ -101,4 +101,13 @@ class Tema
 			    	'nombre' => $this->nombre,
 			  );
     }
+    
+    public function equals($other)
+    {
+    	if ($other instanceof Tema)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
+    }    
+    
 }

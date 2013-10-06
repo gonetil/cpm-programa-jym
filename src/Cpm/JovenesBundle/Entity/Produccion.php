@@ -132,5 +132,13 @@ class Produccion
 			'duracion'=>$this->getDuracionEstimada()
 		);	
     }
+
+   public function equals($other)
+    {
+    	if ($other instanceof Produccion)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
+    }    
     
 }

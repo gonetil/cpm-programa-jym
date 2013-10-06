@@ -287,6 +287,47 @@ class ChapaManager {
     	}
 	}
 	
+		
+	public function guardarRedistribucionDeTanda($tanda, $presentacionesDTO) {
+		
+		$cambios=0;
+		$em = $this->doctrine->getEntityManager();
+		$em->getConnection()->beginTransaction();
+    	try { 
+	        foreach($presentacionesDTO as $presentacionDTO){
+	        	$presentacion = $em->getRepository('CpmJovenesBundle:Presentacion')->find($presentacionDTO['presentacion']);
+	        	$oldBloque=$presentacion->getBloque();
+	        	
+				if (empty($presentacionDTO['bloque'])){
+					if($oldBloque != null)
+						$oldBloque->removePresentacion($presentacion);
+				}else{
+					$bloque=$em->getRepository('CpmJovenesBundle:Bloque')->find($presentacionDTO['bloque']);
+					
+					if($oldBloque != null){
+						if(!$oldBloque->equals($bloque)){
+							$oldBloque->removePresentacion($presentacion);
+							$bloque->addPresentacion($presentacion);
+						}
+					}else{
+						$bloque->addPresentacion($presentacion);
+					}
+				}
+				if($oldBloque !== $presentacion->getBloque()){
+					$cambios++;				
+		        	$em->persist($presentacion);
+				}
+			}
+	
+	        $em->flush();		
+			$em->getConnection()->commit();
+    	} catch (\Exception $e) {
+    		$em->getConnection()->rollback();
+			$em->close();
+            throw $e;
+    	}
+		return $cambios;
+	}
 	
 	
 }

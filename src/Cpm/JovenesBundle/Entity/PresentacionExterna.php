@@ -23,7 +23,7 @@ class PresentacionExterna extends Presentacion
      *
      * @ORM\Column(name="titulo", type="string", length=255)
      */
-    public $titulo;
+    public $titulo = "(sin titulo)";
  
  	/**
     *  @ORM\ManyToOne(targetEntity="Tema")
@@ -48,7 +48,7 @@ class PresentacionExterna extends Presentacion
      *
      * @ORM\Column(name="escuela", type="string", length=255)
      */
-    public  $escuela;	
+    public  $escuela = "Escuela desconocida";	
     
         /**
      * @var string $provincia
@@ -62,21 +62,21 @@ class PresentacionExterna extends Presentacion
      *
      * @ORM\Column(name="localidad", type="string", length=255)
      */
-    public  $localidad;
+    public  $localidad = "Localidad Desconocida";
 
     /**
      * @var string $apellido_coordinador
      *
      * @ORM\Column(name="apellido_coordinador", type="string", length=255)
      */
-    public  $apellido_coordinador;	
+    public  $apellido_coordinador= "Coordinador desconocido";	
 
     /**
      * @var string $nombre_coordinador
      *
      * @ORM\Column(name="nombre_coordinador", type="string", length=255)
      */
-    public  $nombre_coordinador;
+    public  $nombre_coordinador= "Coordinador desconocido";
 
 
    	/**
@@ -84,7 +84,7 @@ class PresentacionExterna extends Presentacion
      *
      * @ORM\Column(name="personas_confirmadas", type="integer")
      */
-    public  $personas_confirmadas;
+    public  $personas_confirmadas = 0;
     
     
     /**
@@ -92,7 +92,7 @@ class PresentacionExterna extends Presentacion
      *
      * @ORM\Column(name="valoracion", type="string", length=255)
      */
-    public  $valoracion;
+    public  $valoracion = "bueno";
 
 	public function getTipo() { return 'externa'; }
 

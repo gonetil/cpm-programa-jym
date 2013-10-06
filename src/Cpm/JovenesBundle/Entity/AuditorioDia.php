@@ -54,50 +54,22 @@ class AuditorioDia
     {
         return $this->id;
     }
-    /*
-     * 
-	
-	function addDia($nuevoDia){
-		$numero = $nuevoDia->getNumero();
-		
-		if (count($this->dias) == 0)
-			$numero = 1;
-		elseif (($numero < 0) || $numero > count($this->dias))
-			$numero=$this->dias->last()->getNumero()+1;
-		
-		foreach($this->dias as $dia){
-			if ($dia->getNumero() > $numero)
-				$dia->setNumero($dia->getNumero()+1);
-		}
-		
-		$nuevoDia->setNumero($numero);
-		$this->dias->add($nuevoDia);
-		$nuevoDia->setTanda($this);
-		$this->reordenarDias();
-
-	}
-     */
-
+   
 	public function getBloques($sorted = false) {
-		if ($sorted) {
-			$iterator = $this->bloques->getIterator(); 
-			$iterator->uasort(function($b1,$b2) { return ($b1->getPosicion() <= $b2->getPosicion() ) ? -1 : 1 ;});
-			return $iterator;
-		}
-		else
-			return $this->bloques;
+		return $this->bloques;
 	}
 	public function setBloques($b) {
 		$this->bloques = $b;
 	}
 	
 	public function addBloque(\Cpm\JovenesBundle\Entity\Bloque $b) {
+		$this->reordenarBloques();
+		
+		$b->setPosicion(count($this->bloques)+1);
+	
 		$this->bloques->add($b);
 		$b->setAuditorioDia($this);
-		
-		if ($b->getPosicion() < 0)
-			$b->setPosicion(count($this->bloques)+1);
-		$this->reordenarBloques();
+
 	}
 	
     public function removeBloque(\Cpm\JovenesBundle\Entity\Bloque $b) {
@@ -106,19 +78,33 @@ class AuditorioDia
     	$this->reordenarBloques();
     }
     
-    public function moverBloque($bloqueAMover, $desplazamiento){
-    	$this->reordenarBloques();
+    public function moverBloque($bloqueAMover, $nuevaPosicion){
+    	if ($nuevaPosicion < 1)
+    		$nuevaPosicion=1;
+    	if ($bloqueAMover->getPosicion() > $nuevaPosicion)
+    		$haciaAdelante=false;
+    	elseif ($bloqueAMover->getPosicion() < $nuevaPosicion)
+    		$haciaAdelante=true;
+    	else
+    		return;
+	    
     	
-    	$nuevaPosicion=$bloqueAMover->getPosicion()+$desplazamiento;
-    	$victima = $this->getBloqueEnPosicion($nuevaPosicion);
+    	foreach ($this->bloques as $b){
+	    	if ($haciaAdelante){
+	    		if ($b->getPosicion() >= $nuevaPosicion){
+		    		echo "Muevo el bloque {$bloqueAMover->getId()} de la posicion {$bloqueAMover->getPosicion()} a {$nuevaPosicion}";
+	        		$bloqueAMover->setPosicion($b->getPosicion());
+		    		$bloqueAMover=$b;
+		    		$nuevaPosicion++;
+				}
+	    	}else{//haciaAtras
+	    	//TODO
+	    	}
+	    }
+	    echo "Muevo el bloque {$bloqueAMover->getId()} de la posicion {$bloqueAMover->getPosicion()} a {$nuevaPosicion}";
+        $bloqueAMover->setPosicion($nuevaPosicion);
     	
-    	if(!empty($victima)){
-    		//si hay alguien en mi lugar lo desplazo 
-    		$victima->setPosicion($bloqueAMover->getPosicion());
-    	}
-    	$bloqueAMover->setPosicion($nuevaPosicion);
-    	
-    	$this->reordenarBloques();
+    	//$this->reordenarBloques();
     }
     
     public function getBloqueEnPosicion($posicion){
@@ -132,8 +118,10 @@ class AuditorioDia
 	protected function reordenarBloques(){
 		$numero = 1;
 		foreach($this->bloques as $b){
-			if ($b->getPosicion() != $numero)
+			if ($b->getPosicion() != $numero){
+				echo "reposiciono el bloque {$b->getId()} de {$b->getPosicion()} a {$numero} <br>";
 				$b->setPosicion($numero);
+			}
 			$numero++; 
 		}
 	}
@@ -176,6 +164,15 @@ class AuditorioDia
  				'dia' => $this->getDia()->getId(),
  				'auditorio' => $this->getAuditorio()->toArray($recursive_depth-1)
  			) ;
+    }
+    
+    
+   public function equals($other)
+    {
+    	if ($other instanceof AuditorioDia)
+        	return $this->getId() == $other->getId();
+        else
+        	return false;
     }
 
 }
