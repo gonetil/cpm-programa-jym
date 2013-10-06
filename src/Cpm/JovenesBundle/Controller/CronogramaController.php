@@ -85,7 +85,22 @@ class CronogramaController extends BaseController
 		} catch (\Exception $e) {
 			return $this->answerError($e);
 		}
+	}
+	
+	/**
+     *
+     * @Route("/tanda/{tanda_id}/resetPresentaciones")
+     * @Method("post")
+    */
+	public function resetearTandaAction($tanda_id) {
 		
+		try { 
+			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+			$numCambios = $this->getChapaManager()->resetearPresentacionesDeTanda($tanda);
+			return $this->answerOk("Se reinicializó la tanda ($tanda_id), y se liberaron $numCambios presentaciones");
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
 	}
 
 

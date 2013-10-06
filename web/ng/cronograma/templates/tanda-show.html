@@ -2,9 +2,9 @@
 
  
 <div class="row-fluid">
-	<div class="offset1 span2">
+	<div class="span6">
 		<div ng-hide="tanda.numero">Cargando Tanda</div>
-		<div ng-show="tanda.numero"><b>Tanda {{tanda.numero}}</b>
+		<div ng-show="tanda.numero"><b>Tanda {{tanda.titulo}}</b>
 			<div class="btn-group" >
 				<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 				<ul class="dropdown-menu">
@@ -13,14 +13,14 @@
 					<li class="divider"></li>
 					<li><a href="#/dia/new/tanda/{{tanda.id}}"><i class="icon-plus"></i>Agregar Dia</a></li>
 					<li class="divider"></li>
-					<li><a href="#"><i class="icon-repeat"></i>Reinicializar la tanda (TBD)</a></li>
+					<li><a href="#/tanda/{{tanda.id}}/reinicializar"><i class="icon-repeat"></i>Reinicializar la tanda </a></li>
 					<li><a href="#/tanda/{{tanda.id}}/distribuir"><i class="icon-random"></i>Distribuir automaticamente</a></li>
 <!-- 					<li><a ng-click="tanda.distribuirPresentaciones(false)"><i class="icon-random"></i>Distribuir automaticamente</a></li> -->
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="span9" >
+	<div class="span6" >
 		<div ng-repeat="log_line in Logger.buffer" class="alert alert-{{log_line.level}}">
 			{{log_line.time}} &rarr; {{log_line.message}}
 		</div>

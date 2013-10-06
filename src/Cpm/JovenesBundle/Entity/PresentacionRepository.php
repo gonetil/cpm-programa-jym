@@ -12,11 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class PresentacionRepository extends EntityRepository
 {
-	public function findAllQuery() {
-		$qb = $this->getEntityManager()->createQueryBuilder()
-		->add('select','p')
-		->add('from','CpmJovenesBundle:Presentacion p');
-	
+	public function findAllQuery($ciclo = null) {
+		
+		$qb = $this->createQueryBuilder('p')
+		->innerJoin('p.tanda','t')
+		->innerJoin('t.instanciaEvento','ie')
+		->innerJoin('ie.evento','e')
+		->addOrderBy('ie.id', 'desc')->addOrderBy('t.numero','ASC');
+			
+		if ($ciclo)
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		
 		return  $qb->getQuery();
+	}
+	
+	public function resetearPresentacionesDeTanda($tanda) {
+		
+		$qb = $this->getEntityManager()->createQueryBuilder()
+			->update('CpmJovenesBundle:Presentacion','p')
+			->set('p.bloque','NULL')
+			->where('p.tanda = :tanda')
+			->setParameter('tanda',$tanda)
+		;
+	
+		return  $qb->getQuery()->execute();
 	}
 }

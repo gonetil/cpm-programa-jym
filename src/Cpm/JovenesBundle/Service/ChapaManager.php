@@ -34,53 +34,6 @@ class ChapaManager {
     }
 
 
-/*** FUNCIONES DE RESET **********/
-	public function resetBloque($bloque) {
-		if ($bloque->getTienePresentaciones()) {
-			
-			foreach ( $bloque->getPresentaciones() as $presentacion ) {
-				$presentacion->setBloque(null);       
-			}
-
-			$bloque->setPresentaciones(array());
-
-		}
-		return $bloque;
-	}
-	
-	public function resetAuditorioDia($auditorioDia) {
-		 
-		$auditorioDia->setBloques( array_map( array($this,'resetBloque') , $auditorioDia->getBloques()->toArray() ));
-		return $auditorioDia;	
-	}
-
-	public function resetDia($dia) {
-		$dia->setAuditoriosDia( array_map( array($this,'resetAuditorioDia') , $dia->getAuditoriosDia()->toArray() ) );
-	    return $dia;
-	}
-	
-	public function resetTanda($tanda) {
-		
-        $tanda->setDias( array_map( array($this,'resetDia') , $tanda->getDias()->toArray() )  );
-        
-		$em = $this->doctrine->getEntityManager();
-		$em->getConnection()->beginTransaction();
-    	try { 
-	        $em->persist($tanda);
-	        $em->flush();		
-			$em->getConnection()->commit();
-    	} catch (\Exception $e) {
-    		$em->getConnection()->rollback();
-			$em->close();
-            throw $e;
-    	}
-		
-	}
-	
-	/*** FIN FUNCIONES DE RESET **********/
-
-
-
 	/*** FUNCIONES DE CLONACION **********/
 
 	/**
@@ -329,5 +282,22 @@ class ChapaManager {
 		return $cambios;
 	}
 	
+	
+	public function resetearPresentacionesDeTanda($tanda) {
+		
+		$em = $this->doctrine->getEntityManager();
+		$em->getConnection()->beginTransaction();
+    	try {
+    		$numUpdated=$em->getRepository('CpmJovenesBundle:Presentacion')->resetearPresentacionesDeTanda($tanda);
+    		//$em->persist($tanda);
+	        $em->flush();		
+			$em->getConnection()->commit();
+    	} catch (\Exception $e) {
+    		$em->getConnection()->rollback();
+			$em->close();
+            throw $e;
+    	}
+		return $numUpdated;	
+	}
 	
 }

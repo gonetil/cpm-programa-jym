@@ -1,0 +1,9 @@
+<form ng-submit="confirmOk()" >
+
+	<div class="alert alert-error"><b>Atención: </b>{{confirmMessage}}</div>
+	<p>{{confirmDescription}}<p>
+	<div>
+		<button type="submit" class="btn btn-danger">{{confirmButton?confirmButton:'Eliminar'}}</button>
+		<a href="javascript:history.back()" class="btn btn-primary">Cancelar</a>
+	</div>
+</form>
