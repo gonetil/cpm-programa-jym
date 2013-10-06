@@ -273,7 +273,7 @@ app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Pres
 	 * - el eje tematico de la presentacion
 	 */
 
-	Tanda.prototype.buscarBloquesCandidatos = function(presentacion) 
+	Tanda.prototype.buscarBloquesCandidatos = function(presentacion,config) 
 	{
 		
 		var candidatos = new Array();
@@ -281,7 +281,7 @@ app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Pres
 			
 			bloque = this.bloquesPresentaciones[index];
 			
-			if (cumpleCondicionesPresentacion(this,bloque,presentacion))
+			if (cumpleCondicionesPresentacion(this,bloque,presentacion,config))
 				candidatos.push(bloque);
 
 		}
@@ -298,11 +298,17 @@ app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Pres
 	 */
 	Tanda.prototype.distribuirPresentaciones = function(modo) {
 		console.log("Comienzo la distribucion de "+this.presentaciones_libres.length+" presentaciones libres en modo "+ modo);
-		if (modo == 'forced')
-			forzar_distribucion = true;
-		else
-			forzar_distribucion = false;
 		
+		var config = {};
+		if (modo == 'forced') { 
+			config['level'] = ALGORITMO_FORZADO; 
+			forzar_distribucion = true;
+		}
+		else if (modo == 'intermediate') { 
+			forzar_distribucion = false;
+			config['level'] = ALGORITMO_INTERMEDIO; 
+		} else
+			config['level'] = ALGORITMO_ESTRICTO;
 		
 		var presentacionesMovidas=0;
 		var bloques = this.getBloquesPresentacionesArray();
@@ -316,16 +322,16 @@ app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Pres
 			var presentacion = this.presentaciones2[libres[i].id]; //trabajo con la presentacion ya indexada			
 			var mejor_bloque = null;
 
-			var bloques_candidatos = this.buscarBloquesCandidatos(presentacion);
+			var bloques_candidatos = this.buscarBloquesCandidatos(presentacion,config);
 			
 			if (bloques_candidatos.length > 0) {
-				mejor_bloque =  buscarMejorBloque(bloques_candidatos, presentacion);
+				mejor_bloque =  buscarMejorBloque(bloques_candidatos, presentacion,config);
 				
-				if (!mejor_bloque) console.log("De la lista de candidatos ",bloques_candidatos," no encontre un mejor_bloque para ",presentacion);
+				//if (!mejor_bloque) console.log("De la lista de candidatos ",bloques_candidatos," no encontre un mejor_bloque para ",presentacion);
 			}
 			
-			if ((!mejor_bloque) && (forzar_distribucion)) //no encontre un buen bloque pero tengo que ubicar la presentacion en alguno si o si 
-				mejor_bloque = dameUnMejorBloqueIgual(bloques_candidatos,presentacion,bloques);
+			if ((!mejor_bloque) && (config.level >= ALGORITMO_INTERMEDIO)) //no encontre un buen bloque pero tengo que ubicar la presentacion en alguno si o si 
+				mejor_bloque = bloqueConMenosPresentaciones(bloques_candidatos,presentacion,bloques);
 			
 			if (mejor_bloque != null){
 				this.moverPresentacion(presentacion,mejor_bloque);
