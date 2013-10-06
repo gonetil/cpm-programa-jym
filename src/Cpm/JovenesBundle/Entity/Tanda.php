@@ -254,15 +254,16 @@ class Tanda
     	return array(
 					'id' => $this->id,
 					'numero' => $this->numero,
+					'titulo' => $this->instanciaEvento->getTitulo()." - Tanda ".$this->numero,					 
 					'fechaInicio' => date_format($this->fechaInicio,"d-m-y") ,
 					'fechaFin' => date_format($this->fechaFin,"d-m-y"),
-					'instanciaEvento' => ($this->instanciaEvento?$this->instanciaEvento->getId():''),					 
+					'instanciaEvento' => $this->instanciaEvento->toArray(1),					 
  					'dias' => $dias,
  					'presentaciones' => $presentaciones,
  		);
     }
     
     public function equals($other){
-    	return !empty($other) && ($other instanceof Tanda) && ($this->getId() == $other->getId());
+    	return ($other instanceof Tanda) && ($this->getId() == $other->getId());
     }
 }

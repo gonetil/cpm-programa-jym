@@ -6,7 +6,9 @@
 	<input type="hidden" ng-model="auditorioDia.id" >
 	
 	<label>Auditorio</label>
-	<select ng-model="auditorioDia.auditorio" ng-required="true" ng-options="a.nombre for a in auditorios track by a.id" required></select>
+	<select ng-model="auditorioDia.auditorio" ng-options="a.nombre for a in auditorios track by a.id" required>
+		<option value="">Seleccione un auditorio que no este ya asociado al día</option>
+	</select>
 	
 	<div>
 		<button type="submit" class="btn btn-primary">{{ textButton }}</button>

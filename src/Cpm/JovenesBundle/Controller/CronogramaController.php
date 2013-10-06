@@ -90,7 +90,7 @@ class CronogramaController extends BaseController
 
 
 	/**
-     * 	Lista las tandas
+     * 	Lista las tandas del ciclo activo
      *
      * @Route("/tanda/")
      * @Method("get")
@@ -99,8 +99,9 @@ class CronogramaController extends BaseController
 	{
 		try { 
 			$em = $this->getDoctrine()->getEntityManager();
-			//FIXME retornar solo tandas del ciclo activo 
-	        $tandas = $em->getRepository('CpmJovenesBundle:Tanda')->findAll();
+		 
+			$ciclo = $this->getJYM()->getCicloActivo();
+	        $tandas = $em->getRepository('CpmJovenesBundle:Tanda')->findAllQuery($ciclo)->getResult();
     		return $this->newJsonResponse($tandas,1);			
 		} catch (\Exception $e) {
 			return $this->answerError($e);
@@ -476,6 +477,18 @@ class CronogramaController extends BaseController
 	///////////////////////////// PRESENTACIONES ////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+     * @Route("/presentacion/{id}")
+     * @Method("get")
+     */
+     public function mostrarPresentacionAction($id) {
+     	try {
+	     	$p = $this->getEntity('CpmJovenesBundle:Presentacion', $id);
+			return $this->newJsonResponse($p);			
+		} catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+     }
 	
 	/**
      *
@@ -514,7 +527,7 @@ class CronogramaController extends BaseController
     			if($presentacion->getTanda() == null)
     				$nuevaTanda->addPresentacion($presentacion);
     			elseif (!$nuevaTanda->equals($presentacion->getTanda()))
-    				$this->getChapaManager()->cambiarDeTanda($presentacion,$nuevaTanda);
+    				$this->getChapaManager()->cambiarPresentacionDeTanda($presentacion,$nuevaTanda);
 	        }
 	        //FIXME corregir posicion en bloque
 		        //if (isset($args['posicion']))
@@ -607,8 +620,9 @@ class CronogramaController extends BaseController
 	
 	private function answerError($message) {
 		if ($message instanceof \Exception)
-			$message=$message->getMessage();
-			
+			throw $message;
+			$message=get_class($message).':'.$message->getMessage();
+		
 		$response = new Response(json_encode($message), 500);
     	$response->headers->set('Content-Type', 'application/json');
 		return $response;
