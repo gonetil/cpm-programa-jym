@@ -12,21 +12,22 @@
 		
 	<label>Duración (en minutos)</label>
 	<input type="number" value="{{bloque.duracion}}" ng-model="bloque.duracion" required min="1">
-	
+	<!-- 
 	<label>Posición</label>
 	<input type="number" value="{{bloque.posicion}}" ng-model="bloque.posicion" required min="-1">
-	
+	 -->
+	 
 	<label class="checkbox">
 		<input type="checkbox" ng-model="bloque.tienePresentaciones" >
 		Es un bloque de presentaciones?
 	</label>
 	
 	<div ng-show="bloque.tienePresentaciones">
-		<label>Ejes Temáticos {{bloque.ejesTematicos.length}}Ss</label>
+		<label>Ejes Temáticos</label>
 		<select ng-model="bloque.ejesTematicos" ng-options="i.nombre for i in ejesTematicos track by i.id "
 		multiple="multiple"></select>
 		
-		<label>Areas de Referencia {{bloque.areasReferencia.length}}Ss</label>
+		<label>Areas de Referencia</label>
 		<select ng-model="bloque.areasReferencia"  ng-options="i.nombre for i in areasReferencia track by i.id "
 		multiple="multiple"></select>
 	</div>

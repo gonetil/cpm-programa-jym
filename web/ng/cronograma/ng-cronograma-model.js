@@ -20,6 +20,9 @@ app.factory('AreaReferencia', function($resource){
 app.factory('EjeTematico', function($resource){
 	return $resource('ejeTematico/:ejeId', {ejeId:'@id'}, {});
 });
+app.factory('Produccion', function($resource){
+	return $resource('produccion/:produccionId', {produccionId:'@id'}, {});
+});
 
 
 app.factory('Auditorio', function($resource){
@@ -32,13 +35,9 @@ app.factory('Auditorio', function($resource){
 
 app.factory('Bloque', function($resource){
 	Bloque = $resource('bloque/:bloqueId', {bloqueId:'@id'}, {
-		  mover: {method:'POST', params:{desplazamiento:0}, url: 'bloque/:bloqueId/mover'}
+		  mover: {method:'POST', params:{posicion:0}, url: 'bloque/:bloqueId/mover'}
 	});
 	
-	Bloque.prototype.mover = function(desplazamiento){
-		Logger.info("Movemos "+desplazamiento+" posiciones");
-		this.$mover({desplazamiento:desplazamiento}, Logger.success, Logger.error);
-	};
 	Bloque.prototype.tieneEje = function(eje){
 		for(var i=0;i<this.ejesTematicos.length;i++)
 			if (eje.id == this.ejesTematicos[i].id) {
@@ -99,11 +98,11 @@ app.factory('Bloque', function($resource){
 	return Bloque;
 });
 
-app.factory('Tanda', function($resource){
+app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Presentacion){
 	
 	//DEFAULT DAO
-	Tanda = $resource('tanda/:tandaId', {}, {
-		//query: {method:'GET', params:{bloqueId:'phones'}, isArray:true}
+	Tanda = $resource('tanda/:tandaId', {tandaId: '@id'}, {
+		savePresentaciones: {method:'POST', params:{}, url:'tanda/:tandaId/savePresentaciones'}
 	});
 
 	
@@ -125,13 +124,6 @@ app.factory('Tanda', function($resource){
 		this.checkInit();
 		return this.bloques[id];
 	};
-
-	/*Tanda.prototype.getBloqueForPresentacion = function(presentacion) {
-		if ((presentacion.bloque !== undefined) && (presentacion.bloque !== null) && ((presentacion.bloque !== '')))
-			return this.getBloque(presentacion.bloque);
-		else
-			return null;
-	};*/
 
 	Tanda.prototype.getAuditorioForBloque = function(bloque) {
 		this.checkInit();
@@ -157,7 +149,7 @@ app.factory('Tanda', function($resource){
 		return this.auditorios;
 	};
 
-	Tanda.prototype.initialize = function(Dia,AuditorioDia,Auditorio,Bloque,Presentacion) {
+	Tanda.prototype.initialize = function() {
 		
 		this.auditorios = {};
 		this.bloques = {};
@@ -197,20 +189,21 @@ app.factory('Tanda', function($resource){
 				} else {
 					auditorio = this.auditorios[this.dias[i].auditoriosDia[j].auditorio.id];
 				}
+
 				
 				auditorioDia.auditorio = auditorio;
 				this.auditoriosDia[auditorioDia.id] = auditorioDia;
 				
 				var bloques = this.dias[i].auditoriosDia[j].bloques;
+				auditorioDia.bloques= new Array;
 				
 				for(var k=0;k<bloques.length;k++) {
 					var bloque = new Bloque(bloques[k]);
-					
 					bloque.auditorioDia = auditorioDia;
-					auditorioDia.bloques[bloque.id] = bloque;
+					
 					if (!this.bloques[bloque.id]) 
 						this.bloques[bloque.id] = bloque;
-					
+
 					if (bloque.tienePresentaciones == 1) { //indexo las presentaciones del bloque
 						this.bloquesPresentaciones[bloque.id] = bloque;
 						for(var m=0;m<bloque.presentaciones.length;m++) {
@@ -220,13 +213,17 @@ app.factory('Tanda', function($resource){
 							this.presentaciones2[p.id] = p;
 						}
 					}
+					auditorioDia.bloques[k] = bloque;
+					//GUARDA necesito arrays, no objetos
+					//auditorioDia.bloques[bloque.id] = bloque;
+					
 				} //endfor k
 			} //endfor j
 			this.dias2[dia.id] = dia;
 			this.dias[i] = dia;
 		} //endfor i
 		
-		console.log("Tanda indexada: ",this);
+		console.log("Tanda indexada correctamente");
 	};
 	
 	/**
@@ -264,7 +261,7 @@ app.factory('Tanda', function($resource){
 			this.presentaciones_libres.push(presentacion);
 
 	};
-	
+
 	/**
 	 * 
 	 * @param presentacion
@@ -295,16 +292,19 @@ app.factory('Tanda', function($resource){
 	/**
 	 * distribuye las presentaciones de la tanda de manera automatica
 	 * @param tanda
-	 * @param forzar_distribucion
+	 * @param modo (forced|best|strict)
+	 * @returns presentacionesMovidas la cantida de presentaciones que el algoritmo pudo distribuir
 	 */
-	Tanda.prototype.distribuirPresentaciones = function(forzar_distribucion) {
-		
-		
-		if (arguments.length == 0)
+	Tanda.prototype.distribuirPresentaciones = function(modo) {
+		console.log("Comienzo la distribucion de "+this.presentaciones_libres.length+" presentaciones libres en modo "+ modo);
+		if (modo == 'forced')
+			forzar_distribucion = true;
+		else
 			forzar_distribucion = false;
 		
-		var bloques = this.getBloquesPresentacionesArray();
 		
+		var presentacionesMovidas=0;
+		var bloques = this.getBloquesPresentacionesArray();
 		
 		var libres = shuffleArray(this.presentaciones_libres).slice();  //paso 1: barajamos las cartas
 		
@@ -326,14 +326,36 @@ app.factory('Tanda', function($resource){
 			if ((!mejor_bloque) && (forzar_distribucion)) //no encontre un buen bloque pero tengo que ubicar la presentacion en alguno si o si 
 				mejor_bloque = dameUnMejorBloqueIgual(bloques_candidatos,presentacion,bloques);
 			
-			if (mejor_bloque != null) 
+			if (mejor_bloque != null){
 				this.moverPresentacion(presentacion,mejor_bloque);
-			else
-				console.log("NUNCA encontre un bloque para ",presentacion);
+				presentacionesMovidas++;
+			}else
+				console.log("NUNCA encontre un bloque para la presentacion ",presentacion);
 				
 		} //while i presentaciones
-		console.log("La tanda quedo asi",this);
+		console.log("Finaliza la distribucion de presentaciones. De las "+cantPresentaciones+" libres, se asignaron "+ presentacionesMovidas);
+		
+		//console.log("La tanda quedo asi",this);
+		return presentacionesMovidas;
 	};
+	
+	/**
+	 * Retorna todas las presentaciones de la tanda, en un simpla array con id de presentacion y id de  bloque (si corresponde)
+	 */
+	Tanda.prototype.getPresentacionesConBloqueDTO = function() {
+		var presentacionConBloqueDTO = new Array();
+		for(i in this.presentaciones2 ){
+			presentacionConBloqueDTO.push({
+				presentacion:this.presentaciones2[i].id,
+				bloque:(this.presentaciones2[i].bloque?this.presentaciones2[i].bloque.id:null)
+			});
+		}
+		return presentacionConBloqueDTO;
+	}
+	
+	
+	
+	
 	return Tanda;
 });
 

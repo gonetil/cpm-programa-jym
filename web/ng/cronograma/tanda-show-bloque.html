@@ -1,21 +1,7 @@
 <div class="caja-bloque" id="bloque-{{bloque.id}}">
-	<div class="header-caja">
 
-		<a class="titulo">{{bloque.horaInicio}}HS {{bloque.nombre}}=	   {{bloque.posicion}}</a>
-
-		<div class=" popover" title="Bloque {{bloque.nombre}}" style="display: none" >
-			 {{bloque.nombre}} [{{bloque.id}}]
-		
-			<button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
-				<b class="caret"></b>
-			</button>
-			<ul class="dropdown-menu ">
-				<li><a href="#/bloque/{{bloque.id}}/edit" title="Editar Bloque">Editar</a></li>
-				<li><a href="#/bloque/{{bloque.id}}/remove" title="Eliminar Bloque">Eliminar</a></li>
-				<li class="divider"></li>
-				<li><a ng-click="{{bloque.bajar()}}" title="Bajar">Bajar</a></li>
-			</ul>
-		</div>
+	<div class="header-caja" data-unique="1" bs-popover="asset('tanda-show-bloque-options')">
+		<a class="btn btn-link" >{{bloque.horaInicio}}HS {{bloque.nombre}}</a>
 	</div>
 
 	<div ng-model="bloque.presentaciones" ng-show="bloque.tienePresentaciones" 
@@ -24,7 +10,9 @@
 		jqyoui-droppable="presentacion_droppable" data-jqyoui-options="presentacion_droppable_options">
 
 		<!-- PRESENTACION -->
-		<div ng-repeat="p in bloque.presentaciones" ng-model="bloque.presentaciones" 
+		
+		<div ng-repeat="p in bloque.presentaciones" ng-model="bloque.presentaciones"
+		  	data-unique="1" bs-popover="asset('tanda-show-presentacion-options.html')" 
 			class="badge badge-presentacion {{ (p.valoracion == 'Muy bueno') ? 'presentacion-muy_buena' : '' }}" style="height: {{p.duracion}}"
 			data-presentacion="{{p.id}}" data-bloque="{{bloque.id}}"  
 			data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options">
