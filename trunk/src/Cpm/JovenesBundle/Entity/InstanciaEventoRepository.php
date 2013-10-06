@@ -16,10 +16,11 @@ class InstanciaEventoRepository extends EntityRepository
 	
 	public function findAllQuery($ciclo = null) {
 		$qb = $this->createQueryBuilder('ie')
+			->innerJoin('ie.evento','e')
 			->add('orderBy','ie.fechaInicio ASC, ie.fechaFin ASC')
 		;
 		if ($ciclo)
-			$qb->andWhere('ie.evento.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
 		
 		return  $qb->getQuery();
 	}

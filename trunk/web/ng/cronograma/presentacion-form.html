@@ -44,6 +44,17 @@
 	<label>Duración (en minutos)</label>
 	<input type="number" value="{{presentacion.duracion}}" ng-model="presentacion.duracion" min="0">
 	
+	
+	<label class="checkbox" ng-show="presentacion.id">
+		<input type="checkbox" ng-model="cambiarDeTanda" >
+		Desea cambiar la presentacion de tanda?
+	</label>
+	
+	<div ng-show="cambiarDeTanda">
+		<label>Nueva tanda {{presentacion.tanda}}</label>
+		<select ng-model="presentacion.tanda"  ng-options="t.id as t.titulo for t in tandas" ></select>
+	</div>
+	
 	<div>
 		<button type="submit" class="btn btn-primary">{{ textButton }} presentacion</button>
 		<a href="javascript:history.back()" class="btn btn-danger">Cancelar</a>

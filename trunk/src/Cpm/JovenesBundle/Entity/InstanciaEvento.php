@@ -376,4 +376,37 @@ class InstanciaEvento
     	return $this->evento->getCiclo();
     }
  
+ public function toArray($recursive_depth) {
+    	if ($recursive_depth == 0)
+    		return $this->getId();
+    	else{//if ($recursive_depth == 1)
+    		//solo se retorna el count de las colecciones, no el contenido
+    		$invitaciones=count($this->getInvitaciones());
+    		$voluntarios=count($this->getVoluntarios());
+    	}/*	else{
+	    	$invitaciones = array();
+	    	foreach ( $this->getInvitaciones() as $i)
+	       		$invitaciones[] = $i->toArray($recursive_depth-1);
+	
+	    	$voluntarios = array();
+	    	foreach ( $this->getVoluntarios() as $p ) 
+				$voluntarios[] = $p->toArray($recursive_depth-1);
+    	}*/
+  		
+    	
+    	return array(
+					'id' => $this->id,
+					'titulo' => $this->getTitulo(),
+					'descripcion' => $this->descripcion,
+					'url' => $this->url,
+					'lugar' => $this->lugar,
+					'fechaInicio' => date_format($this->fechaInicio,"d-m-y") ,
+					'fechaFin' => date_format($this->fechaFin,"d-m-y"),
+					'cerrarInscripcion' => $this->cerrarInscripcion,
+					'fechaCierreInscripcion' => date_format($this->fechaCierreInscripcion,"d-m-y") ,
+					'evento' => $this->evento->getId(),					 
+ 					'invitaciones' => $invitaciones,
+ 					'volunarios' => $voluntarios,
+ 		);
+    }
 }

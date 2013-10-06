@@ -102,7 +102,7 @@ app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Pres
 	
 	//DEFAULT DAO
 	Tanda = $resource('tanda/:tandaId', {tandaId: '@id'}, {
-		savePresentaciones: {method:'POST', params:{}, url:'tanda/:tandaId/savePresentaciones'}
+		savePresentaciones: {method:'POST', params:{}, url:'tanda/:tandaId/savePresentaciones'},
 	});
 
 	
@@ -368,6 +368,21 @@ app.factory('Presentacion', function($resource){
 	Presentacion = $resource('presentacion/:presentacionId', {presentacionId:'@id'}, {
 		mover: {method:'POST', params:{origen:'', destino:''}, isArray:false}
 	});
+	
+	Presentacion.prototype.setBloquePersistent = function(destino){
+		
+		if (!destino)
+			destino='';
+		
+		this.bloque = destino;
+    	this.$save(
+    		function(entity){
+    			//Logger.success("Se movió la presentación "+entity.id);
+    			Logger.debug("Paso la presentación "+entity.id + (entity.bloque?" al bloque "+entity.bloque:" a presentaciones libres"));
+    		}, 
+    		function(error){Logger.error(error.data)}
+    	);
+	}
 	
 	Presentacion.prototype.setBloque = function(bloque) {
 		this.bloque = bloque;

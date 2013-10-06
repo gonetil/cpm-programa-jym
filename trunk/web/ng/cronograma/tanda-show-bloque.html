@@ -13,7 +13,7 @@
 		
 		<div ng-repeat="p in bloque.presentaciones" ng-model="bloque.presentaciones"
 		  	data-unique="1" bs-popover="asset('tanda-show-presentacion-options.html')" 
-			class="badge badge-presentacion {{ (p.valoracion == 'Muy bueno') ? 'presentacion-muy_buena' : '' }}" style="height: {{p.duracion}}"
+			class="badge badge-presentacion"  ng-class="get_css_classes(p)" ng-style="get_css_styles(p)"
 			data-presentacion="{{p.id}}" data-bloque="{{bloque.id}}"  
 			data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options">
 			{{p.escuela}} {{ (p.valoracion == "Muy bueno") ? "(MB)" : "" }}

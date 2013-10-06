@@ -22,12 +22,16 @@ class TandaRepository extends EntityRepository
 		return $qb->getQuery()->getResult(); 	
 	}
 	
-	public function findAllQuery() {
-			
+	public function findAllQuery($ciclo = null) {
+		
 		$qb = $this->createQueryBuilder('t')
 		->innerJoin('t.instanciaEvento','ie')
+		->innerJoin('ie.evento','e')
 		->addOrderBy('ie.id', 'desc')->addOrderBy('t.numero','ASC');
-	
+			
+		if ($ciclo)
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		
 		return  $qb->getQuery();
 	}
 }

@@ -46,17 +46,11 @@
 			<th>Bloque</th>
 			<td>{{p.bloque?p.bloque.nombre:'No tiene bloque asignado'}}</td>
 		</tr>
-		<tr>
-			<th>Posicion de bloque </th>
-			<td>{{bloque.posicion}}</td>
-		</tr>
 	</table>
 	
 	<ul class="nav nav-pils nav-stacked">
 		<li class="">Acciones sobre el bloque</li>
-		<li><a class="" href="#/bloque/{{bloque.id}}/edit" title="Editar Bloque">Editar</a></li>
-		<li><a href="#/bloque/{{bloque.id}}/remove" title="Eliminar Bloque">Eliminar</a></li>
+		<li><a class="" href="#/presentacion/{{p.id}}/edit" title="Editar Presentacion">Editar</a></li>
+		<li><a href="#/presentacion/{{p.id}}/remove" title="Eliminar Presentacion">Eliminar</a></li>
 		<li class="divider"></li>
-<!-- 		<li><a href="#/bloque/{{bloque.id}}/mover?posicion={{bloque.posicion-1}}" title="Subir">Subir</a></li> -->
-<!-- 		<li><a href="#/bloque/{{bloque.id}}/mover?posicion={{bloque.posicion+1}}" title="Bajar">Bajar</a></li> -->
 	</ul>

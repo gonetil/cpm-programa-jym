@@ -21,6 +21,24 @@ function TandaShowCtrl($rootScope,$scope, $routeParams, Tanda, Logger) {
         helper:'clone'
     };
     
+    $scope.get_css_styles=function(o){
+    	var styles= "";
+    	//if (o instanceOf Presentacion){
+    	styles+="height:{{o.duracion}}px;";
+    	//}elseif (o instanceOf Bloque){
+    	//styles+="min-height:{{o.duracion}}px;";
+    	//}
+    	return styles;
+    }
+    $scope.get_css_classes=function(o){
+    	var clases= "";
+    	//if (o instanceOf Presentacion){
+    	if (o.valoracion == 'Muy bueno') 
+    		clases+=' presentacion-muy_buena';
+    	//}elseif (o instanceOf Bloque){
+    	//}
+    	return clases;
+    }
 
     //////////////////////////////////////////
     
@@ -28,18 +46,13 @@ function TandaShowCtrl($rootScope,$scope, $routeParams, Tanda, Logger) {
     	var presentacionId = ui.draggable.data("presentacion");
     	var origen = ui.draggable.data("bloque");
     	var destino = $(event.target).data("bloque");
+    	var presentacion = new Presentacion({id:presentacionId});
     	if (origen == destino){
-    		Logger.debug("Ignoro el dnd de la presentacion porque el destino es == al origen ");
-    		//FIXME aca no deberíamos mirar el tema de la posicion de la presentacion dentro del bloque?
-    		return;
-    	}
-    	//?"al bloque "+ origen.data("bloque"):" presentaciones libres"));
-    	var presentacion = new Presentacion({id:presentacionId, bloque:(destino?destino:'')});
-    	presentacion.$save(function(data){
-    		Logger.success("Se movió la presentación "+presentacion.id);
-    		Logger.debug("Saco la presentación "+presentacionId + " de "+ (origen?"al bloque "+origen:"a presentaciones libres") + " y la paso "+ (destino?"al bloque "+destino:"a presentaciones libres"));
-    		//Logger.debug(data);
-   		}, Logger.error);
+			Logger.debug("Ignoro el move de la presentacion porque el destino es == al origen ");
+			//FIXME aca no deberíamos mirar el tema de la posicion de la presentacion dentro del bloque?
+			return;
+		}
+    	presentacion.setBloquePersistent(destino);
     }
 }
 
@@ -100,7 +113,10 @@ function DiaRemoveCtrl($scope, $routeParams, $location, Dia, Logger){
 }
 function DiaDuplicarCtrl($scope, $routeParams, $location, Dia, Logger){
 	$scope.dia = new Dia({id:$routeParams.diaId});
-	$scope.dia.$duplicar({dia_destino:$routeParams.diaDestino}, function(){Logger.success("Se duplicó el dia "+$scope.dia.id)},Logger.error);
+	$scope.dia.$duplicar({dia_destino:$routeParams.diaDestino}, 
+			function(){Logger.success("Se duplicó el dia "+$scope.dia.id)},
+			function(error){Logger.error(error.data)}
+	);
 	history.back();
 }
 //AUDITORIO_DIA
@@ -124,7 +140,10 @@ function AuditorioDiaEditCtrl($scope, $routeParams, $location, Auditorio, Audito
 
 	$scope.auditorios=Auditorio.query();
 	$scope.saveAuditorioDia=function(){
-		$scope.auditorioDia.$save(function(ad){Logger.success("Se guardó satistfactoriamente el auditorio del dia"); Logger.debug(ad);},Logger.error);
+		$scope.auditorioDia.$save(
+				function(ad){Logger.success("Se guardó satistfactoriamente el auditorio del dia"); Logger.debug(ad);},
+				function(error){Logger.error("Ocurrió un error al tratar de guardar el auditorio del dia"); Logger.error(error.data)}
+		);
 		history.back();
 	}
 }
@@ -133,7 +152,10 @@ function AuditorioDiaRemoveCtrl($scope, $routeParams, $location, AuditorioDia, L
 	$scope.confirmMessage = "Esta seguro que desea eliminar el auditorio día? Se perdera la información de sus bloques y presentaciones asociadas (las presentaciónes NO se eliminarán)";
 	$scope.auditorioDia = new AuditorioDia({id:$routeParams.auditorioDiaId});
 	$scope.confirmOk= function(){
-		$scope.auditorioDia.$remove(Logger.success, Logger.error);
+		$scope.auditorioDia.$remove(
+				function(message){Logger.debug("AuditorioDia "+$routeParams.auditorioDiaId+ " eliminado"); Logger.success(message);},
+				function(error){Logger.error("Se produjo un error al tratar de quitar el auditorio del dia");Logger.error(error.data);}
+		);
 		history.back();
 	}
 }
@@ -145,7 +167,10 @@ function BloqueNewCtrl($scope, $routeParams, $location, Bloque,EjeTematico, Area
 	$scope.ejesTematicos=EjeTematico.query();
 	$scope.areasReferencia=AreaReferencia.query();
 	$scope.saveBloque=function(){
-		$scope.bloque.$save(function(b){Logger.success("Nuevo bloque ("+b.id+") creado con éxito")},Logger.error);
+		$scope.bloque.$save(
+				function(b){Logger.success("Nuevo bloque ("+b.id+") creado con éxito")},
+				function(error){Logger.error("Se produjo un error al guardar el bloque ");Logger.error(error.data);}
+		);
 		history.back();
 	}
 }
@@ -156,7 +181,10 @@ function BloqueEditCtrl($scope, $routeParams, $location, Bloque,EjeTematico, Are
 	$scope.ejesTematicos=EjeTematico.query();
 	$scope.areasReferencia=AreaReferencia.query();
 	$scope.saveBloque = function(){
-		$scope.bloque.$save(function(b){Logger.success("Bloque ("+b.id+") actualizado")},Logger.error);
+		$scope.bloque.$save(
+				function(b){Logger.debug("Bloque ("+b.id+") actualizado")},
+				function(error){Logger.error("Se produjo un error al guardar el bloque ");Logger.error(error.data);}
+		);
 		history.back();
     }
 }
@@ -175,7 +203,10 @@ function BloqueRemoveCtrl($scope, $routeParams, $location, Bloque, Logger){
 	var bid = $routeParams.bloqueId;
 	$scope.bloque = new Bloque({id:bid});
 	$scope.confirmOk= function(){
-		$scope.bloque.$remove(function(){Logger.success("Bloque ("+b.id+") eliminado")}, Logger.error);
+		$scope.bloque.$remove(
+			function(message){Logger.debug("Bloque ("+b.id+") eliminado");Logger.success(message);}, 
+			function(error){Logger.error("Error al eliminar el bloque "+b.id); Logger.error(error.data);}
+		);
 		history.back();
 	}
 }
@@ -199,27 +230,40 @@ function PresentacionNewCtrl($scope, $routeParams, $location, Presentacion,Produ
 	}
 }
 
-function PresentacionEditCtrl($scope, $routeParams, $location, Presentacion,EjeTematico, AreaReferencia, Logger){
+function PresentacionEditCtrl($scope, $routeParams, $location, Presentacion,Produccion,	EjeTematico, AreaReferencia, Tanda, Logger){
 	$scope.textButton = "Editar";
-	$scope.presentacion = Presentacion.get({presentacionId:$routeParams.presentacionId});
+	$scope.presentacion = Presentacion.get(
+			{presentacionId:$routeParams.presentacionId},
+			function(){},
+			function(error){
+				Logger.error("No se pudo recuperar la presentacion "+$routeParams.presentacionId);
+				Logger.error(error.data); 
+
+				history.back();
+			}
+	);
 	$scope.ejesTematicos=EjeTematico.query();
 	$scope.areasReferencia=AreaReferencia.query();
 	$scope.producciones=Produccion.query();
+	$scope.tandas=Tanda.query();
 	$scope.savePresentacion = function(){
 		$scope.presentacion.$save(
-				function(entity){Logger.success("Nueva presentacion ("+entity.id+") creada con éxito")},
-				function(error){Logger.error(error.data)}
+				function(entity){Logger.success("Presentacion ("+entity.id+") actualizada con éxito")},
+				function(error){Logger.error("Error al guardar la presentacion "+pid); Logger.error(error.data);}
 		);
 		history.back();
     }
 }
 
 function PresentacionRemoveCtrl($scope, $routeParams, $location, Presentacion, Logger){
-	$scope.confirmMessage = "Esta seguro que desea eliminar el Bloque? ";
-	var bid = $routeParams.bloqueId;
-	$scope.bloque = new Bloque({id:bid});
+	$scope.confirmMessage = "Esta seguro que desea eliminar la presentacion? ";
+	var pid = $routeParams.presentacionId;
+	$scope.presentacion = new Presentacion({id:pid});
 	$scope.confirmOk= function(){
-		$scope.bloque.$remove(function(){Logger.success("Bloque ("+b.id+") eliminado")}, Logger.error);
+		$scope.presentacion.$remove(
+				function(message){Logger.debug("Presentacion "+pid+" eliminada"); Logger.success(message)}, 
+				function(error){Logger.error("Error al eliminar la presentacion "+pid); Logger.error(error.data);}
+		);
 		history.back();
 	}
 }

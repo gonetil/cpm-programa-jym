@@ -35,11 +35,10 @@
 			<div class="operaciones btn-group ">
 					<button class="btn btn-medium btn-primary dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></button>
 					<ul class="dropdown-menu " >
-						<li><a href="#/auditorioDia/new/dia/{{dia.id}}"><i class="icon-plus"></i>Crear AuditorioDia</a></li>
-						<li><a href="#/dia/{{dia.id}}/remove"><i class="icon-plus"></i>Eliminar Dia</a></li>
-						<li><a href="#/dia/{{dia.id}}/duplicar"><i class="icon-plus"></i>Duplicar Dia</a></li>
+						<li><a href="#/auditorioDia/new/dia/{{dia.id}}"><i class="icon-plus"></i>Agregar Auditorio al día</a></li>
 						<li class="divider"></li>
-						<li><a href="#">Copiar desde otro día (TBD)</a></li>
+						<li><a href="#/dia/{{dia.id}}/duplicar"><i class="icon-plus"></i>Duplicar Dia (Copia auditorios y bloques sin presentaciones)</a></li>
+						<li><a href="#/dia/{{dia.id}}/remove"><i class="icon-plus"></i>Eliminar Dia</a></li>
 				    </ul>
   			</div>
         </th>
@@ -51,8 +50,8 @@
 					<ul class="dropdown-menu " >
 				      <li><a href="#/bloque/new/auditorioDia/{{auditorioDia.id}}">Agregar Bloque</a></li>
 				      <li class="divider"></li>
-				      <li><a href="#/auditorioDia/{{auditorioDia.id}}/edit">Editar AD</a></li>
-				      <li><a href="#/auditorioDia/{{auditorioDia.id}}/remove">Eliminar AD</a></li>
+				      <li><a href="#/auditorioDia/{{auditorioDia.id}}/edit">Editar Auditorio</a></li>
+				      <li><a href="#/auditorioDia/{{auditorioDia.id}}/remove">Quitar Auditorio del día</a></li>
 				    </ul>
   				</div>
               </div>
@@ -78,19 +77,17 @@
 
 
 <!-- PRESENTACIONES LIBRES-->
-<div class="row-fluid presentaciones_libres">
-		<span ng-show="tanda.presentaciones_libres.length > 1">Quedan <b>{{tanda.presentaciones_libres.length}}</b> presentaciones Libres</span> 
-		<span ng-hide="tanda.presentaciones_libres.length > 1">Todas las presentaciones de la tanda han sido asignadas</span> 
-          <div ng-model="tanda.presentaciones_libres" 
+<div class="row-fluid presentaciones_libres" ng-model="tanda.presentaciones_libres" 
           	data-drop="true" jqyoui-droppable="presentacion_droppable" data-jqyoui-options="presentacion_droppable_options">
-	      
+	      	<span ng-show="tanda.presentaciones_libres.length > 0">Quedan <b>{{tanda.presentaciones_libres.length}}</b> presentaciones Libres</span> 
+			<span ng-hide="tanda.presentaciones_libres.length > 0">Todas las presentaciones de la tanda han sido asignadas</span> 
+         
              <div ng-repeat="p in tanda.presentaciones_libres" ng-model="tanda.presentaciones_libres" 
              data-unique="1" bs-popover="asset('tanda-show-presentacion-options.html')" data-placement="top"
-			
-             	data-presentacion="{{p.id}}" class="badge badge-presentacion" style="height:{{p.duracion}}px;" 
+				
+             	data-presentacion="{{p.id}}" class="badge badge-presentacion" ng-class="get_css_classes(p)" ng-style="get_css_styles(p)" 
              	data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options" > 
-	          	{{p.escuela}}
-	          </div>
+	          	{{p.escuela}} ({{p.distrito}})
+		</div>
 	</div>
- </div>
  
