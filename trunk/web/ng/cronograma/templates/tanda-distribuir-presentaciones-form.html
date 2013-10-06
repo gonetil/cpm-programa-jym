@@ -1,0 +1,32 @@
+<form ng-submit="distribuirPresentacionesLibres()">
+	<fieldset>
+
+		<legend>Distribuir presentaciones de la tanda <br/><b>{{tanda.titulo}}</b></legend>
+		
+		<p>
+			Seleccione la forma de distribución de presentaciones deseada 
+		</p>
+		
+		<label class="radio">
+			<span ng-show="reset"><input type="radio" ng-model="modo" value="none">No distribuir<br /></span> 
+			<input type="radio" ng-model="modo" value="strict"> Estricto <br />
+			<input type="radio" ng-model="modo" value="best"> Eficiente (Recomendado) <br />
+			<input type="radio" ng-model="modo" value="forced"> Forzado <br />
+		</label>
+		<div class="alert alert-info">
+			Ayuda: 
+			<ul>
+				<li>El <b>modo estricto</b> carga los bloques con presentaciones que cumpen con todos los criterios que definidos en su configuración </li>
+				<li>El <b>modo eficiente</b> TBD </li>
+				<li>El <b>modo Forzado</b> trata de acomodar la mayor cantidad de  presentaciones posible de acuerdo 
+				al modo estricto y luego distribuye equitativamente las presentaciones restantes en los bloques, de acuerdo
+				al tiempo que tienen libre/excedido </li>
+			</ul>  
+		</div>
+		
+		<div>
+			<button type="submit" class="btn btn-primary">Distribuir</button>
+			<a href="#/tanda/{{tanda.id}}" class="btn btn-danger">Cancelar y volver a la tanda</a>
+		</div>
+	</fieldset>
+</form>

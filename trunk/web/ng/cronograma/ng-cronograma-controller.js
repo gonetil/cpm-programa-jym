@@ -60,9 +60,33 @@ function TandaListCtrl($rootScope, $scope, Tanda) {
 	$scope.tandas = Tanda.query();
 	$rootScope.tanda = null;
 }
+function TandaResetearPresentacionesCtrl($rootScope,$scope, $location, $routeParams, Tanda, Logger) {
+	var tandaId = $routeParams.tandaId;
+	if (!$rootScope.tanda){
+		Logger.debug("La tanda actual no estaba, la levanto nuevamente");
+		$rootScope.tanda = Tanda.get({tandaId: $routeParams.tandaId},function(tanda){
+			tanda.initialize();
+		});
+	}
+	$scope.confirmMessage="Esta seguro que desea reinicializar esta tanda?";
+	$scope.descriptionMessage="Al reinicializar una tanda se quitan todas las presentaciones de sus bloques y quedan libres. No se pierden los días, auditorios ni bloques."
+	$scope.confirmButton='Reinicializar';
+	$scope.confirmOk=function(){
+		
+		var tandaDTO=new Tanda({id:tandaId});
+		tandaDTO.$resetPresentaciones(
+			function(entity){Logger.success("Se reinicializó la tanda"); $location.url("/tanda/"+$routeParams.tandaId);},
+			function(error){Logger.error("Ocurrió un error al reinicializar la tanda"); Logger.error(error.data)}
+		);
+		
+	}
+
+	
+}
 
 function TandaDistribuirPresentacionesCtrl($rootScope,$scope, $location, $routeParams, Tanda, Logger) {
-
+	var tandaId = $routeParams.tandaId;
+	
 	$scope.modo="best";
 	
 	if (!$rootScope.tanda){
@@ -72,6 +96,8 @@ function TandaDistribuirPresentacionesCtrl($rootScope,$scope, $location, $routeP
 		});
 	}
 	$scope.distribuirPresentacionesLibres=function(){
+		
+		
 		if ($rootScope.tanda.presentaciones_libres.length ==0){
 			Logger.info("No quedan presentaciones libres para distribuir en el cronograma");
 			return;
@@ -80,15 +106,15 @@ function TandaDistribuirPresentacionesCtrl($rootScope,$scope, $location, $routeP
 		var movidas = $rootScope.tanda.distribuirPresentaciones($scope.modo);
 		if (movidas == 0){
 			Logger.info("No se pudo distribuir ninguna presentación en el cronograma");
-			return;
+			
 		}else{
 			Logger.debug("Se distribuyeron con éxito "+movidas +" presentaciones, ahora comenzamos el guardado ...");
 			
-			var tandaDTO=new Tanda({id:$routeParams.tandaId});
+			var tandaDTO=new Tanda({id:tandaId});
 			tandaDTO.presentaciones = $rootScope.tanda.getPresentacionesConBloqueDTO();
 			tandaDTO.$savePresentaciones(
-				function(entity){Logger.debug("Se distribuyeron con éxito "+movidas +" presentaciones")},
-				function(error){Logger.error(error.data)}
+				function(entity){Logger.success("Se distribuyeron con éxito "+movidas +" presentaciones")},
+				function(error){Logger.error("Ocurrió un error al guardar la redistribución de la tanda"); Logger.error(error.data)}
 			);
 		}
 		
@@ -163,7 +189,7 @@ function AuditorioDiaRemoveCtrl($scope, $routeParams, $location, AuditorioDia, L
 //BLOQUE
 function BloqueNewCtrl($scope, $routeParams, $location, Bloque,EjeTematico, AreaReferencia, Logger){
 	$scope.textButton = "Crear";
-	$scope.bloque = new Bloque({auditorioDia:$routeParams.auditorioDiaId,tienePresentaciones:true, duracion:15});
+	$scope.bloque = new Bloque({auditorioDia:$routeParams.auditorioDiaId,tienePresentaciones:true, duracion:15, nombre: 'Presentaciones', horaInicio: '09:00'});
 	$scope.ejesTematicos=EjeTematico.query();
 	$scope.areasReferencia=AreaReferencia.query();
 	$scope.saveBloque=function(){
@@ -199,7 +225,8 @@ function BloqueMoverCtrl($scope, $routeParams, $location, Bloque, Logger){
 }
 
 function BloqueRemoveCtrl($scope, $routeParams, $location, Bloque, Logger){
-	$scope.confirmMessage = "Esta seguro que desea eliminar el Bloque? ";
+	$scope.confirmMessage = "Esta seguro que desea eliminar el Bloque?";
+	$scope.confirmMessage = "Se liberarán presentaciones asociadas";
 	var bid = $routeParams.bloqueId;
 	$scope.bloque = new Bloque({id:bid});
 	$scope.confirmOk= function(){
@@ -224,7 +251,7 @@ function PresentacionNewCtrl($scope, $routeParams, $location, Presentacion,Produ
 	$scope.savePresentacion=function(){
 		$scope.presentacion.$save(
 				function(entity){Logger.success("Nueva presentacion ("+entity.id+") creada con éxito")},
-				function(error){Logger.error(error.data)}
+				function(error){Logger.error("Error al crear una presentacion"); Logger.error(error.data)}
 		);
 		history.back();
 	}
@@ -234,11 +261,10 @@ function PresentacionEditCtrl($scope, $routeParams, $location, Presentacion,Prod
 	$scope.textButton = "Editar";
 	$scope.presentacion = Presentacion.get(
 			{presentacionId:$routeParams.presentacionId},
-			function(){},
+			function(entity){Logger.debug("Presentacion ("+entity.id+") recuperada con éxito")},
 			function(error){
 				Logger.error("No se pudo recuperar la presentacion "+$routeParams.presentacionId);
 				Logger.error(error.data); 
-
 				history.back();
 			}
 	);
@@ -257,6 +283,7 @@ function PresentacionEditCtrl($scope, $routeParams, $location, Presentacion,Prod
 
 function PresentacionRemoveCtrl($scope, $routeParams, $location, Presentacion, Logger){
 	$scope.confirmMessage = "Esta seguro que desea eliminar la presentacion? ";
+	$scope.descriptionMessage = "Esta operación no se podrá deshacer";
 	var pid = $routeParams.presentacionId;
 	$scope.presentacion = new Presentacion({id:pid});
 	$scope.confirmOk= function(){

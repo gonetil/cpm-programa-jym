@@ -43,6 +43,7 @@ app.config(['$routeProvider', function($routeProvider, $rootScope) {
 		when('/', {templateUrl: asset('tanda-list.html'), controller: TandaListCtrl}).
 		when('/tanda/:tandaId', {templateUrl: asset('tanda-show.html'), controller: TandaShowCtrl}).
 		when('/tanda/:tandaId/distribuir', {templateUrl: asset('tanda-distribuir-presentaciones-form.html'), controller: TandaDistribuirPresentacionesCtrl}).
+		when('/tanda/:tandaId/reinicializar', {templateUrl: asset('item-remove.html'), controller: TandaResetearPresentacionesCtrl}).
 		when('/dia/new/tanda/:tandaId', {template:'no-template', controller: DiaNewCtrl}).
 		when('/dia/:diaId/remove', {templateUrl: asset('item-remove.html'), controller: DiaRemoveCtrl}).
 		when('/dia/:diaId/duplicar', {template:'no-template', controller: DiaDuplicarCtrl}).
@@ -68,7 +69,7 @@ app.config(['$routeProvider', function($routeProvider, $rootScope) {
 function asset(filename){
 	//Esta funcion se pone suelta, fuera del $rootScope porque desde la inicialización del routeProvider no se puede 
 	// ver $rootScope (dado que aún no fue inicializado)
-	var ng_path=BASE_PATH+"/ng/cronograma/";
+	var ng_path=BASE_PATH+"/ng/cronograma/templates/";
 	var cacheKey="";//new Date().toLocaleString();
 	return ng_path + filename+ "?" + cacheKey;
 	
