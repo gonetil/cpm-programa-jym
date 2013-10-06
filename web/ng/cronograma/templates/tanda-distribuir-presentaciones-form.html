@@ -7,20 +7,20 @@
 			Seleccione la forma de distribución de presentaciones deseada 
 		</p>
 		
-		<label class="radio">
-			<span ng-show="reset"><input type="radio" ng-model="modo" value="none">No distribuir<br /></span> 
-			<input type="radio" ng-model="modo" value="strict"> Estricto <br />
-			<input type="radio" ng-model="modo" value="best"> Eficiente (Recomendado) <br />
-			<input type="radio" ng-model="modo" value="forced"> Forzado <br />
-		</label>
+		<label class="radio"> </label>
+			
+			<input type="radio" ng-model="modo" value="strict"/> Estricto <br />
+			<input type="radio" ng-model="modo" value="intermediate"/> Eficiente (Recomendado) <br />
+			<input type="radio" ng-model="modo" value="forced"/> Forzado <br />
+		
 		<div class="alert alert-info">
 			Ayuda: 
 			<ul>
-				<li>El <b>modo estricto</b> carga los bloques con presentaciones que cumpen con todos los criterios que definidos en su configuración </li>
-				<li>El <b>modo eficiente</b> TBD </li>
+				<li>El <b>modo estricto</b> carga los bloques con presentaciones que cumpen con todos los criterios que definidos en su configuración: duración, area de referencia, eje temático, auditorio</li>
+				<li>El <b>modo eficiente</b> funciona similar al modo estricto, pero ignora el factor de duración (los bloques pueden extenderse más de lo preestablecido) </li>
 				<li>El <b>modo Forzado</b> trata de acomodar la mayor cantidad de  presentaciones posible de acuerdo 
-				al modo estricto y luego distribuye equitativamente las presentaciones restantes en los bloques, de acuerdo
-				al tiempo que tienen libre/excedido </li>
+				al modo estricto, luego lo hace de acuerdo al modo eficiente, y finalmente lo hace ignorando los ejes temáticos y las áreas de referencia 
+				definidas para los bloques</li>
 			</ul>  
 		</div>
 		
