@@ -1,0 +1,62 @@
+	<table class="table">
+		<tr>
+			<th colspan="2">Presentación {{p.tipo}} #{{p.id}}</th>
+		</tr>
+		<tr>
+			<th>Titulo (Valoración)</th>
+			<td>{{p.titulo}} ({{p.valoracion}})</td>
+		</tr>
+		<tr>
+			<th>Personas confirmadas</th>
+			<td>{{p.personasConfirmadas}}</td>
+		</tr>
+		<tr>
+			<th>Escuela</th>
+			<td>{{p.escuela}}</td>
+		</tr>
+		<tr>
+			<th>Procedencia</th>
+			<td>{{p.localidad}}, {{p.distrito}}, {{p.provincia}}</td>
+		</tr>
+		<tr>
+			<th>Coordinador</th>
+			<td>{{p.nombreCoordinador}} {{p.apellidoCoordinador}}</td>
+		</tr>
+		<tr>
+			<th>Producción/Soporte</th>
+			<td>{{p.tipoPresentacion?p.tipoPresentacion.nombre:'Sin tipo de producción'}}</td>
+		</tr>
+		<tr>
+			<th>Eje Temático</th>
+			<td>{{p.ejeTematico?p.ejeTematico.nombre:'Sin Eje temático'}}</td>
+		</tr>
+		<tr>
+			<th>Area de referencia</th>
+			<td>{{p.areaReferencia?p.areaReferencia.nombre:'Sin Area de referencia'}}</td>
+		</tr>
+		<tr>
+			<th>Duración</th>
+			<td>{{p.duracion}}</td>
+		</tr>
+		<tr>
+			<th>Duración</th>
+			<td>{{p.duracion}}</td>
+		</tr>
+		<tr>
+			<th>Bloque</th>
+			<td>{{p.bloque?p.bloque.nombre:'No tiene bloque asignado'}}</td>
+		</tr>
+		<tr>
+			<th>Posicion de bloque </th>
+			<td>{{bloque.posicion}}</td>
+		</tr>
+	</table>
+	
+	<ul class="nav nav-pils nav-stacked">
+		<li class="">Acciones sobre el bloque</li>
+		<li><a class="" href="#/bloque/{{bloque.id}}/edit" title="Editar Bloque">Editar</a></li>
+		<li><a href="#/bloque/{{bloque.id}}/remove" title="Eliminar Bloque">Eliminar</a></li>
+		<li class="divider"></li>
+<!-- 		<li><a href="#/bloque/{{bloque.id}}/mover?posicion={{bloque.posicion-1}}" title="Subir">Subir</a></li> -->
+<!-- 		<li><a href="#/bloque/{{bloque.id}}/mover?posicion={{bloque.posicion+1}}" title="Bajar">Bajar</a></li> -->
+	</ul>

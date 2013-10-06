@@ -1,0 +1,34 @@
+<div >
+	<button type="button" ng-click="hide()" style="color:black;">Cerrar</button>
+  
+	<table class="table">
+		<tr>
+			<th colspan="2">{{bloque.nombre}}</th>
+		</tr>
+		<tr>
+			<th>Hora de inicio</th>
+			<td>{{bloque.horaInicio}}</td>
+		</tr>
+		<tr>
+			<th>Duración</th>
+			<td>{{bloque.duracion}}</td>
+		</tr>
+		<tr>
+			<th>Presentaciones</th>
+			<td>{{bloque.tienePresentaciones?bloque.presentaciones.length:'No soporta'}}</td>
+		</tr>
+		<tr>
+			<th>Posicion de bloque </th>
+			<td>{{bloque.posicion}}</td>
+		</tr>
+	</table>
+	
+	<ul class="nav nav-pils nav-stacked">
+		<li class="">Acciones sobre el bloque</li>
+		<li><a class="" href="#/bloque/{{bloque.id}}/edit" title="Editar Bloque">Editar</a></li>
+		<li><a href="#/bloque/{{bloque.id}}/remove" title="Eliminar Bloque">Eliminar</a></li>
+		<li class="divider"></li>
+<!-- 		<li><a href="#/bloque/{{bloque.id}}/mover?posicion={{bloque.posicion-1}}" title="Subir">Subir</a></li> -->
+<!-- 		<li><a href="#/bloque/{{bloque.id}}/mover?posicion={{bloque.posicion+1}}" title="Bajar">Bajar</a></li> -->
+	</ul>
+</div>

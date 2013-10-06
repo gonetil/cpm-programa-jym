@@ -112,9 +112,9 @@ function dameUnMejorBloqueIgual(bloques_candidatos,presentacion,todos_los_bloque
 	min_bloque = null;
 	min_count = 1000;
 	for(index in bloques_candidatos) {
-		bloque = bloques_candidatos[i];
-		if (count(bloque.presentaciones) <= min_count ) {
-			min_count = count(bloque.presentaciones);
+		bloque = bloques_candidatos[index];
+		if (bloque.presentaciones.length <= min_count ) {
+			min_count = bloque.presentaciones.length;
 			min_bloque = bloque;
 		}
 	}

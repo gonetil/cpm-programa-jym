@@ -1,0 +1,17 @@
+<form ng-submit="distribuirPresentacionesLibres()">
+	<fieldset>
+
+		<legend>{{ textButton }} Auditorio del dia {{auditorioDia.dia}}</legend>
+		<p>INTRO del procedimiento, explicacion , etc
+		</p>
+		<input type="radio" ng-model="modo" value="strict"> Mínimo <br />
+		<input type="radio" ng-model="modo" value="best"> Eficiente <br />
+	
+		<input type="radio" ng-model="modo" value="forced"> Forzar <br />
+		
+		<div>
+			<button type="submit" class="btn btn-primary">Distribuir</button>
+			<a href="javascript:history.back()" class="btn btn-danger">Cancelar</a>
+		</div>
+	</fieldset>
+</form>
