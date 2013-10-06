@@ -248,6 +248,7 @@ function PresentacionNewCtrl($scope, $routeParams, $location, Presentacion,Produ
 	$scope.ejesTematicos=EjeTematico.query();
 	$scope.areasReferencia=AreaReferencia.query();
 	$scope.producciones=Produccion.query();
+	$scope.valoraciones = ["Muy bueno","Bueno","Regular","Sin especificar"];
 	$scope.savePresentacion=function(){
 		$scope.presentacion.$save(
 				function(entity){Logger.success("Nueva presentacion ("+entity.id+") creada con éxito")},

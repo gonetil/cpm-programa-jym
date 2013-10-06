@@ -39,7 +39,8 @@
 	<select ng-model="presentacion.areaReferencia" ng-required="true" ng-options="ar.nombre for ar in areasReferencia track by ar.id "></select>
 	
 	<label>Valoracion</label>
-	<input type="text" placeholder="Valoracion" ng-model="presentacion.valoracion" required>
+	<select ng-model="presentacion.valoracion" ng-required="true" ng-options="val for val in valoraciones"></select>
+	
 		
 	<label>Duración (en minutos)</label>
 	<input type="number" value="{{presentacion.duracion}}" ng-model="presentacion.duracion" min="0">
