@@ -363,11 +363,7 @@ app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Pres
 			});
 		}
 		return presentacionConBloqueDTO;
-	}
-	
-	
-	
-	
+	};
 	return Tanda;
 });
 
@@ -394,23 +390,25 @@ app.factory('Presentacion', function($resource){
     		}, 
     		function(error){Logger.error(error.data)}
     	);
-	}
+	};
 	
 	Presentacion.prototype.setBloque = function(bloque) {
 		this.bloque = bloque;
 	};
 
 	Presentacion.prototype.esCompatibleConBolque = function(bloque) {
-		//FIXMEcompletar condiciones
+		return (bloque.tieneEje(this.ejeTematico) && bloque.tieneArea(this.areaDeReferencia) );
 		
-		return false;
 	};
 	Presentacion.prototype.esCompatibleConAuditorio = function(auditorio) {
-		//FIXMEcompletar condiciones
+
+		for(var i=0;i<auditorio.producciones.length;i++) {	
+			if ((this.tipoPresentacion != '') && (this.tipoPresentacion.id==auditorio.producciones[i].id))
+				return true;
+		}
 		
 		return false;
 	};
-	return Presentacion;
 	
 	return Presentacion;
 	
