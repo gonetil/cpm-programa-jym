@@ -11,7 +11,7 @@ class InvitacionUsuarioType extends AbstractType
     {
     	$invitacion = $options['data'];
     	if (empty($invitacion))
-    		throw \new Exception ("La invitacion no existe en el form InvitacionUsuarioType");
+    		throw new \Exception ("La invitacion no existe en el form InvitacionUsuarioType");
         
         $evento = $invitacion->getInstanciaEvento()->getEvento();
         
