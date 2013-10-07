@@ -1,0 +1,25 @@
+{% spaceless %}
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<body>
+
+{% for presentacion in presentaciones %}
+
+<p style="font-weight: bold">
+{% if presentacion.bloque %}
+	DÍA {{ presentacion.bloque.auditorioDia.dia.numero }}</br>
+	LUGAR {{ presentacion.bloque.auditorioDia.auditorio.nombre | upper }} <br/>
+	HORA Y ACTIVIDAD {{ presentacion.bloque.horaInicio | date('H:i')}} hs. {{ presentacion.bloque.nombre | upper}}  <br/>
+{% else %}
+	SIN ASIGNAR <br/>
+{% endif %}
+Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})<br/>
+</p>
+<p>{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | escape }} - {{ presentacion.distrito  | raw('html') }}</p>
+
+<hr/><br/>
+
+{% endfor %}
+</body>
+</html>
+{% endspaceless %}

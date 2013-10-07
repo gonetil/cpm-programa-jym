@@ -398,8 +398,20 @@ abstract class BaseController extends Controller
         $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
     	return $response; 
     	
+    }
+    
+    protected function makeWord($data,$template,$filename="") {
+    	
+    	$date = date('d-M-Y');
+		$filename = "$filename $date";
+        $response = $this->render($template,$data);
+        $response->headers->set('Content-Type', 'application/vnd.ms-word;  charset=utf-8');
+        $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.doc"');
+    	return $response; 
     	
     }
+    
+        
     protected function getSystemStats() {
     	$stats = array(); 
     	$repo = $this->getRepository('CpmJovenesBundle:Proyecto');

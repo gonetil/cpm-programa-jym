@@ -302,41 +302,78 @@ class TandaController extends BaseController
     	 	return -1;
     	 else if ( $dia1->getNumero() > $dia2->getNumero() )
     	 	return 1;
-    	 else //caen en el mismo dia 
-	    	 if ($bloque1->getPosicion() < $bloque2->getPosicion() )
-	    	 	return -1;
-	    	 else if ($bloque1->getPosicion() > $bloque2->getPosicion() )		
-    			return 1;
-    			else 
-    				return 0;
+    	 else //caen en el mismo dia
+    	 	{
+			    $auditorio1 = $bloque1->getAuditorioDia();
+			    $auditorio2 = $bloque2->getAuditorioDia();
+    	 		 
+    	 		if ($auditorio1->equals($auditorio2)) //estan en el mismo auditorioDia
+    	 		{   
+    	 			$hora1 = $bloque1->getHoraInicio();
+    	 			$hora2 = $bloque2->getHoraInicio();
+    	 			
+			    	 if ($hora1 < $hora2 )
+			    	 	return -1;
+			    	 else if ($hora1 > $hora2 )		
+		    			return 1;
+		    			else 
+		    				return 0;
+    	 		} else { //no son comparables
+    	 			return ($auditorio1->getId() <= $auditorio2->getId()) ? -1 : 1;
+    	 		}
+    			
+    	 	}	
     }
     
     /**
      * Exporta una tanda a Excel
      *
-     * @Route("export_excel", name="tanda_export_excel")
+     * @Route("export_excel_word", name="tanda_export_excel_and_word")
      **/
     
     public function exportarProyectosExcelAction() {
      	$sort_fn = $this->getRequest()->get('sort_fn');
      	if (!isset($sort_fn))
      		$sort_fn = 'sortByCoordinadorApellido';
+     	
+     	$format = $this->getRequest()->get('format');	
+		if (!isset($format)) 
+			$format = 'csv';
 
      	$tanda_id = $this->getRequest()->get('tanda_id');
 		$tanda = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
         if (!$tanda) 
     		throw $this->createNotFoundException('Tanda no encontrada');
     	
-    	$presentaciones = array();
-    	foreach ( $tanda->getPresentaciones() as $presentacion )
-       		$presentaciones[] = $presentacion;
+    	$presentaciones = $tanda->getPresentaciones()->toArray();
+//    	foreach ( $tanda->getPresentaciones() as $presentacion )
+ //      		$presentaciones[] = $presentacion;
 
 		
 		if (method_exists($this,$sort_fn))
 			usort($presentaciones,array($this,$sort_fn));
+		else 
+		die('metodo de ordenamiento undefined');	
 
-		$template = 'CpmJovenesBundle:Tanda:export_to_csv.xls.twig';
-		return $this->makeExcel(array('presentaciones' => $presentaciones, 'tanda' => $tanda),$template, 'Tanda '.$tanda->getNumero());
+		if ($format == 'word') { 
+					$template = 'CpmJovenesBundle:Tanda:export_to_word.doc.twig' ;
+					$fn = 'makeWord';
+
+		 } else {
+		 	$fn = 'makeExcel';
+		 	$template = 'CpmJovenesBundle:Tanda:export_to_csv.xls.twig';
+		 	
+		 }
+		 
+		 $params = array();
+		 $params[] = array('presentaciones' => $presentaciones, 'tanda' => $tanda);
+		 $params[] = $template;
+		 $params[] = 'Tanda '.$tanda->getNumero();
+		 
+		 return call_user_func_array(array($this,$fn),$params);
+		 
+		
+		
     }
     
     
