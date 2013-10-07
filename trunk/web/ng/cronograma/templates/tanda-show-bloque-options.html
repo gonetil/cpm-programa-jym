@@ -21,6 +21,23 @@
 			<th>Posicion de bloque </th>
 			<td>{{bloque.posicion}}</td>
 		</tr>
+		<tr>
+			<th>Ejes temáticos</th>
+			<td>
+				<ol>
+					<li ng-repeat="eje in bloque.ejesTematicos"> {{ eje.nombre }} </li>
+				</ol> 
+			</td> 
+		</tr>
+		<tr>
+			<th>Áreas de referencia</th>
+			<td>
+				<ul>
+					<li ng-repeat="area in bloque.areasReferencia"> {{ area.nombre }} </li>
+				</ul> 
+			</td> 
+		</tr>
+		
 	</table>
 	
 	<ul class="nav nav-pils nav-stacked">
