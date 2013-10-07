@@ -105,6 +105,8 @@ class ChapaManager {
 		foreach ( $tanda->getDias() as $dia ) 
        		$new_tanda->addDia($this->clonarDia($dia));
 		
+		$this->crearPresentacionesParaTanda($new_tanda,false);
+		 
 		$em = $this->doctrine->getEntityManager();
 		$em->getConnection()->beginTransaction();
     	try { 

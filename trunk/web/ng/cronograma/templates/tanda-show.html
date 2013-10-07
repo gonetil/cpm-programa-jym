@@ -2,7 +2,7 @@
 
  
 <div class="row-fluid">
-	<div class="span6">
+	<div class="span5">
 		<div ng-hide="tanda.numero">Cargando Tanda</div>
 		<div ng-show="tanda.numero"><b>Tanda {{tanda.titulo}}</b>
 			<div class="btn-group" >
@@ -20,11 +20,21 @@
 			</div>
 		</div>
 	</div>
-	<div class="span6" >
+	<div class="span5" >
 		<div ng-repeat="log_line in Logger.buffer" class="alert alert-{{log_line.level}}">
 			{{log_line.time}} &rarr; {{log_line.message}}
 		</div>
 	</div>
+	<div class="span2 referencias-box">
+			<p>Referencias</p>
+			<ul>
+				<li><i class="icon-warning-sign"></i>Eje o área incorrectos</li>
+				<li><i class="icon-ban-circle"></i>Auditorio incorrecto</li>
+				<li><i class="icon-plane"></i>Presentación externa</li>
+				<li><i class="icon-time"></i>Tiempo de bloque excedido</li>
+			</ul>
+	</div>
+	
 </div>
 <hr/>	
 <!-- CRONOGRAMA-->

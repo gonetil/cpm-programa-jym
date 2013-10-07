@@ -398,7 +398,7 @@ app.factory('Presentacion', function($resource){
 	};
 
 	Presentacion.prototype.esCompatibleConBolque = function(bloque) {
-		return (bloque.tieneEje(this.ejeTematico) && bloque.tieneArea(this.areaDeReferencia) );
+		return  ( bloque.tieneEje(this.ejeTematico) && bloque.tieneArea(this.areaReferencia) );
 		
 	};
 	Presentacion.prototype.esCompatibleConAuditorio = function(auditorio) {
