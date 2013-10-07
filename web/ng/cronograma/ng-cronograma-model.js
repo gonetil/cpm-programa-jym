@@ -24,6 +24,11 @@ app.factory('Produccion', function($resource){
 	return $resource('produccion/:produccionId', {produccionId:'@id'}, {});
 });
 
+app.factory('Provincia', function($resource){
+	return $resource('provincia', {}, {});
+});
+
+
 
 app.factory('Auditorio', function($resource){
 	Auditorio = $resource('auditorio/:auditorioId', {auditorioId:'@id'}, {});

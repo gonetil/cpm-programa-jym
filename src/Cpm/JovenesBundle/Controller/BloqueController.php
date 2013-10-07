@@ -128,25 +128,19 @@ class BloqueController extends BaseController
 
         if ($editForm->isValid()) {
 	        $em = $this->getDoctrine()->getEntityManager();
-        	$em->getConnection()->beginTransaction();
-	    	try { 
-	        	if (!$entity->getTienePresentaciones()){ 
-	        		//al no ser un bloque de presentaciones, me aseguro que no tenga ninguna presentacion asignada 
-					foreach ( $entity->getPresentaciones() as $index => $presentacion ) {
-						$presentacion->setBloque(null);
+	    	
+	    	if (!$entity->getTienePresentaciones()){ 
+	        	//al no ser un bloque de presentaciones, me aseguro que no tenga ninguna presentacion asignada
+	        	$presentaciones = $entity->getPresentaciones()->toArray(); 
+				foreach ( $presentaciones as $presentacion ) {
+						$entity->removePresentacion($presentacion);
 						$em->persist($presentacion);
-		 				$entity->removePresentacion($presentacion);
-					}	
-	        	}
-	            $em->persist($entity);
-	            $em->flush();
-				$em->getConnection()->commit();
-	    	} catch (\Exception $e) {
-	    		$em->getConnection()->rollback();
-				$em->close();
-	            throw $e;
-	    	}
-    
+				}	
+	        }
+	        $em->persist($entity);
+	        $em->flush();
+			$this->setSuccessMessage("Bloque modificado satisfactoriamente");
+       
             return $this->redirect($this->generateUrl('bloque_edit', array('id' => $id)));
         }
 

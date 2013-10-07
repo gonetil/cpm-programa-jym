@@ -153,20 +153,14 @@ class CronogramaController extends BaseController
 		   		$dia_destino = null;
 		   		$tandaDestino = $dia_origen->getTanda();
 		    }
-		    $em->getConnection()->beginTransaction();
     		$dia_destino = $this->getChapaManager()->clonarDia($dia_origen,$dia_destino);
 		    $tandaDestino->addDia($dia_destino);
 		    		
    			$em->persist($tandaDestino);
     		$em->flush();
-    		$em->getConnection()->commit();
-    			
     		return $this->newJsonResponse($dia_destino, 3);
     	} catch (\Exception $e) {
-    	   	if ($em->getConnection()->isTransactionActive())
-	    	   	$em->getConnection()->rollback();
-			$em->close();
-            return $this->answerError($e);
+    	   	return $this->answerError($e);
     	}
 	}
 	/**
@@ -479,8 +473,26 @@ class CronogramaController extends BaseController
 	public function listarProduccionesAction() {
 		
 		try { 
-			$temas= $this->getEntityManager()->getRepository('CpmJovenesBundle:Produccion')->findBy(array('anulado' => false));
-			return $this->newJsonResponse($temas,2);			
+			$producciones= $this->getEntityManager()->getRepository('CpmJovenesBundle:Produccion')->findBy(array('anulado' => false));
+			return $this->newJsonResponse($producciones,2);			
+		}
+		catch (\Exception $e) {
+			return $this->answerError($e);
+		}
+	}
+
+	/**
+     * @Route("/provincia")
+     * @Method("get")
+     */
+	public function listarProvinciasAction() {
+		
+		try { 
+			$provincias= PresentacionExterna::provincias();
+			for($i=0; $i<count($provincias);$i++){
+				$provincias[$i]=(object) array('nombre'=>$provincias[$i]);
+			}
+			return $this->newJsonResponse($provincias);			
 		}
 		catch (\Exception $e) {
 			return $this->answerError($e);
@@ -592,8 +604,8 @@ class CronogramaController extends BaseController
 				if (isset($args['nombreCoordinador']))
 					$presentacion->setNombreCoordinador((int) $args['nombreCoordinador'] );
 					
-	        }
-		$em->persist($presentacion);
+	    	    }
+			$em->persist($presentacion);
 	        $em->flush();
 	        
 	        
@@ -635,7 +647,7 @@ class CronogramaController extends BaseController
 	
 	private function answerError($message) {
 		if ($message instanceof \Exception)
-			throw $message;
+			//throw $message;
 			$message=get_class($message).':'.$message->getMessage();
 		
 		$response = new Response(json_encode($message), 500);
@@ -688,16 +700,18 @@ class CronogramaController extends BaseController
 	protected function entityToArray($entity, $depth){
 		if($depth == 0)
 			return;
+		if (!is_object($entity))
+			return $entity;
 		
 		if (method_exists($entity, 'toArray')){
 			$resultArray=$entity->toArray($depth);
 		}else{
-			throw new \Exception();
+			
 			$reflectionEntity = new \ReflectionObject($entity);
 			//TODO muy lindo pero no soporta ciclos ...
 			$resultArray=array();
 		    foreach ($reflectionEntity->getProperties(\ReflectionProperty::IS_PUBLIC + \ReflectionProperty::IS_PROTECTED) as $prop) {
-				$pv = $prop->getValue();
+				$pv = $prop->getValue($entity);
 			    if ($pv == null)
 			      	$jValue="";
 			    elseif (is_object($pv) && ($pv instanceof \Traversable)){
