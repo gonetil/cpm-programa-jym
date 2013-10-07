@@ -4,7 +4,7 @@ var app = angular.module("cronograma", ['ngDragDrop', 'ngResource','$strap.direc
 
 
 app.factory('Logger', function(){
-	Logger= {buffer:[], level:'debug', bufferSize:3};
+	Logger= {buffer:[], level:'info', bufferSize:1};
 	Logger.push=function(level, message){
 		if (message.message)
 			message=message.message;
