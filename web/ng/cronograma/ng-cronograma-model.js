@@ -398,11 +398,16 @@ app.factory('Presentacion', function($resource){
 	};
 
 	Presentacion.prototype.esCompatibleConBolque = function(bloque) {
+		if (!this.ejeTematico || !this.areaReferencia) {
+			return false;
+		}
 		return  ( bloque.tieneEje(this.ejeTematico) && bloque.tieneArea(this.areaReferencia) );
-		
 	};
 	Presentacion.prototype.esCompatibleConAuditorio = function(auditorio) {
-
+		if (!auditorio) {
+			console.warn("Se recibe un auditorio null");
+			return false;
+		}
 		for(var i=0;i<auditorio.producciones.length;i++) {	
 			if ((this.tipoPresentacion != '') && (this.tipoPresentacion.id==auditorio.producciones[i].id))
 				return true;

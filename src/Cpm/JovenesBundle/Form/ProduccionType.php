@@ -11,9 +11,9 @@ class ProduccionType extends AbstractType
     {
         $builder
             ->add('nombre')
-            ->add('anulado',null,array('required' => false))
-            ->add('tipoPresentacion',null,array('required' => false))
+            ->add('tipoPresentacion',null,array('required' => true , 'label'=>'Tipo de presentacion asociada/soporte (sera utilizado luego para la diagramación de las tandas de CHAPA). Ej: video'))
             ->add('duracionEstimada',null,array('required' => true , 'label'=> 'Duración estimada para las presentaciones de este tipo' ))
+            ->add('anulado',null,array('required' => false, 'label'=>'Anulada?'))
             ;
     }
 

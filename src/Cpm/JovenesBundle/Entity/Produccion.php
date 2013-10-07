@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Cpm\JovenesBundle\Entity\Produccion
@@ -24,7 +25,8 @@ class Produccion
     /**
      * @var string $nombre
      *
-     * @ORM\Column(name="nombre", type="string")
+     * @ORM\Column(name="nombre", type="string",nullable=false)
+     * @Assert\NotBlank(message="Debe completar el nombre del tipo de producción")
      */
     private $nombre;
 
@@ -39,17 +41,18 @@ class Produccion
     /**
      * @var string $tipoPresentacion
      *
-     * @ORM\Column(name="tipoPresentacion", type="string",nullable=true)
+     * @ORM\Column(name="tipoPresentacion", type="string",nullable=false)
+     * @Assert\NotBlank(message="Debe completar tipo de presentacion asociado a esta producción")
      */
-
 	private $tipoPresentacion; //slug o nombre corto
 
     /**
      * @var string $duracionEstimada
      *
-     * @ORM\Column(name="duracionEstimada", type="integer",options={"default" = 0})
+     * @ORM\Column(name="duracionEstimada", type="integer",options={"default" = 15})
+     * @Assert\Min(limit="1", message="La duración no es válida. Debe ser mayor a 0")
      */
-	private $duracionEstimada=0;
+	private $duracionEstimada=15;
     /**
      * Get id
      *
@@ -106,7 +109,7 @@ class Produccion
 	}
 	
 	public function setTipoPresentacion($tp) {
-		$this->tipoPresentacion = $tp;
+		$this->tipoPresentacion = strtolower($tp);
 	}
     
     public function getDuracionEstimada() {
