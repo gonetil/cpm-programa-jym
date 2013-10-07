@@ -3181,6 +3181,7 @@ div.caja-bloque-presentaciones {
 .caja-bloque-presentaciones > .badge-presentacion {
 	width: 140px;
 	padding-right: 10px;
+	height:26px;
 }
 .caja-bloque-presentaciones > .badge-presentacion:hover{
 	overflow: visible;
@@ -3195,12 +3196,11 @@ div.caja-bloque-presentaciones {
 	max-width: 170px;
 	overflow: hidden;
 	width: auto;
-/* 	height:14px; */
 	border-radius:4px;
 	margin-bottom: 2px;
 }
 .badge-presentacion.presentacion-muy_buena {
-	background-color: #6aDEFF !important;
+	background-color: #4D90FE !important;
 }
 
 .presentacion-extra-info {

@@ -1,5 +1,5 @@
 function TandaShowCtrl($rootScope,$scope, $routeParams, Tanda, Logger) {
-
+	$rootScope.getTanda();
 	var tanda = $rootScope.getTanda($routeParams.tandaId);
 	
 	$scope.presentacion_droppable={
@@ -40,7 +40,9 @@ function TandaShowCtrl($rootScope,$scope, $routeParams, Tanda, Logger) {
     	//}
     	return clases;
     }
-
+    $scope.icons=function(){
+    	return "icon-star icon-star";
+    }
     //////////////////////////////////////////
     
     $scope.presentacionDropped=function(event, ui){
@@ -247,10 +249,12 @@ function PresentacionNewCtrl($scope, $routeParams, $location, Presentacion,Produ
 	$scope.valoraciones = ["Muy bueno","Bueno","Regular","Sin especificar"];
 	$scope.savePresentacion=function(){
 		$scope.presentacion.$save(
-				function(entity){Logger.success("Nueva presentacion externa ("+entity.id+") agregada a la tanda")},
+				function(entity){
+					Logger.success("Nueva presentacion externa ("+entity.id+") agregada a la tanda");
+					$location.url("/tanda/"+$scope.presentacion.tanda);
+				},
 				function(error){Logger.error("Error al crear una presentacion"); Logger.error(error.data)}
 		);
-		$location.url("/tanda/"+$routeParams.tandaId);
 	}
 }
 
@@ -274,23 +278,32 @@ function PresentacionEditCtrl($scope, $routeParams, $location, Presentacion,Prod
 	$scope.tandas=Tanda.query();
 	$scope.savePresentacion = function(){
 		$scope.presentacion.$save(
-				function(entity){Logger.debug("Presentacion ("+entity.id+") actualizada ")},
+				function(entity){
+					Logger.debug("Presentacion ("+entity.id+") actualizada ");
+					$location.url("/tanda/"+$scope.presentacion.tanda);
+				},
 				function(error){Logger.error("Error al guardar la presentacion "+pid); Logger.error(error.data);}
 		);
-		$location.url("/tanda/"+$scope.presentacion.tanda);
     }
 }
 
-function PresentacionRemoveCtrl($scope, $routeParams, $location, Presentacion, Logger){
+function PresentacionRemoveCtrl($rootScope, $scope, $routeParams, $location, Presentacion, Logger){
 	$scope.confirmMessage = "Esta seguro que desea eliminar la presentacion? ";
 	$scope.descriptionMessage = "Esta operación no se podrá deshacer";
 	var pid = $routeParams.presentacionId;
-	$scope.presentacion = new Presentacion({id:pid});
+	
+	$scope.presentacion = Presentacion.get({presentacionId:$routeParams.presentacionId});
+	
+	//$scope.presentacion = new Presentacion({id:pid});
 	$scope.confirmOk= function(){
+		var tanda= $scope.presentacion.tanda;
 		$scope.presentacion.$remove(
-				function(message){Logger.success("Presentación externa "+pid+" eliminada"); Logger.success(message)}, 
+				function(message){
+					Logger.success("Presentación externa "+pid+" eliminada"); 
+					Logger.success(message)
+					$location.url("/tanda/"+tanda);
+				}, 
 				function(error){Logger.error("Error al eliminar la presentacion "+pid); Logger.error(error.data);}
 		);
-		history.back();
 	}
 }

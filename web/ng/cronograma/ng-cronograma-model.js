@@ -108,7 +108,8 @@ app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Pres
 	//DEFAULT DAO
 	Tanda = $resource('tanda/:tandaId', {tandaId: '@id'}, {
 		savePresentaciones: {method:'POST', params:{}, url:'tanda/:tandaId/savePresentaciones'},
-		resetPresentaciones: {method:'POST', params:{}, url:'tanda/:tandaId/resetPresentaciones'}
+		resetPresentaciones: {method:'POST', params:{}, url:'tanda/:tandaId/resetPresentaciones'},
+		get: {method:'GET', params:{}, cache:false}
 	});
 
 	
