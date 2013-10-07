@@ -33,6 +33,9 @@ function TandaShowCtrl($rootScope,$scope, $routeParams, Tanda, Logger) {
     	//if (o instanceOf Presentacion){
     	if (o.valoracion == 'Muy bueno') 
     		clases+=' presentacion-muy_buena';
+    	
+    	if (o.tipo == 'externa')
+    		clases+=' presentacion-externa';
     	//}elseif (o instanceOf Bloque){
     	//}
     	return clases;
