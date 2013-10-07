@@ -24,7 +24,7 @@
     </li>
     <li>
         <a href="#" onclick="$('.hiddenForm').hide(); $('#exportExcelForm').toggle(); return false;">
-            Exportar a Excel
+            Exportar
         </a>
     </li>
     
@@ -46,11 +46,17 @@
   <div class="hiddenForms">
 	
 	  <div class="hiddenForm" id="exportExcelForm">
-	            <form method="get" action="{{ path('tanda_export_excel') }}">
+	            <form method="get" action="{{ path('tanda_export_excel_and_word') }}">
 	            	<label for="sort_fn">Orden</label>
 		            <select name="sort_fn">
 		            	<option value="sortByCoordinadorApellido"> Por apellido del coordinador</option>
 		            	<option value="sortByDiaBloque"> Por dia y bloque</option>
+		            </select>
+		            <br/>
+		            <label for="format">Formato</label>
+		            <select name="format">
+		            	<option value="word">Word</option>
+		            	<option value="csv">Excel</option>
 		            </select>
 		            <input type="hidden" name="tanda_id" value="{{ entity.id }}" />
 		            <button type="submit">Exportar</button>
