@@ -16,8 +16,10 @@
 			class="badge badge-presentacion"  ng-class="get_css_classes(p)" ng-style="get_css_styles(p)"
 			data-presentacion="{{p.id}}" data-bloque="{{bloque.id}}"  
 			data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options">
-			{{p.escuela}} {{ (p.valoracion == "Muy bueno") ? "(MB)" : "" }}
-			 
+			{{p.escuela}} <span class="slug-tipo-presentacion">({{ p.tipoPresentacion.slug }})</span>
+			 <div class="presentacion-extra-info">
+			 {{ p.localidad }} | {{ p.distrito}}
+			 </div>
 		</div>
 	</div>
 </div>
