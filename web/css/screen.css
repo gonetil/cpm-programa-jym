@@ -3149,8 +3149,17 @@ tr:nth-child(odd).caja-dia{
 	padding:10px;
 }
 
+
+td.caja-auditorio-dia {
+	width: 400px;
+}
+
+.caja-auditorio-dia > .header-caja{
+	padding: 4px 19px;
+	background-color: #fff;
+}
 .caja-bloque{
-	margin: 0px 0px 10px 10px;
+	margin: 0px 0px 0px 5px;
 }
 
 .caja-bloque > .header-caja {
@@ -3161,7 +3170,7 @@ tr:nth-child(odd).caja-dia{
 
 div.caja-bloque-presentaciones {
 	background-color: white;
-	padding: 5px 10px;
+	padding: 2px;
 	margin: 0px;
 	overflow: hidden;
 	
@@ -3169,17 +3178,14 @@ div.caja-bloque-presentaciones {
 	border-bottom: 1px solid #ddd;
 	border-radius:4px;
 }
-
-div.caja-bloque-presentaciones:hover{
+.caja-bloque-presentaciones > .badge-presentacion {
+	width: 140px;
+	padding-right: 10px;
+}
+.caja-bloque-presentaciones > .badge-presentacion:hover{
 	overflow: visible;
-}
-td.caja-auditorio-dia {
-	width: 400px;
-}
-
-.caja-auditorio-dia > .header-caja{
-	padding: 4px 19px;
-	background-color: #fff;
+	z-index:99;
+	height:auto;
 }
 
 .badge-presentacion {
@@ -3188,6 +3194,10 @@ td.caja-auditorio-dia {
 	cursor: move;
 	max-width: 170px;
 	overflow: hidden;
+	width: auto;
+/* 	height:14px; */
+	border-radius:4px;
+	margin-bottom: 2px;
 }
 .badge-presentacion.presentacion-muy_buena {
 	background-color: #6aDEFF !important;
@@ -3221,6 +3231,7 @@ td.caja-auditorio-dia {
 	padding: 5px;
 	border-top: solid 5px white;
 	opacity:0.8;
+/* 	overflow: scroll; queda deshabiltado porque sino no se ven los popovers*/
 }
 .presentaciones_libres:hover{
 	opacity:1;
@@ -3278,7 +3289,10 @@ button.btn{
 }
 
 #cronograma-view  .popover{
-	max-width:500px;
+/* 	max-width:500px; */
+max-width: 60%;
+/* max-height: 100%; */
+overflow: overlay;
 }
 #cronograma-view  label{
 	text-align: left;
