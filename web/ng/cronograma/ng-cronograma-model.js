@@ -399,5 +399,21 @@ app.factory('Presentacion', function($resource){
 	Presentacion.prototype.setBloque = function(bloque) {
 		this.bloque = bloque;
 	};
+
+	Presentacion.prototype.esCompatibleConBolque = function(bloque) {
+		//FIXMEcompletar condiciones
+		
+		return false;
+	};
+	Presentacion.prototype.esCompatibleConAuditorio = function(auditorio) {
+		//FIXMEcompletar condiciones
+		
+		return false;
+	};
 	return Presentacion;
+	
+	return Presentacion;
+	
+	
+	
 });
