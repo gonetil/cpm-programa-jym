@@ -36,6 +36,9 @@ app.run(function ($rootScope, Logger, Tanda) {
     $rootScope.asset = asset;
     $rootScope.Logger = Logger;
     
+    $rootScope.getTandaActual = function(){
+    	return $rootScope.tanda;
+    }
     $rootScope.getTanda = function(tandaId){
     	//Gestiona la currentTanda
     	if ($rootScope.tanda && $rootScope.tanda.id != tandaId){

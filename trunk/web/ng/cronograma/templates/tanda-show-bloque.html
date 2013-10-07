@@ -1,7 +1,10 @@
 <div class="caja-bloque" id="bloque-{{bloque.id}}">
 
 	<div class="header-caja" data-unique="1" bs-popover="asset('tanda-show-bloque-options.html')">
-		<a class="btn btn-small btn-link" >{{bloque.horaInicio}}HS {{bloque.nombre}}</a>
+		<a class="btn btn-small btn-link" > 
+			{{bloque.horaInicio}}HS {{bloque.nombre}}
+			<i ng-show="bloque.durecionEstimada() > bloque.duracion" class="icon-warning-sign"></i>
+		</a>
 	</div>
 
 	<div ng-model="bloque.presentaciones" ng-show="bloque.tienePresentaciones" 
@@ -10,15 +13,20 @@
 		jqyoui-droppable="presentacion_droppable" data-jqyoui-options="presentacion_droppable_options">
 
 		<!-- PRESENTACION -->
-		
 		<div ng-repeat="p in bloque.presentaciones" ng-model="bloque.presentaciones"
 		  	data-unique="1" bs-popover="asset('tanda-show-presentacion-options.html')" 
 			class="badge badge-presentacion"  ng-class="get_css_classes(p)" ng-style="get_css_styles(p)"
 			data-presentacion="{{p.id}}" data-bloque="{{bloque.id}}"  
 			data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options">
-			{{p.escuela}} <span class="slug-tipo-presentacion">({{ p.tipoPresentacion.slug }})</span>
+			<i ng-hide="p.esCompatibleConBolque(bloque)" class="icon-warning-sign"></i>
+			<i ng-hide="p.esCompatibleConAuditorio(auditorioDia.auditorio)" class="icon-ban-circle"></i>
+			<i ng-show="p.tipo == 'externa'" class="icon-plane"></i>
+			
+			
+			 {{p.escuela}} <span class="slug-tipo-presentacion">({{ p.tipoPresentacion.slug }})</span>
 			 <div class="presentacion-extra-info">
-			 {{ p.localidad }} | {{ p.distrito}}
+				{{ p.localidad }} | {{ p.distrito}}
+				
 			 </div>
 			 <div class="presentacion-extra-info">
 			 {{ p.areaReferencia.nombre }}
