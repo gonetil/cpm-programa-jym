@@ -70,10 +70,10 @@
               
               <div class="row-fluid" ng-init="countBloquesPorColumna=auditorioDia.bloques.length/2">
             	<div class="span6">
-			  	  <div  ng-repeat="bloque in auditorioDia.bloques | toArray | orderBy:'posicion'" ng-show="$index < countBloquesPorColumna" ng-include="asset('tanda-show-bloque.html')">{{$index}}</div>
+			  	  <div  ng-repeat="bloque in auditorioDia.bloques | toArray | orderBy:'horaInicio'" ng-show="$index < countBloquesPorColumna" ng-include="asset('tanda-show-bloque.html')">{{$index}}</div>
 				</div>
     	       	<div class="span6">
-			  	  <div ng-repeat="bloque in auditorioDia.bloques | toArray| orderBy:'posicion'" ng-show="$index >= countBloquesPorColumna" ng-include="asset('tanda-show-bloque.html')">{{$index}}</div>
+			  	  <div ng-repeat="bloque in auditorioDia.bloques | toArray| orderBy:'horaInicio'" ng-show="$index >= countBloquesPorColumna" ng-include="asset('tanda-show-bloque.html')">{{$index}}</div>
 				</div>
               </div>
               
