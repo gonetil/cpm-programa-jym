@@ -15,11 +15,10 @@
 	<label>Localidad</label>
 	<input type="text" placeholder="Localidad" ng-model="presentacion.localidad" >
 	
-	<label>Distrito</label>
-	<input type="text" placeholder="Distrito" ng-model="presentacion.distrito" >
-	
 	<label>Provincia</label>
-	<input type="text" placeholder="Provincia" ng-model="presentacion.provincia" required>
+	<select ng-model="presentacion.provincia" ng-required="true" ng-options="tp.nombre as tp.nombre for tp in provincias" required>
+		<option value="">Seleccione una provincia</option>
+	</select>
 	
 	<label>Cantidad de Personas confirmadas</label>
 	<input type="number" value="{{presentacion.personasConfirmadas}}" ng-model="presentacion.personasConfirmadas" required min="0">
@@ -40,10 +39,9 @@
 	
 	<label>Valoracion</label>
 	<select ng-model="presentacion.valoracion" ng-required="true" ng-options="val for val in valoraciones"></select>
-	
 		
-	<label>Duración (en minutos)</label>
-	<input type="number" value="{{presentacion.duracion}}" ng-model="presentacion.duracion" min="0">
+<!-- 	<label>Duración (en minutos)</label> -->
+<!-- 	<input type="number" value="{{presentacion.duracion}}" ng-model="presentacion.duracion" min="0"> -->
 	
 	
 	<label class="checkbox" ng-show="presentacion.id">

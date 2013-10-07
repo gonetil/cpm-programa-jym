@@ -47,8 +47,11 @@ class ChapaManager {
 		$nuevo_bloque->setDuracion($bloque->getDuracion());
 		$nuevo_bloque->setHoraInicio($bloque->getHoraInicio());
 		$nuevo_bloque->setAuditorioDia($bloque->getAuditorioDia());	
-		$nuevo_bloque->setEjesTematicos($bloque->getEjesTematicos());
-		$nuevo_bloque->setAreasReferencia($bloque->getAreasReferencia());
+		$nuevo_bloque->setEjesTematicos($bloque->getEjesTematicos()->toArray());
+		$nuevo_bloque->setAreasReferencia($bloque->getAreasReferencia()->toArray());
+		
+		//$nuevo_bloque = clone $bloque;
+		//$nuevo_bloque->setId(null);
 		return $nuevo_bloque;
 	}
 	
@@ -110,7 +113,8 @@ class ChapaManager {
 			$em->getConnection()->commit();
 			return $new_tanda;
     	} catch (\Exception $e) {
-    		$em->getConnection()->rollback();
+    		if ($em->getConnection()->isTransactionActive())
+	    	   	$em->getConnection()->rollback();
 			$em->close();
             throw $e;
     	}
@@ -196,7 +200,8 @@ class ChapaManager {
 			$em->getConnection()->commit();
 			
     	} catch (\Exception $e) {
-    		$em->getConnection()->rollback();
+    		if ($em->getConnection()->isTransactionActive())
+	    	   	$em->getConnection()->rollback();
 			$em->close();
             throw $e;
     	}  	
@@ -275,7 +280,8 @@ class ChapaManager {
 	        $em->flush();		
 			$em->getConnection()->commit();
     	} catch (\Exception $e) {
-    		$em->getConnection()->rollback();
+    		if ($em->getConnection()->isTransactionActive())
+	    	   	$em->getConnection()->rollback();
 			$em->close();
             throw $e;
     	}
@@ -293,7 +299,8 @@ class ChapaManager {
 	        $em->flush();		
 			$em->getConnection()->commit();
     	} catch (\Exception $e) {
-    		$em->getConnection()->rollback();
+    		if ($em->getConnection()->isTransactionActive())
+	    	   	$em->getConnection()->rollback();
 			$em->close();
             throw $e;
     	}

@@ -3149,6 +3149,16 @@ tr:nth-child(odd).caja-dia{
 	padding:10px;
 }
 
+td.caja-auditorio-dia {
+	width: 400px;
+}
+
+.caja-auditorio-dia > .header-caja{
+	padding: 4px 19px;
+	background-color: #fff;
+}
+
+
 .caja-bloque{
 	margin: 0px 0px 10px 10px;
 }
@@ -3159,44 +3169,36 @@ tr:nth-child(odd).caja-dia{
 	font-size: 12px;
 }
 
-div.caja-bloque-presentaciones {
+.caja-bloque-presentaciones {
 	background-color: white;
 	padding: 5px 10px;
 	margin: 0px;
 	overflow: hidden;
-	
-	
 	border-bottom: 1px solid #ddd;
 	border-radius:4px;
 }
-
-div.caja-bloque-presentaciones:hover{
-	overflow: visible;
+.caja-bloque-presentaciones > .badge-presentacion {
+	max-width: 170px;
 }
-td.caja-auditorio-dia {
-	width: 400px;
-}
-
-.caja-auditorio-dia > .header-caja{
-	padding: 4px 19px;
-	background-color: #fff;
-}
+/* div.caja-bloque-presentaciones:hover{ */
+/* 	overflow: visible; */
+/* } */
 
 .badge-presentacion {
 	background-color: #3a87ad;
 	vertical-align: middle;
 	cursor: move;
-	max-width: 170px;
 	overflow: hidden;
 }
-.badge-presentacion.presentacion-muy_buena {
-	background-color: #6aDEFF !important;
-}
+
 .badge-presentacion:hover {
 /* 	max-width: inherit; */
 /* 	overflow: visible; */
 /* 	z-index: 1; */
-	
+}
+
+.presentacion-muy_buena {
+	background-color: #6aDEFF !important;
 }
 
 .presentaciones_libres{
@@ -3211,6 +3213,7 @@ td.caja-auditorio-dia {
 	padding: 5px;
 	border-top: solid 5px white;
 	opacity:0.8;
+	overflow: scroll;
 }
 .presentaciones_libres:hover{
 	opacity:1;
@@ -3251,6 +3254,15 @@ td.caja-auditorio-dia {
 	display: table;
 	margin: auto auto;
 }
+
+
+
+#cronograma-view  .popover{
+	max-width:500px;
+}
+#cronograma-view  label{
+	text-align: left;
+}
 /*******************************************/
 /*******FIN ESTILOS DEL CRONOGRAMA**********/
 /*******************************************/
@@ -3265,11 +3277,4 @@ button.btn{
 }
 *:hover > .hidden-hint{
 	visibility: visible;	
-}
-
-#cronograma-view  .popover{
-	max-width:500px;
-}
-#cronograma-view  label{
-	text-align: left;
 }

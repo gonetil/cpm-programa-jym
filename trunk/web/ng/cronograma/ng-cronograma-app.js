@@ -31,10 +31,32 @@ app.factory('Logger', function(){
 	return Logger;
 });
 
-app.run(function ($rootScope, Logger) {
+app.run(function ($rootScope, Logger, Tanda) {
 	//declaro las variables y funciones globales
     $rootScope.asset = asset;
     $rootScope.Logger = Logger;
+    
+    $rootScope.getTanda = function(tandaId){
+    	//Gestiona la currentTanda
+    	if ($rootScope.tanda && $rootScope.tanda.id != tandaId){
+    		console.log("La tanda actual ("+$rootScope.tanda.id+") es diferente a la pedida ("+tandaId + ") ==> Hago $rootScope.tanda = null");
+    		$rootScope.tanda = null;
+    	}
+        if (!$rootScope.tanda){
+    		Logger.debug("La tanda actual estaba vacia, levanto la tanda "+tandaId);
+    		$rootScope.tanda = Tanda.get(
+    				{tandaId: tandaId},
+    				function(tanda){
+		    				tanda.initialize();
+		    				console.log("Se cargo e inicializó correctamente la tanda "+tandaId);
+		    		}, 
+		    		function(error){Logger.error("Se produjo un error al recuperar la tanda "+ tandaId); Logger.error(error.data);}
+    		);
+    	}
+    	return $rootScope.tanda;
+    };
+	
+    
 });
 
 //hacemos el ruteo de nuestra aplicación

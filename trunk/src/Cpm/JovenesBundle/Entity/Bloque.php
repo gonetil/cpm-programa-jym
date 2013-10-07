@@ -97,6 +97,16 @@ class Bloque
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Set posicion
      *
      * @param integer $posicion

@@ -18,7 +18,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PresentacionExterna extends Presentacion
 {
-    /**
+
+	private static $provincias = array("Ciudad de Buenos Aires", "Buenos Aires", "Catamarca", "Chaco", 
+		"Chubut", "Córdoba", "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza", 
+		"Misiones", "Neuquén", "Río Negro", "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe", 
+		"Santiago del Estero", "Tierra del Fuego, Antártida e Islas del Atlántico Sur", "Tucumán");
+
+	public static function provincias(){
+		return self::$provincias;
+	}
+	
+	/**
      * @var string $titulo
      *
      * @ORM\Column(name="titulo", type="string", length=255)
@@ -123,6 +133,10 @@ class PresentacionExterna extends Presentacion
      */
     public function setProvincia($provincia)
     {
+    	if (!empty($provincia) && (array_search($provincia, self::$provincias) === false)){
+    		throw new \InvalidArgumentException("La provincia $provincia no es valida");
+    	}
+    	
         $this->provincia = $provincia;
     }
 

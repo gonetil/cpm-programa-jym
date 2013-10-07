@@ -505,7 +505,8 @@ class UsuarioController extends BaseController
 			$cnn->commit();
 			$em->flush();
 		} catch (\Exception $e) {
-			$cnn->rollback();
+			if ($cnn->isTransactionActive())
+	    	   	$cnn->rollback();
 			$em->close();
 			throw $e;
 		}
