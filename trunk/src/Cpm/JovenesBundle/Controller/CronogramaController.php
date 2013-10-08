@@ -622,8 +622,17 @@ class CronogramaController extends BaseController
      */
 	public function eliminarPresentacionAction($id) {
 		try { 
-			$presentacion = $this->getEntityForDelete('CpmJovenesBundle:PresentacionExterna', $id);
 			$em = $this->getDoctrine()->getEntityManager();
+			$presentacion = $this->getEntityForDelete('CpmJovenesBundle:Presentacion', $id);
+			
+			if ($presentacion->getTipo() == 'interna') { //pongo la invitacion como rechazada
+			
+				$invitacion = $presentacion->getInvitacion();
+				$invitacion->setAceptoInvitacion(false);
+				$em->persist($invitacion);
+				
+			}
+			
 			$em->remove($presentacion);
 	        $em->flush();
 			return $this->answerOk("Se eliminó con éxito la presentación externa número {$id}");			
