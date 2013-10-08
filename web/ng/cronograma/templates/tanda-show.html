@@ -97,6 +97,7 @@
 				
              	data-presentacion="{{p.id}}" class="badge badge-presentacion" ng-class="get_css_classes(p)" ng-style="get_css_styles(p)" 
              	data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options" > 
+	          	<i ng-show="p.tipo == 'externa'" class="icon-plane"></i>
 	          	{{p.escuela}} ({{p.distrito}})
 		</div>
 	</div>
