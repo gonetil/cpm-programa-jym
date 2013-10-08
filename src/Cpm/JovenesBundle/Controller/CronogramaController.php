@@ -600,9 +600,9 @@ class CronogramaController extends BaseController
 					$presentacion->setPersonasConfirmadas((int) $args['personasConfirmadas'] );
 					
 				if (isset($args['apellidoCoordinador']))
-					$presentacion->setApellidoCoordinador((int) $args['apellidoCoordinador'] );
+					$presentacion->setApellidoCoordinador((string)$args['apellidoCoordinador'] );
 				if (isset($args['nombreCoordinador']))
-					$presentacion->setNombreCoordinador((int) $args['nombreCoordinador'] );
+					$presentacion->setNombreCoordinador((string) $args['nombreCoordinador'] );
 					
 	    	    }
 			$em->persist($presentacion);
