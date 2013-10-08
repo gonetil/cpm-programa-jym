@@ -288,8 +288,8 @@ function PresentacionEditCtrl($scope, $routeParams, $location, Presentacion,Prod
 }
 
 function PresentacionRemoveCtrl($rootScope, $scope, $routeParams, $location, Presentacion, Logger){
-	$scope.confirmMessage = "Esta seguro que desea eliminar la presentacion? ";
-	$scope.descriptionMessage = "Esta operación no se podrá deshacer";
+	$scope.confirmMessage = "Esta seguro que desea eliminar la presentacion?";
+	$scope.confirmDescription = "Esta operación no se podrá deshacer. Si la presentación está asociada a un proyecto del sistema, el proyecto no será modificado. ";
 	var pid = $routeParams.presentacionId;
 	
 	$scope.presentacion = Presentacion.get({presentacionId:$routeParams.presentacionId});
@@ -299,7 +299,7 @@ function PresentacionRemoveCtrl($rootScope, $scope, $routeParams, $location, Pre
 		var tanda= $scope.presentacion.tanda;
 		$scope.presentacion.$remove(
 				function(message){
-					Logger.success("Presentación externa "+pid+" eliminada"); 
+					Logger.success("Presentación "+pid+" eliminada"); 
 					Logger.success(message)
 					$location.url("/tanda/"+tanda);
 				}, 
