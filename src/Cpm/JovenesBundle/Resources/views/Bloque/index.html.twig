@@ -9,7 +9,6 @@
         <tr>
         <th>Id</th>
             <th>Nombre</th>
-            <th>Posicion</th>
             <th>Hora de inicio</th>
             <th>Duración</th>
             <th>Tipo</th>
@@ -22,7 +21,6 @@
         <tr>
             <td>{{ entity.id  }}</td>
             <td><a href="{{ path('bloque_show', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
-            <td>{{ entity.posicion }}</td>
             <td>{% if entity.horaInicio %}{{ entity.horaInicio|date('H:i') }}{% endif%}</td>
             <td>{{ entity.duracion }}</td>
             <td>{% if entity.tienePresentaciones %} Bloque de presentaciones ({{ entity.presentaciones | length }} asignadas){% else %} Bloque simple {% endif %} </td>

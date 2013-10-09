@@ -40,7 +40,7 @@ app.factory('Auditorio', function($resource){
 
 app.factory('Bloque', function($resource){
 	Bloque = $resource('bloque/:bloqueId', {bloqueId:'@id'}, {
-		  mover: {method:'POST', params:{posicion:0}, url: 'bloque/:bloqueId/mover'}
+//		  mover: {method:'POST', params:{posicion:0}, url: 'bloque/:bloqueId/mover'}
 	});
 	
 	Bloque.prototype.tieneEje = function(eje){

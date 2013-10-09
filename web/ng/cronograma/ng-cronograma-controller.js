@@ -211,15 +211,6 @@ function BloqueEditCtrl($scope, $routeParams, $location, Bloque,EjeTematico, Are
 		history.back();
     }
 }
-function BloqueMoverCtrl($scope, $routeParams, $location, Bloque, Logger){
-	var bloqueDTO=new Bloque({id: $routeParams.bloqueId, posicion: $routeParams.posicion}); 
-	bloqueDTO.$save({}, 
-				function(){Logger.debug("Se movio el bloque " +bloqueDTO.id);}, 
-				function(error){Logger.error("Se produjo un error al mover el bloque "); Logger.error(error.data)}
-	);
-	
-	history.back();
-}
 
 function BloqueRemoveCtrl($scope, $routeParams, $location, Bloque, Logger){
 	$scope.confirmMessage = "Esta seguro que desea eliminar el Bloque?";

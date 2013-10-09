@@ -23,7 +23,7 @@ class AuditorioDia
 
 	/**
      * @ORM\OneToMany(targetEntity="Bloque", mappedBy="auditorioDia", cascade={"all"})
-     * @ORM\OrderBy({"posicion" = "ASC"})
+     * @ORM\OrderBy({"horaInicio" = "ASC"})
      **/
     private $bloques;
     
@@ -63,10 +63,6 @@ class AuditorioDia
 	}
 	
 	public function addBloque(\Cpm\JovenesBundle\Entity\Bloque $b) {
-		$this->reordenarBloques();
-		
-		$b->setPosicion(count($this->bloques)+1);
-	
 		$this->bloques->add($b);
 		$b->setAuditorioDia($this);
 
@@ -75,57 +71,7 @@ class AuditorioDia
     public function removeBloque(\Cpm\JovenesBundle\Entity\Bloque $b) {
     	$this->bloques->removeElement($b);
     	//$b->setAuditorioDia(null);
-    	$this->reordenarBloques();
     }
-    
-    public function moverBloque($bloqueAMover, $nuevaPosicion){
-    	if ($nuevaPosicion < 1)
-    		$nuevaPosicion=1;
-    	if ($bloqueAMover->getPosicion() > $nuevaPosicion)
-    		$haciaAdelante=false;
-    	elseif ($bloqueAMover->getPosicion() < $nuevaPosicion)
-    		$haciaAdelante=true;
-    	else
-    		return;
-	    
-    	
-    	foreach ($this->bloques as $b){
-	    	if ($haciaAdelante){
-	    		if ($b->getPosicion() >= $nuevaPosicion){
-		    		echo "Muevo el bloque {$bloqueAMover->getId()} de la posicion {$bloqueAMover->getPosicion()} a {$nuevaPosicion}";
-	        		$bloqueAMover->setPosicion($b->getPosicion());
-		    		$bloqueAMover=$b;
-		    		$nuevaPosicion++;
-				}
-	    	}else{//haciaAtras
-	    	//TODO
-	    	}
-	    }
-	    echo "Muevo el bloque {$bloqueAMover->getId()} de la posicion {$bloqueAMover->getPosicion()} a {$nuevaPosicion}";
-        $bloqueAMover->setPosicion($nuevaPosicion);
-    	
-    	//$this->reordenarBloques();
-    }
-    
-    public function getBloqueEnPosicion($posicion){
-    	foreach ($this->bloques as $b){
-    		if ($b->getPosicion() == $posicion)
-    			return $b;
-    	}
-    	return null;
-    }
-    
-	protected function reordenarBloques(){
-		$numero = 1;
-		foreach($this->bloques as $b){
-			if ($b->getPosicion() != $numero){
-				echo "reposiciono el bloque {$b->getId()} de {$b->getPosicion()} a {$numero} <br>";
-				$b->setPosicion($numero);
-			}
-			$numero++; 
-		}
-	}
-    
     
 	public function getDia() {
 		return $this->dia;

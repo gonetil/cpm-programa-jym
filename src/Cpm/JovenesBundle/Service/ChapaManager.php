@@ -42,7 +42,6 @@ class ChapaManager {
 	public function clonarBloque($bloque,$auditorioDia=null) {
 		$nuevo_bloque = new Bloque();
 		$nuevo_bloque->setNombre($bloque->getNombre());
-		$nuevo_bloque->setPosicion($bloque->getPosicion());
 		$nuevo_bloque->setTienePresentaciones($bloque->getTienePresentaciones());
 		$nuevo_bloque->setDuracion($bloque->getDuracion());
 		$nuevo_bloque->setHoraInicio($bloque->getHoraInicio());

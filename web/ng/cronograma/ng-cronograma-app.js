@@ -76,7 +76,6 @@ app.config(['$routeProvider', function($routeProvider, $rootScope) {
 		when('/auditorioDia/:auditorioDiaId/edit', {templateUrl:asset('auditorioDia-form.html'), controller: AuditorioDiaEditCtrl}).
 		when('/auditorioDia/:auditorioDiaId/remove', {templateUrl: asset('item-remove.html'), controller: AuditorioDiaRemoveCtrl}).
 		when('/bloque/new/auditorioDia/:auditorioDiaId', {templateUrl: asset('bloque-form.html'), controller: BloqueNewCtrl}).
-		when('/bloque/:bloqueId/mover', {template: 'no-template', controller: BloqueMoverCtrl}).
 		when('/bloque/:bloqueId/edit', {templateUrl: asset('bloque-form.html'), controller: BloqueEditCtrl}).
 		when('/bloque/:bloqueId/remove', {templateUrl: asset('item-remove.html'), controller: BloqueRemoveCtrl}).
 		when('/presentacion/new/tanda/:tandaId', {templateUrl: asset('presentacion-form.html'), controller: PresentacionNewCtrl}).
