@@ -1,48 +1,50 @@
 <form ng-submit="savePresentacion()">
-<h2>{{ textButton }} Presentacion Externa {{presentacion.id}}</h2>
+<h2>{{ textButton }} Presentacion {{presentacion.tipo}} {{presentacion.id}}</h2>
 	<input type="hidden" ng-model="presentacion.tipo" value="externa" required>
 	
 <fieldset>
-	<legend>Datos de la escuela</legend>
-	
-	<label>Escuela</label>
-	<input type="text" placeholder="Escuela" ng-model="presentacion.escuela" >
-	
-	<label>Coordinador</label>
-	<input type="text" placeholder="Nombre" ng-model="presentacion.nombreCoordinador" >
-	<input type="text" placeholder="Apellido" ng-model="presentacion.apellidoCoordinador" >
+	<div ng-show="presentacion.tipo == 'externa'">
+		<legend>Datos de la escuela</legend>
 		
-	<label>Localidad</label>
-	<input type="text" placeholder="Localidad" ng-model="presentacion.localidad" >
-	
-	<label>Provincia</label>
-	<select ng-model="presentacion.provincia" ng-required="true" ng-options="tp.nombre as tp.nombre for tp in provincias" required>
-		<option value="">Seleccione una provincia</option>
-	</select>
-	
-	<label>Cantidad de Personas confirmadas</label>
-	<input type="number" value="{{presentacion.personasConfirmadas}}" ng-model="presentacion.personasConfirmadas" required min="0">
-	
-	<legend>Datos del Poyecto</legend>	
-	
-	<label>Titulo</label>
-	<input type="text" placeholder="Titulo" ng-model="presentacion.titulo" >
-	
-	<label>Producción/Soporte</label>
-	<select ng-model="presentacion.tipoPresentacion" ng-required="true" ng-options="tp.nombre for tp in producciones track by tp.id" required></select>
-	
-	<label>Eje Temático</label>
-	<select ng-model="presentacion.ejeTematico" ng-required="true" ng-options="t.nombre for t in ejesTematicos track by t.id "></select>
+		<label>Escuela</label>
+		<input type="text" placeholder="Escuela" ng-model="presentacion.escuela" >
 		
-	<label>Area de Referencia</label>
-	<select ng-model="presentacion.areaReferencia" ng-required="true" ng-options="ar.nombre for ar in areasReferencia track by ar.id "></select>
-	
-	<label>Valoracion</label>
-	<select ng-model="presentacion.valoracion" ng-required="true" ng-options="val for val in valoraciones track by val"></select>
+		<label>Coordinador</label>
+		<input type="text" placeholder="Nombre" ng-model="presentacion.nombreCoordinador" >
+		<input type="text" placeholder="Apellido" ng-model="presentacion.apellidoCoordinador" >
+			
+		<label>Localidad</label>
+		<input type="text" placeholder="Localidad" ng-model="presentacion.localidad" >
 		
-<!-- 	<label>Duración (en minutos)</label> -->
-<!-- 	<input type="number" value="{{presentacion.duracion}}" ng-model="presentacion.duracion" min="0"> -->
-	
+		<label>Provincia</label>
+		<select ng-model="presentacion.provincia" ng-required="true" ng-options="tp.nombre as tp.nombre for tp in provincias" required>
+			<option value="">Seleccione una provincia</option>
+		</select>
+		
+		<label>Cantidad de Personas confirmadas</label>
+		<input type="number" value="{{presentacion.personasConfirmadas}}" ng-model="presentacion.personasConfirmadas" required min="0">
+		
+		<legend>Datos del Poyecto</legend>	
+		
+		<label>Titulo</label>
+		<input type="text" placeholder="Titulo" ng-model="presentacion.titulo" >
+		
+		<label>Producción/Soporte</label>
+		<select ng-model="presentacion.tipoPresentacion" ng-required="true" ng-options="tp.nombre for tp in producciones track by tp.id" required></select>
+		
+		<label>Eje Temático</label>
+		<select ng-model="presentacion.ejeTematico" ng-required="true" ng-options="t.nombre for t in ejesTematicos track by t.id "></select>
+			
+		<label>Area de Referencia</label>
+		<select ng-model="presentacion.areaReferencia" ng-required="true" ng-options="ar.nombre for ar in areasReferencia track by ar.id "></select>
+		
+		<label>Valoracion</label>
+		<select ng-model="presentacion.valoracion" ng-required="true" ng-options="val for val in valoraciones track by val"></select>
+			
+	<!-- 	<label>Duración (en minutos)</label> -->
+	<!-- 	<input type="number" value="{{presentacion.duracion}}" ng-model="presentacion.duracion" min="0"> -->
+		
+	</div>
 	
 	<label class="checkbox" ng-show="presentacion.id">
 		<input type="checkbox" ng-model="cambiarDeTanda" >

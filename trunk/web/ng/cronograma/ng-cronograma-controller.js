@@ -260,9 +260,12 @@ function PresentacionNewCtrl($scope, $routeParams, $location, Presentacion,Produ
 
 function PresentacionEditCtrl($scope, $routeParams, $location, Presentacion,Produccion,	EjeTematico, Provincia, AreaReferencia, Tanda, Logger){
 	$scope.textButton = "Editar";
+	var tanda_anterior = null;
 	$scope.presentacion = Presentacion.get(
 			{presentacionId:$routeParams.presentacionId},
-			function(entity){},
+			function(entity){
+				tanda_anterior = entity.tanda;
+			},
 			function(error){
 				Logger.error("No se pudo recuperar la presentacion "+$routeParams.presentacionId);
 				Logger.error(error.data); 
@@ -280,7 +283,7 @@ function PresentacionEditCtrl($scope, $routeParams, $location, Presentacion,Prod
 		$scope.presentacion.$save(
 				function(entity){
 					Logger.debug("Presentacion ("+entity.id+") actualizada ");
-					$location.url("/tanda/"+$scope.presentacion.tanda);
+					$location.url("/tanda/"+tanda_anterior);
 				},
 				function(error){Logger.error("Error al guardar la presentacion "+pid); Logger.error(error.data);}
 		);
