@@ -10,8 +10,7 @@ class BloqueType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('posicion')            
+            ->add('nombre')     
             ->add('horaInicio', 'time', array (
 				'label' => 'Hora de Inicio',
 				'input'  => 'datetime',

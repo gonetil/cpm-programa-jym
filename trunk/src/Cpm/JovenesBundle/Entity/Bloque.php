@@ -21,12 +21,6 @@ class Bloque
      */
     private $id;
 
-    /**
-     * @var integer $posicion
-     *
-     * @ORM\Column(name="posicion", type="integer")
-     */
-    private $posicion=0;
 
     /**
      * @var datetime $horaInicio
@@ -104,26 +98,6 @@ class Bloque
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    /**
-     * Set posicion
-     *
-     * @param integer $posicion
-     */
-    public function setPosicion($posicion)
-    {
-        $this->posicion = $posicion;
-    }
-
-    /**
-     * Get posicion
-     *
-     * @return integer 
-     */
-    public function getPosicion()
-    {
-        return $this->posicion;
     }
 
     /**
@@ -249,7 +223,7 @@ class Bloque
     
     
     public function __toString() {
-    	return "Bloque ".$this->posicion.": ".$this->nombre."; Tanda ".$this->getAuditorioDia()->getDia()->getTanda()."";
+    	return "Bloque: ".$this->nombre."; Tanda ".$this->getAuditorioDia()->getDia()->getTanda()."";
     }
     
     public function toArray($recursive_depth) {
@@ -264,7 +238,6 @@ class Bloque
 		return array(
 							'id' => $this->id , 
  							 'nombre' => $this->nombre,
- 							 'posicion' => $this->posicion,
  							 'tienePresentaciones' => ($this->tienePresentaciones?true:false),
  							 'duracion' => $this->duracion,
  							 'horaInicio' => date_format($this->horaInicio,"H:i"),

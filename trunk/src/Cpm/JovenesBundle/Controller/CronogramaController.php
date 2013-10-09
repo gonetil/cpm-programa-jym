@@ -330,12 +330,7 @@ class CronogramaController extends BaseController
 	       	
 	       	if (!empty($args['horaInicio']))
 				$bloque->setHoraInicio( date_create_from_format ('H:i', $args['horaInicio']));
-			
-			
-	        if (isset($args['posicion'])){
-	        	$auditorioDia->moverBloque($bloque, (int)$args['posicion']);
-	        }
-	
+				
 	        if (!empty($args['duracion']))
 				$bloque->setDuracion( (int) $args['duracion'] );
 
@@ -557,8 +552,6 @@ class CronogramaController extends BaseController
     				$this->getChapaManager()->cambiarPresentacionDeTanda($presentacion,$nuevaTanda);
 	        }
 	        //FIXME corregir posicion en bloque
-		        //if (isset($args['posicion']))
-				//	$presentacion->setPosicion((int) $args['posicion'] );
 	        
 	        if($presentacion->esExterna()){
 		       // $presentacion  = $this->getEntityForUpdate('CpmJovenesBundle:PresentacionExterna', $id);
