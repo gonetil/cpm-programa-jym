@@ -45,6 +45,13 @@ abstract class Presentacion
      */
     private $tanda;
     
+    /**
+     *
+     * @var integer $posicion
+     * @ORM\Column(name="posicion", type="integer")
+     */
+    private $posicion = 0;
+    
     public abstract function getTitulo();
 	public abstract function getEjeTematico();
     public abstract function getAreaReferencia();
@@ -104,7 +111,12 @@ abstract class Presentacion
     	$this->bloque=null;
     }
     
-  
+  	public function getPosicion() {
+  		return $this->posicion;
+  	}
+  	public function setPosicion($p) {
+  		$this->posicion = $p;
+  	}
     public function getInvitacion() {
     	return null; //las presentaciones no tienen invitaciones, salvo las presentaciones internas
     }
@@ -143,7 +155,8 @@ abstract class Presentacion
 			    	'nombreCoordinador' => $this->getNombreCoordinador(),
 			    	'personasConfirmadas' => $this->getPersonasConfirmadas(),
 			    	'valoracion' => $this->getValoracion(),
-			    	'tipo' => $this->getTipo()
+			    	'tipo' => $this->getTipo(),
+			    	'posicion' => $this->getPosicion()
 			  );
     }
     

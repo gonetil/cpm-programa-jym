@@ -356,6 +356,7 @@ class CronogramaController extends BaseController
 	        	$em->flush();
 	        	$bloque->setAreasReferencia( $areasReferencia );
 	        }
+
 	        if ($auditorioDia){
 				foreach($auditorioDia->getBloques() as $bi){
 					$em->persist($bi);
@@ -552,7 +553,20 @@ class CronogramaController extends BaseController
     				$this->getChapaManager()->cambiarPresentacionDeTanda($presentacion,$nuevaTanda);
 	        }
 	        //FIXME corregir posicion en bloque
-	        
+		        if (isset($args['posicion'])) {
+		        	$nueva_posicion = (int) $args['posicion'];
+					$presentacion->setPosicion( $nueva_posicion );
+					$bloque = $presentacion->getBloque();
+					for($i=0;i<count($bloque->getPresentaciones());$i++) {
+						$p = $bloque->getPresentaciones()->get($i);
+						if ($p->getPosicion() >= $presentacion->getPosicion()) {
+							$p->setPosicion($p->getPosicion()+1);
+							$em->persist($p);
+						}
+					}
+					
+		        }
+
 	        if($presentacion->esExterna()){
 		       // $presentacion  = $this->getEntityForUpdate('CpmJovenesBundle:PresentacionExterna', $id);
 		        
@@ -598,6 +612,35 @@ class CronogramaController extends BaseController
 					$presentacion->setNombreCoordinador((string) $args['nombreCoordinador'] );
 					
 	    	    }
+	    	    
+	    	if (isset($args['destino'])) { //hay un reordenamiento
+	        	
+	        	$bloque = $this->getEntity('CpmJovenesBundle:Bloque',(int)$args['destino']['bloque']);
+	        	$presentaciones = array();
+	        	foreach ( $args['destino']['newOrder'] as $order) {
+       				$p = $this->getEntity('CpmJovenesBundle:Presentacion',(int)$order['presentacion']);
+       				$p->setPosicion($order['posicion']);
+       				$presentaciones[] = $p;  
+       				$em->persist($p);
+				}
+				$bloque->setPresentaciones($presentaciones);
+				$em->persist($bloque);
+	        }
+
+	    	if (isset($args['origen'])) { //hay un reordenamiento
+	        	
+	        	$bloque = $this->getEntity('CpmJovenesBundle:Bloque',(int)$args['origen']['bloque']);
+	        	$presentaciones = array();
+	        	foreach ( $args['origen']['newOrder'] as $order) {
+       				$p = $this->getEntity('CpmJovenesBundle:Presentacion',(int)$order['presentacion']);
+       				$p->setPosicion($order['posicion']);
+       				$presentaciones[] = $p;  
+       				$em->persist($p);
+       				
+				}
+				$bloque->setPresentaciones($presentaciones);
+	        }
+	        	            
 			$em->persist($presentacion);
 	        $em->flush();
 	        

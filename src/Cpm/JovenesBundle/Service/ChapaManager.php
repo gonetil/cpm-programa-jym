@@ -252,14 +252,18 @@ class ChapaManager {
 		$cambios=0;
 		$em = $this->doctrine->getEntityManager();
 		$em->getConnection()->beginTransaction();
+		
     	try { 
 	        foreach($presentacionesDTO as $presentacionDTO){
+	        	
 	        	$presentacion = $em->getRepository('CpmJovenesBundle:Presentacion')->find($presentacionDTO['presentacion']);
 	        	$oldBloque=$presentacion->getBloque();
 	        	
 				if (empty($presentacionDTO['bloque'])){
-					if($oldBloque != null)
+					if($oldBloque != null) {
 						$oldBloque->removePresentacion($presentacion);
+						$presentacion->setPosicion(0);
+					}
 				}else{
 					$bloque=$em->getRepository('CpmJovenesBundle:Bloque')->find($presentacionDTO['bloque']);
 					
@@ -267,9 +271,11 @@ class ChapaManager {
 						if(!$oldBloque->equals($bloque)){
 							$oldBloque->removePresentacion($presentacion);
 							$bloque->addPresentacion($presentacion);
+							$presentacion->setPosicion(count($bloque->getPresentaciones()));
 						}
 					}else{
 						$bloque->addPresentacion($presentacion);
+						$presentacion->setPosicion(count($bloque->getPresentaciones()));
 					}
 				}
 				if($oldBloque !== $presentacion->getBloque()){
