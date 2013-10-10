@@ -1,9 +1,9 @@
 <form ng-submit="savePresentacion()">
-<h2>{{ textButton }} Presentacion {{presentacion.tipo}} {{presentacion.id}}</h2>
+<h2>{{ textButton }} Presentación ({{presentacion.tipo}} {{presentacion.id}})</h2>
 	<input type="hidden" ng-model="presentacion.tipo" value="externa" required>
 	
 <fieldset>
-	<div ng-show="presentacion.tipo == 'externa'">
+	<div ng-hide="presentacion.tipo == 'interna'">
 		<legend>Datos de la escuela</legend>
 		
 		<label>Escuela</label>
@@ -47,6 +47,7 @@
 	</div>
 	
 	<label class="checkbox" ng-show="presentacion.id">
+		<!-- Solo se permite cambiar la tanda de la presentación cuando no es nueva  -->
 		<input type="checkbox" ng-model="cambiarDeTanda" >
 		Desea cambiar la presentacion de tanda?
 	</label>
@@ -57,7 +58,7 @@
 	</div>
 	
 	<div>
-		<button type="submit" class="btn btn-primary">{{ textButton }} presentacion</button>
+		<button type="submit" class="btn btn-primary">{{ textButton }} presentación</button>
 		<a href="javascript:history.back()" class="btn btn-danger">Cancelar</a>
 	</div>
 </fieldset>

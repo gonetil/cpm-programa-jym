@@ -50,6 +50,37 @@ function TandaShowCtrl($rootScope,$scope, $routeParams, Tanda, Logger) {
     	var origen = ui.draggable.data("bloque");
     	var destino = $(event.target).data("bloque");
     	var presentacion = new Presentacion({id:presentacionId});
+
+/*    	
+ * 
+ * 
+ * 
+ * 
+	event{
+		cancelable: true,
+		currentTArget: docuemnt
+		delegateTArget: docuemnt
+		exclusive: undefined
+		data:null
+		handleObj
+		originalEvent: mouseEvent
+		srcElement, target, toElement. 
+	}
+
+
+ui{
+  
+    		draggable:{
+    			data('presentacion') == int
+    			data('bloque') == int
+    		}
+    		helper:{
+    			context: elementoHTML
+    		}
+    		position: {top:'', left: ''}
+    		offset: {top:'', left: ''}
+    	}
+    	*/
     	if (origen == destino){
 			Logger.debug("Ignoro el move de la presentacion porque el destino es == al origen ");
 			//FIXME aca no deberíamos mirar el tema de la posicion de la presentacion dentro del bloque?
@@ -232,7 +263,7 @@ function PresentacionNewCtrl($scope, $routeParams, $location, Presentacion,Produ
 	$scope.textButton = "Crear";
 
 	//cargo los valores por default para la presentacion
-	$scope.presentacion = new Presentacion({tanda:$routeParams.tandaId, duracion:15, personasConfirmadas:0, valoracion: "Sin especificar"});
+	$scope.presentacion = new Presentacion({tanda:$routeParams.tandaId, tipo:'externa', duracion:15, personasConfirmadas:0, valoracion: "Sin especificar"});
 	$scope.ejesTematicos=EjeTematico.query();
 	$scope.areasReferencia=AreaReferencia.query();
 	$scope.producciones=Produccion.query();

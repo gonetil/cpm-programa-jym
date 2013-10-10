@@ -146,7 +146,9 @@
 						            						| {{ bloque.presentaciones | length}} presentaciones asignadas.
 						            						{% set duracion = 0 %}
 						            						{% for presentacion in bloque.presentaciones  %}
-						            							{% set duracion = duracion + presentacion.tipoPresentacion.duracionEstimada %}
+						            							{% if (presentacion.tipoPresentacion) %}
+						            								{% set duracion = duracion + presentacion.tipoPresentacion.duracionEstimada %}
+							            						{% endif %}		
 						            						{% endfor %}		
 						            						| Duración calculada: <strong {% if duracion > bloque.duracion %}style="color:#FF0000"{% endif %}>{{ duracion }} minutos</strong>.
 						            					

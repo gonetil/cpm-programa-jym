@@ -250,11 +250,12 @@ class JYM  {
 				return true;
 		}
 		
+		//CRONOGRAMA
 		elseif($targetObject instanceof \Cpm\JovenesBundle\Entity\Bloque ||
-		$targetObject instanceof \Cpm\JovenesBundle\Entity\AuditorioDia ||
-		$targetObject instanceof \Cpm\JovenesBundle\Entity\Dia ||
-		$targetObject instanceof \Cpm\JovenesBundle\Entity\Tanda ||
-		$targetObject instanceof \Cpm\JovenesBundle\Entity\Presentacion
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\AuditorioDia ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Dia ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Tanda ||
+			$targetObject instanceof \Cpm\JovenesBundle\Entity\Presentacion
 		){
 			if ((!$bloquearCiclosViejos || $targetObject->getCiclo()->getActivo())
 				&& $user->isSuperAdmin() || $user->isAdmin())
