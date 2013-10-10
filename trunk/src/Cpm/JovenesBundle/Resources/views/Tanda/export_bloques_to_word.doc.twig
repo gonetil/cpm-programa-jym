@@ -1,0 +1,29 @@
+{% spaceless %}
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<body>
+
+{% for dia in tanda.dias %}
+	<h1>DÍA {{ dia.numero }}</h1>
+	{% for auditorioDia in dia.auditoriosDia %}
+			<h2>LUGAR {{ auditorioDia.auditorio.nombre | upper }} </h2>
+			{% for bloque in auditorioDia.bloques %}
+				<h3>HORA Y ACTIVIDAD {{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre | upper }}</h3>
+				{% if bloque.tienePresentaciones %}
+					{% for presentacion in bloque.presentaciones %}
+					<p style="font-weight: bold">
+						Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
+					</p>
+					<p>{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | escape }} - {{ presentacion.distrito  | raw('html') }}</p>
+					{% endfor %} {# presentaciones #}
+				{% endif %}
+				<br/> <br/>
+			{% endfor %} {#bloques #}
+			<hr/>
+		{% endfor %} {#auditoriosDia #}
+		<hr/>
+		<hr/>		
+{% endfor %} {#dia #}
+</body>
+</html>
+{% endspaceless %}

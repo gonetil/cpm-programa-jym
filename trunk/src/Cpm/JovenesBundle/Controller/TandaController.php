@@ -345,26 +345,29 @@ class TandaController extends BaseController
         if (!$tanda) 
     		throw $this->createNotFoundException('Tanda no encontrada');
     	
-    	$presentaciones = $tanda->getPresentaciones()->toArray();
-//    	foreach ( $tanda->getPresentaciones() as $presentacion )
- //      		$presentaciones[] = $presentacion;
+    	if (($sort_fn == 'sortByCoordinadorApellido') && ($format = 'doc')) { //caso especial: quieren un .doc con los bloques (TODOS)
+			$presentaciones = null;
+			$template = 'CpmJovenesBundle:Tanda:export_bloques_to_word.doc.twig' ;
+			$fn = 'makeWord';    		
+    	} else {
 
-		
-		if (method_exists($this,$sort_fn))
-			usort($presentaciones,array($this,$sort_fn));
-		else 
-		die('metodo de ordenamiento undefined');	
+	    	$presentaciones = $tanda->getPresentaciones()->toArray();
+			
+			if (method_exists($this,$sort_fn))
+				usort($presentaciones,array($this,$sort_fn));
+			else 
+				die('metodo de ordenamiento undefined');	
 
-		if ($format == 'word') { 
-					$template = 'CpmJovenesBundle:Tanda:export_to_word.doc.twig' ;
-					$fn = 'makeWord';
-
-		 } else {
-		 	$fn = 'makeExcel';
-		 	$template = 'CpmJovenesBundle:Tanda:export_to_csv.xls.twig';
-		 	
-		 }
-		 
+			if ($format == 'word') { 
+						$template = 'CpmJovenesBundle:Tanda:export_to_word.doc.twig' ;
+						$fn = 'makeWord';
+			 } else {
+			 	$fn = 'makeExcel';
+			 	$template = 'CpmJovenesBundle:Tanda:export_to_csv.xls.twig';
+			 	
+			 }
+    	}
+    	
 		 $params = array();
 		 $params[] = array('presentaciones' => $presentaciones, 'tanda' => $tanda);
 		 $params[] = $template;
