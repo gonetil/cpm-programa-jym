@@ -74,7 +74,7 @@ class CronogramaController extends BaseController
 	public function guardarTandaAction($tanda_id) {
 		
 		try { 
-			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+			$tanda  = $this->getEntityForUpdate('CpmJovenesBundle:Tanda', $tanda_id);
 			$vars = $this->getVarsFromJSON();
 			
 			if (empty($vars['presentaciones']) || !is_array($vars['presentaciones']))
@@ -95,7 +95,7 @@ class CronogramaController extends BaseController
 	public function resetearTandaAction($tanda_id) {
 		
 		try { 
-			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+			$tanda  = $this->getEntityForUpdate('CpmJovenesBundle:Tanda', $tanda_id);
 			$numCambios = $this->getChapaManager()->resetearPresentacionesDeTanda($tanda);
 			return $this->answerOk("Se reinicializó la tanda ($tanda_id), y se liberaron $numCambios presentaciones");
 		} catch (\Exception $e) {
@@ -147,7 +147,7 @@ class CronogramaController extends BaseController
 			
 			$dia_destino_id=$args->get('dia_destino');
 	    	if (!empty($dia_destino_id)){
-		   		$dia_destino = $this->getEntity('CpmJovenesBundle:Dia', $dia_destino_id);
+		   		$dia_destino = $this->getEntityForUpdate('CpmJovenesBundle:Dia', $dia_destino_id);
 				$tandaDestino = $dia_destino->getTanda();
 			}else{
 		   		$dia_destino = null;
@@ -261,7 +261,7 @@ class CronogramaController extends BaseController
      */
 	public function eliminarAuditorioDiaAction($auditorioDiaId) {
 		try { 
-			$ad = $this->getEntity('CpmJovenesBundle:AuditorioDia', $auditorioDiaId);
+			$ad = $this->getEntityForDelete('CpmJovenesBundle:AuditorioDia', $auditorioDiaId);
 			$dia=$ad->getDia();
 			$dia->removeAuditorioDia($ad);
 			
@@ -381,7 +381,7 @@ class CronogramaController extends BaseController
      */
 	public function eliminarBloqueAction($bloqueId) {
 		try { 
-			$bloque = $this->getEntity('CpmJovenesBundle:Bloque', $bloqueId);
+			$bloque = $this->getEntityForDelete('CpmJovenesBundle:Bloque', $bloqueId);
 			$ad=$bloque->getAuditorioDia();
 			$ad->removeBloque($bloque);
 			

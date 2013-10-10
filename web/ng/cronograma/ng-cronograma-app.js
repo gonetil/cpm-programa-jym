@@ -45,7 +45,7 @@ app.run(function ($rootScope, Logger, Tanda) {
     		console.log("La tanda actual ("+$rootScope.tanda.id+") es diferente a la pedida ("+tandaId + ") ==> Hago $rootScope.tanda = null");
     		$rootScope.tanda = null;
     	}
-        if (!$rootScope.tanda){
+        if (!$rootScope.tanda && tandaId){
     		Logger.debug("La tanda actual estaba vacia, levanto la tanda "+tandaId);
     		$rootScope.tanda = Tanda.get(
     				{tandaId: tandaId},
