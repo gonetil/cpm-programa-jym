@@ -41,6 +41,8 @@ class PresentacionInterna extends Presentacion
      */
     public function getProyecto()
     {
+    	if(empty($this->invitacion))
+    		throw new \InvalidArgumentException("La invitación de la presentación interna ".$this->getId()."es null");
         return $this->invitacion->getProyecto();
     }
 
