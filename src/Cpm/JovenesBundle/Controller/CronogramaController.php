@@ -666,7 +666,6 @@ class CronogramaController extends BaseController
 				$invitacion = $presentacion->getInvitacion();
 				$invitacion->setAceptoInvitacion(false);
 				$em->persist($invitacion);
-				
 			}
 			
 			$em->remove($presentacion);
@@ -690,10 +689,13 @@ class CronogramaController extends BaseController
 		return $this->createJsonResponse(array('status' => 'success', 'message' => $message));
 	}
 	
-	private function answerError($message) {
-		if ($message instanceof \Exception)
-			//throw $message;
-			$message=get_class($message).':'.$message->getMessage();
+	private function answerError($exception) {
+		if (!($exception instanceof \Exception)){
+			$exception = new \InvalidArgumentException("exception debe ser una Exception, no un string. Vino :".$exception);
+		}
+		
+		$message=get_class($exception).':'.$exception->getMessage();
+		$this->get('logger')->warn("Se produjo una exception en CronogramaController: $message. \n Trace: ".$exception->getTraceAsString());
 		
 		$response = new Response(json_encode($message), 500);
     	$response->headers->set('Content-Type', 'application/json');
