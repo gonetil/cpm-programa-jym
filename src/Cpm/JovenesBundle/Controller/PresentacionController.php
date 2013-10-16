@@ -77,17 +77,16 @@ class PresentacionController extends BaseController
 
             $em = $this->getDoctrine()->getEntityManager();
             try{
-            	$bloque=$presentacion->getBloque();
-				if (!empty($bloque)){
-					$bloque->removePresentacion($presentacion);
-	          		$em->persist($bloque);
-				}
+ //           	$bloque=$presentacion->getBloque();
+//				if (!empty($bloque)){
+//					$bloque->removePresentacion($presentacion);
+//	          		$em->persist($bloque);
+//				}
 				
-				$tanda=$presentacion->getTanda();
-				$tanda->removePresentacion($presentacion);
-	          	$em->persist($tanda);
-	            
-            	$em->remove($presentacion);
+//				$tanda=$presentacion->getTanda();
+//				$tanda->removePresentacion($presentacion);
+//	          	$em->persist($tanda);
+	            $em->remove($presentacion);
             	$em->flush();
             } catch(\Exception $e ) {
 				$this->setErrorMessage("Error al tratar de borrar la presentacion. Mensage: ".$e->getMessage());

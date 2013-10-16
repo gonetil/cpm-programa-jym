@@ -118,7 +118,6 @@ class PresentacionInternaController extends BaseController
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 }
