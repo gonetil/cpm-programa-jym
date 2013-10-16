@@ -177,7 +177,11 @@ class InvitacionController extends BaseController
             $em = $this->getDoctrine()->getEntityManager();
 			$entity = $this->getEntityForDelete('CpmJovenesBundle:Invitacion', $id, $em);
             $em->remove($entity);
-            $em->flush();
+            //hackazo para permitir el delete encascada hacia PresentacionInterna y presentacion
+            $presentaciones = $em->getRepository('CpmJovenesBundle:PresentacionInterna')->findByInvitacion($id);
+			foreach($presentaciones as $presentacion)
+				$em->remove($presentacion);
+            $em->flush();        
         }
 
         return $this->redirect($this->generateUrl('invitaciones'));

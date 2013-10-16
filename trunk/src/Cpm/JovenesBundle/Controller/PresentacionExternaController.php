@@ -32,35 +32,6 @@ class PresentacionExternaController extends BaseController
     }
 
     /**
-     * Finds and displays a PresentacionExterna entity.
-     *
-     * @Route("/{id}/show", name="presentacionexterna_show")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CpmJovenesBundle:PresentacionExterna')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PresentacionExterna entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-		
-		$tandas= $em->getRepository('CpmJovenesBundle:Tanda')->findAll();
-        usort($tandas, function($t1,$t2) {  
-        							return ( ( $t1->getNumero() < $t2->getNumero() )
-        									  ? -1 : 1 );  });
-        									  
-        return array(
-            'entity'      => $entity,
-            'tandas' => $tandas,
-            'delete_form' => $deleteForm->createView(),        );
-    }
-
-    /**
      * Displays a form to create a new PresentacionExterna entity.
      *
      * @Route("/new", name="presentacionexterna_new")

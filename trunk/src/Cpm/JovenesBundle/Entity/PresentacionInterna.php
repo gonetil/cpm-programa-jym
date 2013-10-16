@@ -21,8 +21,9 @@ class PresentacionInterna extends Presentacion
 {
    
     /**
-    * @ORM\ManyToOne(targetEntity="Invitacion")
-    * @ORM\JoinColumn(name="invitacion_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+    * @ORM\ManyToOne(targetEntity="Invitacion", cascade={"remove"})
+    * @ORM\JoinColumn(name="invitacion_id", referencedColumnName="id", nullable=false)
+    * no pongo onDelete=CASCADE porque sino puede eliminarse desde la BBDD la PresentacionInterna y no la Presentacion
     */
 	private $invitacion;
 
