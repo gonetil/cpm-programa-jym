@@ -363,7 +363,7 @@ class TandaController extends BaseController
 						$fn = 'makeWord';
 			 } else {
 			 	$fn = 'makeExcel';
-			 	$template = 'CpmJovenesBundle:Tanda:export_to_csv.xls.twig';
+			 	$template = 'CpmJovenesBundle:Tanda:export_to_excel.xls.twig';
 			 	
 			 }
     	}
