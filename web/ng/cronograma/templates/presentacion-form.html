@@ -5,7 +5,7 @@
 <fieldset>
 	<div ng-show="presentacion.tipo == 'interna'">
 		Si desea modificar los datos de esta presentación, debe modificar los datos del proyecto
-		<a href="path('/admin/proyecto/{{presentacion.proyecto}}/edit')">Editar Proyecto</a>
+		<a href="/admin/proyecto/{{presentacion.proyecto}}/edit">Editar Proyecto</a>
 	</div>
 	<div ng-show="presentacion.tipo != 'interna'">
 		<legend>Datos de la escuela</legend>
