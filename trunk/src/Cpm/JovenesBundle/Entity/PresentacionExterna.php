@@ -235,7 +235,7 @@ class PresentacionExterna extends Presentacion
      *
      * @param Cpm\JovenesBundle\Entity\Tema $ejeTematico
      */
-    public function setEjeTematico(\Cpm\JovenesBundle\Entity\Tema $ejeTematico)
+    public function setEjeTematico($ejeTematico)
     {
         $this->ejeTematico = $ejeTematico;
     }
@@ -255,7 +255,7 @@ class PresentacionExterna extends Presentacion
      *
      * @param Cpm\JovenesBundle\Entity\Eje $areaReferencia
      */
-    public function setAreaReferencia(\Cpm\JovenesBundle\Entity\Eje $areaReferencia)
+    public function setAreaReferencia( $areaReferencia)
     {
         $this->areaReferencia = $areaReferencia;
     }
@@ -296,7 +296,7 @@ class PresentacionExterna extends Presentacion
      *
      * @param Cpm\JovenesBundle\Entity\Produccion $tipoPresentacion
      */
-    public function setTipoPresentacion(\Cpm\JovenesBundle\Entity\Produccion $tipoPresentacion)
+    public function setTipoPresentacion( $tipoPresentacion)
     {
         $this->tipoPresentacion = $tipoPresentacion;
     }
