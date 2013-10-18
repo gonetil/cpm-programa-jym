@@ -507,7 +507,7 @@ class CronogramaController extends BaseController
      public function mostrarPresentacionAction($id) {
      	try {
 	     	$p = $this->getEntity('CpmJovenesBundle:Presentacion', $id);
-			return $this->newJsonResponse($p);			
+			return $this->newJsonResponse($p,1);			
 		} catch (\Exception $e) {
 			return $this->answerError($e);
 		}
