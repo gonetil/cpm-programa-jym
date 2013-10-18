@@ -159,7 +159,7 @@ abstract class Presentacion
 			    	'posicion' => $this->getPosicion()
 			  );
 			  
-		return $this->innerToArray();
+		return $this->innerToArray($response);
     }
     
     protected function innerToArray($array){
