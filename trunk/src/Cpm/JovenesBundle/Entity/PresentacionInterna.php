@@ -143,8 +143,8 @@ class PresentacionInterna extends Presentacion
 
     protected function innerToArray($array){
     	//TODO hacer el toArray de invitacion y de proyecto?
- 		$array['invitacion'] = $this->getInvitacion()->getId(),
- 		$array['proyecto'] = $this->getInvitacion()->getProyecto()->getId(),
+ 		$array['invitacion'] = $this->getInvitacion()->getId();
+ 		$array['proyecto'] = $this->getInvitacion()->getProyecto()->getId();
     	return $array;
     }
 	
