@@ -3,7 +3,7 @@
 	<input type="hidden" ng-model="presentacion.tipo" value="externa" required>
 	
 <fieldset>
-	<div ng-hide="presentacion.tipo == 'interna'">
+	<div ng-show="presentacion.tipo != 'interna'">
 		<legend>Datos de la escuela</legend>
 		
 		<label>Escuela</label>
