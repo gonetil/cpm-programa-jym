@@ -30,16 +30,16 @@
 		<input type="text" placeholder="Titulo" ng-model="presentacion.titulo" >
 		
 		<label>Producción/Soporte</label>
-		<select ng-model="presentacion.tipoPresentacion" ng-required="true" ng-options="tp.nombre for tp in producciones track by tp.id" required></select>
+		<select ng-model="presentacion.tipoPresentacion" ng-required="true" ng-options="tp.id as tp.nombre for tp in producciones" required></select>
 		
 		<label>Eje Temático</label>
-		<select ng-model="presentacion.ejeTematico" ng-required="true" ng-options="t.nombre for t in ejesTematicos track by t.id "></select>
+		<select ng-model="presentacion.ejeTematico" ng-required="true" ng-options="t.id as t.nombre for t in ejesTematicos"></select>
 			
 		<label>Area de Referencia</label>
-		<select ng-model="presentacion.areaReferencia" ng-required="true" ng-options="ar.nombre for ar in areasReferencia track by ar.id "></select>
+		<select ng-model="presentacion.areaReferencia" ng-required="true" ng-options="ar.id as ar.nombre for ar in areasReferencia "></select>
 		
 		<label>Valoracion</label>
-		<select ng-model="presentacion.valoracion" ng-required="true" ng-options="val for val in valoraciones track by val"></select>
+		<select ng-model="presentacion.valoracion" ng-required="true" ng-options="val as for val in valoraciones"></select>
 			
 	<!-- 	<label>Duración (en minutos)</label> -->
 	<!-- 	<input type="number" value="{{presentacion.duracion}}" ng-model="presentacion.duracion" min="0"> -->
