@@ -605,10 +605,7 @@ class CronogramaController extends BaseController
 	
 		        if (isset($args['localidad']))
 					$presentacion->setLocalidad( (string) $args['localidad'] );
-	
-		        if (isset($args['distrito']))
-					$presentacion->setDistrito( (string) $args['distrito'] );
-	
+
 		        if (isset($args['valoracion']))
 					$presentacion->setValoracion( (string) $args['valoracion'] );
 				
