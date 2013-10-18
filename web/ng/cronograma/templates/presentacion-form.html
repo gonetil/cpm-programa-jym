@@ -39,7 +39,9 @@
 		<select ng-model="presentacion.areaReferencia" ng-required="true" ng-options="ar.id as ar.nombre for ar in areasReferencia "></select>
 		
 		<label>Valoracion</label>
-		<select ng-model="presentacion.valoracion" ng-required="true" ng-options="for val in valoraciones"></select>
+		<select ng-model="presentacion.valoracion" ng-required="true" ng-options="val for val in valoraciones">
+			<option value="">Seleccione una valoración</option>
+		</select>
 			
 	<!-- 	<label>Duración (en minutos)</label> -->
 	<!-- 	<input type="number" value="{{presentacion.duracion}}" ng-model="presentacion.duracion" min="0"> -->
