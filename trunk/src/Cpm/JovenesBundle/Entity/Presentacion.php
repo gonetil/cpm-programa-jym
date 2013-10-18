@@ -139,7 +139,7 @@ abstract class Presentacion
 		if ($recursive_depth == 0)
     		return $this->getId();
     	
-    	return array(
+    	$response= array(
 			 		'id' => $this->id,
 			    	'bloque' => (!$this->bloque)?'': $this->bloque->getId(),
 			    	'tanda' => $this->getTanda()->getId(),
@@ -158,6 +158,12 @@ abstract class Presentacion
 			    	'tipo' => $this->getTipo(),
 			    	'posicion' => $this->getPosicion()
 			  );
+			  
+		return $this->innerToArray();
+    }
+    
+    protected function innerToArray($array){
+    	return $array;
     }
     
 
