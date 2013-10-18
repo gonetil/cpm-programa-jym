@@ -574,17 +574,26 @@ class CronogramaController extends BaseController
 					$presentacion->setTitulo((string)$args['titulo']);
 				
 				if (isset($args['ejeTematico'])){
-		        	$ejeTematico=$this->getEntity('CpmJovenesBundle:Tema', (int)$args['ejeTematico'] );
+		        	if (empty($args['ejeTematico']))
+		        		$ejeTematico=null;
+					else
+						$ejeTematico=$this->getEntity('CpmJovenesBundle:Tema', (int)$args['ejeTematico'] );
 			        $presentacion->setEjeTematico( $ejeTematico );
 		        }
 		        
 		        if (isset($args['areaReferencia'])){
-		        	$areaReferencia=$this->getEntity('CpmJovenesBundle:Eje', (int)$args['areaReferencia'] );
+		        	if (empty($args['areaReferencia']))
+		        		$areaReferencia=null;
+					else
+						$areaReferencia=$this->getEntity('CpmJovenesBundle:Eje', (int)$args['areaReferencia'] );
 			        $presentacion->setAreaReferencia( $areaReferencia );
 		        }
 		        
 		        if (isset($args['tipoPresentacion'])){
-		        	$tipoPresentacion=$this->getEntity('CpmJovenesBundle:Produccion', (int)$args['tipoPresentacion'] );
+		        	if (empty($args['tipoPresentacion']))
+		        		$tipoPresentacion=null;
+					else
+						$tipoPresentacion=$this->getEntity('CpmJovenesBundle:Produccion', (int)$args['tipoPresentacion'] );
 			        $presentacion->setTipoPresentacion( $tipoPresentacion );
 		        }
 		        
