@@ -27,12 +27,7 @@
             Exportar
         </a>
     </li>
-    
-   <li>
-        <a href="#" onclick="return confirmAndRelocate('Esta operacion quitará todas las presentaciones de los bloques. ¿desea continuar?','{{ path('tanda_reset',{'id': entity.id}) }}')">
-            Resetear
-        </a>
-    </li>
+
     
     <li>
         <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post"
