@@ -258,13 +258,47 @@ class InvitacionController extends BaseController
      */
     public function cambiarInvitacionDeInstancia($invitacion_id,$instancia_id) {
     	$em = $this->getDoctrine()->getEntityManager();
-        $invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $invitacion_id, $em);
-    	$instancia = $this->getEntityForUpdate('CpmJovenesBundle:InstanciaEvento', $instancia_id, $em);
+		
+    	try { 
+    		
+    		
+    		$invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $invitacion_id, $em);
+    		$instancia = $this->getEntityForUpdate('CpmJovenesBundle:InstanciaEvento', $instancia_id, $em);
+    		$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->createQueryBuilder('t')
+    					->innerJoin('t.instanciaEvento','ins')
+    					->andWhere('ins = :instancia')
+    					->setParameter('instancia',$instancia)
+    					->getQuery()->getSingleResult();
 
-    	$invitacion->setInstanciaEvento($instancia);
-    	
-    	$em->persist($invitacion);
-    	$em->flush();
+    		$em->getConnection()->beginTransaction();
+    		
+    		$invitacion->setInstanciaEvento($instancia);
+    		 
+    		if ($tanda) { //esta hablandoooo de Chapaaaaaaaa 
+    			//me fijo si la invitacion tenia una presentacion, para reasignar de Tanda
+		    	$qb = $em->createQueryBuilder('pre')
+						->add('select','pre')
+						->add('from','CpmJovenesBundle:PresentacionInterna pre')
+						->innerJoin('pre.invitacion','inv')
+						->andWhere('inv = :invitacion')
+						->setParameter('invitacion',$invitacion);
+			
+				$presentaciones = $qb->getQuery()->getResult(); //deberia ser solo una, pero...
+				$cant = count($presentaciones);
+				foreach ( $presentaciones as $presentacion)
+					$tanda->addPresentacion($presentacion);
+					
+				$em->persist($tanda);
+    		}
+	    	$em->persist($invitacion);
+	    	$em->flush();
+	    	$em->getConnection()->commit();
+		} catch (\Exception $e) {
+    		if ($em->getConnection()->isTransactionActive())
+	    	   	$em->getConnection()->rollback();
+			$em->close();
+            throw $e;
+    	} 
     	//catch algo?
     	return new Response("success");
     }
