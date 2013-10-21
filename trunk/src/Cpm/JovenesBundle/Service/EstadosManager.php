@@ -104,6 +104,7 @@ class EstadosManager
 
     		if ($estado_nuevo->getEstado() == ESTADO_ANULADO) //hay que anular todas las invitaciones a instancias de eventos a futuro
     			$this->anularInvitacionesFuturas($proyecto);
+    			$this->eliminarPresentacion($proyecto);
     		
     	}
     	return $resultado; 
@@ -195,5 +196,26 @@ class EstadosManager
 			$em->flush();
 		
      }
+     /**
+      * Cuando un proyecto es anulado, se debe eliminar su presentacion (chapa) si existiera
+      */
+     private function eliminarPresentacion($proyecto) {
+     	$em = $this->doctrine->getEntityManager();
+     	$qb = $em->createQueryBuilder('pre')
+				->add('select','pre')
+				->add('from','CpmJovenesBundle:PresentacionInterna pre')
+				->innerJoin('pre.invitacion','inv')
+				->andWhere('inv.proyecto = :proyecto')
+				->setParameter('proyecto',$proyecto);
+	
+		$presentaciones = $qb->getQuery()->getResult(); //deberia ser solo una, pero...
+		$cant = count($presentaciones);
+		foreach ( $presentaciones as $p) {
+       	    $em->remove($p);
+			$em->flush();
+        }
+        return $cant;
+	}
+				
 }    
 	
