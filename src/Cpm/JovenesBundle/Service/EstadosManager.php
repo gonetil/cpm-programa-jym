@@ -187,7 +187,7 @@ class EstadosManager
      {
      		$em = $this->doctrine->getEntityManager();
      		$hoy = new \DateTime("now");
-     		echo "hoy es {$hoy->format('d/m/Y')} <br/>";
+     		
      		foreach ( $proyecto->getInvitaciones() as $invitacion ) {
      			if ($invitacion->getInstanciaEvento()->getFechaInicio() > $hoy) {
      				$em->remove($invitacion);
