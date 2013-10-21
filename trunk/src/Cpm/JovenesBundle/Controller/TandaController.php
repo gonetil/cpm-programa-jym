@@ -248,31 +248,6 @@ class TandaController extends BaseController
      	
      }
      
-
-   /**
-     * Displays a form to edit an existing Tanda entity.
-     *
-     * @Route("/{id}/reset", name="tanda_reset")
-     * @Template()
-     */
-    public function resetAction($id) { 
-         
-        $tanda = $this->getEntity('CpmJovenesBundle:Tanda', $id);
-        if (!$tanda) {
-    		throw $this->createNotFoundException('Tanda no encontrada');
-    	}
-    	
-      	$chapaManager = $this->getChapaManager();
-    	try {
-    		$chapaManager->resetTanda($tanda);
-    		$this->setSuccessMessage("Tanda reseteada satisfactoriamente");
-    	} catch (\Exception $e) {
-    		$this->setErrorMessage('Error al resetear la tanda seleccioanda. \nMensaje de error: '.$e);
-            throw $e;
-    	}	
-         
-      return $this->redirect($this->generateUrl('tanda_show', array('id' => $tanda->getId() )));
-    }
     
     /**
 	* ordena dos presentaciones a partir del apellido del docence
