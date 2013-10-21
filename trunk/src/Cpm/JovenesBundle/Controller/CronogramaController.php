@@ -556,12 +556,14 @@ class CronogramaController extends BaseController
 		        if (isset($args['posicion'])) {
 		        	$nueva_posicion = (int) $args['posicion'];
 					$presentacion->setPosicion( $nueva_posicion );
-					$bloque = $presentacion->getBloque();
-					for($i=0;$i<count($bloque->getPresentaciones());$i++) {
-						$p = $bloque->getPresentaciones()->get($i);
-						if ($p->getPosicion() >= $presentacion->getPosicion()) {
-							$p->setPosicion($p->getPosicion()+1);
-							$em->persist($p);
+					
+					if ($bloque = $presentacion->getBloque()) { 
+						for($i=0;$i<count($bloque->getPresentaciones());$i++) {
+							$p = $bloque->getPresentaciones()->get($i);
+							if ($p->getPosicion() >= $presentacion->getPosicion()) {
+								$p->setPosicion($p->getPosicion()+1);
+								$em->persist($p);
+							}
 						}
 					}
 					
