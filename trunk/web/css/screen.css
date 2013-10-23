@@ -3159,7 +3159,7 @@ td.caja-auditorio-dia {
 	background-color: #fff;
 }
 .caja-bloque{
-	margin: 0px 0px 0px 5px;
+/* 	margin: 0px 0px 0px 5px; */
 }
 
 .caja-bloque > .header-caja {
@@ -3179,9 +3179,11 @@ div.caja-bloque-presentaciones {
 	border-radius:4px;
 }
 .caja-bloque-presentaciones > .badge-presentacion {
-	width: 140px;
-	padding-right: 10px;
+	width: 100%;
+/* 	padding-right: 10px; */
 	height:26px;
+	overflow: hidden;
+	
 }
 .caja-bloque-presentaciones > .badge-presentacion:hover{
 	overflow: visible;
