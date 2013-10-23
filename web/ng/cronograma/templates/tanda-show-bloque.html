@@ -17,7 +17,8 @@
 		  	data-unique="1" bs-popover="asset('tanda-show-presentacion-options.html')"
 			class="badge badge-presentacion"  ng-class="get_css_classes(p)" ng-style="get_css_styles(p)"
 			data-presentacion="{{p.id}}" data-bloque="{{bloque.id}}"  
-			data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" data-jqyoui-options="presentacion_draggable_options">
+			data-drag="true" jqyoui-draggable="{index:{{$index}},placeholder:false,animate:true}" 
+			data-jqyoui-options="presentacion_draggable_options">
 			<i ng-hide="p.esCompatibleConBolque(bloque)" class="icon-warning-sign"></i>
 			<i ng-hide="p.esCompatibleConAuditorio(auditorioDia.auditorio)" class="icon-ban-circle"></i>
 			<i ng-show="p.tipo == 'externa'" class="icon-plane"></i>
