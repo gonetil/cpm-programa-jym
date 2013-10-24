@@ -72,6 +72,7 @@ class Bloque
 
     /**
      * @ORM\OneToMany(targetEntity="Presentacion", mappedBy="bloque")
+     * @ORM\OrderBy({"posicion" = "ASC"})
      */
 	private $presentaciones;
      
@@ -220,7 +221,28 @@ class Bloque
     	return $this->auditorioDia->getCiclo();
     }
     
-    
+    public function reposicionarPresentacion($presentacion, $nueva_posicion){
+		if ($nueva_posicion <=0){
+			$lastP = null;
+			$maxP = 0;
+			for($i=0;$i<count($this->presentaciones);$i++) {
+		   		$p=$this->presentaciones->get($i);
+		   		if ($p->getPosicion() > $maxP){
+		   			$maxP = $p->getPosicion();
+		   		}
+			}
+			$nueva_posicion = $maxP+1;
+		}else{
+			for($i=0;$i<count($this->presentaciones);$i++) {
+				$p = $this->presentaciones->get($i);
+				if ($p->getPosicion() >= $nueva_posicion) {
+					$p->setPosicion($p->getPosicion()+1);
+					$em->persist($p);
+				}
+			}
+		}
+		$presentacion->setPosicion( $nueva_posicion );
+    }
     
     public function __toString() {
     	return "Bloque: ".$this->nombre."; Tanda ".$this->getAuditorioDia()->getDia()->getTanda()."";

@@ -542,7 +542,21 @@ class CronogramaController extends BaseController
 	       			$newBloque=$this->getEntity('CpmJovenesBundle:Bloque', $args['bloque'] );
 	       		else
 		       		$newBloque=null;
-	        	$presentacion->setBloque( $newBloque);
+
+	       		if ($presentacion->hasBloque())
+	       			$oldBloque=$presentacion->getBloque();
+	       		else
+		       		$oldBloque=null;
+				
+				if ($oldBloque != null && !$oldBloque->equals($newBloque)){
+					$oldBloque->removePresentacion($presentacion);
+				}
+				if ($newBloque != null && !$newBloque->equals($oldBloque)){
+					$newBloque->addPresentacion($presentacion);
+				}
+
+				//$presentacion->setBloque( $newBloque);
+	        	
 	       	}
 	       	if (!empty($args['tanda'])){
 	        	$nuevaTanda = $this->getEntity('CpmJovenesBundle:Tanda', $args['tanda']);
@@ -552,22 +566,12 @@ class CronogramaController extends BaseController
     			elseif (!$nuevaTanda->equals($presentacion->getTanda()))
     				$this->getChapaManager()->cambiarPresentacionDeTanda($presentacion,$nuevaTanda);
 	        }
-	        //FIXME corregir posicion en bloque
-		        if (isset($args['posicion'])) {
-		        	$nueva_posicion = (int) $args['posicion'];
-					$presentacion->setPosicion( $nueva_posicion );
-					
-					if ($bloque = $presentacion->getBloque()) { 
-						for($i=0;$i<count($bloque->getPresentaciones());$i++) {
-							$p = $bloque->getPresentaciones()->get($i);
-							if ($p->getPosicion() >= $presentacion->getPosicion()) {
-								$p->setPosicion($p->getPosicion()+1);
-								$em->persist($p);
-							}
-						}
-					}
-					
-		        }
+	        if (isset($args['posicion']) && $presentacion->hasBloque()) { 
+		        
+		        $bloque = $presentacion->getBloque();
+		        $bloque->reposicionarPresentacion($presentacion, (int) $args['posicion']);
+		    	$em->persist($bloque);
+			}
 
 	        if($presentacion->esExterna()){
 		       // $presentacion  = $this->getEntityForUpdate('CpmJovenesBundle:PresentacionExterna', $id);

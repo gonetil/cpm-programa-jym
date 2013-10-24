@@ -13,6 +13,14 @@ use Doctrine\ORM\EntityRepository;
 class TandaRepository extends EntityRepository
 {
 
+	public function getTandaDeInstanciaEvento($instanciaEvento) {
+		
+		$qb = $this->createQueryBuilder('t');
+		$qb	->andWhere("t.instanciaEvento = :instanciaEvento")
+		->setParameter("instanciaEvento",$instanciaEvento);
+		return $qb->getQuery()->getOneOrNullResult(); 	
+	}
+	
 	public function getTandasDeEvento($evento) {
 		
 		$qb = $this->createQueryBuilder('t');

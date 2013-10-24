@@ -240,10 +240,10 @@ mostrar_campo_archivo = function() {
 		
 		var sin_email = ['1','22','23']; //estados por los que no se debe mandar email automáticamente		
 		if ( sin_email.indexOf(val) != -1) { 
-			$("#cpm_jovenesbundle_estadoproyectotype_enviar_email").attr('checked', false);
+			$("#cpm_jovenesbundle_estadoproyectotype_enviar_email").prop('checked', false);
 
 		} else
-			$("#cpm_jovenesbundle_estadoproyectotype_enviar_email").attr('checked', true);
+			$("#cpm_jovenesbundle_estadoproyectotype_enviar_email").prop('checked', true);
 		
 		return false;
 	}).change();
@@ -520,11 +520,11 @@ function cargarAnios(inputAnios) {
 	if ( $("#widgetAnios input:checked").length > 0 ) 
 	{ 
 		$("#widgetAnios").show();
-		$("#participo").attr('checked',true);
+		$("#participo").prop('checked',true);
 	}
 	else {  
 		$("#widgetAnios").hide();
-		$("#no_participo").attr('checked',true);
+		$("#no_participo").prop('checked',true);
 	}	
 }
 
@@ -540,7 +540,7 @@ function chequearAnios(input) {
 			return false;
 		}
 	} else { 
-		$("#widgetAnios input:checked").attr("checked", false);
+		$("#widgetAnios input:checked").prop("checked", false);
 		updateAnios(input);
 	}
 	

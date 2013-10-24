@@ -89,7 +89,9 @@ abstract class Presentacion
     	if (!empty($b) && !empty($this->tanda) && !$b->getAuditorioDia()->getDia()->getTanda()->equals($this->getTanda())){
     		throw new \InvalidArgumentException("la tanda el bloque recibida es diferente a la tanda de esta presentacion");
     	}
-    	
+    	if (empty($b)){
+    		$this->posicion=0;
+    	}
     	$this->bloque = $b;
     }
     

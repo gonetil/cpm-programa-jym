@@ -264,11 +264,7 @@ class InvitacionController extends BaseController
     		
     		$invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $invitacion_id, $em);
     		$instancia = $this->getEntityForUpdate('CpmJovenesBundle:InstanciaEvento', $instancia_id, $em);
-    		$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->createQueryBuilder('t')
-    					->innerJoin('t.instanciaEvento','ins')
-    					->andWhere('ins = :instancia')
-    					->setParameter('instancia',$instancia)
-    					->getQuery()->getSingleResult();
+    		$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->getTandaDeInstanciaEvento($instancia);
 
     		$em->getConnection()->beginTransaction();
     		
