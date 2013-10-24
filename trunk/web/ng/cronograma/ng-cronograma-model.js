@@ -381,11 +381,10 @@ app.factory('Presentacion', function($resource){
 		
 		if (!destino)
 			destino='';
-		
+		this.posicion=0;
 		this.bloque = destino;
     	this.$save(
     		function(entity){
-    			//Logger.success("Se movió la presentación "+entity.id);
     			Logger.debug("Paso la presentación "+entity.id + (entity.bloque?" al bloque "+entity.bloque:" a presentaciones libres"));
     		}, 
     		function(error){Logger.error(error.data)}

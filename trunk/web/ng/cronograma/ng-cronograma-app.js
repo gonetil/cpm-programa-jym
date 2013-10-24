@@ -18,14 +18,17 @@ app.factory('Logger', function(){
     };
 
 	Logger.error=function(message){
+		console.error(message);
 		Logger.push('error', message);
 	};
 	Logger.success=function(message){
+		console.info(message);
 		Logger.push('success', message);
 	};
     Logger.debug=function(message){
     	if (this.level != 'debug')
 			return; 
+    	console.info(message);
     	Logger.push('info', message);
     };
 	return Logger;
@@ -39,25 +42,10 @@ app.run(function ($rootScope, Logger, Tanda) {
     $rootScope.getTandaActual = function(){
     	return $rootScope.tanda;
     }
-    $rootScope.getTanda = function(tandaId){
-    	//Gestiona la currentTanda
-    	if ($rootScope.tanda && $rootScope.tanda.id != tandaId){
-    		console.log("La tanda actual ("+$rootScope.tanda.id+") es diferente a la pedida ("+tandaId + ") ==> Hago $rootScope.tanda = null");
-    		$rootScope.tanda = null;
-    	}
-        if (!$rootScope.tanda && tandaId){
-    		Logger.debug("La tanda actual estaba vacia, levanto la tanda "+tandaId);
-    		$rootScope.tanda = Tanda.get(
-    				{tandaId: tandaId},
-    				function(tanda){
-		    				tanda.initialize();
-		    				console.log("Se cargo e inicializó correctamente la tanda "+tandaId);
-		    		}, 
-		    		function(error){Logger.error("Se produjo un error al recuperar la tanda "+ tandaId); Logger.error(error.data);}
-    		);
-    	}
-    	return $rootScope.tanda;
-    };
+    $rootScope.setTandaActual = function(tanda){
+    	return $rootScope.tanda=tanda;
+    }
+    
 	
     
 });
@@ -89,6 +77,10 @@ app.config(['$routeProvider', function($routeProvider, $rootScope) {
 	}]
 );
 
+function route(path){
+	var cacheKey="";//new Date().toLocaleString();
+	return BASE_PATH+path+ cacheKey;
+};
 
 function asset(filename){
 	//Esta funcion se pone suelta, fuera del $rootScope porque desde la inicialización del routeProvider no se puede 

@@ -1,23 +1,25 @@
 function TandaShowCtrl($rootScope,$scope, $routeParams, Tanda, Logger) {
-	$rootScope.getTanda();
-	var tanda = $rootScope.getTanda($routeParams.tandaId);
+
+	var tandaId = $routeParams.tandaId;
+	if (!tandaId) {
+		Logger.error("Se perdió el id de tanda.");
+		return;
+	}
+
+	var tanda = Tanda.get(
+			{tandaId: tandaId},
+			function(tanda){
+    				tanda.initialize();
+    				console.log("Se cargo e inicializó correctamente la tanda "+tandaId);
+    		}, 
+    		function(error){
+    			Logger.error("Se produjo un error al recuperar la tanda "+ tandaId); 
+    			Logger.error(error.data);
+    		}
+	);
+	$rootScope.setTandaActual(tanda);
+    
 	
-	$scope.presentacion_droppable={
-			multiple:true,
-			placeholder:false,
-			onDrop:'presentacionDropped'
-	};
-    $scope.presentacion_droppable_options={
-        accept:'.badge-presentacion',
-        tolerance:'intersect',
-        hoverClass:'badge-presentacion-hover'
-    };
-    $scope.presentacion_draggable_options= {
-        revert:'invalid',
-        cursor: 'move', 
-        cursorAt:{left:50, top:10},
-        helper:'clone'
-    };
     
     $scope.get_css_styles=function(o){
     	var styles= "";
@@ -44,60 +46,46 @@ function TandaShowCtrl($rootScope,$scope, $routeParams, Tanda, Logger) {
     	return "icon-star icon-star";
     }
     //////////////////////////////////////////
-    
+   	$scope.presentacion_droppable={
+			multiple:true,
+			placeholder:false,
+			onDrop:'presentacionDropped'
+	};
+    $scope.presentacion_droppable_options={
+        accept:'.badge-presentacion',
+        tolerance:'intersect',
+        hoverClass:'badge-presentacion-hover'
+    };
+    $scope.presentacion_draggable_options= {
+        revert:'invalid',
+        cursor: 'move', 
+        cursorAt:{left:50, top:10},
+        helper:'clone'
+    };
     $scope.presentacionDropped=function(event, ui){
     	var presentacionId = ui.draggable.data("presentacion");
     	var origen = ui.draggable.data("bloque");
     	var destino = $(event.target).data("bloque");
     	var presentacion = new Presentacion({id:presentacionId});
 
-/*    	
- * 
- * 
- * 
- * 
-	event{
-		cancelable: true,
-		currentTArget: docuemnt
-		delegateTArget: docuemnt
-		exclusive: undefined
-		data:null
-		handleObj
-		originalEvent: mouseEvent
-		srcElement, target, toElement. 
-	}
-
-
-ui{
-  
-    		draggable:{
-    			data('presentacion') == int
-    			data('bloque') == int
-    		}
-    		helper:{
-    			context: elementoHTML
-    		}
-    		position: {top:'', left: ''}
-    		offset: {top:'', left: ''}
-    	}
-    	*/
-    	if (origen == destino){
-			Logger.debug("Ignoro el move de la presentacion porque el destino es == al origen ");
-			//FIXME aca no deberíamos mirar el tema de la posicion de la presentacion dentro del bloque?
+    	if (!origen && !destino){
+			console.log("estamos moviendonos en la zona de presentaciones libres");
 			return;
 		}
+    	console.log("Se movio la presentacion ", presentacionId," del bloque ", origen, " al destino ", destino);
     	presentacion.setBloquePersistent(destino);
     }
+    
+    
 }
+
 
 function TandaListCtrl($rootScope, $scope, Tanda) {
 	$scope.tandas = Tanda.query();
-	$rootScope.getTanda();
+	$rootScope.setTandaActual(null);
 }
 function TandaResetearPresentacionesCtrl($rootScope,$scope, $location, $routeParams, Tanda, Logger) {
 	var tandaId = $routeParams.tandaId;
-	//var tanda = $rootScope.getTanda(tandaId);
-
 	$scope.confirmMessage="Esta seguro que desea reinicializar esta tanda?";
 	$scope.descriptionMessage="Al reinicializar una tanda se quitan todas las presentaciones de sus bloques y quedan libres. No se pierden los días, auditorios ni bloques."
 	$scope.confirmButton='Reinicializar';
@@ -113,8 +101,15 @@ function TandaResetearPresentacionesCtrl($rootScope,$scope, $location, $routePar
 
 function TandaDistribuirPresentacionesCtrl($rootScope,$scope, $location, $routeParams, Tanda, Logger) {
 	
+	var tanda = $rootScope.getTandaActual();
 	var tandaId = $routeParams.tandaId;
-	var tanda = $rootScope.getTanda(tandaId);
+	
+	if (!tanda || tanda.id != tandaId){
+		Logger.error("La tanda actual ("+tanda.id+") es diferente a la pedida ("+tandaId + ")");
+		return;
+	}
+	
+	
 	$scope.modo="best";
 	
 	$scope.distribuirPresentacionesLibres=function(){
@@ -250,8 +245,8 @@ function BloqueRemoveCtrl($scope, $routeParams, $location, Bloque, Logger){
 	$scope.bloque = new Bloque({id:bid});
 	$scope.confirmOk= function(){
 		$scope.bloque.$remove(
-			function(message){Logger.debug("Bloque ("+b.id+") eliminado");Logger.success(message);}, 
-			function(error){Logger.error("Error al eliminar el bloque "+b.id); Logger.error(error.data);}
+			function(message){Logger.debug("Bloque ("+bid+") eliminado");Logger.success(message);}, 
+			function(error){Logger.error("Error al eliminar el bloque "+bid); Logger.error(error.data);}
 		);
 		history.back();
 	}
