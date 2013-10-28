@@ -2,6 +2,7 @@
 <tr>
 <header><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></header>
 	<td>Coordinador</td>
+	<td>Celular</td>
 	<td>Distrito</td>
 	<td>Localidad</td>
 	<td>Escuela</td>
@@ -10,10 +11,16 @@
 	<td>Dia</td>
 	<td>Bloque</td>
 	<td>Hora de inicio</td>
+	<td>Soporte</td>
 </tr>
 {% for presentacion in presentaciones %}
 <tr>
 	<td>{{ presentacion.getApellidoCoordinador() }}, {{ presentacion.getNombreCoordinador() }}</td>
+	<td> 
+		{% if (presentacion.getTipo() == 'interna') %}
+			{{ presentacion.getProyecto().getCoordinador().telefonoCelular  }}
+		{% endif %}
+	</td>
 	<td>{{ presentacion.distrito }}</td>
 	<td>{{ presentacion.localidad }}</td>
 	<td>{{ presentacion.escuela }}</td>
@@ -23,6 +30,12 @@
 		<td>{{ presentacion.bloque.auditorioDia.dia.numero }}</td>
 		<td>{{ presentacion.bloque.nombre }} </td>
 		<td>{{ presentacion.bloque.horaInicio | date('H:i')}} </td>
+		<td>{% if presentacion.tipoPresentacion %}
+				{{  presentacion.tipoPresentacion.tipoPresentacion }}
+			{% else %}
+				--
+			{% endif %}
+		</td>
 	{% else %}
 	<td colspan="4"> Sin asignar </td>
 	{% endif %}
