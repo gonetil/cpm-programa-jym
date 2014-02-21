@@ -126,9 +126,7 @@ class Ciclo
      */
     public function setEtapaActual(\Cpm\JovenesBundle\Entity\Etapa $etapaActual)
     {
-    	if (empty($this->etapaActual))
-    		throw new \Exception("Se esta tratando de setear una etapa null");
-    	elseif ($etapaActual->equals($this->etapaActual)) 
+    	if ((!empty($this->etapaActual)) && ($etapaActual->equals($this->etapaActual))) 
     		return;
     	$desc = "Se pasa a la siguiente etapa [".$etapaActual->getNombre()."]";
         $this->etapaActual = $etapaActual;

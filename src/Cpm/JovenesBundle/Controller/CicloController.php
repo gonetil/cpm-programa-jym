@@ -82,6 +82,8 @@ class CicloController extends BaseController
 
         if ($form->isValid()) {
             try{
+            	$etapa = $this->getJYM()->getEtapaInicial();
+            	$entity->setEtapaActual($etapa);
             	$em = $this->getDoctrine()->getEntityManager();
             	$em->persist($entity);
             	$em->flush();
