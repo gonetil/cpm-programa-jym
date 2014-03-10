@@ -59,7 +59,7 @@
             	<br/>{% if entity.aniosParticipo %}<i>[{{ entity.aniosParticipoArray|join(',') }}]</i>{% endif %}
             	</b>
             </td>
-            <td>{{ entity.email }}</td>
+            <td>{{ entity.email }} {{  common.facebookURL(entity) }}</td>
             <td>{{ entity.dni }}</td>
             <td>{{ entity.telefono }}{{ (entity.telefono) and (entity.telefonoCelular)?',':'' }}{{ entity.telefonoCelular }}</td>
             <td>{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif%}</td>

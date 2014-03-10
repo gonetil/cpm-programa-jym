@@ -3319,3 +3319,8 @@ select.large_select {
 	height: 350px;
 }
 select.large_select option { padding: 3px;}
+
+.facebook { 
+	 background: url(../images/icons/facebook.png) no-repeat;
+	 padding: 0px 8px;
+}

@@ -199,3 +199,9 @@
 		 	{% endfor %}	
 	{% endif %}	 	
  {% endmacro %}
+ 
+ {% macro facebookURL(user) %}
+	 {% if user.facebookURL | length > 0 %}
+	 	<a href="{{ user.facebookURL }}" class="facebook">&nbsp;</a>
+	 {% endif %}
+{% endmacro %}	 	

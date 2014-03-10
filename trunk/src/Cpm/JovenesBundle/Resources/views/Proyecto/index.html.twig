@@ -136,7 +136,8 @@ $(document).ready(function() {
 				</a>	
 			</td>
 			<td>Tel:{% if entity.coordinador.telefonoCelular == '' %} {{entity.coordinador.telefono}} {% else %} {{
-				entity.coordinador.telefonoCelular }} {% endif %} <br />Email: {{ entity.coordinador.email }}
+				entity.coordinador.telefonoCelular }} {% endif %} 
+				<br />Email: {{ entity.coordinador.email }} {{ common.facebookURL(entity.coordinador) }}
 			</td>
 			<td class="{% if entity.esPrimeraVezEscuela %}primera_vez{% endif %}">{{ proyecto_box.nombreEscuela(entity.escuela) }}</td>
 			<td>Tel. {{ entity.escuela.telefono }} <br /> E-mail {{ entity.escuela.email }}

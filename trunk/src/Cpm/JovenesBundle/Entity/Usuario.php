@@ -134,6 +134,14 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @ORM\Column(name="fecha_alta", type="datetime", nullable=true)
      */
     private $fecha_alta;
+
+
+
+	 /**
+     * @var string $facebookURL;
+     * @ORM\Column(name="facebookURL", type="string", nullable=true)
+     */    
+    private $facebookURL;    
     
     public function __construct()
     {
@@ -419,7 +427,13 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     public function setAniosParticipo($anios) { 
     	$this->aniosParticipo = $anios;
     }
-    
+ 	
+ 	public function getFacebookURL(){
+ 		return $this->facebookURL;
+ 	}   
+ 	public function setFacebookURL($fb){
+ 		$this->facebookURL = $fb;
+ 	}
         
      /**
      * Set fecha_alta

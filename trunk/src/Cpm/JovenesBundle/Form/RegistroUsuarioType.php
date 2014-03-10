@@ -29,6 +29,12 @@ class RegistroUsuarioType extends BaseType
             ->add('apellido')
             ->add('dni', 'number')
     		->add('email', 'email')
+    		            ->add('facebookURL',null,array('label'=>'Dirección de Facebook',
+            								'required'=>false,
+            								'attr'=>array('title'=>'Ingresar dirección de barra de dirección: https://www.facebook.com/usuario...')
+            							    )
+            )
+    		
             ->add('domicilio',null,array('required'=>true))
             ->add('codigoPostal',null,array('label'=>'Código Postal','required'=>true))
             ->add('telefono',null,array('label'=>'Teléfono','required'=>true))

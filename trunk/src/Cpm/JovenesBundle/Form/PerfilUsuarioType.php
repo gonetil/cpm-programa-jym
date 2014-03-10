@@ -34,6 +34,11 @@ class PerfilUsuarioType extends BaseType
             ->add('apellido')
             ->add('dni', 'number')
     		->add('email', 'email')
+            ->add('facebookURL',null,array('label'=>'Dirección de Facebook',
+            								'required'=>false,
+            								'attr'=>array('title'=>'Ingresar dirección de barra de dirección: https://www.facebook.com/usuario...')
+            							    )
+            								)
             ->add('distrito','entity',array( 'class' => 'CpmJovenesBundle:Distrito',
             									'label'=>'Distrito', 
             									'attr' => array('class'=>'distrito-selector'),

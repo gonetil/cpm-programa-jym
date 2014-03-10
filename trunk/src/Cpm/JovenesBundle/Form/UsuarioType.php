@@ -14,6 +14,11 @@ class UsuarioType extends AbstractType
             ->add('nombre')
             ->add('dni')
             ->add('email', 'email')
+            ->add('facebookURL',null,array('label'=>'Dirección de Facebook',
+            								'required'=>false,
+            								'attr'=>array('title'=>'Ingresar dirección de barra de dirección: https://www.facebook.com/usuario...')
+            							    )
+            								)
             ->add('telefono', null, array('required'=>false))
             ->add('telefonoCelular', null, array('required'=>false))
             ->add('codigoPostal')
