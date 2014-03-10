@@ -33,7 +33,7 @@ class ConfirmacionCamposChapaType extends AbstractType
             						  	'query_builder' => function($er) { return $er->createQueryBuilder('e')->where('e.anulado = 0');}
     								  ))
     								  
-			->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))  
+			->add('escuela', new EscuelaType(), array('label' => 'Datos de la institución'))  
         ;
     }
 

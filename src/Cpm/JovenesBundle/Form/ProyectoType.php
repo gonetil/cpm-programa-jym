@@ -84,7 +84,7 @@ class ProyectoType extends AbstractType
             ->add('deQueSeTrata',null,array('label'=>'¿De qué se trata el proyecto?'))
 	        ->add('motivoRealizacion',null,array('label'=>'¿Por qué queremos investigar este tema?'))
 	        ->add('impactoBuscado',null,array('label'=>'¿Qué impacto tendrá en la comunidad?'))
-        	->add('escuela', new EscuelaType(), array('label' => 'Datos de la escuela'))
+        	->add('escuela', new EscuelaType(), array('label' => 'Datos de la institución'))
 			->add('requerimientosDeEdicion',null,array('label'=>'Requerimientos de edición'))        	
 			->add('color', 'choice',	array(
             		'label' => 'Color', 
