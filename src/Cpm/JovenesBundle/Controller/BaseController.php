@@ -238,7 +238,8 @@ abstract class BaseController extends Controller
        				$eliminados++;
        		}
 		}
-		if ($archivo = $proyecto->getEstadoActual()->getArchivo()) {
+		$estadoActual = $proyecto->getEstadoActual(); 
+		if ( ($estadoActual) && ($archivo = $estadoActual->getArchivo())) {
 				$total++;
 				if (@unlink( $this->getUploadDir().$proyecto->getId()."/".$archivo ) === TRUE)
        				$eliminados++;
