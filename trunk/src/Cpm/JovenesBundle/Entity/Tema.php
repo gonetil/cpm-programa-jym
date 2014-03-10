@@ -1,5 +1,5 @@
 <?php
-
+//LOS TEMAS SON LOS EJES TEMATICOS... y LOS EJES SON EN REALIDAD LAS AREAS DE REFERENCIA. Genial!
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -34,6 +34,7 @@ class Tema
      * @ORM\Column(name="anulado", type="boolean")
      */
     private $anulado;
+
 
 
     /**
@@ -75,6 +76,7 @@ class Tema
     {
         $this->anulado = $anulado;
     }
+
 
     /**
      * Get anulado

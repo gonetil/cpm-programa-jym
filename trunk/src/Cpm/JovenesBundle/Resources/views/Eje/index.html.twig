@@ -10,6 +10,7 @@
             <th>Id</th>
             <th>Nombre</th>
             <th>Descripcion</th>
+            <th>Ejes temáticos</th>
             <th>Anulado</th>
             <th>Acciones</th>
         </tr>
@@ -20,6 +21,7 @@
             <td><a href="{{ path('eje_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.nombre }}</td>
             <td>{{ entity.descripcion }}</td>
+            <td>{{ entity.ejesTematicos | length}}</td>
             <td>{{ entity.anulado }}</td>
             <td>
                 <ul>
