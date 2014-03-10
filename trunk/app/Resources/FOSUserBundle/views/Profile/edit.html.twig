@@ -20,5 +20,11 @@
     </div>
 </form>
 
-
+<<script type="text/javascript">
+<!--
+var $fb_url = $("#fos_user_profile_form_user_facebookURL");
+var fb_hint = $fb_url.attr('title');
+$fb_url.parent('div').append("<span> "+ fb_hint+"<span>");
+//-->
+</script>
 {% endblock fos_user_content %}

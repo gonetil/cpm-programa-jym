@@ -15,10 +15,18 @@
 	
 	{{ form_row(form.nombre) }}
 	{{ form_row(form.apellido) }}
-
+	
 	{{ common.aniosParticipo('#fos_user_registration_form_aniosParticipo', form) }}
 	
     {{ form_widget(form) }}
+    	<script type="text/javascript">
+		<!--
+		var $fb_url = $("#fos_user_registration_form_facebookURL");
+		var fb_hint = $fb_url.attr('title');
+		$fb_url.parent('div').append("<div> "+ fb_hint+"</div>");
+		//-->
+		</script>
+		    
     <div>
         <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
     </div>
