@@ -12,6 +12,7 @@ class EjeType extends AbstractType
         $builder
             ->add('nombre')
             ->add('descripcion')
+            ->add('ejesTematicos',null,array('label'=>'Ejes temáticos', 'required'=>false,'attr'=>array('class' => 'large_select' )))
             ->add('anulado')
         ;
     }

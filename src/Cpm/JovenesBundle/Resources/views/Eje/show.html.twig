@@ -19,6 +19,10 @@
             <td>{{ entity.descripcion }}</td>
         </tr>
         <tr>
+            <th>Ejes temáticos</th>
+            <td><ul>{% for eje in entity.ejesTematicos %} <li><a href="{{ path('tema_edit', { 'id': eje.id }) }}">{{ eje.nombre }}</a></li> {% endfor %}</ul></td>
+        </tr>
+        <tr>
             <th>Anulado</th>
             <td>{{ entity.anulado }}</td>
         </tr>

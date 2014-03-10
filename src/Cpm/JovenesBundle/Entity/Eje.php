@@ -1,5 +1,5 @@
 <?php
-
+//LOS EJES SON EN REALIDAD LAS AREAS DE REFERENCIA... LOS TEMAS SON LOS EJES TEMATICOS
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -42,6 +42,18 @@ class Eje
      */
     private $anulado;
 
+	/**
+     * @var Cpm\JovenesBundle\Entity\Tema  $ejesTematicos
+     *
+     * @ORM\ManyToMany(targetEntity="Tema", inversedBy="areasDeReferencia")
+     * @ORM\JoinTable(name="ejesTematicosPorAreas")
+     */
+	private $ejesTematicos;
+
+
+	public function __construct() { 
+		$this->ejesTematicos = new \Doctrine\Common\Collections\ArrayCollection();
+	}
 
     /**
      * Get id
@@ -113,6 +125,12 @@ class Eje
         return $this->anulado;
     }
     
+ 	public function getEjesTematicos() { 
+ 		return $this->ejesTematicos;
+ 	}
+ 	public function setEjesTematicos($ejes) {
+ 		$this->ejesTematicos = $ejes;	
+ 	}
         
     public function __toString()
     {

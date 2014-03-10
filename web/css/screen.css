@@ -3313,3 +3313,9 @@ overflow: overlay;
 .referencias-box i {
 	padding-right: 2px;
 }
+
+select.large_select { 
+	width: 500px;
+	height: 350px;
+}
+select.large_select option { padding: 3px;}
