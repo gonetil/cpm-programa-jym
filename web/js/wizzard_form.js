@@ -43,7 +43,7 @@
 	   	}).change();
 	   	
 	   	$(formName+"_eje").change(function(event) {
-	   		mostrarDescripcionEje($(formName+"_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"));
+	   		mostrarDescripcionEje($(formName+"_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"), $(formName+"_temaPrincipal") );
 	   	});
   }
    
@@ -88,7 +88,14 @@
    }
 
    
-   function mostrarDescripcionEje(eje_id,$target_elem,$loading) {
+   /**
+    * Al seleccionar un eje, se envia un request solicitando la descripcion de dicho eje, y la lista de temas del mismo
+    * @param eje_id  el ID del eje seleccionado
+    * @param $target_elem   nodo HTML donde se mostrará la descripción
+    * @param $loading		nodo HTML donde se muestra la animación de loading
+    * @param $temas_select  nodo HTML (SELECT) donde se mostrará la lista de temas
+    */
+   function mostrarDescripcionEje(eje_id,$target_elem,$loading,$temas_select) {
 	   $loading.show();
 	   $target_elem.html("");
 	   url = $target_elem.attr('target');
@@ -97,6 +104,13 @@
 		   	{ eje_id : eje_id },
 		   	function(json) { 
 		   		$target_elem.html(json.descripcion);
+		   		if (json.ejesTematicos) {
+		   			$temas_select.empty();
+		   			json.ejesTematicos.forEach(function(tema) {
+		   										var new_opt = "<option value='"+tema.id+"'>"+tema.nombre+"</option>";
+		   						   				$temas_select.append(new_opt);
+		   			});
+		   		}
 		   		$loading.hide();
 		   	}
 	   );
