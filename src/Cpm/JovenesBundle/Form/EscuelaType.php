@@ -33,7 +33,17 @@ class EscuelaType extends AbstractType {
 		))->add('nombre', null, array (
 			'label' => 'Nombre de la Escuela',
 			'required' => false
-		))->add('email', null, array (
+		))->add('cue', null, array (
+			'label' => 'CUE de la Escuela',
+			'required' => false
+		))->add('contextoEncierro', 'choice', array (
+			'label' => '¿La institución funciona en contexto de encierro?',
+			'required' => false,
+			'choices' => array(1=>"si",0=>"no"),
+    		'expanded' => true,
+    		'attr'=>array('class'=>'radios-en-linea')
+		))
+		->add('email', null, array (
 			'attr' => array (
 				'class' => 'email'
 			)

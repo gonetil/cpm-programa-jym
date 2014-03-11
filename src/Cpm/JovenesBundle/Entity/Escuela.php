@@ -96,7 +96,14 @@ class Escuela
      */
     private $director;
 
-    
+
+     /**
+     * @var integer $cue
+     * 
+     * @ORM\Column (name="cue", type="integer", nullable=true)
+     * @Assert\Regex(pattern="/^[\s0-9]*$/", message="El CUE (“Código Único de Establecimiento) de la institución solo puede contener números")
+     */
+    private $cue;
     
     /**
     *  @ORM\ManyToOne(targetEntity="Localidad")
@@ -108,6 +115,14 @@ class Escuela
      * @ORM\OneToOne(targetEntity="Proyecto", mappedBy="escuela")
      */
     private $proyecto;
+     
+     /**
+     * @var boolean $contextoEncierro
+     * @ORM\Column(name="contextoEncierro", type="boolean")
+     * indica si la institución está en un contexto de encierro
+     */        
+    private $contextoEncierro = false;
+     
      
      /**
      * Get id
@@ -444,5 +459,19 @@ class Escuela
     public function getProyecto()
     {
         return $this->proyecto;
+    }
+    
+    public function getCue() { 
+    	return $this->cue;
+    }
+    public function setCue($cue) {
+    	$this->cue = $cue;
+    }
+    
+    public function getContextoEncierro() {
+    	return $this->contextoEncierro;
+    }
+    public function setContextoEncierro($contexto) { 
+    	$this->contextoEncierro = $contexto;
     }
 }
