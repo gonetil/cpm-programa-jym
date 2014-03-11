@@ -83,14 +83,19 @@
 
 		<h3>Integrantes</h3>
 		<p>
-			<b>Coordinador</b>: {{ proyecto.coordinador.nombre }} {{proyecto.coordinador.apellido}} &lt;<a href="mailto:{{proyecto.coordinador.email}}">{{proyecto.coordinador.email}}</a>&gt;		
+			<b>Coordinador</b>: {{ proyecto.coordinador.nombre }} {{proyecto.coordinador.apellido}} &lt;
+			<a href="mailto:{{proyecto.coordinador.email}}">{{proyecto.coordinador.email}}</a>&gt;
+			 {{ common.facebookURL(proyecto.coordinador) }}		
 		</p>
 		{% if proyecto.colaboradores | length > 0 %}
 			<p>
 				<b>Colaboradores: </b>
 				<ul class="colaboradores">
 					{% for colaboradores in proyecto.colaboradores %}
-						<li> {{colaboradores.nombre}} {{colaboradores.apellido}} &lt;<a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;</li>
+						<li> {{colaboradores.nombre}} {{colaboradores.apellido}} &lt;
+						<a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;
+						 {{ common.facebookURL(colaboradores) }}
+						 </li>
 					{% endfor %}
 				</ul>
 			</p>
@@ -100,6 +105,9 @@
 		<h3> Datos de la Institución </h3>
 
 		<p> {{ _self.nombreEscuela(proyecto.escuela) }} </p>
+		<p> CUE {{ escuela.cue }} </p>
+		<p> ¿La escuela funciona en contexto de encierro? : {{ common.show_bool(escuela.contextoEncierro) }} </p>
+		
 		<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p> 
 		<p> Localidad {{escuela.localidad.nombre }} , Distrito {{ escuela.localidad.distrito }} </p>
 		<p> Tel. {{ escuela.telefono }} / Email {{ escuela.email }} </p>

@@ -36,6 +36,8 @@
 	
 			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_escuela').toggle(); return false;"> {{ proyecto_box.nombreEscuela(entity.escuela) }} </a></h4>
 			<div class="info_escuela hidden extra_info">
+				<p> CUE {{ escuela.cue }}</p>
+				<p> ¿La escuela funciona en contexto de encierro? : {{ common.show_bool(escuela.contextoEncierro) }} </p>
 				<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p> 
 				<p> Localidad {{escuela.localidad.nombre }} , Distrito {{ escuela.localidad.distrito }} </p>
 				<p> Región Educativa: {{ entity.escuela.localidad.distrito.region }} </p>
