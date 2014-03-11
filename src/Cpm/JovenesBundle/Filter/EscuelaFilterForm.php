@@ -75,7 +75,13 @@ class EscuelaFilterForm extends ModelFilterForm
 	        											        								
 		    ->add('nombre', null, array('label' => 'Nombre o numero de escuela',
         								'required' => false))
-		    					
+		    ->add('contextoEncierro', 'choice' ,array('label' => 'Contexto de encierro' , 
+            											'choices' => array(1=>"Si",2=>"No"),
+            											'preferred_choices' => array("Todos"),
+        												'empty_value' => "Todos",
+        												'expanded'=>false,
+        												'required'=>false
+                										)) 					
         ;
           		$miCiclo = new CicloFilter();
        		$builder->add('cicloFilter',$miCiclo->createForm($this->getJYM()),array('label'=>'Ciclo'));
