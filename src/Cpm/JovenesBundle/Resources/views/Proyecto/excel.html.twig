@@ -25,7 +25,9 @@
 	<td>Region</td>
 	<td>Tel.</td>
 	<td>Email</td>
-	<td>Direccion</td>
+	<td>Director</td>
+	<td>Contexto de encierro</td>
+	<td>CUE de la escuela</td>
 	{{ usuario_export.print_header(true,'Coordinador') }}
 	{% for i in 0..2 %}
 		{{ usuario_export.print_header(false,'Colaborador '~ i) }}
@@ -69,7 +71,8 @@
 		<td>{{ escuela.telefono }}</td> 
 		<td>{{ escuela.email }}</td>
 		<td>{{ escuela.director }}</td>
-		
+		<td>{{ common.show_bool(escuela.contextoEncierro) }}</td>
+		<td>{{ escuela.cue }}</td>
 		{{ usuario_export.print_entity(entity.coordinador,true) }}
 		{% for colaborador in entity.colaboradores %}
 			{{ usuario_export.print_entity(colaborador,false) }}

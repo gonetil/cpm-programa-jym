@@ -106,7 +106,7 @@
 		   		$target_elem.html(json.descripcion);
 		   		if (json.ejesTematicos) {
 		   			$temas_select.empty();
-		   			json.ejesTematicos.forEach(function(tema) {
+		   			jQuery.each(json.ejesTematicos, function(i,tema) {
 		   										var new_opt = "<option value='"+tema.id+"'>"+tema.nombre+"</option>";
 		   						   				$temas_select.append(new_opt);
 		   			});
