@@ -148,6 +148,11 @@ class ProyectoRepository extends EntityRepository {
 				$qb->innerJoin("e.tipoInstitucion", 't')->andWhere('t = :tipoInstitucion')->setParameter('tipoInstitucion', $escuela->getTipoInstitucion());
 			}
 
+			if ($contextoEncierro = $escuela->getContextoEncierro()) {
+				$ctx = ($contextoEncierro != 1)?0 : 1;
+				$qb->andWhere('e.contextoEncierro = :contexto')->setParameter('contexto',$ctx);
+			}
+
 			if (trim($escuela->getNombre()) != "") {
 				$escuelaSel = trim($escuela->getNombre());
 
