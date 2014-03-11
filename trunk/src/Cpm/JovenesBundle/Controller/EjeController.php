@@ -187,12 +187,17 @@ class EjeController extends BaseController
       public function fetchEjeAction() {
     	$eje_id = $this->getRequest()->get('eje_id');
  		$eje = $this->getRepository('CpmJovenesBundle:Eje')->find($eje_id);
- 		$temas = $eje->getEjesTematicos();
+ 		$temas = $eje->getEjesTematicos()->toArray();
+ 		$temas = array_filter($temas, function($tema) { return ( $tema->getAnulado()=== FALSE); } ); 
+												
+ 		
  		$json = array();
 		if ($eje) { 
 			$json['descripcion'] = $eje->getDescripcion();
 			$json['id'] = $eje->getId();
-			$json['ejesTematicos'] = array_map(function($tema) { return array('id'=>$tema->getId(),'nombre'=>$tema->getNombre() ); }, $temas->toArray() );		
+			$json['ejesTematicos'] = array_map(  function($tema) { return array('id'=>$tema->getId(),'nombre'=>$tema->getNombre() ); }, 
+												$temas
+												);		
 		}
 		
 		$response = new Response(json_encode($json));
