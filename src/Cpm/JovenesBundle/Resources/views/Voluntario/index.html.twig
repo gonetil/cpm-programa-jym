@@ -3,6 +3,14 @@
 {% block title %}Listado de Voluntarios{% endblock %}
  
 {% block content %}
+{{ filter.form_head(form) }}
+{{ form_row(form.modelFilter.apellido) }}
+{{ form_label(form.modelFilter.email) }} {{ form_widget(form.modelFilter.email) }}
+{{ form_widget(form._token) }}
+<br/>
+<label>&nbsp;</label><input type="submit" value="Filtar">
+</form>
+
 <table class="records_list">
     <thead>
         <tr>

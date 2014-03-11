@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Cpm \ JovenesBundle \ Filter \ VoluntarioFilter;
 
 /**
  * VoluntarioRepository
@@ -12,6 +13,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class VoluntarioRepository extends EntityRepository
 {
+	
+	static $sort_criteria = array("id" => "v.id","apellido"=>"v.apellildo");
+	
 	public function findAllQuery() {
 		$qb = $this->getEntityManager()->createQueryBuilder()
 			->add('select','v')
@@ -20,4 +24,18 @@ class VoluntarioRepository extends EntityRepository
     return  $qb->getQuery();
   
 	}
+		
+	
+	public function filterQuery(VoluntarioFilter $filter, $ciclo_activo,$sort_field = null, $sort_order) {
+		$qb = $this->createQueryBuilder('v');
+		
+		if ($filter->getEmail())
+			$qb->andWhere('v.email LIKE :email')->setParameter('email','%'.$filter->getEmail().'%');
+		
+		if ($filter->getApellido())
+			$qb->andWhere('v.apellido LIKE :apellido')->setParameter('apellido','%'.$filter->getApellido().'%');
+		
+		return $qb;
+	} 
+	
 }
