@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Voluntario;
 use Cpm\JovenesBundle\Form\VoluntarioType;
 
+use Cpm\JovenesBundle\Filter\VoluntarioFilter;
+use Cpm\JovenesBundle\Filter\VoluntarioFilterForm;
+
 /**
  * Voluntario controller.
  *
@@ -24,10 +27,12 @@ class VoluntarioController extends BaseController
      */
     public function indexAction()
     {
+    	return $this->filterAction(new VoluntarioFilter(), 'voluntario');
     	
-    	$em = $this->getDoctrine()->getEntityManager();
+/*    	$em = $this->getDoctrine()->getEntityManager();
         $entities = $em->getRepository('CpmJovenesBundle:Voluntario')->findAllQuery();
-        return $this->paginate($entities);
+        return $this->paginate($entities); 
+        */
     }
 
     /**
