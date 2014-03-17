@@ -28,7 +28,11 @@
 		{{ form_row(form.escuela.cue)}}
 		{{ form_row(form.escuela.numero) }}
 	</div>
-	{{ form_row(form.escuela.contextoEncierro) }}
+	<div>
+	{{ form_label(form.escuela.contextoEncierro) }}
+	{{ form_widget(form.escuela.contextoEncierro) }}
+	{{ form_errors(form.escuela.contextoEncierro) }}
+	</div>
 	{{ form_row(form.escuela.email)}}
 	{{ form_row(form.escuela.telefono)}}
 	{{ form_row(form.escuela.domicilio)}}
