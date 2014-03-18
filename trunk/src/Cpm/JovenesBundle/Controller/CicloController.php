@@ -75,15 +75,13 @@ class CicloController extends BaseController
      */
     public function createAction()
     {
-        $entity  = new Ciclo();
+        $entity  = new Ciclo( $this->getJYM()->getEtapaInicial() );
         $request = $this->getRequest();
         $form    = $this->createForm(new CicloType(), $entity);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
             try{
-            	$etapa = $this->getJYM()->getEtapaInicial();
-            	$entity->setEtapaActual($etapa);
             	$em = $this->getDoctrine()->getEntityManager();
             	$em->persist($entity);
             	$em->flush();
