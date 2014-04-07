@@ -43,7 +43,10 @@
 	   	}).change();
 	   	
 	   	$(formName+"_eje").change(function(event) {
-	   		mostrarDescripcionEje($(formName+"_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"), $(formName+"_temaPrincipal") );
+	    	  previously_selected = $(formName+"_temaPrincipal").find(':selected').val();
+	      	  mostrarDescripcionEje($(formName+"_eje").val(),$("#descripcion_eje"), $("#eje_row .inline-loading"), $(formName+"_temaPrincipal") , previously_selected );
+	      	  //$(formName+"_temaPrincipal option[value='"+selected+"']").attr('selected','selected');
+	      	  
 	   	});
   }
    
@@ -63,8 +66,6 @@
    			next = $("#stage_"+to);
 		   	if (prev) prev.hide();
 		   	if (next) next.fadeIn();
-		   	
-			$("#cpm_jovenesbundle_proyectotype_eje").change();
    		}
    }
    
@@ -95,7 +96,7 @@
     * @param $loading		nodo HTML donde se muestra la animación de loading
     * @param $temas_select  nodo HTML (SELECT) donde se mostrará la lista de temas
     */
-   function mostrarDescripcionEje(eje_id,$target_elem,$loading,$temas_select) {
+   function mostrarDescripcionEje(eje_id,$target_elem,$loading,$temas_select, currently_selected) {
 	   $loading.show();
 	   $target_elem.html("");
 	   url = $target_elem.attr('target');
@@ -107,7 +108,9 @@
 		   		if (json.ejesTematicos) {
 		   			$temas_select.empty();
 		   			jQuery.each(json.ejesTematicos, function(i,tema) {
-		   										var new_opt = "<option value='"+tema.id+"'>"+tema.nombre+"</option>";
+		   										set_selected = (currently_selected == tema.id) ? " selected='selected' " : "";
+		   											
+		   										var new_opt = "<option value='"+tema.id+"'"+ set_selected + ">"+tema.nombre+"</option>";
 		   						   				$temas_select.append(new_opt);
 		   			});
 		   		}
@@ -118,13 +121,12 @@
    
    
    $(document).ready(function() {
-   					
-	   				$("#cpm_jovenesbundle_proyectotype_eje").change();
-	   				$("#cpm_jovenesbundle_presentacionproyectotype_eje").change();
+   	
 					setup_validation();
 					setup_selects();
 					enter_to_tab();
 		   			move_stage(0,1,false); 
-		   			
+	   				$("#cpm_jovenesbundle_proyectotype_eje").change();
+	   				$("#cpm_jovenesbundle_presentacionproyectotype_eje").change();	   			
 					
    			} );
