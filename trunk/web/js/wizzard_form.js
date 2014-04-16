@@ -15,8 +15,10 @@
        required: "Debe seleccionar una localidad (recuerde seleccionar un distrito primero)",
      };
     
-     
-   	form_handler = $("form[name='wizzard_form']").validate( { messages : custom_messages });
+     /*Los input de type number los paso a type text con CSS number, porque sino en Chrome se boludea*/
+     $("form[name='wizzard_form'] input[type='number']").attr('type','text').addClass('number');
+
+     form_handler = $("form[name='wizzard_form']").validate( { messages : custom_messages });
    	$("form[name='wizzard_form']").removeAttr("novalidate");
 
    }
