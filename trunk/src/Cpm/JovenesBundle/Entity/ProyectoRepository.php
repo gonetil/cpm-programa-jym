@@ -65,11 +65,11 @@ class ProyectoRepository extends EntityRepository {
 			}	*/
 		}
 
-		if ($primeraVezQueParticipa = $usuarioFilter->getPrimeraVezQueParticipa()) {
+		if ($primeraVezQueParticipa = $usuarioFilter->getPrimeraVezQueParticipa()) {  //este es el select
 				if ($primeraVezQueParticipa == 1)
-	       			$qb->andWhere(" ( coordinador.aniosParticipo like '{}' or coordinador.aniosParticipo is NULL )");
+	       			$qb->andWhere(" ( coordinador.aniosParticipo like '{}' or coordinador.aniosParticipo like '[]' or coordinador.aniosParticipo is NULL )");
 	       		else	
-		       		$qb->andWhere(" not ( coordinador.aniosParticipo like '{}' or coordinador.aniosParticipo is NULL )");
+		       		$qb->andWhere(" not ( coordinador.aniosParticipo like '{}' or coordinador.aniosParticipo like '[]' or coordinador.aniosParticipo is NULL )");
 		}
 		
 		
