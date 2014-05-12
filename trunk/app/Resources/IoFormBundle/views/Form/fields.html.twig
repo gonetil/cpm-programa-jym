@@ -82,13 +82,12 @@
     {# block('field_widget') #}  {# render text field #}
     {% spaceless %}
     <script type="text/javascript">
-      $(function(){
+    
+      $(document).ready((function(){
         {% if not callback %}
-          function callback(data, cb){
-              cb(data);
-          }
+          function callback(data, cb){  cb(data); }
         {% endif %}
-        $( "#{{ id }}" ).autocomplete({
+        $auto = $( "#{{ id }}" ).autocomplete({
             source: function(request, cb){
                 var url = "{{ url }}".replace('%24%24term%24%24', request.term);
                 {% if callback %}
@@ -111,12 +110,13 @@
                     return false;
             }
 
-        })
-        .data( "autocomplete" )._renderItem = function( ul, item ) {
+        });
+
+        $auto.data( "uiAutocomplete" )._renderItem = function( ul, item ) {
 			return $( "<li></li>" ).data( "item.autocomplete", item ).append( "<a>" + item.desc + "</a>" ).appendTo( ul );
 		};
 
-	});
+	}));
     </script>
     </div>
     {% endspaceless %}
