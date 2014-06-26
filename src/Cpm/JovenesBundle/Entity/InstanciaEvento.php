@@ -274,8 +274,8 @@ class InstanciaEvento
     
     public function getTitulo()
     {
-    	$referencia = $this->fechaInicio->format('d/m');
-    	$dia_fin = $this->fechaFin->format('d/m');
+    	$referencia = $this->fechaInicio->format('d/m/y');
+    	$dia_fin = $this->fechaFin->format('d/m/y');
     	if ($referencia != $dia_fin)
     		$referencia.=" al ".$dia_fin;
     	
