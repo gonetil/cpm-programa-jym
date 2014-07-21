@@ -232,10 +232,10 @@ class CorreoController extends BaseController
 		if ($correoBatchForm->isValid() && count($proyectos)) {
 			
 			//	$valid = $mailer->validateTemplate($correoBatch->getCuerpo());
-				
+	
 			$correoMaestro = new Correo();
 			$correoMaestro->setAsunto($correoBatch->getAsunto());
-			$correoMaestro->setCuerpo($correoBatch->getCuerpo());
+			$correoMaestro->setCuerpo($correoBatch->getCuerpo()); 
 			$correoMaestro->setArchivos($correoBatch->getArchivos());
 			$mailer->procesarAdjuntos($correoMaestro);
 			
@@ -251,7 +251,7 @@ class CorreoController extends BaseController
 					$exampleCorreo= $mailer->enviarCorreo($exampleCorreo, array(), true);
 					$correoBatch->setPreviewText($exampleCorreo->getCuerpo()); 
 					$correoBatch->setPreview(false);
-					$correoBatch->setCuerpo($exampleCorreo->getCuerpo());
+					$correoBatch->setCuerpo($correoMaestro->getCuerpo());
 					$this->setWarnMessage("Por favor, verifique el texto del correo antes de enviarlo");
 				}catch(InvalidTemplateException $e){
 						$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
