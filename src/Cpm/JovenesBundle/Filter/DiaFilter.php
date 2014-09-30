@@ -16,7 +16,7 @@ class DiaFilter extends Dia implements ModelFilter {
 	}
 	
 	public function getSortFields() {
-		return array();
+		return array('id'=>'Id');
 	}
 
 	
