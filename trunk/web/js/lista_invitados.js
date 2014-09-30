@@ -21,6 +21,7 @@ newLine = function(number) {
 };
 
 checkLine = function(elem) {
+	if (isAdmin) return true; //los admins siempre pueden enviar el form, incluso sin elementos
 	var check = true;
 	$(elem+" input").each(function(index,val) {
 		if ($(val).val() == "") {
@@ -29,6 +30,7 @@ checkLine = function(elem) {
 		} else
 			$(val).css("border","1px solid #ACACAC");
 	});
+	
 	return check;
 }
 updateLegend = function() { $("#lista_invitados .invitados_count").html("Total: " + cantInvitados + ". Restan: " + (maxInvitados - cantInvitados) ); }
