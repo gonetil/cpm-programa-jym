@@ -3,6 +3,8 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Cpm\JovenesBundle\Filter\BloqueFilter;
+
 
 /**
  * BloqueRepository
@@ -18,5 +20,26 @@ class BloqueRepository extends EntityRepository
 		->add('from','CpmJovenesBundle:Bloque d');
 	
 		return  $qb->getQuery();
+	}
+	
+		public function filterQuery(BloqueFilter $filter,$ciclo_activo,$sort_field = null, $sort_order) {
+		
+	
+	 	$qb = $this->createQueryBuilder('b')
+	 		->innerJoin('b.auditorioDia','ad')
+	 	    ->innerJoin('ad.dia','d')
+			->addOrderBy('d.numero', 'asc');
+		
+		$cicloFilter = $filter->getCicloFilter();
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
+			$qb
+			->innerJoin('d.tanda','t')
+			->innerJoin('t.instanciaEvento','ie')
+			->innerJoin('ie.evento','e')
+			->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		}
+	
+		return $qb;
+	
 	}
 }

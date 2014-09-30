@@ -78,7 +78,9 @@ class Tanda
      */
     public function getCiclo()
     {
-        return $this->instanciaEvento->getCiclo();
+       if ($this->instanciaEvento)
+	        return $this->instanciaEvento->getCiclo();
+	   else return null;     
     }
     
     /**

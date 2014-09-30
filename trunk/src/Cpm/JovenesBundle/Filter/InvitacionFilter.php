@@ -11,7 +11,8 @@ class InvitacionFilter extends Invitacion implements ModelFilter {
 	private $cicloFilter;
 	
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
-		return new InvitacionFilterForm($this, $jym);
+		//return new UsuarioFilterForm($this, $jym,'_usuario');
+		return new InvitacionFilterForm($this, $jym, '_invitacion');
 	}
 
 	public function getTargetEntity() {

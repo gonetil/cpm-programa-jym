@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Cpm\JovenesBundle\Filter\AuditorioDiaFilter;
 
 /**
  * AuditorioDiaRepository
@@ -19,4 +20,25 @@ class AuditorioDiaRepository extends EntityRepository
 	
 		return  $qb->getQuery();
 	}
+	
+	public function filterQuery(AuditorioDiaFilter $filter,$ciclo_activo,$sort_field = null, $sort_order) {
+		
+	
+	 	$qb = $this->createQueryBuilder('ad')
+	 	    ->innerJoin('ad.dia','d')
+			->addOrderBy('d.numero', 'asc');
+		
+		$cicloFilter = $filter->getCicloFilter();
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
+			$qb
+			->innerJoin('d.tanda','t')
+			->innerJoin('t.instanciaEvento','ie')
+			->innerJoin('ie.evento','e')
+			->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		}
+	
+		return $qb;
+	
+	}
+	
 }

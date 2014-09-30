@@ -12,6 +12,10 @@ use Cpm\JovenesBundle\Form\TandaType;
 use Cpm\JovenesBundle\Entity\Dia;
 use Cpm\JovenesBundle\Entity\AuditorioDia;
 
+
+use Cpm\JovenesBundle\Filter\TandaFilter;
+use Cpm\JovenesBundle\Filter\TandaFilterForm;
+
 /**
  * Tanda controller.
  *
@@ -27,14 +31,19 @@ class TandaController extends BaseController
      */
     public function indexAction()
     {
+
         $em = $this->getDoctrine()->getEntityManager();
 		
 		$ciclo = $this->getJYM()->getCicloActivo();
+		
+		$result = $this->filterAction(new TandaFilter(), 'tanda');
+		
 		$eventos = $em->getRepository('CpmJovenesBundle:Evento')->findAllQuery($ciclo)->getResult();
-        $entities = $em->getRepository('CpmJovenesBundle:Tanda')->findAllQuery()->getResult();
+//        $entities = $em->getRepository('CpmJovenesBundle:Tanda')->findAllQuery($ciclo)->getResult();
        
-
-        return array('entities' => $entities, 'eventos'=>$eventos);
+		$result['eventos'] = $eventos; 
+		return $result;
+  //      return array('entities' => $entities, 'eventos'=>$eventos);
     }
 
     /**

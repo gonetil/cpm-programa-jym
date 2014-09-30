@@ -3,6 +3,8 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Cpm\JovenesBundle\Filter\TandaFilter;
+
 
 /**
  * TandaRepository
@@ -41,5 +43,21 @@ class TandaRepository extends EntityRepository
 			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
 		
 		return  $qb->getQuery();
+	}
+	
+	public function filterQuery(TandaFilter $filter,$ciclo_activo,$sort_field = null, $sort_order) {
+		
+	 	$qb = $this->createQueryBuilder('t')
+			->innerJoin('t.instanciaEvento','ie')
+			->innerJoin('ie.evento','e')
+			->addOrderBy('ie.id', 'desc')->addOrderBy('t.numero','ASC');
+		
+		$cicloFilter = $filter->getCicloFilter();
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
+			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		}
+	
+		return $qb;
+	
 	}
 }
