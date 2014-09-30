@@ -3,7 +3,8 @@
 {% block title %}Listado de días{% endblock %}
 
 {% block content %}
-
+{{ filter.form_init(form) }}
+{{ filter.form_end(form) }}
 <table class="records_list">
     <thead>
         <tr>

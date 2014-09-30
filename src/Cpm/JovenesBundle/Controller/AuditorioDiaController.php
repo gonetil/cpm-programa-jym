@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\AuditorioDia;
 use Cpm\JovenesBundle\Form\AuditorioDiaType;
 
+use Cpm\JovenesBundle\Filter\AuditorioDiaFilter;
+use Cpm\JovenesBundle\Filter\AuditorioDiaFilterForm;
+
 /**
  * AuditorioDia controller.
  *
@@ -24,8 +27,8 @@ class AuditorioDiaController extends BaseController
      */
     public function indexAction()
     {
-        $entities = $this->getRepository('CpmJovenesBundle:AuditorioDia')->findAllQuery();
-        return $this->paginate($entities);
+       return $this->filterAction(new AuditorioDiaFilter(), 'auditoriodia');
+       
     }
 
     /**

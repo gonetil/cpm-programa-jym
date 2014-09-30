@@ -9,6 +9,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Bloque;
 use Cpm\JovenesBundle\Form\BloqueType;
 
+
+use Cpm\JovenesBundle\Filter\BloqueFilter;
+use Cpm\JovenesBundle\Filter\BloqueFilterForm;
+
+
 /**
  * Bloque controller.
  *
@@ -24,8 +29,8 @@ class BloqueController extends BaseController
      */
     public function indexAction()
     {
-        $entities = $this->getRepository('CpmJovenesBundle:Bloque')->findAllQuery();
-        return $this->paginate($entities);
+    	
+       return $this->filterAction(new BloqueFilter(), 'bloque');
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Cpm\JovenesBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Cpm\JovenesBundle\Filter\DiaFilter;
 
 /**
  * DiaRepository
@@ -18,5 +19,23 @@ class DiaRepository extends EntityRepository
 		->add('from','CpmJovenesBundle:Dia d');
 	
 		return  $qb->getQuery();
+	}
+
+	public function filterQuery(DiaFilter $filter,$ciclo_activo,$sort_field = null, $sort_order) {
+		
+	
+	 	$qb = $this->createQueryBuilder('d')
+			->addOrderBy('d.numero', 'asc');
+		
+		$cicloFilter = $filter->getCicloFilter();
+		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
+			$qb->innerJoin('d.tanda','t')
+			->innerJoin('t.instanciaEvento','ie')
+			->innerJoin('ie.evento','e')
+			->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
+		}
+	
+		return $qb;
+	
 	}
 }

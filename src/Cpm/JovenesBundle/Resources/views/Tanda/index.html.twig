@@ -3,7 +3,8 @@
 {% block title %}Listado de tandas{% endblock %}
 
 {% block content %}
-
+{{ filter.form_init(form) }}
+{{ filter.form_end(form) }}
 <table class="records_list">
     <thead>
         <tr>
@@ -56,7 +57,7 @@
 	 </li>
 </ul>
 
-	        <div id="inicializarTandasForm" class="hiddenForms" style="display:none; clear:both;float:left;">
+{# 	        <div id="inicializarTandasForm" class="hiddenForms" style="display:none; clear:both;float:left;">
 	        	<form method="post" action="{{ path('tanda_init') }}">
 					<label for="evento">Indique el evento de Chapadmalal:</label>
 					<select name="evento_chapa" id="evento_chapa">
@@ -71,5 +72,5 @@
 					<input type="submit" value="Generar tandas">
 				</form>
 			</div>
-
+#}
 {% endblock %}

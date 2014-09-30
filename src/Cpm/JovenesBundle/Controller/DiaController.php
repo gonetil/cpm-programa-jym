@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cpm\JovenesBundle\Entity\Dia;
 use Cpm\JovenesBundle\Form\DiaType;
 
+use Cpm\JovenesBundle\Filter\DiaFilter;
+use Cpm\JovenesBundle\Filter\DiaFilterForm;
+
 /**
  * Dia controller.
  *
@@ -24,8 +27,8 @@ class DiaController extends BaseController
      */
     public function indexAction()
     {
-        $entities = $this->getRepository('CpmJovenesBundle:Dia')->findAllQuery();
-        return $this->paginate($entities);
+    	return $this->filterAction(new DiaFilter(), 'dia');
+        
     }
 
     /**
