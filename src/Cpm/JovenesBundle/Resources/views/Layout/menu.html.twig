@@ -7,12 +7,13 @@
 	<div class="navi">
 	<div class="table">
 	<div class="nav-divider">&nbsp;</div>
+		{% if is_granted("ROLE_ADMIN") %}
 		<ul class="select">
 			<li>
 				<a href="{{path('dashboard')}}"><b>Tablero</b></a>
 			</li>
 		</ul>
-		
+		{% endif %}
 		<ul  class="select current" >
 			<li>
 				<a href="{{path('home')}}"><b>Panel de Control</b></a>
