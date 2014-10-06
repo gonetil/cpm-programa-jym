@@ -53,9 +53,11 @@ class TandaRepository extends EntityRepository
 			->addOrderBy('ie.id', 'desc')->addOrderBy('t.numero','ASC');
 		
 		$cicloFilter = $filter->getCicloFilter();
+		$qb->andWhere('e.ciclo = :ciclo');
 		if  ($cicloFilter && ($ciclo = $cicloFilter['ciclo'])) {
-			$qb->andWhere('e.ciclo = :ciclo')->setParameter('ciclo',$ciclo);
-		}
+			$qb->setParameter('ciclo',$ciclo);
+		} else 
+			$qb->setParameter('ciclo',$ciclo_activo);
 	
 		return $qb;
 	
