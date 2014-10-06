@@ -12,11 +12,11 @@
 	<li>
     	<a href="{{ path('index_cronograma') }}#/tanda/{{entity.id}}">Cronograma</a>
     </li>
-    <li>
+<!--    <li>
         <a href="{{ path('tanda_edit', { 'id': entity.id }) }}">
             Editar
         </a>
-    </li>
+    </li>-->
     <li>
         <a href="#" onclick="$('.hiddenForm').hide(); $('#clonarForm').toggle(); return false;">
             Clonar
@@ -60,7 +60,7 @@
 	    
 	  <div class="hiddenForm" id="clonarForm">
 	            <form method="get" action="{{ path('tanda_clonar') }}">
-	            	<label for="instancia_id">Seleccione la instancia de Chapadmalal para la nueva tanda</label>
+	            	<label for="instancia_id">Seleccione la instancia de evento para la nueva tanda (no debe tener tanda asociada)</label>
 		            <select name="instancia_id">
 		            {% for instancia  in entity.instanciaEvento.evento.instancias %}
 		            	<option value="{{ instancia.id }}"> {{ instancia }} </option>
