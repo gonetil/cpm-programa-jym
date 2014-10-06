@@ -27,15 +27,15 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('tanda_show', { 'id': entity.id }) }}">ver</a>
+                        <a href="{{ path('tanda_show', { 'id': entity.id }) }}">Ver</a>
                     </li>
                     <li>
                         <a href="{{ path('index_cronograma') }}#/tanda/{{entity.id}}">Cronograma</a>
                     </li>
-                    <li>
+<!--                    <li>
                         <a href="{{ path('tanda_edit', { 'id': entity.id }) }}">editar</a>
                     </li>
-                    
+ -->                 
                 </ul>
             </td>
             <td>id={{ entity.id }}</td>
@@ -45,31 +45,38 @@
 </table>
 
 <ul class="record_actions">
-    <li>
-        <a href="{{ path('tanda_new') }}">
-            Agregar otra tanda
-        </a>
-     </li>
      <li>    
         <a href="#" onclick="$('#inicializarTandasForm').toggle(); return false;">
-            Recrear tandas faltantes
+            Agregar tandas
         </a>
 	 </li>
 </ul>
 
- 	        <div id="inicializarTandasForm" class="hiddenForms" style="display:none; clear:both;float:left;">
+ 	        <div id="inicializarTandasForm" class="hiddenForms" style="display:none; clear:both;float:left; max-width:inherit;">
 	        	<form method="post" action="{{ path('tanda_init') }}">
-					<label for="evento">Indique el evento de Chapadmalal:</label>
-					<select name="evento_chapa" id="evento_chapa">
+					<label for="evento">Indique el evento:</label>
+					<select name="evento_chapa" id="evento_chapa" style="width:auto;">
 					{% for evento in eventos %}
 						<option value="{{ evento.id }}">{{ evento.titulo }}</option>
 					{% endfor %}
 					</select>
 					<br/>
-					<label for="incluir_no_confirmadas">Incluir también las presentaciones aún sin confirmar</label>
-					<input type="checkbox" name="incluir_no_confirmadas">
+
+					<label for="accion">Cuantas tandas desea crear?</label>					
+					<input type="radio" name="cuantas" value="una" onchange="$('#generarTandasWarn').hide();" checked />Una sola tanda vacía
+					<input type="radio" name="cuantas" value="resto" onchange="$('#generarTandasWarn').show();" />Todas las tandas faltantes de este evento, usando la primer tanda como molde.
+					<br/>
+
+					<label for="incluir_no_confirmadas">Generar presentaciones para invitaciones aun no confirmadas?</label>
+					<input type="checkbox" name="incluir_no_confirmadas"> (normalmente sólo se consideran las invitaciones aceptadas, en tanto que nunca se consideran las invitaciones rechazadas)
 					</br>
-					<input type="submit" value="Generar tandas">
+
+					<p id="generarTandasWarn" style="display:none;">ATENCION: Se generara una nueva tanda para cada instancia del evento seleccionado que no tenga tanda. 
+					Recuerde que esta operación requiere que haya creado previamente al menos una tanda para el evento en 
+					cuestion y que esa tanda se usará como base para clonar las nuevas tandas. 
+					</p>
+
+					<input type="submit" value="Generar">
 				</form>
 			</div>
 
