@@ -167,7 +167,7 @@ class ChapaManager {
 	    return $tanda; 
 	}
 	
-	public function inicializarTandas($evento,$incluir_no_confirmadas) {
+	public function inicializarTandas($evento,$incluir_no_confirmadas, $una_o_resto = true) {
 		$em = $this->doctrine->getEntityManager();
 		
 		$instancias = $evento->getInstancias();
@@ -183,7 +183,7 @@ class ChapaManager {
 	  	$em->getConnection()->beginTransaction();
     	try { 
 	    	foreach ( $instancias as $instancia ) {
-
+				
 				//echo "buscando tanda para instanciaEvento ".$instancia->getId();
 	    		$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->findBy(array('instanciaEvento'=>$instancia->getId()));
 	    		//echo "===>se encontraron ".count($tanda)." tandas <br/>";
@@ -192,6 +192,9 @@ class ChapaManager {
 	            	$em->persist($tanda);
 	            	$em->flush();
 	            	$created++;
+	            	if ($una_o_resto)
+	            		//dejo de crear tandas luego de crear la primera
+	            		break;
 				} else{
 					//la tanda ya existe
 				}

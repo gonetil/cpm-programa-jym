@@ -204,6 +204,8 @@ class TandaController extends BaseController
     public function initializeTanda() {
     	$evento_id = $this->getRequest()->get('evento_chapa');
     	$incluir_no_confirmadas = $this->getRequest()->get('incluir_no_confirmadas');
+    	$una_o_resto = $this->getRequest()->get('cuantas');
+    	$una_o_resto = ($una_o_resto == "una");
     	
     	$evento = $this->getEntity('CpmJovenesBundle:Evento', $evento_id);
     	if (!$evento) {
@@ -212,7 +214,7 @@ class TandaController extends BaseController
     	
     	$chapaManager = $this->getChapaManager();
     	try {
-    		$msg = $chapaManager->inicializarTandas($evento,$incluir_no_confirmadas);
+    		$msg = $chapaManager->inicializarTandas($evento,$incluir_no_confirmadas, $una_o_resto);
     		$this->setSuccessMessage("Inicialización de tandas completada. $msg");
     	} catch (\Exception $e) {
     		$this->setErrorMessage('Error al inicializar las tandas de Chapadmalal. Mensaje: '.$e);
