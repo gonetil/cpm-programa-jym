@@ -13,7 +13,7 @@
 {% else %}
 	SIN ASIGNAR <br/>
 {% endif %}
-Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})<br/>
+Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.getTipoPresentacion()  | e('html') }})<br/>
 </p>
 <p>{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | escape }} - {{ presentacion.distrito  | raw('html') }}</p>
 
