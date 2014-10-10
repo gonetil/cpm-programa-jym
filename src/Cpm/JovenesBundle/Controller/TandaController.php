@@ -331,14 +331,13 @@ class TandaController extends BaseController
         if (!$tanda) 
     		throw $this->createNotFoundException('Tanda no encontrada');
     	
-    	if (($sort_fn == 'sortByDiaBloque') && ($format == 'doc')) { //caso especial: quieren un .doc con los bloques (TODOS)
+    	if (($sort_fn == 'sortByDiaBloque') && ($format == 'word')) { //caso especial: quieren un .doc con los bloques (TODOS)
 			$presentaciones = null;
 			$template = 'CpmJovenesBundle:Tanda:export_bloques_to_word.doc.twig' ;
 			$fn = 'makeWord';    		
     	} else {
 
 	    	$presentaciones = $tanda->getPresentaciones()->toArray();
-			
 			if (method_exists($this,$sort_fn))
 				usort($presentaciones,array($this,$sort_fn));
 			else 

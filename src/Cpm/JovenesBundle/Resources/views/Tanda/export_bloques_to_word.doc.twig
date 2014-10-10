@@ -12,7 +12,8 @@
 				{% if bloque.tienePresentaciones %}
 					{% for presentacion in bloque.presentaciones %}
 					<p style="font-weight: bold">
-						Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
+						Título y producción: {{ presentacion.getTitulo() | escape }}
+						{{  presentacion.getTipoPresentacion() | e('html') }}
 					</p>
 					<p>{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | escape }} - {{ presentacion.distrito  | raw('html') }}</p>
 					{% endfor %} {# presentaciones #}
