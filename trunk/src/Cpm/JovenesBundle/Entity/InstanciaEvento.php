@@ -375,6 +375,17 @@ class InstanciaEvento
     public function getCiclo(){
     	return $this->evento->getCiclo();
     }
+
+    /**
+     * Retorna la cantidad de días ocupados por la instancia actual
+     *
+     * @return datetime 
+     */
+    public function getCantDias()
+    {
+        $diff = $this->getFechaInicio()->diff($this->getFechaFin(), true); 
+	    return $diff->days + 1;
+    }
  
  public function toArray($recursive_depth) {
     	if ($recursive_depth == 0)
