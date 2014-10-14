@@ -408,4 +408,16 @@ class Evento
 	public function setPermitirModificarLaInvitacion($aBool) { 
 		$this->permitirModificarLaInvitacion = $aBool;
 	}
+	
+	/**
+	 * Retorna un iterator de instancias ordenadas por fecha
+	 */
+	public function getInstanciasIterator(){
+		$iterator = $this->getInstancias()->getIterator();
+    	$iterator->uasort(function($inst1,$inst2) { 
+    		return ($inst1->getFechaInicio() < $inst2->getFechaInicio()) ? -1 : 1 ; 
+    	});
+    	return $iterator;
+	}
+	
 }

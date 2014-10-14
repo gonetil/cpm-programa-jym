@@ -17,6 +17,7 @@ use Cpm\JovenesBundle\Entity\Auditorio;
 use Cpm\JovenesBundle\Entity\Presentacion;
 use Cpm\JovenesBundle\Entity\PresentacionInterna;
 use Cpm\JovenesBundle\Entity\PresentacionExterna;
+use Cpm\JovenesBundle\Exception\UserActionException;
 
 
 
@@ -93,40 +94,14 @@ class ChapaManager {
 		return $max+1;
 	}
 	
-	/**
-	 * genera una nueva tanda con los mismos dias, auditoriosDia y bloques de $tanda, y la asigna a la instanciaEvento $instancia
-	 */
-	public function clonarTanda($tanda,$instancia) {
-		
-		$new_tanda = new Tanda($instancia);
-		
-		$new_tanda->setNumero($this->getNextTandaNumber($tanda));
-		foreach ( $tanda->getDias() as $dia ) 
-       		$new_tanda->addDia($this->clonarDia($dia));
-		
-		$this->crearPresentacionesParaTanda($new_tanda,false);
-		 
-		$em = $this->doctrine->getEntityManager();
-		$em->getConnection()->beginTransaction();
-    	try { 
-	        $em->persist($new_tanda);
-	        $em->flush();		
-			$em->getConnection()->commit();
-			return $new_tanda;
-    	} catch (\Exception $e) {
-    		if ($em->getConnection()->isTransactionActive())
-	    	   	$em->getConnection()->rollback();
-			$em->close();
-            throw $e;
-    	}
-	}
 	/*** FIN FUNCIONES DE CLONACION **********/
 	
 	
 	
 	/*** FUNCIONES DE INICIALIZACION AUTOMATICA **********/
-	public function crearDiasParaTanda($tanda,$num_dias,$auditorios) {
-	    //creo los dias para la tanda
+	private function crearDiasParaTanda($tanda,$num_dias) {
+	    $auditorios = $em->getRepository('CpmJovenesBundle:Auditorio')->findBy(array('anulado'=>false));
+		//creo los dias para la tanda
 	    for($nroDia=1;$nroDia<=$num_dias;$nroDia++) {
 			$tandaDia = new Dia($nroDia);	
 			$tanda->addDia($tandaDia);       	
@@ -139,8 +114,20 @@ class ChapaManager {
 		 }
 	}
 	
+	private function crearTandaParaInstancia($instancia,$numero, $tandaTemplate = null) {
+	  	$tanda = new Tanda($instancia);
+	    $tanda->setNumero($numero);
+	    if ($tandaTemplate ==null){ 
+  	 	    $dias = $instancia->getCantDias();
+   		    $this->crearDiasParaTanda($tanda,$dias);
+		}else{
+			foreach ( $tandaTemplate->getDias() as $dia ) 
+	       		$tanda->addDia($this->clonarDia($dia));
+		}
+		return $tanda; 
+	}
 	
-	public function crearPresentacionesParaTanda($tanda,$incluir_no_confirmadas) {
+	private function crearPresentacionesParaTanda($tanda,$incluir_no_confirmadas) {
 		$em = $this->doctrine->getEntityManager();
 		
 		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento(),$incluir_no_confirmadas);
@@ -149,55 +136,36 @@ class ChapaManager {
        		$tanda->addPresentacion($presentacion);
 		}
 	}
-	
-	public function inicializarUnaTanda($instancia,$incluir_no_confirmadas,$numero=0,$auditorios = null) {
-
+	public function inicializarRestoTandas($instanciasIterator,$incluir_no_confirmadas) {
 		$em = $this->doctrine->getEntityManager();
-		$tanda = new Tanda($instancia);
-	    $tanda->setNumero($numero);
-	    if ($auditorios == null)
-	    	$auditorios = $em->getRepository('CpmJovenesBundle:Auditorio')->findBy(array('anulado'=>false));
-	    	   		
-	    $diff = $instancia->getFechaInicio()->diff($instancia->getFechaFin(), true); 
-	    $dias = $diff->days + 1; //se consideran los dias entre las fechas mas el primer dia
-	    
-	    $this->crearDiasParaTanda($tanda,$dias,$auditorios);
-	    $this->crearPresentacionesParaTanda($tanda,$incluir_no_confirmadas);
-	       		
-	    return $tanda; 
-	}
-	
-	public function inicializarTandas($evento,$incluir_no_confirmadas, $una_o_resto = true) {
-		$em = $this->doctrine->getEntityManager();
-		
-		$instancias = $evento->getInstancias();
-    	if (count($instancias) < 1) {
-    		throw $this->createNotFoundException('El evento seleccionado no posee instancias');
-    	}
-    	$iterator = $instancias->getIterator();
-    	$iterator->uasort(function($inst1,$inst2) { return ($inst1->getFechaInicio() < $inst2->getFechaInicio()) ? -1 : 1 ; });
-    	$index = 1;
-  		$created = 0;
-	  	$auditorios = $em->getRepository('CpmJovenesBundle:Auditorio')->findBy(array('anulado'=>false));
+		//consumo y guardo la primer instancia
+		$primerTanda = $em->getRepository('CpmJovenesBundle:Tanda')->findOneBy(array('instanciaEvento'=>$instanciasIterator->current()->getId()));
+		if ($primerTanda == null)
+    		throw new UserActionException('Debe crear y configurar la primer tanda y luego generar el resto de las tandas');
+	  	$instanciasIterator->next();
 	  	
+		$index = 1;
+  		$created = 0;
 	  	$em->getConnection()->beginTransaction();
+	  	
+	  	
     	try { 
-	    	foreach ( $instancias as $instancia ) {
-				
-				//echo "buscando tanda para instanciaEvento ".$instancia->getId();
-	    		$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->findBy(array('instanciaEvento'=>$instancia->getId()));
-	    		//echo "===>se encontraron ".count($tanda)." tandas <br/>";
-				if (count($tanda) == 0) {
-		    		$tanda = $this->inicializarUnaTanda($instancia,$incluir_no_confirmadas,$index,$auditorios);
-	            	$em->persist($tanda);
-	            	$em->flush();
+	    	foreach ( $instanciasIterator as $instancia ) {
+				$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->findOneBy(array('instanciaEvento'=>$instancia->getId()));
+				if (empty($tanda)) {
+		    		$tanda = $this->crearTandaParaInstancia($instancia,$index,$primerTanda);
+	            	
 	            	$created++;
-	            	if ($una_o_resto)
-	            		//dejo de crear tandas luego de crear la primera
-	            		break;
 				} else{
 					//la tanda ya existe
 				}
+				
+				if ($tanda->getPresentaciones()->isEmpty()){
+					//si la tanda no tiene presentaciones trato de generárselas
+					$this->crearPresentacionesParaTanda($tanda,$incluir_no_confirmadas);
+				}
+				$em->persist($tanda);
+            	$em->flush();
 	            $index++;
 			}
 			$index--;
@@ -212,6 +180,46 @@ class ChapaManager {
     	
     	return "$index instancias analizadas, $created tandas creadas";
 	}
+	
+	public function inicializarPrimerTanda($instanciasIterator,$incluir_no_confirmadas) {
+		$em = $this->doctrine->getEntityManager();
+		
+    	$primerTanda = $em->getRepository('CpmJovenesBundle:Tanda')->findOneBy(array('instanciaEvento'=>$instanciasIterator->current()->getId()));
+		if ($primerTanda != null)
+    		throw new UserActionException('la primer tanda del evento ya existe, no se hace nada.');
+    	
+    	$em->getConnection()->beginTransaction();
+    	try { 
+	    	$primerTanda = $this->crearTandaParaInstancia($instancia,0);
+	        $this->crearPresentacionesParaTanda($tanda,$incluir_no_confirmadas);
+	        $em->persist($tanda);
+		    $em->flush();
+	    	$em->getConnection()->commit();
+			return "Se creó la primer tanda";
+			
+    	} catch (\Exception $e) {
+    		if ($em->getConnection()->isTransactionActive())
+	    	   	$em->getConnection()->rollback();
+			$em->close();
+            throw $e;
+    	}  	
+    	
+	}
+	public function inicializarTandas($evento,$incluir_no_confirmadas, $una_o_resto = true) {
+		$em = $this->doctrine->getEntityManager();
+		$instanciasIterator = $evento->getInstanciasIterator();
+    	if ($instanciasIterator->count() < 1) 
+    		throw new UserActionException('El evento seleccionado no posee instancias');
+    	$instanciasIterator->seek(0);
+    	$eventoStr=" para el evento ".$evento->getTitulo();
+    	if ($una_o_resto){
+    		return $this->inicializarPrimerTanda($instanciasIterator, $incluir_no_confirmadas).$eventoStr;
+    	}else{
+    		return $this->inicializarRestoTandas($instanciasIterator, $incluir_no_confirmadas).$eventoStr;
+    	}
+    	
+	}
+	
 	
 	/*** FIN FUNCIONES DE INICIALIZACION AUTOMATICA **********/
 	
