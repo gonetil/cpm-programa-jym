@@ -1945,6 +1945,7 @@ ul.mis_proyectos .proyecto_box a { color : #000;  }
 .filters button { height: 33px; padding: 3px 10px;}
 .filters select { height: 25px; min-height: 25px;  }
 .filters input { height:16px; min-height: 16px; width:120px; min-width:120px}
+.filters input[type='checkbox'] { min-width: 10px;} 
 
 .filters .double input { min-height: 30px; }
 .filters .double input[type='radio'], .filters .double input[type='checkbox'] { 
