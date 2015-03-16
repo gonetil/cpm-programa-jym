@@ -23,7 +23,18 @@
 	<div class="aviso_escuela">
 		<p>Nombre y número de la escuela: por favor, complete al menos uno de los campos</p>
 		{{ form_row(form.escuela.nombre)}}
-		{{ form_row(form.escuela.cue)}}
+		
+		<div class="cue_field">
+			{{ form_label(form.escuela.cue)}}
+			{{ form_widget(form.escuela.cue) }}
+			<a href="#" onclick="$('.cue_field .input_hint').fadeToggle(); return false;">
+				<img src="/images/icons/Knob Help.png" alt="Que es esto?" title="Qué es esto?" height="20px"/>
+			</a>
+			<span class="input_hint hidden absolute">
+					El CUE es la Clave Única de Establecimiento, un número que identifica a cada una de las escuelas  de la Argentina. Junto con el ANEXO, permite saber con exactitud cuál es la institución que participa del Programa. Se puede averiguar el CUEANEXO de la escuela en la siguiente página web: 
+<a href="http://www.mapaeducativo.edu.ar/externos/buscaescuela/index.php" target="_BLANK">http://www.mapaeducativo.edu.ar/externos/buscaescuela/index.php</a>
+			</span>
+		</div>		
 		{{ form_row(form.escuela.numero) }}
 	</div>
 	<div>

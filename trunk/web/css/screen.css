@@ -3325,3 +3325,5 @@ select.large_select option { padding: 3px;}
 	 background: url(../images/icons/facebook.png) no-repeat;
 	 padding: 1px 8px;
 }
+
+.absolute { position: absolute; }

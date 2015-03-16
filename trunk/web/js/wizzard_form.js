@@ -29,18 +29,48 @@
   	    setup_selects_for_form("#cpm_jovenesbundle_presentacionproyectotype"); 
   }
 
+
+  function setRequired(elem) {
+	$(elem).addClass('required').attr("required","required");
+  }
+  function setOptional(elem) {
+      $(elem).removeAttr("required").removeClass('required');
+  }
+
+   function setEnabled(elem) {
+       $(elem).removeAttr('disabled');
+       setRequired(elem);
+   }
+   function setDisabled(elem) {
+	  $(elem).attr('disabled','disabled');
+      setOptional(elem);
+  }
+  
   function setup_selects_for_form(formName) {
 	  $(formName+"_escuela_tipoInstitucion").change(function(event) {
 	   		$numero_escuela = $(formName+"esds");
 	   	
 	 		if( $(this).val() == "") //selecciono otra institucion
-	 		{  
-	 			$(formName+"_escuela_otroTipoInstitucion").removeAttr('disabled').addClass('required').attr("required","required"); 
-	 			$(formName+"_escuela_tipoEscuela").attr('disabled','disabled').removeAttr("required").removeClass('required');
-	 			
-	 		} else {
-	 			$(formName+"_escuela_otroTipoInstitucion").attr('disabled','disabled').removeClass('required').removeAttr("required"); 
-	 			$(formName+"_escuela_tipoEscuela").removeAttr('disabled').addClass('required').attr("required","required");
+	 		{
+	 			setEnabled(formName+"_escuela_otroTipoInstitucion");
+                setRequired(formName+"_escuela_otroTipoInstitucion");
+	 			setDisabled(formName+"_escuela_tipoEscuela");
+                setOptional(formName+"_escuela_tipoEscuela");
+
+                setOptional(formName+"_escuela_nombre");
+                setOptional(formName+"_escuela_cue");
+                setOptional(formName+"_escuela_numero");
+
+	 		} else { //selecciono un tipo de institucion
+	 			setEnabled(formName+"_escuela_tipoEscuela")
+                setRequired(formName+"_escuela_tipoEscuela");
+	 			setDisabled(formName+"_escuela_otroTipoInstitucion");
+                setOptional(formName+"_escuela_otroTipoInstitucion");
+
+                setRequired(formName+"_escuela_nombre");
+                setRequired(formName+"_escuela_cue");
+                setRequired(formName+"_escuela_numero");
+
 	 		}
 	   	}).change();
 	   	
@@ -127,8 +157,10 @@
 					setup_validation();
 					setup_selects();
 					enter_to_tab();
-		   			move_stage(0,1,false); 
-	   				$("#cpm_jovenesbundle_proyectotype_eje").change();
+		   			move_stage(0,1,false);
+		   			
+		   			$("#cpm_jovenesbundle_proyectotype_eje").change();
 	   				$("#cpm_jovenesbundle_presentacionproyectotype_eje").change();	   			
+	   				
 					
    			} );

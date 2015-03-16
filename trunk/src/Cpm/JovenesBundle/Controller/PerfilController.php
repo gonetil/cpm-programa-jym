@@ -101,6 +101,7 @@ class PerfilController extends BaseController
     	$form = $this->createForm(new ProyectoType(), $proyecto);
     	$form->remove('coordinador');
     	$form->remove('requerimientosDeEdicion');
+    	$form->remove('produccionFinal');
     	
     	return array(
                 'entity' => $proyecto,
@@ -168,6 +169,8 @@ class PerfilController extends BaseController
     	
     	$editForm->remove('coordinador');
 	    $editForm->remove('requerimientosDeEdicion');
+	    $editForm->remove('produccionFinal');
+	    
     	return array(
                 'entity'      => $entity,
 		    	'coordinador' => $entity->getCoordinador(),
