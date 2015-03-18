@@ -37,7 +37,10 @@ class EscuelaType extends AbstractType {
 		))->add('cue', null, array (
 			'label' => 'CUE de la Escuela',
 			'required' => false,
-			'attr'=>array('class'=>'number')
+			'attr'=>array('class'=>'number',
+                'maxlength' => '9',
+                'minlength' => '9'
+            )
 		))->add('contextoEncierro', 'choice', array (
 			'label' => '¿La institución funciona en contexto de encierro?',
 			'required' => true,
