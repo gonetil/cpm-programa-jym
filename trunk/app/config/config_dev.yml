@@ -11,10 +11,14 @@ web_profiler:
 
 monolog:
     handlers:
+        fos_user:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%_fos_user.log
+            level: debug
         main:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
-            level: debug
+            level: info
         firephp:
             type:  firephp
             level: info

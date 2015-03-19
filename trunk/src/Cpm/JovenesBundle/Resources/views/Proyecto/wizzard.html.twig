@@ -57,19 +57,6 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 			</div>
 			{{ form_row(form.temaPrincipal) }}
             <br/>
-            <div>
-                <label for="produccionFinal">
-                    Producción final
-                </label>
-                <input type="text" name="produccionFinal" disabled="disabled" style="text-decoration: line-through;"></select>
-                <div class="input_hint">
-                    El soporte en qué realizarán la producción final (teatro, mural, video, revista, danza, murga, etc.) le será solicitado al grupo al
-                momento de presentar el proyecto definitivo. <br/>
-
-                    Esto permite que en esta primera instancia los equipos puedan concentrarse en la investigación, tema y preguntas que propone la misma,
-                y que el lenguaje o soporte en que produzcan sus conclusiones surja a partir de los avances de este proceso.
-                </div>
-            </div>
             <br/>
 			<div>{{ form_label(form.deQueSeTrata) }} 
 				{{ form_widget(form.deQueSeTrata) }} 
@@ -82,7 +69,20 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 			</div>
 			{{ form_row(form.motivoRealizacion)}}
 			{{ form_row(form.impactoBuscado) }}
-		</div>
+
+            <div>
+                <br/>
+                <hr/>
+                 <p>   El soporte en qué realizarán la producción final (teatro, mural, video, revista, danza, murga, etc.) le será solicitado al grupo al
+                    momento de presentar el proyecto definitivo. <br/>
+                 </p>
+                <p>
+                    Esto permite que en esta primera instancia los equipos puedan concentrarse en la investigación, tema y preguntas que propone la misma,
+                    y que el lenguaje o soporte en que produzcan sus conclusiones surja a partir de los avances de este proceso.
+                </p>
+            </div>
+
+        </div>
 		<ul class="record_actions">
 			<li><a href="#" onclick="move_stage(2,1,false); return false;"> Anterior </a></li>
 			<li><a href="#" onclick="move_stage(2,3);  return false;"> Siguiente </a></li>

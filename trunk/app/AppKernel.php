@@ -6,6 +6,8 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 class AppKernel extends Kernel
 {
 	const DATE_FORMAT='dd/MM/yyyy';
+	const TIME_FORMAT='H:i';
+	
     public function registerBundles()
     {
         $bundles = array(
@@ -23,8 +25,7 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
         	new Ideup\SimplePaginatorBundle\IdeupSimplePaginatorBundle(),
             new Cpm\JovenesBundle\CpmJovenesBundle(),
-            new Io\FormBundle\IoFormBundle(),
-        
+            new Io\FormBundle\IoFormBundle(),      
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
