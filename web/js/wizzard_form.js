@@ -14,11 +14,17 @@
      custom_messages['cpm_jovenesbundle_presentacionproyectotype[escuela][localidad]'] = {  
        required: "Debe seleccionar una localidad (recuerde seleccionar un distrito primero)",
      };
+
+     custom_messages['cpm_jovenesbundle_proyectotype[escuela][cue]'] = {
+           minlength: "Por favor ingrese un CUE válido",
+       };
     
      /*Los input de type number los paso a type text con CSS number, porque sino en Chrome se boludea*/
      $("form[name='wizzard_form'] input[type='number']").attr('type','text').addClass('number');
 
-     form_handler = $("form[name='wizzard_form']").validate( { messages : custom_messages });
+     form_handler = $("form[name='wizzard_form']").validate( {
+         messages : custom_messages
+     });
    	$("form[name='wizzard_form']").removeAttr("novalidate");
 
    }
@@ -32,6 +38,7 @@
 
   function setRequired(elem) {
 	$(elem).addClass('required').attr("required","required");
+      setEnabled(elem);
   }
   function setOptional(elem) {
       $(elem).removeAttr("required").removeClass('required');
@@ -39,33 +46,32 @@
 
    function setEnabled(elem) {
        $(elem).removeAttr('disabled');
-       setRequired(elem);
    }
    function setDisabled(elem) {
 	  $(elem).attr('disabled','disabled');
       setOptional(elem);
   }
-  
+
+  function setBlocked(elem) { setDisabled(elem); setOptional(elem); }
+
   function setup_selects_for_form(formName) {
 	  $(formName+"_escuela_tipoInstitucion").change(function(event) {
 	   		$numero_escuela = $(formName+"esds");
 	   	
 	 		if( $(this).val() == "") //selecciono otra institucion
 	 		{
-	 			setEnabled(formName+"_escuela_otroTipoInstitucion");
                 setRequired(formName+"_escuela_otroTipoInstitucion");
-	 			setDisabled(formName+"_escuela_tipoEscuela");
-                setOptional(formName+"_escuela_tipoEscuela");
 
-                setOptional(formName+"_escuela_nombre");
-                setOptional(formName+"_escuela_cue");
-                setOptional(formName+"_escuela_numero");
+        	 	setBlocked(formName+"_escuela_tipoEscuela");
+
+                setBlocked(formName+"_escuela_nombre");
+                setBlocked(formName+"_escuela_cue");
+                setBlocked(formName+"_escuela_numero");
 
 	 		} else { //selecciono un tipo de institucion
-	 			setEnabled(formName+"_escuela_tipoEscuela")
                 setRequired(formName+"_escuela_tipoEscuela");
-	 			setDisabled(formName+"_escuela_otroTipoInstitucion");
-                setOptional(formName+"_escuela_otroTipoInstitucion");
+
+                setBlocked(formName+"_escuela_otroTipoInstitucion")
 
                 setRequired(formName+"_escuela_nombre");
                 setRequired(formName+"_escuela_cue");
@@ -160,7 +166,5 @@
 		   			move_stage(0,1,false);
 		   			
 		   			$("#cpm_jovenesbundle_proyectotype_eje").change();
-	   				$("#cpm_jovenesbundle_presentacionproyectotype_eje").change();	   			
-	   				
 					
    			} );

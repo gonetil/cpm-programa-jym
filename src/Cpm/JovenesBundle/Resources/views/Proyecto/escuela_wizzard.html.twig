@@ -1,13 +1,12 @@
 	<script>
-   			$(document).ready(function() { 
-   					$("#cpm_jovenesbundle_proyectotype_escuela_tipoInstitucion").change(function(event) { 
+   			$(document).ready(function() {
+                $("#cpm_jovenesbundle_proyectotype_escuela_tipoInstitucion").change(function(event) {
    						if ($(event.target).val() == "")
    							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr("disabled");
    						else 
    							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr("disabled","disabled");
    					}).trigger('change');
-
-   			});
+            });
 
    		</script>
 
