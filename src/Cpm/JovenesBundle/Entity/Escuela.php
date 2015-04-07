@@ -394,7 +394,9 @@ class Escuela
      */
     public function getDistrito()
     {
-    	return $this->localidad->getDistrito();
+        if ($this->localidad)
+        	return $this->localidad->getDistrito();
+        else return null;
 
     }
 
@@ -414,7 +416,8 @@ class Escuela
      */
     public function getRegion()
     {
-        return $this->getDistrito()->getRegion();
+        $distrito = $this->getDistrito();
+        return ($distrito) ? $distrito->getRegion() : null;
     }
     
     public function __toString() { 

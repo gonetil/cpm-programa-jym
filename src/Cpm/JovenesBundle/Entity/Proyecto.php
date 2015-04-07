@@ -412,7 +412,7 @@ class Proyecto
      *
      * @param Cpm\JovenesBundle\Entity\Produccion $produccionFinal
      */
-    public function setProduccionFinal(\Cpm\JovenesBundle\Entity\Produccion $produccionFinal)
+    public function setProduccionFinal($produccionFinal)
     {
         $this->produccionFinal = $produccionFinal;
     }
