@@ -262,7 +262,12 @@ class CorreoController extends BaseController
 				
 //				$correoMaestro->setArchivos($adjuntos);	
 				$cant = 0;
-				set_time_limit(60+3*count($proyectos));
+                $estimated_seconds_per_project = (  ($correoBatch->getCcCoordinadores() ? 3 : 0)
+                                                + ($correoBatch->getCcEscuelas() ? 3 : 0)
+                                                + ($correoBatch->getCcColaboradores() ? 6 : 0));
+
+				set_time_limit(120+$estimated_seconds_per_project*count($proyectos));
+
 				try{
 					foreach ($proyectos as $proyecto) {
 						$correo=$correoMaestro->clonar(false);
