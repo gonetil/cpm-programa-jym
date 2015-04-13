@@ -358,11 +358,13 @@ class UsuarioController extends BaseController
     public function searchAction($search)
     {
     	$keywords = array();
-    	if ($coma = strpos($search,",",2) !== FALSE) {
-    		$keywords = explode(",",$search);
-    	} else {
-    		$keywords = explode(" ",$search);
-    	}
+        $offset = 2;
+        if (strlen($search) > $offset)
+            if (($coma = strpos($search,",",$offset)) !== FALSE) {
+                $keywords = explode(",",$search);
+            } else {
+                $keywords = explode(" ",$search);
+            }
     	
     	array_walk($keywords, create_function('&$keyword', '$keyword = trim($keyword);'));
     	

@@ -289,8 +289,11 @@ class PerfilController extends BaseController
         $invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id);
         
         if ($invitacion->getInstanciaEvento()->fue() || ($invitacion->estaPendiente() && !$invitacion->estaVigente())){
-    		$this->setWarnMessage("El plazo de inscripción para el evento '".$invitacion->getInstanciaEvento()->getTitulo()."'ya cerró.");    	
-		    if (!$user->isAdmin())
+    		$this->setWarnMessage("El plazo de inscripción para el evento '".$invitacion->getInstanciaEvento()->getTitulo()."'ya cerró.");
+
+            $user =$this->getJYM()->getLoggedInUser();
+
+            if (!$user->isAdmin())
 		    	return $this->redirect($this->generateUrl('home'));
         }
 		
