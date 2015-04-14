@@ -359,6 +359,7 @@ class UsuarioController extends BaseController
     {
     	$keywords = array();
         $offset = 2;
+        $coma = FALSE;
         if (strlen($search) > $offset)
             if (($coma = strpos($search,",",$offset)) !== FALSE) {
                 $keywords = explode(",",$search);
