@@ -56,8 +56,9 @@ class EventosManager
     	$ccEscuela=$invitacionBatch->getCcEscuelas();
     	$ccColaboradores=$invitacionBatch->getCcColaboradores();
     	$avoidMail = $invitacionBatch->getNoEnviarCorreo();
-    	
-    	set_time_limit(60+3*count($invitacionBatch->getProyectos()));
+
+    	//set_time_limit(60+3*count($invitacionBatch->getProyectos()));
+        set_time_limit(0);
     	$sin_enviar = array();
         foreach ( $invitacionBatch->getProyectos() as $p ) {
 			 list($invitacion,$enviada) = $this->invitarProyecto($instancia, $p,$ccEscuela,$ccColaboradores,$avoidMail);
