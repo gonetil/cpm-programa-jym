@@ -363,7 +363,7 @@ class Escuela
      *
      * @param Cpm\JovenesBundle\Entity\Localidad $localidad
      */
-    public function setLocalidad(\Cpm\JovenesBundle\Entity\Localidad $localidad)
+    public function setLocalidad($localidad)
     {
         $this->localidad = $localidad;
     }
