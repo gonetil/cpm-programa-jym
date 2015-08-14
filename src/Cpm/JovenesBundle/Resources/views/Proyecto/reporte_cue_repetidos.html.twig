@@ -1,0 +1,41 @@
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+
+{% block title %} Reporte de proyectos con CUE repetidos {% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ asset('bootstrap-2.3.2/css/bootstrap.css') }}" />
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>CUE</th>
+            <th>Proyectos</th>
+        </tr>
+        </thead>
+{% for cue in cues_repetidos %}
+    <tr>
+        <td>
+            <strong>{{ cue['cue'] }}</strong><br/>
+        </td>
+        <td>
+            <table class="table-condensed table-bordered">
+                <tr><td><strong>Escuela</strong></td><td><strong>Proyecto</strong></td><td><strong>Coordinador</strong></td></tr>
+                {% for p in cue['proyectos'] %}
+                <tr>
+                    <td> {{ p.escuela  }}</td>
+                    <td> <a href="{{ path('proyecto_show', { 'id': p.id }) }}">{{ p.titulo }}</a> </td>
+                    <td>
+                        {%  if p.coordinador %}
+                            <a href="{{ path('usuario_show', { 'id': p.coordinador.id }) }}">{{ p.coordinador }}</a>
+                        {% else %}
+                            SIN COORDINADOR
+                        {%  endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </td>
+    </tr>
+
+{% endfor %}
+    </table>
+{% endblock %}

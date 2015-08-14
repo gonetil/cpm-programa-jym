@@ -524,6 +524,38 @@ class ProyectoController extends BaseController
 		return $this->makeExcel(array('entities' => $entities),$template, 'Proyectos');
 		 
     }
-    
 
+    /**
+     * @Route("/CUE_repetidos" , name="reporte_cue_repetidos")
+     * @Template("CpmJovenesBundle:Proyecto:reporte_cue_repetidos.html.twig")
+     */
+    public function reporteCUERepetidos() {
+        $em = $this->getEntityManager();
+        $qb = $em->getRepository('CpmJovenesBundle:Proyecto')->createQueryBuilder('p')
+            ->addSelect('count(p) cant,e.cue')
+            ->innerJoin('p.escuela','e')
+            ->innerJoin('p.ciclo','ciclo')
+            ->where('ciclo = :ciclo_actual')->setParameter('ciclo_actual',$this->getJYM()->getCicloActivo())
+            ->andWhere('e.cue is not null')
+            ->groupBy('e.cue')
+            ->having('cant > 1')
+            ->getQuery();
+        $cues = $qb->getResult();
+        $datos = array();
+        foreach ($cues as $cue_data) {
+            $cue = $cue_data['cue'];
+            $qb = $em->getRepository('CpmJovenesBundle:Proyecto')->createQueryBuilder('p')
+                ->innerJoin('p.escuela','e')
+                ->where('e.cue = :cue')->setParameter('cue',$cue)
+                ->innerJoin('p.ciclo','ciclo') //por las dudas que aparezca en ciclos anteriores
+                ->andWhere('ciclo = :ciclo_actual')->setParameter('ciclo_actual',$this->getJYM()->getCicloActivo())
+                ->getQuery();
+            $datos[] = array('cue'=>$cue_data['cue'], 'proyectos'=>$qb->getResult());
+
+        }
+
+        return array(
+            'cues_repetidos'      => $datos
+        );
+    }
 }
