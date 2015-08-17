@@ -25,6 +25,10 @@ class ProyectoRepository extends EntityRepository {
 
 	}
 
+    private function ids($array_collection) {
+        return array_map(function($elem) { return $elem->getId(); },array_values($array_collection->toArray()));
+    }
+
 	public function filterQuery(ProyectoFilter $data, $ciclo_activo, $sort_field = null, $sort_order) {
 		
 		$qb = $this->createQueryBuilder('p')->innerJoin("p.coordinador", "coordinador")->innerJoin("p.escuela","e");
@@ -58,11 +62,6 @@ class ProyectoRepository extends EntityRepository {
 						}
 					}
 			}  
-				
-/*		foreach ( $aniosParticipo as $index => $anio ) {
-				$var = "anio{$index}"; 
-       			$qb->andWhere("coordinador.aniosParticipo like :$var")->setParameter("$var","%$anio%");
-			}	*/
 		}
 
 		if ($primeraVezQueParticipa = $usuarioFilter->getPrimeraVezQueParticipa()) {  //este es el select
@@ -96,15 +95,17 @@ class ProyectoRepository extends EntityRepository {
 			$qb->andWhere('p.esPrimeraVezEscuela = :pve')->setParameter('pve', $pv);
 		}
 		
-		if ($data->getEje())
-			$qb->andWhere('p.eje = :eje')->setParameter('eje', $data->getEje());
-			
-			
-		if ($data->getProduccionFinal())
-			$qb->andWhere('p.produccionFinal = :pf')->setParameter('pf', $data->getProduccionFinal());
+		if ($producciones = $data->getProduccionesFinales()and (count($producciones)))  {
+           $qb->andWhere('p.produccionFinal IN (:pf)')->setParameter('pf', $this->ids($producciones));
+        }
 
-		if ($data->getTemaPrincipal())
-			$qb->andWhere('p.temaPrincipal = :tp')->setParameter('tp', $data->getTemaPrincipal());
+        if ($temas = $data->getTemasPrincipales()and (count($temas))) {
+            $qb->andWhere('p.temaPrincipal IN (:temas)')->setParameter('temas', $this->ids($temas) );
+        }
+
+        if ($ejes = $data->getEjes() and (count($ejes))) {
+           $qb->andWhere('p.eje IN (:ejes)')->setParameter('ejes', $this->ids($ejes));
+        }
 
 		if ($color = $data->getColor()) {
 			$qb->andWhere('p.color like :color')->setParameter('color', $color);

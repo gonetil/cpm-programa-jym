@@ -25,18 +25,17 @@ class ProyectoFilterForm extends ModelFilterForm
         												'expanded'=>false,
         												'required'=>false
                 										))
-            ->add('temaPrincipal','entity',array(
-				            							'label' => 'Tema Principal',
-				            						 	'class' => 'CpmJovenesBundle:Tema',
-				            						 	'empty_value' => "Todos",
-		        										'preferred_choices' => array("Todos"),
-				            						 	'query_builder' => function($er) {
-																	        return $er->createQueryBuilder('t')
-															            ->orderBy('t.nombre', 'ASC');
-		    														},
-        												'required'=>false
-    								    ))
-            ->add('produccionFinal','entity',array(
+            ->add('temasPrincipales','entity',array(
+                                                        'label' => 'Tema Principal',
+                                                        'class' => 'CpmJovenesBundle:Tema',
+                                                        'query_builder' => function($er) {
+                                                            return $er->createQueryBuilder('t')
+                                                                ->orderBy('t.nombre', 'ASC');
+                                                        },
+                                                        'required'=>false,
+                                                        'multiple' => true
+                                                    ))
+            ->add('produccionesFinales','entity',array(
 		            									'label' => 'Produccion Final',
 		            									'class' => 'CpmJovenesBundle:Produccion',
 		    								    		'empty_value' => "Todos",
@@ -45,7 +44,8 @@ class ProyectoFilterForm extends ModelFilterForm
 																	        return $er->createQueryBuilder('p')
 															            ->orderBy('p.nombre', 'ASC');
 		    														},
-        												'required'=>false
+        												'required'=>false,
+                                                        'multiple' => true
         								))
 		  ->add('coordinador', null,array( 'label' => 'Coordinador',
 		    										'required' => false ))
@@ -79,7 +79,7 @@ class ProyectoFilterForm extends ModelFilterForm
     				))         
  				->add('deQueSeTrata', null,array( 'label' => 'Descripción',
 		    										'required' => false ))
-	            ->add('eje','entity',array('label' => 'Eje',
+	            ->add('ejes','entity',array('label' => 'Eje',
 		            									'class' => 'CpmJovenesBundle:Eje',
 		    								    		'empty_value' => "Todos",
 		    								            'preferred_choices' => array("Todos"),
@@ -87,7 +87,8 @@ class ProyectoFilterForm extends ModelFilterForm
 																	        return $er->createQueryBuilder('p')
 															            ->orderBy('p.nombre', 'ASC');
 		    														},
-        												'required'=>false
+        												'required'=>false,
+                                                        'multiple'=>true
         								))
 			   ->add('cuentanConNetbook', 'choice' ,array('label' => 'Cuentan con notebook?' , 
             											'choices' => array(1=>"Si",2=>"No"),

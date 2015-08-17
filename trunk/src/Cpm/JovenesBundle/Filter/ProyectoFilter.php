@@ -13,8 +13,19 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 	private $instanciaEventoFilter;
 	private $cicloFilter;
 	private $usuarioFilter;
-	
-	
+
+    private $temasPricipales; //usado para la seleccion de multiples temas
+    public function getTemasPrincipales() { return $this->temasPricipales; }
+    public function setTemasPrincipales($temas) { $this->temasPricipales = $temas; }
+
+    private $ejes;
+    public function getEjes() { return $this->ejes; }
+    public function setEjes($e) { $this->ejes = $e; }
+
+    private $produccionesFinales;
+    public function getProduccionesFinales() { return $this->produccionesFinales; }
+    public function setProduccionesFinales($pf) { $this->produccionesFinales = $pf;}
+
 
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new ProyectoFilterForm($this, $jym);
