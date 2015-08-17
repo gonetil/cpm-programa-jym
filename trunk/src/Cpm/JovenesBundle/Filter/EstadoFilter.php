@@ -8,8 +8,11 @@ class EstadoFilter extends EstadoProyecto implements ModelFilter {
 	private $yaEvaluado;
 	private $conArchivo;
 	private $vigente = 1;
-	private $nota;
 	private $aprobado;
+
+    private $notas;
+    public function getNotas() { return $this->notas;}
+    public function setNotas($n) { $this->notas = $n; }
 	
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new EstadoFilterForm($this, $jym, '_estado');
@@ -40,14 +43,6 @@ class EstadoFilter extends EstadoProyecto implements ModelFilter {
 	
 	public function setVigente($vigente) {
 		$this->vigente = $vigente;
-	}
-	
-	public function getNota() {
-		return $this->nota;
-	}
-	
-	public function setNota($nota) {
-		$this->nota = $nota;
 	}
 	
 	public function getAprobado() {

@@ -26,8 +26,7 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
     public function getProduccionesFinales() { return $this->produccionesFinales; }
     public function setProduccionesFinales($pf) { $this->produccionesFinales = $pf;}
 
-
-	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
+    public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new ProyectoFilterForm($this, $jym);
 	}
 
