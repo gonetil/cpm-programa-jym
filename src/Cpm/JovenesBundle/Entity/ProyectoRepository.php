@@ -25,8 +25,12 @@ class ProyectoRepository extends EntityRepository {
 
 	}
 
+    /*
+     * recibe un array o un ArrayCollecion y retorna un array con los IDs de los items
+     */
     private function ids($array_collection) {
-        return array_map(function($elem) { return $elem->getId(); },array_values($array_collection->toArray()));
+        $datos = (!is_array($array_collection)) ? $array_collection->toArray() : $array_collection;
+        return array_map(function($elem) { return $elem->getId(); },array_values($datos));
     }
 
 	public function filterQuery(ProyectoFilter $data, $ciclo_activo, $sort_field = null, $sort_order) {
@@ -248,12 +252,9 @@ class ProyectoRepository extends EntityRepository {
 							$qb->andWhere("est.correoEnviado is null");
 						}
 					}
-					
-					if ($nota = $estado->getNota()) {
-						if ($nota == ESTADO_APROBADO_Y_APROBADO_C)
-							$qb->andWhere('est.estado in (:aprobado ,  :aprobado_c )')->setParameter('aprobado',ESTADO_APROBADO)->setParameter('aprobado_c',ESTADO_APROBADO_CLINICA);
-						else	
-							$qb->andWhere('est.estado = :nota')->setParameter('nota',$nota);
+
+               	if ($notas = $estado->getNotas() and (count($notas))) {
+                        $qb->andWhere('est.estado IN (:notas)')->setParameter('notas', $notas );
 					}
 
 //					if ($aprobado = $estado->getAprobado()) { 

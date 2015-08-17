@@ -33,13 +33,14 @@ class EstadoFilterForm extends ModelFilterForm
         												'expanded'=>false,
         												'required'=>false
                 										))
-			->add('nota','choice',array('label' => 'Nota' ,
+			->add('notas','choice',array('label' => 'Nota' ,
 										  'choices' => EstadosManager::getEstadosEvaluados() + array(
-										  													ESTADO_APROBADO_Y_APROBADO_C => "Aprobados y Aprobados C",
+										  													//ESTADO_APROBADO_Y_APROBADO_C => "Aprobados y Aprobados C",
 										  													ESTADO_ANULADO => "Anulados"),
 										  'empty_value'=>'Todas',
 										  'expanded'=>false,
-										  'required' => false
+										  'required' => false,
+                                          'multiple' => true
 										  ))  
 			 ->add('correoEnviado', 'choice' ,array('label' => 'Con correo enviado' , 
             											'choices' => array(1=>"Si",2=>"No"),
