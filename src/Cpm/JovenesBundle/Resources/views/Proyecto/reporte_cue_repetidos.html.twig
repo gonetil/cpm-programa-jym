@@ -4,23 +4,20 @@
 
 {% block content %}
     <link rel="stylesheet" href="{{ asset('bootstrap-2.3.2/css/bootstrap.css') }}" />
-    <table class="table table-hover">
+    <table class="table">
         <thead>
         <tr>
             <th>CUE</th>
-            <th>Proyectos</th>
+            <th><strong>Escuela</strong></th><th><strong>Proyecto</strong></th><th><strong>Coordinador</strong></th>
         </tr>
         </thead>
-{% for cue in cues_repetidos %}
-    <tr>
-        <td>
-            <strong>{{ cue['cue'] }}</strong><br/>
-        </td>
-        <td>
-            <table class="table-condensed table-bordered">
-                <tr><td><strong>Escuela</strong></td><td><strong>Proyecto</strong></td><td><strong>Coordinador</strong></td></tr>
+            {% set css_class = 'even' %}
+            {% for cue in cues_repetidos %}
                 {% for p in cue['proyectos'] %}
-                <tr>
+                <tr class="{{ css_class }}">
+                    <td>
+                        <strong>{{ cue['cue'] }}</strong><br/>
+                    </td>
                     <td> {{ p.escuela  }}</td>
                     <td> <a href="{{ path('proyecto_show', { 'id': p.id }) }}">{{ p.titulo }}</a> </td>
                     <td>
@@ -31,11 +28,13 @@
                         {%  endif %}
                     </td>
                 </tr>
-                {% endfor %}
-            </table>
-        </td>
-    </tr>
+                {% endfor %} {# for de proyectos #}
+                {% if css_class == 'even' %}
+                    {% set css_class = 'odd' %}
+                {% else %}
+                    {% set css_class = 'even' %}
+                {% endif %}
+            {% endfor %}  {# for cues_repetidos #}
 
-{% endfor %}
-    </table>
+            </table>
 {% endblock %}

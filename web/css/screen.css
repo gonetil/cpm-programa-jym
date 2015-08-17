@@ -3327,3 +3327,7 @@ select.large_select option { padding: 3px;}
 }
 
 .absolute { position: absolute; }
+
+
+table tr.even { background-color: #FEFEFE; }
+table tr.odd { background-color: #DEDEDE; }
