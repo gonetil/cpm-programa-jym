@@ -2,7 +2,8 @@
 
 ## Bajar el proyecto:
 ```sh
-git clone ...
+git clone https://github.com/gonetil/cpm-programa-jym.git
+git checkout working
 bin/vendors install
 ```
 
