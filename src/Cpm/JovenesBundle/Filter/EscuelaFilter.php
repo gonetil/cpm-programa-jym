@@ -7,8 +7,10 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 
 	public $regionDesde;
 	public $regionHasta;
-	public $distrito;
-	public $region;
+	public $distritos;
+	public $regiones;
+    public $localidades;
+
 	private $cicloFilter;
 	
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
@@ -31,45 +33,35 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 		return $this->regionHasta;
 	}
 	
-	   /**
-     * Set distrito
-     *
-     * @param Cpm\JovenesBundle\Entity\Distrito $distrito
-     */
-    public function setDistrito($distrito)
+    public function getLocalidades()
     {
-        $this->distrito = $distrito;
+        return $this->localidades;
+    }
+
+    public function setLocalidades($localidades)
+    {
+        $this->localidades = $localidades;
+    }
+
+    public function setDistritos($distritos)
+    {
+        $this->distritos = $distritos;
     }  
 
-    /**
-     * Get distrito
-     *
-     * @return Cpm\JovenesBundle\Entity\Distrito 
-     */
-    public function getDistrito()
+    public function getDistritos()
     {
-    	return $this->distrito;
+    	return $this->distritos;
 
     }
 
-    /**
-     * Set region
-     *
-     * @param Cpm\JovenesBundle\Entity\RegionEducativa $region
-    */
-    public function setRegion($region)
+    public function setRegiones($regiones)
     {
-    	$this->region=$region;
+    	$this->regiones=$regiones;
     }
  
-    /**
-     * Get region
-     *
-     * @return Cpm\JovenesBundle\Entity\RegionEducativa 
-     */
-    public function getRegion()
+    public function getRegiones()
     {
-        return $this->region;
+        return $this->regiones;
     }
 
 	

@@ -63,6 +63,7 @@ class DefaultController extends BaseController
     		$localidades = $em->getRepository('CpmJovenesBundle:Localidad')->findAllOrdered();
     	
     	$json = array();
+
     	foreach ($localidades as $loc) {
     		$json[] = array("nombre"=>$loc->getNombre(), "id" => $loc->getId());
     	} 
@@ -79,14 +80,15 @@ class DefaultController extends BaseController
     * @Route("/public/find_by_region", name="distrito_find_by_region")
     */
     public function findByRegionAction() {
+
     	$region_id = $this->get('request')->query->get('region_id');
-    
+
     	$em = $this->getDoctrine()->getEntityManager();
     	if ($region_id != -1)
     		$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findByRegion($region_id);
     	else
     		$distritos = $em->getRepository('CpmJovenesBundle:Distrito')->findAllOrdered();
-    	
+
     	$json = array();
     	foreach ($distritos as $dist) {
     		$json[] = array("nombre"=>$dist->getNombre(), "id" => $dist->getId());

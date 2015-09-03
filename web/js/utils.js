@@ -132,21 +132,55 @@ autofill_select = function ( value_to_send , select_to_fill , url_to_json, empty
 	}
 };
 
+/**
+ * habilita/deshabilita los select de regiones, distritos y localidades segun la cantidad de opciones seleccionadas en cada uno
+ **/
+
+disableMultipleSelects = function() {
+    $regiones = jQuery('select.region-selector');
+    $distritos = jQuery('select.distrito-selector');
+    $localidades = jQuery('select.localidad-selector');
+
+    if(($regiones.find(':selected').length>1)) { //si selecciona multiples regiones, no puede seleccionar ni distritos ni localidades
+        $distritos.prop('disabled','disabled');
+        $localidades.prop('disabled','disabled');
+    } else if ($distritos.find(':selected').length>1) { //si selecciono multiples distritos, solo se bloquean las localidades
+        $localidades.prop('disabled','disabled');
+        $distritos.prop('disabled',false);
+    } else //no hay multiple seleccion ni de regiones ni de distritos, queda todo habilitado
+    {
+        $distritos.prop('disabled',false);
+        $localidades.prop('disabled',false);
+    }
+}
+
 buscar_localidades = function() {
-	id = jQuery("select.distrito-selector").val();
-			
-	select = "select.localidad-selector";
-	if (id == "") 
-		id = "-1";
-	autofill_select( { distrito_id : id} ,  select , "/public/find_by_distrito" , "Todas");			
+    disableMultipleSelects();
+    var id = -1;
+    select = "select.localidad-selector";
+
+    if (jQuery('select.distrito-selector :selected').length > 1) {
+        return;
+    }
+    else if (jQuery('select.distrito-selector :selected').length == 1) {
+        id = jQuery("select.distrito-selector :selected")[0].value;
+    }
+
+	autofill_select( { distrito_id : id} ,  select , "/public/find_by_distrito" , "Todas");
 };
 
 buscar_distritos = function() {
-		id = jQuery("select.region-selector").val();
-			
-		select = "select.distrito-selector";
-		if (id == "")
-			id =-1;
+        disableMultipleSelects();
+        var id = -1;
+        select = "select.distrito-selector";
+
+        if (jQuery('select.region-selector :selected').length > 1) {
+                return;
+        }
+        else if (jQuery("select.region-selector :selected").length == 1)
+            id = jQuery("select.region-selector :selected")[0].value;
+
+
 		autofill_select( { region_id : id} , select  , "/public/find_by_region" , "Todos");
 };
 
@@ -160,6 +194,7 @@ buscar_instancias_eventos = function() {
 };
 
 bind_rdl_selects = function(){
+    disableMultipleSelects();
 	$('select.region-selector').change(buscar_distritos);
 	$('select.distrito-selector').change(buscar_localidades);
 	$("#cpm_jovenesbundle_filter_modelFilter_eventoFilter_evento").change(buscar_instancias_eventos);

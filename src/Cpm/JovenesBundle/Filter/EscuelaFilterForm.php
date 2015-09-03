@@ -10,7 +10,7 @@ class EscuelaFilterForm extends ModelFilterForm
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-          ->add('region','entity',array(
+          ->add('regiones','entity',array(
 		    								'label' => 'Región Educativa',
 		    								'class' => 'CpmJovenesBundle:RegionEducativa',
 		    								'empty_value' => "Todas",
@@ -20,9 +20,10 @@ class EscuelaFilterForm extends ModelFilterForm
 		    														return $er->createQueryBuilder('r')
 		    														->orderBy('r.nombre', 'ASC');
 		    														},
-		    								'required'=>false
+		    								'required'=>false,
+                                            'multiple'=>true
 		    							))
-		    ->add('distrito','entity',array(
+		    ->add('distritos','entity',array(
 		    							'label' => 'Distrito',
 		    							'class' => 'CpmJovenesBundle:Distrito',
 		    							'query_builder' => function($er) {
@@ -32,9 +33,10 @@ class EscuelaFilterForm extends ModelFilterForm
 		    							'attr' => array('class' => 'distrito-selector'),
 		    							'empty_value' => "Todos",
 		    							'preferred_choices' => array("Todos"),
-		    							'required'=>false
+		    							'required'=>false,
+                                        'multiple'=>true
 		    							)) 
-			->add('localidad','entity',array(
+			->add('localidades','entity',array(
 		    								'label' => 'Localidad',
 		    								'class' => 'CpmJovenesBundle:Localidad',
 			    							'query_builder' => function($er) {
@@ -45,7 +47,8 @@ class EscuelaFilterForm extends ModelFilterForm
 		    								'attr' => array('class' => 'localidad-selector'),
 		    								'empty_value' => "Todas",
 		    								'preferred_choices' => array("Todas"),
-		    								'required'=>false		    
+		    								'required'=>false,
+                                            'multiple'=>true
 		    							))
 		  	->add('tipoInstitucion','entity',array(
 		            									'label' => 'Tipo de Institución',

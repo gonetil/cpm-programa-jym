@@ -62,8 +62,8 @@ $(document).ready(function() {
 			<h4>Filtros sobre la escuela</h4>
 			{{ form_row(form.modelFilter.escuelaFilter.nombre) }}
 			<div class="extra-filters">
-				{{ form_row(form.modelFilter.escuelaFilter.localidad) }}
-				{{ form_row(form.modelFilter.escuelaFilter.distrito) }} 
+				{{ form_row(form.modelFilter.escuelaFilter.localidades) }}
+				{{ form_row(form.modelFilter.escuelaFilter.distritos) }}
 				<div class='range'>
 					{{ form_label(form.modelFilter.escuelaFilter.regionDesde) }} 
 					{{ form_errors(form.modelFilter.escuelaFilter.regionDesde) }} 
@@ -72,7 +72,7 @@ $(document).ready(function() {
 					{{ form_errors(form.modelFilter.escuelaFilter.regionHasta) }} 
 					{{ form_widget(form.modelFilter.escuelaFilter.regionHasta) }}
 				</div>			
-				{{ form_row(form.modelFilter.escuelaFilter.region) }} 
+				{{ form_row(form.modelFilter.escuelaFilter.regiones) }}
 				{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
 				{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }}
 				{{ form_row(form.modelFilter.escuelaFilter.contextoEncierro) }}

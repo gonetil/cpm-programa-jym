@@ -121,23 +121,26 @@ class ProyectoRepository extends EntityRepository {
 
 
 		if ($escuela = $data->getEscuelaFilter()) {
-	
+
 			$tiene_escuela = false;
-			if ($escuela->getLocalidad()) {
+			if (($localidades = $escuela->getLocalidades()) && (count($localidades)) ) {
+
 				$tiene_escuela = true;
-				$qb->innerJoin("e.localidad", 'l')->andWhere('l = :localidad')->setParameter('localidad', $escuela->getLocalidad());
+				$qb->innerJoin("e.localidad", 'l')->andWhere('l in (:localidades)')->setParameter('localidades', $this->ids($localidades));
 			}
-			elseif ($escuela->getDistrito()) {
+			elseif (($distritos = $escuela->getDistritos()) && (count($distritos))) {
 				$tiene_escuela = true;
-				$qb->innerJoin("e.localidad", 'l')->innerJoin("l.distrito", 'd')->andWhere('d = :distrito')->setParameter('distrito', $escuela->getDistrito());
+				$qb->innerJoin("e.localidad", 'l')
+                    ->innerJoin("l.distrito", 'd')
+                    ->andWhere('d in (:distritos)')->setParameter('distritos', $this->ids($escuela->getDistritos()));
 			}
-			elseif ($escuela->getRegion() || $escuela->getRegionDesde() || $escuela->getRegionHasta()) //la region solo se considera si no se eligio ni la localidad ni el distrito 
+			elseif (($regiones = $escuela->getRegiones()) || $escuela->getRegionDesde() || $escuela->getRegionHasta()) //la region solo se considera si no se eligio ni la localidad ni el distrito
 			{
 				$tiene_escuela = true;
 				$qb->innerJoin("e.localidad", 'l')->innerJoin("l.distrito", 'd')->innerJoin("d.region", 'r');
 
-				if ($escuela->getRegion())
-					$qb->andWhere('r = :region')->setParameter('region', $escuela->getRegion());
+				if (count($regiones))
+					$qb->andWhere('r in (:regiones)')->setParameter('regiones', $this->ids($escuela->getRegiones()));
 				else {
 					if ($escuela->getRegionDesde())
 						$qb->andWhere('r.id >= :regionDesde')->setParameter('regionDesde', $escuela->getRegionDesde());
