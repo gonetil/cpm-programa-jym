@@ -79,6 +79,8 @@ class ProyectoFilterForm extends ModelFilterForm
     				))         
  				->add('deQueSeTrata', null,array( 'label' => 'Descripción',
 		    										'required' => false ))
+                ->add('titulo', null,array( 'label' => 'Titulo del proyecto',
+                'required' => false ))
 	            ->add('ejes','entity',array('label' => 'Eje',
 		            									'class' => 'CpmJovenesBundle:Eje',
 		    								    		'empty_value' => "Todos",

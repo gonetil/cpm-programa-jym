@@ -185,7 +185,12 @@ class ProyectoRepository extends EntityRepository {
 			$qb->andWhere("p.deQueSeTrata like :dqst")->setParameter("dqst", "%".(trim($data->getDeQueSeTrata()) ."%"));
 		}
 
-		if ($data->getRequerimientosDeEdicion()) {
+        if (trim($data->getTitulo()) != "") {
+
+            $qb->andWhere("p.titulo like :titulo")->setParameter("titulo", "%".(trim($data->getTitulo()) ."%"));
+        }
+
+        if ($data->getRequerimientosDeEdicion()) {
 			if ($data->getRequerimientosDeEdicion() != 1)
 				$qb->andWhere("p.requerimientosDeEdicion like ''");
 			else	
