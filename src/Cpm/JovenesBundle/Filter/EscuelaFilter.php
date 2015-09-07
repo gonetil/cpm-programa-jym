@@ -5,8 +5,6 @@ use Cpm \ JovenesBundle \ Entity \ Escuela;
 
 class EscuelaFilter extends Escuela implements ModelFilter {
 
-	public $regionDesde;
-	public $regionHasta;
 	public $distritos;
 	public $regiones;
     public $localidades;
@@ -23,14 +21,6 @@ class EscuelaFilter extends Escuela implements ModelFilter {
 	
 	public function getTargetEntity() {
 		return 'CpmJovenesBundle:Escuela';
-	}
-	
-	public function getRegionDesde() {
-		return $this->regionDesde;
-	}
-
-	public function getRegionHasta() {
-		return $this->regionHasta;
 	}
 	
     public function getLocalidades()

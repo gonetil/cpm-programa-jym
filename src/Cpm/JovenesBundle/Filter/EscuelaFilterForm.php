@@ -64,18 +64,7 @@ class EscuelaFilterForm extends ModelFilterForm
         	->add('otroTipoInstitucion','checkbox',array(
         												'label' => 'Otro tipo de institucion',
 		    											'required'=>false
-        												))							
-        	->add('regionDesde','integer',array(
-		            									'label' => 'Desde la región',
-		    											'attr' => array('class' => 'input-narrow left-float'),
-        												'required'=>false
-        								))
-        	->add('regionHasta','integer',array(
-		            									'label' => 'Hasta la región',
-		    											'attr' => array('class' => 'input-narrow left-float'),
-        												'required'=>false
-        								))
-	        											        								
+        												))
 		    ->add('nombre', null, array('label' => 'Nombre o numero de escuela',
         								'required' => false))
 		    ->add('contextoEncierro', 'choice' ,array('label' => 'Contexto de encierro' , 

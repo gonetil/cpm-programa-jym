@@ -65,14 +65,6 @@ $(document).ready(function() {
 			    {{ form_row(form.modelFilter.titulo) }}
 				{{ form_row(form.modelFilter.escuelaFilter.localidades) }}
 				{{ form_row(form.modelFilter.escuelaFilter.distritos) }}
-				<div class='range'>
-					{{ form_label(form.modelFilter.escuelaFilter.regionDesde) }} 
-					{{ form_errors(form.modelFilter.escuelaFilter.regionDesde) }} 
-					{{ form_widget(form.modelFilter.escuelaFilter.regionDesde) }} 
-					{{ form_label(form.modelFilter.escuelaFilter.regionHasta) }} 
-					{{ form_errors(form.modelFilter.escuelaFilter.regionHasta) }} 
-					{{ form_widget(form.modelFilter.escuelaFilter.regionHasta) }}
-				</div>			
 				{{ form_row(form.modelFilter.escuelaFilter.regiones) }}
 				{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
 				{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }}
