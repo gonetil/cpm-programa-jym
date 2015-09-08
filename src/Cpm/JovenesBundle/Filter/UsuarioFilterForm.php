@@ -44,7 +44,7 @@ class UsuarioFilterForm extends ModelFilterForm
 		    ->add('aniosParticipo','choice',array('label'=>'Años en los que indicó que participó', 
 		    								  'required' => false,
 		    								  'choices' => $anios,
-		    								  'expanded' => true,
+		    								  'expanded' => false,
 		    								  'multiple' => true,
 		    								  'required' => false,
 		    								  'attr'=>array('class'=>'radios-en-linea'),

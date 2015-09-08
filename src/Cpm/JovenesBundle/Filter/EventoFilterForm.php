@@ -28,7 +28,16 @@ class EventoFilterForm extends ModelFilterForm
 		  ->add('sinInvitacionFlag','checkbox',array(
 													'label' => 'Sin invitación al evento',
 													'required' => false		  
-		  )) 	
+		  ))
+            ->add('confirmoInvitacionFlag','checkbox',array(
+                'label' => 'Invitación confirmada',
+                'required' => false
+            ))
+            ->add('asistioAlEventoFlag','checkbox',array(
+                'label' => 'Asistió al evento',
+                'required' => false
+            ))
+
 		  ;
 		  
 		         

@@ -1,5 +1,25 @@
-{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %} {% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as
-proyecto_box %} {% block title %} Listado de Proyectos {% endblock %} {% block content %}
+{% extends 'CpmJovenesBundle:Layout:admin_layout.html.twig' %}
+{% import "CpmJovenesBundle:Perfil:proyecto_box.macro.html.twig" as proyecto_box %}
+{% import "CpmJovenesBundle:Proyecto:filters.html.twig" as proyecto_filters %}
+
+
+{% block title %}
+    Listado de Proyectos
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="systats">
+        <p class='stats_title' onclick="$('.systats ul').slideToggle();">Estadísticas ({{ jym.getCicloActivo() }})</p>
+        <ul>
+            <li>Cant. de proyectos: {{total_proyectos}}</li> {% if total_proyectos > 0 %}
+            <li>% primera vez del coordinador: {{ (100 * total_PrimeraVezDocente / total_proyectos) | number_format(2)}}% ( {{total_PrimeraVezDocente}}/{{total_proyectos}} )</li>
+            <li>% primera vez de los alumnos: {{ (100 * total_PrimeraVezAlumnos / total_proyectos) | number_format(2) }}% ({{total_PrimeraVezAlumnos}}/{{total_proyectos}})</li>
+            <li>% primera vez de la escuela: {{ (100 * total_PrimeraVezEscuela / total_proyectos) | number_format(2)}}% ({{total_PrimeraVezEscuela}}/{{total_proyectos}})</li> {% endif %}
+            <li>Cantidad de coordinadores: {{ total_Coordinadores }}</li>
+        </ul>
+    </div>
 
 
 <script>
@@ -28,77 +48,12 @@ $(document).ready(function() {
 
 </script>
 
-{{ filter.form_head(form) }}
+
 
 <div id="before_list">
 
-	<div class="filters">
-		<div class='left'>
-			<h4>Filtros sobre el proyecto</h4>
-			{{ form_row(form.modelFilter.coordinador) }} 
-			<div class="extra-filters">
-				{{ form_row(form.modelFilter.deQueSeTrata) }}			
-				{{ form_row(form.modelFilter.usuarioFilter.primeraVezQueParticipa) }}			
-				<div class="aniosGroup">
-				{{ form_label(form.modelFilter.usuarioFilter.aniosParticipo) }}
-				<div class="smaller">{{ form_label(form.modelFilter.usuarioFilter.porPrimeraVez) }} {{ form_widget(form.modelFilter.usuarioFilter.porPrimeraVez) }}</div>
-				{{ form_widget(form.modelFilter.usuarioFilter.aniosParticipo) }}
-				
-				</div>
-				{{form_row(form.modelFilter.ejes) }}
-				{{form_row(form.modelFilter.temasPrincipales) }}
-	            {{ form_row(form.modelFilter.produccionesFinales) }}
-	            {{ form_row(form.modelFilter.esPrimeraVezAlumnos) }}
-	            {{ form_row(form.modelFilter.cuentanConNetbook) }}
-	            {{ form_row(form.modelFilter.cuentanConPlataformaVirtual) }}
-	            {{ form_row(form.modelFilter.estadoFilter.conArchivo) }} 
-	            {{ form_row(form.modelFilter.estadoFilter.yaEvaluado) }}
-	            {{ form_row(form.modelFilter.estadoFilter.correoEnviado) }}
-	            {{ form_row(form.modelFilter.estadoFilter.notas) }}
-	            {{ form_row(form.modelFilter.estadoFilter.vigente) }}
-            </div>
-		</div>
-		<div class='right'>
-			<h4>Filtros sobre la escuela</h4>
-			{{ form_row(form.modelFilter.escuelaFilter.nombre) }}
-			<div class="extra-filters">
-			    {{ form_row(form.modelFilter.titulo) }}
-				{{ form_row(form.modelFilter.escuelaFilter.localidades) }}
-				{{ form_row(form.modelFilter.escuelaFilter.distritos) }}
-				{{ form_row(form.modelFilter.escuelaFilter.regiones) }}
-				{{ form_row(form.modelFilter.escuelaFilter.tipoInstitucion) }} 
-				{{ form_row(form.modelFilter.escuelaFilter.otroTipoInstitucion) }}
-				{{ form_row(form.modelFilter.escuelaFilter.contextoEncierro) }}
-				{{ form_row(form.modelFilter.esPrimeraVezEscuela) }}
-				{{ form_row(form.modelFilter.eventoFilter.evento) }}
-				{{ form_row(form.modelFilter.eventoFilter.sinInvitacionFlag) }}
-				{{ form_row(form.modelFilter.instanciaEventoFilter.instanciaEvento) }}
-				
-				{{ form_row(form.modelFilter.requerimientosDeEdicion) }} 
-				{{form_row(form.modelFilter.color) }}
-				{{form_row(form.modelFilter.transporte ) }}
-				{{form_row(form.modelFilter.cicloFilter.ciclo ) }}
-			</div>
-	 
-		</div>
-		
-		<div class="filter-separator">
-			<hr/>
-			<div class="slidedown" onclick="$('.extra-filters').toggle();"> </div>
-			{{ filter.form_buttons(form) }}
-		</div>	
-	</div>
+  {{ proyecto_filters.render_filters(form,filter) }}
 
-	<div class="systats">
-		<h4>Estadísticas del ciclo activo ({{ jym.getCicloActivo() }})</h4>
-		<ul>
-			<li>Cant. de proyectos: {{total_proyectos}}</li> {% if total_proyectos > 0 %}
-			 <li>% primera vez del coordinador: {{ (100 * total_PrimeraVezDocente / total_proyectos) | number_format(2)}}% ( {{total_PrimeraVezDocente}}/{{total_proyectos}} )</li>  
-			<li>% primera vez de los alumnos: {{ (100 * total_PrimeraVezAlumnos / total_proyectos) | number_format(2) }}% ({{total_PrimeraVezAlumnos}}/{{total_proyectos}})</li>
-			<li>% primera vez de la escuela: {{ (100 * total_PrimeraVezEscuela / total_proyectos) | number_format(2)}}% ({{total_PrimeraVezEscuela}}/{{total_proyectos}})</li> {% endif %}
-			<li>Cantidad de coordinadores: {{ total_Coordinadores }}</li>
-		</ul>
-	</div>
 </div>
 
 <table class="records_list">
