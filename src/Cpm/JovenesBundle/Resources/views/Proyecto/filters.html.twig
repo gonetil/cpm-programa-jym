@@ -25,13 +25,36 @@
         $group = $(group_selector);
         $group.toggleClass('collapsed').toggleClass('uncollapsed');
     }
+
+    function hasValue(input) {
+        $input = $(input);
+        if ($input.is(':checkbox'))
+            return $input.is(':checked');
+        else if ($input.is('select') && ($input.find('option:selected').text() == 'Todos'))
+             return false; //caso especial, algunas veces todos tiene valor y otras no
+        else return $input.val();
+
+    }
+    /**
+     * Marca todos los bloques que tienen algun dato dentro (select con algo seleccionado, check marcados, input con texto)
+     */
+    function markBlockWithData() {
+        $('.proyecto_filters  .filter_group').each(function(){
+            $dad =  $(this);
+            $dad.find(':input').each(function() {
+                                            if (hasValue(this) )
+                                                $dad.find('.title').addClass('group_with_data');
+                });
+            });
+    }
+    markBlockWithData();
 </Script>
 {% endmacro %}
 
 
 {% macro filter_block(name,always_visible,filters) %}
 
-    <div class="filter_group filter_{{ name|replace({' ':'_'}) }} {% if not always_visible %}collapsed{% else %} uncollapsed %}{% endif %}">
+    <div class="filter_group filter_{{ name|replace({' ':'_'}) }} {% if not always_visible %}collapsed{% else %} uncollapsed {% endif %}">
         <div class="title" onclick="showgroup('.filter_{{ name |replace({' ':'_'}) }}')">{{ name }}
 
         </div>

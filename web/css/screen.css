@@ -2056,11 +2056,12 @@ ul.mis_proyectos .proyecto_box a { color : #000;  }
     color:#333333;
     font-weight: bold;
     text-align: left;
+    padding-left: 20px ;
     cursor: pointer;
     border: 1px solid #EEEEEE;
     border-radius: 10px 10px 0px 0px;
 }
-.proyecto_filters .filter_group > .title:hover { background-color: #EFF5FF;  }
+.proyecto_filters .filter_group > .title:hover { background-color: #FFF5FF;  }
 
 .proyecto_filters .filter_order  {
     width: 300px;
@@ -2076,6 +2077,13 @@ ul.mis_proyectos .proyecto_box a { color : #000;  }
 .proyecto_filters .filter_group.uncollapsed > .filters_in_group { display:block;}
 .proyecto_filters .filter_group.uncollapsed { border-radius: 10px;}
 
+.proyecto_filters .filter_group .title.group_with_data
+{
+    background-image: url('../images/shared/yes.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-color: #EFF5FF;
+}
 
 .systats {
     position: absolute;
