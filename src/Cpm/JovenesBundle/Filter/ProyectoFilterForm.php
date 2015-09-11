@@ -92,20 +92,6 @@ class ProyectoFilterForm extends ModelFilterForm
         												'required'=>false,
                                                         'multiple'=>true
         								))
-			   ->add('cuentanConNetbook', 'choice' ,array('label' => 'Cuentan con notebook?' , 
-            											'choices' => array(1=>"Si",2=>"No"),
-            											'preferred_choices' => array("Todos"),
-        												'empty_value' => "Todos",
-        												'expanded'=>false,
-        												'required'=>false
-                										))	
-			   ->add('cuentanConPlataformaVirtual', 'choice' ,array('label' => 'Cuentan con plataforma virtual?' , 
-            											'choices' => array(1=>"Si",2=>"No"),
-            											'preferred_choices' => array("Todos"),
-        												'empty_value' => "Todos",
-        												'expanded'=>false,
-        												'required'=>false
-                										))		
                 			;
 	
 			$escuela = new EscuelaFilter();	
