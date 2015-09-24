@@ -209,13 +209,20 @@ class ProyectoRepository extends EntityRepository {
 		}
 		
 		
-		$instanciaEvento = $data->getInstanciaEventoFilter(); 
-		if ($iev = $instanciaEvento->getInstanciaEvento()) {  
+		$instanciaEvento = $data->getInstanciaEventoFilter();
+		if ($iev = $instanciaEvento->getInstanciaEvento()) {
 					$qb	->innerJoin('p.invitaciones','invitaciones2')
 					->innerJoin('invitaciones2.instanciaEvento','instancia2')
 					->andWhere('instancia2 = :iev')->setParameter('iev',$iev);
-		}
-		
+
+            if ($instanciaEvento->getConfirmoInvitacionAInstancia())
+               $qb->andWhere('invitaciones2.aceptoInvitacion = 1');
+
+            if ($instanciaEvento->getAsistioAInstancia())
+                $qb->andWhere('invitaciones2.asistio = 1');
+
+        }
+
 
 		$estado = $data->getEstadoFilter();
 		if ($estado) {

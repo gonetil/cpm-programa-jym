@@ -9,7 +9,7 @@
         {{ _self.filter_block('Evaluaciones',false,[form.modelFilter.estadoFilter.conArchivo, form.modelFilter.estadoFilter.yaEvaluado,form.modelFilter.estadoFilter.correoEnviado,form.modelFilter.estadoFilter.notas,form.modelFilter.estadoFilter.vigente]) }}
         {{ _self.filter_block('Ubicacion geografica',false,[form.modelFilter.escuelaFilter.localidades,form.modelFilter.escuelaFilter.distritos,form.modelFilter.escuelaFilter.regiones]) }}
         {{ _self.filter_block('Escuelas',false,[ form.modelFilter.escuelaFilter.tipoInstitucion, form.modelFilter.escuelaFilter.otroTipoInstitucion, form.modelFilter.escuelaFilter.contextoEncierro,form.modelFilter.esPrimeraVezEscuela] ) }}
-        {{ _self.filter_block('Eventos',false,[ form.modelFilter.eventoFilter.evento,form.modelFilter.eventoFilter.sinInvitacionFlag,form.modelFilter.instanciaEventoFilter.instanciaEvento ]) }}
+        {{ _self.filter_block('Eventos',false,[ form.modelFilter.eventoFilter.evento,form.modelFilter.eventoFilter.sinInvitacionFlag,form.modelFilter.instanciaEventoFilter.instanciaEvento,form.modelFilter.instanciaEventoFilter.confirmoInvitacionAInstancia ,form.modelFilter.instanciaEventoFilter.asistioAInstancia  ]) }}
         {{ _self.filter_block('Chapa',false,[form.modelFilter.requerimientosDeEdicion,form.modelFilter.color,form.modelFilter.transporte ]) }}
         {{ _self.filter_block('Ciclo',false,[form.modelFilter.cicloFilter.ciclo]) }}
         {{ filter.form_buttons(form) }}

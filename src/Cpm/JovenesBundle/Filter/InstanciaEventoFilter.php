@@ -7,7 +7,11 @@ class InstanciaEventoFilter extends InstanciaEvento implements ModelFilter {
 	private $instanciaEvento; 
 	private $cicloFilter;
 	private $eventoFilter;
-	
+	private $confirmoInvitacionAInstancia;
+    private $asistioAInstancia;
+
+
+
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new InstanciaEventoFilterForm($this, $jym, '_instancia_evento');
 	}
@@ -28,7 +32,39 @@ class InstanciaEventoFilter extends InstanciaEvento implements ModelFilter {
 	public function setInstanciaEvento($instancia) {
 		$this->instanciaEvento = $instancia;
 	}
-	
+
+    /**
+     * @return mixed
+     */
+    public function getConfirmoInvitacionAInstancia()
+    {
+        return $this->confirmoInvitacionAInstancia;
+    }
+
+    /**
+     * @param mixed $confirmoInvitacionAInstancia
+     */
+    public function setConfirmoInvitacionAInstancia($confirmoInvitacionAInstancia)
+    {
+        $this->confirmoInvitacionAInstancia = $confirmoInvitacionAInstancia;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAsistioAInstancia()
+    {
+        return $this->asistioAInstancia;
+    }
+
+    /**
+     * @param mixed $asistioAInstancia
+     */
+    public function setAsistioAInstancia($asistioAInstancia)
+    {
+        $this->asistioAInstancia = $asistioAInstancia;
+    }
+
 	public function getCicloFilter()
 	{ 
 		return $this->cicloFilter;
