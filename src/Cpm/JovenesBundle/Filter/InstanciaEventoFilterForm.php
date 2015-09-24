@@ -21,15 +21,23 @@ class InstanciaEventoFilterForm extends ModelFilterForm
 		    														},
         												'required'=>false		    				
 		    	))
-            ->add('confirmoInvitacionAInstancia','checkbox',
+            ->add('confirmoInvitacionAInstancia','choice',
                 array(
                     'label'=>'Confirmo invitacion a la instancia',
-                    'required'=>false
+                    'required'=>false,
+                    'choices' => array(3=>"Todos",1=>"Si",2=>"No"),
+                    'data' => '3',
+                    'empty_value' => false,
+                    'expanded'=>false
                 ))
-            ->add('asistioAInstancia','checkbox',
+            ->add('asistioAInstancia','choice',
                 array(
                     'label'=>'Asistio a la instancia',
-                    'required'=>false
+                    'required'=>false,
+                    'choices' => array(3=>"Todos",1=>"Si",2=>"No"),
+                    'data' => '3',
+                    'empty_value' => false,
+                    'expanded'=>false
                 ))
 		  ;
 		

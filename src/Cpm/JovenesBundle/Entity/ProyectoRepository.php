@@ -204,8 +204,22 @@ class ProyectoRepository extends EntityRepository {
 					->innerJoin('inv.instanciaEvento','instancia')
 					->innerJoin('instancia.evento','ev')->andWhere('ev = :ev')->setParameter('ev',$ev);
 				//$qb->andWhere('p.tipoInstitucion is NULL');
-								 
-			}		
+                $confirmoFlag=$evento->getConfirmoInvitacionFlag();
+                if ($confirmoFlag != 3) { //3 es TODOS
+                    if ($confirmoFlag==1)
+                        $qb->andWhere("inv.aceptoInvitacion = 1");
+                    else $qb->andWhere('(inv.aceptoInvitacion is NULL or inv.aceptoInvitacion = 0)');
+                }
+
+                $asistioFlag=$evento->getAsistioAlEventoFlag();
+                if ($asistioFlag != 3) {//3 es TODOS
+                    if ($asistioFlag ==1)
+                        $qb->andWhere("inv.asistio = 1");
+                    else
+                        $qb->andWhere('(inv.asistio IS NULL or inv.asistio = 0)');
+                }
+
+            }
 		}
 		
 		
@@ -215,11 +229,22 @@ class ProyectoRepository extends EntityRepository {
 					->innerJoin('invitaciones2.instanciaEvento','instancia2')
 					->andWhere('instancia2 = :iev')->setParameter('iev',$iev);
 
-            if ($instanciaEvento->getConfirmoInvitacionAInstancia())
-               $qb->andWhere('invitaciones2.aceptoInvitacion = 1');
+            $confirmoInstanciaFlag = $instanciaEvento->getConfirmoInvitacionAInstancia();
+            if ($confirmoInstanciaFlag != 3) { //3 es TODOS
+                if ($confirmoInstanciaFlag == 1)
+                    $qb->andWhere('invitaciones2.aceptoInvitacion = 1');
+                else
+                    $qb->andWhere('(invitaciones2.aceptoInvitacion = 0 or invitaciones2.aceptoInvitacion IS NULL)');
+            }
 
-            if ($instanciaEvento->getAsistioAInstancia())
-                $qb->andWhere('invitaciones2.asistio = 1');
+            $asistioAInstanciaFlag = $instanciaEvento->getAsistioAInstancia();
+            if ($asistioAInstanciaFlag != 3){ //3 es TODOS
+                if ($asistioAInstanciaFlag == 1)
+                    $qb->andWhere('invitaciones2.asistio = 1');
+                else
+                    $qb->andWhere('(invitaciones2.asistio = 0 or invitaciones2.asistio IS NULL)');
+
+            }
 
         }
 

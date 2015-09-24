@@ -29,18 +29,25 @@ class EventoFilterForm extends ModelFilterForm
 													'label' => 'Sin invitación al evento',
 													'required' => false		  
 		  ))
-            ->add('confirmoInvitacionFlag','checkbox',array(
+            ->add('confirmoInvitacionFlag','choice',array(
                 'label' => 'Invitación confirmada',
-                'required' => false
+                'required' => false,
+                'choices' => array(3=>"Todos",1=>"Si",2=>"No"),
+                'data' => '3',
+                'empty_value' => false,
+                'expanded'=>false
             ))
-            ->add('asistioAlEventoFlag','checkbox',array(
+            ->add('asistioAlEventoFlag','choice',array(
                 'label' => 'Asistió al evento',
-                'required' => false
+                'required' => false,
+                'choices' => array(3=>"Todos",1=>"Si",2=>"No"),
+                'data' => '3',
+                'empty_value' => false,
+                'expanded'=>false
             ))
 
 		  ;
-		  
-		         
+
        		$miCiclo = new CicloFilter();
        		$builder->add('cicloFilter',$miCiclo->createForm($this->getJYM()),array('label'=>'Ciclo'));
 		  
