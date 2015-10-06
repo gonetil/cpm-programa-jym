@@ -212,7 +212,8 @@ class TandaController extends BaseController
     	if (!$evento) {
     		throw $this->createNotFoundException('Evento no encontrado');
     	}
-    	
+
+
     	$chapaManager = $this->getChapaManager();
     	try {
     		$msg = $chapaManager->inicializarTandas($evento,$incluir_no_confirmadas, $una_o_resto);
