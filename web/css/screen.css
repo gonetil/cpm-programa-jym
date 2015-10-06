@@ -2034,6 +2034,7 @@ ul.mis_proyectos .proyecto_box a { color : #000;  }
 
 .filters.proyecto_filters .filter_button:hover { background-color: #585757;}
 
+.filters.proyecto_filters select { width: 270px; font-size:90%; } 
 .proyecto_filters .filter_group {
     border: 1px solid #cecece;
     border-radius: 10px 10px 0px 0px;
