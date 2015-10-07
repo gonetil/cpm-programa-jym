@@ -1,6 +1,7 @@
 <table>
 <tr>
 <header><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></header>
+    {% if includeIDs  %} <td>ID</td> {% endif %}
 	<td>Coordinador</td>
 	<td>Celular</td>
 	<td>Distrito</td>
@@ -15,6 +16,7 @@
 </tr>
 {% for presentacion in presentaciones %}
 <tr>
+    {% if includeIDs  %} <td>{{ presentacion.getProyecto().getId() }}</td> {% endif %}
 	<td>{{ presentacion.getApellidoCoordinador() }}, {{ presentacion.getNombreCoordinador() }}</td>
 	<td> 
 		{% if (presentacion.getTipo() == 'interna') %}

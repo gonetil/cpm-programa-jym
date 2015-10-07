@@ -11,7 +11,7 @@
 				<h3>HORA Y ACTIVIDAD {{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre | upper }}</h3>
 				{% if bloque.tienePresentaciones %}
 					{% for presentacion in bloque.presentaciones %}
-                      <p>ID: {{ presentacion.getId() }}</p>
+                        {% if includeIDs  %} <p>ID: {{ presentacion.getProyecto().getId() }}</p> {% endif %}
                         <p style="font-weight: bold">
 						Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
 					</p>

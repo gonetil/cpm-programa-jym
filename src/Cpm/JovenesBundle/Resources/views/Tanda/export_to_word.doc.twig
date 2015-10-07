@@ -13,6 +13,7 @@
 {% else %}
 	SIN ASIGNAR <br/>
 {% endif %}
+ {% if includeIDs  %} <p>ID: {{ presentacion.getProyecto().getId() }}</p> {% endif %}
 Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion | e('html') }})<br/>
 </p>
 <p>{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | escape }} - {{ presentacion.distrito  | raw('html') }}</p>

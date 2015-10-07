@@ -48,8 +48,11 @@
 		            	<option value="word">Word</option>
 		            	<option value="csv">Excel</option>
 		            </select>
+                    <br/>
+                    <Label for="includeProjectIds">Incluir IDs de proyectos:</Label>
+                    <input type="checkbox" name="includeProjectIds" />
 		            <input type="hidden" name="tanda_id" value="{{ entity.id }}" />
-		            <button type="submit">Exportar</button>
+		            <br/><button type="submit">Exportar</button>
 	            </form>
 	    </div>
   
