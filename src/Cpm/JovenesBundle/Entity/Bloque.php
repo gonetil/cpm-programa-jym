@@ -237,7 +237,6 @@ class Bloque
 				$p = $this->presentaciones->get($i);
 				if ($p->getPosicion() >= $nueva_posicion) {
 					$p->setPosicion($p->getPosicion()+1);
-					$em->persist($p);
 				}
 			}
 		}
