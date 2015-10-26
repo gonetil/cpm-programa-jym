@@ -3334,11 +3334,12 @@ div.caja-bloque-presentaciones {
 }
 
 .presentaciones_libres{
-	position:fixed;
+	/*position:fixed;
+	  max-height: 120px;
+		*/
 	bottom:0px;
 	left:0;
-	width:100%;
-	max-height: 120px;
+	width:98%;
 	min-height: 50px;
 	background-color:#dceaf4; 
 	z-index: 100;

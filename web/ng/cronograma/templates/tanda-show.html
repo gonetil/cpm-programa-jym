@@ -89,7 +89,7 @@
 
 
 <!-- PRESENTACIONES LIBRES-->
-<div class="row-fluid presentaciones_libres" ng-model="tanda.presentaciones_libres" 
+<div class="row-fluid presentaciones_libres" id="resizable" ng-model="tanda.presentaciones_libres"
           	data-drop="true" jqyoui-droppable="presentacion_droppable" data-jqyoui-options="presentacion_droppable_options">
 	      	<span ng-show="tanda.presentaciones_libres.length > 0">Quedan <b>{{tanda.presentaciones_libres.length}}</b> presentaciones Libres</span> 
 			<span ng-hide="tanda.presentaciones_libres.length > 0">Todas las presentaciones de la tanda han sido asignadas</span> 
