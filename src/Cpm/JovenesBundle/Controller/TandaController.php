@@ -272,8 +272,13 @@ class TandaController extends BaseController
 			    	 	return -1;
 			    	 else if ($hora1 > $hora2 )		
 		    			return 1;
-		    			else 
-		    				return 0;
+		    			else { //estan en el mismo bloque, usamos el orden de la presentacion
+                            if ($presentacion1->getPosicion() < $presentacion2->getPosicion())
+                                return -1;
+                            else
+                                return 1;
+                        }
+
     	 		} else { //no son comparables
     	 			return ($auditorio1->getId() <= $auditorio2->getId()) ? -1 : 1;
     	 		}
