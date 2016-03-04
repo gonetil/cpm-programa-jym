@@ -44,17 +44,7 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 			{{ form_row(form.esPrimeraVezEscuela) }}
 			{{ form_row(form.esPrimeraVezAlumnos) }}
 			{{ form_row(form.nroAlumnos) }}
-			{{ form_row(form.cuentanConNetbook) }}
-			{{ form_row(form.cuentanConPlataformaVirtual) }}
-			
-			<div id="eje_row">
-			{{ form_label(form.eje) }}
-			{{ form_widget(form.eje) }}
-				<span class="loading inline-loading"></span>
-				<div id="descripcion_eje" class="input_hint" target="{{ path('eje_fetch') }}">
-									
-				</div>
-			</div>
+
 			{{ form_row(form.temaPrincipal) }}
             <br/>
             <br/>
@@ -101,7 +91,10 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 			<div id="coordinador">
 				<strong> Coordinador: </strong> {{ coordinador.nombre }} {{
 				coordinador.apellido }} <br /> <strong> Dirección de
-					correo: </strong> {{ coordinador.email }}
+					correo: </strong> {{ coordinador.email }} <br/>
+				Teléfono celular: <strong> {{ coordinador.telefonoCelular }}</strong>
+				<br/>
+				Por favor revisar estos datos y modificarlos de ser necesario <a href="{{path('fos_user_profile_edit')}}" target="_blank">haciendo click aquí</a>
 			</div>
 
 			<div id="colaboradores">

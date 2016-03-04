@@ -15,7 +15,7 @@ class EscuelaType extends AbstractType {
 			'preferred_choices' => array('Otro')
 		))->add('otroTipoInstitucion', null, array (
 			'required' => false,
-			'label' => 'Otro tipo de institución'
+			'label' => 'Otro tipo de institución (tipo y nombre)'
 		))->add('tipoEscuela', 'entity', array (
 			'required' => false,
 			'label' => 'Tipo de Escuela',

@@ -48,7 +48,7 @@ class ProyectoType extends AbstractType
     				'expanded' => true,
     				 'attr'=>array('class'=>'radios-en-linea'),
     		))
-    		->add('cuentanConNetbook', 'choice',	array(
+    	/*	->add('cuentanConNetbook', 'choice',	array(
             		'label' => '¿Los jóvenes que participan en el proyecto cuentan con netbooks del Plan Conectar Igualdad?', 
             		'required'=>false,
     				'choices' => array(1=>"si",0=>"no"),
@@ -61,16 +61,16 @@ class ProyectoType extends AbstractType
     				'choices' => array(1=>"si",0=>"no"),
     				'expanded' => true,
     				 'attr'=>array('class'=>'radios-en-linea'),
-    		))
+    		)) */
             ->add('colaboradores','collection',array('allow_add'=>true, 'allow_delete'=>true, 'by_reference'=>false, 'type'=>new ColaboradorType()))
-            ->add('eje','entity',
+           /* ->add('eje','entity',
             					array('label' => 'Área de referencia',
             						  	'empty_value' => "Seleccione ...",
             						  	'required'=>true,
 									    'preferred_choices' => array("Seleccione ..."),
             						  'class' => 'CpmJovenesBundle:Eje',
             						  'query_builder' => function($er) { return $er->createQueryBuilder('e')->where('e.anulado = 0');}
-    								    ))
+    								    )) */
             ->add('temaPrincipal','entity',
             					array('label' => 'Eje temático',
             						  'class' => 'CpmJovenesBundle:Tema',
