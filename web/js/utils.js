@@ -101,7 +101,7 @@ function clear_form_elements(form) {
             case 'password':
             case 'select-multiple':
             case 'select-one':
-            case 'text':
+			case 'text':
             case 'textarea':
             	this.value="";
                 break;
@@ -109,7 +109,7 @@ function clear_form_elements(form) {
             case 'radio':
             	this.checked="";
         }
-        return true;
+        return false;
     });
 
 }
