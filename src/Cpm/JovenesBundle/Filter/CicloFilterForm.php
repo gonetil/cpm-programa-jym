@@ -11,7 +11,7 @@ class CicloFilterForm extends ModelFilterForm {
 		
 	public function buildForm(FormBuilder $builder, array $options) {
 		$ciclo = $this->getJYM()->getCicloActivo();
-		
+
 		$builder  
 		  ->add('ciclo','entity',array(
 		    							'label' => 'Ciclo',
@@ -23,7 +23,7 @@ class CicloFilterForm extends ModelFilterForm {
 		    																  ->orderBy('c.id', 'DESC');
 		    																  //->orderBy('c.titulo', 'ASC');
 		    														},
-		    							//'empty_value' => "Cualquiera",
+		    							'empty_value' => $ciclo->getAnio(),
 		    							'required'=>true
 		    					)) 
 		  		
