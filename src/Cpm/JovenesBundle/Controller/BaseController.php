@@ -92,7 +92,7 @@ abstract class BaseController extends Controller
 		$paginator = $this->get('ideup.simple_paginator');
 
 		$entities = $paginator->setItemsPerPage(20, 'entities')
-            ->setMaxPagerItems(5, 'entities') //esto lo ignora rotundamente
+            ->setMaxPagerItems(5, 'entities')
             ->paginate($query,'entities')->getResult();
 
 
