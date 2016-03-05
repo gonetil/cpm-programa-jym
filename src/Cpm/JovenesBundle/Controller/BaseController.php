@@ -86,14 +86,17 @@ abstract class BaseController extends Controller
 	protected function getChapaManager(){
 		return $this->get('cpm_jovenes_bundle.chapa_manager');
 	}
-	protected function paginate($query, $extra_params = array() ){ 
-		
-		
-		$paginator = $this->get('ideup.simple_paginator');
-		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
-		
+	protected function paginate($query, $extra_params = array() ){
+
 		$request = ($this->container->get('request'));
-		
+		$paginator = $this->get('ideup.simple_paginator');
+
+		$entities = $paginator->setItemsPerPage(20, 'entities')
+            ->setMaxPagerItems(5, 'entities') //esto lo ignora rotundamente
+            ->paginate($query,'entities')->getResult();
+
+
+
 		$routeName = $request->get('_route');
 
 		$vars = $request->getQueryString();
@@ -334,7 +337,9 @@ abstract class BaseController extends Controller
 		$filter->setPageSize($paginator->getItemsPerPage());
 		$filter->setPageNumber($paginator->getCurrentPage());
 		
-		$entities = $paginator->setItemsPerPage(20, 'entities')->paginate($query,'entities')->getResult();
+		$entities = $paginator->setItemsPerPage(20, 'entities')
+            ->setMaxPagerItems(5,'entities')
+            ->paginate($query,'entities')->getResult();
 		
 		$args['filter'] = $filter;
 		$args['form'] = $form->createView();
