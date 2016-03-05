@@ -35,7 +35,7 @@ class ProyectoFilter extends Proyecto implements ModelFilter {
 	}
 	
 	public function getSortFields() {
-		return array("id" => "Id","titulo" => "Titulo","coordinador"  => "Apellido Coordinador");
+		return array("id" => "Id","titulo" => "Titulo","coordinador"  => "Apellido Coordinador","localidad"=>"Localidad","distrito"=>"Distrito");
 	}
 	
 	public function getEscuelaFilter() {

@@ -12,7 +12,13 @@ use Doctrine \ ORM \ EntityRepository;
  */
 class ProyectoRepository extends EntityRepository {
 	
-	static $sort_criteria = array("id" => "p.id" , "coordinador" => "coordinador.apellido", "titulo" => "p.titulo");
+	static $sort_criteria = array(
+		"id" => "p.id" ,
+		"coordinador" => "coordinador.apellido",
+		"titulo" => "p.titulo",
+		"localidad"=>"l.nombre",
+		"distrito"=>"d.nombre"
+	);
 	
 	function findAllQuery($ciclo = null) {
 		$qb = $this->getEntityManager()->createQueryBuilder();
@@ -35,8 +41,11 @@ class ProyectoRepository extends EntityRepository {
 
 	public function filterQuery(ProyectoFilter $data, $ciclo_activo, $sort_field = null, $sort_order) {
 		
-		$qb = $this->createQueryBuilder('p')->innerJoin("p.coordinador", "coordinador")->innerJoin("p.escuela","e");
-		
+		$qb = $this->createQueryBuilder('p')->innerJoin("p.coordinador", "coordinador")
+			->innerJoin("p.escuela","e")
+			->innerJoin("e.localidad", 'l')
+			->innerJoin('l.distrito', 'd');
+
 		if ($sort_field) {
 			$field = (isset(ProyectoRepository::$sort_criteria[$sort_field]))?ProyectoRepository::$sort_criteria[$sort_field]:ProyectoRepository::$sort_criteria['id'];
 			$qb->orderBy($field,$sort_order);
@@ -126,18 +135,16 @@ class ProyectoRepository extends EntityRepository {
 			if (($localidades = $escuela->getLocalidades()) && (count($localidades)) ) {
 
 				$tiene_escuela = true;
-				$qb->innerJoin("e.localidad", 'l')->andWhere('l in (:localidades)')->setParameter('localidades', $this->ids($localidades));
+				$qb->andWhere('l in (:localidades)')->setParameter('localidades', $this->ids($localidades));
 			}
 			elseif (($distritos = $escuela->getDistritos()) && (count($distritos))) {
 				$tiene_escuela = true;
-				$qb->innerJoin("e.localidad", 'l')
-                    ->innerJoin("l.distrito", 'd')
-                    ->andWhere('d in (:distritos)')->setParameter('distritos', $this->ids($escuela->getDistritos()));
+				$qb->andWhere('d in (:distritos)')->setParameter('distritos', $this->ids($escuela->getDistritos()));
 			}
 			elseif (($regiones = $escuela->getRegiones()) && (count($regiones))) //la region solo se considera si no se eligio ni la localidad ni el distrito
 			{
 				$tiene_escuela = true;
-				$qb->innerJoin("e.localidad", 'l')->innerJoin("l.distrito", 'd')->innerJoin("d.region", 'r');
+				$qb->innerJoin("d.region", 'r');
                 $qb->andWhere('r in (:regiones)')->setParameter('regiones', $this->ids($escuela->getRegiones()));
 			}
 
