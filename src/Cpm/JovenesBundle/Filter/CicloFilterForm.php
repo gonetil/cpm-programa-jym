@@ -23,7 +23,6 @@ class CicloFilterForm extends ModelFilterForm {
 		    																  ->orderBy('c.id', 'DESC');
 		    																  //->orderBy('c.titulo', 'ASC');
 		    														},
-		    							'empty_value' => $ciclo->getAnio(),
 		    							'required'=>true
 		    					)) 
 		  		
