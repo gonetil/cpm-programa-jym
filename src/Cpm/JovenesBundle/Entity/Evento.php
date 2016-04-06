@@ -419,5 +419,30 @@ class Evento
     	});
     	return $iterator;
 	}
-	
+
+
+	/**
+	 * Calcula los numeros de invitaciones enviadas, invitaciones aceptadas y asistentes confirmados en todas las instancias del evento
+	 * @return array con las cantidades de invitaciones enviadas, aceptadas y asistentes confirmados
+	 */
+	public function getNumerosDeInvitaciones() {
+		$total_invitaciones = 0;
+		$total_aceptadas = 0;
+		$total_asistentes = 0;
+
+		foreach($this->getInstancias() as $instancia) {
+			$invitaciones = $instancia->getInvitaciones()->toArray();
+			$total_invitaciones += count($invitaciones);
+
+			foreach($invitaciones as $inv) {
+				if ($inv->getAceptoInvitacion()) $total_aceptadas++;
+				$total_asistentes += $inv->getNumeroAsistentes();
+			}
+		}
+		return array(
+			'enviadas' => $total_invitaciones,
+			'aceptadas' => $total_aceptadas,
+			'asistentes' => $total_asistentes
+		);
+	}
 }

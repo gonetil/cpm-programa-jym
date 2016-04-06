@@ -17,6 +17,10 @@
             <th>Ciclo</th>
             <th>Título</th>
             <th>Descripción</th>
+            <th>Instancias</th>
+            <th>Invitaciones enviadas</th>
+            <th>Invitaciones aceptadas</th>
+            <th>Asistentes</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -27,6 +31,11 @@
             <td>{{ entity.ciclo }}</td>
             <td>{{ entity.titulo }}</td>
             <td>{{ entity.descripcion }}</td>
+            <td> {{ entity.instancias | length }}</td>
+            {% set info_invitaciones = entity.getNumerosDeInvitaciones() %}
+            <td> {{ info_invitaciones['enviadas'] }}</td>
+            <td> {{ info_invitaciones['aceptadas'] }}</td>
+            <td> {{ info_invitaciones['asistentes'] }}</td>
             <td>
                 <ul>
                     <li>
