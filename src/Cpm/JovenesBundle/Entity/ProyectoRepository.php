@@ -50,12 +50,11 @@ class ProyectoRepository extends EntityRepository {
 			$field = (isset(ProyectoRepository::$sort_criteria[$sort_field]))?ProyectoRepository::$sort_criteria[$sort_field]:ProyectoRepository::$sort_criteria['id'];
 			$qb->orderBy($field,$sort_order);
 		}
-		
-		$cicloFilter = $data->getCicloFilter();
-		if  ($ciclo = $cicloFilter->getCiclo()) { 
-			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo);
-		} else {
-			$qb->andWhere('p.ciclo = :ciclo')->setParameter('ciclo', $ciclo_activo);
+
+		if ($ciclos= $data->getCiclos() and (count($ciclos))) {
+			$qb->andWhere('p.ciclo IN (:ciclos)')->setParameter('ciclos', $this->ids($ciclos));
+		} else  { //tomamos el ciclo activo por default
+			$qb->innerJoin('p.ciclo','ciclo')->andWhere('ciclo.activo = 1');
 		}
 
 		$usuarioFilter = $data->getUsuarioFilter();

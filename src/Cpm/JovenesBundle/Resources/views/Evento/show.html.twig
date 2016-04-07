@@ -42,6 +42,20 @@
             <th>Limitar la lista de invitados a</th>
             <td>{{ entity.numeroMaximoInvitados }}</td>
         </tr>
+        {% set info_invitaciones = entity.getNumerosDeInvitaciones() %}
+        <tr>
+            <th>Invitaciones enviadas</th>
+            <td> {{ info_invitaciones['enviadas'] }}</td>
+        </tr>
+        <tr>
+            <th>Invitaciones aceptadas</th>
+            <td> {{ info_invitaciones['aceptadas'] }}</td>
+        </tr>
+        <tr>
+            <th>Asistentes confirmados</th>
+            <td> {{ info_invitaciones['asistentes'] }}</td>
+        </tr>
+
     </tbody>
 </table>
 

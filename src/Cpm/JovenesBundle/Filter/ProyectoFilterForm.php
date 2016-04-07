@@ -92,7 +92,18 @@ class ProyectoFilterForm extends ModelFilterForm
         												'required'=>false,
                                                         'multiple'=>true
         								))
+	            ->add('ciclos','entity',array('label' => 'Ciclo',
+	                                    'class' => 'CpmJovenesBundle:Ciclo',
+	                                    'preferred_choices' => array($this->getJYM()->getCicloActivo()->getId() ),
+	                                    'query_builder' => function($er) {
+		                                    return $er->createQueryBuilder('c')
+		                                              ->orderBy('c.anio', 'DESC');
+	                                    },
+	                                    'required'=>false,
+	                                    'multiple'=>true
+	            ))
                 			;
+
 	
 			$escuela = new EscuelaFilter();	
             $builder->add('escuelaFilter', $escuela->createForm($this->getJYM()) ,array('label' => 'Institución'));
@@ -108,10 +119,7 @@ class ProyectoFilterForm extends ModelFilterForm
         	    									
             $estado = new EstadoFilter();
             $builder->add('estadoFilter',$estado->createForm($this->getJYM()),array('label'=>'Estado'));
-       
-       		$miCiclo = new CicloFilter();
-       		$builder->add('cicloFilter',$miCiclo->createForm($this->getJYM()),array('label'=>'Ciclo'));
-        	
+
     }
     
 }

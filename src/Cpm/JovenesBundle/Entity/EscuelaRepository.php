@@ -28,11 +28,6 @@ class EscuelaRepository extends EntityRepository
 	public function filterQuery(EscuelaFilter $data, $ciclo_activo,$sort_field = null, $sort_order) {
 		$qb = $this->createQueryBuilder('e');
 										
-		/* if ($sort_field) {
-			$field = (isset(EscuelaRepository::$sort_criteria[$sort_field]))?EscuelaRepository::$sort_criteria[$sort_field]:EscuelaRepository::$sort_criteria['id'];
-			$qb->orderBy($field,$sort_order);
-		} */
-
 			$qb_proyectos = $this->getEntityManager()->createQueryBuilder();
 			$qb_proyectos->select('p')->from('CpmJovenesBundle:Proyecto','p')
 					->innerJoin('p.ciclo','ciclo')->andWhere('ciclo = :ciclo')
