@@ -429,6 +429,7 @@ class Evento
 		$total_invitaciones = 0;
 		$total_aceptadas = 0;
 		$total_asistentes = 0;
+        $total_presentes = 0;
 
 		foreach($this->getInstancias() as $instancia) {
 			$invitaciones = $instancia->getInvitaciones()->toArray();
@@ -436,13 +437,15 @@ class Evento
 
 			foreach($invitaciones as $inv) {
 				if ($inv->getAceptoInvitacion()) $total_aceptadas++;
+                if ($inv->getAsistio()) $total_presentes++;
 				$total_asistentes += $inv->getNumeroAsistentes();
 			}
 		}
 		return array(
 			'enviadas' => $total_invitaciones,
 			'aceptadas' => $total_aceptadas,
-			'asistentes' => $total_asistentes
+			'asistentes' => $total_asistentes,
+            'asistieron' => $total_presentes
 		);
 	}
 }
