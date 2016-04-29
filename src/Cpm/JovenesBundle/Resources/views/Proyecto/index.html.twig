@@ -46,7 +46,7 @@ $(document).ready(function() {
 
 	//se setean valores por defecto al reiniciar el formulario
 	$('#filter-form button[type="reset"]').live('click',function(){
-		console.log($('#cpm_jovenesbundle_filter_sortField option:first-child'));
+		window.location.href = "{{path(jym.getEtapaActual().getProyectosVigentesAction())}}";
 
 	});
 });
