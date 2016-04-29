@@ -43,7 +43,7 @@ $(document).ready(function() {
 		$target_instancias = $("#cpm_jovenesbundle_filter_modelFilter_instanciaEventoFilter_instanciaEvento");
 		filtrarEventosPorCiclo(url,ciclo,$target_eventos,$target_instancias);
 	});
-
+	
 	//se setean valores por defecto al reiniciar el formulario
 	$('#filter-form button[type="reset"]').live('click',function(){
 		window.location.href = "{{path(jym.getEtapaActual().getProyectosVigentesAction())}}";
