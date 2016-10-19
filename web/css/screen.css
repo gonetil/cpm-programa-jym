@@ -3270,6 +3270,14 @@ td.caja-auditorio-dia {
 	padding: 4px 19px;
 	background-color: #fff;
 }
+
+.caja-auditorio-dia .row-fluid .span6 { 
+    width: 95%;
+}
+
+.caja-auditorio-dia .row-fluid .span6 .badge-presentacion { 
+	width: 95%;
+}
 .caja-bloque{
 /* 	margin: 0px 0px 0px 5px; */
 }
@@ -3307,7 +3315,7 @@ div.caja-bloque-presentaciones {
 	background-color: #3a87ad;
 	vertical-align: middle !important;
 	cursor: move;
-	max-width: 170px;
+	max-width: 332px;
 	overflow: hidden;
 	width: auto;
 	border-radius:4px;
