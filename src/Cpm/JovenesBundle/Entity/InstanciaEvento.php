@@ -356,9 +356,9 @@ class InstanciaEvento
     public function estaAbiertaInscripcion(){
     	$now =new \DateTime();
     	
-    	if ($this->fechaInicio < $now)
+    	if ($this->fechaInicio < $now) //esta instancia ya empezo
     		return false;
-    	elseif (!empty($this->fechaCierreInscripcion) && $this->fechaCierreInscripcion < $now && $this->cerrarInscripcion)
+    	elseif ( (!empty($this->fechaCierreInscripcion)) && ($this->fechaCierreInscripcion < $now) && ($this->cerrarInscripcion))
     		return false;
     	else
     		return true;

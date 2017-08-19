@@ -59,6 +59,12 @@
             <th>Asistentes que participaron</th>
             <td> {{ info_invitaciones['asistieron'] }}</td>
         </tr>
+        <tr>
+            <th>Solicitar que se cargue un archivo</th>
+            <td>{% if entity.solicitarArchivoAdjunto %} Sí (Texto: {{ entity.descripcionArchivoAdjunto }})
+             {% else %} No {% endif %}</td>
+        </tr>
+
 
     </tbody>
 </table>
@@ -102,7 +108,7 @@
 	        </a>
 	    </li>
 	    <li>
-	        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post" 
+	        <form action="{{ path('evento_delete', { 'id': entity.id }) }}" method="post"
 	        onsubmit="return confirm('Esta seguro que desea eliminar el evento?')">
 	            {{ form_widget(delete_form) }}
 	            <button type="submit">Borrar</button>

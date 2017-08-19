@@ -3,55 +3,55 @@
 
 {% import "CpmJovenesBundle:Proyecto:proyecto_macros.html.twig" as proyecto_macros %}
 
-{% block title %} Detalle del proyecto{% endblock %} 
+{% block title %} Detalle del proyecto{% endblock %}
 
 {% block content %}
 
 		{{ proyecto_macros.menu_comentarios(entity) }}
-		{{ proyecto_macros.postits_proyecto(postits) }} 		
- 	  	
- 	  	<div class="proyecto_box_admin">	    
+		{{ proyecto_macros.postits_proyecto(postits) }}
+
+ 	  	<div class="proyecto_box_admin">
 		  	{% if ( entity.estadoActual) and (entity.estadoActual.estado >= constant('ESTADO_PRESENTADO')) %}
-																	 
+
 				<div class="download_link icon" title="Descargar archivo">
 			    	<a href="{{ path('proyecto_descargar_presentacion',{ 'id' : entity.id}) }}" > 
 			    	 	&nbsp;
 			    	</a>
-		    	</div> 
+		    	</div>
 			{% endif %}
 		  	<h2>Ciclo {{ entity.ciclo }}</h2>
 		    <h2 class="proyeto_title"> Proyecto: {{ entity.titulo }} </h2>
-					    
-		    
+
+
 		    {% if entity.color | length > 0 %}
 				<h4 class="info_header extra_info color-{{entity.color}}">
 					<a href="#" ;>
 						Color {{ entity.color }}
-					</a>			
+					</a>
 				</h4>
 			{% endif %}
-		    
-		    
+
+
 			{% set escuela = entity.escuela %}
-	
+
 			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_escuela').toggle(); return false;"> {{ proyecto_box.nombreEscuela(entity.escuela) }} </a></h4>
 			<div class="info_escuela hidden extra_info">
 				<p> CUE {{ escuela.cue }}</p>
 				<p> ¿La escuela funciona en contexto de encierro? : {{ common.show_bool(escuela.contextoEncierro) }} </p>
-				<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p> 
+				<p> Domicilio {{ escuela.domicilio }} CP {{escuela.codigoPostal }} </p>
 				<p> Localidad {{escuela.localidad.nombre }} , Distrito {{ escuela.localidad.distrito }} </p>
 				<p> Región Educativa: {{ entity.escuela.localidad.distrito.region }} </p>
 				<p> Tel. {{ escuela.telefono }} / Email {{ escuela.email }} </p>
 				<p> Director: {{ escuela.director }} </p>
 			</div> <!-- info_escuela -->
-		
+
 			<h4 class="info_header extra_info">
 				<a href="#" onclick="$('.info_coordinador').toggle(); return false;";>
 					Coordinador {{ entity.coordinador.nombre }} {{entity.coordinador.apellido}}
-					<a class="perfil_usuario_link" href="{{ path('usuario_show',{ 'id' : entity.coordinador.id}) }}">Ver perfil</a>	   
-				</a>			
+					<a class="perfil_usuario_link" href="{{ path('usuario_show',{ 'id' : entity.coordinador.id}) }}">Ver perfil</a>
+				</a>
 			</h4>
-			<div class="info_coordinador hidden extra_info"> 
+			<div class="info_coordinador hidden extra_info">
 				<p>
 					Email <a href="mailto:{{entity.coordinador.email}}">{{entity.coordinador.email}}</a>
 					{{ common.facebookURL(entity.coordinador) }}
@@ -61,21 +61,21 @@
 				<p>Teléfono celular {{ entity.coordinador.telefonoCelular }}</p>
 				<p>Domicilio {{ entity.coordinador.domicilio }}</p>
 	        	<p>Código postal {{ entity.coordinador.codigoPostal }}</p>
-				<p>Años en los que participó el coordinador: 
+				<p>Años en los que participó el coordinador:
 			    		{% if entity.coordinador.aniosParticipo | length > 0 %}
             				<div id="widgetAnios">
             					<input type="hidden" id="anios" value="{{entity.coordinador.aniosParticipo}}" />
             				 </div>
-            					<script> 
-           				 			cargarAnios($("#anios"));  
+            					<script>
+           				 			cargarAnios($("#anios"));
            				 			$("#widgetAnios input").click(function(event){
             							event.preventDefault();
-            						});	
+            						});
             					</script>
             			{% else %}
             					sin cargar
             			{% endif %}
-            	</p>	        	     	
+            	</p>
 			</div>	<!-- info_coordinador -->
 
 			{% if entity.colaboradores | length > 0 %}
@@ -86,7 +86,7 @@
 				</h4>
 				<ul class="colaboradores hidden extra_info">
 					{% for colaboradores in entity.colaboradores %}
-						<li> 
+						<li>
 							{{colaboradores.nombre}} {{colaboradores.apellido}} &lt;
 							<a href="mailto:{{colaboradores.email}}">{{colaboradores.email}}</a>&gt;
 							{{ common.facebookURL(colaboradores) }}
@@ -94,81 +94,81 @@
 						</li>
 					{% endfor %}
 				</ul>
-				
+
 			{% endif %}
-		
+
 			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_proyecto').toggle(); return false;">Acerca del proyecto (tema, alumnos, impacto...) </a></h4>
 			<div class="info_proyecto hidden extra_info">
-				<ul>	
+				<ul>
 			    	<li>Recibió capacitación en años anteriores: {{ common.show_bool(entity.recibioCapacitacion) }}</li>
 			    	<li>Primera vez de la escuela: {{ common.show_bool(entity.esPrimeraVezEscuela) }}</li>
 			    	<li>Primera vez de los alumnos: {{ common.show_bool(entity.esPrimeraVezAlumnos) }}</li>
 			    	<li>Los alumnos cuentan con netbooks del Plan Conectar Igualdad: {{ common.show_bool(entity.cuentanConNetbook) }}</li>
-			    	<li>Cuentan con la plataforma virtual: {{ common.show_bool(entity.cuentanConPlataformaVirtual) }}</li>    	
+			    	<li>Cuentan con la plataforma virtual: {{ common.show_bool(entity.cuentanConPlataformaVirtual) }}</li>
 			    </ul>
-						
-			
+
+
 				<p> Cantidad de alumnos que participan: {{ entity.nroAlumnos }} </p>
 
 				<p> Área de referencia: {% if entity.eje %} {{ entity.eje }} {% else %} SIN DEFINIR {% endif %} </p>
 				<p> Eje temático: {{ entity.temaPrincipal }} </p>
 				<p>  Producción Final: {{ entity.produccionFinal }} </p>
-				
+
 				<h4>¿De qué trata el proyecto?</h4>
 				<p>  {{ entity.deQueSeTrata }} </p>
-				
+
 				<h4>¿Cuál es el motivo de su realización?</h4>
 				<p>  {{ entity.motivoRealizacion }} </p>
-				
+
 				<h4>¿Cuál es el impacto buscado?</h4>
 				<p>  {{ entity.impactoBuscado }} </p>
 				<p> &nbsp; </p>
 			</div> <!-- info_proyecto -->
-			
-			
+
+
 			{% if entity.requerimientosDeEdicion | length > 0 %}
-				<h4 class="info_header extra_info"> 
+				<h4 class="info_header extra_info">
 						<a href="#" onclick="$('.info_edicion').toggle(); return false;">Requerimientos de Edición </a></h4>
 				<div class="info_edicion hidden extra_info">
 					<p> {{ entity.requerimientosDeEdicion }} </p>
 				</div> <!-- info_edicion -->
 			{% endif %}
-			
-			
+
+
 			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_transporte').toggle(); return false;">Transporte y observaciones</a></h4>
 			<div class="info_transporte hidden extra_info">
 				<p> Transporte: <strong>{% if entity.transporte | length > 0 %} {{ entity.transporte }} {% else %} - {% endif %} </strong> </p>
-				 
+
 				<h4> Observaciones: </h4>
 				<p>  {{ entity.observaciones }} </p>
 				<p> &nbsp; </p>
 			</div> <!-- info_transporte -->
-			
-			
+
+
 			{% if comentarios | length > 0 %}
 			<h4 class="info_header extra_info"> <a href="#" onclick="$('.info_comentarios').toggle(); return false;">Comentarios post chapa ({{comentarios | length}})</a></h4>
 			<div class="info_comentarios hidden extra_info">
 				{% for comentario in comentarios %}
 					<div id="comentario_{{comentario.id}}" class="comentario">
 						<div class="options_bar">
-							<a href="#" title="Borrar" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : comentario.id }) }}', 'comentario_{{comentario.id}}'); return false;"> 
+							<a href="#" title="Borrar" onclick="eliminarComentarioAjax('{{ path('proyecto_eliminar_comentario', { 'id' : comentario.id }) }}', 'comentario_{{comentario.id}}'); return false;">
 								<img src="{{ asset('images/icons/delete.png') }}">
 							 </a>
 						</div>
-					
+
 							Fecha: <strong>{{ comentario.getFechaCreado |date('d-m-Y H:i:s') }}</strong>
-						<br/>Autor: <strong>{{ comentario.autor.nombre }} {{ comentario.autor.apellido }}</strong> 	
+						<br/>Autor: <strong>{{ comentario.autor.nombre }} {{ comentario.autor.apellido }}</strong>
 						<br/> Título <strong>{{comentario.asunto}}</strong>
-						<br/>  {{ comentario.cuerpo }} 
-					</div>	 
+						<br/>  {{ comentario.cuerpo }}
+					</div>
 				 {% endfor %}
 			</div> <!-- info_comentarios -->
 			{% endif %}
-			
-			
-			
-			
-			
+
+
+
+
+
 			<ul class="record_actions">
 			    <li>
 			        <a href="{{ path('proyecto') }}">
@@ -190,16 +190,16 @@
 			    </li>
 			    {% endif %}
 			</ul>
-				
+
 	</div> <!-- proyecto_box_admin -->
-	
-	
+
+
 	<div class="proyecto_right_box">
-	
-		{{ proyecto_macros.estados_proyecto(entity,estados_anteriores,estado_form) }}	
+
+		{{ proyecto_macros.estados_proyecto(entity,estados_anteriores,estado_form) }}
 		{{ proyecto_macros.invitaciones_proyecto(entity) }}
-	
-	
+
+
 	</div> <!-- proyecto_right_box -->
 
  {% endblock %}

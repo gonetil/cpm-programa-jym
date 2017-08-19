@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Cpm\JovenesBundle\Entity\InstanciaEvento;
 use Cpm\JovenesBundle\Entity\Proyecto;
 use Gedmo\Mapping\Annotation as GEDMO;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Cpm\JovenesBundle\Entity\Invitacion
  *
@@ -29,7 +30,7 @@ class Invitacion
      * @ORM\Column(type="datetime", name="fecha_creacion")
      * @GEDMO\Timestampable(on="create")
      */
-    
+
     private $fechaCreacion;
 
     /**
@@ -83,7 +84,7 @@ class Invitacion
 
     /**
      * @var Cpm\JovenesBundle\Entity\Proyecto $proyecto
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Proyecto")
      * @ORM\JoinColumn(name="proyecto_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
@@ -91,7 +92,7 @@ class Invitacion
 
     /**
      * @var Cpm\JovenesBundle\Entity\InstanciaEvento $instanciaEvento
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="InstanciaEvento", inversedBy="invitaciones")
      * @ORM\JoinColumn(name="instancia_evento_id", referencedColumnName="id", nullable=false, onDelete="RESTRICT")
      */
@@ -105,38 +106,43 @@ class Invitacion
      */
 
 	private $solicitaTren;
-    
-    
+
+
     /**
      * @var text $invitados
      *
      * @ORM\Column(name="invitados", type="text", nullable=true)
      */
     private $invitados;
-    
+
     /**
      * @var integer $duracion
      * @ORM\Column(name="duracion", type="integer", nullable=true)
-     * 
+     *
      **/
     private $duracion;
-    
-    
-    
-    private $embeddedForm	; 
-    
+
+    /**
+     * @var boolean $archivoAdjunto
+     *
+     * @ORM\Column(name="archivo_adjunto", type="string", nullable=true)
+     */
+    private $archivoAdjunto;
+
+    private $embeddedForm	;
+
     private $cantInvitados;
-    
+
 	public function __construct(){
 		$this->numeroAsistentes=1;
 		$this->solicitaViaje = false;
 		$this->solicitaHospedaje = false;
 	}
-	
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -156,7 +162,7 @@ class Invitacion
     /**
      * Get fechaCreacion
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getFechaCreacion()
     {
@@ -176,18 +182,18 @@ class Invitacion
     /**
      * Get aceptoInvitacion
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAceptoInvitacion()
     {
         return $this->aceptoInvitacion;
     }
-    
-    public function getRechazoInvitacion() { 
+
+    public function getRechazoInvitacion() {
     	return ($this->aceptoInvitacion === false);
     }
     public function getSinResponder() {
-    	
+
     	return is_null($this->aceptoInvitacion);
     }
 
@@ -204,7 +210,7 @@ class Invitacion
     /**
      * Get numeroAsistentes
      *
-     * @return smallint 
+     * @return smallint
      */
     public function getNumeroAsistentes()
     {
@@ -224,7 +230,7 @@ class Invitacion
     /**
      * Get solicitaViaje
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSolicitaViaje()
     {
@@ -244,7 +250,7 @@ class Invitacion
     /**
      * Get solicitaHospedaje
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSolicitaHospedaje()
     {
@@ -264,7 +270,7 @@ class Invitacion
     /**
      * Get observaciones
      *
-     * @return text 
+     * @return text
      */
     public function getObservaciones()
     {
@@ -284,7 +290,7 @@ class Invitacion
     /**
      * Get suplente
      *
-     * @return string 
+     * @return string
      */
     public function getSuplente()
     {
@@ -304,7 +310,7 @@ class Invitacion
     /**
      * Get asistio
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAsistio()
     {
@@ -324,7 +330,7 @@ class Invitacion
     /**
      * Get proyecto
      *
-     * @return object 
+     * @return object
      */
     public function getProyecto()
     {
@@ -344,27 +350,27 @@ class Invitacion
     /**
      * Get instanciaEvento
      *
-     * @return object 
+     * @return object
      */
     public function getInstanciaEvento()
     {
         return $this->instanciaEvento;
     }
-    
+
     public function estaPendiente(){
     	return ((! $this->instanciaEvento->fue()) && ($this->aceptoInvitacion === null));
     }
-    
+
     public function estaVigente(){
     	return $this->instanciaEvento->estaAbiertaInscripcion();
     }
- 
+
     public function __toString()
     {
     	return "{$this->id}: proyecto ".$this->proyecto->getId()." / Instancia: ". $this->instanciaEvento->getTitulo();
     }
 
-	
+
 	public function setInvitados($invitados) {
 		$this->cantInvitados = count(json_decode($invitados, true));
 		$this->invitados = $invitados;
@@ -373,43 +379,47 @@ class Invitacion
 	{
 		return $this->invitados;
 	}
-	
+
 	public function countInvitados() {
 		if (! isset($this->cantInvitados))
 			$this->cantInvitados = count(json_decode($this->invitados, true));
-			
+
 		return $this->cantInvitados;
 	}
-	
+
 	public function setSolicitaTren($aBool)
 	{
 		$this->solicitaTren = $aBool;
 	}
-	
+
 	public function getSolicitaTren()
 	{
 		return $this->solicitaTren;
 	}
-	
+
 	public function getDuracion()
-	{ 
+	{
 		return $this->duracion;
 	}
-	
+
 	public function setDuracion($duracion)
 	{
 		$this->duracion = $duracion;
 	}
-	
-	public function getEmbeddedForm() 
+
+  public function getArchivoAdjunto() { return $this->archivoAdjunto; }
+
+  public function setArchivoAdjunto($param) { $this->archivoAdjunto = $param; }
+
+	public function getEmbeddedForm()
 	{
-		
-		if ($this->embeddedForm != null) { 
+
+		if ($this->embeddedForm != null) {
 			return $this->embeddedForm;
 		}
-		else {  
-			if ($subAction = $this->getInstanciaEvento()->getEvento()->getAction())	
-				{ 
+		else {
+			if ($subAction = $this->getInstanciaEvento()->getEvento()->getAction())
+				{
 					$subAction = "Cpm\\JovenesBundle\\EntityDummy\\".$subAction;
 					$this->embeddedForm = new $subAction($this);
 					return $this->embeddedForm;
@@ -417,10 +427,10 @@ class Invitacion
 				else throw new \Exception("No hay embedded form");
 		}
 	}
-	
-	public function setEmbeddedForm($form) 
+
+	public function setEmbeddedForm($form)
 	{
 		$this->embeddedForm = $form;
 	}
-	
+
 }

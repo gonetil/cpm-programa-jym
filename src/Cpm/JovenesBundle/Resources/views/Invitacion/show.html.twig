@@ -9,23 +9,23 @@
     <tbody>
      	<tr>
     		<th> Instancia de Evento </th>
-    		<td> {{ entity.instanciaEvento }} </td> 		
+    		<td> {{ entity.instanciaEvento }} </td>
     	</tr>
 
     	<tr>
     		<th> Escuela </th>
-    		<td> {{ entity.proyecto.escuela }} </td> 		
+    		<td> {{ entity.proyecto.escuela }} </td>
     	</tr>
     	<tr>
     		<th> Coordinador </th>
-    		<td> {{ entity.proyecto.coordinador }} </td> 		
+    		<td> {{ entity.proyecto.coordinador }} </td>
     	</tr>
 
     	<tr>
     		<th> Proyecto </th>
-    		<td> {{ entity.proyecto.titulo }} </td> 		
+    		<td> {{ entity.proyecto.titulo }} </td>
     	</tr>
-    	
+
         <tr>
             <th>Fecha de invitación</th>
             <td>{{ entity.fechaCreacion|date('d-m-Y H:i:s') }}</td>
@@ -60,6 +60,15 @@
             <th>Solicita Hospedaje?</th>
             <td>{% if not entity.solicitaHospedaje is defined %}? (El usuario no respondió){% else %}{% if entity.solicitaHospedaje %}Si{% else %}No{% endif %}{% endif %}</td>
             <td>{{ entity.solicitaHospedaje }}</td>
+        </tr>
+        {% endif %}
+        {% if evento.solicitarArchivoAdjunto %}
+        <tr>
+            <th>{{ evento.descripcionArchivoAdjunto }}</th>
+            <td>
+              <a href="{{ path('invitacion_descargar_archivo_adjunto',{ 'id' : entity.id}) }}" >
+                {{ entity.archivoAdjunto }}</a>
+            </td>
         </tr>
         {% endif %}
         {% if evento.permitirObservaciones %}

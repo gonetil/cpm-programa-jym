@@ -32,7 +32,7 @@ class InvitacionController extends BaseController
 
 
     }
-    
+
     /**
      * Muetsra un form de invitacion de proyectos a una instancia de un evento
      *
@@ -42,13 +42,13 @@ class InvitacionController extends BaseController
     {
     	$entities=$entitiesQuery->getResult();
         $editForm = $this->createForm(new InvitacionBatchType(), new InvitacionBatch());
-        
+
         return array(
             'form'   => $editForm->createView(),
             'proyectos' => $entities
         );
     }
-    
+
     /**
      * Invitacion una serie de proyectos a una instancia de un evento
      *
@@ -66,20 +66,20 @@ class InvitacionController extends BaseController
         if ($editForm->isValid()) {
         	try{
         		$repetidas = $ev_mgr->invitarProyectos($invitacionBatch);
-        		if (count($repetidas) > 0) { 
+        		if (count($repetidas) > 0) {
         			$coordinadores = "";
         			foreach ( $repetidas as $proyecto) {
         				$coordinadores .= $proyecto->getCoordinador()." ; ";
         			}
-        		$this->setInfoMessage("Lista de invitaciones repetidas (no fueron reenviadas): ".$coordinadores);	
+        		$this->setInfoMessage("Lista de invitaciones repetidas (no fueron reenviadas): ".$coordinadores);
         		}
         		return $this->redirect($this->generateUrl('instancia_show', array('id' => $invitacionBatch->getInstancia()->getId())));
         	}catch(InvalidTemplateException $e){
 					$this->setErrorMessage('La plantilla no es valida: ' .$e->getPrevious()->getMessage());
 			}catch(MailCannotBeSentException $e){
 				$this->setErrorMessage('No se pudieron enviar las invitaciones por correo. Verifique que los datos ingresados sean válidos');
-			}	
-		
+			}
+
         }
 
         return array(
@@ -87,8 +87,8 @@ class InvitacionController extends BaseController
             'form'   => $editForm->createView(),
         );
     }
-    
-        
+
+
 
     /**
      * Finds and displays a Invitacion entity.
@@ -107,7 +107,7 @@ class InvitacionController extends BaseController
             );
     }
 
-  
+
     /**
      * Displays a form to edit an existing Invitacion entity.
      *
@@ -181,7 +181,7 @@ class InvitacionController extends BaseController
             $presentaciones = $em->getRepository('CpmJovenesBundle:PresentacionInterna')->findByInvitacion($id);
 			foreach($presentaciones as $presentacion)
 				$em->remove($presentacion);
-            $em->flush();        
+            $em->flush();
         }
 
         return $this->redirect($this->generateUrl('invitaciones'));
@@ -194,63 +194,63 @@ class InvitacionController extends BaseController
             ->getForm()
         ;
     }
-    
+
     /**
     * Actualiza el campo asistencia de una entidad
     *
     * @Route("/{id}/set_single_asistencia", name="invitaciones_set_single_asistencia")
     * @Method("get")
     */
-    public function set_single_asistencia($id) 
+    public function set_single_asistencia($id)
     {
     	$asistio = ($this->get('request')->query->get('asistencia') == 'true');
     	$em = $this->getDoctrine()->getEntityManager();
 		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id, $em);
-    	
+
     	$entity->setAsistio($asistio);
     	$em->persist($entity);
     	$em->flush();
 		return new Response("success");
     }
-    
+
     /**
      * Reenvia una invitación previamente existente
      * @Route("/{id}/reenviar_invitacion" , name="invitaciones_reenviar_una")
      * @Method("get")
      */
-    public function reenviarInvitacion($id) { 
+    public function reenviarInvitacion($id) {
     	$invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id);
-		$eventosManager = $this->getEventosManager();    	
-    	$eventosManager->enviarInvitacionAProyecto($invitacion, false,false); //no se envía cc a los colaboradores ni a la escuela 
-    	//catch algo? 
+		$eventosManager = $this->getEventosManager();
+    	$eventosManager->enviarInvitacionAProyecto($invitacion, false,false); //no se envía cc a los colaboradores ni a la escuela
+    	//catch algo?
     	return new Response("success");
     }
-    
-    
+
+
    /**
     *  @Route("/{id}/export_invitados_to_excel", name="invitados_export_to_excel")
     * @Method("get")
     * @Template("CpmJovenesBundle:Invitacion:invitados_excel.xls.twig")
-    */    
+    */
     public function exportInvitadosToExcelAction($id) {
     	$entity = $this->getEntity('CpmJovenesBundle:Invitacion', $id);
 
 		$filename = "Invitados - {$entity->getProyecto()->getEscuela()})";
-		
+
 		$invitados = $entity->getInvitados();
-		if (!$invitados) 
+		if (!$invitados)
 			$invitados = array();
-		else		
+		else
 			$invitados = json_decode($invitados, true);
-		
+
         $response = $this->render('CpmJovenesBundle:Invitacion:invitados_excel.xls.twig',
         						   array('invitacion' => $entity ,
         						   		 'invitados' => $invitados));
         $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
         $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
-    	return $response; 
+    	return $response;
     }
-    
+
      /**
      * Modifica la instancia de una invitacion
      * @Route("/{invitacion_id}/{instancia_id}/modificar_invitacion_de_instancia" , name="modificar_invitacion_de_instancia")
@@ -258,19 +258,19 @@ class InvitacionController extends BaseController
      */
     public function cambiarInvitacionDeInstancia($invitacion_id,$instancia_id) {
     	$em = $this->getDoctrine()->getEntityManager();
-		
-    	try { 
-    		
-    		
+
+    	try {
+
+
     		$invitacion = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $invitacion_id, $em);
     		$instancia = $this->getEntityForUpdate('CpmJovenesBundle:InstanciaEvento', $instancia_id, $em);
     		$tanda = $em->getRepository('CpmJovenesBundle:Tanda')->getTandaDeInstanciaEvento($instancia);
 
     		$em->getConnection()->beginTransaction();
-    		
+
     		$invitacion->setInstanciaEvento($instancia);
-    		 
-    		if ($tanda) { //esta hablandoooo de Chapaaaaaaaa 
+
+    		if ($tanda) { //esta hablandoooo de Chapaaaaaaaa
     			//me fijo si la invitacion tenia una presentacion, para reasignar de Tanda
 		    	$qb = $em->createQueryBuilder('pre')
 						->add('select','pre')
@@ -278,12 +278,12 @@ class InvitacionController extends BaseController
 						->innerJoin('pre.invitacion','inv')
 						->andWhere('inv = :invitacion')
 						->setParameter('invitacion',$invitacion);
-			
+
 				$presentaciones = $qb->getQuery()->getResult(); //deberia ser solo una, pero...
 				$cant = count($presentaciones);
 				foreach ( $presentaciones as $presentacion)
 					$tanda->addPresentacion($presentacion);
-					
+
 				$em->persist($tanda);
     		}
 	    	$em->persist($invitacion);
@@ -294,12 +294,12 @@ class InvitacionController extends BaseController
 	    	   	$em->getConnection()->rollback();
 			$em->close();
             throw $e;
-    	} 
+    	}
     	//catch algo?
     	return new Response("success");
     }
-    
-    
+
+
     	/**
 	 * @Route("/search/{search}" , name="usuario_invitacion_online_search")
 	 * @param $search
@@ -312,26 +312,56 @@ class InvitacionController extends BaseController
 		//$qb->orWhere($qb->expr()->like('u.nombre', ':search'));
 		$qb->setParameter('search', '%'.$search.'%');
     	$data = $qb->getQuery()->getResult();
-    	
+
     	$usuarios = array();
     	foreach ( $data as $usuario ) {
             $usuarios[] = array(
-								'label'=>$usuario->getApellido(). ", ". $usuario->getNombre(), 
+								'label'=>$usuario->getApellido(). ", ". $usuario->getNombre(),
 								'desc' => $usuario->getApellido(). ", ". $usuario->getNombre(),
 								'id' => $usuario->getId(),
 								'value' => $usuario->getId()
-								
+
 							   );
         }
 //        var_dump($usuarios);
-    	
+
     	return $this->createJsonResponse($usuarios);
     }
-    
+
    public function exportarInvitacionesExcelAction($entitiesQuery) {
 		$entities = $entitiesQuery->getResult();
 		$template = 'CpmJovenesBundle:Invitacion:export_to_excel.xls.twig';
 		return $this->makeExcel(array('entities'=>$entities),$template,'invitaciones');
-		 
+
+    }
+
+
+    /**
+    * Envia el archivo de la invitacion
+    *
+    * @Route("/{id}/descargar", name="invitacion_descargar_archivo_adjunto")
+    *
+    */
+
+    public function descargarArchivoAdjuntoAction($id) {
+      $invitacion = $this->getEntity('CpmJovenesBundle:Invitacion', $id);
+
+      if ($archivo = $invitacion->getArchivoAdjunto()) {
+          $file = $this->getUploadDir().$archivo;
+
+          $pos = strrpos($file, '.');
+          $ext =  ($pos!==false)?substr($file, $pos+1) : "";
+
+          $response = new Response();
+          $response->headers->set('Content-Type', 'application/msword');
+          $response->headers->set("Content-Disposition", 'Attachment;filename="'.$archivo.'"');
+          $response->send();
+          readfile($file);
+          return $response;
+    } else {
+      $response = new Response();
+      //asi?
+      return $response;
+    }
     }
 }

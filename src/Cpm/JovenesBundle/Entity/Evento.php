@@ -83,23 +83,23 @@ class Evento
      * @ORM\Column(name="action", type="string", nullable=true)
      */
     private $action;
-    
-                
+
+
     /**
      * @ORM\ManyToOne(targetEntity="Ciclo")
      * @ORM\JoinColumn(name="ciclo_id", referencedColumnName="id", nullable=false, onDelete="RESTRICT")
      */
     private $ciclo;
-   
-    
+
+
     /**
      * @var boolean $preguntarSolicitaTren
      *
      * @ORM\Column(name="preguntar_solicita_tren", type="boolean")
      */
     private $preguntarSolicitaTren;
-    
-    
+
+
     /**
      * @var boolean $solicitarListaInvitados
      *
@@ -112,22 +112,36 @@ class Evento
      * @ORM\Column(name="numero_maximo_invitados", type="integer")
      */
     private $numeroMaximoInvitados;
-    
+
     /**
      * @var boolean $solicitarDuracionPresentacion
      *
      * @ORM\Column(name="solicitar_duracion_presentacion", type="boolean")
      */
     private $solicitarDuracionPresentacion;
-    
+
     /**
      * @var boolean $permitirModificarLaInvitacion
      *
      * @ORM\Column(name="permitir_modificar_invitacion", type="boolean")
-     */   
+     */
     private $permitirModificarLaInvitacion;
-    
-    
+
+
+    /**
+     * @var boolean $solicitarArchivoAdjunto
+     *
+     * @ORM\Column(name="solicitar_archivo_adjunto", type="boolean")
+     */
+    private $solicitarArchivoAdjunto;
+
+    /**
+     * @var string descripcionArchivoAdjunto
+     *
+     * @ORM\Column(name="descripcion_archivo_adjunto", type="string", nullable=true)
+     */
+    private $descripcionArchivoAdjunto;
+
 	public function __construct(){
 		$this->pedirNumeroAsistentes = false;
 		$this->permitirSuplente = false;
@@ -139,14 +153,16 @@ class Evento
 		$this->solicitarListaInvitados = false;
 		$this->permitirModificarLaInvitacion = false;
 		$this->preguntarSolicitaTren = false;
-		
+    $this->solicitarArchivoAdjunto= false;
+    $this->descripcionArchivoAdjunto = 'Adjuntar archivo';
+
 		$this->instancias = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -166,14 +182,14 @@ class Evento
     /**
      * Get titulo
      *
-     * @return string 
+     * @return string
      */
     public function getTitulo()
     {
         return $this->titulo;
     }
 
-    
+
 
     /**
      * Set descripcion
@@ -188,7 +204,7 @@ class Evento
     /**
      * Get descripcion
      *
-     * @return string 
+     * @return string
      */
     public function getDescripcion()
     {
@@ -208,7 +224,7 @@ class Evento
     /**
      * Get pedirNumeroAsistentes
      *
-     * @return smallint 
+     * @return smallint
      */
     public function getPedirNumeroAsistentes()
     {
@@ -228,7 +244,7 @@ class Evento
     /**
      * Get permitirSuplente
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPermitirSuplente()
     {
@@ -248,7 +264,7 @@ class Evento
     /**
      * Get ofrecerHospedaje
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getOfrecerHospedaje()
     {
@@ -268,7 +284,7 @@ class Evento
     /**
      * Get ofrecerViaje
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getOfrecerViaje()
     {
@@ -288,13 +304,13 @@ class Evento
     /**
      * Get permitirObservaciones
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPermitirObservaciones()
     {
         return $this->permitirObservaciones;
     }
-    
+
     /**
      * Add instancias
      *
@@ -308,13 +324,13 @@ class Evento
     /**
      * Get instancias
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getInstancias()
     {
         return $this->instancias;
     }
-    
+
     public function __toString()
     {
     	return $this->titulo . ' - '.$this->ciclo;
@@ -333,7 +349,7 @@ class Evento
     /**
      * Get action
      *
-     * @return string 
+     * @return string
      */
     public function getAction()
     {
@@ -359,18 +375,18 @@ class Evento
     {
         $this->ciclo = $ciclo;
     }
- 
- 
+
+
 	public function setNumeroMaximoInvitados($numero)
 	{
 		$this->numeroMaximoInvitados = $numero;
 	}
-	
-	public function getNumeroMaximoInvitados() 
+
+	public function getNumeroMaximoInvitados()
     {
     	return $this->numeroMaximoInvitados;
     }
-    
+
     public function setSolicitarListaInvitados($aBool)
     {
     	$this->solicitarListaInvitados = $aBool;
@@ -380,17 +396,17 @@ class Evento
 	{
 		return $this->solicitarListaInvitados;
 	}
-	
+
 	public function setPreguntarSolicitaTren($aBool)
 	{
 		$this->preguntarSolicitaTren = $aBool;
 	}
-	
+
 	public function getPreguntarSolicitaTren()
 	{
 		return $this->preguntarSolicitaTren;
 	}
-    
+
  	public function getSolicitarDuracionPresentacion()
  	{
  		return $this->solicitarDuracionPresentacion;
@@ -401,26 +417,33 @@ class Evento
  		$this->solicitarDuracionPresentacion = $aBool;
  	}
 
-	public function getPermitirModificarLaInvitacion() { 
+	public function getPermitirModificarLaInvitacion() {
 		return $this->permitirModificarLaInvitacion;
 	}
-	
-	public function setPermitirModificarLaInvitacion($aBool) { 
+
+	public function setPermitirModificarLaInvitacion($aBool) {
 		$this->permitirModificarLaInvitacion = $aBool;
 	}
-	
+
 	/**
 	 * Retorna un iterator de instancias ordenadas por fecha
 	 */
 	public function getInstanciasIterator(){
 		$iterator = $this->getInstancias()->getIterator();
-    	$iterator->uasort(function($inst1,$inst2) { 
-    		return ($inst1->getFechaInicio() < $inst2->getFechaInicio()) ? -1 : 1 ; 
+    	$iterator->uasort(function($inst1,$inst2) {
+    		return ($inst1->getFechaInicio() < $inst2->getFechaInicio()) ? -1 : 1 ;
     	});
     	return $iterator;
 	}
 
 
+  public function getSolicitarArchivoAdjunto() { return $this->solicitarArchivoAdjunto; }
+
+  public function setSolicitarArchivoAdjunto($param) { $this->solicitarArchivoAdjunto = $param; }
+
+  public function getDescripcionArchivoAdjunto() { return $this->descripcionArchivoAdjunto;}
+
+  public function setDescripcionArchivoAdjunto($param) { $this->descripcionArchivoAdjunto = $param;}
 	/**
 	 * Calcula los numeros de invitaciones enviadas, invitaciones aceptadas y asistentes confirmados en todas las instancias del evento
 	 * @return array con las cantidades de invitaciones enviadas, aceptadas y asistentes confirmados
