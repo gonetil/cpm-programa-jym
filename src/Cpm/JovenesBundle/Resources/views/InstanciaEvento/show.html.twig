@@ -73,7 +73,7 @@
 	<h4>Resumen:</h4>
 	<ul class='listado-items' id="resumen">
 	</ul>
-	
+
 	<div>
 	<h4>Voluntarios</h4>
 		<ul class='listado-items'>
@@ -95,7 +95,7 @@
 		    <thead>
 		    <tr class='table-options'>
 		    	<td colspan="4">
-				<ul class="table-options" style="float:left">	
+				<ul class="table-options" style="float:left">
 			    	<li><a class="excel-icon icon" href="{{ path('instancia_export_to_excel', { 'id': entity.id }) }}" title="Exportar a Excel">&nbsp;</a></li>
 			    	<li><a class="repeat-email icon" href="#" title="Reenviar invitaciones pendientes" onclick="instancia_reinvitar(); return false;">&nbsp;</a></li>
 			    </ul>
@@ -122,6 +122,10 @@
 		            {% if entity.evento.solicitarListaInvitados %}
 		            <th>Participantes</th>
 		            {% endif %}
+                {% if entity.evento.solicitarArchivoAdjunto %}
+                <th>Archivo adjunto</th>
+                {% endif %}
+
 		            {% if entity.evento.permitirSuplente %}
 		            <th>Suplente</th>
 		            {% endif %}
@@ -133,8 +137,8 @@
 		            {% endif %}
 		            {% if entity.evento.permitirObservaciones %}
 		            <th>Observaciones</th>
-		            {% endif %}	          
-		            <th> Asistió </th>  	            	            	            	            
+		            {% endif %}
+		            <th> Asistió </th>
 		        </tr>
 		    </thead>
 		    <tbody class="records_list">
@@ -150,12 +154,12 @@
 		            <td> {{ i.apellido_coordinador }}, {{ i.nombre_coordinador }} </td>
 		            <td> <a href=" {{ path('proyecto_show',{ id:inv.proyecto.getId }) }}" title="Ver proyecto">
 		            			{{ common.nombreEscuela(inv.proyecto.escuela) }}
-		            	</a>		
+		            	</a>
 		            </td>
 		            <td> {{ i.distrito_escuela }}</td>
 		            <td  class="mini-icon {% if inv.sinResponder %} ns_nc {% elseif inv.aceptoInvitacion %}yes{% else %}no{% endif %}"
 		            			{% if inv.sinResponder %} colspan="100%">
-		            					<a href="#" target="{{ path( 'invitaciones_reenviar_una', { 'id': inv.id }) }}" 
+		            					<a href="#" target="{{ path( 'invitaciones_reenviar_una', { 'id': inv.id }) }}"
 		            					title="Reenviar invitación" onclick="invitacion_reinvitar(this); return false;" class="repeat-email icon" style="margin-left: 100px; border:none;"></a>
 							    {% else %}
 							    > {# cierro el tag td #}
@@ -168,15 +172,18 @@
 				            	{% set asistentes = asistentes + inv.numeroAsistentes %}
 					            	<td>{{ inv.numeroAsistentes }}</td>
 					            {% else %}
-					            	{% set asistentes = asistentes + 1 %}	
+					            	{% set asistentes = asistentes + 1 %}
 					        	{% endif %}
-					        	
+
 					        	{% if entity.evento.solicitarListaInvitados %}
 					        		  {% set misInvitados = inv.countInvitados %}
 					        		  {% set invitados = invitados + misInvitados %}
 					              <td> {{ misInvitados }} <a class="mini-excel-icon tiny-icon" href="{{ path('invitados_export_to_excel', { 'id': inv.id }) }}" title="Exportar lista de invitados">&nbsp;</a> </td>
 					            {% endif %}
-					        	
+                      {% if entity.evento.solicitarArchivoAdjunto %}
+                      <td><div class="download_mini mini-icon"><a href="{{ path('invitacion_descargar_archivo_adjunto',{ 'id' : inv.id}) }}"></a></div></td>
+                      {% endif %}
+
 					            {% if entity.evento.permitirSuplente %}
 					            	<td>{{ inv.suplente }}</th>
 					            {% endif %}
@@ -188,42 +195,42 @@
 					            {% endif %}
 					            {% if entity.evento.permitirObservaciones %}
 					            	<td>{{ inv.observaciones }}</td>
-					            {% endif %}	  
+					            {% endif %}
 					            <td class="mini-icon {% if inv.asistio %}yes{% else %}no{% endif %} col-asistencia">
 					            	<input type="checkbox" name="asistencia" value="{{ path('invitaciones_set_single_asistencia', { 'id': inv.id }) }}" {% if inv.asistio %} checked{%endif%}>
 					            	<div class="loading inline-loading"></div>
 					            </td>
 				            {% else %}
-					            {% set rechazadas= rechazadas+1 %}	
-					            <td colspan="100%" class="mini-icon rechazada"> 
+					            {% set rechazadas= rechazadas+1 %}
+					            <td colspan="100%" class="mini-icon rechazada">
 					             </td>
 				            {% endif %}
-				           
+
 				        {% else %}
-												        
+
 				        	{% set pendientes=pendientes+1 %}
-				        	
-				      {% endif %} {# inv.aceptoInvitacion #}      
-				      
+
+				      {% endif %} {# inv.aceptoInvitacion #}
+
 		        </tr>
 		        {% endfor %}
 		</table>
-	{% endif %} {# invitaciones > 0 #}	
+	{% endif %} {# invitaciones > 0 #}
 		<script>
 		var resumen = '<li>Invitaciones enviadas: <span class="status">{{ invitaciones | length}}</span></li> \
 		<li>Invitaciones aceptadas: <span class="status"> {{ aceptaciones }}</span> </li> \
 		<li>Invitaciones pendientes: <span class="status">{{ pendientes }}</span> </li> \
 		<li>Invitaciones rechazadas: <span class="status">{{ rechazadas }}</span> </li> \
 		<li>Cantidad de asistenes confirmados: <span class="status">{{asistentes }}</span> </li>';
-		
+
 		{% if invitados > 0 %}
 			resumen += '<li>Cantidad total de invitados cargados: <span class="status">{{ invitados }}</span> </li>';
 		{% endif %}
-		
-		
+
+
 		$("#resumen").html(resumen);
 		</script>
-		
+
 		<div id="reinvitar_form" title="Re-enviar invitaciones pendientes">
 			<form action="{{ path('instancia_reinvitar', {'id' : entity.id}) }}">
 			{{ form_row(reinvitar_form.ccColaboradores) }}

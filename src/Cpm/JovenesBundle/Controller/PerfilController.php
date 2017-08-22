@@ -343,7 +343,7 @@ class PerfilController extends BaseController
 
       if ( ( $invitacion->getInstanciaEvento()->getEvento()->getSolicitarArchivoAdjunto() ) && ( !$invitacion->getArchivoAdjunto() ) ) {
            $this->setErrorMessage('Error al procesar el archivo adjunto');
-           $invitacion->setArchivoAdjunto(null);
+           
            return $this->render('CpmJovenesBundle:Perfil:aceptarInvitacion.html.twig',
              array('invitacion' => $invitacion, 'edit_usuario_form' => $editForm->createView())
            );
@@ -358,15 +358,14 @@ class PerfilController extends BaseController
 
 		}
 
-		$this->setSuccessMessage("La invitación fue guardada satisfactoriamente.");
-      $file = $invitacion->getArchivoAdjunto();
-      $uploader = $user->getApellido() . '_' . $user->getNombre();
-      $today = new \DateTime();
-      $filename = $invitacion->getInstanciaEvento()->getEvento()->getTitulo() .$uploader . $today->format('Ymd_His') . '.' .$file->guessExtension();
-      $file->move($this->getUploadDir(), $filename);
 
-      $invitacion->setArchivoAdjunto($filename);
-      $this->doPersist($invitacion);
+    if  ( $invitacion->getInstanciaEvento()->getEvento()->getSolicitarArchivoAdjunto() ) {
+      $file = $editForm['archivoAdjunto']->getData();
+      $filename = $this->updateUploadedFileInInvitation($invitacion,$file);
+    }
+
+    $this->setSuccessMessage("La invitación fue guardada satisfactoriamente.");
+    $this->doPersist($invitacion);
 
         //Si la invitacion es válida y fue aceptada, mando la notificacion al coordinador por mail
         if ($invitacion->getAceptoInvitacion()){

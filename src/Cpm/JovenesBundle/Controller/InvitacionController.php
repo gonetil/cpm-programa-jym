@@ -138,7 +138,8 @@ class InvitacionController extends BaseController
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-		$entity = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id, $em);
+		    $entity = $this->getEntityForUpdate('CpmJovenesBundle:Invitacion', $id, $em);
+        $file = $entity->getArchivoAdjunto();
         $editForm   = $this->createForm(new InvitacionType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -147,6 +148,18 @@ class InvitacionController extends BaseController
         $editForm->bindRequest($request);
 
         if ($editForm->isValid()) {
+
+          /*La invitacion es para un evento que solicita archivo adjunto, y un administrador esta reemplazando el archivo
+          original cargado por el usuario */
+          if ( ( $entity->getInstanciaEvento()->getEvento()->getSolicitarArchivoAdjunto() ) &&
+               ( $entity->getArchivoAdjunto() ) )
+          {
+            $file = $editForm['archivoAdjunto']->getData();
+            $filename = $this->updateUploadedFileInInvitation($entity,$file);
+
+          }
+
+
             $em->persist($entity);
             $em->flush();
 
