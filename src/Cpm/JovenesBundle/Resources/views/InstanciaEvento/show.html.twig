@@ -102,8 +102,15 @@
 			    </td>
 			    <td colspan="100%">
 			    	<ul class="table-options" style="float:right">
-				    	<li><a href="#" class="yes icon" onclick="$('tr.aceptada').toggle(); return false;"  title="Mostrar/Ocultar aceptadas"> &nbsp;</a></li>
+
+            {% if entity.evento.solicitarListaInvitados %}
+              <li><a href="{{ path('export_all_invitados_to_excel', { 'id' : entity.id }) }}" class="mini-excel-icon tiny-icon" title="Descargar archivo con todos los participantes"> &nbsp;</a></li>
+            {% endif %}
+
+              <li><a href="#" class="yes icon" onclick="$('tr.aceptada').toggle(); return false;"  title="Mostrar/Ocultar aceptadas"> &nbsp;</a></li>
 				    	<li><a href="#" class="no icon" onclick="$('tr.rechazada').toggle(); return false;"   title="Mostrar/Ocultar rechazadas"> &nbsp;</a></li>
+              <li><a href="#" class="ns_nc icon" onclick="$('tr.pendiente').toggle(); return false;"  title="Mostrar/Ocultar pendientes"> &nbsp;</a></li>
+
 				    	<li><a href="#" class="ns_nc icon" onclick="$('tr.pendiente').toggle(); return false;"  title="Mostrar/Ocultar pendientes"> &nbsp;</a></li>
 			    	</ul>
 			    </td>

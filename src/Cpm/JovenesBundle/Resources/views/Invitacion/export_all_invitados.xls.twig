@@ -1,0 +1,21 @@
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+
+<table>
+<tr>
+  <td><b> Nombre </b></td>
+  <td><b> Apellido </b></td>
+  <td><b> Fecha de Nacimiento </b></td>
+  <td><b> Tipo de Documento </b></td>
+  <td><b> Número de Documento </b></td>
+</tr>
+{% for inv in invitados %}
+  <tr>
+    <td>{{ inv.nombre }}</td>
+    <td>{{ inv.apellido }}</td>
+    <td>{{ inv.fechaNac }}</td>
+    <td>{{ inv.tipoDoc }}</td>
+    <td>{{ inv.doc }}</td>
+  </tr>
+{% endfor %}
+
+</table>

@@ -377,4 +377,31 @@ class InvitacionController extends BaseController
       return $response;
     }
     }
+
+    /**
+     *  @Route("/{id}/export_all_invitados_to_excel", name="export_all_invitados_to_excel")
+     * @Method("get")
+     * @Template("CpmJovenesBundle:Invitacion:invitados_excel.xls.twig")
+     * Genera un unico archivo con todos los invitados de invitaciones aceptadas a la instancia de evneto $id
+     */
+     public function exportAllInvitadosToExcelAction($id) {
+        $entity = $this->getEntity('CpmJovenesBundle:InstanciaEvento', $id);
+
+        $filename = "Invitados - {$entity})";
+        $invitaciones = array_filter( $entity->getInvitaciones()->toArray() , function($inv) { return $inv->getAceptoInvitacion(); });
+
+        $invitados = array();
+        foreach ($invitaciones as $invitacion_aceptada) {
+          $invitados_inst = json_decode( $invitacion_aceptada->getInvitados() );
+          foreach ($invitados_inst as $invitado) {
+            $invitados[] = $invitado;
+          }
+        }
+
+         $response = $this->render('CpmJovenesBundle:Invitacion:export_all_invitados.xls.twig',
+                        array('invitados' => $invitados));
+         $response->headers->set('Content-Type', 'application/msexcel;  charset=utf-8');
+         $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.xls"');
+       return $response;
+     }
 }
