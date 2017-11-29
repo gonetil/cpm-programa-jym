@@ -394,7 +394,7 @@ class InvitacionController extends BaseController
         foreach ($invitaciones as $invitacion_aceptada) {
           $invitados_inst = json_decode( $invitacion_aceptada->getInvitados() );
           foreach ($invitados_inst as $invitado) {
-            $invitados[] = $invitado;
+            $invitados[] = array("invitados"=>$invitado,"invitacion" => $invitacion_aceptada);
           }
         }
 

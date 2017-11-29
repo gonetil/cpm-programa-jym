@@ -7,14 +7,20 @@
   <td><b> Fecha de Nacimiento </b></td>
   <td><b> Tipo de Documento </b></td>
   <td><b> Número de Documento </b></td>
+  <td><b> Escuela </b></td>
+  <td><b> Localidad </b></td>
 </tr>
-{% for inv in invitados %}
+{% for invitado in invitados %}
+  {% set inv = invitado['invitados'] %}
+  {% set invitacion_aceptada = invitado['invitacion'] %}
   <tr>
     <td>{{ inv.nombre }}</td>
     <td>{{ inv.apellido }}</td>
     <td>{{ inv.fechaNac }}</td>
     <td>{{ inv.tipoDoc }}</td>
     <td>{{ inv.doc }}</td>
+    <td>{{ invitacion_aceptada.proyecto.escuela }} </td>
+    <td>{{ invitacion_aceptada.proyecto.escuela.localidad }} </td>
   </tr>
 {% endfor %}
 
