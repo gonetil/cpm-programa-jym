@@ -278,7 +278,6 @@ class InstanciaEvento
     	$dia_fin = $this->fechaFin->format('d/m/y');
     	if ($referencia != $dia_fin)
     		$referencia.=" al ".$dia_fin;
-    	
     	return $this->evento->getTitulo()." ($referencia)";
     }
     
