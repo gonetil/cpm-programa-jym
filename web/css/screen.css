@@ -3453,3 +3453,12 @@ select.large_select option { padding: 3px;}
 
 table tr.even { background-color: #FEFEFE; }
 table tr.odd { background-color: #DEDEDE; }
+
+
+#confirm-email-error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    padding: 0px 0px 15px 0px;
+  }
+.confirm-email-error { border-color: red; border-width:2px;}  

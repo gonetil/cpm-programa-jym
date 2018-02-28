@@ -642,14 +642,14 @@ function filtrarEventosPorCiclo(url, ciclo,$target_eventos,$target_instancias) {
 function VerificarConfirmacionEmail($field1,$field2) {
 	if ( $field1.val() == $field2.val() ) {
   		$("#confirm-email-error-message").remove();
-			$field2.removeClass("error");
+			$field2.removeClass("confirm-email-error");
    		return true;
 	}
 	else {
-		$field2.addClass("error");
+		$field2.addClass("confirm-email-error");
 		$field2.focus();
 		$("#confirm-email-error-message").remove();
-		$field2.parent().append('<span id="confirm-email-error-message">Los correos no coinciden</span>');
+		$field2.parent().append('<div id="confirm-email-error-message">Los correos no coinciden</div>');
 		return false;
 	}
 }
