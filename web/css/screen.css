@@ -3461,4 +3461,5 @@ table tr.odd { background-color: #DEDEDE; }
     text-align: center;
     padding: 0px 0px 15px 0px;
   }
-.confirm-email-error { border-color: red; border-width:2px;}  
+.confirm-email-error { border-color: red; border-width:2px;}
+.fos_user_profile_edit { width: 550px; }

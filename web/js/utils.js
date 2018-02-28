@@ -658,3 +658,9 @@ function checkAniosAndEmails() {
 	return ( (chequearAnios("#fos_user_registration_form_aniosParticipo")) &&
 					 (VerificarConfirmacionEmail($('#fos_user_registration_form_email'),$('#confirm_email') )) );
 }
+
+function checkPerfilEditForm() {
+	return ( (chequearAnios("#fos_user_profile_form_user_aniosParticipo")) &&
+					 (VerificarConfirmacionEmail($('#fos_user_profile_form_user_email'),$('#confirm_email') )) );
+
+}

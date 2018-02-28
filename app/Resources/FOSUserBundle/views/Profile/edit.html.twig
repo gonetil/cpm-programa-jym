@@ -6,11 +6,19 @@
 
 {% block fos_user_content %}
 
-<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit" onsubmit='return chequearAnios("#fos_user_profile_form_user_aniosParticipo");'>
-{{ form_row(form.user) }}
+<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit"
+onsubmit='return checkPerfilEditForm();'>
+
 {{ form_row(form.user.nombre) }}
 {{ form_row(form.user.apellido) }}
-
+{{ form_row(form.user.email) }}
+<div>
+  <label for="confirm_email">Confirmar Email</label>
+  <input type="text" id="confirm_email" name="confirm_email"
+  onfocus="VerificarConfirmacionEmail($('#fos_user_registration_form_email'),$('#confirm_email'));"
+  onblur="VerificarConfirmacionEmail($('#fos_user_registration_form_email'),$('#confirm_email'));">
+</div>
+{{ form_row(form.user) }}
 {{ common.aniosParticipo('#fos_user_profile_form_user_aniosParticipo', form.user) }}
 
 {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
