@@ -12,21 +12,14 @@
 
 <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register" onsubmit='return chequearAnios("#fos_user_registration_form_aniosParticipo");'>
 	{% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
-	
+
 	{{ form_row(form.nombre) }}
 	{{ form_row(form.apellido) }}
-	
+
 	{{ common.aniosParticipo('#fos_user_registration_form_aniosParticipo', form) }}
-	
+
     {{ form_widget(form) }}
-    	<script type="text/javascript">
-		<!--
-		var $fb_url = $("#fos_user_registration_form_facebookURL");
-		var fb_hint = $fb_url.attr('title');
-		$fb_url.parent('div').append("<div> "+ fb_hint+"</div>");
-		//-->
-		</script>
-		    
+
     <div>
         <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
     </div>
@@ -34,9 +27,9 @@
 
 {% else %}
 	<h3 style="line-height: 32px; margin: 20px;">
-		El registro de usuarios a la plataforma del Programa Jovenes y memoria no está abierto aún. 
-		Para mayor información puede acceder a <a href="http://jovenesymemoria.comisionporlamemoria.net/">http://jovenesymemoria.comisionporlamemoria.net/</a> 
-		o escribirnos por mail a jovenesymemoria<b>@</b>comisionporlamemoria.org 
+		El registro de usuarios a la plataforma del Programa Jovenes y memoria no está abierto aún.
+		Para mayor información puede acceder a <a href="http://jovenesymemoria.comisionporlamemoria.net/">http://jovenesymemoria.comisionporlamemoria.net/</a>
+		o escribirnos por mail a jovenesymemoria<b>@</b>comisionporlamemoria.org
 	</h3>
 {% endif %}
 {% endblock fos_user_content %}

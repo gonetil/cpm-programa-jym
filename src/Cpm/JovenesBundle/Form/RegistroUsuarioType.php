@@ -12,12 +12,12 @@ class RegistroUsuarioType extends BaseType
 	public function __construct($c){
 		parent::__construct($c);
 	}
-	
+
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
         	->add('distrito','entity',array( 'class' => 'CpmJovenesBundle:Distrito',
-            									'label'=>'Distrito', 
+            									'label'=>'Distrito',
             									'attr' => array('class'=>'distrito-selector'),
      											'query_builder' => function($er) {
 													        return $er->createQueryBuilder('dis')
@@ -28,13 +28,7 @@ class RegistroUsuarioType extends BaseType
             ->add('nombre')
             ->add('apellido')
             ->add('dni', 'number')
-    		->add('email', 'email')
-    		            ->add('facebookURL',null,array('label'=>'Dirección de Facebook',
-            								'required'=>false,
-            								'attr'=>array('title'=>'Ingresar dirección de barra de dirección: https://www.facebook.com/usuario...')
-            							    )
-            )
-    		
+    			  ->add('email', 'email')
             ->add('domicilio',null,array('required'=>true))
             ->add('codigoPostal',null,array('label'=>'Código Postal','required'=>true))
             ->add('telefono',null,array('label'=>'Teléfono','required'=>true))
@@ -48,13 +42,13 @@ class RegistroUsuarioType extends BaseType
     {
         return 'cpm_jovenesbundle_registrousuariotype';
     }
-    
-    
+
+
     public function getDefaultOptions(array $options)
     {
     	$a = parent::getDefaultOptions($options);
     	//$a['groups'] = 'Registration';
         return $a;
     }
-    
+
 }

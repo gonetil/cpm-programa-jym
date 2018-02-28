@@ -12,8 +12,8 @@ class PerfilUsuarioType extends BaseType
 	public function __construct($c){
 		parent::__construct($c);
 	}
-	
-	
+
+
     public function buildForm(FormBuilder $builder, array $options)
     {
     	parent::buildForm($builder, $options);
@@ -33,14 +33,9 @@ class PerfilUsuarioType extends BaseType
             ->add('nombre')
             ->add('apellido')
             ->add('dni', 'number')
-    		->add('email', 'email')
-            ->add('facebookURL',null,array('label'=>'Dirección de Facebook',
-            								'required'=>false,
-            								'attr'=>array('title'=>'Ingresar dirección de barra de dirección: https://www.facebook.com/usuario...')
-            							    )
-            								)
+    	    	->add('email', 'email')
             ->add('distrito','entity',array( 'class' => 'CpmJovenesBundle:Distrito',
-            									'label'=>'Distrito', 
+            									'label'=>'Distrito',
             									'attr' => array('class'=>'distrito-selector'),
      											'query_builder' => function($er) {
 													        return $er->createQueryBuilder('dis')
@@ -53,7 +48,7 @@ class PerfilUsuarioType extends BaseType
             ->add('telefono',null,array('label'=>'Teléfono'))
             ->add('telefonoCelular', 'text', array('required'=>false,
     												'label' => 'Teléfono Celular'))
-    		->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))										
+    		->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))
     												;
 
     }
@@ -63,7 +58,7 @@ class PerfilUsuarioType extends BaseType
     {
         return 'cpm_jovenesbundle_perfilusuariotype';
     }
-    
-    
-    
+
+
+
 }
