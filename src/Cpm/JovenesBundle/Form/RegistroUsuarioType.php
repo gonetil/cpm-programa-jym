@@ -32,7 +32,13 @@ class RegistroUsuarioType extends BaseType
             ->add('domicilio',null,array('required'=>true))
             ->add('codigoPostal',null,array('label'=>'Código Postal','required'=>true))
             ->add('telefono',null,array('label'=>'Teléfono','required'=>true))
-            ->add('telefonoCelular', 'text', array('required'=>false, 'label'=>'Teléfono Celular'))
+            ->add('telefonoCelular', 'text', array('required'=>false,
+									'label'=>'Teléfono Celular',
+									'attr' => array( 'placeholder' => 'Ej. (0221) 15-6437325',
+																	 'hint' => 'Ej. (0221) 15-6437325'
+																 )
+															)
+									)
             ->add('plainPassword', 'repeated', array('type' => 'password', 'first_name'=>'Clave', 'second_name'=>'Repetir Clave'))
         	->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))
         ;
