@@ -35,7 +35,12 @@
         <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}"/>
     </div>
 </form>
-
+<script type="text/javascript">
+<!--
+$("#fos_user_registration_form_email").bind('copy paste', function(e) { e.preventDefault(); });
+$('#confirm_email').bind('copy paste', function(e) { e.preventDefault(); });
+//-->
+</script>
 {% else %}
 	<h3 style="line-height: 32px; margin: 20px;">
 		El registro de usuarios a la plataforma del Programa Jovenes y memoria no está abierto aún.
