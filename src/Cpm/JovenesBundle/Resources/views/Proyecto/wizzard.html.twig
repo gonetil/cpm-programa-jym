@@ -7,7 +7,7 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 
 <form action="{% if form_action == 'proyecto_update_wizzard' %}
 				{{ path( form_action, { 'id': entity.id } ) }}
-			{% else %}	
+			{% else %}
 				{{ path( form_action ) }}
 			{% endif %}"
 	method="post" {{ form_enctype(form) }} name="wizzard_form">
@@ -16,9 +16,9 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 		{{ form_errors(form) }}
 		<h4>Paso 1 de 3</h4>
 		<h3>Información de la institución, organización social o grupo juvenil</h3>
-		
+
 		<div class="form_fields">
-			{# incluyo el formulario de carga de escuela en el wizzard #} 
+			{# incluyo el formulario de carga de escuela en el wizzard #}
 			{% include "CpmJovenesBundle:Proyecto:escuela_wizzard.html.twig" %}
 		</div>
 
@@ -26,7 +26,7 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 		<ul class="record_actions">
 			<li><a href="#" onclick="move_stage(1,2);  return false;"> Siguiente </a></li>
 			<li><a href="javascript:confirmAndRelocate('¿Esta seguro que desea descartar esta propuesta?', '{{ path('home_usuario') }}')">
-					Cancelar 
+					Cancelar
 			</a></li>
 		</ul>
 
@@ -43,17 +43,26 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 			{{ form_row(form.recibioCapacitacion) }}
 			{{ form_row(form.esPrimeraVezEscuela) }}
 			{{ form_row(form.esPrimeraVezAlumnos) }}
-			{{ form_row(form.nroAlumnos) }}
-
+			<div>
+			{{ form_label(form.nroAlumnos) }}
+			{{ form_widget(form.nroAlumnos) }}
+				<div class="input_hint">
+					La Comisión por la Memoria no establece un número mínimo ni máximo de participantes para
+					llevar adelante el trabajo de investigación en el territorio durante el año.
+					Sin embargo para el Encuentro Final en Chapadmalal se establecerá un cupo máximo
+					de participantes por grupo, condicionado por la totalidad de los inscriptos y la
+					disponibilidad de plazas otorgadas por el Ministerio de Turismo de Nación.
+				</div>
+			</div>
 			{{ form_row(form.temaPrincipal) }}
             <br/>
             <br/>
-			<div>{{ form_label(form.deQueSeTrata) }} 
-				{{ form_widget(form.deQueSeTrata) }} 
-				 
+			<div>{{ form_label(form.deQueSeTrata) }}
+				{{ form_widget(form.deQueSeTrata) }}
+
 				<div class="input_hint">
-					Indicar, en caso que sea pertinente,  nombres propios de la investigación que se planea. 
-					Algunos ejemplos: nombre de desaparecidos o víctimas de gatillo fácil; nombres de empresas o fábricas; 
+					Indicar, en caso que sea pertinente,  nombres propios de la investigación que se planea.
+					Algunos ejemplos: nombre de desaparecidos o víctimas de gatillo fácil; nombres de empresas o fábricas;
 					clubes; organizaciones políticas; cooperativas o asociaciones vecinales; centros clandestinos de detención, etc.
 				</div>
 			</div>
@@ -98,7 +107,7 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 			</div>
 
 			<div id="colaboradores">
-				
+
 				{% for form_colaborador in form.colaboradores %}
 					<div class='innerForm' id="form{{loop.index - 1}}">
 					<a href="#" class='borrar_form_colaborador' ref="{{loop.index - 1}}"> Quitar </a>
@@ -108,15 +117,15 @@ title %} Ficha de Inscripción {% endblock %} {% block content %}
 					{{ form_row(form_colaborador.facebookURL ) }}
 					</div>
 				{% endfor %}
-				{% if entity.colaboradores | length > 0 %} 
+				{% if entity.colaboradores | length > 0 %}
 					{# cuando ya habia colaboradores cargados, tengo que poner el template del form de colaboradores a mano... asco! #}
 					<div id="cpm_jovenesbundle_proyectotype_colaboradores" data-prototype="&lt;div&gt;&lt;label class=&quot; required&quot;&gt;$$name$$&lt;/label&gt;&lt;div id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$&quot;&gt;&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_nombre&quot; class=&quot; required&quot;&gt;Nombre&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_nombre&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][nombre]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_apellido&quot; class=&quot; required&quot;&gt;Apellido&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_apellido&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][apellido]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;
 					&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_email&quot; class=&quot; required&quot;&gt;Email&lt;/label&gt;&lt;input type=&quot;email&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_email&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][email]&quot; required=&quot;required&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
 					&lt;div&gt;&lt;label for=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_facebookURL&quot; &gt;Direccion de Facebook&lt;/label&gt;&lt;input type=&quot;url&quot; id=&quot;cpm_jovenesbundle_proyectotype_colaboradores_$$name$$_facebookURL&quot; name=&quot;cpm_jovenesbundle_proyectotype[colaboradores][$$name$$][facebookURL]&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
-					">		
-				{% endif %}  
-				
-					
+					">
+				{% endif %}
+
+
 				 <a href="#"
 					onclick="addDynamicForm('#cpm_jovenesbundle_proyectotype_colaboradores'); return false;">
 					Agregar colaborador </a> </br>
