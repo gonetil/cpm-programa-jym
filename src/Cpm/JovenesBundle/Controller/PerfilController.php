@@ -58,6 +58,8 @@ class PerfilController extends BaseController
      *
      */
     private function debeActualizarPerfil($usuario) {
+      return false;
+      
     		$message = "Por favor, verifique y complete (si corresponde) los siguientes campos: ";
     		$result = false;
     		if (!$usuario->getDomicilio()) {
@@ -343,7 +345,7 @@ class PerfilController extends BaseController
 
       if ( ( $invitacion->getInstanciaEvento()->getEvento()->getSolicitarArchivoAdjunto() ) && ( !$invitacion->getArchivoAdjunto() ) ) {
            $this->setErrorMessage('Error al procesar el archivo adjunto');
-           
+
            return $this->render('CpmJovenesBundle:Perfil:aceptarInvitacion.html.twig',
              array('invitacion' => $invitacion, 'edit_usuario_form' => $editForm->createView())
            );
