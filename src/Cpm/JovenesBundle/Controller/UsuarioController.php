@@ -26,8 +26,8 @@ use Cpm\JovenesBundle\Form\UnionUsuariosBatchType;
  */
 class UsuarioController extends BaseController
 {
-	
-	
+
+
     /**
      * Lists all Usuario entities.
      *
@@ -37,7 +37,7 @@ class UsuarioController extends BaseController
     public function indexAction()
     {
          return $this->filterAction(new UsuarioFilter(), 'usuario');
-     
+
     }
 
     /**
@@ -57,7 +57,7 @@ class UsuarioController extends BaseController
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-        	'lock_form' => $lockForm->createView(), 
+        	'lock_form' => $lockForm->createView(),
         	'ciclos' => $ciclos      );
     }
 
@@ -91,10 +91,10 @@ class UsuarioController extends BaseController
        $form = $this->createForm(new UsuarioType(), $user );
 
 	   $form->bindRequest($this->getRequest());
-	    
+
 	   $user->setApellido(ucwords(strtolower($user->getApellido())));
 	   $user->setNombre(ucwords(strtolower($user->getNombre())));
-	   
+
        if ($form->isValid()) {
        		if ($this->getUserManager()->findUserByEmail($user->getEmail())){
        			$this->setErrorMessage('Ya existe un usuario con email ' . ($user->getEmail()));
@@ -108,7 +108,7 @@ class UsuarioController extends BaseController
 		        }
 				$this->getUserManager()->updateUser($user);
 				$this->setSuccessMessage('Se creo el usuario correctamente.' . ($user->getResetPassword()?' La cuenta está activada.':' Se le envió un correo de activación.'));
-					
+
 	      	 	return $this->redirect($this->generateUrl('usuario_show', array('id' => $user->getId())));
        		}
         }
@@ -126,7 +126,7 @@ class UsuarioController extends BaseController
      * @Template()
      */
     public function editAction($id)
-    {	
+    {
         $entity = $this->getEntityForUpdate('CpmJovenesBundle:Usuario', $id);
         $editForm = $this->createForm(new UsuarioType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -158,7 +158,7 @@ class UsuarioController extends BaseController
 
         $user->setApellido(ucwords(strtolower($user->getApellido())));
         $user->setNombre(ucwords(strtolower($user->getNombre())));
-        
+
         if ($editForm->isValid()) {
         	$otherUser = $this->getUserManager()->findUserByEmail($user->getEmail());
         	if (($otherUser) && !$otherUser->equals($user)){
@@ -171,7 +171,7 @@ class UsuarioController extends BaseController
 		        }
 				$this->getUserManager()->updateUser($user);
 				$this->setSuccessMessage('Se modificó el usuario correctamente.' . ($user->getResetPassword()?' La cuenta fue activada.':''));
-				
+
 	            return $this->redirect($this->generateUrl('usuario_show', array('id' => $id)));
 	        }
         }
@@ -194,7 +194,7 @@ class UsuarioController extends BaseController
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 		$loggedUser = $this->getJYM()->getLoggedInUser();
-	
+
 	    $form->bindRequest($request);
 
         if ($form->isValid()) {
@@ -236,7 +236,7 @@ class UsuarioController extends BaseController
      * @Template()
      */
     public function toggleLockAction($id)
-    {	
+    {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
@@ -244,7 +244,7 @@ class UsuarioController extends BaseController
 
         if ($form->isValid()) {
             $user = $this->getEntityForUpdate('CpmJovenesBundle:Usuario', $id);
-            
+
             if (!$user->isEnabled()){
             	$this->setErrorMessage('No tiene sentido bloquear un usuario que no esta habilitado para loguearse en el sistema.');
             }else{
@@ -259,36 +259,36 @@ class UsuarioController extends BaseController
         }
 		return $this->redirect($this->generateUrl('usuario_show', array('id' => $user->getId())));
     }
-    
+
     /**
-     * Para cada usuario del sistema, si participa en algún proyecto en el ciclo activo, 
+     * Para cada usuario del sistema, si participa en algún proyecto en el ciclo activo,
      * lo agrega a la lista de años en que participo
      * @Route("/update_anios_participados_old", name="update_anios_participados_old")
      */
     public function actualizarAniosParticipados() {
-    	
+
     	set_time_limit(0);
     	$em = $this->getDoctrine()->getEntityManager();
-		$ciclo = $this->getJYM()->getCicloActivo();
-		$proyectos = $em->getRepository('CpmJovenesBundle:Proyecto')->findAllQuery($ciclo)->getResult() ;
-		$anio = $ciclo->getAnio();
-		$updates = 0;
-		
-    	foreach ( $proyectos as $proyecto) 
+			$ciclo = $this->getJYM()->getCicloActivo();
+			$proyectos = $em->getRepository('CpmJovenesBundle:Proyecto')->findAllQuery($ciclo)->getResult() ;
+			$anio = $ciclo->getAnio();
+			$updates = 0;
+
+    	foreach ( $proyectos as $proyecto)
     	{
        		$user = $proyecto->getCoordinador();
        		$updates+=$this->actualizarAniosParticipadosDeUsuario($user ,$anio);
-       			
+
        		foreach ( $proyecto->getColaboradores() as $user) {
        			$updates+=$this->actualizarAniosParticipadosDeUsuario($user ,$anio);
        		}
-       		 
+
 		}
 		$this->setSuccessMessage("Se actualizaron en total $updates usuarios");
 		return $this->redirect($this->generateUrl('usuario', array()));
     }
-    
-    private function actualizarAniosParticipadosDeUsuario($usuario,$anio) 
+
+    private function actualizarAniosParticipadosDeUsuario($usuario,$anio)
     {
     	$updates = 0;
     	if  (is_null($usuario->getAniosParticipo())) {
@@ -302,55 +302,57 @@ class UsuarioController extends BaseController
     			$updates++;
     		}
     	}
-    	
+
     	//$this->getUserManager()->updateUser($usuario);
-    	return $updates; 
+    	return $updates;
     }
 
     /**
-     * Para cada usuario del sistema, si participa en algún proyecto en el ciclo activo, 
+     * Para cada usuario del sistema, si participa en algún proyecto en el ciclo activo,
      * lo agrega a la lista de años en que participo
      * @Route("/update_anios_participados", name="update_anios_participados")
      */
      function actualizarAniosParticipadosBatch() {
 
 		 $memoInit = memory_get_usage();
-		 
+
       	$em = $this->getEntityManager(); //group_concat
 		$proyectos = $em->getRepository('CpmJovenesBundle:Proyecto')->findAll();
-        
+
     	set_time_limit(60+3*count($proyectos));
     	$i = $updates = 0;
-   
+
 		$batchSize = 20;
 		$cache = array();
     	foreach ($proyectos as $proyecto) {
    	    	$anio = $proyecto->getCiclo()->getAnio();
-   	    	
-   	    	$user_id = $proyecto->getCoordinador()->getId();
-   	    	$user = $proyecto->getCoordinador();
+					$user = $proyecto->getCoordinador();
+					if ($user) {
+   	    		$user_id = $proyecto->getCoordinador()->getId();
+						$updates+=$this->actualizarAniosParticipadosDeUsuario($user,$anio);
+						$this->getEntityManager()->persist($user);
+						foreach ( $proyecto->getColaboradores() as $colab) {
+								$user_id = $colab->getId();
+					   			$updates+=$this->actualizarAniosParticipadosDeUsuario($colab ,$anio);
+					   			$this->getEntityManager()->persist($colab);
+			       		}
+   	    	}
 
-			$updates+=$this->actualizarAniosParticipadosDeUsuario($user,$anio);
-			$this->getEntityManager()->persist($user);
-			foreach ( $proyecto->getColaboradores() as $colab) {
-					$user_id = $colab->getId();
-		   			$updates+=$this->actualizarAniosParticipadosDeUsuario($colab ,$anio);
-		   			$this->getEntityManager()->persist($colab);
-       		}
-    		
+
+
 		}
 
 	    	$this->getEntityManager()->flush();
 	    	$this->getEntityManager()->clear();
-   
-   		
+
+
    		$mem = round(((memory_get_usage() - $memoInit) / (pow(1024,2) )),2);
 		$cant = count($proyectos);
 		$this->setSuccessMessage("Se actualizaron en total $updates usuarios de $cant proyectos. Se utilizaron en total $mem MB");
 		return $this->redirect($this->generateUrl('usuario', array()));
-		
+
 	}
-	
+
 	/**
 	 * @Route("/search/{search}" , name="usuario_online_search")
 	 * @param $search
@@ -366,12 +368,12 @@ class UsuarioController extends BaseController
             } else {
                 $keywords = explode(" ",$search);
             }
-    	
+
     	array_walk($keywords, create_function('&$keyword', '$keyword = trim($keyword);'));
-    	
+
     	$em = $this->getEntityManager();
     	$qb = $em->getRepository('CpmJovenesBundle:Usuario')->createQueryBuilder('u');
-		
+
 		if ($coma != FALSE) //apellido, nombre
 		{
 			$qb->andWhere($qb->expr()->like('u.apellido', ':apellido'));
@@ -379,42 +381,42 @@ class UsuarioController extends BaseController
 			$qb->setParameter('apellido', $keywords[0].'%');
 			$qb->setParameter('nombre', $keywords[1].'%');
 		}
-		else { 
+		else {
 			foreach ( $keywords as $index => $value ) {
-	    		$qb->andWhere($qb->expr()->like('u.apellido', ":search_$index"))->setParameter("search_$index","$value%");   
+	    		$qb->andWhere($qb->expr()->like('u.apellido', ":search_$index"))->setParameter("search_$index","$value%");
 			}
-			
+
 		}
-		
+
 		$qb->andWhere('u.enabled = 1');
 		//$qb->setParameter('search', '%'.$search.'%');
     	$data = $qb->getQuery()->getResult();
-    	
+
     	$usuarios = array();
     	foreach ( $data as $usuario ) {
             $usuarios[] = array(
-								'label'=>$usuario->getApellido(). ", ". $usuario->getNombre() . " <{$usuario->getEmail()}>", 
+								'label'=>$usuario->getApellido(). ", ". $usuario->getNombre() . " <{$usuario->getEmail()}>",
 								'desc' => $usuario->getApellido(). ", ". $usuario->getNombre(),
 								'id' => $usuario->getId(),
 								'value' => $usuario->getId()
-								
+
 							   );
         }
 //        var_dump($usuarios);
-    	
+
     	return $this->createJsonResponse($usuarios);
     }
 
 	/**
-	 * 
+	 *
 	 * Muestra el form para unir varios usuarios en uno solo
 	 * @Template("CpmJovenesBundle:Usuario:show_union_usuarios_batch_form.html.twig")
 	 */
 
 	public function unionUsuariosBatchFormAction($entitiesQuery) {
-		
+
 		$unionBatch = new UnionUsuariosBatch();
-		
+
 		$usuarios = $entitiesQuery->getResult();
 		$unionBatch->setUsuarios(new \ Doctrine \ Common \ Collections \ ArrayCollection($usuarios));
 
@@ -427,7 +429,7 @@ class UsuarioController extends BaseController
 
 
 
-			
+
 
 	/**
 	*
@@ -451,60 +453,60 @@ class UsuarioController extends BaseController
 				);
 		}
 		$usuarioFinal = $this->getEntity('CpmJovenesBundle:Usuario', $usuarioFinal_id);
-	
+
 		$strings = array();
 		foreach ( $usuarios as $usuario) {
        		$strings[] = $usuario->__toString();
 		}
-		
+
 		try {
-			$this->unirUsuarios($usuarioFinal,$usuarios);	
+			$this->unirUsuarios($usuarioFinal,$usuarios);
 			$str = join(';',$strings);
 			$this->setSuccessMessage("Usuario $usuarioFinal unido satisfactoriamente con $str");
 		} catch(\PDOException $e){
 			$this->setErrorMessage("Error al unir el usuario $e");
 		}
-			
+
 		return array (
 				'form' => $usuariosBatchForm->createView(),
 				'usuarios' => $usuarios,
 			);
 	 }
-	 
-	 
+
+
 	 /**
      * Combina los datos del $usuarioFinal con todos los $usuarios
      */
-     
+
 	 private function unirUsuarios($usuarioFinal, $usuarios) {
-	 
+
      	$em = $this->getEntityManager();
     	$cnn = $this->getDoctrine()->getConnection();
     	$query_coordinadores = $em->createQuery('UPDATE CpmJovenesBundle:Proyecto p ' .
     											'SET p.coordinador = :nuevo_coordinador ' .
     											'WHERE p.coordinador = :viejo_coordinador');
-    	
+
     	$query_correos = $em->createQuery( 'UPDATE CpmJovenesBundle:Correo c ' .
     										'SET c.destinatario = :nuevo_usuario ' .
     										'WHERE c.destinatario = :viejo_usuario ');
 		$cnn->beginTransaction();
-		try { 
+		try {
 	    	foreach ( $usuarios as $usuario) {
 	    		if ($usuario->getId() == $usuarioFinal->getId())
 	    			continue;
-	    		
-	    		$cnn->prepare(" UPDATE Proyecto SET coordinador_id = {$usuarioFinal->getId()} WHERE coordinador_id = {$usuario->getId()}")->execute();	
+
+	    		$cnn->prepare(" UPDATE Proyecto SET coordinador_id = {$usuarioFinal->getId()} WHERE coordinador_id = {$usuario->getId()}")->execute();
 	    		//$em->flush();
-	    		$cnn->prepare(" UPDATE ColaboradorProyecto SET usuario_id = {$usuarioFinal->getId()} WHERE usuario_id = {$usuario->getId()}")->execute();			
+	    		$cnn->prepare(" UPDATE ColaboradorProyecto SET usuario_id = {$usuarioFinal->getId()} WHERE usuario_id = {$usuario->getId()}")->execute();
 		    	//$em->flush();
 		    	$query_correos->setParameter('nuevo_usuario',$usuarioFinal)->setParameter('viejo_usuario',$usuario)->execute();
 		    	//$em->flush();
-	
+
 				$this->getUserManager()->deleteUser($usuario);
 				//$em->flush();
-				
+
 	    	}
-	    	$this->getUserManager()->updateUser($usuarioFinal);	
+	    	$this->getUserManager()->updateUser($usuarioFinal);
 			$cnn->commit();
 			$em->flush();
 		} catch (\Exception $e) {
@@ -513,15 +515,15 @@ class UsuarioController extends BaseController
 			$em->close();
 			throw $e;
 		}
-    	
-    	
-	 	
+
+
+
 	 }
-	 
+
 	 public function exportarUsuariosExcelAction($entitiesQuery) {
 		$entities = $entitiesQuery->getResult();
 		$template = 'CpmJovenesBundle:Usuario:export_to_excel.xls.twig';
 		return $this->makeExcel(array('entities' => $entities),$template,'Usuarios');
-		 
+
     }
 }
