@@ -1016,6 +1016,7 @@ color: white;
  background-position: left center;
  background-repeat: no-repeat;
 }
+#nav-right li a { color: #FFFFFF; }
 
 #acc-settings {
 	background-image: url("../images/shared/nav/icon_acc_settings.gif");
