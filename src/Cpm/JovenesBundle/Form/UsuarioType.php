@@ -25,7 +25,7 @@ class UsuarioType extends AbstractType
             ->add('domicilio')
             ->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))
 	        ->add('localidad','entity',array( 'class' => 'CpmJovenesBundle:Localidad',
-	                    									'label'=>'Localidad', 
+	                    									'label'=>'Localidad',
 	                    									'attr' => array('class'=>'localidad-selector'),
 	             											'query_builder' => function($er) {
 																			        return $er->createQueryBuilder('loc')
@@ -33,7 +33,7 @@ class UsuarioType extends AbstractType
 																			        }
 				))
             ->add('distrito','entity',array( 'class' => 'CpmJovenesBundle:Distrito',
-            									'label'=>'Distrito', 
+            									'label'=>'Distrito',
             									'attr' => array('class'=>'distrito-selector'),
      											'query_builder' => function($er) {
 													        return $er->createQueryBuilder('dis')
@@ -42,19 +42,19 @@ class UsuarioType extends AbstractType
     											))
             ->add('roles', 'choice', array('choices'=> array('ROLE_USER'=>'Docente','ROLE_ADMIN'=>'Administrador'), 'multiple'=>true))
             ->add('resetPassword', 'checkbox', array('label'=>"Asignar clave?", 'required'=>false))
-            ->add('plainPassword', 'repeated', array('required'=>false,'type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir", 
+            ->add('plainPassword', 'repeated', array('required'=>false,'type'=>'password', 'first_name'=> "Clave", 'second_name'=> "Repetir",
             	'invalid_message' => 'Las claves no coinciden'
             ))
         ;
     }
-    
+
 
     public function getName()
     {
         return 'cpm_jovenesbundle_usuariotype';
     }
-    
-    
+
+
     public function getDefaultOptions(array $options)
     {
     	return array(

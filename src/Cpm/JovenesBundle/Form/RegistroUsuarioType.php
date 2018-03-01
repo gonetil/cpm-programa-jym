@@ -40,7 +40,7 @@ class RegistroUsuarioType extends BaseType
 															)
 									)
             ->add('plainPassword', 'repeated', array('type' => 'password', 'first_name'=>'Clave', 'second_name'=>'Repetir Clave'))
-        	->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))
+        	//->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))
         ;
     }
 

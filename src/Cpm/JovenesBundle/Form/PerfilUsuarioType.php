@@ -53,7 +53,7 @@ class PerfilUsuarioType extends BaseType
 																					 )
 																			)
 									)
-    		->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))
+    		//->add('aniosParticipo','hidden',array('label'=>'Años en los que participó'))
     												;
 
     }

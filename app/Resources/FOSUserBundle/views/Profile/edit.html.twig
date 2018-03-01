@@ -19,7 +19,7 @@ onsubmit='return checkPerfilEditForm();'>
   onblur="VerificarConfirmacionEmail($('#fos_user_registration_form_email'),$('#confirm_email'));">
 </div>
 {{ form_row(form.user) }}
-{{ common.aniosParticipo('#fos_user_profile_form_user_aniosParticipo', form.user) }}
+{# common.aniosParticipo('#fos_user_profile_form_user_aniosParticipo', form.user) #}
 
 {% include "CpmJovenesBundle:Default:localidad_distrito_form.html.twig" %}
     {{ form_widget(form) }}
