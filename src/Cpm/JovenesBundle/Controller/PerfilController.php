@@ -58,8 +58,7 @@ class PerfilController extends BaseController
      *
      */
     private function debeActualizarPerfil($usuario) {
-      return false;
-      
+
     		$message = "Por favor, verifique y complete (si corresponde) los siguientes campos: ";
     		$result = false;
     		if (!$usuario->getDomicilio()) {
@@ -67,10 +66,20 @@ class PerfilController extends BaseController
     			$result = true;
     		}
 
-    		if (!$usuario->getAniosParticipo()) {
+        $etapa = $this->getJYM()->getCicloActivo()->getEtapaActual();
+        $threshold = date("Y")."-02-01"; //equivale al 1 de febrero del corriente
+
+        //verificamos si estamos en la etapa de inscripcion de propuestas y si actualizo su perfil este año
+        if ( ($etapa->getNumero() == 2) && (!$usuario->isUpdated( new \DateTime($threshold) ) ))
+        {
+          $message = "Por favor, revise y actualice la información de su perfil";
+          $result = true;
+        }
+/*  Dado que el campo de aniosParticipo ahora no se ve mas, no tiene sentido pedirle al usuario que lo complete
+  		if (!$usuario->getAniosParticipo()) {
     			$message .= "Años en los que participó; ";
     			$result = true;
-    		}
+    		} */
 
 
     		if ($result)

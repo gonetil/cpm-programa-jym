@@ -48,7 +48,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     * @Assert\MaxLength(limit="255", message="El apellido es muy largo.")
     */
     private $apellido;
-    
+
     /**
      * @var string $nombre
      *
@@ -59,7 +59,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @Assert\MaxLength(limit="255", message="El nombre es muy largo.")
      */
    private $nombre;
-   
+
     /**
      * @var string $telefono
      *
@@ -86,13 +86,13 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
 
 
    /**
-    * 
+    *
     * @ORM\ManyToOne(targetEntity="Localidad")
     * @ORM\JoinColumn(name="localidad_id", referencedColumnName="id", nullable=true, onDelete="RESTRICT")
     */
     private $localidad;
-        
-    
+
+
     /**
     *  @ORM\OneToMany(targetEntity="Correo",mappedBy="destinatario")
     *  @ORM\JoinColumns({
@@ -100,7 +100,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     * })
     */
     private $correosRecibidos;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="Proyecto", mappedBy="colaboradores")
      **/
@@ -110,24 +110,24 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="Proyecto", mappedBy="coordinador")
      **/
     private $proyectosCoordinados;
-    
+
     private $distrito;
     private $resetPassword;
-    
-    
+
+
     /**
      * @var string $domicilio
      * @ORM\Column(name="domicilio", type="string", nullable=true)
-     */    
+     */
     private $domicilio;
 
 
     /**
      * @var string $aniosParticipo
      * @ORM\Column(name="aniosParticipo", type="string", nullable=true)
-     */    
+     */
     private $aniosParticipo;
-    
+
     /**
      * @var datetime $fecha_alta
      *
@@ -135,14 +135,20 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      */
     private $fecha_alta;
 
+		/**
+     * @var datetime $updated_at
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updated_at;
 
 
 	 /**
      * @var string $facebookURL;
      * @ORM\Column(name="facebookURL", type="string", nullable=true)
-     */    
-    private $facebookURL;    
-    
+     */
+    private $facebookURL;
+
     public function __construct()
     {
     	parent::__construct();
@@ -152,21 +158,21 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
         $this->resetPassword = false;
         $this->aniosParticipo = '{}';
     }
-    
+
     public function getNombreComleto(){
     	return $this->apellido.", ".$this->nombre;
     }
     /**
      * Get id
      *$email
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    public function setId($id) 
+    public function setId($id)
     {
     	$this->id = $id;
     }
@@ -185,11 +191,11 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
         parent::setEmail($email);
         parent::setUsername($email);
     }
-    
+
     /**
      * Get dni
      *
-     * @return string 
+     * @return string
      */
     public function getDni()
     {
@@ -209,7 +215,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * Get telefono
      *
-     * @return string 
+     * @return string
      */
     public function getTelefono()
     {
@@ -229,7 +235,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * Get telefonoCelular
      *
-     * @return string 
+     * @return string
      */
     public function getTelefonoCelular()
     {
@@ -249,13 +255,13 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * Get codigoPostal
      *
-     * @return string 
+     * @return string
      */
     public function getCodigoPostal()
     {
         return $this->codigoPostal;
     }
-    
+
 
     /**
     * Set apellido
@@ -266,7 +272,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     {
     	$this->apellido = ucwords(strtolower($apellido)) ;
     }
-    
+
     /**
      * Get apellido
      *
@@ -276,8 +282,8 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     {
     	return $this->apellido;
     }
-    
-    
+
+
     /**
     * Set nombre
     *
@@ -287,7 +293,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     {
     	$this->nombre = ucwords(strtolower($nombre));
     }
-    
+
     /**
      * Get nombre
      *
@@ -297,8 +303,8 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     {
     	return $this->nombre;
     }
-    
-    
+
+
     /**
      * Set localidad
      *
@@ -312,13 +318,13 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * Get localidad
      *
-     * @return Cpm\JovenesBundle\Entity\Localidad 
+     * @return Cpm\JovenesBundle\Entity\Localidad
      */
     public function getLocalidad()
     {
         return $this->localidad;
     }
-	
+
     /**
      * Add correosRecibidos
      *
@@ -332,7 +338,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * Get correosRecibidos
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCorreosRecibidos()
     {
@@ -342,13 +348,13 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * Get proyectosColaborados
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getProyectosColaborados()
     {
         return $this->proyectosColaborados;
     }
-    
+
     public function __toString() {
     	return "{$this->nombre} {$this->apellido} <{$this->email}>";
     }
@@ -366,7 +372,7 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * Get proyectosCoordinados
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getProyectosCoordinados($ciclo = null)
     {
@@ -375,27 +381,27 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
 	    else
 	    {
 	    	$proyectos = array();
-	    	foreach ( $this->proyectosCoordinados  as $p ) 
+	    	foreach ( $this->proyectosCoordinados  as $p )
 	    	{
 	    		if ($p->getCiclo()->equals($ciclo))
 	    			$proyectos[] = $p;
 	    	}
 	    	return $proyectos;
-	    }    
+	    }
     }
-    
+
     public function getDistrito() {
 		if ($this->localidad)
 			return $this->localidad->getDistrito();
-		else 
+		else
 			return "";
     }
 
     public function setDistrito($distrito) {
     	$this->distrito = $distrito;
     }
-    
-        
+
+
     public function getResetPassword() {
 		return $this->resetPassword;
     }
@@ -403,38 +409,38 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     public function setResetPassword($rp) {
     	$this->resetPassword = $rp;
     }
-    
+
     public function isAdmin(){
     	return ( $this->hasRole(self::ROL_ADMIN) || $this->isSuperAdmin() );
     }
-    
+
 	public function getDomicilio() {
 		return $this->domicilio;
-	}    
-    
-    public function setDomicilio($domicilio) { 
+	}
+
+    public function setDomicilio($domicilio) {
     	$this->domicilio = $domicilio;
     }
 
 	public function getAniosParticipo() {
 		return $this->aniosParticipo;
-	}    
+	}
 
 	public function getAniosParticipoArray() {
 		return json_decode($this->aniosParticipo);
-	}    
-    
-    public function setAniosParticipo($anios) { 
+	}
+
+    public function setAniosParticipo($anios) {
     	$this->aniosParticipo = $anios;
     }
- 	
+
  	public function getFacebookURL(){
  		return $this->facebookURL;
- 	}   
+ 	}
  	public function setFacebookURL($fb){
  		$this->facebookURL = $fb;
  	}
-        
+
      /**
      * Set fecha_alta
      *
@@ -448,13 +454,30 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     /**
      * Get fecha_alta
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getFechaAlta()
     {
         return $this->fecha_alta;
     }
-   	
+
+		/**
+		* Set updated_at
+		* @param datetime $aDate
+		*/
+		public function setUpdatedAt(\datetime $aDate) {
+			 $this->updated_at = $aDate;
+		 }
+
+		 /**
+	 	 * Get fecha_alta
+	 	 * @return datetime
+	 	 */
+		 public function getUpdatedAt()
+		 {
+			 return $this->updated_at;
+		 }
+
    	/**
      *
      * @ORM\PrePersist
@@ -463,4 +486,20 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
     {
             $this->setFechaAlta(new \DateTime(date('Y-m-d H:i:s')));
     }
+ /**
+	*
+	* @ORM\PrePersist
+	* @ORM\PreUpdate
+	*/
+	public function updateUpdatedAt()
+	{
+		 $this->setUpdatedAt(new \DateTime('now'));
+	 }
+
+  /**
+	*
+	*/
+	 public function isUpdated($threshold_date) {
+	 		return !( is_null($this->getUpdatedAt()) || ($this->getUpdatedAt() < $threshold_date) ); 
+	 }
 }
