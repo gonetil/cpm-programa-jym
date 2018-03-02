@@ -15,8 +15,8 @@ onsubmit='return checkPerfilEditForm();'>
 <div>
   <label for="confirm_email">Confirmar Email</label>
   <input type="text" id="confirm_email" name="confirm_email"
-  onfocus="VerificarConfirmacionEmail($('#fos_user_registration_form_email'),$('#confirm_email'));"
-  onblur="VerificarConfirmacionEmail($('#fos_user_registration_form_email'),$('#confirm_email'));">
+  onfocus="VerificarConfirmacionEmail($('#fos_user_profile_form_user_email'),$('#confirm_email'));"
+  onblur="VerificarConfirmacionEmail($('#fos_user_profile_form_user_email'),$('#confirm_email'));">
 </div>
 {{ form_row(form.user) }}
 {# common.aniosParticipo('#fos_user_profile_form_user_aniosParticipo', form.user) #}
