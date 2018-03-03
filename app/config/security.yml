@@ -17,9 +17,10 @@ security:
                 csrf_provider: form.csrf_provider
                 login_path: /choose
                 failure_path: /login
+                success_handler: cpm_jovenes_bundle.authentication_success_handler
             logout:       true
             anonymous:    true
- 
+
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -31,7 +32,7 @@ security:
         - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
 
-        
+
     providers:
 #        fos_userbundle:
 #            id: fos_user.user_manager
@@ -45,8 +46,7 @@ security:
 #            users:
 #                user:  { password: userpass, roles: [ 'ROLE_USER' ] }
 #                admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
-        
+
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN]
-
