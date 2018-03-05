@@ -34,7 +34,7 @@ class RegistroUsuarioType extends BaseType
             ->add('telefono',null,array('label'=>'Teléfono','required'=>true))
             ->add('telefonoCelular', 'text', array('required'=>false,
 									'label'=>'Teléfono Celular',
-									'attr' => array( 'placeholder' => 'Ej. (0221) 15-6437325',
+									'attr' => array( 'placeholder' => 'Ej. 0221156437325',
 																	 'hint' => 'Ej. (0221) 15-6437325'
 																 )
 															)
