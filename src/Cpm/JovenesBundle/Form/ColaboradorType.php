@@ -13,11 +13,12 @@ class ColaboradorType extends AbstractType
 	        ->add('nombre')
 	        ->add('apellido')
             ->add('email', 'email')
-            ->add('facebookURL',null,array('label'=>'Dirección de Facebook',
+/*            ->add('facebookURL',null,array('label'=>'Dirección de Facebook',
             								'required'=>false,
             								'attr'=>array('title'=>'Ingresar dirección de barra de dirección: https://www.facebook.com/usuario...')
             							    )
             								)
+                            */
         ;
     }
 
@@ -25,7 +26,7 @@ class ColaboradorType extends AbstractType
     {
         return 'cpm_jovenesbundle_colaboradortype';
     }
-    
+
     public function getDefaultOptions(array $options)
     {
     	return array(
@@ -33,5 +34,5 @@ class ColaboradorType extends AbstractType
     	        'groups'  => 'Colaborador',
         );
     }
-    
+
 }

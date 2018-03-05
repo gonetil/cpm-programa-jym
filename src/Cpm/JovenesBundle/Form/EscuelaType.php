@@ -6,7 +6,7 @@ use Symfony \ Component \ Form \ FormBuilder;
 
 class EscuelaType extends AbstractType {
 	public function buildForm(FormBuilder $builder, array $options) {
-		
+
 		$builder->add('tipoInstitucion', 'entity', array (
 			'class' => 'CpmJovenesBundle:TipoInstitucion',
 			'label' => 'Tipo de Institución',
@@ -25,7 +25,7 @@ class EscuelaType extends AbstractType {
 			},
 			'empty_value' => "Seleccione ...",
 		    'preferred_choices' => array("Seleccione ..."),
-		            									
+
 		))->add('numero', null, array (
 			'label' => 'Número de Escuela',
 			'required' => false,
@@ -56,6 +56,7 @@ class EscuelaType extends AbstractType {
 		))->add('telefono', null, array (
 			'attr' => array (
 				'class' => 'number'
+				'attr' => array('placeholder'=>'Ej. 02214262900')
 			),
 			'required' => false,
 			'data' => '0'
@@ -92,7 +93,7 @@ class EscuelaType extends AbstractType {
 	public function getDefaultOptions(array $options) {
 		return array (
 			'data_class' => 'Cpm\JovenesBundle\Entity\Escuela',
-			
+
 		);
 	}
 
