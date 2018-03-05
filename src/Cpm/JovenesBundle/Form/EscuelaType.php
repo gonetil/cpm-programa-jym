@@ -55,7 +55,7 @@ class EscuelaType extends AbstractType {
 			)
 		))->add('telefono', null, array (
 			'attr' => array (
-				'class' => 'number'
+				'class' => 'number',
 				'attr' => array('placeholder'=>'Ej. 02214262900')
 			),
 			'required' => false,
