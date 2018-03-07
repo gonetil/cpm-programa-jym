@@ -7,7 +7,7 @@ class AppKernel extends Kernel
 {
 	const DATE_FORMAT='dd/MM/yyyy';
 	const TIME_FORMAT='H:i';
-	
+
     public function registerBundles()
     {
         $bundles = array(
@@ -17,15 +17,17 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
-	        new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-	        new FOS\UserBundle\FOSUserBundle(),
+	          new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+						new Cpm\UserBundle\CpmUserBundle(),
+					  new FOS\UserBundle\FOSUserBundle(),
             new Symfony\Bundle\DoctrineBundle\DoctrineBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-        	new Ideup\SimplePaginatorBundle\IdeupSimplePaginatorBundle(),
+        	  new Ideup\SimplePaginatorBundle\IdeupSimplePaginatorBundle(),
             new Cpm\JovenesBundle\CpmJovenesBundle(),
-            new Io\FormBundle\IoFormBundle(),      
+
+            new Io\FormBundle\IoFormBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

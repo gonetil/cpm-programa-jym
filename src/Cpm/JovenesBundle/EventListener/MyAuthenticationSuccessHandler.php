@@ -1,4 +1,10 @@
 <?php
+/**
+* Este listener se utiliza para capturar el LoginSuccess de los usuarios.
+* Durante la etapa 2 (Inscripcion de propuestas) los usuarios deben ir a la opcion de
+* editar perfil una vez que iniciaron sesion
+*
+*/
 
 namespace Cpm\JovenesBundle\EventListener;
 
@@ -41,8 +47,10 @@ class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandlerInte
           $route = $this->router->generate('dashboard');
         } elseif ($this->security->isGranted('ROLE_USER'))
         {
-              if ( $etapa->getNumero() == 2 )
+              if ( $etapa->getNumero() == 2 ) {
+                  $request->getSession()->setFlash('info', "Durante la etapa de inscripción de propuestas del programa Jóvenes y Memoria, solicitamos a los usuarios que actualicen los datos de sus perfiles personales");
                   $route= $this->router->generate('fos_user_profile_edit');
+                }
                else
                 $route = $this->router->generate('home_usuario');
         }

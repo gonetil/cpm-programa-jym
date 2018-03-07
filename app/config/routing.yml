@@ -16,7 +16,7 @@ fos_user_resetting:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
-    
+
 CpmJovenesBundle:
 #    resource: "@CpmJovenesBundle/Controller/"
 #    type:     annotation
@@ -25,11 +25,10 @@ CpmJovenesBundle:
 
 fos_user_profile_show:
     pattern:   /profile/
-    defaults:  { _controller: FOSUserBundle:Profile:edit }
-    
- 
+    defaults:  { _controller: UserBundle:Profile:edit }
+
+
 # Internal routing configuration to handle ESI
 #_internal:
 #   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
 #   prefix:   /_internal
-
