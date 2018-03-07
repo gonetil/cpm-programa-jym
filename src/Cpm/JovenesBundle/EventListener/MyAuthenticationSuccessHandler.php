@@ -42,12 +42,16 @@ class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandlerInte
     {
         $route = '';
         $etapa = $this->jym->getEtapaActual();
+        $user = $this->security->getToken()->getUser();
+
         if ( $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_SUPER_ADMIN') )
         {
           $route = $this->router->generate('dashboard');
         } elseif ($this->security->isGranted('ROLE_USER'))
         {
-              if ( $etapa->getNumero() == 2 ) {
+              // verificamos si el usuario actualizo su perfil al menos el 1 de febrero del corriente
+              $threshold_date = new \DateTime( date('Y').'-02-01' );
+              if ( ( $etapa->getNumero() == 2 ) && (!$user->isUpdated($threshold_date)) ) {
                   $request->getSession()->setFlash('info', "Durante la etapa de inscripción de propuestas del programa Jóvenes y Memoria, solicitamos a los usuarios que actualicen los datos de sus perfiles personales");
                   $route= $this->router->generate('fos_user_profile_edit');
                 }

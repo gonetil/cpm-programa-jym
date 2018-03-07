@@ -142,6 +142,12 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
      */
     private $updated_at;
 
+		/**
+     * @var datetime $human_updated_at
+     *
+     * @ORM\Column(name="human_updated_at", type="datetime", nullable=true)
+     */
+    private $human_updated_at;
 
 	 /**
      * @var string $facebookURL;
@@ -499,7 +505,14 @@ class Usuario extends BaseUser //implements AdvancedUserInterface, \Serializable
   /**
 	*
 	*/
-	 public function isUpdated($threshold_date) {
-	 		return !( is_null($this->getUpdatedAt()) || ($this->getUpdatedAt() < $threshold_date) ); 
+	 public function isUpdated(\datetime $threshold_date) {
+	 		return !( is_null($this->getHumanUpdatedAt()) || ($this->getHumanUpdatedAt() < $threshold_date) );
+	 }
+
+	 public function getHumanUpdatedAt() {
+		 return $this->human_updated_at;
+	 }
+	 public function setHumanUpdatedAt(\datetime $date) {
+		 	$this->human_updated_at = $date;
 	 }
 }

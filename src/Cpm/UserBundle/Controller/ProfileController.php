@@ -10,7 +10,7 @@ use FOS\UserBundle\Model\UserInterface;
 class ProfileController extends ContainerAware
 {
   /**
-   * Edit the user
+   * Edit the user . Este action lo ejecuta siempre un humano.
    */
   public function editAction()
   {
@@ -23,6 +23,7 @@ class ProfileController extends ContainerAware
       $form = $this->container->get('fos_user.profile.form');
       $formHandler = $this->container->get('fos_user.profile.form.handler');
 
+      $this->updateUserTimestamp($user);
       $process = $formHandler->process($user);
       if ($process) {
           $jym = $this->container->get('cpm_jovenes_bundle.application');
@@ -43,6 +44,15 @@ class ProfileController extends ContainerAware
       );
   }
 
+ private function updateUserTimestamp($user) {
+
+   $referer = $this->container->get('request')
+                ->headers
+                ->get('referer');
+    if (strpos('login',$referer) === FALSE)  //no viene desde el login
+      $user->setHumanUpdatedAt(new \DateTime());
+
+ }
   /**
    * Show the user
    */
