@@ -4,6 +4,17 @@
 <title>Programa Jovenes y Memoria - Convocatoria </title>
 <link rel="stylesheet" href="{{ asset('css/convoca.css') }}" />
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-29893521-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-29893521-2');
+</script>
+
+
 </head>
 
 <body>
@@ -14,7 +25,7 @@
   </div>
 	<div id="contenido">
 				<img src="{{ asset('images/inicio/bienve.png') }}" alt="Bienvenidos!" border="0" height="319" width="282">
-				
+
 				<a href="{{path('fos_user_security_login')}}"><img src="{{ asset('images/inicio/si.png') }}" alt="Ya estoy registrado!" class="imgspace" border="0" height="319" width="219"></a>
 				<a href="{{path('fos_user_registration_register')}}"><img src="{{ asset('images/inicio/no.png') }}" alt="No estoy registrado!" class="imgspace" border="0" height="319" width="219"></a>
 				<a href="{{ asset('files/instructivo.pdf') }}"><img src="{{ asset('images/inicio/instructivo.png') }}" alt="Instructivo para usuarios" border="0" height="319" width="181"></a>
@@ -23,5 +34,5 @@
 		<div id="footer">
 	Desarrollado por 2230 Sistemas &copy; <span id="spanYear">{{ "now"|date("Y") }}</span> <a href="">contacto@2230.com.ar</a>. Todos los derechos reservados.</div>
 	 </div>
-	
+
 </div>
