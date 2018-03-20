@@ -35,7 +35,7 @@ class ResettingController extends BaseController
       if ($process) {
           $this->authenticateUser($user);
 
-          $this->setFlash('fos_user_success', 'resetting.flash.success');
+          $this->setFlash('fos_user_success', 'La nueva contraseña fue registrada satisfactoriamente ');
 
           return new RedirectResponse($this->container->get('router')->generate('home_usuario'));
       }
