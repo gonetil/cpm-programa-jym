@@ -56,8 +56,8 @@ class EscuelaType extends AbstractType {
 		))->add('telefono', null, array (
 			'attr' => array (
 				'class' => 'number',
-				'attr' => array('placeholder'=>'Ej. 02214262900')
-			),
+				'placeholder'=>'Ej. 02214262900',
+			 ),
 			'required' => false,
 			'data' => '0'
 		))->add('domicilio')->add('codigoPostal', null, array (
