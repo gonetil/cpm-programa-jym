@@ -24,10 +24,24 @@ class WebappController extends BaseController {
         $em = $this->getDoctrine()->getEntityManager();
 
         $tandas = $em->getRepository('CpmJovenesBundle:Tanda')->findAllQuery( $this->getJYM()->getCicloActivo() )->getResult(); 
+        $result = array_map( array($this,'tandaToEventsArray'),$tandas);
+        return $this->createJsonResponse($result);
+    }
+
+    /**
+     * Retorna un JSON con la lista de tandas
+     * 
+     * @Route("/tanda/all", name="get_all_tandas_full")
+     * @Method("get")
+     */
+    public function allTandaAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $tandas = $em->getRepository('CpmJovenesBundle:Tanda')->findAllQuery( $this->getJYM()->getCicloActivo() )->getResult(); 
         $result = array();
-        foreach($tandas as $tanda) {
-            $result[] = $tanda->toArray(1);
-        }
+        foreach($tandas as $tanda) 
+            $result[] = $this->tandaToEventsArray($tanda,true);
+        
         return $this->createJsonResponse($result);
     }
 
@@ -35,69 +49,76 @@ class WebappController extends BaseController {
     * @Route("tanda/{id}", name="get_tanda")
     * @Method("get")
     */
-    public function getTandasAction($id) {
+    public function getTandaAction($id) {
 		$tanda = $this->getEntity('CpmJovenesBundle:Tanda', $id);
         if (!$tanda) 
             throw $this->createNotFoundException('Tanda no encontrada');
-        
-        return $this->createJsonResponse($this->tandaToEventsArray($tanda));
+        return $this->createJsonResponse($this->tandaToEventsArray($tanda, true));
     }
 
-    private function tandaToEventsArray($tanda) {
-        $result = array();
-        $result['tanda'] = array('tanda'=>$tanda->getNumero(), 
-                                 'inicio' => $tanda->getFechaInicio(), 
-                                 'fin' => $tanda->getFechaFin(),
-                                 'dias' => array()
-                                );
 
-        foreach($tanda->getDias() as $dia) 
-            $result['tanda']['dias'][] = $this->diaToEventsArray($dia,$tanda);
 
-        return $result;
+
+
+
+
+    /****** HELPER FUNCTIONS TO WALK THROUGH TANDAS ***********/
+
+
+
+    private function tandaToEventsArray($tanda,$recursive = false) {
+        $result = array(
+                'numero'=>$tanda->getNumero(), 
+                'inicio' => $tanda->getFechaInicio()->format('Y-m-d'), 
+                'fin' => $tanda->getFechaFin()->format('Y-m-d'),
+        );
+        if ($recursive)
+            $result['dias'] = $this->map('diasToEventsArray',$tanda->getDias());
+        
+         return $result;
     }
 
-    private function diaToEventsArray($dia,$tanda) {
-        $dia_tanda = array();
-        $fechaInicio = $tanda->getFechaInicio()->add( date_interval_create_from_date_string(($dia->getNumero() - 1).' days') );
+    private function diasToEventsArray($dia) {
+        return array('auditoriosDia' =>  $this->map('auditorioDiaToEventsArray',$dia->getAuditoriosDia()) ) ;
+    }
 
-        print_r($dia);
-        $bloques = $dia->getBloques();
-        
-        foreach($bloques as $bloque)
-            $dia_tanda['bloques'][] = $this->bloqueToEventsArray($bloque);
-
-        return $dia_tanda;
+    private function auditorioDiaToEventsArray($auditorioDia) {
+        return array(  
+            'auditorio' => $auditorioDia->getAuditorio()->getNombre(),
+            'bloques' => $this->map('bloqueToEventsArray',$auditorioDia->getBloques()) 
+            );
 
     }
 
     private function bloqueToEventsArray($bloque) {
-        $bloque_dia = array();
-        $auditorio = $bloque->getAuditorioDia()->getAuditorio();
-        $bloque_dia['nombre'] = $bloque->getNombre();
-        $bloque_dia['ejes_tematicos'] = $bloque->getEjesTematicos();
-        $bloque_dia['areas_referencia'] = $bloque->getAreasReferencia();
-        $bloque_dia['horaInicio'] = $$bloque->getHoraInicio();;
-        $bloque_dia['auditorio'] = $auditorio->getNombre();
+        return array(
+                'nombre' => $bloque->getNombre(),
+                'horaInicio' => $bloque->getHoraInicio()->format('H:i'),
+                'presentaciones' => $this->map( 'presentacionToEventsArray' ,$bloque->getPresentaciones() ),
+   //           'ejes_tematicos' => $bloque->getEjesTematicos(),
+   //           'areas_referencia' => $bloque->getAreasReferencia(),
+        );
 
-        if ($bloque->getTienePresentaciones()) { 
-            $bloque_dia['presentaciones'] = array();
-            foreach($bloque->getPresentaciones() as $presentacion) 
-                $bloque_dia['presentaciones'][] = $this->presentacionToEventsArray($presentacion);
-        }
-
-        return $bloque_dia;
     }
 
     private function presentacionToEventsArray($presentacion) {
-        $presentacion_bloque = array();
-        $presentacion_bloque['titulo'] = $presentacion->getTitulo();
-        $presentacion_bloque['escuela'] = $presentacion->getEscuela();
-        $presentacion_bloque['localidad'] = $presentacion->getLocalidad();
-        $presentacion_bloque['distrito'] = $presentacion->getDistrito();
-        $presentacion_bloque['tipo'] = $presentacion->getTipoPresentacion();
-        return $presentacion_bloque;
-
+        return array(
+            'titulo' => $presentacion->getTitulo(),
+            'escuela' => $presentacion->getEscuela(),
+            'localidad' => $presentacion->getLocalidad(),
+            'tipo' => preg_replace('/\W+/','',strtolower(strip_tags($presentacion->getTipoPresentacion()->getTipoPresentacion()))),
+            //'distrito' => $presentacion->getDistrito();
+        );
     }
-		
+
+    /**
+     * Helper function para ejecutar el array_map sobre colecciones 
+     */
+
+    private function map($fn,$doctrine_collection) {
+        return array_map( 
+                array ( $this,$fn) , 
+                $doctrine_collection->toArray() 
+            );
+    }
 }
