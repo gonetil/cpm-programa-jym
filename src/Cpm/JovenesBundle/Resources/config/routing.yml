@@ -3,12 +3,16 @@ ControllersAdmin:
     type:     annotation
     prefix:   /admin/
     
-    
 ControllerDocente:
     resource: "@CpmJovenesBundle/Controller/PerfilController.php"
     type:     annotation
     prefix:   /perfil/
-    
+
+ControllerWebapp:
+    resource: "@CpmJovenesBundle/Controller/WebappController.php"
+    type: annotation
+    prefix: /webapp/    
+  
 ControllerPublico:
     resource: "@CpmJovenesBundle/Controller/DefaultController.php"
     type:     annotation
