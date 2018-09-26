@@ -69,8 +69,8 @@ class WebappController extends BaseController {
     private function tandaToEventsArray($tanda,$recursive = false) {
         $result = array(
                 'numero'=>$tanda->getNumero(), 
-                'inicio' => $tanda->getFechaInicio()->format('Y-m-d'), 
-                'fin' => $tanda->getFechaFin()->format('Y-m-d'),
+                'fechaInicio' => $tanda->getFechaInicio()->format('Y-m-d'), 
+                'fechaFin' => $tanda->getFechaFin()->format('Y-m-d'),
         );
         if ($recursive)
             $result['dias'] = $this->map('diasToEventsArray',$tanda->getDias());
@@ -79,7 +79,7 @@ class WebappController extends BaseController {
     }
 
     private function diasToEventsArray($dia) {
-        return array('auditoriosDia' =>  $this->map('auditorioDiaToEventsArray',$dia->getAuditoriosDia()) ) ;
+        return array('numero'=> $dia->getNumero(), 'auditoriosDia' =>  $this->map('auditorioDiaToEventsArray',$dia->getAuditoriosDia()) ) ;
     }
 
     private function auditorioDiaToEventsArray($auditorioDia) {
@@ -94,6 +94,7 @@ class WebappController extends BaseController {
         return array(
                 'nombre' => $bloque->getNombre(),
                 'horaInicio' => $bloque->getHoraInicio()->format('H:i'),
+                'duracion' => $bloque->getDuracion(),
                 'presentaciones' => $this->map( 'presentacionToEventsArray' ,$bloque->getPresentaciones() ),
    //           'ejes_tematicos' => $bloque->getEjesTematicos(),
    //           'areas_referencia' => $bloque->getAreasReferencia(),
