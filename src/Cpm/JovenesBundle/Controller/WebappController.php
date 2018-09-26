@@ -25,7 +25,8 @@ class WebappController extends BaseController {
 
         $tandas = $em->getRepository('CpmJovenesBundle:Tanda')->findAllQuery( $this->getJYM()->getCicloActivo() )->getResult(); 
         $result = array_map( array($this,'tandaToEventsArray'),$tandas);
-        return $this->createJsonResponse($result);
+
+        return $this->getJSON( $result );
     }
 
     /**
@@ -42,7 +43,7 @@ class WebappController extends BaseController {
         foreach($tandas as $tanda) 
             $result[] = $this->tandaToEventsArray($tanda,true);
         
-        return $this->createJsonResponse($result);
+        return $this->getJSON( $result );
     }
 
     /** 
@@ -53,7 +54,8 @@ class WebappController extends BaseController {
 		$tanda = $this->getEntity('CpmJovenesBundle:Tanda', $id);
         if (!$tanda) 
             throw $this->createNotFoundException('Tanda no encontrada');
-        return $this->createJsonResponse($this->tandaToEventsArray($tanda, true));
+        
+        return $this->getJSON( $this->tandaToEventsArray($tanda, true) );
     }
 
 
@@ -64,10 +66,14 @@ class WebappController extends BaseController {
 
     /****** HELPER FUNCTIONS TO WALK THROUGH TANDAS ***********/
 
+    private function getJSON($array) {
+        return $this->createJsonResponse($array, "charset=utf-8");
+    }
 
 
     private function tandaToEventsArray($tanda,$recursive = false) {
         $result = array(
+                'id' => $tanda->getId(),
                 'numero'=>$tanda->getNumero(), 
                 'fechaInicio' => $tanda->getFechaInicio()->format('Y-m-d'), 
                 'fechaFin' => $tanda->getFechaFin()->format('Y-m-d'),
@@ -104,10 +110,11 @@ class WebappController extends BaseController {
 
     private function presentacionToEventsArray($presentacion) {
         return array(
-            'titulo' => $presentacion->getTitulo(),
+            'id' => $presentacion->getId(),
+            'titulo' => trim( $presentacion->getTitulo(),' '),
             'escuela' => $presentacion->getEscuela(),
             'localidad' => $presentacion->getLocalidad(),
-            'tipo' => preg_replace('/\W+/','',strtolower(strip_tags($presentacion->getTipoPresentacion()->getTipoPresentacion()))),
+            'tipo' => $this->safeString($presentacion->getTipoPresentacion()->getTipoPresentacion()),
             //'distrito' => $presentacion->getDistrito();
         );
     }
@@ -121,5 +128,10 @@ class WebappController extends BaseController {
                 array ( $this,$fn) , 
                 $doctrine_collection->toArray() 
             );
+    }
+
+    private function safeString($string) {
+       $acentos = array( 'Á'=>'A', 'É'=>'E', 'Í'=>'I', 'Ñ'=>'N', 'Ó'=>'O', 'Ú'=>'U', 'á'=>'a', 'é'=>'e', 'í'=>'i', 'ñ'=>'n', 'ó'=>'o', 'ú'=>'u' );
+       return strtr($string, $acentos);
     }
 }
