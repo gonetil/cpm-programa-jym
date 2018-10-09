@@ -47,7 +47,7 @@ class WebappController extends BaseController {
     }
 
     /** 
-    * @Route("tanda/{id}", name="get_tanda")
+    * @Route("tanda/{id}", name="get_single_tanda")
     * @Method("get")
     */
     public function getTandaAction($id) {

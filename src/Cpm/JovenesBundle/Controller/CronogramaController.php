@@ -34,6 +34,7 @@ class CronogramaController extends BaseController
      */
 	public function indexAction()
     {
+		
         return array();
 	}
 
@@ -51,8 +52,10 @@ class CronogramaController extends BaseController
      * @Method("get")
      */
 	public function mostrarTandaAction($tanda_id) {
+		
 		try { 
 			$tanda  = $this->getEntity('CpmJovenesBundle:Tanda', $tanda_id);
+			
 			$tandaArray = $tanda->toArray(20);
 			$tandaArray['presentaciones_libres']=array();
 			foreach($tanda->getPresentaciones() as $p){
@@ -112,6 +115,7 @@ class CronogramaController extends BaseController
      */
 	public function listarTandasAction() 
 	{
+		
 		try { 
 			$em = $this->getDoctrine()->getEntityManager();
 		 

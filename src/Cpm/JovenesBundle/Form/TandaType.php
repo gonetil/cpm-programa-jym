@@ -14,6 +14,10 @@ class TandaType extends AbstractType
             ->add('fechaInicio')
             ->add('fechaFin')
             ->add('instanciaEvento')
+            ->add('completada', 'checkbox',	array(
+                'label' => '¿La planificación de la tanda está completada?', 
+                'required'=>false,
+                ))
         ;
     }
 

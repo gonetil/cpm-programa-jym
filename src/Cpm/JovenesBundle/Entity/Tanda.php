@@ -54,6 +54,15 @@ class Tanda
    
      **/
     private $dias;
+
+    /**
+     * @var boolean $completada
+     *
+     * @ORM\Column(name="completada", type="boolean")
+     * Indica si la tanda ya esta completada, o sea si su informacion se incluye al exportarse al JSON
+     */
+    private $completada;
+
     
     
     /**
@@ -194,7 +203,15 @@ class Tanda
  			$dias = new \Doctrine\Common\Collections\ArrayCollection($dias);
  		$this->dias = $dias;
     }
-	
+    
+    public function getCompletada() {
+        return $this->completada;
+    }
+
+    public function setCompletada($aBool) {
+        $this->completada = $aBool;
+    }
+    
 	function removeDia($diaABorrar){
 		$this->dias->removeElement($diaABorrar);
 		$this->reordenarDias();

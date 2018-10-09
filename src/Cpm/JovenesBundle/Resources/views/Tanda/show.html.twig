@@ -79,12 +79,29 @@
             <th>Presentaciones</th>
             <td>{{ entity.presentaciones|length }}</td>
         </tr>
-        
+
+        <tr>
+            <th>Planificacion completada</th>
+            <td> 
+                {#  <a href="{{ path('tanda_toggle_completada', { 'id': entity.id }) }}">
+                   {% if entity.completada %} Sí {% else %} No {% endif %}
+                </a> #}
+                
+
+                <label class="switch">
+                <input type="checkbox" {% if entity.completada %} checked {% endif %} onchange="jQuery('#toggle_form').submit();">
+                <span class="slider"></span>
+                </label>
+                <form action="{{ path('tanda_toggle_completada', { 'id': entity.id }) }}" method="get" id="toggle_form"></form>
+
+        </td>
+            
+        </tr>
+
         {{ macros.diasDeTanda(entity) }}
 
     </tbody>
 </table>
-
 
 	    
 {% endblock %}
