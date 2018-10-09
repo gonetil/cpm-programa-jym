@@ -77,8 +77,9 @@ class WebappController extends BaseController {
                 'numero'=>$tanda->getNumero(), 
                 'fechaInicio' => $tanda->getFechaInicio()->format('Y-m-d'), 
                 'fechaFin' => $tanda->getFechaFin()->format('Y-m-d'),
+                'completada' => ($tanda->getCompletada() ) ? "true" : "false",
         );
-        if ($recursive)
+        if ($recursive && $tanda->getCompletada() )
             $result['dias'] = $this->map('diasToEventsArray',$tanda->getDias());
         
          return $result;
