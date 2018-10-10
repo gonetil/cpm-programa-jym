@@ -92,11 +92,14 @@
                 <input type="checkbox" {% if entity.completada %} checked {% endif %} onchange="jQuery('#toggle_form').submit();">
                 <span class="slider"></span>
                 </label>
-                <form action="{{ path('tanda_toggle_completada', { 'id': entity.id }) }}" method="get" id="toggle_form"></form>
+                 <form action="{{ path('tanda_toggle_completada', { 'id': entity.id }) }}" method="get" id="toggle_form"></form>
 
         </td>
-            
         </tr>
+        <tr><th></th><td>
+        Al marcarse como completada, la planificación (dias, bloques, presentaciones, etc.) será visible desde la app móvil
+        </td></tr>
+
 
         {{ macros.diasDeTanda(entity) }}
 
