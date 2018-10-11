@@ -1,0 +1,87 @@
+{% spaceless %}
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+    .title { 
+        text-transform: uppercase;
+    }
+    .listing {
+         padding-top: 5px;
+    }
+    .infoTanda {
+        padding-bottom: 20px;
+    }
+    .tanda > .title {
+        font-size: 18pt;
+        font-weight: bold;
+    }
+    .tanda .duration {
+        font-size: 14pt;
+        color: #0c0c0c;
+    }
+
+    .diasTanda .title { 
+        font-size: 16pt;
+        font-weight: bold;
+    }
+
+    .auditorioDia .title {
+        font-size: 15pt;
+        font-weight: bold;
+        color: #060606;
+    }
+
+    .bloque .title {
+        font-size: 14pt;
+        padding-top: 10px;
+    }
+
+    .presentaciones .title {
+        text-transform: capitalize;
+        padding-top: 10px;
+        line-height: 1px;
+        font-weight: normal;
+    }
+
+    .presentaciones .detail {
+        font-style: italic;
+        color: #333333;
+        font-size: 11pt;
+        line-height: 1px;
+    }
+</style>
+<body>
+<div class="tanda">
+    <div class="title">Tanda {{ tanda.numero }}</div>
+    <div class="duration"> Del {{ tanda.fechaInicio | date('d-m-Y') }} al {{ tanda.fechaFin | date('d-m-Y') }} </div>
+    <div class="diasTanda listing">
+        {% for dia in tanda.dias %}
+            <div class="title">Dia {{ dia.numero }}</div>
+            <div class="auditorioDia listing">
+                {% for auditorioDia in dia.auditoriosDia %}
+                    <div class="title"> {{ auditorioDia.auditorio.nombre }} </div>
+                    <div class="bloque listing">
+                        {% for bloque in auditorioDia.bloques %}
+                            <div class="title">{{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre }}</div>
+                            {% if bloque.tienePresentaciones %}
+                                <ul class="presentaciones listing">
+                                    {% for presentacion in bloque.presentaciones %}
+                                        <li>
+                                            <p class="title">
+                                                {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
+                                            </p>
+                                            <p class="detail">{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | raw('html') }}</p>
+                                        </li>
+                                    {% endfor %} {# presentaciones #}
+                                </ul> <!-- presentacion -->   
+                            {% endif %}       
+                        {% endfor %} {#bloques #}
+                     </div> <!-- bloque -->   
+                    {% endfor %} {#auditoriosDia #}
+            </div> <!-- auditorioDia -->        
+        {% endfor %} {#dia #}
+     </div> <!-- diaTanda -->
+   </div> <!-- tanda -->     
+</body>
+</html>
+{% endspaceless %}

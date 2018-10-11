@@ -412,6 +412,16 @@ abstract class BaseController extends Controller
     	
     }
     
+    protected function makeHtml($data,$template,$filename="") {
+    	
+    	$date = date('d-M-Y');
+		$filename = "$filename $date";
+        $response = $this->render($template,$data);
+        $response->headers->set('Content-Type', 'text/html;  charset=utf-8');
+        $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.html"');
+    	return $response; 
+    	
+    }
         
     protected function getSystemStats() {
     	$stats = array(); 
