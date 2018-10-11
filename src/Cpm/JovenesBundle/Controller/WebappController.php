@@ -98,10 +98,12 @@ class WebappController extends BaseController {
     }
 
     private function bloqueToEventsArray($bloque) {
+        
         return array(
                 'nombre' => $bloque->getNombre(),
                 'horaInicio' => $bloque->getHoraInicio()->format('H:i'),
-                'duracion' => $bloque->getDuracion(),
+//                'duracion' => $bloque->getDuracion(),
+                'horaFin' => $bloque->getHoraInicio()->modify("+{$bloque->getDuracion()} minutes")->format('H:i'),
                 'presentaciones' => $this->map( 'presentacionToEventsArray' ,$bloque->getPresentaciones() ),
    //           'ejes_tematicos' => $bloque->getEjesTematicos(),
    //           'areas_referencia' => $bloque->getAreasReferencia(),
