@@ -47,7 +47,8 @@
 		            <select name="format">
 		            	<option value="word">Word</option>
 		            	<option value="csv">Excel</option>
-		            </select>
+                        <option value="html">HTML</option>
+    	            </select>
                     <br/>
                     <Label for="includeProjectIds">Incluir IDs de proyectos:</Label>
                     <input type="checkbox" name="includeProjectIds" />
@@ -82,7 +83,26 @@
             <th>Presentaciones</th>
             <td>{{ entity.presentaciones|length }}</td>
         </tr>
-        
+
+       <tr>
+           <th>Planificacion completada</th>
+           <td> 
+               {#  <a href="{{ path('tanda_toggle_completada', { 'id': entity.id }) }}">
+                  {% if entity.completada %} Sí {% else %} No {% endif %}
+               </a> #}
+               
+
+               <label class="switch">
+               <input type="checkbox" {% if entity.completada %} checked {% endif %} onchange="jQuery('#toggle_form').submit();">
+               <span class="slider"></span>
+               </label>
+                <form action="{{ path('tanda_toggle_completada', { 'id': entity.id }) }}" method="get" id="toggle_form"></form>
+       </td>
+       </tr>
+       <tr><th></th><td>
+       Al marcarse como completada, la planificación (dias, bloques, presentaciones, etc.) será visible desde la app móvil
+       </td></tr>
+          
         {{ macros.diasDeTanda(entity) }}
 
     </tbody>

@@ -380,9 +380,9 @@ abstract class BaseController extends Controller
         return $entity;
 	}
 
-	protected function createJsonResponse($json_array){
-		$response = new Response(json_encode($json_array));
-    	$response->headers->set('Content-Type', 'application/json');
+	protected function createJsonResponse($json_array,$extraHeaders=""){
+		$response = new Response(json_encode($json_array,JSON_UNESCAPED_UNICODE));
+    	$response->headers->set('Content-Type', "application/json; $extraHeaders");
     	return $response;
     }
 
@@ -417,6 +417,17 @@ abstract class BaseController extends Controller
 
     }
 
+	    protected function makeHtml($data,$template,$filename="") {
+		    	
+		    	$date = date('d-M-Y');
+				$filename = "$filename $date";
+		        $response = $this->render($template,$data);
+		        $response->headers->set('Content-Type', 'text/html;  charset=utf-8');
+		        $response->headers->set('Content-Disposition', 'Attachment;filename="'.$filename.'.html"');
+		    	return $response; 
+		    	
+		 }
+		
 
     protected function getSystemStats() {
     	$stats = array();

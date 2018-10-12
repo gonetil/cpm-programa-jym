@@ -54,7 +54,16 @@ class Tanda
    
      **/
     private $dias;
-    
+
+       
+    /**
+    * @var boolean $completada
+    *
+    * @ORM\Column(name="completada", type="boolean")
+    * Indica si la tanda ya esta completada, o sea si su informacion se incluye al exportarse al JSON
+    */
+    private $completada;
+           
     
     /**
      * @ORM\OneToMany(targetEntity="Presentacion", mappedBy="tanda", cascade={"all"})
@@ -206,11 +215,11 @@ class Tanda
 		if (count($this->dias) == 0)
 			$numero = 1;
 		elseif (($numero < 0) || $numero > count($this->dias))
-			$numero=$this->dias->last()->getNumero()+1;
+			$numero=$this->dias->last()->getNumero() ;
 		
 		foreach($this->dias as $dia){
 			if ($dia->getNumero() > $numero)
-				$dia->setNumero($dia->getNumero()+1);
+				$dia->setNumero($dia->getNumero());
 		}
 		
 		$nuevoDia->setNumero($numero);
@@ -225,10 +234,19 @@ class Tanda
 		foreach($this->dias as $dia){
 			if ($dia->getNumero() != $numero)
 				$dia->setNumero($numero);
-			$numero++; 
+			$numero      ; 
 		}
 	}
-		
+
+       
+   public function getCompletada() {
+       return $this->completada;
+   }
+
+   public function setCompletada($aBool) {
+       $this->completada = $aBool;
+   }
+   
     
     public function __toString() {
     	return $this->getNumero()." (".$this->getFechaInicio()->format('d/m/Y').")";

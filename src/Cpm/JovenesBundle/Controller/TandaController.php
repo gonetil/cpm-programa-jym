@@ -194,7 +194,21 @@ class TandaController extends BaseController
     }
     
     
-    
+       /**
+       * Setea la tanda como completada / no completada
+       *
+       * @Route("/{id}/toggle_completada", name="tanda_toggle_completada")
+       */
+      public function toggleCompletadaAction($id)
+      {
+          $tanda = $this->getEntityForUpdate('CpmJovenesBundle:Tanda',$id);
+          $tanda->setCompletada(!$tanda->getCompletada());
+  
+          $em = $this->getDoctrine()->getEntityManager();
+          $em->persist($tanda);
+          $em->flush();
+          return $this->redirect($this->generateUrl('tanda_show', array('id' => $id)));
+      }
     
     /**
      * Crea las tandas a partir de las instancias del evento Chapa.
@@ -323,7 +337,10 @@ class TandaController extends BaseController
 			if ($format == 'word') { 
 						$template = 'CpmJovenesBundle:Tanda:export_to_word.doc.twig' ;
 						$fn = 'makeWord';
-			 } else {
+            } else if ($format == 'html') {
+                $template = 'CpmJovenesBundle:Tanda:export_to_html.html.twig' ;
+                $fn = 'makeHtml';
+            } else {
 			 	$fn = 'makeExcel';
 			 	$template = 'CpmJovenesBundle:Tanda:export_to_excel.xls.twig';
 			 	
