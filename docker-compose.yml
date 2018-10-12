@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jovenes
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootx
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./mysql-data:/var/lib/mysql"
+  web:
+    image: webgriffe/php-apache-base:5.6
+    depends_on:
+      - db
+    volumes:
+      - ".:/var/www/"
+      - "./web:/var/www/html/"
+    ports:
+      - "80:80"
+    stdin_open: true
+    tty: true
+    links:
+      - db
+  
