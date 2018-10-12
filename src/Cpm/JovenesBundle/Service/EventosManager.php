@@ -129,7 +129,7 @@ class EventosManager
     	
 		$invitaciones = $this->doctrine->getEntityManager()->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesPendientes($instancia);
         
-    	set_time_limit(60+3*count($invitaciones));
+    	set_time_limit(900+15*count($invitaciones));
     	$i = 0;
     //	$memoInit = memory_get_usage();
     //	echo "el init se comio :".($memoInit - $memoInitZero);
