@@ -50,7 +50,7 @@ class CorreoController extends BaseController
 		
 		$mailer = $this->getMailer();
 		$enviados = 0;
-		set_time_limit(60+3*count($entities));
+		set_time_limit(900+15*count($entities));
 		
 		try{
 			foreach ( $entities as $correoViejo) {
@@ -262,11 +262,11 @@ class CorreoController extends BaseController
 				
 //				$correoMaestro->setArchivos($adjuntos);	
 				$cant = 0;
-                $estimated_seconds_per_project = (  ($correoBatch->getCcCoordinadores() ? 3 : 0)
+                $estimated_seconds_per_project = 10 + (  ($correoBatch->getCcCoordinadores() ? 3 : 0)
                                                 + ($correoBatch->getCcEscuelas() ? 3 : 0)
                                                 + ($correoBatch->getCcColaboradores() ? 6 : 0));
 
-				set_time_limit(120+$estimated_seconds_per_project*count($proyectos));
+				set_time_limit(900+$estimated_seconds_per_project*count($proyectos));
 
 				try{
 					foreach ($proyectos as $proyecto) {
@@ -371,7 +371,7 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 				
 				//LO mando
 				$cant = 0;
-				set_time_limit(60+3*count($usuarios));
+				set_time_limit(900+15*count($usuarios));
 				try{
 					foreach ($usuarios as $usuario) {
 						$correo=$correoMaestro->clonar(false);
@@ -466,7 +466,7 @@ $correoBatchForm=$this->createForm(new CorreoBatchType(), $correoBatch);
 	
 		
 	   $mailer = $this->getMailer();
-       set_time_limit(60+3*count($invitados));
+       set_time_limit(900+15*count($invitados));
 
 		$cant = 0;
 //		$plantilla = 'invitaci-n-a-n-no-confirmada';  //recordatorio para que confirmen la invitacion!
