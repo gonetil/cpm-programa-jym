@@ -69,6 +69,7 @@ class WebappController extends BaseController {
     private function getJSON($array) {
         return $this->createJsonResponse($array, "charset=utf-8");
     }
+    
 
 
     private function tandaToEventsArray($tanda,$recursive = false) {
@@ -78,6 +79,7 @@ class WebappController extends BaseController {
                 'fechaInicio' => $tanda->getFechaInicio()->format('Y-m-d'), 
                 'fechaFin' => $tanda->getFechaFin()->format('Y-m-d'),
                 'completada' => ($tanda->getCompletada() ) ? "true" : "false",
+                "auditorios" => $this->getAuditoriosIndex($tanda->getDias()),
         );
         if ($recursive && $tanda->getCompletada() )
             $result['dias'] = $this->map('diasToEventsArray',$tanda->getDias());
@@ -85,15 +87,32 @@ class WebappController extends BaseController {
          return $result;
     }
 
+    /**
+     * retorna un listado con todos los auditorios que se utilizarnan en los bloques de la tanda
+     */
+    private function getAuditoriosIndex($dias) {
+        $auditorios = array();
+        foreach($dias as $dia)
+            foreach ($dia->getAuditoriosDia() as $auditorioDia) 
+                $auditorios[$auditorioDia->getAuditorio()->getId()] = $auditorioDia->getAuditorio()->getNombre();
+        return $auditorios;        
+
+    }
     private function diasToEventsArray($dia) {
-        return array('numero'=> $dia->getNumero(), 'auditoriosDia' =>  $this->map('auditorioDiaToEventsArray',$dia->getAuditoriosDia()) ) ;
+        
+        $bloques = array();
+        return array('numero'=> $dia->getNumero(), 
+        'bloques' =>  $this->map('auditorioDiaToEventsArray',$dia->getAuditoriosDia()) ) ;
     }
 
     private function auditorioDiaToEventsArray($auditorioDia) {
-        return array(  
-            'auditorio' => $auditorioDia->getAuditorio()->getNombre(),
-            'bloques' => $this->map('bloqueToEventsArray',$auditorioDia->getBloques()) 
-            );
+        $id_auditorio = $auditorioDia->getAuditorio()->getId();
+        $bloques = $this->map('bloqueToEventsArray',$auditorioDia->getBloques());
+  //      print_r($bloques); die;
+        for($i=0;$i<count($bloques);$bloques[$i++]['auditorio']=$id_auditorio);
+///            $b['auditorio'] = $id_auditorio;
+        return $bloques;
+
 
     }
 
