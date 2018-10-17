@@ -107,8 +107,14 @@ class WebappController extends BaseController {
 
     private function auditorioDiaToEventsArray($auditorioDia) {
         $id_auditorio = $auditorioDia->getAuditorio()->getId();
-        $bloques = $this->map('bloqueToEventsArray',$auditorioDia->getBloques());
-  //      print_r($bloques); die;
+        
+        $sort_fn = function($b1,$b2) { 
+            $hora1 = new \DateTime($b1->getHoraInicio()->format('H:i'));
+            $hora2 = new \DateTime($b2->getHoraInicio()->format('H:i'));
+            return ($hora1 <= $hora2);
+        };
+
+        $bloques = $this->map('bloqueToEventsArray',$auditorioDia->getBloques(), $sort_fn);
         for($i=0;$i<count($bloques);$bloques[$i++]['auditorio']=$id_auditorio);
 ///            $b['auditorio'] = $id_auditorio;
         return $bloques;
@@ -118,12 +124,13 @@ class WebappController extends BaseController {
 
     private function bloqueToEventsArray($bloque) {
         
+        $sorter = function($p1,$p2) { return ($p1->getPosicion() < $p2->getPosicion()) ; };
         return array(
                 'nombre' => $bloque->getNombre(),
                 'horaInicio' => $bloque->getHoraInicio()->format('H:i'),
 //                'duracion' => $bloque->getDuracion(),
                 'horaFin' => $bloque->getHoraInicio()->modify("+{$bloque->getDuracion()} minutes")->format('H:i'),
-                'presentaciones' => $this->map( 'presentacionToEventsArray' ,$bloque->getPresentaciones() ),
+                'presentaciones' => $this->map( 'presentacionToEventsArray' , $bloque->getPresentaciones() , $sorter),
    //           'ejes_tematicos' => $bloque->getEjesTematicos(),
    //           'areas_referencia' => $bloque->getAreasReferencia(),
         );
@@ -137,6 +144,7 @@ class WebappController extends BaseController {
             'escuela' => $presentacion->getEscuela(),
             'localidad' => $presentacion->getLocalidad(),
             'tipo' => $this->safeString($presentacion->getTipoPresentacion()->getTipoPresentacion()),
+            //'posicion' => $presentacion->getPosicion()
             //'distrito' => $presentacion->getDistrito();
         );
     }
@@ -145,11 +153,13 @@ class WebappController extends BaseController {
      * Helper function para ejecutar el array_map sobre colecciones 
      */
 
-    private function map($fn,$doctrine_collection) {
+    private function map($fn,$doctrine_collection, $sort_fn = null) {
+        $array = $doctrine_collection->toArray();
+        if ($sort_fn)
+            uasort($array, $sort_fn);
+
         return array_map( 
-                array ( $this,$fn) , 
-                $doctrine_collection->toArray() 
-            );
+                array ( $this,$fn) , $array );
     }
 
     private function safeString($string) {

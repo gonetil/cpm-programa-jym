@@ -338,6 +338,7 @@ class TandaController extends BaseController
 						$template = 'CpmJovenesBundle:Tanda:export_to_word.doc.twig' ;
 						$fn = 'makeWord';
             } else if ($format == 'html') {
+                usort($presentaciones,function($p1,$p2) { return ($p1->getPosicion() <= $p2->getPosicion()); });
                 $template = 'CpmJovenesBundle:Tanda:export_to_html.html.twig' ;
                 $fn = 'makeHtml';
             } else {

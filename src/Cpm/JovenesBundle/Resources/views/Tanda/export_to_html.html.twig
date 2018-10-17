@@ -61,14 +61,14 @@
                 {% for auditorioDia in dia.auditoriosDia %}
                     <div class="title"> {{ auditorioDia.auditorio.nombre }} </div>
                     <div class="bloque listing">
-                        {% for bloque in auditorioDia.bloques %}
+                        {% for bloque in auditorioDia.getSortedBloques() %}
                             <div class="title">{{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre }}</div>
                             {% if bloque.tienePresentaciones %}
                                 <ul class="presentaciones listing">
                                     {% for presentacion in bloque.presentaciones %}
                                         <li>
                                             <p class="title">
-                                                {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
+                                               {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
                                             </p>
                                             <p class="detail">{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | raw('html') }}</p>
                                         </li>

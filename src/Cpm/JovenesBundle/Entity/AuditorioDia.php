@@ -119,6 +119,17 @@ class AuditorioDia
         	return $this->getId() == $other->getId();
         else
         	return false;
-    }
+	}
+	
+	public function getSortedBloques() { 
+		$iterator = $this->getBloques()->getIterator();
+		$iterator->uasort(function($b1,$b2){
+			$hora1 = new \DateTime($b1->getHoraInicio()->format('H:i'));
+			$hora2 = new \DateTime($b2->getHoraInicio()->format('H:i'));
+			//if ($hora1 > $hora2) echo "despues"; else echo "antes";
+            return ($hora1 > $hora2);
+		});
+		return iterator_to_array($iterator);;
+	}
 
 }
