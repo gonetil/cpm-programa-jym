@@ -8,13 +8,13 @@
 <p style="font-weight: bold">
 {% if presentacion.bloque %}
 	DÍA {{ presentacion.bloque.auditorioDia.dia.numero }}</br>
-	LUGAR {{ presentacion.bloque.auditorioDia.auditorio.nombre | upper }} <br/>
-	HORA Y ACTIVIDAD {{ presentacion.bloque.horaInicio | date('H:i')}} hs. {{ presentacion.bloque.nombre | upper}}  <br/>
+	{{ presentacion.bloque.auditorioDia.auditorio.nombre | upper }} <br/>
+	{{ presentacion.bloque.horaInicio | date('H:i')}} hs. {{ presentacion.bloque.nombre | upper}}  <br/>
 {% else %}
 	SIN ASIGNAR <br/>
 {% endif %}
  {% if includeIDs  %} <p>ID: {{ presentacion.getProyecto().getId() }}</p> {% endif %}
-Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion | e('html') }})<br/>
+{{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion | e('html') }})<br/>
 </p>
 <p>{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | escape }} - {{ presentacion.distrito  | raw('html') }}</p>
 
