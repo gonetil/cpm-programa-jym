@@ -6,14 +6,14 @@
 {% for dia in tanda.dias %}
 	<h1>DÍA {{ dia.numero }}</h1>
 	{% for auditorioDia in dia.auditoriosDia %}
-			<h2>LUGAR {{ auditorioDia.auditorio.nombre | upper }} </h2>
-			{% for bloque in auditorioDia.bloques %}
-				<h3>HORA Y ACTIVIDAD {{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre | upper }}</h3>
+			<h2>{{ auditorioDia.auditorio.nombre | upper }} </h2>
+			{% for bloque in auditorioDia.getSortedBloques() %}
+				<h3>{{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre | upper }}</h3>
 				{% if bloque.tienePresentaciones %}
 					{% for presentacion in bloque.presentaciones %}
                         {% if includeIDs  %} <p>ID: {{ presentacion.getProyecto().getId() }}</p> {% endif %}
                         <p style="font-weight: bold">
-						Título y producción: {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
+						{{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
 					</p>
 					<p>{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | escape }} - {{ presentacion.distrito  | raw('html') }}</p>
 					{% endfor %} {# presentaciones #}
