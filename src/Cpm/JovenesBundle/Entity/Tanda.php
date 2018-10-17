@@ -62,7 +62,7 @@ class Tanda
     * @ORM\Column(name="completada", type="boolean")
     * Indica si la tanda ya esta completada, o sea si su informacion se incluye al exportarse al JSON
     */
-    private $completada;
+    private $completada=false;
            
     
     /**
