@@ -100,9 +100,14 @@ class WebappController extends BaseController {
     }
     private function diasToEventsArray($dia) {
         
-        $bloques = array();
+        $bloques = $this->map('auditorioDiaToEventsArray',$dia->getAuditoriosDia());
+        $bloques_planos = array();
+        foreach ($bloques as $bloque_array) 
+            foreach($bloque_array as $b)
+                $bloques_planos[] = $b;
+                
         return array('numero'=> $dia->getNumero(), 
-        'bloques' =>  $this->map('auditorioDiaToEventsArray',$dia->getAuditoriosDia()) ) ;
+        'bloques' =>   $bloques_planos) ;
     }
 
     private function auditorioDiaToEventsArray($auditorioDia) {
@@ -116,6 +121,9 @@ class WebappController extends BaseController {
 
         $bloques = $this->map('bloqueToEventsArray',$auditorioDia->getBloques(), $sort_fn);
         for($i=0;$i<count($bloques);$bloques[$i++]['auditorio']=$id_auditorio);
+
+      
+
 ///            $b['auditorio'] = $id_auditorio;
         return $bloques;
 
