@@ -58,11 +58,9 @@
         {% for dia in tanda.dias %}
             <div class="title">Dia {{ dia.numero }}</div>
             <div class="auditorioDia listing">
-                {% for auditorioDia in dia.auditoriosDia %}
-                    <div class="title"> {{ auditorioDia.auditorio.nombre }} </div>
+                {% for bloque in dia.getSortedBloques() %}
                     <div class="bloque listing">
-                        {% for bloque in auditorioDia.getSortedBloques() %}
-                            <div class="title">{{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre }}</div>
+                            <div class="title">{{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre }} <span class="title"> ({{ bloque.auditorioDia.auditorio.nombre }}) </span></div>
                             {% if bloque.tienePresentaciones %}
                                 <ul class="presentaciones listing">
                                     {% for presentacion in bloque.presentaciones %}
@@ -74,10 +72,9 @@
                                         </li>
                                     {% endfor %} {# presentaciones #}
                                 </ul> <!-- presentacion -->   
-                            {% endif %}       
-                        {% endfor %} {#bloques #}
+                            {% endif %}      {#tienePresentaciones#} 
                      </div> <!-- bloque -->   
-                    {% endfor %} {#auditoriosDia #}
+                    {% endfor %} {#for bloque in dia #}
             </div> <!-- auditorioDia -->        
         {% endfor %} {#dia #}
      </div> <!-- diaTanda -->

@@ -5,24 +5,20 @@
 
 {% for dia in tanda.dias %}
 	<h1>DÍA {{ dia.numero }}</h1>
-	{% for auditorioDia in dia.auditoriosDia %}
-			<h2>{{ auditorioDia.auditorio.nombre | upper }} </h2>
-			{% for bloque in auditorioDia.getSortedBloques() %}
-				<h3>{{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre | upper }}</h3>
+	{% for bloque in dia.getSortedBloques() %}
+				<h3>{{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre | upper }} ({{ bloque.auditorioDia.auditorio.nombre | upper }})</h3>
 				{% if bloque.tienePresentaciones %}
+					<br/>
 					{% for presentacion in bloque.presentaciones %}
                         {% if includeIDs  %} <p>ID: {{ presentacion.getProyecto().getId() }}</p> {% endif %}
                         <p style="font-weight: bold">
-						{{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
-					</p>
+							{{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
+						</p>
 					<p>{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | escape }} - {{ presentacion.distrito  | raw('html') }}</p>
 					{% endfor %} {# presentaciones #}
 				{% endif %}
 				<br/> <br/>
-			{% endfor %} {#bloques #}
-			<hr/>
-		{% endfor %} {#auditoriosDia #}
-		<hr/>
+		{% endfor %} {#bloque #}
 		<hr/>		
 {% endfor %} {#dia #}
 </body>
