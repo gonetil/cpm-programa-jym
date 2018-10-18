@@ -1,0 +1,6 @@
+app/cache
+app/logs
+web/app_dev.php
+app/config/parameters.in*
+mysql-data
+vendor
