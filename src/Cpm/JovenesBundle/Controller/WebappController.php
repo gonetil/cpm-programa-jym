@@ -78,7 +78,7 @@ class WebappController extends BaseController {
                 'numero'=>$tanda->getNumero(), 
                 'fechaInicio' => $tanda->getFechaInicio()->format('Y-m-d'), 
                 'fechaFin' => $tanda->getFechaFin()->format('Y-m-d'),
-                'completada' => ($tanda->getCompletada() ) ? "true" : "false",
+                'completada' => $tanda->getCompletada() ,
                 "auditorios" => $this->getAuditoriosIndex($tanda->getDias()),
         );
         if ($recursive && $tanda->getCompletada() )
@@ -105,7 +105,7 @@ class WebappController extends BaseController {
         foreach ($bloques as $bloque_array) 
             foreach($bloque_array as $b)
                 $bloques_planos[] = $b;
-                
+
         return array('numero'=> $dia->getNumero(), 
         'bloques' =>   $bloques_planos) ;
     }
