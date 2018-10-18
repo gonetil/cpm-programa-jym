@@ -1,6 +1,5 @@
 app/cache
 app/logs
-web/app_dev.php
 app/config/parameters.ini
 mysql-data
 vendor
