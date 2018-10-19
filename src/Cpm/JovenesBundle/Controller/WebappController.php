@@ -94,7 +94,7 @@ class WebappController extends BaseController {
         $auditorios = array();
         foreach($dias as $dia)
             foreach ($dia->getAuditoriosDia() as $auditorioDia) 
-                $auditorios[$auditorioDia->getAuditorio()->getId()] = $auditorioDia->getAuditorio()->getNombre();
+                $auditorios[] = array('id'=>$auditorioDia->getAuditorio()->getId(), 'nombre' => $auditorioDia->getAuditorio()->getNombre());
         return $auditorios;        
 
     }
