@@ -213,9 +213,9 @@ class Tanda
 		$numero = $nuevoDia->getNumero();
 		
 		if (count($this->dias) == 0)
-			$numero = 1;
+            $numero = 1;
 		elseif (($numero < 0) || $numero > count($this->dias))
-			$numero=$this->dias->last()->getNumero() ;
+			$numero=$this->dias->last()->getNumero() + 1;
 		
 		foreach($this->dias as $dia){
 			if ($dia->getNumero() > $numero)
@@ -234,7 +234,7 @@ class Tanda
 		foreach($this->dias as $dia){
 			if ($dia->getNumero() != $numero)
 				$dia->setNumero($numero);
-			$numero      ; 
+			$numero++; 
 		}
 	}
 
