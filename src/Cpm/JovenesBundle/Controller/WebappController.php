@@ -133,12 +133,15 @@ class WebappController extends BaseController {
     private function bloqueToEventsArray($bloque) {
         
         $sorter = function($p1,$p2) { return ($p1->getPosicion() < $p2->getPosicion()) ; };
+        $presentaciones = array();
+        foreach ( $this->map( 'presentacionToEventsArray' , $bloque->getPresentaciones() , $sorter) as $p)
+            $presentaciones[] = $p;
         return array(
                 'nombre' => $bloque->getNombre(),
                 'horaInicio' => $bloque->getHoraInicio()->format('H:i'),
 //                'duracion' => $bloque->getDuracion(),
                 'horaFin' => $bloque->getHoraInicio()->modify("+{$bloque->getDuracion()} minutes")->format('H:i'),
-                'presentaciones' => $this->map( 'presentacionToEventsArray' , $bloque->getPresentaciones() , $sorter),
+                'presentaciones' => $presentaciones 
    //           'ejes_tematicos' => $bloque->getEjesTematicos(),
    //           'areas_referencia' => $bloque->getAreasReferencia(),
         );
