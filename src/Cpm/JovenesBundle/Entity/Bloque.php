@@ -75,7 +75,16 @@ class Bloque
      * @ORM\OrderBy({"posicion" = "ASC"})
      */
 	private $presentaciones;
-     
+
+        
+    /**
+     * @var string $descripcion
+     *
+     * @ORM\Column(name="descripcion", type="text")
+     */
+    
+    private $descripcion;
+
     function __construct(){
     	$this->ejesTematicos = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->areasReferencia=new \Doctrine\Common\Collections\ArrayCollection();
@@ -219,6 +228,14 @@ class Bloque
     
     public function getCiclo(){
     	return $this->auditorioDia->getCiclo();
+    }
+
+    public function getDescripcion() {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion($desc) { 
+        $this->descripcion = $desc;
     }
     
     public function reposicionarPresentacion($presentacion, $nueva_posicion){

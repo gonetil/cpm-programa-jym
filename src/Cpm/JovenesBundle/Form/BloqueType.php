@@ -11,6 +11,7 @@ class BloqueType extends AbstractType
     {
         $builder
             ->add('nombre')     
+            ->add('descripcion')     
             ->add('horaInicio', 'time', array (
 				'label' => 'Hora de Inicio',
 				'input'  => 'datetime',
