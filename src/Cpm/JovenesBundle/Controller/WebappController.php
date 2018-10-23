@@ -122,9 +122,6 @@ class WebappController extends BaseController {
         $bloques = $this->map('bloqueToEventsArray',$auditorioDia->getBloques(), $sort_fn);
         for($i=0;$i<count($bloques);$bloques[$i++]['auditorio']=$id_auditorio);
 
-      
-
-///            $b['auditorio'] = $id_auditorio;
         return $bloques;
 
 
@@ -132,7 +129,7 @@ class WebappController extends BaseController {
 
     private function bloqueToEventsArray($bloque) {
         
-        $sorter = function($p1,$p2) { return ($p1->getPosicion() < $p2->getPosicion()) ; };
+        $sorter = function($p1,$p2) { return ($p1->getPosicion() > $p2->getPosicion()) ; };
         $presentaciones = array();
         foreach ( $this->map( 'presentacionToEventsArray' , $bloque->getPresentaciones() , $sorter) as $p)
             $presentaciones[] = $p;
