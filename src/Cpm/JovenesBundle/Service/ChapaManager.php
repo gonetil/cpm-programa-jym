@@ -43,6 +43,7 @@ class ChapaManager {
 	public function clonarBloque($bloque,$auditorioDia=null) {
 		$nuevo_bloque = new Bloque();
 		$nuevo_bloque->setNombre($bloque->getNombre());
+		$nuevo_bloque->setDescripcion($bloque->getDescripcion());
 		$nuevo_bloque->setTienePresentaciones($bloque->getTienePresentaciones());
 		$nuevo_bloque->setDuracion($bloque->getDuracion());
 		$nuevo_bloque->setHoraInicio($bloque->getHoraInicio());
@@ -105,7 +106,7 @@ class ChapaManager {
 		//creo los dias para la tanda
 	    for($nroDia=1;$nroDia<=$num_dias;$nroDia++) {
 			$tandaDia = new Dia($nroDia);	
-			$tanda->addDia($tandaDia);       	
+			$tanda->addDia($tandaDia);        	
 			//cargo los auditorios para cada dia
 	       	foreach ( $auditorios as $auditorio) { 
 	       		$newAuditorioDia = new AuditorioDia();

@@ -141,9 +141,10 @@ class WebappController extends BaseController {
                 'horaInicio' => $bloque->getHoraInicio()->format('H:i'),
 //                'duracion' => $bloque->getDuracion(),
                 'horaFin' => $bloque->getHoraInicio()->modify("+{$bloque->getDuracion()} minutes")->format('H:i'),
-                'presentaciones' => $presentaciones 
+                'presentaciones' => $presentaciones, 
    //           'ejes_tematicos' => $bloque->getEjesTematicos(),
    //           'areas_referencia' => $bloque->getAreasReferencia(),
+                'descripcion' => $bloque->getDescripcion()
         );
 
     }
