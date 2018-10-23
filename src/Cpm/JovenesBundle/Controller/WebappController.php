@@ -40,9 +40,12 @@ class WebappController extends BaseController {
 
         $tandas = $em->getRepository('CpmJovenesBundle:Tanda')->findAllQuery( $this->getJYM()->getCicloActivo() )->getResult(); 
         $result = array();
-        foreach($tandas as $tanda) 
+        foreach($tandas as $tanda) { 
             $result[] = $this->tandaToEventsArray($tanda,true);
+        }
         
+        uasort($result,function($t1,$t2) { return ( $t1['numero'] < $t2['numero']) ? -1 : 1; });
+
         return $this->getJSON( $result );
     }
 
@@ -152,7 +155,7 @@ class WebappController extends BaseController {
             'escuela' => $presentacion->getEscuela(),
             'localidad' => $presentacion->getLocalidad(),
             'tipo' => $this->safeString($presentacion->getTipoPresentacion()->getTipoPresentacion()),
-            //'posicion' => $presentacion->getPosicion()
+            'posicion' => $presentacion->getPosicion()
             //'distrito' => $presentacion->getDistrito();
         );
     }
