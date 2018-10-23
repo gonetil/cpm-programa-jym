@@ -80,7 +80,7 @@ class Bloque
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="text")
+     * @ORM\Column(name="descripcion", type="text", nullable=true)
      */
     
     private $descripcion;
