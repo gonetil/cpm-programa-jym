@@ -45,8 +45,12 @@ class WebappController extends BaseController {
         }
         
         uasort($result,function($t1,$t2) { return ( $t1['numero'] < $t2['numero']) ? -1 : 1; });
+        //copio el resultado a un array plano para que al transformarse a JSON se genere en forma de rarray        
+        $tandas = array();
+        foreach($result as $tanda) 
+            $tandas[] = $tanda;
 
-        return $this->getJSON( $result );
+        return $this->getJSON( $tandas );
     }
 
     /** 
