@@ -36,6 +36,13 @@ class Escuela
     */
     private $otroTipoInstitucion;
     
+    /**
+    * @var string $otroTipoInstitucionNombre
+    *
+    * @ORM\Column(name="otroTipoInstitucionNombre", type="string", nullable=true)
+    *  
+    */
+    private $otroTipoInstitucionNombre;
     
     
     /**
@@ -153,6 +160,28 @@ class Escuela
     {
         return $this->otroTipoInstitucion;
     }
+
+
+     /**
+     * Set otroTipoInstitucionNombre
+     *
+     * @param string $otroTipoInstitucionNombre
+     */
+    public function setOtroTipoInstitucionNombre($otroTipoInstitucionNombre)
+    {
+        $this->otroTipoInstitucionNombre = $otroTipoInstitucionNombre;
+    }
+
+    /**
+     * Get otroTipoInstitucionNombre
+     *
+     * @return string 
+     */
+    public function getOtroTipoInstitucionNombre()
+    {
+        return $this->otroTipoInstitucionNombre;
+    }
+
 
     /**
      * Set email

@@ -1,10 +1,15 @@
 	<script>
    			$(document).ready(function() {
                 $("#cpm_jovenesbundle_proyectotype_escuela_tipoInstitucion").change(function(event) {
-   						if ($(event.target).val() == "")
+   						if (isNotEscuelaSelected($(event.target))) {
    							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").removeAttr("disabled");
-   						else 
+							   $("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucionNombre").removeAttr("disabled");
+						   }
+   						else {
    							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucion").attr("disabled","disabled");
+   							$("#cpm_jovenesbundle_proyectotype_escuela_otroTipoInstitucionNombre").attr("disabled","disabled");
+
+						   }
    					}).trigger('change');
             });
 
@@ -17,6 +22,7 @@
 	
 	{{ form_row(form.escuela.tipoInstitucion)}}
 	{{ form_row(form.escuela.otroTipoInstitucion)}}
+	{{ form_row(form.escuela.otroTipoInstitucionNombre)}}
 	
 	{{ form_row(form.escuela.tipoEscuela)}}
 	

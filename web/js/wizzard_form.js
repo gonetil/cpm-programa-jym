@@ -52,15 +52,19 @@
       setOptional(elem);
   }
 
+	function isNotEscuelaSelected($field) {
+		return ( ($field.val() == "") || ($field.find(':selected').text().indexOf("Escuela") < 0));
+	}
   function setBlocked(elem) { setDisabled(elem); setOptional(elem); }
 
   function setup_selects_for_form(formName) {
 	  $(formName+"_escuela_tipoInstitucion").change(function(event) {
 	   		$numero_escuela = $(formName+"esds");
-	   	
-	 		if( $(this).val() == "") //selecciono otra institucion
+				 
+	 		if (isNotEscuelaSelected($(this))) //selecciono otra institucion , que no sea una escuela
 	 		{
-                setRequired(formName+"_escuela_otroTipoInstitucion");
+								setRequired(formName+"_escuela_otroTipoInstitucion");
+								setRequired(formName+"_escuela_otroTipoInstitucionNombre");
 
         	 	setBlocked(formName+"_escuela_tipoEscuela");
 
@@ -71,7 +75,8 @@
 	 		} else { //selecciono un tipo de institucion
                 setRequired(formName+"_escuela_tipoEscuela");
 
-                setBlocked(formName+"_escuela_otroTipoInstitucion")
+								setBlocked(formName+"_escuela_otroTipoInstitucion")
+								setBlocked(formName+"_escuela_otroTipoInstitucionNombre")
 
                 setRequired(formName+"_escuela_nombre");
                 setRequired(formName+"_escuela_cue");
