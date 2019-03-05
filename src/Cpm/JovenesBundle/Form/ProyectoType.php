@@ -41,14 +41,14 @@ class ProyectoType extends AbstractType
     				'expanded' => true,
     				 'attr'=>array('class'=>'radios-en-linea'),
     		))
-    		->add('esPrimeraVezAlumnos', 'choice',	array(
+    	/*	->add('esPrimeraVezAlumnos', 'choice',	array(
             		'label' => '¿participan por primera vez los jóvenes del proyecto?', 
             		'required'=>false,
     				'choices' => array(1=>"si",0=>"no"),
     				'expanded' => true,
     				 'attr'=>array('class'=>'radios-en-linea'),
     		))
-    	/*	->add('cuentanConNetbook', 'choice',	array(
+    		->add('cuentanConNetbook', 'choice',	array(
             		'label' => '¿Los jóvenes que participan en el proyecto cuentan con netbooks del Plan Conectar Igualdad?', 
             		'required'=>false,
     				'choices' => array(1=>"si",0=>"no"),
