@@ -25,21 +25,22 @@ class ProyectoType extends AbstractType
 													            ->orderBy('u.apellido', 'ASC');
     														}
     								    )) */
-            ->add('titulo')
+            ->add('titulo',null, array('attr'=>array('maxlength' => '45','minlength' => '1')
+		))
             ->add('nroAlumnos','integer',array('label'  => 'Cantidad de jóvenes que participan', 'attr'=>array('class'=>'number')))
     		 ->add('recibioCapacitacion', 'choice',	array(
             		'label' => '¿recibió capacitación del programa Jóvenes y Memoria en años anteriores?', 
-            		'required'=>false,
-    				'choices' => array(1=>"si",0=>"no"),
+            		'required'=>true,
+					'choices' => array(1=>"si",0=>"no"),
     				'expanded' => true,
-    				 'attr'=>array('class'=>'radios-en-linea'),
+					 'attr'=>array('class'=>'radios-en-linea')					 
     		))
     		->add('esPrimeraVezEscuela', 'choice',	array(
             		'label' => '¿participa por primera vez la institución?', 
-            		'required'=>false,
-    				'choices' => array(1=>"si",0=>"no"),
+            		'required'=>true,
+					'choices' => array(1=>"si",0=>"no"),
     				'expanded' => true,
-    				 'attr'=>array('class'=>'radios-en-linea'),
+					 'attr'=>array('class'=>'radios-en-linea'),
     		))
     	/*	->add('esPrimeraVezAlumnos', 'choice',	array(
             		'label' => '¿participan por primera vez los jóvenes del proyecto?', 

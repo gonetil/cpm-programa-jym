@@ -36,7 +36,8 @@ class EscuelaType extends AbstractType {
 			'attr'=>array('class'=>'number')
 		))->add('nombre', null, array (
 			'label' => 'Nombre de la Escuela',
-			'required' => false
+			'required' => false,
+			'attr' => array('placeholder'=>'No tiene', 'value' => 'No tiene')
 		))->add('cue', null, array (
 			'label' => 'CUE de la Escuela',
 			'required' => false,

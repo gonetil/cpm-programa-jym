@@ -32,9 +32,20 @@
    
   function setup_selects() { 
   	   	setup_selects_for_form("#cpm_jovenesbundle_proyectotype");
-  	    setup_selects_for_form("#cpm_jovenesbundle_presentacionproyectotype"); 
+				setup_selects_for_form("#cpm_jovenesbundle_presentacionproyectotype"); 
+				setOptionChecked('#cpm_jovenesbundle_proyectotype_recibioCapacitacion_0',false);
+				setOptionChecked('#cpm_jovenesbundle_proyectotype_recibioCapacitacion_1',false);
+				setOptionChecked('#cpm_jovenesbundle_proyectotype_esPrimeraVezEscuela_0',false);
+				setOptionChecked('#cpm_jovenesbundle_proyectotype_esPrimeraVezEscuela_1',false);
+				
   }
-
+	
+	function setOptionChecked(elem,checked) {
+		if (checked)
+			$(emen).attr('checked','checked');
+		else
+			$(elem).attr('checked',false);
+	}
 
   function setRequired(elem) {
 	$(elem).addClass('required').attr("required","required");
@@ -52,6 +63,12 @@
       setOptional(elem);
   }
 
+	function setVisibility(elem,makeVisible) {
+			if (makeVisible)
+				$(elem).show();
+			else 
+				$(elem).hide();
+	}
 	function isNotEscuelaSelected($field) {
 		return ( ($field.val() == "") || ($field.find(':selected').text().indexOf("Escuela") < 0));
 	}
@@ -66,11 +83,13 @@
 								setRequired(formName+"_escuela_otroTipoInstitucion");
 								setRequired(formName+"_escuela_otroTipoInstitucionNombre");
 
-        	 	setBlocked(formName+"_escuela_tipoEscuela");
-
+        	 			setBlocked(formName+"_escuela_tipoEscuela");
                 setBlocked(formName+"_escuela_nombre");
                 setBlocked(formName+"_escuela_cue");
-                setBlocked(formName+"_escuela_numero");
+								setBlocked(formName+"_escuela_numero");
+								
+								setVisibility(".aviso_escuela",false);
+
 
 	 		} else { //selecciono un tipo de institucion
                 setRequired(formName+"_escuela_tipoEscuela");
@@ -80,7 +99,8 @@
 
                 setRequired(formName+"_escuela_nombre");
                 setRequired(formName+"_escuela_cue");
-                setRequired(formName+"_escuela_numero");
+								setRequired(formName+"_escuela_numero");
+								setVisibility(".aviso_escuela",true);
 
 	 		}
 	   	}).change();
