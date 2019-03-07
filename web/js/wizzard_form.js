@@ -33,10 +33,10 @@
   function setup_selects() { 
   	   	setup_selects_for_form("#cpm_jovenesbundle_proyectotype");
 				setup_selects_for_form("#cpm_jovenesbundle_presentacionproyectotype"); 
-				setOptionChecked('#cpm_jovenesbundle_proyectotype_recibioCapacitacion_0',false);
-				setOptionChecked('#cpm_jovenesbundle_proyectotype_recibioCapacitacion_1',false);
-				setOptionChecked('#cpm_jovenesbundle_proyectotype_esPrimeraVezEscuela_0',false);
-				setOptionChecked('#cpm_jovenesbundle_proyectotype_esPrimeraVezEscuela_1',false);
+//				setOptionChecked('#cpm_jovenesbundle_proyectotype_recibioCapacitacion_0',false);
+//				setOptionChecked('#cpm_jovenesbundle_proyectotype_recibioCapacitacion_1',false);
+//				setOptionChecked('#cpm_jovenesbundle_proyectotype_esPrimeraVezEscuela_0',false);
+//				setOptionChecked('#cpm_jovenesbundle_proyectotype_esPrimeraVezEscuela_1',false);
 				
   }
 	

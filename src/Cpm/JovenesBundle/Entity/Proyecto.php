@@ -43,21 +43,21 @@ class Proyecto
      *
      * @ORM\Column(name="esPrimeraVezEscuela", type="boolean")
      */
-    private $esPrimeraVezEscuela=false;
+    private $esPrimeraVezEscuela;
 
     /**
      * @var boolean $esPrimeraVezAlumnos
      *
      * @ORM\Column(name="esPrimeraVezAlumnos", type="boolean")
      */
-    private $esPrimeraVezAlumnos=false;
+    private $esPrimeraVezAlumnos;
     
      /**
      * @var boolean $recibioCapacitacion
      * @ORM\Column(name="recibioCapacitacion", type="boolean")
      * indica si recibió capacitación en años anteriores
      */        
-    private $recibioCapacitacion=false;     
+    private $recibioCapacitacion;     
     
     /**
      * @ORM\OneToOne(targetEntity="Escuela", inversedBy="proyecto",cascade={"all"})
