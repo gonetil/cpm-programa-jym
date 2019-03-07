@@ -128,7 +128,7 @@ class Escuela
      * @ORM\Column(name="contextoEncierro", type="boolean")
      * indica si la institución está en un contexto de encierro
      */        
-    private $contextoEncierro = false;
+    private $contextoEncierro;
      
      
      /**
