@@ -8,9 +8,13 @@
 
 	<strong>
 	   	{% if escuela.numero %}
-	    	N° {{ escuela.numero }}
+		   {% if escuela.numero > 0 %}
+	    		N° {{ escuela.numero }}
+			{%endif %}
 	    {%endif%}
-	    {{ escuela.nombre }}
+		{% if escuela.nombre|lower != 'no tiene' %}
+	    	{{ escuela.nombre }}
+		{% endif %}
 	</strong>	
 {% endmacro %}
 

@@ -94,8 +94,7 @@ $(document).ready(function() {
 				<br />Email: {{ entity.coordinador.email }} {{ common.facebookURL(entity.coordinador) }}
 			</td>
 			<td class="{% if entity.esPrimeraVezEscuela %}primera_vez{% endif %}">{{ proyecto_box.nombreEscuela(entity.escuela) }}</td>
-			<td>Tel. {{ entity.escuela.telefono }} <br /> E-mail {{ entity.escuela.email }}
-			</td>
+			<td>Tel. {{ entity.escuela.telefono }} <br /> E-mail {{ entity.escuela.email }}</td>
 			<td>{{ entity.escuela.localidad }}</td>
 			<td>{{ entity.escuela.localidad.distrito }}</td>
 			<td>{{ entity.titulo }}</td>
