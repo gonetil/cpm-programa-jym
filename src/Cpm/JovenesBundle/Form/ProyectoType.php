@@ -34,7 +34,7 @@ class ProyectoType extends AbstractType
 				'choices' => array(0=>"no",1=>"si"),
 				'empty_value'=>'',
 				'preferred_choices' => array(""),
-				'expanded' => true,
+				'expanded' => false,
 				'attr'=>array('class'=>'radios-en-linea')
 
 			))->add('esPrimeraVezEscuela', 'choice', array (
@@ -42,7 +42,7 @@ class ProyectoType extends AbstractType
 				'required' => true,
 				'choices' => array(0=>"no",1=>"si"),
 				'empty_value'=>'',
-				'expanded' => true,
+				'expanded' => false,
 				'attr'=>array('class'=>'radios-en-linea')
 			))
     	/*	->add('esPrimeraVezAlumnos', 'choice',	array(
