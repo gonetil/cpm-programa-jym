@@ -50,7 +50,7 @@ class Proyecto
      *
      * @ORM\Column(name="esPrimeraVezAlumnos", type="boolean")
      */
-    private $esPrimeraVezAlumnos;
+    private $esPrimeraVezAlumnos=false;
     
      /**
      * @var boolean $recibioCapacitacion
