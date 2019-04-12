@@ -223,7 +223,15 @@ class ProyectoRepository extends EntityRepository {
                         $qb->andWhere("inv.asistio = 1");
                     else
                         $qb->andWhere('(inv.asistio IS NULL or inv.asistio = 0)');
+				}
+				
+				$rechazoFlag=$evento->getRechazoInvitacionFlag();
+                if ($rechazoFlag != 3) { //3 es TODOS
+                    if ($rechazoFlag==1)  
+                        $qb->andWhere("inv.aceptoInvitacion = 0");
+                    else $qb->andWhere('(inv.aceptoInvitacion = 1)');
                 }
+
 
             }
 		}
@@ -250,7 +258,16 @@ class ProyectoRepository extends EntityRepository {
                 else
                     $qb->andWhere('(invitaciones2.asistio = 0 or invitaciones2.asistio IS NULL)');
 
+			}
+			
+			$rechazoInstanciaFlag = $instanciaEvento->getRechazoInvitacionAInstancia();
+            if ($rechazoInstanciaFlag != 3) { //3 es TODOS
+                if ($rechazoInstanciaFlag == 1)
+                    $qb->andWhere('invitaciones2.aceptoInvitacion = 0');
+                else
+                    $qb->andWhere('(invitaciones2.aceptoInvitacion = 1)');
             }
+
 
         }
 

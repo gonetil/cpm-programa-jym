@@ -8,7 +8,8 @@ class EventoFilter extends Evento implements ModelFilter {
 	private $evento; 
 	private $cicloFilter;
 	private $asistioAlEventoFlag;
-    private $confirmoInvitacionFlag;
+	private $confirmoInvitacionFlag;
+	private $rechazoInvitacionFlag;
 
 	public function createForm(\Cpm\JovenesBundle\Service\JYM $jym){
 		return new EventoFilterForm($this, $jym, '_evento');
@@ -80,5 +81,19 @@ class EventoFilter extends Evento implements ModelFilter {
         $this->asistioAlEventoFlag = $asistioAlEventoFlag;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRechazoInvitacionFlag()
+    {
+        return $this->rechazoInvitacionFlag;
+    }
 
+    /**
+     * @param mixed $rechazoInvitacionFlag
+     */
+    public function setRechazoInvitacionFlag($rechazoInvitacionFlag)
+    {
+        $this->rechazoInvitacionFlag = $rechazoInvitacionFlag;
+    }
 }

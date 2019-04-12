@@ -45,6 +45,14 @@ class EventoFilterForm extends ModelFilterForm
                 'empty_value' => false,
                 'expanded'=>false
             ))
+            ->add('rechazoInvitacionFlag','choice',array(
+                'label' => 'Rechazó la invitación al evento',
+                'required' => false,
+                'choices' => array(3=>"Todos",1=>"Si",2=>"No"),
+                'data' => '3',
+                'empty_value' => false,
+                'expanded'=>false
+            ))
 
 		  ;
 

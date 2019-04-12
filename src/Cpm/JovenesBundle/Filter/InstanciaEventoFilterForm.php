@@ -39,6 +39,15 @@ class InstanciaEventoFilterForm extends ModelFilterForm
                     'empty_value' => false,
                     'expanded'=>false
                 ))
+            ->add('rechazoInvitacionAInstancia','choice',
+                array(
+                    'label'=>'Rechazó la invitacion a la instancia',
+                    'required'=>false,
+                    'choices' => array(3=>"Todos",1=>"Si",2=>"No"),
+                    'data' => '3',
+                    'empty_value' => false,
+                    'expanded'=>false
+                ))     
 		  ;
 		
 				         

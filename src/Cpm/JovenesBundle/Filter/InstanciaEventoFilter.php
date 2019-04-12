@@ -8,7 +8,8 @@ class InstanciaEventoFilter extends InstanciaEvento implements ModelFilter {
 	private $cicloFilter;
 	private $eventoFilter;
 	private $confirmoInvitacionAInstancia;
-    private $asistioAInstancia;
+	private $asistioAInstancia;
+	private $rechazoInvitacionAInstancia;
 
 
 
@@ -63,7 +64,24 @@ class InstanciaEventoFilter extends InstanciaEvento implements ModelFilter {
     public function setAsistioAInstancia($asistioAInstancia)
     {
         $this->asistioAInstancia = $asistioAInstancia;
+	}
+	
+	/**
+     * @return mixed
+     */			    
+    public function getRechazoInvitacionAInstancia()
+    {
+        return $this->rechazoInvitacionAInstancia;
     }
+
+    /**
+     * @param mixed $rechazoInvitacionAInstancia
+     */
+    public function setRechazoInvitacionAInstancia($rechazoInvitacionAInstancia)
+    {
+        $this->rechazoInvitacionAInstancia = $rechazoInvitacionAInstancia;
+    }
+
 
 	public function getCicloFilter()
 	{ 
