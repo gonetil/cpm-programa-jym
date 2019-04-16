@@ -5,18 +5,12 @@
 	<td>Estado</td>
 	<td>Recibio capacitacion</td>
 	<td>Primera vez de la escuela</td>
-	<td>Primera vez de los alumnos</td>
-	<td>Cuentan con netbook</td>
-	<td>Cuentan con plataforma virtual</td>
 	<td>Nro. de alumnos</td>
 	<td>Area de referencia</td>
 	<td>Eje tematico</td>
 	<td>Produccion final</td>
 	<td>Valoración</td>
 	<td>Observaciones</td>
-	<td>Req. edicion</td>
-	<td>Transporte</td>
-	<td>Color</td>
 	<td>Escuela</td>
 	<td>Direccion</td>
 	<td>CP</td>
@@ -43,9 +37,6 @@
 		<td>{{ entity.estadoActual }}</td>
 		<td>{{ common.show_bool(entity.recibioCapacitacion) }}</td>
 		<td>{{ common.show_bool(entity.esPrimeraVezEscuela) }}</td>
-		<td>{{ common.show_bool(entity.esPrimeraVezAlumnos) }}</td>
-		<td>{{ common.show_bool(entity.cuentanConNetbook) }}</td>
-		<td>{{ common.show_bool(entity.cuentanConPlataformaVirtual) }}</td>    	
 		<td>{{ entity.nroAlumnos }}</td>
 		<td>{{ entity.eje }}</td>
 		<td>{{ entity.temaPrincipal }}</td>
@@ -57,9 +48,6 @@
 		<td> Iniciado </td>
 		<td> - </td>
 		{% endif %}
-		<td>{{ entity.requerimientosDeEdicion }}</td>
-		<td>{{ entity.transporte }}</td>
-		<td>{{ entity.color }}</td>
 				
 		{% set escuela = entity.escuela %}
 		<td>{{ common.nombreEscuela(entity.escuela) }}</td>

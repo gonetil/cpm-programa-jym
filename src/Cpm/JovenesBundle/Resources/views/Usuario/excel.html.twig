@@ -10,7 +10,6 @@
 		<td>Domicilio {{ role }}</td>
 		<td>CP {{ role }}</td>
 	{%  endif %}
-	<td>Facebook {{ role }}</td>
 {% endmacro %}
 
 {% macro print_entity(user,print_full_data) %}
@@ -25,6 +24,5 @@
 			<td>{{ user.domicilio }}</td>
 	        <td>{{ user.codigoPostal }}</td>
 	{% endif %}
-	<td>{{ user.facebookURL }}<td>
 
 {% endmacro %}
