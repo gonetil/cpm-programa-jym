@@ -56,7 +56,16 @@ app.factory('Bloque', function($resource){
 				return true;
 		return false;
 	};
-	
+
+	Bloque.prototype.cantPresentacionesEnLocalidad = function(localidad){
+		var count = 0;
+		for(var i=0;i<this.presentaciones.length;i++) {
+			if (this.presentaciones[i].localidad == localidad)
+			   count++;
+		}
+		return count;	
+	}
+
 	Bloque.prototype.duracionEstimada = function() { //suma las duraciones de todas las presentaciones
 			var count=0;
 			
@@ -299,12 +308,15 @@ app.factory('Tanda', function($resource, Dia,AuditorioDia,Auditorio,Bloque, Pres
 	 * distribuye las presentaciones de la tanda de manera automatica
 	 * @param tanda
 	 * @param modo (forced|best|strict)
+	 * @param city_limit limite max. de presentaciones para una misma localidad
 	 * @returns presentacionesMovidas la cantida de presentaciones que el algoritmo pudo distribuir
 	 */
-	Tanda.prototype.distribuirPresentaciones = function(modo) {
+	Tanda.prototype.distribuirPresentaciones = function(modo, city_limit) {
 		console.log("Comienzo la distribucion de "+this.presentaciones_libres.length+" presentaciones libres en modo "+ modo);
 		
 		var config = {};
+		config['city_limit'] = city_limit;
+
 		if (modo == 'forced') { 
 			config['level'] = ALGORITMO_FORZADO; 
 			forzar_distribucion = true;

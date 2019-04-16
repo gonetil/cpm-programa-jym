@@ -112,7 +112,7 @@ function TandaDistribuirPresentacionesCtrl($rootScope,$scope, $location, $routeP
 	
 	$scope.modo="best";
 	
-	$scope.distribuirPresentacionesLibres=function(){
+	$scope.distribuirPresentacionesLibres=function(){ 
 		
 		if (tanda.presentaciones_libres.length ==0){
 			Logger.info("No quedan presentaciones libres para distribuir en el cronograma");
@@ -120,7 +120,7 @@ function TandaDistribuirPresentacionesCtrl($rootScope,$scope, $location, $routeP
 			return;
 		}
 		
-		var movidas = tanda.distribuirPresentaciones($scope.modo);
+		var movidas = tanda.distribuirPresentaciones($scope.modo,$scope.city_limit);
 		if (movidas == 0){
 			Logger.info("No se pudo distribuir ninguna presentación en el cronograma");
 		}else{

@@ -175,7 +175,11 @@ function cumpleCondicionesPresentacion(tanda,bloque,presentacion,config) {
 	if (!bloque.tieneArea(presentacion.areaReferencia) && (config.level < ALGORITMO_FORZADO )){
 		return false;
 	}
-		
+
+	if ( (config.city_limit > 0) && (bloque.cantPresentacionesEnLocalidad(presentacion.localidad) >= config.city_limit)  && (config.level < ALGORITMO_FORZADO )) {
+		return false;
+	}
+
 	return true;
 }
 
