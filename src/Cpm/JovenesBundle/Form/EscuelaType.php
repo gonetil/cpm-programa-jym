@@ -10,9 +10,9 @@ class EscuelaType extends AbstractType {
 		$builder->add('tipoInstitucion', 'entity', array (
 			'class' => 'CpmJovenesBundle:TipoInstitucion',
 			'label' => 'Tipo de Institución',
-			'empty_value' => 'Otro',
-			'required' => false,
-			'preferred_choices' => array('Otro')
+//			'empty_value' => 'Otro',
+			'required' => true,
+//			'preferred_choices' => array('Otro')
 		))->add('otroTipoInstitucionNombre', null, array (
 			'required' => false,
 			'label' => 'Nombre de la institución'
