@@ -25,7 +25,7 @@ class ProyectoType extends AbstractType
 													            ->orderBy('u.apellido', 'ASC');
     														}
     								    )) */
-            ->add('titulo',null, array('attr'=>array('maxlength' => '45','minlength' => '1')
+            ->add('titulo',null, array('attr'=>array('maxlength' => '45','minlength' => '1','placeholder'=> 'Long. máxima 45 caracteres')
 		))
             ->add('nroAlumnos','integer',array('label'  => 'Cantidad de jóvenes que participan', 'attr'=>array('class'=>'number')))
 			->add('recibioCapacitacion', 'choice', array (
