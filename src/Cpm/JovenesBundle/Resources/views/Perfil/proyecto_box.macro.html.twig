@@ -1,11 +1,13 @@
 {% macro nombreEscuela(escuela) %}
-	{% if escuela.tipoInstitucion.id is defined %}
+	{% if (escuela.tipoInstitucion.id is defined) and (escuela.tipoInstitucion.id < 3) %}
 		{{ escuela.tipoInstitucion }}:  
 		{{ escuela.tipoEscuela }}
 	{% else %}
-		{{ escuela.otroTipoInstitucion }}:
+	   OOSS
+		 {{ escuela.otroTipoInstitucionNombre }} - 
+		 {{ escuela.otroTipoInstitucion }}
 	{% endif %}		
-
+  
 	<strong>
 	   	{% if escuela.numero %}
 		   {% if escuela.numero > 0 %}
