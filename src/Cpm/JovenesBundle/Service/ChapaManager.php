@@ -329,4 +329,45 @@ class ChapaManager {
 		return $numUpdated;	
 	}
 	
+
+
+	/**
+	 * Dada una $tanda preexistente, revisa la lista de presentaciones y la compara con los proyectos de la instancia de evento Chapa
+	 * que se corresponde con la tanda.
+	 * Con esta información:
+	 * a) Elimina las presentaciones internas que no se corresponden con proyectos de la instancia de evento (esto no aplica a las externas)
+	 * b) Crea y agrega las presentaciones que se corresponden con proyectos que confirmaron su asistencia a Chapa y que aún no figuran como presentaciones de la tanda
+	 * 
+	 */
+	public function resincronizarTanda($tanda) {
+		$cantAgregadas = $this->generarPresentacionesFaltantes($tanda);
+		return $cantAgregadas;
+//		$cantEliminadas = $this->eliminarPresentacionesMovidas($tanda);
+	}
+
+
+	private function generarPresentacionesFaltantes($tanda) {
+		$incluir_no_confirmadas = true;
+		$em = $this->doctrine->getEntityManager();
+		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento(),$incluir_no_confirmadas);
+		$presentacionesInternas = array_filter($tanda->getPresentaciones()->toArray(), function($p) { return ($p->getTipo() == 'interna'); });
+
+		$count = 0;
+		foreach ( $invitaciones as $invitacion ) {
+			if (! $this->findInvitacion($invitacion[0],$presentacionesInternas)) {
+				$presentacion = new PresentacionInterna($invitacion[0]);
+				$tanda->addPresentacion($presentacion);
+				$count++;
+			}
+		}
+		return $count;
+
+	}
+
+	private function findInvitacion($invitacion,$presentacionesInternas) {
+		foreach( $presentacionesInternas as $presentacion)
+			if ($presentacion->getInvitacion() == $invitacion)
+				return TRUE;
+		return FALSE;
+	}
 }

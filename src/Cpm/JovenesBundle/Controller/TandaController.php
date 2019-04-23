@@ -391,4 +391,23 @@ class TandaController extends BaseController
     	
     	return $this->redirect($this->generateUrl('presentacion_show', array('id' => $presentacion->getId() )));
     }
+
+   /**
+     * Actualiza la lista de presentaciones internas de una tanda en base a las invitaciones aceptadas
+     *
+     * @Route("/{id}/sync", name="tanda_edit")
+     */
+    public function resincronizarTanda($id) {
+        $tanda = $this->getEntityForUpdate('CpmJovenesBundle:Tanda',$id);
+
+        $chapaManager = $this->getChapaManager();
+   		$cant = $chapaManager->resincronizarTanda($tanda);
+   		$this->setSuccessMessage("Sincronización completada. Se agregaron $cant presentaciones");
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($tanda);
+        $em->flush();
+        return $this->redirect($this->generateUrl('tanda_show', array('id' => $id)));
+
+    }
 }
