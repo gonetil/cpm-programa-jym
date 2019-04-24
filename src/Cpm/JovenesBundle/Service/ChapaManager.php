@@ -340,22 +340,25 @@ class ChapaManager {
 	 * 
 	 */
 	public function resincronizarTanda($tanda) {
-		$cantAgregadas = $this->generarPresentacionesFaltantes($tanda);
-		return $cantAgregadas;
-//		$cantEliminadas = $this->eliminarPresentacionesMovidas($tanda);
+		$incluir_no_confirmadas = true;
+		$em = $this->doctrine->getEntityManager();
+		//$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento(),$incluir_no_confirmadas);
+		$invitaciones = array_filter($tanda->getInstanciaEvento()->getInvitaciones()->toArray(), function ($inv) { return $inv->getAceptoInvitacion(); });
+		$presentacionesInternas = array_filter($tanda->getPresentaciones()->toArray(), function($p) { return ($p->getTipo() == 'interna'); });
+
+		$cantAgregadas = $this->generarPresentacionesFaltantes($tanda, $invitaciones,$presentacionesInternas);
+
+		$cantEliminadas = $this->eliminarPresentacionesMovidas($tanda, $invitaciones,$presentacionesInternas);
+		return array($cantAgregadas, $cantEliminadas);
+		
 	}
 
 
-	private function generarPresentacionesFaltantes($tanda) {
-		$incluir_no_confirmadas = true;
-		$em = $this->doctrine->getEntityManager();
-		$invitaciones = $em->getRepository('CpmJovenesBundle:Invitacion')->getInvitacionesAceptadas($tanda->getInstanciaEvento(),$incluir_no_confirmadas);
-		$presentacionesInternas = array_filter($tanda->getPresentaciones()->toArray(), function($p) { return ($p->getTipo() == 'interna'); });
-
+	public function generarPresentacionesFaltantes($tanda, $invitaciones,$presentacionesInternas) {
 		$count = 0;
 		foreach ( $invitaciones as $invitacion ) {
-			if (! $this->findInvitacion($invitacion[0],$presentacionesInternas)) {
-				$presentacion = new PresentacionInterna($invitacion[0]);
+			if (! $this->findInvitacion($invitacion,$presentacionesInternas)) {
+				$presentacion = new PresentacionInterna($invitacion);
 				$tanda->addPresentacion($presentacion);
 				$count++;
 			}
@@ -364,10 +367,36 @@ class ChapaManager {
 
 	}
 
+	public function eliminarPresentacionesMovidas($tanda, $invitaciones,$presentacionesInternas) {
+		$count = 0;
+		$em = $this->doctrine->getEntityManager();
+		$em->getConnection()->beginTransaction();
+		foreach ($presentacionesInternas as $presentacion) {
+			if (! $this->findPresentacion($presentacion,$invitaciones)) {
+				$count++;
+				$tanda->removePresentacion($presentacion);
+				$em->remove($presentacion); //la presentacion tiene que dejar de existir como tal, luego se deberá crear la que corresponda a la tanda donde va
+			}	
+		}
+		$em->flush();		
+		$em->getConnection()->commit();
+		return $count;
+	}
+
 	private function findInvitacion($invitacion,$presentacionesInternas) {
-		foreach( $presentacionesInternas as $presentacion)
+		foreach($presentacionesInternas as $presentacion) {
 			if ($presentacion->getInvitacion() == $invitacion)
 				return TRUE;
+		}
 		return FALSE;
+	}
+
+	private function findPresentacion($presentacion,$invitaciones) {
+		
+		foreach($invitaciones as $invitacion) {
+			if ($presentacion->getInvitacion() == $invitacion)
+				return TRUE;
+		}		
+		return FALSE;		
 	}
 }

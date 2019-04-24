@@ -22,11 +22,12 @@
             Exportar
         </a>
     </li>
-
+	<li>
+    	<a href="{{ path('tanda_sync' , { 'id' : entity.id }) }}">Sincronizar</a>
+    </li>
     
     <li>
-        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}" method="post"
-        onsubmit="return confirm('Esta seguro que desea eliminar la Tanda? Guarda que se pierde todo');">
+        <form action="{{ path('tanda_delete', { 'id': entity.id }) }}"> 
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar</button>
         </form>
