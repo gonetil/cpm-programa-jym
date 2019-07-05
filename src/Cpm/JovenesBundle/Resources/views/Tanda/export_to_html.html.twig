@@ -1,74 +1,106 @@
 {% spaceless %}
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/HighVoltage.css" >
 <style>
-    .title { 
-        text-transform: uppercase;
+
+/*
+  @font-face {
+      font-family: "HighVoltage Rough";
+      src: url("/css/HighVoltage.ttf") format("woff"), url("/css/HighVoltage.ttf") format("opentype"), url("/css/HighVoltage.ttf") format("truetype");
     }
-    .listing {
-         padding-top: 5px;
+*/
+    html,body {
+      font-family: "HighVoltage Rough";
+      font-size: 12px;
+      text-transform: none;
     }
-    .infoTanda {
-        padding-bottom: 20px;
+
+    .tanda {
+	    background-image: url('/images/header_export_html.png');
+	    background-repeat: no-repeat;
+	    background-size: inherit;
     }
-    .tanda > .title {
+
+    .tanda-head {
+    /* height: 311px; */
+    padding-top: 350px;
+    padding-left: 60px;
+    }
+    .tanda-head > .title {
+    font-size: 3rem;
+    }
+    .tanda-head > .duration {
+    font-size: 2rem;
+
+    color: #777;
+    }
+
+    .diasTanda > .title { 
         font-size: 18pt;
-        font-weight: bold;
-    }
-    .tanda .duration {
-        font-size: 14pt;
-        color: #0c0c0c;
     }
 
-    .diasTanda .title { 
+    .bloque > .title , .diasTanda > .title{
+	padding-left:60px;
         font-size: 16pt;
-        font-weight: bold;
+        padding-top: 30px;        
+	text-transform: uppercase;
     }
 
-    .auditorioDia .title {
-        font-size: 15pt;
-        font-weight: bold;
-        color: #060606;
+    .bloque .horaInicio {
+      color: #008fd8;
+    }
+    .bloque-con-presentaciones .horaInicio {
+      color: #be0000; 
     }
 
-    .bloque .title {
-        font-size: 14pt;
-        padding-top: 10px;
+    ul.presentaciones {
+        margin: 0;
+	padding-inline-start: 60px;    
+	font-size: 14pt;
+    }
+
+    .presentaciones li {
+      list-style-type: none;
+    }
+
+    .presentaciones .fa-star {
+	color:red;
+	left: 35px;
+	position: absolute;
+	font-size: 17px;
     }
 
     .presentaciones .title {
-        text-transform: capitalize;
-        padding-top: 10px;
-        line-height: 1px;
-        font-weight: normal;
+        color:gray;
+	padding-top: 11px;
     }
 
     .presentaciones .detail {
-        font-style: italic;
-        color: #333333;
-        font-size: 11pt;
-        line-height: 1px;
     }
 </style>
 <body>
 <div class="tanda">
-    <div class="title">Tanda {{ tanda.numero }}</div>
-    <div class="duration"> Del {{ tanda.fechaInicio | date('d-m-Y') }} al {{ tanda.fechaFin | date('d-m-Y') }} </div>
+    <div class="tanda-head">
+	    <div class="title">Tanda {{ tanda.numero }}</div>
+	    <div class="duration"> Del {{ tanda.fechaInicio | date('d-m') }} al {{ tanda.fechaFin | date('d-m') }} </div>
+    </div>
     <div class="diasTanda listing">
         {% for dia in tanda.dias %}
-            <div class="title">Dia {{ dia.numero }}</div>
-            <div class="auditorioDia listing">
+            <div class="title">Dia {{ dia.numero }} <i class="fas fa-bolt"></i></div>
+            <div class="bloques listing">
                 {% for bloque in dia.getSortedBloques() %}
-                    <div class="bloque listing">
-                            <div class="title">{{ bloque.horaInicio | date('H:i')}} hs. {{ bloque.nombre }} <span class="title"> ({{ bloque.auditorioDia.auditorio.nombre }}) </span></div>
+                    <div class="bloque listing {% if bloque.tienePresentaciones %}bloque-con-presentaciones{% endif %}">
+                            <div class="title"><span class="horaInicio"> {{ bloque.horaInicio | date('H:i')}} hs. </span> <span class="title"> {{ bloque.nombre }} ({{ bloque.auditorioDia.auditorio.nombre }}) </span></div>
                             {% if bloque.tienePresentaciones %}
                                 <ul class="presentaciones listing">
                                     {% for presentacion in bloque.presentaciones %}
                                         <li>
-                                            <p class="title">
+                                            <div class="title"> <i class="fas fa-star"></i>
                                                {{ presentacion.getTitulo() | escape }} ({{ presentacion.tipoPresentacion.tipoPresentacion  | e('html') }})
-                                            </p>
-                                            <p class="detail">{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | raw('html') }}</p>
+                                            </div>
+                                            <div class="detail">{{ presentacion.escuela  | raw }} - {{ presentacion.localidad  | raw('html') }}</div>
                                         </li>
                                     {% endfor %} {# presentaciones #}
                                 </ul> <!-- presentacion -->   

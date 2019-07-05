@@ -16,7 +16,7 @@ class BloqueType extends AbstractType
 				'label' => 'Hora de Inicio',
 				'input'  => 'datetime',
 				'widget'  => 'single_text',
-				'with_seconds' => false
+				'with_seconds' => true
 				))
             ->add('duracion')
             ->add('auditorioDia')

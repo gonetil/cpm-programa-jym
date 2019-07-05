@@ -156,9 +156,12 @@ class Dia
             $all_bloques = array_merge($all_bloques,$ad->getBloques()->toArray());
         
         uasort($all_bloques,function($b1,$b2){
-			$hora1 = new \DateTime($b1->getHoraInicio()->format('H:i'));
-			$hora2 = new \DateTime($b2->getHoraInicio()->format('H:i'));
-            return ($hora1 > $hora2);
+			$hora1 = new \DateTime($b1->getHoraInicio()->format('H:i:s'));
+			$hora2 = new \DateTime($b2->getHoraInicio()->format('H:i:s'));
+            if ($hora1 == $hora2)
+                return (!$b1->getTienePresentaciones() && $b2->getTienePresentaciones()) ; 
+            else
+                return ($hora1 > $hora2);
         });
         
         return $all_bloques;

@@ -1,3 +1,5 @@
+app/spool/*
+app/uploads/*
 app/cache
 app/logs
 app/config/parameters.ini
